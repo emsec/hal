@@ -96,7 +96,7 @@ Collaboration diagram for hal::NetlistModificationDecorator:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_netlist_modification_decorator__coll__graph.png" border="0" usemap="#ahal_1_1_netlist_modification_decorator_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_netlist_modification_decorator_coll__map" id="ahal_1_1_netlist_modification_decorator_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,240,156"/>
+<area shape="rect" title=" " alt="" coords="5,5,240,185"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -112,6 +112,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a84800ef0fe58a009b4fbbab4790a7719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9686ba0f77336b52c330fc2e0c17e18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_modification_decorator.html#ad9686ba0f77336b52c330fc2e0c17e18">connect_nets</a> (<a class="el" href="classhal_1_1_net.html">Net</a> *master_net, <a class="el" href="classhal_1_1_net.html">Net</a> *slave_net)</td></tr>
 <tr class="separator:ad9686ba0f77336b52c330fc2e0c17e18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b52a5b6632159e20b4a73cd66077eb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_modification_decorator.html#a1b52a5b6632159e20b4a73cd66077eb9">create_gnd_net</a> ()</td></tr>
+<tr class="separator:a1b52a5b6632159e20b4a73cd66077eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a657d06f3cd3cdb1af3b3e557d3a904c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_modification_decorator.html#a657d06f3cd3cdb1af3b3e557d3a904c9">create_vcc_net</a> ()</td></tr>
+<tr class="separator:a657d06f3cd3cdb1af3b3e557d3a904c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A netlist decorator that provides functionality to modify the associated netlist. </p>
@@ -238,7 +242,53 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">192</a> of file <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html">netlist_modification_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00288">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="pin__group_8h_source.html#l00341">hal::PinGroup&lt; T &gt;::assign_pin()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00343">hal::Netlist::delete_net()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">hal::DataContainer::get_data_map()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">hal::Netlist::get_modules()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00480">hal::Net::is_global_input_net()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00485">hal::Net::is_global_output_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="pin__group_8h_source.html#l00380">hal::PinGroup&lt; T &gt;::move_pin()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">hal::none</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00319">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00157">hal::Net::remove_source()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">hal::DataContainer::set_data_map()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00288">hal::Net::add_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00127">hal::Net::add_source()</a>, <a class="el" href="pin__group_8h_source.html#l00341">hal::PinGroup&lt; T &gt;::assign_pin()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00343">hal::Netlist::delete_net()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2data__container_8cpp_source.html#l00072">hal::DataContainer::get_data_map()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">hal::Netlist::get_modules()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00480">hal::Net::is_global_input_net()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00485">hal::Net::is_global_output_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="pin__group_8h_source.html#l00380">hal::PinGroup&lt; T &gt;::move_pin()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca334c4a4c42fdb79d7ebc3e73b517e6f8">hal::none</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00319">hal::Net::remove_destination()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00157">hal::Net::remove_source()</a>, and <a class="el" href="netlist_2data__container_8cpp_source.html#l00077">hal::DataContainer::set_data_map()</a>.</p>
+
+</div>
+</div>
+<a id="a1b52a5b6632159e20b4a73cd66077eb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b52a5b6632159e20b4a73cd66077eb9">&#9670;&nbsp;</a></span>create_gnd_net()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt; hal::NetlistModificationDecorator::create_gnd_net </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Searches for a GND net in the netlist. If there are no existing ones then the function will try to search for a GND gate type in the gate library and create a GND net with corresponding gate source.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the either newly created or all already existing GND nets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00349">349</a> of file <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html">netlist_modification_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00173">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00333">hal::Netlist::create_net()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00186">hal::GateLibrary::get_gnd_gate_types()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00529">hal::Netlist::get_gnd_nets()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00013">hal::GateLibrary::get_name()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba578552719239a72a2d45ad422f67d24d">hal::ground</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
+
+</div>
+</div>
+<a id="a657d06f3cd3cdb1af3b3e557d3a904c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a657d06f3cd3cdb1af3b3e557d3a904c9">&#9670;&nbsp;</a></span>create_vcc_net()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt; hal::NetlistModificationDecorator::create_vcc_net </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Searches for a VCC net in the netlist. If there are no existing ones then the function will try to search for a VCC gate type in the gate library and create a VCC net with corresponding gate source.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the either newly created or all already existing VCC nets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00411">411</a> of file <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html">netlist_modification_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00173">hal::Netlist::create_gate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00333">hal::Netlist::create_net()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00013">hal::GateLibrary::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00164">hal::GateLibrary::get_vcc_gate_types()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00546">hal::Netlist::get_vcc_nets()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba62cd275989e78ee56a81f0265a87562e">hal::power</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
 </div>
 </div>
@@ -267,7 +317,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00015">15</a> of file <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html">netlist_modification_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00569">hal::Netlist::delete_module()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">hal::Netlist::get_modules()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00312">hal::Module::is_top_module()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00603">hal::Netlist::delete_module()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">hal::Netlist::get_modules()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00312">hal::Module::is_top_module()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
 </div>
 </div>
@@ -331,7 +381,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_modification_decorator.html">NetlistModificationDecorator</a></li>
-    <li class="footer">Generated on Tue Jul 16 2024 12:39:13 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 16 2024 13:26:17 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

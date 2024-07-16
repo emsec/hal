@@ -195,6 +195,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a14f90b67d5536b381ff3774523eed04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac536d7aebe1058d6ed2c54fa71e84c5c"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist.html#ac536d7aebe1058d6ed2c54fa71e84c5c">get_global_output_nets</a> () const</td></tr>
 <tr class="separator:ac536d7aebe1058d6ed2c54fa71e84c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b3bda30f2d646f55c26147aed46652a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist.html#a4b3bda30f2d646f55c26147aed46652a">get_gnd_nets</a> () const</td></tr>
+<tr class="separator:a4b3bda30f2d646f55c26147aed46652a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d7c7c82629192ee8342adde672bddd3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist.html#a0d7c7c82629192ee8342adde672bddd3">get_vcc_nets</a> () const</td></tr>
+<tr class="separator:a0d7c7c82629192ee8342adde672bddd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fd4f32302dcb8dbcdc4b512d586fee9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist.html#a5fd4f32302dcb8dbcdc4b512d586fee9">enable_automatic_net_checks</a> (bool enable_checks=true)</td></tr>
 <tr class="separator:a5fd4f32302dcb8dbcdc4b512d586fee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b216ae67326e514b53bbb320e65b6ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist.html#a3b216ae67326e514b53bbb320e65b6ef">get_unique_module_id</a> ()</td></tr>
@@ -330,7 +334,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00013">13</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00553">create_module()</a>, and <a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html#l00057">NetlistInternalManager</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00587">create_module()</a>, and <a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html#l00057">NetlistInternalManager</a>.</p>
 
 </div>
 </div>
@@ -371,7 +375,7 @@ Friends</h2></td></tr>
 <p>Clear all internal caches of the netlist.<br  />
  In a typical application, calling this function is not required. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00823">823</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00857">857</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -462,7 +466,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00178">create_gate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00178">create_gate()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00349">hal::NetlistModificationDecorator::create_gnd_net()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00411">hal::NetlistModificationDecorator::create_vcc_net()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00031">hal::NetlistModificationDecorator::replace_gate()</a>.</p>
 
 </div>
 </div>
@@ -547,9 +551,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new grouping on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00642">642</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00676">676</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">get_unique_grouping_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00658">get_unique_grouping_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
 </div>
 </div>
@@ -588,7 +592,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new grouping on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00637">637</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00671">671</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
@@ -639,9 +643,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new module on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00564">564</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00598">598</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00553">create_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00540">get_unique_module_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00587">create_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00574">get_unique_module_id()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
 </div>
 </div>
@@ -694,11 +698,11 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new module on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00553">553</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00587">587</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00327">hal::Module::assign_gates()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00564">create_module()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00013">Netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00598">create_module()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00013">Netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -772,7 +776,7 @@ Friends</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00119">hal::NetlistModificationDecorator::connect_gates()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00238">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00119">hal::NetlistModificationDecorator::connect_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00349">hal::NetlistModificationDecorator::create_gnd_net()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00411">hal::NetlistModificationDecorator::create_vcc_net()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00238">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -830,7 +834,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00647">647</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00681">681</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>.</p>
 
@@ -862,7 +866,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00569">569</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00603">603</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>.</p>
 
@@ -896,7 +900,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00343">343</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00238">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -925,7 +929,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00529">529</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00563">563</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1017,7 +1021,7 @@ Friends</h2></td></tr>
 <p>Get a set of all gate IDs that have previously been used but been freed ever since.</p>
 <dl class="section return"><dt>Returns</dt><dd>All freed gate IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00717">717</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00751">751</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1040,7 +1044,7 @@ Friends</h2></td></tr>
 <p>Get a set of all grouping IDs that have previously been used but been freed ever since.</p>
 <dl class="section return"><dt>Returns</dt><dd>All freed grouping ids. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00807">807</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00841">841</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1063,7 +1067,7 @@ Friends</h2></td></tr>
 <p>Get a set of all module IDs that have previously been used but been freed ever since.</p>
 <dl class="section return"><dt>Returns</dt><dd>All freed module IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00777">777</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00811">811</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1086,7 +1090,7 @@ Friends</h2></td></tr>
 <p>Get a set of all net IDs that have previously been used but been freed ever since.</p>
 <dl class="section return"><dt>Returns</dt><dd>All freed net IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00747">747</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00781">781</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1143,7 +1147,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">132</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>, and <a class="el" href="configuration_8cpp_source.html#l00271">hal::dataflow::Configuration::with_gate_types()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00349">hal::NetlistModificationDecorator::create_gnd_net()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00411">hal::NetlistModificationDecorator::create_vcc_net()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager::serialize_project()</a>, and <a class="el" href="configuration_8cpp_source.html#l00271">hal::dataflow::Configuration::with_gate_types()</a>.</p>
 
 </div>
 </div>
@@ -1166,7 +1170,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">204</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00060">hal::GateSelectModel::GateSelectModel()</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00467">hal::BooleanInfluencePlugin::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00108">hal::netlist_utils::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00528">hal::NetlistTraversalDecorator::get_next_sequential_gates_map()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, and <a class="el" href="configuration_8cpp_source.html#l00135">hal::dataflow::Configuration::with_known_structures()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00060">hal::GateSelectModel::GateSelectModel()</a>, <a class="el" href="boolean__influence_8cpp_source.html#l00586">hal::boolean_influence::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00108">hal::netlist_utils::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00528">hal::NetlistTraversalDecorator::get_next_sequential_gates_map()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, and <a class="el" href="configuration_8cpp_source.html#l00135">hal::dataflow::Configuration::with_known_structures()</a>.</p>
 
 </div>
 </div>
@@ -1270,6 +1274,29 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a4b3bda30f2d646f55c26147aed46652a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b3bda30f2d646f55c26147aed46652a">&#9670;&nbsp;</a></span>get_gnd_nets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; hal::Netlist::get_gnd_nets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all GND nets in the netlist.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector nets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00529">529</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00349">hal::NetlistModificationDecorator::create_gnd_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
 <a id="ae41916880e2d766ab5367d26ee6cb2b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae41916880e2d766ab5367d26ee6cb2b3">&#9670;&nbsp;</a></span>get_grouping_by_id()</h2>
 
@@ -1294,7 +1321,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The grouping on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00657">657</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00691">691</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>.</p>
 
@@ -1319,7 +1346,7 @@ Friends</h2></td></tr>
 <p>Get all groupings contained within the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of groupings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00668">668</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00702">702</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00058">hal::GroupingTableModel::GroupingTableModel()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1350,7 +1377,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of groupings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00673">673</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00707">707</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 </div>
 </div>
@@ -1425,7 +1452,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The module on success, nullptr otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">579</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">613</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>.</p>
 
@@ -1450,7 +1477,7 @@ Friends</h2></td></tr>
 <p>Get all modules contained within the netlist, including the top module.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of modules. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">590</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">624</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__select__model_8cpp_source.html#l00070">hal::ModuleSelectModel::appendEntries()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00673">hal::NetlistRelay::debugHandleFileOpened()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00015">hal::NetlistModificationDecorator::delete_modules()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, and <a class="el" href="module__table__model_8cpp_source.html#l00089">hal::ModuleTableModel::setNet()</a>.</p>
 
@@ -1481,7 +1508,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of modules. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00595">595</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00629">629</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>.</p>
 
@@ -1590,7 +1617,7 @@ Friends</h2></td></tr>
 <p>Get the gate ID following the highest currently used ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next gate ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00697">697</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00731">731</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1613,7 +1640,7 @@ Friends</h2></td></tr>
 <p>Get the grouping ID following the highest currently used ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next grouping ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00787">787</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00821">821</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1636,7 +1663,7 @@ Friends</h2></td></tr>
 <p>Get the module ID following the highest currently used ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next module ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00757">757</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00791">791</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1659,7 +1686,7 @@ Friends</h2></td></tr>
 <p>Get the net ID following the highest currently used ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The next net ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00727">727</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00761">761</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1682,7 +1709,7 @@ Friends</h2></td></tr>
 <p>Get the top module of the netlist.</p>
 <dl class="section return"><dt>Returns</dt><dd>The top module. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00574">574</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">608</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00534">hal::GuiApiClasses::View::addTo()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00023">hal::dumpPingroups()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="gui__api_8cpp_source.html#l00795">hal::GuiApiClasses::View::getValidObjects()</a>, <a class="el" href="module__widget_8cpp_source.html#l00228">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>, <a class="el" href="module__widget_8cpp_source.html#l00036">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">operator==()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l00337">hal::Module::remove_gates()</a>.</p>
 
@@ -1730,9 +1757,9 @@ Friends</h2></td></tr>
  The value of 0 is reserved and represents an invalid ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The grouping ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">624</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00658">658</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00642">create_grouping()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00676">create_grouping()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1754,9 +1781,9 @@ Friends</h2></td></tr>
  The value of 0 is reserved and represents an invalid ID.</p>
 <dl class="section return"><dt>Returns</dt><dd>The module ID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00540">540</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00574">574</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00564">create_module()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00598">create_module()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1801,7 +1828,7 @@ Friends</h2></td></tr>
 <p>Get a set of all currently used gate IDs.</p>
 <dl class="section return"><dt>Returns</dt><dd>All used gate IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00707">707</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00741">741</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="plugin__parameter__dialog_8cpp_source.html#l00356">hal::PluginParameterNodeDialog::PluginParameterNodeDialog()</a>.</p>
 
@@ -1824,7 +1851,7 @@ Friends</h2></td></tr>
 <p>Get a set of all currently used grouping IDs.</p>
 <dl class="section return"><dt>Returns</dt><dd>All used grouping IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00797">797</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00831">831</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1847,7 +1874,7 @@ Friends</h2></td></tr>
 <p>Get a set of all currently used module IDs.</p>
 <dl class="section return"><dt>Returns</dt><dd>All used module IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00767">767</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00801">801</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="plugin__parameter__dialog_8cpp_source.html#l00356">hal::PluginParameterNodeDialog::PluginParameterNodeDialog()</a>.</p>
 
@@ -1870,7 +1897,7 @@ Friends</h2></td></tr>
 <p>Get a set of all currently used net IDs.</p>
 <dl class="section return"><dt>Returns</dt><dd>All used net IDs. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00737">737</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00771">771</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00016">hal::SubgraphNetlistDecorator::copy_subgraph_netlist()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1896,6 +1923,29 @@ Friends</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00304">304</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
+
+</div>
+</div>
+<a id="a0d7c7c82629192ee8342adde672bddd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d7c7c82629192ee8342adde672bddd3">&#9670;&nbsp;</a></span>get_vcc_nets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; hal::Netlist::get_vcc_nets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all VCC nets in the netlist.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of nets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00546">546</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00411">hal::NetlistModificationDecorator::create_vcc_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
 </div>
 </div>
@@ -1955,7 +2005,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00509">509</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00480">hal::Net::is_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">mark_global_input_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -1987,7 +2037,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00514">514</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2net_8cpp_source.html#l00485">hal::Net::is_global_output_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">mark_global_output_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2047,9 +2097,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the grouping is in the netlist, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00652">652</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00686">686</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2079,7 +2129,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the module is in the netlist, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">613</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00647">647</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>.</p>
 
@@ -2113,7 +2163,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">348</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00326">hal::GuiApi::deselectNet()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">hal::NetlistTraversalDecorator::get_next_combinational_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">hal::NetlistTraversalDecorator::get_next_matching_gates_until_depth()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">hal::NetlistTraversalDecorator::get_next_sequential_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">mark_global_output_net()</a>, <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, <a class="el" href="gui__api_8cpp_source.html#l00132">hal::GuiApi::selectNet()</a>, <a class="el" href="net__info__table_8cpp_source.html#l00060">hal::NetInfoTable::setNet()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">unmark_global_input_net()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">unmark_global_output_net()</a>.</p>
 
@@ -2184,7 +2234,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00828">828</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00862">862</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00028">hal::GateLibrary::get_gate_location_data_category()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00038">hal::GateLibrary::get_gate_location_data_identifiers()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
@@ -2218,7 +2268,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">387</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00509">is_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf483783b5cb1b87407dd87879cedaa4a">hal::NetlistEvent::marked_global_input</a>, and <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00509">is_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf483783b5cb1b87407dd87879cedaa4a">hal::NetlistEvent::marked_global_input</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00460">hal::Net::mark_global_input_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2250,7 +2300,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">417</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00514">is_global_output_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae8c6c35b23ca8b21ff8acd068b2deada">hal::NetlistEvent::marked_global_output</a>, and <a class="el" href="test_8py_source.html#l00008">test::n</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00514">is_global_output_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae8c6c35b23ca8b21ff8acd068b2deada">hal::NetlistEvent::marked_global_output</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00465">hal::Net::mark_global_output_net()</a>, and <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2376,7 +2426,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00031">31</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00104">get_design_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00118">get_device_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">get_gate_library()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00090">get_input_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00590">get_modules()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00574">get_top_module()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00104">get_design_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00118">get_device_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">get_gate_library()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00090">get_input_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">get_modules()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00364">get_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">get_top_module()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00070">operator!=()</a>.</p>
 
@@ -2467,7 +2517,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00722">722</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00756">756</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2496,7 +2546,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00812">812</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00846">846</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2525,7 +2575,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00782">782</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00816">816</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2554,7 +2604,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00752">752</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00786">786</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2645,7 +2695,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00702">702</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00736">736</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>.</p>
 
@@ -2676,7 +2726,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00792">792</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00826">826</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>.</p>
 
@@ -2707,7 +2757,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00762">762</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00796">796</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>.</p>
 
@@ -2738,7 +2788,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00732">732</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00766">766</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>.</p>
 
@@ -2769,7 +2819,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00712">712</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00746">746</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2798,7 +2848,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00802">802</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00836">836</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2827,7 +2877,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00772">772</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00806">806</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2856,7 +2906,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00742">742</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00776">776</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>.</p>
 
@@ -2888,7 +2938,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">447</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafad9cc107ff1da372cce7da6ef0636af22">hal::NetlistEvent::unmarked_global_input</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafad9cc107ff1da372cce7da6ef0636af22">hal::NetlistEvent::unmarked_global_input</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00470">hal::Net::unmark_global_input_net()</a>.</p>
 
@@ -2920,7 +2970,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">478</a> of file <a class="el" href="src_2netlist_2netlist_8cpp_source.html">netlist.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0">hal::NetlistEvent::unmarked_global_output</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">is_net_in_netlist()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0">hal::NetlistEvent::unmarked_global_output</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp_source.html#l00005">hal::netlist_init()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00475">hal::Net::unmark_global_output_net()</a>.</p>
 
@@ -3027,7 +3077,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist.html">Netlist</a></li>
-    <li class="footer">Generated on Tue Jul 16 2024 12:39:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 16 2024 13:26:17 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Simulator &mdash; hal_py v4.3.0-11-g757522748 documentation</title>
+  <title>Netlist Simulator &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-11-g757522748
+                v4.3.0-33-g1e8b5de4b
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,6 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hawkeye.html">HAWKEYE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_identification.html">Module Identification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_preprocessing.html">Netlist Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="resynthesis.html">Resynthesis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Simulator</a></li>
@@ -144,7 +145,7 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netlist_simulator.</span></span><span class="sig-name descname"><span class="pre">NetlistSimulator</span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="netlist_simulator.NetlistSimulator.generate_vcd">
-<span class="sig-name descname"><span class="pre">generate_vcd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">generate_vcd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">nets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">set()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.generate_vcd" title="Permalink to this definition"></a></dt>
 <dd><p>Generates the a VCD file for parts the simulated netlist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -152,7 +153,7 @@
 <li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The path to the VCD file.</p></li>
 <li><p><strong>start_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Start of the timeframe to write to the file (in picoseconds).</p></li>
 <li><p><strong>end_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – End of the timeframe to write to the file (in picoseconds).</p></li>
-<li><p><strong>nets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>]</em>) – Nets to include in the VCD file.</p></li>
+<li><p><strong>nets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><em>hal_py.Net</em><em>]</em>) – Nets to include in the VCD file.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -236,11 +237,11 @@ This function can only be called before the simulation has started.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_simulator.NetlistSimulator.load_initial_values">
-<span class="sig-name descname"><span class="pre">load_initial_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><span class="pre">hal_py.BooleanFunction.Value</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load_initial_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.BooleanFunction.Value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.load_initial_values" title="Permalink to this definition"></a></dt>
 <dd><p>Load the specified initial value into the current state of all sequential elements.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>hal_py.BooleanFunction.Value</em></a>) – The initial value to load.</p>
+<dd class="field-odd"><p><strong>value</strong> (<em>hal_py.BooleanFunction.Value</em>) – The initial value to load.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,13 +262,13 @@ Does not remove gates/nets from the simulation set.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_simulator.NetlistSimulator.set_input">
-<span class="sig-name descname"><span class="pre">set_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><span class="pre">hal_py.BooleanFunction.Value</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_input" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.NetlistSimulator" title="netlist_simulator.NetlistSimulator"><span class="pre">netlist_simulator.NetlistSimulator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.BooleanFunction.Value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#netlist_simulator.NetlistSimulator.set_input" title="Permalink to this definition"></a></dt>
 <dd><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to set a signal value for.</p></li>
-<li><p><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>hal_py.BooleanFunction.Value</em></a>) – The value to set.</p></li>
+<li><p><strong>net</strong> (<em>hal_py.Net</em>) – The net to set a signal value for.</p></li>
+<li><p><strong>value</strong> (<em>hal_py.BooleanFunction.Value</em>) – The value to set.</p></li>
 </ul>
 </dd>
 </dl>
@@ -340,12 +341,12 @@ Use p set_input to control specific signals.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_simulator.Simulation.get_net_value">
-<span class="sig-name descname"><span class="pre">get_net_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.Simulation" title="netlist_simulator.Simulation"><span class="pre">netlist_simulator.Simulation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><span class="pre">hal_py.BooleanFunction.Value</span></a></span></span><a class="headerlink" href="#netlist_simulator.Simulation.get_net_value" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_net_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#netlist_simulator.Simulation" title="netlist_simulator.Simulation"><span class="pre">netlist_simulator.Simulation</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.BooleanFunction.Value</span></span></span><a class="headerlink" href="#netlist_simulator.Simulation.get_net_value" title="Permalink to this definition"></a></dt>
 <dd><p>Get the signal value of a specific net at a specific point in time specified in picoseconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to inspect.</p></li>
+<li><p><strong>net</strong> (<em>hal_py.Net</em>) – The net to inspect.</p></li>
 <li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The time in picoseconds.</p></li>
 </ul>
 </dd>
@@ -353,7 +354,7 @@ Use p set_input to control specific signals.</p>
 <dd class="field-even"><p>The net’s signal value.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a></p>
+<dd class="field-odd"><p>hal_py.BooleanFunction.Value</p>
 </dd>
 </dl>
 </dd></dl>

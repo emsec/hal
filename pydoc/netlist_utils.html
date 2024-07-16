@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Utils &mdash; hal_py v4.3.0-11-g757522748 documentation</title>
+  <title>Netlist Utils &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-11-g757522748
+                v4.3.0-33-g1e8b5de4b
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -107,17 +107,17 @@
 <p>HAL Netlist Utility functions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistUtils.copy_netlist">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">copy_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></span><a class="headerlink" href="#hal_py.NetlistUtils.copy_netlist" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">copy_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.Netlist</span></span></span><a class="headerlink" href="#hal_py.NetlistUtils.copy_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Get a deep copy of an entire netlist including all of its gates, nets, modules, and groupings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to copy.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to copy.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The deep copy of the netlist.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></p>
+<dd class="field-odd"><p>hal_py.Netlist</p>
 </dd>
 </dl>
 </dd></dl>
@@ -131,7 +131,7 @@ If the theshold value is set to 0, a net must be input to all gates to be consid
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates.</p></li>
+<li><p><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.Gate</em><em>]</em>) – The gates.</p></li>
 <li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The threshold value, defaults to 0.</p></li>
 </ul>
 </dd>
@@ -139,7 +139,7 @@ If the theshold value is set to 0, a net must be input to all gates to be consid
 <dd class="field-even"><p>The common input nets.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Net]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -155,10 +155,10 @@ The optional filter is evaluated on every gate such that the result only contain
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</p></li>
-<li><p><strong>chain_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The sequence of gate types that is expected to make up the gate chain.</p></li>
-<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em>) – The input pins through which the gates are allowed to be connected.</p></li>
-<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em>) – The output pins through which the gates are allowed to be connected.</p></li>
+<li><p><strong>start_gate</strong> (<em>hal_py.Gate</em>) – The gate at which to start the chain detection.</p></li>
+<li><p><strong>chain_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GateType</em><em>]</em>) – The sequence of gate types that is expected to make up the gate chain.</p></li>
+<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><em>hal_py.GateType</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em>) – The input pins through which the gates are allowed to be connected.</p></li>
+<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><em>hal_py.GateType</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em>) – The output pins through which the gates are allowed to be connected.</p></li>
 <li><p><strong>filter</strong> (<em>lambda</em>) – A filter that is evaluated on all candidates.</p></li>
 </ul>
 </dd>
@@ -166,24 +166,24 @@ The optional filter is evaluated on every gate such that the result only contain
 <dd class="field-even"><p>A list of gates that form a chain.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Gate]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistUtils.get_ff_dependency_matrix">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">get_ff_dependency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple[Dict[int,</span> <span class="pre">hal::Gate],</span> <span class="pre">List[List[int]]]</span></span></span><a class="headerlink" href="#hal_py.NetlistUtils.get_ff_dependency_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">get_ff_dependency_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple[Dict[int,</span> <span class="pre">hal::Gate],</span> <span class="pre">List[List[int]]]</span></span></span><a class="headerlink" href="#hal_py.NetlistUtils.get_ff_dependency_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Get the FF dependency matrix of a netlist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to extract the dependency matrix from.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to extract the dependency matrix from.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pair(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>, <a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]])</p>
+<dd class="field-odd"><p>pair(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>, hal_py.Gate), <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -198,9 +198,9 @@ The optional filter is evaluated on every gate such that the result only contain
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate at which to start the chain detection.</p></li>
-<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The input pins through which the gates must be connected. Defaults to an empty list.</p></li>
-<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The output pins through which the gates must be connected. Defaults to an empty list.</p></li>
+<li><p><strong>start_gate</strong> (<em>hal_py.Gate</em>) – The gate at which to start the chain detection.</p></li>
+<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GatePin</em><em>]</em>) – The input pins through which the gates must be connected. Defaults to an empty list.</p></li>
+<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><em>hal_py.GatePin</em><em>]</em>) – The output pins through which the gates must be connected. Defaults to an empty list.</p></li>
 <li><p><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</p></li>
 </ul>
 </dd>
@@ -208,7 +208,7 @@ The optional filter is evaluated on every gate such that the result only contain
 <dd class="field-even"><p>A list of gates that form a chain on success, an empty list on error.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Gate]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,15 +220,15 @@ The optional filter is evaluated on every gate such that the result only contain
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</p></li>
-<li><p><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – The targeted pins.</p></li>
+<li><p><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate.</p></li>
+<li><p><strong>pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GatePin</em><em>]</em>) – The targeted pins.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The list of nets connected to the pins.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Net]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -525,8 +525,8 @@ If there is no such path an empty vector is returned. If there is more than one 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The input pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
-<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em><em>]</em>) – The output pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
+<li><p><strong>input_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><em>hal_py.GateType</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GatePin</em><em>]</em><em>]</em>) – The input pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
+<li><p><strong>output_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><em>hal_py.GateType</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GatePin</em><em>]</em><em>]</em>) – The output pins (of every gate type of the sequence) through which the gates must be connected.</p></li>
 <li><p><strong>filter</strong> (<em>lambda</em>) – An optional filter function to be evaluated on each gate.</p></li>
 </ul>
 </dd>
@@ -534,7 +534,7 @@ If there is no such path an empty vector is returned. If there is more than one 
 <dd class="field-even"><p>A list of gates that form a chain on success, an empty list on error.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Gate]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -547,28 +547,28 @@ The variables of the resulting Boolean function are made up of the IDs of the ne
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The output net for which to generate the Boolean function.</p></li>
-<li><p><strong>subgraph_gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates making up the subgraph.</p></li>
+<li><p><strong>net</strong> (<em>hal_py.Net</em>) – The output net for which to generate the Boolean function.</p></li>
+<li><p><strong>subgraph_gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.Gate</em><em>]</em>) – The gates making up the subgraph.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The combined Boolean function of the subgraph on success, an empty Boolean function otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></p>
+<dd class="field-odd"><p>hal_py.BooleanFunction</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistUtils.remove_buffers">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">remove_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">analyze_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.NetlistUtils.remove_buffers" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">remove_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analyze_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.NetlistUtils.remove_buffers" title="Permalink to this definition"></a></dt>
 <dd><p>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets.
 If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ inputs from the Boolean function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</p></li>
+<li><p><strong>netlist</strong> (<em>hal_py.Netlist</em>) – The target netlist.</p></li>
 <li><p><strong>analyze_inputs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set True to dynamically analyze the inputs, False otherwise.</p></li>
 </ul>
 </dd>
@@ -583,11 +583,11 @@ If enabled, analyzes every gate’s inputs and removes fixed ‘0’ or ‘1’ 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistUtils.remove_unused_lut_endpoints">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">remove_unused_lut_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.NetlistUtils.remove_unused_lut_endpoints" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistUtils.</span></span><span class="sig-name descname"><span class="pre">remove_unused_lut_endpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.NetlistUtils.remove_unused_lut_endpoints" title="Permalink to this definition"></a></dt>
 <dd><p>Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The target netlist.</p>
+<dd class="field-odd"><p><strong>netlist</strong> (<em>hal_py.Netlist</em>) – The target netlist.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed endpionts on success, -1 otherwise.</p>
@@ -607,9 +607,9 @@ A pin can be omitted if no connection at that pin is desired.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to be replaced.</p></li>
-<li><p><strong>target_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a>) – The gate type of the replacement gate.</p></li>
-<li><p><strong>pin_map</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>,</em><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a><em>]</em>) – A dict from old to new pins.</p></li>
+<li><p><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to be replaced.</p></li>
+<li><p><strong>target_type</strong> (<em>hal_py.GateType</em>) – The gate type of the replacement gate.</p></li>
+<li><p><strong>pin_map</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><em>hal_py.GatePin</em><em>,</em><em>hal_py.GatePin</em><em>]</em>) – A dict from old to new pins.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

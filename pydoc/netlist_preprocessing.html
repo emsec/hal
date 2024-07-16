@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Preprocessing &mdash; hal_py v4.3.0-11-g757522748 documentation</title>
+  <title>Netlist Preprocessing &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Resynthesis" href="resynthesis.html" />
-    <link rel="prev" title="HAWKEYE" href="hawkeye.html" /> 
+    <link rel="prev" title="Module Identification" href="module_identification.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-11-g757522748
+                v4.3.0-33-g1e8b5de4b
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,6 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hawkeye.html">HAWKEYE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_identification.html">Module Identification</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="resynthesis.html">Resynthesis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
@@ -89,7 +90,7 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">netlist_preprocessing.</span></span><span class="sig-name descname"><span class="pre">NetlistPreprocessingPlugin</span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin" title="Permalink to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gate">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">decompose_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gate" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">decompose_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Gate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gate" title="Permalink to this definition"></a></dt>
 <dd><p>Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
 Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ‘delete_gate’ flag is set.</p>
 <p>For the decomposition we currently only support the base operands AND, OR, INVERT.
@@ -97,8 +98,8 @@ The function searches in the gate library for a fitting two input gate and uses 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to decompose.</p></li>
+<li><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p></li>
+<li><p><strong>gate</strong> (<em>hal_py.Gate</em>) – The gate to decompose.</p></li>
 <li><p><strong>delete_gate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Determines whether the original gate gets deleted by the function, defaults to <cite>True</cite>.</p></li>
 </ul>
 </dd>
@@ -113,7 +114,7 @@ The function searches in the gate library for a fitting two input gate and uses 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gates_of_type">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">decompose_gates_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gates_of_type" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">decompose_gates_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.GateType</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gates_of_type" title="Permalink to this definition"></a></dt>
 <dd><p>Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
 Afterwards the original gate is deleted and the output net is connected to the built gate tree.</p>
 <p>For the decomposition we currently only support the base operands AND, OR, INVERT.
@@ -121,8 +122,8 @@ The function searches in the gate library for a fitting two input gate and uses 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>gate_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The gate types that should be decomposed.</p></li>
+<li><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p></li>
+<li><p><strong>gate_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.GateType</em><em>]</em>) – The gate types that should be decomposed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -175,13 +176,13 @@ The function searches in the gate library for a fitting two input gate and uses 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.parse_def_file">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_def_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.parse_def_file" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_def_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">def_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.parse_def_file" title="Permalink to this definition"></a></dt>
 <dd><p>Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
 The extracted coordinates get annotated to the gates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
+<li><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p></li>
 <li><p><strong>def_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The path to the def file</p></li>
 </ul>
 </dd>
@@ -196,14 +197,14 @@ The extracted coordinates get annotated to the gates.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reconstruct_indexed_ff_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reconstruct_indexed_ff_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers" title="Permalink to this definition"></a></dt>
 <dd><p>Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
 This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
 This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
 We try to reconstruct name and index for each flip flop based on the name of its output nets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of reconstructed names on success, <cite>None</cite> otherwise.</p>
@@ -216,13 +217,13 @@ We try to reconstruct name and index for each flip flop based on the name of its
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_buffers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers" title="Permalink to this definition"></a></dt>
 <dd><p>Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
 Considers all combinational gates and takes their inputs into account.
 For example, a 2-input AND gate with one input being connected to constant ‘1’ will also be removed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed buffers on success, <cite>None</cite> otherwise.</p>
@@ -235,11 +236,11 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_redundant_logic">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_redundant_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_redundant_logic" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_redundant_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_redundant_logic" title="Permalink to this definition"></a></dt>
 <dd><p>Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed gates on success, <cite>None</cite> otherwise.</p>
@@ -252,11 +253,11 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_gates">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unconnected_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_gates" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unconnected_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_gates" title="Permalink to this definition"></a></dt>
 <dd><p>Removes gates which outputs are all unconnected and not a global output net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed gates on success, <cite>None</cite> otherwise.</p>
@@ -269,11 +270,11 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_nets">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unconnected_nets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_nets" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unconnected_nets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_nets" title="Permalink to this definition"></a></dt>
 <dd><p>Remove nets which have no source and not destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed nets on success, <cite>None</cite> otherwise.</p>
@@ -286,11 +287,11 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_unused_lut_inputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unused_lut_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unused_lut_inputs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_unused_lut_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unused_lut_inputs" title="Permalink to this definition"></a></dt>
 <dd><p>Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of removed LUT endpoints on success, <cite>None</cite> otherwise.</p>
@@ -303,11 +304,11 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.simplify_lut_inits">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_lut_inits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.simplify_lut_inits" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simplify_lut_inits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.simplify_lut_inits" title="Permalink to this definition"></a></dt>
 <dd><p>Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+<dd class="field-odd"><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The number of simplified INIT strings on success, <cite>None</cite> otherwise.</p>
@@ -320,16 +321,16 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="netlist_preprocessing.NetlistPreprocessingPlugin.unify_ff_outputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unify_ff_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.unify_ff_outputs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unify_ff_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateType</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.unify_ff_outputs" title="Permalink to this definition"></a></dt>
 <dd><p>Iterates all flip-flops of the netlist or specified by the user.
 If a flip-flop has a <code class="docutils literal notranslate"><span class="pre">state</span></code> and a <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> output, a new inverter gate is created and connected to the <code class="docutils literal notranslate"><span class="pre">state</span></code> output net as an additional destination.
 Finally, the <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> output net is disconnected from the <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> pin and re-connected to the new inverter gate’s output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.</p></li>
-<li><p><strong>inverter_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a>) – The inverter gate type to use. Defaults to a <code class="docutils literal notranslate"><span class="pre">None</span></code>, in which case the first inverter type found in the gate library is used.</p></li>
+<li><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p></li>
+<li><p><strong>ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.Gate</em><em>]</em>) – The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.</p></li>
+<li><p><strong>inverter_type</strong> (<em>hal_py.GateType</em>) – The inverter gate type to use. Defaults to a <code class="docutils literal notranslate"><span class="pre">None</span></code>, in which case the first inverter type found in the gate library is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -360,7 +361,7 @@ Finally, the <code class="docutils literal notranslate"><span class="pre">neg_st
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="hawkeye.html" class="btn btn-neutral float-left" title="HAWKEYE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="module_identification.html" class="btn btn-neutral float-left" title="Module Identification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="resynthesis.html" class="btn btn-neutral float-right" title="Resynthesis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

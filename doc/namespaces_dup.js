@@ -1371,8 +1371,7 @@ var namespaces_dup =
     [ "std", "namespacestd.html", "namespacestd" ],
     [ "test", "namespacetest.html", [
       [ "inf", "namespacetest.html#ade4b74e569e08d34aeb580d0380e44de", null ],
-      [ "n", "namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090", null ],
-      [ "pl", "namespacetest.html#aac9aefb9f09ac6868c274eca88a7b7c1", null ]
+      [ "n", "namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090", null ]
     ] ],
     [ "test_multiple", "namespacetest__multiple.html", [
       [ "dir_path", "namespacetest__multiple.html#acc4677858c72770ae76519b4ccc47178", null ],
@@ -1380,8 +1379,7 @@ var namespaces_dup =
       [ "gate_library_path", "namespacetest__multiple.html#ae231762a69fc3d6b78a3d8ba62544d67", null ],
       [ "hal_base_path", "namespacetest__multiple.html#a543d66d31f760784516bf673780bf12b", null ],
       [ "inf", "namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd", null ],
-      [ "netlist", "namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1", null ],
-      [ "pl", "namespacetest__multiple.html#ab7dba87eb770cbd8b3e2ae79f8266f9b", null ]
+      [ "netlist", "namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1", null ]
     ] ],
     [ "test_plugin", "namespacetest__plugin.html", [
       [ "base_path", "namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816", null ],

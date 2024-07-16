@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/boolean_influence/test_multiple.py Source File</title>
+<title>HAL: /home/runner/work/hal/hal/plugins/boolean_influence/scripts/test_multiple.py Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -102,35 +102,33 @@ $(document).ready(function(){initNavTree('test__multiple_8py_source.html',''); i
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">from</span> hal_plugins <span class="keyword">import</span> boolean_influence</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#ab7dba87eb770cbd8b3e2ae79f8266f9b">   17</a></span>&#160;pl = hal_py.plugin_manager.get_plugin_instance(<span class="stringliteral">&quot;boolean_influence&quot;</span>)</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">import</span> glob</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> glob</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#aa1726891f96105ae41d3f40a15e96b75">   19</a></span>&#160;files = glob.glob(dir_path + <span class="stringliteral">&#39;/**/netlist/*.v&#39;</span>, recursive=<span class="keyword">True</span>)</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#aa1726891f96105ae41d3f40a15e96b75">   21</a></span>&#160;files = glob.glob(dir_path + <span class="stringliteral">&#39;/**/netlist/*.v&#39;</span>, recursive=<span class="keyword">True</span>)</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;print(files)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;print(len(files))</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordflow">for</span> file <span class="keywordflow">in</span> files:</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    print(<span class="stringliteral">&quot;Getting influences in netlist {}&quot;</span>.format(file))</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;print(files)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;print(len(files))</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordflow">for</span> file <span class="keywordflow">in</span> files:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    print(<span class="stringliteral">&quot;Getting influences in netlist {}&quot;</span>.format(file))</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">   27</a></span>&#160;    netlist = hal_py.NetlistFactory.load_netlist(file, gate_library_path)</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">   29</a></span>&#160;    netlist = hal_py.NetlistFactory.load_netlist(file, gate_library_path)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">for</span> gate <span class="keywordflow">in</span> netlist.gates:</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">if</span> gate.type.has_property(hal_py.GateTypeProperty.ff):</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            print(<span class="stringliteral">&quot;Gathering influences for gate {}&quot;</span>.format(gate.id))   </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd">   34</a></span>&#160;            inf = pl.get_boolean_influences_of_gate(gate)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">#unload everything hal related</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;hal_py.plugin_manager.unload_all_plugins()</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordflow">for</span> gate <span class="keywordflow">in</span> netlist.gates:</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">if</span> gate.type.has_property(hal_py.GateTypeProperty.ff):</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            print(<span class="stringliteral">&quot;Gathering influences for gate {}&quot;</span>.format(gate.id))   </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd">   32</a></span>&#160;            inf = boolean_influence.get_boolean_influences_of_gate(gate)</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">#unload everything hal related</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;hal_py.plugin_manager.unload_all_plugins()</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e66abdd4ce1958cbb4df6935267b2aa1.html">boolean_influence</a></li><li class="navelem"><a class="el" href="test__multiple_8py.html">test_multiple.py</a></li>
-    <li class="footer">Generated on Tue Jul 16 2024 12:39:08 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e66abdd4ce1958cbb4df6935267b2aa1.html">boolean_influence</a></li><li class="navelem"><a class="el" href="dir_d12f67f07ea2afc063b7d3cdb938601d.html">scripts</a></li><li class="navelem"><a class="el" href="test__multiple_8py.html">test_multiple.py</a></li>
+    <li class="footer">Generated on Tue Jul 16 2024 13:26:11 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

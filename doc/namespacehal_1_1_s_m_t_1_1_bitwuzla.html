@@ -95,10 +95,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a314dfb608f1671a7c069a1bea127e788"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#a314dfb608f1671a7c069a1bea127e788">query_binary_path</a> ()</td></tr>
 <tr class="memdesc:a314dfb608f1671a7c069a1bea127e788"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a> binary is available on the system.  <a href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#a314dfb608f1671a7c069a1bea127e788">More...</a><br /></td></tr>
 <tr class="separator:a314dfb608f1671a7c069a1bea127e788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d2ca20edbecc50feecce9bc5e7b17cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#a4d2ca20edbecc50feecce9bc5e7b17cc">query_library</a> (std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
-<tr class="separator:a4d2ca20edbecc50feecce9bc5e7b17cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1c19f24d5ff7914542db2c21c8dfd84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#aa1c19f24d5ff7914542db2c21c8dfd84">query_binary</a> (std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
-<tr class="separator:aa1c19f24d5ff7914542db2c21c8dfd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affaadc7bc6d480d5a887c472d1f57960"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#affaadc7bc6d480d5a887c472d1f57960">query_library</a> (const std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
+<tr class="separator:affaadc7bc6d480d5a887c472d1f57960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac731e2cff942eb2fc21eb02d19a9bdc7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::tuple&lt; bool, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html#ac731e2cff942eb2fc21eb02d19a9bdc7">query_binary</a> (const std::string &amp;input, const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config)</td></tr>
+<tr class="separator:ac731e2cff942eb2fc21eb02d19a9bdc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -106,8 +106,8 @@ Variables</h2></td></tr>
 <tr class="separator:a91ebbf195c51c0fdc0b3437b89d15125"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aa1c19f24d5ff7914542db2c21c8dfd84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1c19f24d5ff7914542db2c21c8dfd84">&#9670;&nbsp;</a></span>query_binary()</h2>
+<a id="ac731e2cff942eb2fc21eb02d19a9bdc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac731e2cff942eb2fc21eb02d19a9bdc7">&#9670;&nbsp;</a></span>query_binary()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -115,7 +115,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Bitwuzla::query_binary </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>input</em>, </td>
         </tr>
         <tr>
@@ -141,9 +141,9 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a> process on success, Err() otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00285">285</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00289">289</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00204">query_binary_path()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00205">query_binary_path()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
 
 </div>
 </div>
@@ -164,16 +164,16 @@ Variables</h2></td></tr>
 
 <p>Checks whether a <a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a> binary is available on the system. </p>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00204">204</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00205">205</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00285">query_binary()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00289">query_binary()</a>.</p>
 
 </div>
 </div>
-<a id="a4d2ca20edbecc50feecce9bc5e7b17cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d2ca20edbecc50feecce9bc5e7b17cc">&#9670;&nbsp;</a></span>query_library()</h2>
+<a id="affaadc7bc6d480d5a887c472d1f57960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affaadc7bc6d480d5a887c472d1f57960">&#9670;&nbsp;</a></span>query_library()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,7 +181,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::tuple&lt;bool, std::string&gt; &gt; hal::SMT::Bitwuzla::query_library </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>input</em>, </td>
         </tr>
         <tr>
@@ -207,9 +207,9 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and status with (0) was_killed (true in case process was killed), and (1) stdout Stdout of <a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a> process on success, Err() otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00233">233</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00234">234</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282">hal::error</a>, <a class="el" href="types_8h_source.html#l00073">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="types_8h_source.html#l00073">hal::SMT::QueryConfig::generate_model</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, and <a class="el" href="control_8py_source.html#l00013">control::parser</a>.</p>
 
 </div>
 </div>
@@ -226,7 +226,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00200">200</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00201">201</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -236,7 +236,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t_1_1_bitwuzla.html">Bitwuzla</a></li>
-    <li class="footer">Generated on Tue Jul 16 2024 12:39:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 16 2024 13:26:17 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

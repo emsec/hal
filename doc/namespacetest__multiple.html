@@ -97,13 +97,11 @@ Variables</h2></td></tr>
 <tr class="separator:acc4677858c72770ae76519b4ccc47178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae231762a69fc3d6b78a3d8ba62544d67"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#ae231762a69fc3d6b78a3d8ba62544d67">gate_library_path</a> = &quot;/home/simon/projects/hal/plugins/gate_libraries/definitions/lsi_10k.hgl&quot;</td></tr>
 <tr class="separator:ae231762a69fc3d6b78a3d8ba62544d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7dba87eb770cbd8b3e2ae79f8266f9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#ab7dba87eb770cbd8b3e2ae79f8266f9b">pl</a> = hal_py.plugin_manager.get_plugin_instance(&quot;boolean_influence&quot;)</td></tr>
-<tr class="separator:ab7dba87eb770cbd8b3e2ae79f8266f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1726891f96105ae41d3f40a15e96b75"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#aa1726891f96105ae41d3f40a15e96b75">files</a> = glob.glob(<a class="el" href="namespacetest__multiple.html#acc4677858c72770ae76519b4ccc47178">dir_path</a> + '/**/<a class="el" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>/*.v', recursive=True)</td></tr>
 <tr class="separator:aa1726891f96105ae41d3f40a15e96b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca3deff7ab8749c592308be75680f1e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a> = hal_py.NetlistFactory.load_netlist(<a class="el" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>, <a class="el" href="namespacetest__multiple.html#ae231762a69fc3d6b78a3d8ba62544d67">gate_library_path</a>)</td></tr>
 <tr class="separator:aca3deff7ab8749c592308be75680f1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04dab7e5a4ab4a23c010b5df93732bbd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd">inf</a> = pl.get_boolean_influences_of_gate(gate)</td></tr>
+<tr class="memitem:a04dab7e5a4ab4a23c010b5df93732bbd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd">inf</a> = boolean_influence.get_boolean_influences_of_gate(gate)</td></tr>
 <tr class="separator:a04dab7e5a4ab4a23c010b5df93732bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -135,7 +133,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00021">21</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00019">19</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
 
 </div>
 </div>
@@ -178,12 +176,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">test_multiple.inf = pl.get_boolean_influences_of_gate(gate)</td>
+          <td class="memname">test_multiple.inf = boolean_influence.get_boolean_influences_of_gate(gate)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00034">34</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00032">32</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
 
 </div>
 </div>
@@ -199,25 +197,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00029">29</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00027">27</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal.boolean_function_net_decorator_init()</a>, <a class="el" href="file__manager_8cpp_source.html#l00493">hal::FileManager.deprecatedOpenFile()</a>, <a class="el" href="graph__context__serializer_8cpp_source.html#l00009">hal::GraphContextSerializer.deserialize()</a>, <a class="el" href="python__editor_8cpp_source.html#l00141">hal::PythonSerializer.deserialize()</a>, <a class="el" href="grouping__serializer_8cpp_source.html#l00069">hal::GroupingSerializer.deserialize()</a>, <a class="el" href="comment__manager_8cpp_source.html#l00045">hal::CommentManager.deserialize()</a>, <a class="el" href="grouping__color__serializer_8cpp_source.html#l00064">hal::GroupingColorSerializer.deserialize()</a>, <a class="el" href="module__color__manager_8cpp_source.html#l00121">hal::ModuleColorSerializer.deserialize()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00023">hal::BooleanFunctionNetDecorator.get_net_from()</a>, <a class="el" href="event__log_8cpp_source.html#l00092">hal::event_log.handle_netlist_event()</a>, <a class="el" href="python__editor_8cpp_source.html#l00311">hal::PythonEditor.handleDeserializationFromHalFile()</a>, <a class="el" href="python__bindings_2bindings_2netlist__utils_8cpp_source.html#l00005">hal.netlist_utils_init()</a>, <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler.notify()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00482">hal::netlist_utils.remove_buffers()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00671">hal::netlist_utils.remove_unused_lut_endpoints()</a>, <a class="el" href="graph__context__serializer_8cpp_source.html#l00026">hal::GraphContextSerializer.serialize()</a>, <a class="el" href="python__editor_8cpp_source.html#l00058">hal::PythonSerializer.serialize()</a>, <a class="el" href="grouping__serializer_8cpp_source.html#l00023">hal::GroupingSerializer.serialize()</a>, <a class="el" href="comment__manager_8cpp_source.html#l00020">hal::CommentManager.serialize()</a>, <a class="el" href="grouping__color__serializer_8cpp_source.html#l00032">hal::GroupingColorSerializer.serialize()</a>, <a class="el" href="module__color__manager_8cpp_source.html#l00097">hal::ModuleColorSerializer.serialize()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00139">hal::ProjectManager.serialize_project()</a>, <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00090">hal::netlist_writer_manager.write()</a>, and <a class="el" href="src_2verilog__writer_8cpp_source.html#l00015">hal::VerilogWriter.write()</a>.</p>
-
-</div>
-</div>
-<a id="ab7dba87eb770cbd8b3e2ae79f8266f9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7dba87eb770cbd8b3e2ae79f8266f9b">&#9670;&nbsp;</a></span>pl</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">test_multiple.pl = hal_py.plugin_manager.get_plugin_instance(&quot;boolean_influence&quot;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="test__multiple_8py_source.html#l00017">17</a> of file <a class="el" href="test__multiple_8py_source.html">test_multiple.py</a>.</p>
 
 </div>
 </div>
@@ -227,7 +209,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacetest__multiple.html">test_multiple</a></li>
-    <li class="footer">Generated on Tue Jul 16 2024 12:39:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 16 2024 13:26:17 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
