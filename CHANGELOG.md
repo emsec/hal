@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 * **WARNING:** this release breaks the API of the `bitorder_propagation` plugin
 * plugins
+  * added `resynthesis` plugin
+    * moved `decompose_gate` and `decompose_gates_of_type` from `netlist_preprocessing` plugin and slightly changed their API
+    * added functions for logic re-synthesis that write out parts of the current netlist and call Yosys as an open-source synthesizer to produce a new gate-level netlist based on a user-defined gate library
   * changed `bitorder_propagation` plugin
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
     * changed propagation logic for better results
