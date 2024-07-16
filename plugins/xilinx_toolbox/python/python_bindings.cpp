@@ -25,7 +25,8 @@ namespace hal
         py::module m("xilinx_toolbox", "A collection of functions specifically designed to operate on Xilinx FPGA netlists.");
 #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<XilinxToolboxPlugin, RawPtrWrapper<XilinxToolboxPlugin>, BasePluginInterface> py_xilinx_toolbox_plugin(m, "XilinxToolboxPlugin");
+        py::class_<XilinxToolboxPlugin, RawPtrWrapper<XilinxToolboxPlugin>, BasePluginInterface> py_xilinx_toolbox_plugin(
+            m, "XilinxToolboxPlugin", R"(This class provides an interface to integrate the Xilinx toolbox as a plugin within the HAL framework.)");
 
         py_xilinx_toolbox_plugin.def_property_readonly("name", &XilinxToolboxPlugin::get_name, R"(
             The name of the plugin.
