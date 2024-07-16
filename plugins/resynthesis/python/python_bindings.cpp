@@ -199,7 +199,7 @@ namespace hal
                 All Boolean functions of a gate are then written to an HDL file that is functionally equivalent to the gate.
                 These files are fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
                 The provided gate library should be a subset of the gate library that was used to parse the netlist.
-                The gate is then replaced in the original netlist with the circuit that was just generated.
+                The gates are then replaced in the original netlist with the circuits that were just generated.
                 This process is repeated for every gate, hence they are re-synthesized in isolation.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
@@ -232,12 +232,72 @@ namespace hal
                 All Boolean functions of a gate are then written to an HDL file that is functionally equivalent to the gate.
                 These files are fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
                 The provided gate library should be a subset of the gate library that was used to parse the netlist.
-                The gate is then replaced in the original netlist with the circuit that was just generated.
+                The gates are then replaced in the original netlist with the circuits that were just generated.
                 This process is repeated for every gate, hence they are re-synthesized in isolation.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.GateType] gate_types: The gate types to be re-synthesized.
                 :param hal_py.GateLibrary target_gl: The gate library that is a subset of the gate library used to parse the netlist.
+                :returns: The number of re-synthesized gates on success, ``None`` otherwise.
+                :rtype: int or ``None``
+            )");
+
+        m.def(
+            "resynthesize_subgraph",
+            [](Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl) -> std::optional<u32> {
+                auto res = resynthesis::resynthesize_subgraph(nl, subgraph, target_gl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("subgraph"),
+            py::arg("target_gl"),
+            R"(
+                Re-synthesize the combinational gates of the subgraph by calling Yosys on a Verilog netlist representation of the subgraph using a reduced gate library.
+                All gates of the subgraph are written to a Verilog netlist file which is then fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
+                The provided gate library should be a subset of the gate library that was used to parse the netlist.
+                The gates are then replaced in the original netlist with the circuit that was just generated.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] subgraph: The subgraph to re-synthesize.
+                :param hal_py.GateLibrary target_lib: The gate library that is a subset of the gate library used to parse the netlist.
+                :returns: The number of re-synthesized gates on success, ``None`` otherwise.
+                :rtype: int or ``None``
+            )");
+
+        m.def(
+            "resynthesize_subgraph_of_type",
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
+                auto res = resynthesis::resynthesize_subgraph_of_type(nl, gate_types, target_gl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("gate_types"),
+            py::arg("target_gl"),
+            R"(
+                Re-synthesize the combinational gates of the specified types as a subgraph by calling Yosys on a Verilog netlist representation of the subgraph induced by these gates using a reduced gate library.
+                All gates of the subgraph are written to a Verilog netlist file which is then fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
+                The provided gate library should be a subset of the gate library that was used to parse the netlist.
+                The gates are then replaced in the original netlist with the circuit that was just generated.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.GateType] gate_types: The gate types to be re-synthesized.
+                :param hal_py.GateLibrary target_lib: The gate library that is a subset of the gate library used to parse the netlist.
                 :returns: The number of re-synthesized gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
