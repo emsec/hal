@@ -50,7 +50,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_binary(const std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -95,7 +95,7 @@ namespace hal
              *      (1) stdout Stdout of Z3 process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_library(const std::string& input, const QueryConfig& config)
             {
                 UNUSED(input);
                 UNUSED(config);
@@ -137,7 +137,7 @@ namespace hal
              *      (1) stdout Stdout of Boolector process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_binary(const std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -185,7 +185,7 @@ namespace hal
              *      (1) stdout Stdout of Boolector process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_library(const std::string& input, const QueryConfig& config)
             {
                 UNUSED(input);
                 UNUSED(config);
@@ -231,7 +231,7 @@ namespace hal
              *      (1) stdout Stdout of Bitwuzla process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_library(const std::string& input, const QueryConfig& config)
             {
 #ifdef BITWUZLA_LIBRARY
 
@@ -286,7 +286,7 @@ namespace hal
              *      (1) stdout Stdout of Bitwuzla process on success, 
              *      Err() otherwise
 			 */
-            Result<std::tuple<bool, std::string>> query_binary(std::string& input, const QueryConfig& config)
+            Result<std::tuple<bool, std::string>> query_binary(const std::string& input, const QueryConfig& config)
             {
                 auto binary_path = query_binary_path();
                 if (binary_path.is_error())
@@ -340,7 +340,7 @@ namespace hal
             {SolverType::Bitwuzla, Bitwuzla::is_linked},
         };
 
-        std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> Solver::spec2query = {
+        std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(const std::string&, const QueryConfig&)>> Solver::spec2query = {
             {{SolverType::Z3, SolverCall::Binary}, Z3::query_binary},
             {{SolverType::Z3, SolverCall::Library}, Z3::query_library},
             {{SolverType::Boolector, SolverCall::Binary}, Boolector::query_binary},
@@ -437,7 +437,7 @@ namespace hal
             return query_local(config, input_str);
         }
 
-        Result<SolverResult> Solver::query_local(const QueryConfig& config, std::string& smt2)
+        Result<SolverResult> Solver::query_local(const QueryConfig& config, const std::string& smt2)
         {
             auto query = spec2query.at({config.solver, config.call})(smt2, config);
             if (query.is_ok())

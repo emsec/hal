@@ -422,10 +422,10 @@ namespace hal
             :rtype: hal_py.SMT.Result or str
         )");
 
-        py_smt_solver.def(
+        py_smt_solver.def_static(
             "query_local",
-            [](const SMT::Solver& self, const SMT::QueryConfig& config, const std::string& smt2) -> std::optional<SMT::SolverResult> {
-                auto res = self.query_local(config);
+            [](const SMT::QueryConfig& config, const std::string& smt2) -> std::optional<SMT::SolverResult> {
+                auto res = SMT::Solver::query_local(config, smt2);
                 if (res.is_ok())
                 {
                     return res.get();
