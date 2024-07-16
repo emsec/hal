@@ -43,16 +43,18 @@ namespace hal
     namespace netlist_preprocessing
     {
         /**
-         * Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
+         * Remove all LUT fan-in endpoints that have no influence on the output of the LUT gate.
+         * For some FPGA architectures, it may happen that a net is connected to a LUT input pin which (according to the LUT configuration) does not affect the LUT's output.
+         * This function removes such connections to improve results of structural analysis.
          * 
          * @param[in] nl - The netlist to operate on. 
-         * @returns OK() and the number of removed LUT endpoints on success, an error otherwise.
+         * @returns OK() and the number of removed LUT fan-in endpoints on success, an error otherwise.
          */
         Result<u32> remove_unused_lut_inputs(Netlist* nl);
 
         /**
-         * Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
-         * Considers all combinational gates and takes their inputs into account.
+         * Remove buffer gates from the netlist and merge their fan-in and fan-out nets.
+         * This function considers all combinational gates and also takes their inputs into account.
          * For example, a 2-input AND gate with one input being connected to constant `1` will also be removed.
          * 
          * @param[in] nl - The netlist to operate on. 
@@ -115,6 +117,15 @@ namespace hal
         Result<u32> remove_unconnected_looped(Netlist* nl);
 
         /**
+         * Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
+         * If the first inverter has additional successors, only the second inverter is deleted.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @returns OK() and the number of removed inverter gates on success, an error otherwise.
+         */
+        Result<u32> remove_consecutive_inverters(Netlist* nl);
+
+        /**
          * Apply manually implemented optimizations to the netlist centered around muxes.
          * Currently implemented optimizations include:
          *  - removing inverters incase there are inverter gates in front and behind every data input and output of the mux
@@ -134,15 +145,6 @@ namespace hal
          * @return OK() and the number rerouted destinations on success, an error otherwise.
          */
         Result<u32> propagate_constants(Netlist* nl);
-
-        /**
-         * Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
-         * If the first inverter has additional successors, only the second inverter is deleted.
-         * 
-         * @param[in] nl - The netlist to operate on.
-         * @returns OK() and the number of removed inverter gates on success, an error otherwise.
-         */
-        Result<u32> remove_consecutive_inverters(Netlist* nl);
 
         /**
          * Replaces pins connected to GND/VCC with constants and simplifies the Boolean function of a LUT by recomputing the INIT string.
