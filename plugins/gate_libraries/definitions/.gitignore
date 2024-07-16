@@ -7,3 +7,5 @@
 !lsi_10k.hgl
 !NangateOpenCellLibrary.hgl
 !NanGate_15nm_OCL.hgl
+!helper_libs/aoixm_hal_i4.hgl
+!helper_libs/im_hal_i4.hgl
