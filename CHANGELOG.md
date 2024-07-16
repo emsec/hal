@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * **WARNING:** this release breaks the API of the `bitorder_propagation` plugin
+* **WARNING:** this release breaks the API of the `boolean_influence` plugin
 * plugins
   * updated `boolean_influence` plugin
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms

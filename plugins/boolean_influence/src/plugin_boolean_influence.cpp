@@ -9,7 +9,7 @@ namespace hal
 
     std::string BooleanInfluencePlugin::get_name() const
     {
-        return std::string("module_identification");
+        return std::string("boolean_influence");
     }
 
     std::string BooleanInfluencePlugin::get_version() const

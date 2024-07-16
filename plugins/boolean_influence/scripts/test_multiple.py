@@ -14,8 +14,6 @@ hal_py.plugin_manager.load_all_plugins()
 
 from hal_plugins import boolean_influence
 
-pl = hal_py.plugin_manager.get_plugin_instance("boolean_influence")
-
 import glob
 
 files = glob.glob(dir_path + '/**/netlist/*.v', recursive=True)
@@ -31,7 +29,7 @@ for file in files:
     for gate in netlist.gates:
         if gate.type.has_property(hal_py.GateTypeProperty.ff):
             print("Gathering influences for gate {}".format(gate.id))   
-            inf = pl.get_boolean_influences_of_gate(gate)
+            inf = boolean_influence.get_boolean_influences_of_gate(gate)
 
 
 #unload everything hal related
