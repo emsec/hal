@@ -32,12 +32,14 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/utilities/result.h"
 
 namespace hal
 {
     class Netlist;
     class Gate;
+    class Net;
     class GateType;
     class GateLibrary;
 
@@ -147,5 +149,17 @@ namespace hal
          * @return OK() and the number of re-synthesized gates on success, an error otherwise.
          */
         Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
+
+        // TODO functions below wil be removed/replaced soon
+        Result<std::monostate> replace_subgraph_with_netlist(const std::vector<Gate*>& subgraph,
+                                                             const std::unordered_map<Net*, std::vector<Net*>>& global_io_mapping,
+                                                             const Netlist* src_nl,
+                                                             Netlist* dst_nl,
+                                                             const bool delete_subgraph_gates);
+
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& bfs,
+                                                                                        const std::filesystem::path& genlib_path,
+                                                                                        GateLibrary* target_gl,
+                                                                                        const bool optimize_area);
     }    // namespace resynthesis
 }    // namespace hal
