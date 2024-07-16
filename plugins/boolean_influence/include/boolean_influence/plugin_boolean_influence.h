@@ -23,20 +23,62 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file plugin_boolean_influence.h 
+ * @brief This file contains all functions related to the HAL plugin API.
+ */
+
 #pragma once
 
-#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/result.h"
 
 namespace hal
 {
+    /**
+     * @class BooleanInfluencePlugin
+     * @brief Plugin interface for the Boolean influence plugin.
+     * 
+     * This class provides an interface to integrate the Boolean influence plugin within the HAL framework.
+     */
     class PLUGIN_API BooleanInfluencePlugin : public BasePluginInterface
     {
     public:
+        /**
+         * @brief Default constructor for `BooleanInfluencePlugin`.
+         */
+        BooleanInfluencePlugin() = default;
+
+        /**
+         * @brief Default destructor for `BooleanInfluencePlugin`.
+         */
+        ~BooleanInfluencePlugin() = default;
+
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * @brief Get a short description of the plugin.
+         *
+         * @returns The short description.
+         */
+        std::string get_description() const override;
+
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
-        void initialize() override;
+        /**
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
+         */
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

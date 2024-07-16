@@ -9,7 +9,7 @@ namespace hal
 
     std::string BooleanInfluencePlugin::get_name() const
     {
-        return std::string("boolean_influence");
+        return std::string("module_identification");
     }
 
     std::string BooleanInfluencePlugin::get_version() const
@@ -17,8 +17,16 @@ namespace hal
         return std::string("0.1");
     }
 
-    void BooleanInfluencePlugin::initialize()
+    std::string BooleanInfluencePlugin::get_description() const
     {
+        return std::string("Set of functions to determine the influence of variables of a Boolean function on its output.");
+    }
+
+    std::set<std::string> BooleanInfluencePlugin::get_dependencies() const
+    {
+        std::set<std::string> retval;
+        retval.insert("z3_utils");
+        return retval;
     }
 
 }    // namespace hal

@@ -29,7 +29,7 @@ namespace hal
 
         /**
          * Generates the Boolean influence of each input variable of a Boolean function using the internal HAL functions only
-         * The function is slower, but can be better used in multithreading enviroment.
+         * The function is slower, but can be better used in multithreading environment.
          *
          * @param[in] bf - The Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
@@ -39,7 +39,7 @@ namespace hal
 
         /**
          * Generates the Boolean influence of each input variable of a Boolean function using z3 expressions and substitutions/simplifications only.
-         * The function is slower, but can be better used in multithreading enviroment.
+         * The function is slower, but can be better used in multithreading environment.
          *
          * @param[in] bf - The Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
@@ -74,7 +74,7 @@ namespace hal
 
         /**
          * Generates the function of the net using only the given gates.
-         * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.
+         * Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
          *
          * @param[in] gates - The gates of the subcircuit.
          * @param[in] start_net - The output net of the subcircuit at which to start the analysis.
@@ -95,7 +95,7 @@ namespace hal
 
         /**
          * Generates the function of the net using only the given gates.
-         * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.
+         * Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
          *
          * @param[in] gates - The gates of the subcircuit.
          * @param[in] start_net - The output net of the subcircuit at which to start the analysis.

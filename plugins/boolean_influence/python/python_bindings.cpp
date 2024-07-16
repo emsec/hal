@@ -18,18 +18,66 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(boolean_influence, m)
     {
-        m.doc() = "hal BooleanInfluencePlugin python bindings";
+        m.doc() = "Set of functions to determine the influence of variables of a Boolean function on its output.";
 #else
     PYBIND11_PLUGIN(boolean_influence)
     {
-        py::module m("boolean_influence", "hal BooleanInfluencePlugin python bindings");
+        py::module m("boolean_influence", "Set of functions to determine the influence of variables of a Boolean function on its output.");
 #endif    // ifdef PYBIND11_MODULE
 
-        py::class_<BooleanInfluencePlugin, RawPtrWrapper<BooleanInfluencePlugin>, BasePluginInterface>(m, "BooleanInfluencePlugin")
-            .def_property_readonly("name", &BooleanInfluencePlugin::get_name)
-            .def("get_name", &BooleanInfluencePlugin::get_name)
-            .def_property_readonly("version", &BooleanInfluencePlugin::get_version)
-            .def("get_version", &BooleanInfluencePlugin::get_version);
+        py::class_<BooleanInfluencePlugin, RawPtrWrapper<BooleanInfluencePlugin>, BasePluginInterface> py_boolean_influence_plugin(m, "BooleanInfluencePlugin");
+
+        py_boolean_influence_plugin.def_property_readonly("name", &BooleanInfluencePlugin::get_name, R"(
+            The name of the plugin.
+
+            :type: str
+        )");
+
+        py_boolean_influence_plugin.def("get_name", &BooleanInfluencePlugin::get_name, R"(
+            Get the name of the plugin.
+
+            :returns: The name of the plugin.
+            :rtype: str
+        )");
+
+        py_boolean_influence_plugin.def_property_readonly("version", &BooleanInfluencePlugin::get_version, R"(
+            The version of the plugin.
+
+            :type: str
+        )");
+
+        py_boolean_influence_plugin.def("get_version", &BooleanInfluencePlugin::get_version, R"(
+            Get the version of the plugin.
+
+            :returns: The version of the plugin.
+            :rtype: str
+        )");
+
+        py_boolean_influence_plugin.def_property_readonly("description", &BooleanInfluencePlugin::get_description, R"(
+            The description of the plugin.
+
+            :type: str
+        )");
+
+        py_boolean_influence_plugin.def("get_description", &BooleanInfluencePlugin::get_description, R"(
+            Get the description of the plugin.
+
+            :returns: The description of the plugin.
+            :rtype: str
+        )");
+
+        py_boolean_influence_plugin.def_property_readonly("dependencies", &BooleanInfluencePlugin::get_dependencies, R"(
+            A set of plugin names that this plugin depends on.
+
+            :type: set[str]
+        )");
+
+        py_boolean_influence_plugin.def("get_dependencies", &BooleanInfluencePlugin::get_dependencies, R"(
+            Get a set of plugin names that this plugin depends on.
+
+            :returns: A set of plugin names that this plugin depends on.
+            :rtype: set[str]
+        )");
 
         m.def(
             "get_boolean_influence",
@@ -74,8 +122,8 @@ namespace hal
             py::arg("bf"),
             py::arg("num_evaluations") = 32000,
             R"(
-            The Boolean function gets translated to a z3::expr and afterwards efficent c code.
-            The program is compiled and executed many times to meassure the Boolean influence of each input variable.
+            The Boolean function gets translated to a z3::expr and afterwards efficient c code.
+            The program is compiled and executed many times to measure the Boolean influence of each input variable.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
             :param int num_evaluations: The amount of evaluations that are performed for each input variable.
@@ -101,7 +149,7 @@ namespace hal
             py::arg("num_evaluations") = 32000,
             R"(
             Generates the Boolean influence of each input variable of a Boolean function using z3 expressions and substitutions/simplifications only.
-            The function is slower, but can be better used in multithreading enviroment.
+            The function is slower, but can be better used in multithreading environment.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
             :param int num_evaluations: The amount of evaluations that are performed for each input variable.
@@ -128,7 +176,7 @@ namespace hal
             py::arg("num_evaluations") = 32000,
             R"(
             Generates the function of the net using only the given gates.
-            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
 
             :param list[hal_py.Gate] gates: The gates of the subcircuit.
             :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
@@ -155,7 +203,7 @@ namespace hal
             py::arg("num_evaluations") = 32000,
             R"(
             Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
 
             :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
             :param int num_evaluations: The amount of evaluations that are performed for each input variable.
@@ -179,8 +227,8 @@ namespace hal
             },
             py::arg("bf"),
             R"(
-            The Boolean function gets translated to a z3::expr and afterwards efficent c code.
-            The program is compiled and executed exactly once for every possible input mapping to accuratley determine the boolean influence of each variable.
+            The Boolean function gets translated to a z3::expr and afterwards efficient c code.
+            The program is compiled and executed exactly once for every possible input mapping to accurately determine the boolean influence of each variable.
 
             :param hal_py.BooleanFunction bf: The Boolean function.
             :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
@@ -205,7 +253,7 @@ namespace hal
             py::arg("start_net"),
             R"(
             Generates the function of the net using only the given gates.
-            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
 
             :param list[hal_py.Gate] gates: The gates of the subcircuit.
             :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
@@ -230,7 +278,7 @@ namespace hal
             py::arg("gate"),
             R"(
             Generates the function of the dataport net of the given flip-flop.
-            Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evalated.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
 
             :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
             :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
