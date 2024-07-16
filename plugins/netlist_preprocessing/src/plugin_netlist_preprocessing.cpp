@@ -26,6 +26,7 @@ namespace hal
     {
         std::set<std::string> retval;
         retval.insert("resynthesis");
+        retval.insert("z3_utils");
         return retval;
     }
 }    // namespace hal
