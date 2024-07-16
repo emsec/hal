@@ -104,6 +104,15 @@ namespace hal
             Result<SolverResult> query_local(const QueryConfig& config) const;
 
             /**
+			 * Queries a local SMT solver with the specified query configuration and the provided smt2 representation of the query.
+			 *
+			 * @param[in] config - The SMT solver query configuration.
+			 * @param[in] smt2   - The SMT solver query as smt2 string.
+			 * @returns OK() and the result on success, Err() otherwise.
+			 */
+            static Result<SolverResult> query_local(const QueryConfig& config, const std::string& smt2);
+
+            /**
 			 * Queries a remote SMT solver with the specified query configuration.
 			 *
 			 * \warning This function is not yet implemented.
@@ -129,7 +138,7 @@ namespace hal
             /// stores list of SMT solver constraints
             std::vector<Constraint> m_constraints;
 
-            static std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(std::string&, const QueryConfig&)>> spec2query;
+            static std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(const std::string&, const QueryConfig&)>> spec2query;
             static std::map<SolverType, std::function<Result<std::string>()>> type2query_binary;
             static std::map<SolverType, bool> type2link_status;
 

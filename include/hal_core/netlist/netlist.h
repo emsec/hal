@@ -431,6 +431,20 @@ namespace hal
         const std::vector<Net*>& get_global_output_nets() const;
 
         /**
+         * Get all GND nets in the netlist.
+         * 
+         * @returns A vector nets.
+         */
+        std::vector<Net*> get_gnd_nets() const;
+
+        /**
+         * Get all VCC nets in the netlist.
+         * 
+         * @returns A vector of nets.
+         */
+        std::vector<Net*> get_vcc_nets() const;
+
+        /**
          * Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
          * \warning{\b WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.}
          * 
