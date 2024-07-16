@@ -3107,14 +3107,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((S & I1) | ((! S) & I0))"
                         }
                     ]
