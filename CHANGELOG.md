@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file.
   * added `utils::get_unique_temp_directory`
   * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
   * added datatype 'ExistingFile' to plugin parameter 
+  * added helper gate libraries needed for resynthesis; this is a dirty hack, expect more changes later
+  * changed MUX data input and output pins in all gate libraries to `PinType::data`
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
   * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
