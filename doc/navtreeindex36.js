@@ -245,8 +245,8 @@ var NAVTREEINDEX36 =
 "qt.html#WidgetAttribute-enum":[5,0,5,1196],
 "qt.html#WidgetAttribute-enum":[5,0,5,1175],
 "qt.html#WidgetAttribute-enum":[5,0,5,1178],
-"qt.html#WidgetAttribute-enum":[5,0,5,1262],
 "qt.html#WidgetAttribute-enum":[5,0,5,1202],
+"qt.html#WidgetAttribute-enum":[5,0,5,1262],
 "qt.html#WidgetAttribute-enum":[5,0,5,1269],
 "qt.html#WidgetAttribute-enum":[5,0,5,1243],
 "qt.html#WidgetAttribute-enum":[5,0,5,1239]

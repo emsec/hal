@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Subgraph Netlist Decorator &mdash; hal_py v4.3.0-9-g04d91d9b6 documentation</title>
+  <title>Subgraph Netlist Decorator &mdash; hal_py v4.3.0-11-g757522748 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-9-g04d91d9b6
+                v4.3.0-11-g757522748
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -123,34 +123,40 @@
 <span class="sig-name descname"><span class="pre">copy_subgraph_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SubgraphNetlistDecorator.copy_subgraph_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>copy_subgraph_netlist(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate]) -&gt; hal_py.Netlist</p>
+<li><p>copy_subgraph_netlist(self: hal_py.SubgraphNetlistDecorator, subgraph_gates: List[hal_py.Gate], all_global_io: bool = False) -&gt; hal_py.Netlist</p>
 <blockquote>
 <div><p>Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] subgraph_gates</dt>
 <dd class="field-odd"><p>The gates making up the subgraph that shall be copied from the netlist.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The copied subgraph netlist on success, None otherwise.</p>
+<dt class="field-even">param bool all_global_io</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to mark all nets as global input or output that lost at least one source or destination in the copied netlist, <code class="docutils literal notranslate"><span class="pre">False</span></code> to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.Netlist or None</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The copied subgraph netlist on success, None otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.Netlist or None</p>
 </dd>
 </dl>
 </div></blockquote>
 </li>
-<li><p>copy_subgraph_netlist(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module) -&gt; hal_py.Netlist</p>
+<li><p>copy_subgraph_netlist(self: hal_py.SubgraphNetlistDecorator, subgraph_module: hal_py.Module, all_global_io: bool = False) -&gt; hal_py.Netlist</p>
 <blockquote>
 <div><p>Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Module subgraph_module</dt>
 <dd class="field-odd"><p>The module making up the subgraph that shall be copied from the netlist.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The copied subgraph netlist on success, None otherwise.</p>
+<dt class="field-even">param bool all_global_io</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to mark all nets as global input or output that lost at least one source or destination in the copied netlist, <code class="docutils literal notranslate"><span class="pre">False</span></code> to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.Netlist or None</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The copied subgraph netlist on success, None otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.Netlist or None</p>
 </dd>
 </dl>
 </div></blockquote>

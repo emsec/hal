@@ -11,6 +11,7 @@ HAL Plugins Documentation
    gui
    hawkeye
    netlist_preprocessing
+   resynthesis
    netlist_simulator
    netlist_simulator_controller
    verilator
