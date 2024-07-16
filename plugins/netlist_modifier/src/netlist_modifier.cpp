@@ -147,7 +147,8 @@ namespace hal
             new_gate->set_location(position);
         }
 
-        module->assign_gate(new_gate);
+        if (module != new_gate->get_module())
+            module->assign_gate(new_gate);
 
         return true;
     }
