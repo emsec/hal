@@ -18,12 +18,16 @@ All notable changes to this project will be documented in this file.
   * added `utils::get_unique_temp_directory`
   * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
   * added `all_global_io` parameter to `SubgraphNetlistDecorator::copy_subgraph_netlist` to configure labeling of global inputs and outputs
+  * added datatype `ExistingFile` to plugin parameter 
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
   * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
   * fixed bugs related to the Boolean function SLICE operation 
   * fixed VCD writer of `netlist_simulation_controller` plugin
   * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
+  * fixed layout bug which occured when leftmost node had no inputs
+  * fixed missing sort indicator when sorting entries in `Views` widget
+  * fixed bug loading simulation data by cleaning map before loading controller from project
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS

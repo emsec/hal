@@ -115,6 +115,7 @@ namespace hal
         connect(mContextTreeView, &QTreeView::doubleClicked, this, &ContextManagerWidget::handleItemDoubleClicked);
         connect(mContextTreeView, &QTreeView::clicked, this, &ContextManagerWidget::handleItemClicked);
         connect(mContextTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
+        connect(mContextTreeView->header(), &QHeaderView::sectionClicked, this, &ContextManagerWidget::handleHeaderSectionClicked);
         connect(mContextTreeModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
@@ -131,6 +132,11 @@ namespace hal
 
         connect(mContextTreeModel, &ContextTreeModel::directoryCreatedSignal, this, &ContextManagerWidget::selectDirectory);
         connect(mContextTreeModel, &QAbstractItemModel::rowsInserted, this, &ContextManagerWidget::handleRowsInserted);
+    }
+
+    void ContextManagerWidget::handleHeaderSectionClicked(int column)
+    {
+        mContextTreeView->header()->setSortIndicatorShown(true);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
