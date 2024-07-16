@@ -434,10 +434,10 @@ namespace hal
             }
 
             auto input_str = input.get();
-            return query_local(config, input_str);
+            return query_local_with_smt2(config, input_str);
         }
 
-        Result<SolverResult> Solver::query_local(const QueryConfig& config, const std::string& smt2)
+        Result<SolverResult> Solver::query_local_with_smt2(const QueryConfig& config, const std::string& smt2)
         {
             auto query = spec2query.at({config.solver, config.call})(smt2, config);
             if (query.is_ok())

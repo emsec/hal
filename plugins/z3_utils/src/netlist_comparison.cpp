@@ -337,7 +337,7 @@ namespace hal
 
                 s.add(bf_a != bf_b);
                 auto smt2_str  = s.to_smt2();
-                auto query_res = SMT::Solver::query_local(config, smt2_str);
+                auto query_res = SMT::Solver::query_local_with_smt2(config, smt2_str);
                 if (query_res.is_error())
                 {
                     return ERR_APPEND(query_res.get_error(),

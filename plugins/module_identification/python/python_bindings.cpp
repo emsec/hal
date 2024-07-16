@@ -14,13 +14,13 @@ namespace hal
 {
 
 #ifdef PYBIND11_MODULE
-    PYBIND11_MODULE(hawkeye, m)
+    PYBIND11_MODULE(module_identification, m)
     {
         m.doc() = "Plugin for module classification against a library of predefined types.";
 #else
-    PYBIND11_PLUGIN(hawkeye)
+    PYBIND11_PLUGIN(module_identification)
     {
-        py::module m("hawkeye", "Plugin for module classification against a library of predefined types.");
+        py::module m("module_identification", "Plugin for module classification against a library of predefined types.");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<ModuleIdentificationPlugin, RawPtrWrapper<ModuleIdentificationPlugin>, BasePluginInterface> py_module_identification_plugin(

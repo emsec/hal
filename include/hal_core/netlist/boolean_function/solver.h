@@ -110,7 +110,7 @@ namespace hal
 			 * @param[in] smt2   - The SMT solver query as smt2 string.
 			 * @returns OK() and the result on success, Err() otherwise.
 			 */
-            static Result<SolverResult> query_local(const QueryConfig& config, const std::string& smt2);
+            static Result<SolverResult> query_local_with_smt2(const QueryConfig& config, const std::string& smt2);
 
             /**
 			 * Queries a remote SMT solver with the specified query configuration.
