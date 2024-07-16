@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 * **WARNING:** this release breaks the API of the `bitorder_propagation` plugin
 * plugins
+  * added `resynthesis` plugin
+    * moved `decompose_gate` and `decompose_gates_of_type` from `netlist_preprocessing` plugin and slightly changed their API
+    * added functions for logic re-synthesis that write out parts of the current netlist and call Yosys as an open-source synthesizer to produce a new gate-level netlist based on a user-defined gate library
   * changed `bitorder_propagation` plugin
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
     * changed propagation logic for better results
@@ -14,7 +17,8 @@ All notable changes to this project will be documented in this file.
   * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
   * added `utils::get_unique_temp_directory`
   * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
-  * added datatype 'ExistingFile' to plugin parameter 
+  * added `all_global_io` parameter to `SubgraphNetlistDecorator::copy_subgraph_netlist` to configure labeling of global inputs and outputs
+  * added datatype `ExistingFile` to plugin parameter 
   * added helper gate libraries needed for resynthesis; this is a dirty hack, expect more changes later
   * changed MUX data input and output pins in all gate libraries to `PinType::data`
 * bugfixes
@@ -24,7 +28,7 @@ All notable changes to this project will be documented in this file.
   * fixed VCD writer of `netlist_simulation_controller` plugin
   * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
   * fixed layout bug which occured when leftmost node had no inputs
-  * fixed missing sort indicator when sorting entries in 'Views' widget
+  * fixed missing sort indicator when sorting entries in `Views` widget
   * fixed bug loading simulation data by cleaning map before loading controller from project
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
