@@ -42,7 +42,7 @@ namespace hal
         /**
          * @brief Write all single output combinational gate types of the gate library to a genlib file at the provided location.
          * 
-         * The area for the gate types is currently estimated by their input pin count and subsidized in the case of multiplexers.
+         * The area for the gate types is currently estimated by their input pin count and reduced in the case of multiplexers to motivate a possible resynthesis to use MUX gates when possible.
          * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
