@@ -11,5 +11,6 @@ if(PL_RESYNTHESIS OR BUILD_ALL_PLUGINS)
                    HEADER ${RESYNTHESIS_INC}
                    SOURCES ${RESYNTHESIS_SRC} ${RESYNTHESIS_PYTHON_SRC}
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/resynthesis.rst
+                   LINK_LIBRARIES genlib_writer
                 )
 endif()
