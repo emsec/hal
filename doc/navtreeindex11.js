@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411":[6,0,0,103,3],
 "classhal_1_1_liberty_parser.html":[4,1,0,9],
 "classhal_1_1_liberty_parser.html#a31d56a1e5dc2758f134a9e9837804537":[4,1,0,9,0],
 "classhal_1_1_liberty_parser.html#a9b42e79acc9e12ce902dc79e71dfe215":[4,1,0,9,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "classhal_1_1_main_window.html#afe1b78964d52b94a97831dddea6edf4d":[4,0,25,36],
 "classhal_1_1_main_window.html#afe4e77b5541c8f6949aebfcddccaed7e":[4,0,25,75],
 "classhal_1_1_minimap_scrollbar.html":[4,0,1,0,4],
-"classhal_1_1_minimap_scrollbar.html#a03688adf74509fd1157c91cf0e91b252":[4,0,1,0,4,3],
-"classhal_1_1_minimap_scrollbar.html#a1bfd60d64da9c1a63476f4f4d0f6de92":[4,0,1,0,4,2]
+"classhal_1_1_minimap_scrollbar.html#a03688adf74509fd1157c91cf0e91b252":[4,0,1,0,4,3]
 };
