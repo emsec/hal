@@ -107,7 +107,14 @@ namespace hal
         std::string gate_name = "UNKNOWN_" + std::to_string(gate->get_id());
         u32 gate_id           = gate->get_id();
 
-        std::pair position = gate->get_location();
+        // std::vector<std::tuple<u32, int, int>> grid_positions;
+
+        std::vector<u32> viewIDs;
+        
+        for(u32 viewID: GuiApiClasses::View::getIds({}, {gate})){
+            viewIDs.push_back(viewID);
+            // grid_positions.emplace_back(viewID, GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(gate->get_id())->first, GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(gate->get_id())->second);
+        }
 
         Module* module = gate->get_module();
 
@@ -143,9 +150,30 @@ namespace hal
             counter++;
         }
 
-        if (position.first > 0 && position.second > 0){
-            new_gate->set_location(position);
+        for(u32 viewID: viewIDs){
+            GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
+            GuiApiClasses::View::addTo(viewID, {}, {new_gate});
+            GuiApiClasses::View::setGridPlacement(viewID, gp);
         }
+
+        /*for(std::tuple<u32, int, int> placement_item: grid_positions){
+            u32 viewID = std::get<0>(placement_item);
+            int x = std::get<1>(placement_item);
+            int y = std::get<2>(placement_item);
+
+            std::cout << x << ":" << y << std::endl;
+
+            GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
+
+            gp->setGatePosition(new_gate->get_id(), {x, y});
+
+            GuiApiClasses::View::setGridPlacement(viewID, gp);
+
+            int new_x = GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(new_gate->get_id())->first;
+            int new_y = GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(new_gate->get_id())->second;
+
+            std::cout << new_x << ":" << new_y << std::endl;
+        }*/
 
         if (module != new_gate->get_module())
             module->assign_gate(new_gate);
@@ -427,12 +455,12 @@ max_probes=5)";
     bool NetlistModifierPlugin::modify_in_place()
     {
         UIPluginInterface* mGuiPlugin = plugin_manager::get_plugin_instance<UIPluginInterface>("hal_gui");
-        if (mGuiPlugin)
-            mGuiPlugin->set_layout_locker(true);        
+        //if (mGuiPlugin)
+        //    mGuiPlugin->set_layout_locker(true);        
 
         if (!modify_gatelibrary()){
-            if (mGuiPlugin)
-                mGuiPlugin->set_layout_locker(false);
+            //if (mGuiPlugin)
+            //    mGuiPlugin->set_layout_locker(false);
             return false;
         }
 
@@ -453,14 +481,14 @@ max_probes=5)";
         {
             if (!replace_gate_in_netlist(gNetlist, gate))
             {
-                if (mGuiPlugin)
-                    mGuiPlugin->set_layout_locker(false);
+                //if (mGuiPlugin)
+                //    mGuiPlugin->set_layout_locker(false);
                 return false;
             }
         }
 
-        if (mGuiPlugin)
-            mGuiPlugin->set_layout_locker(false);
+        //if (mGuiPlugin)
+        //    mGuiPlugin->set_layout_locker(false);
 
         return true;
     }
