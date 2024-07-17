@@ -33,6 +33,8 @@
 !python_shell/**/*
 !resynthesis*
 !resynthesis/**/*
+!sequential_symbolic_execution*
+!sequential_symbolic_execution/**/*
 !simulator
 !solve_fsm*
 !solve_fsm/**/*

@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
     * added comprehensive simplification logic that is able to simplify `z3::expr` using an extended rule set as the simplification of `hal::BooleanFunction`
   * added `module_identification` plugin 
     * allows a user to automatically search for arithmetic structures in the netlist
+  * added `sequential_symbolic_execution` plugin
+    * allows the user to perform symbolic execution over mulitple cycles including sequential elements
   * added first rudimentary version of `genlib_writer` that allows to write the combinational gates of a gate library in genlib format which is required for resynthesis.
 * core
   * decorators
