@@ -14,7 +14,7 @@
 #include <limits>
 #include <numeric>
 
-#define DEBUG_PRINT
+// #define DEBUG_PRINT
 
 namespace hal
 {
@@ -227,7 +227,9 @@ namespace hal
                 std::vector<VerifiedCandidate> unique_candidates = candidates;
                 unique_candidates.erase(std::unique(unique_candidates.begin(), unique_candidates.end()), unique_candidates.end());
 
-                log_info("module_identification", "Dedupe candidates to a size of {}", unique_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Dedupe candidates to a size of " << unique_candidates.size() << std::endl;
+#endif
 
                 // sort the candidates into sets of candidates with the same gates and control signals
                 std::map<std::pair<std::vector<Gate*>, std::vector<Net*>>, std::vector<VerifiedCandidate>> gates_control_to_candidate_sets;
@@ -242,53 +244,69 @@ namespace hal
                     candidate_sets.push_back(c_set);
                 }
 
-                log_info("module_identification", "Sorted candidates into {} candidate sets", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Sorted candidates into {} candidate sets" << candidate_sets.size() << std::endl;
+#endif
 
                 // filter the candidate sets such that only the ones with the least input signals not part of the operands survive
                 candidate_sets = filter_sets_by(candidate_sets, registers, true, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return calcualte_ignored_input_signals(c_set);
                 });
-                log_info("module_identification", "Filtered candidates with ignored input signals, left with {}", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with ignored input signals, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // filter the candidate sets such that only the ones with the most input and output signals survive
                 candidate_sets = filter_sets_by(candidate_sets, registers, false, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return calculate_maximum_io_signals(c_set);
                 });
-                log_info("module_identification", "Filtered candidates with most IO signals, left with {}", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with most IO signals, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // filter the candidate set such that only the ones with the least control signals survive
                 candidate_sets = filter_sets_by(candidate_sets, registers, true, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return c_set.front().m_control_signals.size();
                 });
-                log_info("module_identification", "Filtered candidates with control signal count, left with {}", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with control signal count, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // filter the candidate sets such that only the ones with the most gates survive
                 candidate_sets = filter_sets_by(candidate_sets, registers, false, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return c_set.front().m_gates.size();
                 });
-                log_info("module_identification", "Filtered candidates with candidate gate count, left with {}", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with candidate gate count, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // select candidate sets with the control signals that share the least source flip flops with the operands bits in the DANA grouping
-                candidate_sets = filter_sets_by(candidate_sets, registers, true, [nl](const auto& c_set, const auto& _registers) { return calculate_shared_source_regs(nl, c_set, _registers); });
-                log_info("module_identification", "Filtered candidates with shared source reg count, left with {}", candidate_sets.size());
+                candidate_sets = filter_sets_by(candidate_sets, registers, true, [nl](const auto& c_set, const auto& registers) { return calculate_shared_source_regs(nl, c_set, registers); });
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with shared source reg count, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // select the candidate set with the least amount of "module outputs" that are not part of the output bitvector
                 candidate_sets = filter_sets_by(candidate_sets, registers, true, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return calcualte_ignored_output_signals(c_set);
                 });
-                log_info("module_identification", "Filtered candidates with ignored output signal count, left with {}", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered candidates with ignored output signal count, left with " << candidate_sets.size() << std::endl;
+#endif
 
                 // select the candidate set with the most candidates
                 candidate_sets = filter_sets_by(candidate_sets, registers, false, [](const auto& c_set, const auto& _registers) {
                     UNUSED(_registers);
                     return c_set.size();
                 });
-                log_info("module_identification", "Reduced candidates to {} sets", candidate_sets.size());
+#ifdef DEBUG_PRINT
+                std::cout << "Reduced candidates to {} sets" << candidate_sets.size() << std::endl;
+#endif
 
                 // TODO remove debug printing
                 if (candidate_sets.size() > 1)
@@ -471,7 +489,9 @@ namespace hal
                     return additional_outputs;
                 });
 
-                log_info("module_identification", "reduced candidate set to size {}", best_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;
+#endif
 
                 /**
                  * Select the candidates containing the most non-const variables in the operands
@@ -488,7 +508,9 @@ namespace hal
                     return non_constant_count;
                 });
 
-                log_info("module_identification", "reduced candidate set to size {}", best_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;
+#endif
 
                 /**
                  * Select the candidates with the lowest amount of constant signals 
@@ -507,7 +529,9 @@ namespace hal
                     return constant_count;
                 });
 
-                log_info("module_identification", "reduced candidate set to size {}", best_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;
+#endif
 
                 /**
                  * Select the candidates with the lowest amount of signals in multiple operands
@@ -536,7 +560,9 @@ namespace hal
                     return multi_count;
                 });
 
-                log_info("module_identification", "reduced candidate set to size {}", best_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;
+#endif
 
                 /**
                  * Select the candidates with the lowest amount of source registers for each operand.
@@ -545,7 +571,9 @@ namespace hal
 
                 best_candidates = filter_candidates_by(best_candidates, registers, true, [nl](const auto& c, const auto& dc) { return calculate_operand_source_regs(nl, c, dc); });
 
-                log_info("module_identification", "reduced candidate set to size {}", best_candidates.size());
+#ifdef DEBUG_PRINT
+                std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;
+#endif
 
                 /**
                  * This is a special rule only applying to sign extended comparisons.

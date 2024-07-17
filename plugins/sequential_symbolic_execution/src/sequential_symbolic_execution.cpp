@@ -9,6 +9,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/utils.h"
 #include "z3_utils/simplification.h"
+#include "z3_utils/z3_utils.h"
 
 #include <sys/resource.h>
 
