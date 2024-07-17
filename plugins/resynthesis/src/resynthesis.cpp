@@ -10,6 +10,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
+#include "hal_core/utilities/log.h"
 
 #include <fstream>
 
@@ -585,9 +586,9 @@ namespace hal
 
             // Write the modified lines back to the file
             std::ofstream output_file(org_netlist_path);
-            for (const auto& line : lines)
+            for (const auto& out_line : lines)
             {
-                output_file << line << std::endl;
+                output_file << out_line << std::endl;
             }
             output_file.close();
 
@@ -609,11 +610,13 @@ namespace hal
 
             system(command.c_str());
 
+            LogManager::get_instance()->deactivate_channel("netlist");
             auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, target_gl);
             if (resynth_nl == nullptr)
             {
                 return ERR("unable to re-synthesize gate-level netlist with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
             }
+            LogManager::get_instance()->activate_channel("netlist");
 
             // delete the created directory and the contained files
             std::filesystem::remove_all(base_path);
@@ -621,26 +624,26 @@ namespace hal
             return OK(std::move(resynth_nl));
         }
 
-        // TODO move to the netlist traversal decorator, currently existing in the machine learning branch
-        std::vector<Net*> get_outputs_of_subgraph(const std::vector<Gate*>& subgraph)
-        {
-            std::unordered_set<Gate*> subgraph_set = {subgraph.begin(), subgraph.end()};
-            std::unordered_set<Net*> outputs;
+        // // TODO move to the netlist traversal decorator, currently existing in the machine learning branch
+        // std::vector<Net*> get_outputs_of_subgraph(const std::vector<Gate*>& subgraph)
+        // {
+        //     std::unordered_set<Gate*> subgraph_set = {subgraph.begin(), subgraph.end()};
+        //     std::unordered_set<Net*> outputs;
 
-            for (const auto g : subgraph)
-            {
-                for (const auto ep : g->get_successors())
-                {
-                    // check whether gate has a successor outside the subgraph
-                    if (subgraph_set.find(ep->get_gate()) == subgraph_set.end())
-                    {
-                        outputs.insert(ep->get_net());
-                    }
-                }
-            }
+        //     for (const auto g : subgraph)
+        //     {
+        //         for (const auto ep : g->get_successors())
+        //         {
+        //             // check whether gate has a successor outside the subgraph
+        //             if (subgraph_set.find(ep->get_gate()) == subgraph_set.end())
+        //             {
+        //                 outputs.insert(ep->get_net());
+        //             }
+        //         }
+        //     }
 
-            return {outputs.begin(), outputs.end()};
-        }
+        //     return {outputs.begin(), outputs.end()};
+        // }
 
         Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_gate(const Gate* g, GateLibrary* target_gl, const std::filesystem::path& genlib_path)
         {
