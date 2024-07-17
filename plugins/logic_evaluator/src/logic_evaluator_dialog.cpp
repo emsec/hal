@@ -4,6 +4,8 @@
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
 #include "gui/grouping/grouping_manager_widget.h"
+#include "gui/module_model/module_model.h"
+#include "logic_evaluator/select_gates.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -112,8 +114,11 @@ namespace hal {
             outLayout->addWidget(lep);
         }
 
-        QLabel* bbox = new QLabel(QString("%1 Gate%2").arg(gates.size()).arg(gates.size()==1?"":"s"),this);
-        bbox->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        QTreeView* tview = new QTreeView(this);
+        ModuleModel* tmodel = new ModuleModel(this);
+        tmodel->populateFromGatelist(gates);
+        tview->setModel(tmodel);
+        tview->expandAll();
 
         mMenuBar = new QMenuBar(this);
         QMenu* options = mMenuBar->addMenu("Options");
@@ -127,7 +132,7 @@ namespace hal {
         inpLayout->addStretch();
         outLayout->addStretch();
         topLayout->addLayout(inpLayout);
-        topLayout->addWidget(bbox);
+        topLayout->addWidget(tview);
         topLayout->addLayout(outLayout);
         topLayout->setMenuBar(mMenuBar);
 

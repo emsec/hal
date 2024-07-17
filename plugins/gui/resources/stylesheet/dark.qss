@@ -1609,17 +1609,6 @@ hal--LogicEvaluatorPingroup > QLabel
     max-height       : 28;
 }
 
-QLabel > QCheckBox
-{
-    color            : white;
-    font-family      : "Iosevka";
-    font-style       : bold;
-    font-size        : 10px;
-    border           : none;
-    background-color : black;
-    max-height       : 28;
-}
-
 hal--LogicEvaluatorPingroup QCheckBox
 {
     font           : bold "Iosevka";
@@ -1644,24 +1633,11 @@ hal--LogicEvaluatorPingroup QCheckBox::indicator:unchecked
     border         : 1px solid black;
 }
 
-hal--LogicEvaluatorDialog > QLabel
+hal--LogicEvaluatorDialog > QTreeView
 {
     border-style   : solid;
     border-color   : #A0A5A8 black #414243 black;
-    border-width   : 2 0 2 0;
-    font-size      : 14pt;
-    font-style     : normal;
+    border-width   : 2 2 2 2;
     background     : black;
-    color          : white;
-    min-width      : 160px;
-}
-
-QLabel > QLabel
-{
-    border         : none;
-    font-size      : 14pt;
-    font-style     : normal;
-    background     : black;
-    color          : white;
-    min-width      : 160px;
+    min-width      : 300px;
 }
