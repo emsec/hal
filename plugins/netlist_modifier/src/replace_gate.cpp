@@ -22,11 +22,14 @@ namespace hal
         std::string gate_name = "UNKNOWN_" + std::to_string(gate->get_id());
         u32 gate_id           = gate->get_id();
 
-        std::vector<u32> viewIDs;
+        std::vector<std::tuple<u32, int, int>> grid_positions;
         
         for(u32 viewID: GuiApiClasses::View::getIds({}, {gate})){
-            viewIDs.push_back(viewID);
-            // grid_positions.emplace_back(viewID, GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(gate->get_id())->first, GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(gate->get_id())->second);
+            GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
+
+            int x = gp->gatePosition(gate->get_id())->first;
+            int y = gp->gatePosition(gate->get_id())->second;
+            grid_positions.emplace_back(viewID, x, y);
         }
 
         Module* module = gate->get_module();
@@ -63,34 +66,21 @@ namespace hal
             counter++;
         }
 
-        /*for(std::tuple<u32, int, int> placement_item: grid_positions){
+        if (module != new_gate->get_module())
+            module->assign_gate(new_gate);
+
+        for(std::tuple<u32, int, int> placement_item: grid_positions){
             u32 viewID = std::get<0>(placement_item);
             int x = std::get<1>(placement_item);
             int y = std::get<2>(placement_item);
 
-            std::cout << x << ":" << y << std::endl;
+            GuiApiClasses::View::addTo(viewID, {}, {new_gate});
 
             GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
 
             gp->setGatePosition(new_gate->get_id(), {x, y});
 
             GuiApiClasses::View::setGridPlacement(viewID, gp);
-
-            int new_x = GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(new_gate->get_id())->first;
-            int new_y = GuiApiClasses::View::getGridPlacement(viewID)->gatePosition(new_gate->get_id())->second;
-
-            std::cout << new_x << ":" << new_y << std::endl;
-        }*/
-
-        if (module != new_gate->get_module())
-            module->assign_gate(new_gate);
-
-        
-        for(u32 viewID: viewIDs){
-            continue;
-            // GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
-            GuiApiClasses::View::addTo(viewID, {}, {new_gate});
-            // GuiApiClasses::View::setGridPlacement(viewID, gp);
         }
 
         return true;
