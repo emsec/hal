@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.3.0-50-gf145ed926 documentation</title>
+  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.3.0-51-g0630128bd documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-50-gf145ed926
+                v4.3.0-51-g0630128bd
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -89,8 +89,8 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dataflow.analyze">
 <span class="sig-prename descclassname"><span class="pre">dataflow.</span></span><span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dataflow.Configuration" title="dataflow.Configuration"><span class="pre">dataflow.Configuration</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional[hal::dataflow::Result]</span></span></span><a class="headerlink" href="#dataflow.analyze" title="Permalink to this definition"></a></dt>
-<dd><p>Analyze the gate-level netlist to identify word-level registers.
-Reconstructs registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
+<dd><p>Analyze the gate-level netlist to identify word-level structures such as registers.
+Reconstructs word-level structures such as registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
 Operates on an abstraction of the netlist that contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -123,8 +123,12 @@ Operates on an abstraction of the netlist that contains only flip-flops and conn
 <dl class="py property">
 <dt class="sig sig-object py" id="dataflow.Configuration.control_pin_types">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">control_pin_types</span></span><a class="headerlink" href="#dataflow.Configuration.control_pin_types" title="Permalink to this definition"></a></dt>
-<dd><p>The pin types of the pins to be considered control pins. Defaults to an empty set.
-:type: set[hal_py.PinType]</p>
+<dd><p>The pin types of the pins to be considered control pins. Defaults to an empty set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType">hal_py.PinType</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -141,8 +145,12 @@ Operates on an abstraction of the netlist that contains only flip-flops and conn
 <dl class="py property">
 <dt class="sig sig-object py" id="dataflow.Configuration.enforce_type_consistency">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enforce_type_consistency</span></span><a class="headerlink" href="#dataflow.Configuration.enforce_type_consistency" title="Permalink to this definition"></a></dt>
-<dd><p>Enforce gate type consistency inside of a group. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:type: bool</p>
+<dd><p>Enforce gate type consistency inside of a group. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -159,8 +167,12 @@ Operates on an abstraction of the netlist that contains only flip-flops and conn
 <dl class="py property">
 <dt class="sig sig-object py" id="dataflow.Configuration.gate_types">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gate_types</span></span><a class="headerlink" href="#dataflow.Configuration.gate_types" title="Permalink to this definition"></a></dt>
-<dd><p>The gate types to be grouped by dataflow analysis. Defaults to an empty set.
-:type: set[hal_py.GateType]</p>
+<dd><p>The gate types to be grouped by dataflow analysis. Defaults to an empty set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType">hal_py.GateType</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -177,8 +189,12 @@ Operates on an abstraction of the netlist that contains only flip-flops and conn
 <dl class="py property">
 <dt class="sig sig-object py" id="dataflow.Configuration.known_net_groups">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">known_net_groups</span></span><a class="headerlink" href="#dataflow.Configuration.known_net_groups" title="Permalink to this definition"></a></dt>
-<dd><p>Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty list.
-:type: list[list[hal_py.Net]]</p>
+<dd><p>Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -254,11 +270,21 @@ Overwrites any existing gate type and control pin configuration.</p>
 <li><p>with_gate_types(self: dataflow.Configuration, types: Set[hal_py.GateType], overwrite: bool = False) -&gt; dataflow.Configuration</p>
 <blockquote>
 <div><p>Add the gate types to the set of gate types to be grouped by dataflow analysis.
-Overwrite the existing set of gate types by setting the optional <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> flag to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
-:param set[hal_py.GateType] types: A set of gate types.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite existing set of gate types, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Overwrite the existing set of gate types by setting the optional <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> flag to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param set[hal_py.GateType] types</dt>
+<dd class="field-odd"><p>A set of gate types.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite existing set of gate types, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_gate_types(self: dataflow.Configuration, type_properties: Set[hal_py.GateTypeProperty], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -314,11 +340,21 @@ The groups will be used to guide dataflow analysis, but will remain unaltered in
 <blockquote>
 <div><p>Add lists of gates to the set of previously identified word-level groups.
 These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
-The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
-:param list[list[hal_py.Gate]] groups: A list of groups, each of them given as a list of gates.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[list[hal_py.Gate]] groups</dt>
+<dd class="field-odd"><p>A list of groups, each of them given as a list of gates.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_groups(self: dataflow.Configuration, groups: List[List[int]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -347,11 +383,21 @@ The groups will be used to guide dataflow analysis, but will remain unaltered in
 <div><p>Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.
 These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
 The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
-The group IDs will be ignored during analysis and the same group may be assigned a new ID.
-:param dict[int,set[hal_py.Gate]] groups: A dict from group IDs to groups, each of them given as a set of gates.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+The group IDs will be ignored during analysis and the same group may be assigned a new ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param dict[int,set[hal_py.Gate]] groups</dt>
+<dd class="field-odd"><p>A dict from group IDs to groups, each of them given as a set of gates.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
@@ -367,11 +413,21 @@ The group IDs will be ignored during analysis and the same group may be assigned
 <div><p>Add modules to the set of previously identified word-level structures.
 The gates contained in the modules do not have to be of the target gate types.
 The input and output pin groups of these modules will be used to guide datapath analysis.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param list[hal_py.Module] structures: A list of modules.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[hal_py.Module] structures</dt>
+<dd class="field-odd"><p>A list of modules.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_structures(self: dataflow.Configuration, structures: List[Tuple[hal_py.Module, List[hal_py.ModulePinGroup]]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -381,11 +437,21 @@ The gates contained in the modules do not have to be of the target gate types.
 The input and output pin groups of these modules will be used to guide datapath analysis.
 For each module, the input and output pin groups to be considered for analysis must be specified. 
 An empty pin group vector results in all pin groups of the module being considered.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param list[tuple(hal_py.Module,list[hal_py.ModulePinGroup])] structures: A list of modules, each of them with a list of module pin groups.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[tuple(hal_py.Module,list[hal_py.ModulePinGroup])] structures</dt>
+<dd class="field-odd"><p>A list of modules, each of them with a list of module pin groups.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_structures(self: dataflow.Configuration, structures: List[hal_py.Gate], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -393,11 +459,21 @@ Only pin groups larger than <code class="docutils literal notranslate"><span cla
 <div><p>Add (typically large) gates to the set of previously identified word-level structures.
 The gates do not have to be of the target gate types.
 The input and output pin groups of these gates will be used to guide datapath analysis.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param list[hal_py.Gate] structures: A list of gates.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[hal_py.Gate] structures</dt>
+<dd class="field-odd"><p>A list of gates.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_structures(self: dataflow.Configuration, structures: List[Tuple[hal_py.Gate, List[hal_py.GatePinGroup]]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -407,11 +483,21 @@ The gates do not have to be of the target gate types.
 The input and output pin groups of these gates will be used to guide datapath analysis.
 For each gate, the input and output pin groups to be considered for analysis must be specified. 
 An empty pin group vector results in all pin groups of the gate being considered.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param list[tuple(hal_py.Gate,list[hal_py.GatePinGroup])] structures: A list of gates, each of them with a list of gate pin groups.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param list[tuple(hal_py.Gate,list[hal_py.GatePinGroup])] structures</dt>
+<dd class="field-odd"><p>A list of gates, each of them with a list of gate pin groups.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_structures(self: dataflow.Configuration, structures: Set[hal_py.GateType], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -419,11 +505,21 @@ Only pin groups larger than <code class="docutils literal notranslate"><span cla
 <div><p>Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
 The gate types do not have to be part of the target gate types.
 The input and output pin groups of the gates of these types will be used to guide datapath analysis.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param set[hal_py.GateType] structures: A set of gates.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param set[hal_py.GateType] structures</dt>
+<dd class="field-odd"><p>A set of gates.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>with_known_structures(self: dataflow.Configuration, structures: Dict[hal_py.GateType, List[hal_py.GatePinGroup]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
@@ -433,11 +529,21 @@ The gate types do not have to be part of the target gate types.
 The input and output pin groups of the gates of these types will be used to guide datapath analysis.
 For each gate type, the input and output pin groups to be considered for analysis must be specified. 
 An empty pin group vector results in all pin groups of the gate type being considered.
-Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
-:param dict[hal_py.GateType,list[hal_py.GatePinGroup]] structures: A dict from gates to a vector of a subset of their pin groups.
-:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
-:returns: The updated dataflow analysis configuration.
-:rtype: dataflow.Dataflow.Configuration</p>
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param dict[hal_py.GateType,list[hal_py.GatePinGroup]] structures</dt>
+<dd class="field-odd"><p>A dict from gates to a vector of a subset of their pin groups.</p>
+</dd>
+<dt class="field-even">param bool overwrite</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The updated dataflow analysis configuration.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dataflow.Dataflow.Configuration</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
@@ -509,22 +615,46 @@ Please note that this ID is not related to any other HAL ID.</p>
 <ol class="arabic">
 <li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateType, str] = {}, pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
 <blockquote>
-<div><p>Create modules for the dataflow analysis result.
-:param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.
-:param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
-:param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-:returns: A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
-:rtype: dict[int,hal_py.Module] or None</p>
+<div><p>Create modules for the dataflow analysis result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param dict[hal_py.GateType,str] module_suffixes</dt>
+<dd class="field-odd"><p>The suffixes to use for modules containing only gates of a specific gate type. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.</p>
+</dd>
+<dt class="field-even">param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes</dt>
+<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.</p>
+</dd>
+<dt class="field-odd">param set[int] group_ids</dt>
+<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>dict[int,hal_py.Module] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 <li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateTypeProperty, str], pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
 <blockquote>
-<div><p>Create modules for the dataflow analysis result.
-:param dict[hal_py.GateTypeProperty,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.
-:param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
-:param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-:returns: A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
-:rtype: dict[int,hal_py.Module] or None</p>
+<div><p>Create modules for the dataflow analysis result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param dict[hal_py.GateTypeProperty,str] module_suffixes</dt>
+<dd class="field-odd"><p>The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.</p>
+</dd>
+<dt class="field-even">param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes</dt>
+<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.</p>
+</dd>
+<dt class="field-odd">param set[int] group_ids</dt>
+<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>dict[int,hal_py.Module] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>

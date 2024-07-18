@@ -87,31 +87,35 @@ $(document).ready(function(){initNavTree('gui__layout__locker_8cpp_source.html',
 </div><!--header-->
 <div class="contents">
 <a href="gui__layout__locker_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gui__layout__locker_8h.html">dataflow_analysis/utils/gui_layout_locker.h</a>&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__interface__ui_8h.html">hal_core/plugin_system/plugin_interface_ui.h</a>&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">namespace </span>dataflow</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">    9</a></span>&#160;        <a class="code" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">GuiLayoutLocker::GuiLayoutLocker</a>()</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;            : mGuiPlugin(nullptr)</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">namespace </span>dataflow</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">   10</a></span>&#160;        <a class="code" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">GuiLayoutLocker::GuiLayoutLocker</a>() : mGuiPlugin(nullptr)</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            mGuiPlugin = plugin_manager::get_plugin_instance&lt;UIPluginInterface&gt;(<span class="stringliteral">&quot;hal_gui&quot;</span>);</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keywordflow">if</span> (mGuiPlugin)</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                mGuiPlugin-&gt;<a class="code" href="classhal_1_1_u_i_plugin_interface.html#ac0f7fc4d633d65da0357014041c5d0d4">set_layout_locker</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        }</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">   17</a></span>&#160;        <a class="code" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">GuiLayoutLocker::~GuiLayoutLocker</a>()</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keywordflow">if</span> (mGuiPlugin)</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                mGuiPlugin-&gt;<a class="code" href="classhal_1_1_u_i_plugin_interface.html#ac0f7fc4d633d65da0357014041c5d0d4">set_layout_locker</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        }</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                mGuiPlugin-&gt;<a class="code" href="classhal_1_1_u_i_plugin_interface.html#ac0f7fc4d633d65da0357014041c5d0d4">set_layout_locker</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        }</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">   19</a></span>&#160;        <a class="code" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">GuiLayoutLocker::~GuiLayoutLocker</a>()</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordflow">if</span> (mGuiPlugin)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                mGuiPlugin-&gt;<a class="code" href="classhal_1_1_u_i_plugin_interface.html#ac0f7fc4d633d65da0357014041c5d0d4">set_layout_locker</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            }</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }    <span class="comment">// namespace dataflow</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_u_i_plugin_interface_html_ac0f7fc4d633d65da0357014041c5d0d4"><div class="ttname"><a href="classhal_1_1_u_i_plugin_interface.html#ac0f7fc4d633d65da0357014041c5d0d4">hal::UIPluginInterface::set_layout_locker</a></div><div class="ttdeci">virtual void set_layout_locker(bool enable)=0</div></div>
-<div class="ttc" id="aclasshal_1_1dataflow_1_1_gui_layout_locker_html_a2f1cf760581ddd309bb5f559c12c4f6e"><div class="ttname"><a href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">hal::dataflow::GuiLayoutLocker::~GuiLayoutLocker</a></div><div class="ttdeci">~GuiLayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="gui__layout__locker_8cpp_source.html#l00017">gui_layout_locker.cpp:17</a></div></div>
-<div class="ttc" id="aclasshal_1_1dataflow_1_1_gui_layout_locker_html_a52e1b48a294df2d55fafbb43680a1dba"><div class="ttname"><a href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">hal::dataflow::GuiLayoutLocker::GuiLayoutLocker</a></div><div class="ttdeci">GuiLayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="gui__layout__locker_8cpp_source.html#l00009">gui_layout_locker.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1dataflow_1_1_gui_layout_locker_html_a2f1cf760581ddd309bb5f559c12c4f6e"><div class="ttname"><a href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a2f1cf760581ddd309bb5f559c12c4f6e">hal::dataflow::GuiLayoutLocker::~GuiLayoutLocker</a></div><div class="ttdeci">~GuiLayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="gui__layout__locker_8cpp_source.html#l00019">gui_layout_locker.cpp:19</a></div></div>
+<div class="ttc" id="aclasshal_1_1dataflow_1_1_gui_layout_locker_html_a52e1b48a294df2d55fafbb43680a1dba"><div class="ttname"><a href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">hal::dataflow::GuiLayoutLocker::GuiLayoutLocker</a></div><div class="ttdeci">GuiLayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="gui__layout__locker_8cpp_source.html#l00010">gui_layout_locker.cpp:10</a></div></div>
 <div class="ttc" id="agui__layout__locker_8h_html"><div class="ttname"><a href="gui__layout__locker_8h.html">gui_layout_locker.h</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
 <div class="ttc" id="aplugin__interface__ui_8h_html"><div class="ttname"><a href="plugin__interface__ui_8h.html">plugin_interface_ui.h</a></div></div>
@@ -122,7 +126,7 @@ $(document).ready(function(){initNavTree('gui__layout__locker_8cpp_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_3c07900b7b99a5091ad5d298551df493.html">utils</a></li><li class="navelem"><a class="el" href="gui__layout__locker_8cpp.html">gui_layout_locker.cpp</a></li>
-    <li class="footer">Generated on Wed Jul 17 2024 22:28:55 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 18 2024 12:22:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

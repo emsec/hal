@@ -148,7 +148,7 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a9d7b9b5948aa361332502ed7bc255881"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; <a class="el" href="classhal_1_1dataflow_1_1_result.html">dataflow::Result</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881">analyze</a> (const <a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;config)</td></tr>
-<tr class="memdesc:a9d7b9b5948aa361332502ed7bc255881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Analyze the gate-level netlist to identify word-level registers.  <a href="namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881">More...</a><br /></td></tr>
+<tr class="memdesc:a9d7b9b5948aa361332502ed7bc255881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Analyze the gate-level netlist to identify word-level structures such as registers.  <a href="namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881">More...</a><br /></td></tr>
 <tr class="separator:a9d7b9b5948aa361332502ed7bc255881"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -168,8 +168,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Analyze the gate-level netlist to identify word-level registers. </p>
-<p>Reconstructs registers based on properties such as the control inputs of, e.g., their flip-flops and common successors/predecessors. Operates on an abstraction of the netlist that, e.g., contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.</p>
+<p>Analyze the gate-level netlist to identify word-level structures such as registers. </p>
+<p>Reconstructs word-level structures such as registers based on properties such as the control inputs of, e.g., their flip-flops and common successors/predecessors. Operates on an abstraction of the netlist that, e.g., contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>- The dataflow analysis configuration. </td></tr>
@@ -192,7 +192,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li>
-    <li class="footer">Generated on Wed Jul 17 2024 22:29:01 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 18 2024 12:22:25 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

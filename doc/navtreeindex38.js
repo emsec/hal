@@ -1,6 +1,5 @@
 var NAVTREEINDEX38 =
 {
-"selection__tree__view_8cpp_source.html":[7,0,1,3,2,38,3,1],
 "selection__tree__view_8h.html":[7,0,1,3,0,0,40,3,1],
 "selection__tree__view_8h_source.html":[7,0,1,3,0,0,40,3,1],
 "separated__graphics__net_8cpp.html":[7,0,1,3,2,19,1,0,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX38 =
 "splitter_8h.html":[7,0,1,3,0,0,45,0],
 "splitter_8h_source.html":[7,0,1,3,0,0,45,0],
 "splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
-"splitter__anchor_8cpp_source.html":[7,0,1,3,2,10,4]
+"splitter__anchor_8cpp_source.html":[7,0,1,3,2,10,4],
+"splitter__anchor_8h.html":[7,0,1,3,0,0,11,4]
 };
