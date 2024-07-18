@@ -1,15 +1,20 @@
 option(PL_NETLIST_MODIFIER "PL_NETLIST_MODIFIER" OFF)
 
 if(PL_NETLIST_MODIFIER OR BUILD_ALL_PLUGINS)
+
+    find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
     file(GLOB_RECURSE NETLIST_MODIFIER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
     file(GLOB_RECURSE NETLIST_MODIFIER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE NETLIST_MODIFIER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
+    qt5_wrap_cpp(MOC_INC ${NETLIST_MODIFIER_INC})
+
     hal_add_plugin(netlist_modifier
         SHARED
         HEADER ${NETLIST_MODIFIER_INC}
-        SOURCES ${NETLIST_MODIFIER_SRC} ${NETLIST_MODIFIER_PYTHON_SRC}
-        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller
+        SOURCES ${NETLIST_MODIFIER_SRC} ${NETLIST_MODIFIER_PYTHON_SRC} ${MOC_INC}
+        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller Qt5::Widgets
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_modifier.rst
     )
 endif()

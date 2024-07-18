@@ -29,9 +29,7 @@ namespace hal
             .def("get_name", &NetlistModifierPlugin::get_name)
             .def_property_readonly("version", &NetlistModifierPlugin::get_version)
             .def("get_version", &NetlistModifierPlugin::get_version)
-            .def(py::init<>())
-            .def("modify_in_place", &NetlistModifierPlugin::modify_in_place)
-            .def("save", &NetlistModifierPlugin::save);
+            .def(py::init<>());
 
 #ifndef PYBIND11_MODULE
         return m.ptr();
