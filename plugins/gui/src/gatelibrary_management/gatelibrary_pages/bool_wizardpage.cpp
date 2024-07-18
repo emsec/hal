@@ -90,12 +90,13 @@ namespace hal
             for(std::pair<const std::basic_string<char>, BooleanFunction> bf : boolFunctions){
                 QLabel* label = new QLabel(QString::fromStdString(bf.first));
                 BooleanFunctionEdit* lineEdit;
-                if(mWizard->generalInfoPage->getProperties().contains("ff"))
+
+                if(mWizard->generalInfoPage->getProperties().contains("ff") || mWizard->generalInfoPage->getProperties().contains("latch"))
                 {
                     legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
-                    lineEdit = new BooleanFunctionEdit(legVars, this);
+                    legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
                 }
-                else lineEdit = new BooleanFunctionEdit(legVars, this);
+                lineEdit = new BooleanFunctionEdit(legVars, this);
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
                 lineEdit->setText(QString::fromStdString(bf.second.to_string()));
@@ -118,12 +119,14 @@ namespace hal
                                 QLabel* label = new QLabel(pin->getName());
                                 QString name = label->text();
                                 BooleanFunctionEdit* lineEdit;
-                                if(mWizard->generalInfoPage->getProperties().contains("ff"))
+
+                                if(mWizard->generalInfoPage->getProperties().contains("ff") || mWizard->generalInfoPage->getProperties().contains("latch"))
                                 {
                                     legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
-                                    lineEdit = new BooleanFunctionEdit(legVars, this);
+                                    legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
                                 }
-                                else lineEdit = new BooleanFunctionEdit(legVars, this);
+                                lineEdit = new BooleanFunctionEdit(legVars, this);
+
                                 mLayout->addWidget(label, rowCount, 0);
                                 mLayout->addWidget(lineEdit, rowCount, 1);
                                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);

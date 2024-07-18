@@ -31,6 +31,7 @@
 #include <QGridLayout>
 #include <QTabWidget>
 #include <QLineEdit>
+#include <QCheckBox>
 #include <QTextEdit>
 #include <QLabel>
 
@@ -45,7 +46,7 @@ namespace hal {
             QLineEdit* addressGroup;
             QLineEdit* clockFunction;
             QLineEdit* enableFunciton;
-            QComboBox* isWritePort;
+            QCheckBox* isWritePort;
         };
         QList<RAMPort> getRamPorts();
         void setData(GateType* gate);

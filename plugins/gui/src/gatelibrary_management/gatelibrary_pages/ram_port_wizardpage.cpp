@@ -25,7 +25,7 @@ void RAMPortWizardPage::initializePage(){
 
     //create empty lines for ram_port for each data/address pair
     //assumption at this point: #data fields = #address fields
-    for (int i=0; i<pinGroups.length(); i++) { //-1 for dummy entries
+    for (int i=0; i<pinGroups.length(); i++) {
         if(pinGroups[i]->getItemType() == PinItem::TreeItemType::GroupCreator) continue;
         PinType type = pinGroups[i]->getPinType();
         if(type == PinType::data)
@@ -38,8 +38,7 @@ void RAMPortWizardPage::initializePage(){
             rp.addressGroup = new QLineEdit(this);
             rp.clockFunction = new QLineEdit(this);
             rp.enableFunciton = new QLineEdit(this);
-            rp.isWritePort = new QComboBox(this);
-            rp.isWritePort->addItems({"True", "False"});
+            rp.isWritePort = new QCheckBox(this);
 
             mLabDataGroup = new QLabel("Name of the data pingroup: ");
             mLabAddressGroup = new QLabel("Name of the address pingroup: ");
@@ -58,13 +57,13 @@ void RAMPortWizardPage::initializePage(){
             mLayout->addWidget(mLabIsWritePort, 6*(ramPortCnt-1)+5, 0);
             mLayout->addWidget(rp.isWritePort, 6*(ramPortCnt-1)+5, 1);
 
-            if(!ram_ports.empty()) {
+            if(!ram_ports.empty() && ramPortCnt<=ram_ports.size()) {
                 auto ram_port = ram_ports[ramPortCnt-1]->convert_to<RAMPortComponent>();
                 rp.dataGroup->setText(QString::fromStdString(ram_port->get_data_group()));
                 rp.addressGroup->setText(QString::fromStdString(ram_port->get_address_group()));
                 rp.clockFunction->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
-                rp.enableFunciton->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
-                rp.isWritePort->setCurrentText(ram_port->is_write_port() ? "True":"False");
+                rp.enableFunciton->setText(QString::fromStdString(ram_port->get_enable_function().to_string()));
+                rp.isWritePort->setChecked(ram_port->is_write_port());
             }
             mRamPortEdits.append(rp);
         }

@@ -154,7 +154,7 @@ namespace hal
                     identifiers.push_back(id.toStdString());
                 }
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
-                parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->currentText() == "Ascending");
+                parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->isChecked());
             }
             else if(prop == "ff")
             {
@@ -203,14 +203,11 @@ namespace hal
                 std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(std::move(state_component));
                 LatchComponent* latch_component = component->convert_to<LatchComponent>();
 
-                BooleanFunction data_in_bf;
-                BooleanFunction enable_bf;
-
                 auto data_in_res = BooleanFunction::from_string(latchPage->mDataIn->text().toStdString());
                 auto enable_res = BooleanFunction::from_string(latchPage->mEnableOn->text().toStdString());
 
-                if(data_in_res.is_ok()) data_in_bf = data_in_res.get();
-                if(enable_res.is_ok()) enable_bf = enable_res.get();
+                if(data_in_res.is_ok()) latch_component->set_data_in_function(data_in_res.get());
+                if(enable_res.is_ok()) latch_component->set_enable_function(enable_res.get());
 
                 BooleanFunction async_reset;
                 auto async_reset_res = BooleanFunction::from_string(latchPage->mAReset->text().toStdString());
@@ -251,7 +248,7 @@ namespace hal
                                 rpEdit.addressGroup->text().toStdString(),
                                 clocked_on_bf,
                                 enabled_on_bf,
-                                rpEdit.isWritePort->currentText() == "True");
+                                rpEdit.isWritePort->isChecked());
                 }
                 parentComponent = GateTypeComponent::create_ram_component(std::move(sub_component), ramPage->mBitSize->text().toInt());
             }

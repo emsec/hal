@@ -31,6 +31,7 @@
 #include <QGridLayout>
 #include <QTabWidget>
 #include <QLineEdit>
+#include <QCheckBox>
 #include <QLabel>
 
 namespace hal {
@@ -45,7 +46,7 @@ namespace hal {
     private:
         QGridLayout* mLayout;
 
-        QComboBox* mAscending;
+        QCheckBox* mAscending;
         //QLineEdit* mAscending;
 
         QLabel* mLabAscending;
