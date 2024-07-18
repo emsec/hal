@@ -77,5 +77,5 @@ namespace hal
             }
 
         }    // namespace split_by_successors_predecessors
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

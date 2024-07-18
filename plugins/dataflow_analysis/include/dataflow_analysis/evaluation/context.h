@@ -36,7 +36,7 @@ namespace hal
         {
             struct Context
             {
-                Context(){
+                Context() {
                     // phase   = 0;
                 };
 
@@ -46,5 +46,5 @@ namespace hal
             };
 
         }    // namespace evaluation
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

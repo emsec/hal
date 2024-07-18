@@ -91,5 +91,5 @@ namespace hal
             }
 
         }    // namespace group_by_successors_predecessors
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

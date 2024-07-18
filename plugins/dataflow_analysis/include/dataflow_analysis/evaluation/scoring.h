@@ -43,5 +43,5 @@ namespace hal
         {
             std::shared_ptr<Grouping> scoring(Context& eval_context, const std::shared_ptr<const NetlistAbstraction>& m_context);
         }    // namespace scoring
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal
