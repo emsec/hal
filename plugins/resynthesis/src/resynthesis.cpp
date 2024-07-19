@@ -611,12 +611,14 @@ namespace hal
             system(command.c_str());
 
             LogManager::get_instance()->deactivate_channel("netlist");
+            LogManager::get_instance()->deactivate_channel("netlist_parser");
             auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, target_gl);
             if (resynth_nl == nullptr)
             {
                 return ERR("unable to re-synthesize gate-level netlist with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
             }
             LogManager::get_instance()->activate_channel("netlist");
+            LogManager::get_instance()->activate_channel("netlist_parser");
 
             // delete the created directory and the contained files
             std::filesystem::remove_all(base_path);
@@ -1257,12 +1259,15 @@ namespace hal
             // TODO check again the proper way to start a subprocess
             system(command.c_str());
 
+            LogManager::get_instance()->deactivate_channel("netlist");
+            LogManager::get_instance()->deactivate_channel("netlist_parser");
             auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, target_gl);
-
             if (resynth_nl == nullptr)
             {
                 return ERR("unable to resynthesize Boolean functions with yosys: failed to load re-synthesized netlist at " + resynthesized_netlist_path.string());
             }
+            LogManager::get_instance()->activate_channel("netlist");
+            LogManager::get_instance()->activate_channel("netlist_parser");
 
             // TODO check whether this is needed here or maybe move this somewhere else
             // yosys workaround for stupid net renaming

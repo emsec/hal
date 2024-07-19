@@ -778,7 +778,6 @@ namespace hal
 
             // 1. Simplify all parameters of the function recursively
             const auto op = e.decl().decl_kind();
-            auto num_args = e.num_args();
             std::vector<z3::expr> p;
             for (u32 i = 0; i < e.num_args(); i++)
             {
@@ -2020,6 +2019,8 @@ namespace hal
     {
         Result<z3::expr> simplify_local(const z3::expr& e, std::unordered_map<u32, z3::expr>& cache, const bool check_correctness)
         {
+            std::cout << "start simplification" << std::endl;
+
             const u32 max_loop_iterations = 128;
             u32 iteration                 = 0;
 

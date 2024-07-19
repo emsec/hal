@@ -373,7 +373,7 @@ namespace hal
 
                 do
                 {
-                    for (int i = 0; i < candidates.size(); ++i)    // [0..N-1] integers
+                    for (u32 i = 0; i < candidates.size(); ++i)    // [0..N-1] integers
                     {
                         if (bitmask[i])
                         {
@@ -1334,7 +1334,6 @@ namespace hal
             if (candidate.m_candidate_type == CandidateType::adder)
             {
                 std::map<std::string, BooleanFunction::Value> zero_eval_mapping;
-                std::map<std::string, BooleanFunction::Value> one_eval_mapping;
                 for (const auto& n : candidate.m_input_nets)
                 {
                     const std::string var_name = BooleanFunctionNetDecorator(*n).get_boolean_variable_name();
@@ -1342,12 +1341,10 @@ namespace hal
                     {
                         const BooleanFunction::Value val = candidate.m_control_mapping.at(n);
                         zero_eval_mapping.insert({var_name, val});
-                        one_eval_mapping.insert({var_name, val});
                     }
                     else
                     {
                         zero_eval_mapping.insert({var_name, BooleanFunction::Value::ZERO});
-                        one_eval_mapping.insert({var_name, BooleanFunction::Value::ONE});
                     }
                 }
 
@@ -1414,7 +1411,7 @@ namespace hal
             }
             else if (candidate.m_candidate_type == CandidateType::counter || candidate.m_candidate_type == CandidateType::absolute)
             {
-                if (candidate.m_output_nets.size() > candidate.m_input_nets.size())
+                if (candidate.m_output_nets.size() > candidate.m_input_nets.size() + 1)
                 {
                     return OK({candidate});
                 }

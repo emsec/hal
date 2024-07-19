@@ -22,6 +22,34 @@ namespace hal
     {
         namespace
         {
+            std::vector<std::vector<VerifiedCandidate>> filter_out_redundant_const_muls(std::vector<std::vector<VerifiedCandidate>>& candidate_sets)
+            {
+                std::set<std::vector<Net*>> found_counter_for_output;
+                for (const auto& cs : candidate_sets)
+                {
+                    if (std::find(cs.front().m_types.begin(), cs.front().m_types.end(), CandidateType::counter) != cs.front().m_types.end())
+                    {
+                        found_counter_for_output.insert(cs.front().m_output_nets);
+                    }
+                }
+
+                std::vector<std::vector<VerifiedCandidate>> filtered_candidates;
+                for (const auto& cs : candidate_sets)
+                {
+                    if (std::find(cs.front().m_types.begin(), cs.front().m_types.end(), CandidateType::constant_multiplication) != cs.front().m_types.end())
+                    {
+                        if (found_counter_for_output.find(cs.front().m_output_nets) != found_counter_for_output.end())
+                        {
+                            continue;
+                        }
+                    }
+
+                    filtered_candidates.push_back(cs);
+                }
+
+                return filtered_candidates;
+            }
+
             // calculates how many registers both feed into the operands of a candidate and into the control signals
             u32 calculate_shared_source_regs(const Netlist* nl, const std::vector<VerifiedCandidate>& candidates, const std::vector<std::vector<Gate*>>& registers)
             {
@@ -245,7 +273,16 @@ namespace hal
                 }
 
 #ifdef DEBUG_PRINT
-                std::cout << "Sorted candidates into {} candidate sets" << candidate_sets.size() << std::endl;
+                std::cout << "Sorted candidates into " << candidate_sets.size() << " candidate sets" << std::endl;
+#endif
+
+                /**
+                 * Workaround: Some counter operations can be represented as a shifted addition x - (x >> 1).
+                 * If there are counter candidates and constant multiplications candidates with the same output nets and an operand shift of -1, discard the constant multiplication
+                 */
+                candidate_sets = filter_out_redundant_const_muls(candidate_sets);
+#ifdef DEBUG_PRINT
+                std::cout << "Filtered redundant constant multiplication candidates, left with " << candidate_sets.size() << std::endl;
 #endif
 
                 // filter the candidate sets such that only the ones with the least input signals not part of the operands survive
@@ -285,7 +322,7 @@ namespace hal
 #endif
 
                 // select candidate sets with the control signals that share the least source flip flops with the operands bits in the DANA grouping
-                candidate_sets = filter_sets_by(candidate_sets, registers, true, [nl](const auto& c_set, const auto& registers) { return calculate_shared_source_regs(nl, c_set, registers); });
+                candidate_sets = filter_sets_by(candidate_sets, registers, true, [nl](const auto& c_set, const auto& r) { return calculate_shared_source_regs(nl, c_set, r); });
 #ifdef DEBUG_PRINT
                 std::cout << "Filtered candidates with shared source reg count, left with " << candidate_sets.size() << std::endl;
 #endif
@@ -482,7 +519,8 @@ namespace hal
                 /**
                  * Select the candidates with the lowest amount of output nets that are not covered by the candidate
                  */
-                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& dc) {
+                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& _r) {
+                    UNUSED(_r);
                     const auto all_outputs        = get_output_nets(c.m_gates, false).size();
                     const auto c_outputs          = c.m_output_nets.size();
                     const auto additional_outputs = (c_outputs > all_outputs) ? 0 : all_outputs - c_outputs;
@@ -496,7 +534,8 @@ namespace hal
                 /**
                  * Select the candidates containing the most non-const variables in the operands
                  */
-                best_candidates = filter_candidates_by(best_candidates, registers, false, [](const auto& c, const auto& dc) {
+                best_candidates = filter_candidates_by(best_candidates, registers, false, [](const auto& c, const auto& _r) {
+                    UNUSED(_r);
                     u32 non_constant_count = 0;
                     for (const auto& nets : c.m_operands)
                     {
@@ -517,7 +556,8 @@ namespace hal
                  * We find that the extensions with constants allowed for more irregular candidate formations. 
                  */
 
-                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& dc) {
+                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& _r) {
+                    UNUSED(_r);
                     u32 constant_count = 0;
                     for (const auto& nets : c.m_operands)
                     {
@@ -538,7 +578,8 @@ namespace hal
                  * Usually a candidate where each signal belongs to exactly one operand is prefered.
                  */
 
-                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& dc) {
+                best_candidates = filter_candidates_by(best_candidates, registers, true, [](const auto& c, const auto& _r) {
+                    UNUSED(_r);
                     u32 multi_count = 0;
                     std::map<Net*, std::set<u32>> net_to_ops;
                     for (u32 op_idx = 0; op_idx < c.m_operands.size(); op_idx++)
@@ -569,7 +610,7 @@ namespace hal
                  * Usually an operand that sources from exactly one reg is preferable.
                  */
 
-                best_candidates = filter_candidates_by(best_candidates, registers, true, [nl](const auto& c, const auto& dc) { return calculate_operand_source_regs(nl, c, dc); });
+                best_candidates = filter_candidates_by(best_candidates, registers, true, [nl](const auto& c, const auto& r) { return calculate_operand_source_regs(nl, c, r); });
 
 #ifdef DEBUG_PRINT
                 std::cout << "reduced candidate set to size " << best_candidates.size() << std::endl;

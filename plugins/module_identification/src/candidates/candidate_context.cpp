@@ -496,13 +496,8 @@ namespace hal
                 return OK(it->second);
             }
 
-            // Get a random number for thread save operation
-            srand(time(NULL) ^ (int)std::hash<std::thread::id>{}(std::this_thread::get_id()));
-            std::ostringstream ss;
-            ss << rand();
-            std::string idstr                                   = ss.str();
             const auto& bf                                      = get_boolean_function(n, ctrl_mapping).get();
-            Result<std::unordered_map<std::string, double>> res = boolean_influence::get_boolean_influence(bf, 1024, idstr);
+            Result<std::unordered_map<std::string, double>> res = boolean_influence::get_boolean_influence(bf, 1024);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "failed to create boolean influence");

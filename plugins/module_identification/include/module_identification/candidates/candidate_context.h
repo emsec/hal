@@ -34,17 +34,19 @@
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
-#include "hal_core/utilities/result.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/result.h"
 
-#include <vector>
 #include <map>
+#include <vector>
 
 // #define Z3_CANDIDATE_CONTEXT
 #define HAL_CANDIDATE_CONTEXT
 
 #ifdef Z3_CANDIDATE_CONTEXT
-#include "z3_utils.h"
+#include "z3_utils/simplification.h"
+#include "z3_utils/subgraph_function_generation.h"
+#include "z3_utils/z3_utils.h"
 #endif
 
 namespace hal
@@ -75,7 +77,7 @@ namespace hal
              * @returns OK() incase of success, an error otherwise.
              */
             hal::Result<std::monostate> populate_boolean_function_cache(const std::vector<Net*> nets);
-            
+
             /**
              * @brief Retrieves a constant boolean function for a given net and control mapping.
              * 
@@ -147,7 +149,8 @@ namespace hal
              * @param[in] eval_mapping - The evaluation mapping for the boolean function.
              * @returns OK() and a vector of boolean function values incase of success, an error otherwise.
              */
-            hal::Result<std::vector<BooleanFunction::Value>> evaluate(const Net* n, const std::map<Net*, BooleanFunction::Value>& ctrl_mapping, const std::map<std::string, BooleanFunction::Value>& eval_mapping);
+            hal::Result<std::vector<BooleanFunction::Value>>
+                evaluate(const Net* n, const std::map<Net*, BooleanFunction::Value>& ctrl_mapping, const std::map<std::string, BooleanFunction::Value>& eval_mapping);
 
             /**
              * @brief The gates of the corresponding structural candidate.
@@ -274,7 +277,8 @@ namespace hal
              * @param[in] eval_mapping - The evaluation mapping for the boolean function.
              * @returns OK() and a vector of boolean function values, an error otherwise.
              */
-            hal::Result<std::vector<BooleanFunction::Value>> evaluate(const Net* n, const std::map<Net*, BooleanFunction::Value>& ctrl_mapping, const std::map<std::string, BooleanFunction::Value>& eval_mapping);
+            hal::Result<std::vector<BooleanFunction::Value>>
+                evaluate(const Net* n, const std::map<Net*, BooleanFunction::Value>& ctrl_mapping, const std::map<std::string, BooleanFunction::Value>& eval_mapping);
 
             /**
              * @brief The gates involved in the candidate context.
