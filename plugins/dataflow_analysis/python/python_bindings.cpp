@@ -90,16 +90,19 @@ namespace hal
 
         py_dataflow_configuration.def_readwrite("known_net_groups", &dataflow::Configuration::known_net_groups, R"(
             Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty list.
+
             :type: list[list[hal_py.Net]]
         )");
 
         py_dataflow_configuration.def_readwrite("gate_types", &dataflow::Configuration::gate_types, R"(
             The gate types to be grouped by dataflow analysis. Defaults to an empty set.
+
             :type: set[hal_py.GateType]
         )");
 
         py_dataflow_configuration.def_readwrite("control_pin_types", &dataflow::Configuration::control_pin_types, R"(
             The pin types of the pins to be considered control pins. Defaults to an empty set.
+
             :type: set[hal_py.PinType]
         )");
 
@@ -111,6 +114,7 @@ namespace hal
 
         py_dataflow_configuration.def_readwrite("enforce_type_consistency", &dataflow::Configuration::enforce_type_consistency, R"(
             Enforce gate type consistency inside of a group. Defaults to ``False``.
+
             :type: bool
         )");
 
@@ -136,6 +140,7 @@ namespace hal
             The gates contained in the modules do not have to be of the target gate types.
             The input and output pin groups of these modules will be used to guide datapath analysis.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param list[hal_py.Module] structures: A list of modules.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -153,6 +158,7 @@ namespace hal
             For each module, the input and output pin groups to be considered for analysis must be specified. 
             An empty pin group vector results in all pin groups of the module being considered.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param list[tuple(hal_py.Module,list[hal_py.ModulePinGroup])] structures: A list of modules, each of them with a list of module pin groups.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -165,6 +171,7 @@ namespace hal
             The gates do not have to be of the target gate types.
             The input and output pin groups of these gates will be used to guide datapath analysis.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param list[hal_py.Gate] structures: A list of gates.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -182,6 +189,7 @@ namespace hal
             For each gate, the input and output pin groups to be considered for analysis must be specified. 
             An empty pin group vector results in all pin groups of the gate being considered.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param list[tuple(hal_py.Gate,list[hal_py.GatePinGroup])] structures: A list of gates, each of them with a list of gate pin groups.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -197,6 +205,7 @@ namespace hal
             The gate types do not have to be part of the target gate types.
             The input and output pin groups of the gates of these types will be used to guide datapath analysis.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param set[hal_py.GateType] structures: A set of gates.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -214,6 +223,7 @@ namespace hal
             For each gate type, the input and output pin groups to be considered for analysis must be specified. 
             An empty pin group vector results in all pin groups of the gate type being considered.
             Only pin groups larger than ``min_group_size`` will be considered.
+
             :param dict[hal_py.GateType,list[hal_py.GatePinGroup]] structures: A dict from gates to a vector of a subset of their pin groups.
             :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -240,6 +250,7 @@ namespace hal
             Add lists of gates to the set of previously identified word-level groups.
             These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
             The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
+
             :param list[list[hal_py.Gate]] groups: A list of groups, each of them given as a list of gates.
             :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -267,6 +278,7 @@ namespace hal
             These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
             The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
             The group IDs will be ignored during analysis and the same group may be assigned a new ID.
+
             :param dict[int,set[hal_py.Gate]] groups: A dict from group IDs to groups, each of them given as a set of gates.
             :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -277,6 +289,7 @@ namespace hal
             "with_gate_types", py::overload_cast<const std::set<const GateType*>&, bool>(&dataflow::Configuration::with_gate_types), py::arg("types"), py::arg("overwrite") = false, R"(
             Add the gate types to the set of gate types to be grouped by dataflow analysis.
             Overwrite the existing set of gate types by setting the optional ``overwrite`` flag to ``True``.
+
             :param set[hal_py.GateType] types: A set of gate types.
             :param bool overwrite: Set ``True`` to overwrite existing set of gate types, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
@@ -345,8 +358,8 @@ namespace hal
             },
             py::arg("config"),
             R"(
-                Analyze the gate-level netlist to identify word-level registers.
-                Reconstructs registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
+                Analyze the gate-level netlist to identify word-level structures such as registers.
+                Reconstructs word-level structures such as registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
                 Operates on an abstraction of the netlist that contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.
 
                 :param dataflow.Dataflow.Configuration config: The dataflow analysis configuration.
@@ -641,6 +654,7 @@ namespace hal
             py::arg("group_ids")       = std::unordered_set<u32>(),
             R"(
                 Create modules for the dataflow analysis result.
+
                 :param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to ``"module"`` for mixed and unspecified gate types.
                 :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
                 :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
@@ -670,6 +684,7 @@ namespace hal
             py::arg("group_ids")    = std::unordered_set<u32>(),
             R"(
                 Create modules for the dataflow analysis result.
+
                 :param dict[hal_py.GateTypeProperty,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to ``"module"`` for mixed and unspecified gate types.
                 :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
                 :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.

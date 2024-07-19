@@ -45,4 +45,4 @@ namespace hal
 
         }    // namespace split_by_successor_predecessor_known_groups
     }    // namespace dataflow
-}
+}    // namespace hal
