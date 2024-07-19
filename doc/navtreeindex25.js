@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"group__file__management.html":[4,0,6],
 "group__gate__lib.html":[4,1,0,4],
 "group__gate__lib__parser.html":[4,1,0,4,0],
 "group__gate__lib__writer.html":[4,1,0,4,1],
@@ -89,16 +90,16 @@ var NAVTREEINDEX25 =
 "group__pybind.html#gad09c61daaa174b451b0519d0f54a2382":[4,1,3,14],
 "group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98":[4,1,3,25],
 "group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98":[5,0,2,513],
-"group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[4,1,3,27],
 "group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[5,0,2,515],
+"group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[4,1,3,27],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[5,0,2,486],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[4,1,3,6],
 "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[5,0,2,480],
 "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[4,1,3,2],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[5,0,2,526],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[4,1,3,30],
-"group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb":[5,0,2,481],
 "group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb":[4,1,3,3],
+"group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb":[5,0,2,481],
 "group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a":[5,0,2,484],
 "group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a":[4,1,3,5],
 "group__pybind.html#gaf8d3775de7aff4ada2993c698332de33":[4,1,3,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "index.html#autotoc_md35":[0,4,0],
 "index.html#autotoc_md36":[0,4,1],
 "index.html#autotoc_md37":[0,5],
-"index.html#autotoc_md38":[0,6],
-"index.html#autotoc_md39":[0,7]
+"index.html#autotoc_md38":[0,6]
 };

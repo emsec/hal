@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"gate__type__component_8cpp_source.html":[7,0,2,0,3,3,1],
 "gate__type__component_8h.html":[7,0,0,0,1,3,3,1],
 "gate__type__component_8h_source.html":[7,0,0,0,1,3,3,1],
 "gate__type__components_8cpp.html":[7,0,2,2,0,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6":[4,0,2,8,1],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a":[5,0,2,472,2],
 "group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a":[4,0,2,8,2],
-"group__events.html":[4,1,0,6],
-"group__file__management.html":[4,0,6]
+"group__events.html":[4,1,0,6]
 };
