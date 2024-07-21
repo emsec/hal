@@ -1639,5 +1639,12 @@ hal--LogicEvaluatorDialog > QTreeView
     border-color   : #A0A5A8 black #414243 black;
     border-width   : 2 2 2 2;
     background     : black;
-    min-width      : 300px;
+    min-width      : 400px;
+}
+
+hal--LogicEvaluatorSelectGates
+{
+    qproperty-selForeground : #FFE8A0;
+    qproperty-selBackground : #102030;
+    min-width               : 400px;
 }

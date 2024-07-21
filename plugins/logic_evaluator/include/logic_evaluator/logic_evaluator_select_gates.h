@@ -26,6 +26,7 @@
     #pragma once
 
     #include <QDialog>
+    #include <QCheckBox>
     #include <QTreeView>
     #include <vector>
     #include "gui/module_model/module_model.h"
@@ -33,35 +34,66 @@
     namespace hal {
         class Gate;
 
+        class ModuleProxyModel;
+
+        class Searchbar;
+
         class SelectGateItem : public ModuleItem
         {
             Qt::CheckState mState;
+            bool mSelectable;
         public:
-            SelectGateItem(u32 id, ModuleItem::TreeItemType type)
-                : ModuleItem(id, type) {;}
+            SelectGateItem(u32 id, ModuleItem::TreeItemType type, bool isSel = true)
+                : ModuleItem(id, type), mState(Qt::Unchecked), mSelectable(isSel) {;}
             Qt::CheckState state() const { return mState; }
+            bool isSelectable() const { return mSelectable; }
+            void setSelectable(bool isSel) { mSelectable = isSel; }
             void setState(Qt::CheckState stat) { mState = stat; }
         };
+
+        class LogicEvaluatorSelectGates;
 
         class SelectGateModel : public ModuleModel
         {
             Q_OBJECT
+            std::vector<Gate*> mSelectedGates;
+            LogicEvaluatorSelectGates* mParentDialog;
+
             int insertModuleRecursion(const Module* mod, SelectGateItem* parentItem = nullptr);
             QPair<bool,bool> setCheckedRecursion(bool applySet, BaseTreeItem* parentItem, const QSet<u32>& selectedGateIds = QSet<u32>() );
             void setModuleStateRecursion(SelectGateItem* item, Qt::CheckState stat);
+            void setSelectedGatesRecursion(SelectGateItem* item = nullptr);
         public:
             SelectGateModel(QObject* parent = nullptr);
             void setChecked(const std::vector<Gate *> &gates);
             Qt::ItemFlags flags(const QModelIndex &index) const override;
             QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
             bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+            const std::vector<Gate*>& selectedGates();
         };
 
-        class SelectGates : public QDialog
+        class LogicEvaluatorSelectGates : public QDialog
         {
             Q_OBJECT
+
+            Q_PROPERTY(QColor selBackground READ selBackground WRITE setSelBackground)
+            Q_PROPERTY(QColor selForeground READ selForeground WRITE setSelForeground)
+
             QTreeView* mTreeView;
+            SelectGateModel* mSelectGateModel;
+            ModuleProxyModel* mProxyModel;
+            Searchbar* mSearchbar;
+            QCheckBox* mCompile;
+            QColor mSelBackground;
+            QColor mSelForeground;
+        public Q_SLOTS:
+            void accept() override;
         public:
-            SelectGates(const std::vector<Gate *> &gates, QWidget* parent = nullptr);
+            LogicEvaluatorSelectGates(const std::vector<Gate *> &gates, QWidget* parent = nullptr);
+
+            QColor selBackground() const { return mSelBackground; }
+            void setSelBackground(QColor bg) { mSelBackground = bg; }
+            QColor selForeground() const { return mSelForeground; }
+            void setSelForeground(QColor fg) { mSelForeground = fg; }
         };
     }

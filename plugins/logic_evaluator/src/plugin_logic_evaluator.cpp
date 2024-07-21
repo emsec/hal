@@ -109,7 +109,51 @@ namespace hal
         const GateType* gt = g->get_type();
         if (gt->has_property(GateTypeProperty::ff)) return false;
         if (gt->has_property(GateTypeProperty::latch)) return false;
+        if (gt->has_property(GateTypeProperty::ram)) return false;
         return true;
+    }
+
+    std::vector<ContextMenuContribution> GuiExtensionLogicEvaluator::get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
+    {
+        std::vector<ContextMenuContribution> retval;
+        if (nl && (!mods.empty() || !gats.empty()))
+            retval.push_back({this,"context", "Launch logic evaluator"});
+        return retval;
+    }
+
+    void GuiExtensionLogicEvaluator::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
+    {
+       if (nl && (!mods.empty() || !gats.empty()))
+       {
+           std::unordered_set<Gate*> gates;
+           for (u32 gatId : gats)
+           {
+               Gate* g = nl->get_gate_by_id(gatId);
+               if (g && acceptGate(g))
+                   gates.insert(g);
+           }
+           for (u32 modId : mods)
+           {
+               Module* m = nl->get_module_by_id(modId);
+               if (m)
+               {
+                   for (Gate* g : m->get_gates(nullptr,true))
+                       if (acceptGate(g))
+                           gates.insert(g);
+               }
+           }
+
+           if (gates.empty())
+           {
+               log_warning("logic_evaluator", "No pure logical gates in selection, logic evaluator not launched.");
+               return;
+           }
+
+           std::vector<Gate*> vgates(gates.begin(), gates.end());
+           LogicEvaluatorDialog* led = new LogicEvaluatorDialog(vgates, false);
+           led->show();
+
+       }
     }
 
 }    // namespace hal

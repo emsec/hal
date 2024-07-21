@@ -1,7 +1,12 @@
-#include "logic_evaluator/select_gates.h"
+#include "logic_evaluator/logic_evaluator_select_gates.h"
+#include "logic_evaluator/logic_evaluator_dialog.h"
+#include "logic_evaluator/plugin_logic_evaluator.h"
+#include "gui/module_model/module_proxy_model.h"
+#include "gui/searchbar/searchbar.h"
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
 #include <QGridLayout>
+#include <QDialogButtonBox>
 #include <QVector>
 
 namespace hal {
@@ -13,13 +18,24 @@ namespace hal {
         {
         case Qt::ForegroundRole:
             if (item && item->getType() == ModuleItem::TreeItemType::Gate && item->state() == Qt::Checked)
-                return QColor("#FFE8A0"); //TODO : style file
+            {
+                if (mParentDialog)
+                    return mParentDialog->selForeground();
+                else
+                    return ModuleModel::data(index, role);
+            }
             break;
         case Qt::BackgroundRole:
             if (item && item->getType() == ModuleItem::TreeItemType::Gate && item->state() == Qt::Checked)
-                return QColor("#102030");
+            {
+                if (mParentDialog)
+                    return mParentDialog->selBackground();
+                else
+                    return ModuleModel::data(index, role);
+            }
             break;
         case Qt::CheckStateRole:
+            if (!item->isSelectable()) return QVariant();
             if (item && !index.column()) return item->state();
             break;
         }
@@ -55,29 +71,36 @@ namespace hal {
         for (BaseTreeItem* bti : item->getChildren())
         {
             SelectGateItem* child = dynamic_cast<SelectGateItem*>(bti);
+            if (!child->isSelectable()) continue;
             setModuleStateRecursion(child,stat);
         }
     }
 
 
     SelectGateModel::SelectGateModel(QObject* parent)
+        :    mParentDialog(dynamic_cast<LogicEvaluatorSelectGates*>(parent))
     {
         insertModuleRecursion(gNetlist->get_top_module());
     }
 
     int SelectGateModel::insertModuleRecursion(const Module* mod, SelectGateItem* parentItem)
     {
+        int countCheckable = 0;
         SelectGateItem* child = new SelectGateItem(mod->get_id(), ModuleItem::TreeItemType::Module);
         for (const Module* subm : mod->get_submodules())
-            insertModuleRecursion(subm, child);
+            countCheckable += insertModuleRecursion(subm, child);
         for (const Gate* g : mod->get_gates(nullptr, false))
         {
-            child->appendChild(new SelectGateItem(g->get_id(), ModuleItem::TreeItemType::Gate));
+            bool isSel = GuiExtensionLogicEvaluator::acceptGate(g);
+            child->appendChild(new SelectGateItem(g->get_id(), ModuleItem::TreeItemType::Gate, isSel));
+            if (isSel) ++countCheckable;
         }
+        if (!countCheckable) child->setSelectable(false);
         if (parentItem)
             parentItem->appendChild(child);
         else
             mRootItem->appendChild(child);
+        return countCheckable;
     }
 
     QPair<bool,bool> SelectGateModel::setCheckedRecursion(bool applySet, BaseTreeItem *parentItem, const QSet<u32> &selectedGateIds)
@@ -93,6 +116,7 @@ namespace hal {
         SelectGateItem* item = dynamic_cast<SelectGateItem*>(parentItem);
         if (item)
         {
+            if (!item->isSelectable()) return QPair<bool,bool>(false,false);
             Qt::CheckState lastState;
             switch (item->getType()) {
             case ModuleItem::TreeItemType::Module:
@@ -139,6 +163,42 @@ namespace hal {
         return QPair<bool,bool>(hasChecked,hasUnchecked);
     }
 
+    void SelectGateModel::setSelectedGatesRecursion(SelectGateItem* item)
+    {
+        BaseTreeItem* parentItem = nullptr;
+        if (item)
+        {
+            if (!item->isSelectable()) return;
+            switch (item->getType()) {
+            case ModuleItem::TreeItemType::Module:
+                parentItem = item;
+                break;
+            case ModuleItem::TreeItemType::Gate:
+                if (item->state() == Qt::Checked)
+                {
+                    Gate*g = gNetlist->get_gate_by_id(item->id());
+                    if (g) mSelectedGates.push_back(g);
+                }
+                break;
+            case ModuleItem::TreeItemType::Net:
+                Q_ASSERT(1==0);
+                break;
+            }
+        }
+        else
+            parentItem = mRootItem;
+
+        if (parentItem)
+            for (BaseTreeItem* childItem : parentItem->getChildren())
+                setSelectedGatesRecursion(static_cast<SelectGateItem*>(childItem));
+    }
+
+    const std::vector<Gate*>& SelectGateModel::selectedGates()
+    {
+        setSelectedGatesRecursion();
+        return mSelectedGates;
+    }
+
     void SelectGateModel::setChecked(const std::vector<Gate *> &gates)
     {
         QSet<u32> selectedGateIds;
@@ -153,18 +213,56 @@ namespace hal {
     {
         Qt::ItemFlags retval = ModuleModel::flags(index);
         if (index.column()) return retval;
-        return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+        const SelectGateItem* item = dynamic_cast<const SelectGateItem*>(getItemFromIndex(index));
+        if (!item->isSelectable()) return Qt::NoItemFlags;
+        return retval | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
     }
 
-    SelectGates::SelectGates(const std::vector<Gate *>& gates, QWidget* parent)
+    LogicEvaluatorSelectGates::LogicEvaluatorSelectGates(const std::vector<Gate *>& gates, QWidget* parent)
         : QDialog(parent)
     {
+        setWindowTitle("Select combinatorical gates for logic evaluator");
         QGridLayout* layout = new QGridLayout(this);
         mTreeView = new QTreeView(this);
-        SelectGateModel* model = new SelectGateModel(this);
-        model->setChecked(gates);
-        mTreeView->setModel(model);
+        mSelectGateModel = new SelectGateModel(this);
+        mProxyModel = new ModuleProxyModel(this);
+        mProxyModel->setSourceModel(mSelectGateModel);
+        mProxyModel->toggleFilterGates();
+        mSelectGateModel->setChecked(gates);
+        mTreeView->setModel(mProxyModel);
+        mTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mTreeView->expandAll();
-        layout->addWidget(mTreeView);
+        mTreeView->setColumnWidth(0,250);
+        mTreeView->setColumnWidth(1,40);
+        mTreeView->setColumnWidth(2,110);
+
+        QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+        connect(bbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(bbox, &QDialogButtonBox::rejected, this , &QDialog::reject);
+        bbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+        mSearchbar = new Searchbar(this);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &ModuleProxyModel::startSearch);
+
+        mCompile = new QCheckBox("Compile selected logic", this);
+        mCompile->setChecked(true);
+
+        layout->addWidget(mTreeView,0,0,1,2);
+        layout->addWidget(mSearchbar, 1,0,1,2);
+        layout->addWidget(mCompile, 2,0,1,2);
+        layout->addWidget(bbox, 3,1);
+        mTreeView->setMinimumWidth(400);
+
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
+    }
+
+    void LogicEvaluatorSelectGates::accept()
+    {
+        LogicEvaluatorDialog* led = new LogicEvaluatorDialog(mSelectGateModel->selectedGates(),mCompile->isChecked());
+        led->show();
+        led->raise();
+        QDialog::accept();
     }
 }

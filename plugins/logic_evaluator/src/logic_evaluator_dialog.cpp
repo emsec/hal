@@ -5,7 +5,7 @@
 #include "gui/gui_globals.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/module_model/module_model.h"
-#include "logic_evaluator/select_gates.h"
+#include "logic_evaluator/logic_evaluator_select_gates.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -27,11 +27,11 @@ namespace hal {
     const char* LOGIC_EVALUATOR_CALC = "logic_evaluator_calc";
     const char* COMPILER = "gcc";
 
-    LogicEvaluatorDialog::LogicEvaluatorDialog(std::vector<Gate *> &gates, bool skipCompile, QWidget *parent)
-        : QDialog(parent), mSimulationInput(new SimulationInput), mActionCompile(nullptr), mActionIndicate(nullptr)
+    LogicEvaluatorDialog::LogicEvaluatorDialog(const std::vector<Gate *>& gates, bool skipCompile, QWidget *parent)
+        : QDialog(parent), mGates(gates), mSimulationInput(new SimulationInput), mActionCompile(nullptr), mActionIndicate(nullptr)
     {
         setAttribute(Qt::WA_DeleteOnClose);
-        setWindowTitle("Logic Evaluator");
+        setWindowTitle(QString("Logic Evaluator %1 Gates").arg(gates.size()));
 
         mSimulationInput->add_gates(gates);
         mSimulationInput->compute_net_groups();
@@ -119,6 +119,9 @@ namespace hal {
         tmodel->populateFromGatelist(gates);
         tview->setModel(tmodel);
         tview->expandAll();
+        tview->setColumnWidth(0,250);
+        tview->setColumnWidth(1,40);
+        tview->setColumnWidth(2,110);
 
         mMenuBar = new QMenuBar(this);
         QMenu* options = mMenuBar->addMenu("Options");
@@ -128,6 +131,8 @@ namespace hal {
         mActionIndicate = options->addAction("Show in graphic view");
         connect(mActionIndicate, &QAction::toggled, this, &LogicEvaluatorDialog::handleIndicateToggled);
         mActionIndicate->setCheckable(true);
+        QAction* relaunch = mMenuBar->addAction("Relaunch");
+        connect(relaunch, &QAction::triggered, this, &LogicEvaluatorDialog::handleRelaunchTriggered);
 
         inpLayout->addStretch();
         outLayout->addStretch();
@@ -135,6 +140,8 @@ namespace hal {
         topLayout->addWidget(tview);
         topLayout->addLayout(outLayout);
         topLayout->setMenuBar(mMenuBar);
+
+        tview->setMinimumWidth(400);
 
         if (!skipCompile)
             compile();
@@ -150,6 +157,12 @@ namespace hal {
     LogicEvaluatorDialog::~LogicEvaluatorDialog()
     {
         delete mSimulationInput;
+    }
+
+    void LogicEvaluatorDialog::handleRelaunchTriggered()
+    {
+        LogicEvaluatorSelectGates lesg(mGates, this);
+        lesg.exec();
     }
 
     void LogicEvaluatorDialog::handleCompiledToggled(bool checked)

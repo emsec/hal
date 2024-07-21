@@ -60,6 +60,7 @@ namespace hal {
             ~SharedLibHandle() { close(); };
         };
 
+        std::vector<Gate*> mGates;
         SimulationInput* mSimulationInput;
         QList<const Gate*> mEvaluationOrder;
         QList<LogicEvaluatorPingroup*> mInputs;
@@ -81,8 +82,9 @@ namespace hal {
     private Q_SLOTS:
         void handleCompiledToggled(bool checked);
         void handleIndicateToggled(bool checked);
+        void handleRelaunchTriggered();
     public:
-        LogicEvaluatorDialog(std::vector<Gate*>& gates, bool skipCompile, QWidget* parent = nullptr);
+        LogicEvaluatorDialog(const std::vector<Gate*>& gates, bool skipCompile, QWidget* parent = nullptr);
         ~LogicEvaluatorDialog();
         bool compile();
     };

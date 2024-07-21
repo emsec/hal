@@ -54,8 +54,8 @@ namespace hal
     class GuiExtensionLogicEvaluator : public GuiExtensionInterface
     {
 
-        static bool acceptGate(const Gate* g);
     public:
+        static bool acceptGate(const Gate* g);
         /**
          * @brief Default constructor for `GuiExtensionEvaluator`.
          */
@@ -74,5 +74,33 @@ namespace hal
          * @param[in] params - The parameters including their values.
          */
         void set_parameter(const std::vector<PluginParameter>& params) override;
+
+
+        /**
+         * Contribution to context menu.
+         * This function gets called when a context menu in GUI graphical netlist view pops up. Plugins that
+         * want to add their own entries in context menu will return one ContextMenuContribution record per
+         * entry line.
+         *
+         * @param[in] nl - The current netlist in GUI
+         * @param[in] mods - List of selected modules
+         * @param[in] gats - List of selected gates
+         * @param[in] nets - List of selected nets
+         * @return
+         */
+        virtual std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
+
+        /**
+         * Call from GUI to execute function.
+         * This function gets called when user selected a plugin contribution (see get_context_contribution) in
+         * context menu of GUI graphical netlist view or when user clicked a push button in contributed plugin menu
+         *
+         * @param[in] tag - The function tagname (unique identifier)
+         * @param[in] nl - The current netlist in GUI
+         * @param[in] mods - List of selected modules
+         * @param[in] gats - List of selected gates
+         * @param[in] nets - List of selected nets
+         */
+        virtual void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
     };
 }    // namespace hal
