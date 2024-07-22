@@ -1,11 +1,14 @@
 #pragma once
-#include "hal_core/defines.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
+#define SECRET_PASSWORD "test12345"
+
 namespace hal
 {
+    extern Netlist* gNetlist;
+
     class GuiExtensionNetlistModifier;
 
     class PLUGIN_API NetlistModifierPlugin : public BasePluginInterface
@@ -15,8 +18,9 @@ namespace hal
         static bool replace_gate_in_netlist(Netlist* netlist, Gate* gate);
         static std::string obfuscated_gate_name(int num_in, int num_out, int num_io = 0);
         bool modify_gatelibrary();
-        bool create_encrypted_zip(std::string password, int probe_type, int probe_limit, std::string salt = "", bool existing_hal_file=false);
+        bool create_encrypted_zip(std::string password, int probe_type, int probe_limit, std::string salt = "", bool existing_hal_file = false);
         bool update_encrypted_zip(std::string password, int probe_type, int probe_limit);
+        bool modify_in_place(int probe_type, int probe_limit);
 
     public:
         std::string get_name() const override;
@@ -30,7 +34,6 @@ namespace hal
 
         NetlistModifierPlugin();
 
-        bool modify_in_place(int probe_type, int probe_limit);
         void open_popup();
     };
 

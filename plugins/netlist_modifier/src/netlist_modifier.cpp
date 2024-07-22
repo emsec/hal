@@ -2,8 +2,6 @@
 
 namespace hal
 {
-    extern Netlist* gNetlist;
-
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<NetlistModifierPlugin>();

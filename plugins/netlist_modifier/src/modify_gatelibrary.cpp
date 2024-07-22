@@ -1,8 +1,6 @@
-#include "netlist_modifier/netlist_modifier.h"
-
-#include "hal_core/netlist/project_manager.h"
-
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
+#include "hal_core/netlist/project_manager.h"
+#include "netlist_modifier/netlist_modifier.h"
 
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
@@ -10,10 +8,8 @@
 
 namespace hal
 {
-    const char* OBFUSCATED = "_obfuscated";
+    const char* OBFUSCATED   = "_obfuscated";
     const char* GATE_LIB_TAG = "gate_library";
-
-    extern Netlist* gNetlist;
 
     bool NetlistModifierPlugin::modify_gatelibrary()
     {
@@ -56,7 +52,7 @@ namespace hal
         else
         {
             log_warning("netlist_modifier", "Cannot find mandatory '{}' tag in project file '{}'.", GATE_LIB_TAG, projFilePath.string());
-            return false; // gate library entry missing in project file
+            return false;    // gate library entry missing in project file
         }
 
         // yes, we know what we are doing when casting away const ;-)
@@ -65,7 +61,7 @@ namespace hal
         GateLibrary* gl = const_cast<GateLibrary*>(gNetlist->get_gate_library());
 
         // map gate type categories by number of pins
-        std::unordered_map<u32,int> pinCountMap;
+        std::unordered_map<u32, int> pinCountMap;
         for (auto const& [key, gt] : gl->get_gate_types())
         {
             int count[5] = {0, 0, 0, 0, 0};
@@ -78,17 +74,17 @@ namespace hal
         }
 
         // create dummy gate types with appropriate number of pins
-        for  (auto const& [pc,count] : pinCountMap)
+        for (auto const& [pc, count] : pinCountMap)
         {
             int inCount  = pc & 0x3FF;
             int outCount = (pc >> 10) & 0x3FF;
             int ioCount  = (pc >> 20) & 0x3FF;
             GateType* gt = gl->create_gate_type(obfuscated_gate_name(inCount, outCount, ioCount));
-            for (int i=0; i<inCount; i++)
+            for (int i = 0; i < inCount; i++)
                 gt->create_pin("I" + std::to_string(i), PinDirection::input, PinType::none, true);
-            for (int i=0; i<outCount; i++)
+            for (int i = 0; i < outCount; i++)
                 gt->create_pin("O" + std::to_string(i), PinDirection::output, PinType::none, true);
-            for (int i=0; i<ioCount; i++)
+            for (int i = 0; i < ioCount; i++)
                 gt->create_pin("IO" + std::to_string(i), PinDirection::inout, PinType::none, true);
         }
 
@@ -117,4 +113,4 @@ namespace hal
 
         return true;
     }
-}
+}    // namespace hal

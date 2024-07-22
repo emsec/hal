@@ -1,21 +1,20 @@
-#include "netlist_modifier/netlist_modifier.h"
-
 #include "gui/gui_api/gui_api.h"
+#include "netlist_modifier/netlist_modifier.h"
 
 namespace hal
 {
     bool NetlistModifierPlugin::replace_gate_in_netlist(Netlist* netlist, Gate* gate)
     {
         // get the number of input pins
-        int in_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::input; }).size();
-        int out_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::output; }).size();
+        int in_pins     = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::input; }).size();
+        int out_pins    = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::output; }).size();
         int in_out_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::inout; }).size();
 
-        GateType* new_gate_type = netlist->get_gate_library()->get_gate_type_by_name(obfuscated_gate_name(in_pins,out_pins, in_out_pins));
+        GateType* new_gate_type = netlist->get_gate_library()->get_gate_type_by_name(obfuscated_gate_name(in_pins, out_pins, in_out_pins));
 
         if (!new_gate_type)
         {
-            log_error("netlist_modifier", "No gatetype called '{}' in gatelib", obfuscated_gate_name(in_pins,out_pins, in_out_pins));
+            log_error("netlist_modifier", "No gatetype called '{}' in gatelib", obfuscated_gate_name(in_pins, out_pins, in_out_pins));
             return false;
         }
 
@@ -23,8 +22,9 @@ namespace hal
         u32 gate_id           = gate->get_id();
 
         std::vector<std::tuple<u32, int, int>> grid_positions;
-        
-        for(u32 viewID: GuiApiClasses::View::getIds({}, {gate})){
+
+        for (u32 viewID : GuiApiClasses::View::getIds({}, {gate}))
+        {
             GridPlacement* gp = GuiApiClasses::View::getGridPlacement(viewID);
 
             int x = gp->gatePosition(gate->get_id())->first;
@@ -69,10 +69,11 @@ namespace hal
         if (module != new_gate->get_module())
             module->assign_gate(new_gate);
 
-        for(std::tuple<u32, int, int> placement_item: grid_positions){
+        for (std::tuple<u32, int, int> placement_item : grid_positions)
+        {
             u32 viewID = std::get<0>(placement_item);
-            int x = std::get<1>(placement_item);
-            int y = std::get<2>(placement_item);
+            int x      = std::get<1>(placement_item);
+            int y      = std::get<2>(placement_item);
 
             GuiApiClasses::View::addTo(viewID, {}, {new_gate});
 
@@ -85,4 +86,4 @@ namespace hal
 
         return true;
     }
-}
+}    // namespace hal
