@@ -44,6 +44,8 @@ namespace hal {
 
     class LogicEvaluatorPingroup;
 
+    class LogicEvaluatorTruthtableModel;
+
     class LogicEvaluatorDialog : public QDialog
     {
         Q_OBJECT
@@ -71,6 +73,7 @@ namespace hal {
         QMenuBar* mMenuBar;
         QAction* mActionCompile;
         QAction* mActionIndicate;
+        LogicEvaluatorTruthtableModel* mTruthtable;
 
         void calculateEvaluationOrder();
         void recalcCompiled();
@@ -83,6 +86,7 @@ namespace hal {
         void handleCompiledToggled(bool checked);
         void handleIndicateToggled(bool checked);
         void handleRelaunchTriggered();
+        void handleTruthtableTriggered();
     public:
         LogicEvaluatorDialog(const std::vector<Gate*>& gates, bool skipCompile, QWidget* parent = nullptr);
         ~LogicEvaluatorDialog();

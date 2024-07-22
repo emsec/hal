@@ -26,10 +26,12 @@
     #pragma once
 
     #include <QDialog>
-    #include <QCheckBox>
     #include <QTreeView>
     #include <vector>
     #include "gui/module_model/module_model.h"
+
+    class QDialogButtonBox;
+    class QCheckBox;
 
     namespace hal {
         class Gate;
@@ -63,13 +65,15 @@
             QPair<bool,bool> setCheckedRecursion(bool applySet, BaseTreeItem* parentItem, const QSet<u32>& selectedGateIds = QSet<u32>() );
             void setModuleStateRecursion(SelectGateItem* item, Qt::CheckState stat);
             void setSelectedGatesRecursion(SelectGateItem* item = nullptr);
+        Q_SIGNALS:
+            void selectionStateChanged(bool empty);
         public:
             SelectGateModel(QObject* parent = nullptr);
             void setChecked(const std::vector<Gate *> &gates);
             Qt::ItemFlags flags(const QModelIndex &index) const override;
             QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
             bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-            const std::vector<Gate*>& selectedGates();
+            const std::vector<Gate*>& selectedGates() const {return mSelectedGates; }
         };
 
         class LogicEvaluatorSelectGates : public QDialog
@@ -84,10 +88,13 @@
             ModuleProxyModel* mProxyModel;
             Searchbar* mSearchbar;
             QCheckBox* mCompile;
+            QDialogButtonBox* mButtonBox;
             QColor mSelBackground;
             QColor mSelForeground;
         public Q_SLOTS:
             void accept() override;
+        private Q_SLOTS:
+            void handleSelectionStateChanged(bool empty);
         public:
             LogicEvaluatorSelectGates(const std::vector<Gate *> &gates, QWidget* parent = nullptr);
 

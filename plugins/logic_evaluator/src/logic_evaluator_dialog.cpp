@@ -6,6 +6,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/module_model/module_model.h"
 #include "logic_evaluator/logic_evaluator_select_gates.h"
+#include "logic_evaluator/logic_evaluator_truthtable.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -32,6 +33,12 @@ namespace hal {
     {
         setAttribute(Qt::WA_DeleteOnClose);
         setWindowTitle(QString("Logic Evaluator %1 Gates").arg(gates.size()));
+
+        if (gates.empty())
+        {
+            log_warning("logic_evaluator", "No eligible gates selected for logic evaluator, window will close");
+            close();
+        }
 
         mSimulationInput->add_gates(gates);
         mSimulationInput->compute_net_groups();
@@ -133,6 +140,8 @@ namespace hal {
         mActionIndicate->setCheckable(true);
         QAction* relaunch = mMenuBar->addAction("Relaunch");
         connect(relaunch, &QAction::triggered, this, &LogicEvaluatorDialog::handleRelaunchTriggered);
+        QAction* ttable = mMenuBar->addAction("Truth Table");
+        connect(ttable, &QAction::triggered, this, &LogicEvaluatorDialog::handleTruthtableTriggered);
 
         inpLayout->addStretch();
         outLayout->addStretch();
@@ -162,7 +171,52 @@ namespace hal {
     void LogicEvaluatorDialog::handleRelaunchTriggered()
     {
         LogicEvaluatorSelectGates lesg(mGates, this);
-        lesg.exec();
+        if (lesg.exec() == QDialog::Accepted)
+            lower();
+    }
+
+    void LogicEvaluatorDialog::handleTruthtableTriggered()
+    {
+        if (!mSharedLib.handle) return;
+        if (!mTruthtable)
+        {
+            QList<const Net*> inpList;
+            QList<const Net*> outList;
+            for (const LogicEvaluatorPingroup* lepg : mInputs)
+                for (int i=lepg->size()-1; i>=0; i--)
+                    inpList.append(lepg->getValue(i).first);
+            for (const LogicEvaluatorPingroup* lepg : mOutputs)
+                for (int i=lepg->size()-1; i>=0; i--)
+                    outList.append(lepg->getValue(i).first);
+            if (inpList.isEmpty() || outList.isEmpty()) return;
+            mTruthtable = new LogicEvaluatorTruthtableModel(inpList,outList,this);
+
+            int maxInput = 1 << inpList.size();
+
+            for (int inputVal = 0; inputVal < maxInput; inputVal++)
+            {
+                QList<int> values;
+                int mask = 1;
+                for (const Net* n : inpList)
+                {
+                    int bitVal = (inputVal&mask) ? 1 : 0;
+                    values.append(bitVal);
+                    mSharedLib.set(mExternalArrayIndex[n], bitVal);
+                    mask <<= 1;
+                }
+                mSharedLib.calc();
+                for (const Net* n : outList)
+                {
+                    int bitVal = mSharedLib.get(mExternalArrayIndex[n]);
+                    values.append(bitVal);
+                }
+                mTruthtable->addColumn(new LogicEvaluatorTruthtableColumn(inpList.size()+outList.size(),values));
+            }
+        }
+        if (!mTruthtable) return;
+
+        LogicEvaluatorTruthtable lett(mTruthtable, this);
+        lett.exec();
     }
 
     void LogicEvaluatorDialog::handleCompiledToggled(bool checked)

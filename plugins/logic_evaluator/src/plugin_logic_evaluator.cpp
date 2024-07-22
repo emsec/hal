@@ -3,6 +3,7 @@
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/gate.h"
 #include "logic_evaluator/logic_evaluator_dialog.h"
+#include "logic_evaluator/logic_evaluator_select_gates.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_api/gui_api.h"
@@ -95,7 +96,9 @@ namespace hal
 
         if (gates.empty())
         {
-            log_warning("logic_evaluator", "No pure logical gates in selection, logic evaluator not launched.");
+            std::vector<Gate *> emptyList;
+            LogicEvaluatorSelectGates lesg(emptyList);
+            lesg.exec();
             return;
         }
 
@@ -145,7 +148,9 @@ namespace hal
 
            if (gates.empty())
            {
-               log_warning("logic_evaluator", "No pure logical gates in selection, logic evaluator not launched.");
+               std::vector<Gate *> emptyList;
+               LogicEvaluatorSelectGates lesg(emptyList);
+               lesg.exec();
                return;
            }
 

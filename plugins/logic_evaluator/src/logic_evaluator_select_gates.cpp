@@ -7,6 +7,7 @@
 #include "gui/gui_globals.h"
 #include <QGridLayout>
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QVector>
 
 namespace hal {
@@ -59,6 +60,10 @@ namespace hal {
             Q_ASSERT(1==0);
             break;
         }
+        bool stateWasEmpty = mSelectedGates.empty();
+        setSelectedGatesRecursion();
+        if (stateWasEmpty != mSelectedGates.empty())
+            Q_EMIT selectionStateChanged(mSelectedGates.empty());
         return true;
     }
 
@@ -165,6 +170,9 @@ namespace hal {
 
     void SelectGateModel::setSelectedGatesRecursion(SelectGateItem* item)
     {
+        if (!item)
+            mSelectedGates.clear();
+
         BaseTreeItem* parentItem = nullptr;
         if (item)
         {
@@ -193,12 +201,6 @@ namespace hal {
                 setSelectedGatesRecursion(static_cast<SelectGateItem*>(childItem));
     }
 
-    const std::vector<Gate*>& SelectGateModel::selectedGates()
-    {
-        setSelectedGatesRecursion();
-        return mSelectedGates;
-    }
-
     void SelectGateModel::setChecked(const std::vector<Gate *> &gates)
     {
         QSet<u32> selectedGateIds;
@@ -207,6 +209,7 @@ namespace hal {
             selectedGateIds.insert(g->get_id());
 
         setCheckedRecursion(true, mRootItem, selectedGateIds);
+        setSelectedGatesRecursion();
     }
 
     Qt::ItemFlags SelectGateModel::flags(const QModelIndex &index) const
@@ -236,10 +239,12 @@ namespace hal {
         mTreeView->setColumnWidth(1,40);
         mTreeView->setColumnWidth(2,110);
 
-        QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-        connect(bbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-        connect(bbox, &QDialogButtonBox::rejected, this , &QDialog::reject);
-        bbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+        connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(mButtonBox, &QDialogButtonBox::rejected, this , &QDialog::reject);
+        mButtonBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        connect(mSelectGateModel, &SelectGateModel::selectionStateChanged, this, &LogicEvaluatorSelectGates::handleSelectionStateChanged);
+        mButtonBox->button(QDialogButtonBox::Ok)->setDisabled(mSelectGateModel->selectedGates().empty());
 
         mSearchbar = new Searchbar(this);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &ModuleProxyModel::startSearch);
@@ -250,12 +255,17 @@ namespace hal {
         layout->addWidget(mTreeView,0,0,1,2);
         layout->addWidget(mSearchbar, 1,0,1,2);
         layout->addWidget(mCompile, 2,0,1,2);
-        layout->addWidget(bbox, 3,1);
+        layout->addWidget(mButtonBox, 3,1);
         mTreeView->setMinimumWidth(400);
 
         QStyle* s = style();
         s->unpolish(this);
         s->polish(this);
+    }
+
+    void LogicEvaluatorSelectGates::handleSelectionStateChanged(bool empty)
+    {
+        mButtonBox->button(QDialogButtonBox::Ok)->setDisabled(empty);
     }
 
     void LogicEvaluatorSelectGates::accept()
