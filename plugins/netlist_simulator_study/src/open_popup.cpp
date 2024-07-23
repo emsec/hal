@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    QString last_file_input = "";
+    QString FilePickerPopup::last_file_input = "";
     
     FilePickerPopup::FilePickerPopup(QWidget* parent) : QDialog(parent)
     {

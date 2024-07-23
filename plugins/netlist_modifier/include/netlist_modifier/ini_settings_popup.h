@@ -16,6 +16,9 @@ namespace hal
         int get_selected_probing_model();
         int get_probe_limit();
 
+        static int last_probe_limit;
+        static int last_probe_type;
+
     private:
         QRadioButton* t_probe_option;
         QRadioButton* scan_chain_option;

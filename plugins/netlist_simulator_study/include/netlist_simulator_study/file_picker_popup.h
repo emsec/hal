@@ -15,6 +15,8 @@ namespace hal
         explicit FilePickerPopup(QWidget* parent = nullptr);
         std::string get_file_path();
 
+        static QString last_file_input;
+
     private:
         QLineEdit* filePathLineEdit;
         QPushButton* openFileButton;

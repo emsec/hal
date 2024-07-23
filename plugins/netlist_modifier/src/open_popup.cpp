@@ -9,8 +9,8 @@
 
 namespace hal
 {
-    int last_probe_limit = -1;
-    int last_probe_type = -1;
+    int IniSettingsPopup::last_probe_limit = -1;
+    int IniSettingsPopup::last_probe_type = -1;
 
     IniSettingsPopup::IniSettingsPopup(QWidget* parent) : QDialog(parent)
     {
