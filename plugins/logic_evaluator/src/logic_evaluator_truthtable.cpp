@@ -6,6 +6,8 @@
 #include <QMenuBar>
 #include <QActionGroup>
 #include <QHeaderView>
+#include <QDialogButtonBox>
+#include <QLabel>
 
 namespace hal {
     LogicEvaluatorTruthtableColumn::LogicEvaluatorTruthtableColumn(int nrows, QList<int> values)
@@ -18,9 +20,14 @@ namespace hal {
         }
     }
 
-    bool LogicEvaluatorTruthtableColumn::lessThan(const LogicEvaluatorTruthtableColumn& other, int irow) const
+    bool LogicEvaluatorTruthtableColumn::lessThan(const LogicEvaluatorTruthtableColumn& other, const QList<int> &sortRows) const
     {
-        return mArray[irow] < other.mArray[irow];
+        for (int irow : sortRows)
+        {
+            if (mArray[irow] < other.mArray[irow]) return true;
+            if (mArray[irow] > other.mArray[irow]) return false;
+        }
+        return false; // equal
     }
 
     LogicEvaluatorTruthtableColumn::~LogicEvaluatorTruthtableColumn()
@@ -50,9 +57,18 @@ namespace hal {
         mColumnList.append(letc);
     }
 
-    void LogicEvaluatorTruthtableModel::sortModel(int irow)
+    void LogicEvaluatorTruthtableModel::sortModelRow(int irow)
     {
-        std::sort(mColumnList.begin(),mColumnList.end(),[irow](const LogicEvaluatorTruthtableColumn* a, const LogicEvaluatorTruthtableColumn* b){return a->lessThan(*b,irow); } );
+        QList<int> sortRows;
+        sortRows.append(irow);
+        std::sort(mColumnList.begin(),mColumnList.end(),[sortRows](const LogicEvaluatorTruthtableColumn* a, const LogicEvaluatorTruthtableColumn* b){return a->lessThan(*b,sortRows); } );
+        Q_EMIT dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
+    }
+
+    void LogicEvaluatorTruthtableModel::sortModelRows(const QList<int>& sortRows)
+    {
+        if (sortRows.isEmpty()) return;
+        std::sort(mColumnList.begin(),mColumnList.end(),[sortRows](const LogicEvaluatorTruthtableColumn* a, const LogicEvaluatorTruthtableColumn* b){return a->lessThan(*b,sortRows); } );
         Q_EMIT dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
     }
 
@@ -111,8 +127,51 @@ namespace hal {
         return (1 << mInputList.size());
     }
 
+    //--------------------------------
+    LogicEvaluatorTruthtableSort::LogicEvaluatorTruthtableSort(QList<const Net*>& nets, QWidget* parent)
+        : QDialog(parent), mNets(nets)
+    {
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        const char* ordinal[] = { "st", "nd", "th"};
+        for (int i=0; i<5; i++)
+        {
+            if (i) layout->addStretch();
+            layout->addWidget(new QLabel(QString("%1%2 sort key").arg(i+1).arg(i<3?ordinal[i]:ordinal[2]),this));
+            mSortKey[i] = new QComboBox(this);
+            mSortKey[i]->addItem("--not used--", (const void*) nullptr);
+            for (const Net* n : mNets)
+                mSortKey[i]->addItem(QString::fromStdString(n->get_name()),(const void*)n);
+            layout->addWidget(mSortKey[i]);
+        }
+        QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+        connect(bbox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(bbox, &QDialogButtonBox::rejected, this , &QDialog::reject);
+        bbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        layout->addWidget(bbox);
+    }
+
+    QList<int> LogicEvaluatorTruthtableSort::sortOrder() const
+    {
+         QList<int> retval;
+         QSet<const Net*> selected;
+         for (int i=0; i<5; i++)
+         {
+             int inx = mSortKey[i]->currentIndex();
+             if (!inx) break;
+             --inx; // skip not used entry
+             const Net* n = mNets.at(inx);
+             if (!selected.contains(n))
+             {
+                 retval.append(inx);
+                 selected.insert(n);
+             }
+         }
+         return retval;
+    }
+
+    //--------------------------------
     LogicEvaluatorTruthtable::LogicEvaluatorTruthtable(LogicEvaluatorTruthtableModel* model, QWidget* parent)
-        : mModel(model)
+        : mModel(model), mColumnDubbleClicked(-1)
     {
         QGridLayout* layout = new QGridLayout(this);
         QMenuBar* menuBar = new QMenuBar(this);
@@ -130,11 +189,15 @@ namespace hal {
         mActionDisplayFormat[LogicEvaluatorTruthtableModel::ZeroOne]->setChecked(true);
         handleDisplayFormatChanged(mActionDisplayFormat[LogicEvaluatorTruthtableModel::ZeroOne]);
 
+        QAction* actSort = menuBar->addAction("Sort");
+        connect(actSort, &QAction::triggered, this, &LogicEvaluatorTruthtable::handleSortTriggered);
+
         QTableView* view = new QTableView(this);
         view->setModel(mModel);
         for (int icol=0; icol<mModel->columnCount(); icol++)
             view->setColumnWidth(icol, 32);
-        connect(view->verticalHeader(), &QHeaderView::sectionClicked, mModel, &LogicEvaluatorTruthtableModel::sortModel);
+        connect(view->verticalHeader(), &QHeaderView::sectionClicked, mModel, &LogicEvaluatorTruthtableModel::sortModelRow);
+        connect(view->horizontalHeader(), &QHeaderView::sectionDoubleClicked, this, &LogicEvaluatorTruthtable::handleColumnDubbleClicked);
         layout->addWidget(view);
         layout->setMenuBar(menuBar);
     }
@@ -144,6 +207,38 @@ namespace hal {
         if (df == mDisplayFormat) return;
         mDisplayFormat = df;
         Q_EMIT dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
+    }
+
+    void LogicEvaluatorTruthtable::handleSortTriggered()
+    {
+        QList<const Net*> nets = mModel->getNets();
+        LogicEvaluatorTruthtableSort lets(nets,this);
+        if (lets.exec() == QDialog::Accepted)
+        {
+            mModel->sortModelRows(lets.sortOrder());
+        }
+    }
+
+    void LogicEvaluatorTruthtable::handleColumnDubbleClicked(int icol)
+    {
+        mColumnDubbleClicked = icol;
+        accept();
+    }
+
+    QMap<const Net*, int> LogicEvaluatorTruthtableModel::selectedColumn(int icol) const
+    {
+        QMap<const Net*,int> retval;
+        if (icol < 0 || icol >= mColumnList.size()) return retval;
+        LogicEvaluatorTruthtableColumn* letc = mColumnList.at(icol);
+        int irow = 0;
+        for (const Net* n : mInputList)
+            retval[n] = letc->data(irow++);
+        return retval;
+    }
+
+    QMap<const Net*, int> LogicEvaluatorTruthtable::selectedColumn() const
+    {
+        return mModel->selectedColumn(mColumnDubbleClicked);
     }
 
     void LogicEvaluatorTruthtable::handleDisplayFormatChanged(QAction* act)

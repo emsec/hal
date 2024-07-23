@@ -28,6 +28,7 @@
 #include <QDialog>
 #include <QAbstractTableModel>
 #include <QList>
+#include <QComboBox>
 
 namespace hal {
     class Net;
@@ -40,7 +41,7 @@ namespace hal {
         LogicEvaluatorTruthtableColumn(int nrows, QList<int> values);
         ~LogicEvaluatorTruthtableColumn();
         int data(int irow) const;
-        bool lessThan(const LogicEvaluatorTruthtableColumn& other, int irow) const;
+        bool lessThan(const LogicEvaluatorTruthtableColumn& other, const QList<int>& sortRows) const;
     };
 
     class LogicEvaluatorTruthtableModel : public QAbstractTableModel
@@ -56,10 +57,14 @@ namespace hal {
         int mInputSize;
         int mOutputSize;
     public Q_SLOTS:
-        void sortModel(int irow);
+        void sortModelRow(int irow);
+        void sortModelRows(const QList<int>& sortRows);
     public:
         LogicEvaluatorTruthtableModel(const QList<const Net*>& inpList, const QList<const Net*>& outList, QObject* parent = nullptr);
         ~LogicEvaluatorTruthtableModel();
+        QList<const Net*> getNets() const { return mInputList + mOutputList; }
+        QMap<const Net*, int> selectedColumn(int icol) const;
+
         void setDisplayFormat(DisplayFormat df);
         void addColumn(LogicEvaluatorTruthtableColumn* letc);
         QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -68,15 +73,29 @@ namespace hal {
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     };
 
+    class LogicEvaluatorTruthtableSort : public QDialog
+    {
+        Q_OBJECT
+        QComboBox* mSortKey[5];
+        QList<const Net*> mNets;
+    public:
+        LogicEvaluatorTruthtableSort(QList<const Net*>& nets, QWidget* parent = nullptr);
+        QList<int> sortOrder() const;
+    };
+
     class LogicEvaluatorTruthtable : public QDialog
     {
         Q_OBJECT
         QAction* mActionDisplayFormat[LogicEvaluatorTruthtableModel::MAXFORMAT];
+        QAction* mActionSort;
         LogicEvaluatorTruthtableModel* mModel;
+        int mColumnDubbleClicked;
     private Q_SLOT:
         void handleDisplayFormatChanged(QAction* act);
+        void handleSortTriggered();
+        void handleColumnDubbleClicked(int icol);
     public:
-         LogicEvaluatorTruthtable(LogicEvaluatorTruthtableModel* model, QWidget* parent = nullptr);
-
+        LogicEvaluatorTruthtable(LogicEvaluatorTruthtableModel* model, QWidget* parent = nullptr);
+        QMap<const Net*, int> selectedColumn() const;
     };
 }

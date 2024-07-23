@@ -189,6 +189,11 @@ namespace hal {
                 for (int i=lepg->size()-1; i>=0; i--)
                     outList.append(lepg->getValue(i).first);
             if (inpList.isEmpty() || outList.isEmpty()) return;
+            if (inpList.size() > 10)
+            {
+                log_warning("logic_evaluator", "Cannot generate truth table for {} logic inputs.", inpList.size());
+                return;
+            }
             mTruthtable = new LogicEvaluatorTruthtableModel(inpList,outList,this);
 
             int maxInput = 1 << inpList.size();
@@ -216,7 +221,17 @@ namespace hal {
         if (!mTruthtable) return;
 
         LogicEvaluatorTruthtable lett(mTruthtable, this);
-        lett.exec();
+        if (lett.exec() == QDialog::Accepted)
+        {
+            QMap<const Net*,int> vals = lett.selectedColumn();
+            for (auto it = vals.constBegin(); it != vals.constEnd(); ++it)
+            {
+                const Net* n = it.key();
+                BooleanFunction::Value bv = it.value() ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                for (LogicEvaluatorPingroup* lepg : mInputs)
+                    lepg->setValue(n,bv);
+            }
+        }
     }
 
     void LogicEvaluatorDialog::handleCompiledToggled(bool checked)
