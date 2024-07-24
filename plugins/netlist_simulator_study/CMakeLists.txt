@@ -14,7 +14,7 @@ if(PL_NETLIST_SIMULATOR_STUDY OR BUILD_ALL_PLUGINS)
         SHARED
         HEADER ${NETLIST_SIMULATOR_STUDY_INC}
         SOURCES ${NETLIST_SIMULATOR_STUDY_SRC} ${NETLIST_SIMULATOR_STUDY_PYTHON_SRC}  ${MOC_INC}
-        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller Qt5::Widgets
+        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller Qt5::Widgets QuaZip::QuaZip
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator_study.rst
     )
 endif()
