@@ -1,4 +1,4 @@
-#include "netlist_preprocessing/plugin_netlist_preprocessing.h"
+#include "netlist_preprocessing/netlist_preprocessing.h"
 
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
@@ -70,7 +70,7 @@ namespace hal {
             EXPECT_EQ(l5->get_predecessor("I2")->get_gate(), l2);
             EXPECT_EQ(l5->get_predecessor("I3")->get_gate(), l3);
 
-            auto res = NetlistPreprocessingPlugin::remove_unused_lut_inputs(nl.get());
+            auto res = netlist_preprocessing::remove_unused_lut_inputs(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 3);
 
@@ -129,7 +129,7 @@ namespace hal {
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            auto res = NetlistPreprocessingPlugin::remove_buffers(nl.get());
+            auto res = netlist_preprocessing::remove_buffers(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 1);
 
@@ -175,7 +175,7 @@ namespace hal {
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            auto res = NetlistPreprocessingPlugin::remove_buffers(nl.get());
+            auto res = netlist_preprocessing::remove_buffers(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 1);
 
@@ -220,7 +220,7 @@ namespace hal {
             Net* n3 = test_utils::connect(nl.get(), g0, "O", g1, "I1");
             Net* n4 = test_utils::connect(nl.get(), g1, "O", g2, "I0");
 
-            auto res = NetlistPreprocessingPlugin::remove_buffers(nl.get());
+            auto res = netlist_preprocessing::remove_buffers(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 1);
 
@@ -236,9 +236,9 @@ namespace hal {
     /**
      * Test the deletion of redundant logic gates.
      *
-     * Functions: remove_redundant_logic
+     * Functions: remove_redundant_gates
      */
-    TEST_F(NetlistPreprocessingTest, check_remove_redundant_logic)
+    TEST_F(NetlistPreprocessingTest, check_remove_redundant_gates)
     {
         TEST_START
         {
@@ -274,7 +274,7 @@ namespace hal {
             Net* n5 = test_utils::connect(nl.get(), g2, "Q", g4, "I0");
             Net* n6 = test_utils::connect(nl.get(), g3, "QN", g4, "I1");
 
-            auto res = NetlistPreprocessingPlugin::remove_redundant_logic(nl.get());
+            auto res = netlist_preprocessing::remove_redundant_gates(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 2);
 

@@ -70,7 +70,7 @@ namespace hal
             /// Controls whether the SMT query is performed on a local or a remote machine.
             bool local = true;
             /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
-            bool generate_model = true;
+            bool generate_model = false;
             /// The timeout after which the SMT solver is killed in seconds.
             u64 timeout_in_seconds = 10;
 

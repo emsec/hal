@@ -91,6 +91,22 @@ namespace hal
          */
         Result<Net*> connect_nets(Net* master_net, Net* slave_net);
 
+        /**
+         * Searches for a GND net in the netlist.
+         * If there are no existing ones then the function will try to search for a GND gate type in the gate library and create a GND net with corresponding gate source. 
+         * 
+         * @returns A vector containing the either newly created or all already existing GND nets.
+         */
+        Result<std::vector<Net*>> create_gnd_net();
+
+        /**
+         * Searches for a VCC net in the netlist.
+         * If there are no existing ones then the function will try to search for a VCC gate type in the gate library and create a VCC net with corresponding gate source. 
+         * 
+         * @returns A vector containing the either newly created or all already existing VCC nets.
+         */
+        Result<std::vector<Net*>> create_vcc_net();
+
     private:
         Netlist& m_netlist;
     };

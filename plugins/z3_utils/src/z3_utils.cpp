@@ -1,10 +1,10 @@
-#include "z3_utils.h"
+#include "z3_utils/z3_utils.h"
 
-#include "converter/cpp_converter.h"
-#include "converter/verilog_converter.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
 #include "z3_api.h"
+#include "z3_utils/converter/cpp_converter.h"
+#include "z3_utils/converter/verilog_converter.h"
 
 #include <sstream>
 
@@ -31,15 +31,24 @@ namespace hal
                     case BooleanFunction::NodeType::Index:
                         return {true, context.bv_val(node.index, node.size)};
                     case BooleanFunction::NodeType::Constant: {
-                        // since our constants are defined as arbitrary bit-vectors,
-                        // we have to concat each bit just to be on the safe side
-                        auto constant = context.bv_val(node.constant.front(), 1);
-                        for (u32 i = 1; i < node.constant.size(); i++)
+                        std::vector<u8> bits;
+                        for (u32 i = 0; i < node.constant.size(); i++)
                         {
-                            const auto bit = node.constant.at(i);
-                            constant       = z3::concat(context.bv_val(bit, 1), constant);
+                            if (node.constant.at(i) == BooleanFunction::Value::ONE)
+                            {
+                                bits.push_back(1);
+                            }
+                            else if (node.constant.at(i) == BooleanFunction::Value::ZERO)
+                            {
+                                bits.push_back(0);
+                            }
+                            else
+                            {
+                                return {false, z3::expr(context)};
+                            }
                         }
-                        return {true, constant};
+
+                        return {true, context.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data()))};
                     }
                     case BooleanFunction::NodeType::Variable: {
                         if (auto it = var2expr.find(node.variable); it != var2expr.end())
@@ -100,7 +109,7 @@ namespace hal
                     case BooleanFunction::NodeType::Ult:
                         return {true, z3::ult(p[0], p[1])};
                     case BooleanFunction::NodeType::Ite:
-                        return {true, z3::ite(p[0] == context.bv_val(1, 1), p[1], p[2])};
+                        return {true, z3::ite(p[0], p[1], p[2])};
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                         return {false, z3::expr(context)};
@@ -133,236 +142,321 @@ namespace hal
             }
         }
 
-        Result<BooleanFunction> to_bf(const z3::expr& e)
+        Result<z3::expr> value_from_binary_string(z3::context& context, const std::string& bit_string)
         {
-            u64 size;
-            if (e.is_bv())
+            std::vector<u8> bits;
+            for (u32 i = 0; i < bit_string.length(); i++)
             {
-                size = e.get_sort().bv_size();
-
-                if (size > 64)
+                if (bit_string.at(i) == '1')
                 {
-                    return ERR("can only translate bit vector sizes < 64, but input bit vector has size " + std::to_string(size));
+                    bits.push_back(1);
                 }
-
-                if (e.is_numeral())
+                else if (bit_string.at(i) == '0')
                 {
-                    return OK(BooleanFunction::Const(e.get_numeral_uint64(), size));
-                }
-                else if (e.is_const())
-                {
-                    return OK(BooleanFunction::Var(e.to_string(), size));
-                }
-            }
-
-            const auto op = e.decl().decl_kind();
-            auto num_args = e.num_args();
-            std::vector<BooleanFunction> args;
-
-            for (u32 i = 0; i < e.num_args(); i++)
-            {
-                const auto arg = e.arg(i);
-                if (const auto res = to_bf(arg); res.is_ok())
-                {
-                    args.push_back(std::move(res.get()));
+                    bits.push_back(0);
                 }
                 else
                 {
-                    return ERR(res.get_error());
+                    return ERR("cannot generate value from binary string: encountered unexpected character " + bit_string.at(i));
                 }
             }
 
-            switch (op)
+            return OK(context.bv_val(bits.size(), reinterpret_cast<bool*>(bits.data())));
+        }
+
+        namespace
+        {
+            Result<BooleanFunction> to_bf_internal(const z3::expr& e, std::map<z3::expr, BooleanFunction>& cache)
             {
-                case Z3_OP_BAND: {
-                    auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::And(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BOR: {
-                    auto bf_res = BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BNOT: {
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'NOT' must have arity 1");
-                    }
-                    return BooleanFunction::Not(std::move(args.at(0)), size);
-                }
-                case Z3_OP_BXOR: {
-                    auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Xor(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BADD: {
-                    auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Add(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BSUB: {
-                    auto bf_res = BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Sub(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BMUL: {
-                    auto bf_res = BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Mul(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_BSDIV:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'SDIV' must have arity 2");
-                    }
-                    return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
-                case Z3_OP_BUDIV:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'UDIV' must have arity 2");
-                    }
-                    return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
-                case Z3_OP_BSREM:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'SREM' must have arity 2");
-                    }
-                    return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
-                case Z3_OP_BUREM:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'UREM' must have arity 2");
-                    }
-                    return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
-                case Z3_OP_CONCAT: {
-                    auto bf_res = BooleanFunction::Concat(std::move(args.at(0)), std::move(args.at(1)), size);
-                    for (u64 i = 2; i < num_args; i++)
-                    {
-                        bf_res =
-                            bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Concat(std::move(bf), std::move(arg), size); });
-                    }
-                    return bf_res;
-                }
-                case Z3_OP_EXTRACT: {
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'SLICE' must have arity 1");
-                    }
+                u64 size;
+                if (e.is_bv())
+                {
+                    size = e.get_sort().bv_size();
 
-                    const u32 operand_size = args.at(0).size();
+                    if (e.is_numeral())
+                    {
+                        if (size <= 64)
+                        {
+                            return OK(BooleanFunction::Const(e.get_numeral_uint64(), size));
+                        }
+                        else
+                        {
+                            std::vector<BooleanFunction::Value> boolean_values;
+                            const std::string val_str = Z3_get_numeral_binary_string(e.ctx(), e);
+                            for (u32 idx = 0; idx < val_str.size(); idx++)
+                            {
+                                if (val_str.at(idx) == '1')
+                                {
+                                    boolean_values.push_back(BooleanFunction::Value::ONE);
+                                }
+                                else if (val_str.at(idx) == '0')
+                                {
+                                    boolean_values.push_back(BooleanFunction::Value::ZERO);
+                                }
+                                else
+                                {
+                                    return ERR("cannot convert expression to boolean function: failed to translate character " + std::to_string(val_str.at(idx)) + " to Boolean value.");
+                                }
+                            }
 
-                    return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(e.lo(), operand_size), BooleanFunction::Index(e.hi(), operand_size), size);
-                }
-                case Z3_OP_ZERO_EXT: {
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'ZEXT' must have arity 1");
+                            return OK(BooleanFunction::Const(boolean_values));
+                        }
                     }
+                    else if (e.is_const())
+                    {
+                        // std::cout << e << std::endl;
+                        const std::string name = e.decl().name().str();
+                        return OK(BooleanFunction::Var(name, size));
+                    }
+                    else if (e.is_var())
+                    {
+                        const std::string name = e.decl().name().str();
+                        return OK(BooleanFunction::Var(name, size));
+                    }
+                }
 
-                    return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
-                }
-                case Z3_OP_SIGN_EXT: {
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'SEXT' must have arity 1");
-                    }
+                // if (const auto it = cache.find(e); it != cache.end())
+                // {
+                //     return OK(it->second);
+                // }
 
-                    return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                const auto op = e.decl().decl_kind();
+                auto num_args = e.num_args();
+                std::vector<BooleanFunction> args;
+
+                for (u32 i = 0; i < e.num_args(); i++)
+                {
+                    const auto arg = e.arg(i);
+                    if (const auto res = to_bf_internal(arg, cache); res.is_ok())
+                    {
+                        // const auto [it, _] = cache.insert({arg, res.get()});
+                        // args.push_back(it->second.clone());
+                        args.push_back(res.get());
+                    }
+                    else
+                    {
+                        return ERR(res.get_error());
+                    }
                 }
-                case Z3_OP_BSHL:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'SHL' must have arity 2");
+
+                switch (op)
+                {
+                    case Z3_OP_BAND: {
+                        auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::And(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
-                case Z3_OP_BLSHR:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'LSHR' must have arity 2");
+                    case Z3_OP_BOR: {
+                        auto bf_res = BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
-                case Z3_OP_BASHR:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'ASHR' must have arity 2");
+                    case Z3_OP_BNOT: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'NOT' must have arity 1");
+                        }
+                        return BooleanFunction::Not(std::move(args.at(0)), size);
                     }
-                    return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
-                case Z3_OP_ROTATE_LEFT:
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'ROL' must have arity 1");
+                    case Z3_OP_BXOR: {
+                        auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Xor(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
-                case Z3_OP_ROTATE_RIGHT:
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'ROR' must have arity 1");
+                    case Z3_OP_BNEG: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'NEG' must have arity 1");
+                        }
+                        return ERR("Negation not implemented");
                     }
-                    return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
-                case Z3_OP_EQ:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'EQ' must have arity 2");
+                    case Z3_OP_BADD: {
+                        auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Add(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Eq(std::move(args.at(0)), std::move(args.at(1)), 1);
-                case Z3_OP_SLEQ:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'SLE' must have arity 2");
+                    case Z3_OP_BSUB: {
+                        auto bf_res = BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Sub(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Sle(std::move(args.at(0)), std::move(args.at(1)), 1);
-                case Z3_OP_SLT:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'SLT' must have arity 2");
+                    case Z3_OP_BMUL: {
+                        auto bf_res = BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res =
+                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Mul(std::move(bf), std::move(arg), size); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Slt(std::move(args.at(0)), std::move(args.at(1)), 1);
-                case Z3_OP_ULEQ:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'ULE' must have arity 2");
+                    case Z3_OP_BSDIV:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'SDIV' must have arity 2");
+                        }
+                        return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BUDIV:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'UDIV' must have arity 2");
+                        }
+                        return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BSREM:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'SREM' must have arity 2");
+                        }
+                        return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_BUREM:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'UREM' must have arity 2");
+                        }
+                        return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
+                    case Z3_OP_CONCAT: {
+                        auto bf_res = BooleanFunction::Concat(std::move(args.at(0)), std::move(args.at(1)), args.at(0).size() + args.at(1).size());
+                        for (u64 i = 2; i < num_args; i++)
+                        {
+                            bf_res = bf_res.map<BooleanFunction>(
+                                [arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Concat(std::move(bf), std::move(arg), bf.size() + arg.size()); });
+                        }
+                        return bf_res;
                     }
-                    return BooleanFunction::Ule(std::move(args.at(0)), std::move(args.at(1)), 1);
-                case Z3_OP_ULT:
-                    if (num_args != 2)
-                    {
-                        return ERR("operation 'ULT' must have arity 2");
+                    case Z3_OP_EXTRACT: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'SLICE' must have arity 1");
+                        }
+
+                        const u32 operand_size = args.at(0).size();
+
+                        return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(e.lo(), operand_size), BooleanFunction::Index(e.hi(), operand_size), size);
                     }
-                    return BooleanFunction::Ult(std::move(args.at(0)), std::move(args.at(1)), 1);
-                case Z3_OP_ITE:
-                    if (num_args != 3)
-                    {
-                        return ERR("operation 'ITE' must have arity 3");
+                    case Z3_OP_ZERO_EXT: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'ZEXT' must have arity 1");
+                        }
+
+                        return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
                     }
-                    return BooleanFunction::Ite(std::move(args.at(0)), std::move(args.at(1)), std::move(args.at(2)), size);
-                default:
-                    return ERR("operation '" + e.decl().name().str() + "' with arity " + std::to_string(num_args) + " is not yet implemented");
+                    case Z3_OP_SIGN_EXT: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'SEXT' must have arity 1");
+                        }
+
+                        return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                    }
+                    case Z3_OP_BSHL:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'SHL' must have arity 2");
+                        }
+                        return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                    case Z3_OP_BLSHR:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'LSHR' must have arity 2");
+                        }
+                        return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                    case Z3_OP_BASHR:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ASHR' must have arity 2");
+                        }
+                        return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                    case Z3_OP_ROTATE_LEFT:
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'ROL' must have arity 1");
+                        }
+                        return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
+                    case Z3_OP_ROTATE_RIGHT:
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'ROR' must have arity 1");
+                        }
+                        return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
+                    case Z3_OP_EQ:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'EQ' must have arity 2");
+                        }
+                        return BooleanFunction::Eq(std::move(args.at(0)), std::move(args.at(1)), 1);
+                    case Z3_OP_SLEQ:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'SLE' must have arity 2");
+                        }
+                        return BooleanFunction::Sle(std::move(args.at(0)), std::move(args.at(1)), 1);
+                    case Z3_OP_SLT:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'SLT' must have arity 2");
+                        }
+                        return BooleanFunction::Slt(std::move(args.at(0)), std::move(args.at(1)), 1);
+                    case Z3_OP_ULEQ:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ULE' must have arity 2");
+                        }
+                        return BooleanFunction::Ule(std::move(args.at(0)), std::move(args.at(1)), 1);
+                    case Z3_OP_ULT:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ULT' must have arity 2");
+                        }
+                        return BooleanFunction::Ult(std::move(args.at(0)), std::move(args.at(1)), 1);
+                    case Z3_OP_ITE:
+                        if (num_args != 3)
+                        {
+                            return ERR("operation 'ITE' must have arity 3");
+                        }
+                        return BooleanFunction::Ite(std::move(args.at(0)), std::move(args.at(1)), std::move(args.at(2)), size);
+                    default:
+                        return ERR("operation '" + e.decl().name().str() + "' with arity " + std::to_string(num_args) + " is not yet implemented");
+                }
             }
+        }    // namespace
+
+        Result<BooleanFunction> to_bf(const z3::expr& e)
+        {
+            std::map<z3::expr, BooleanFunction> cache;
+            return to_bf_internal(e, cache);
         }
 
         std::string to_smt2(const z3::expr& e)
         {
             auto s = z3::solver(e.ctx());
-            s.add(e == e.ctx().bv_val(0, 1));
+            if (e.get_sort().is_bv())
+            {
+                s.add(e == e.ctx().bv_val(0, e.get_sort().bv_size()));
+            }
+            else
+            {
+                s.add(e == e.ctx().bool_val(true));
+            }
             return s.to_smt2();
         }
 
@@ -386,27 +480,36 @@ namespace hal
 
         std::set<std::string> get_variable_names(const z3::expr& e)
         {
+            std::set<u32> visited       = {e.id()};
+            std::vector<z3::expr> stack = {e};
+
             std::set<std::string> var_names;
 
-            // get inputs from smt2 string, much faster than iterating over z3 things
-            const auto smt = to_smt2(e);
-
-            std::istringstream iss(smt);
-            for (std::string line; std::getline(iss, line);)
+            while (!stack.empty())
             {
-                if (line.find("declare-fun") != std::string::npos)
+                const auto n = stack.back();
+                stack.pop_back();
+
+                if (n.is_numeral())
                 {
-                    auto start_index = line.find_first_of(' ') + 1;    // variable name starts after the first space
-                    auto end_index   = line.find_first_of(' ', start_index);
+                    continue;
+                }
 
-                    if (start_index == std::string::npos + 1 || end_index == std::string::npos)
+                if (n.is_var() || n.is_const())
+                {
+                    var_names.insert(n.to_string());
+                }
+                else
+                {
+                    for (u32 i = 0; i < n.num_args(); i++)
                     {
-                        log_error("z3_utils", "Some variables in line '{}' do not seem to fit in our handled format!", line);
-                        continue;
+                        const auto a_i = n.arg(i);
+                        if (visited.find(a_i.id()) == visited.end())
+                        {
+                            visited.insert(a_i.id());
+                            stack.push_back(a_i);
+                        }
                     }
-
-                    auto var_name = line.substr(start_index, end_index - start_index);
-                    var_names.insert(var_name);
                 }
             }
 
@@ -418,6 +521,7 @@ namespace hal
             return extract_net_ids(get_variable_names(e));
         }
 
+        // TODO make this return a result
         std::set<u32> extract_net_ids(const std::set<std::string>& variable_names)
         {
             std::set<u32> net_ids;

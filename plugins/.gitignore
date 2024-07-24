@@ -7,6 +7,8 @@
 !dataflow_analysis/**/*
 !gate_libraries*
 !gate_libraries/**/*
+!genlib_writer*
+!genlib_writer/**/*
 !gexf_writer*
 !gexf_writer/**/*
 !graph_algorithm*
@@ -25,10 +27,16 @@
 !liberty_parser/**/*
 !logic_evaluator*
 !logic_evaluator/**/*
+!module_identification*
+!module_identification/**/*
 !netlist_preprocessing*
 !netlist_preprocessing/**/*
 !python_shell*
 !python_shell/**/*
+!resynthesis*
+!resynthesis/**/*
+!sequential_symbolic_execution*
+!sequential_symbolic_execution/**/*
 !simulator
 !solve_fsm*
 !solve_fsm/**/*

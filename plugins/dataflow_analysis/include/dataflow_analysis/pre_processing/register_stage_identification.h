@@ -38,5 +38,5 @@ namespace hal
         {
             void identify_register_stages(NetlistAbstraction& netlist_abstr);
         }    // namespace pre_processing
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

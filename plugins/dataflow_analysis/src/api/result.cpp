@@ -576,6 +576,7 @@ namespace hal
                     }
                 }
 
+                // rename pins if only single pin in pin group (remove "(" and ")")
                 for (const auto* pin_group : new_mod->get_pin_groups())
                 {
                     if (pin_group->size() == 1)

@@ -45,5 +45,5 @@ namespace hal
                 process(const processing::Configuration& config, const std::shared_ptr<const Grouping>& state1, const std::shared_ptr<const Grouping>& state2, bool delete_from_smaller);
 
         }    // namespace merge_states
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

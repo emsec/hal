@@ -99,7 +99,7 @@ namespace hal
                     case BooleanFunction::NodeType::Concat:
                         return OK("(concat " + p[0] + " " + p[1] + ")");
                     case BooleanFunction::NodeType::Slice:
-                        return OK("((_ extract " + p[1] + " " + p[2] + ") " + p[0] + ")");
+                        return OK("((_ extract " + p[2] + " " + p[1] + ") " + p[0] + ")");
                     case BooleanFunction::NodeType::Zext:
                         return OK("((_ zero_extend " + std::to_string(node.size - function.get_nodes().at(index - 2).index) + ") " + p[0] + ")");
                     case BooleanFunction::NodeType::Sext:
@@ -163,5 +163,5 @@ namespace hal
                 }
             }
         }    // namespace Translator
-    }        // namespace SMT
+    }    // namespace SMT
 }    // namespace hal

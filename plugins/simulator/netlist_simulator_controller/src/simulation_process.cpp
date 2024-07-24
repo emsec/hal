@@ -183,7 +183,7 @@ namespace hal
 
             if (mProcess)
             {
-                delete mProcess;
+                mProcess->deleteLater();
                 mProcess = nullptr;
             }
         }
@@ -225,6 +225,7 @@ namespace hal
             logCommand +=  " " + arg;
         logCommand += "</font></h1>\n";
         mProcess = new QProcess;
+
         mProcess->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
         connect(mProcess,&QProcess::readyReadStandardError,this,&SimulationProcess::handleReadyReadStandardError);
         connect(mProcess,&QProcess::readyReadStandardOutput,this,&SimulationProcess::handleReadyReadStandardOutput);
@@ -263,6 +264,8 @@ namespace hal
     void SimulationProcess::handleReadyReadStandardError()
     {
         QString errTxt;
+        if (!mProcess) return;
+
         for (const QByteArray& line : mProcess->readAllStandardError().split('\n'))
         {
             if (line.startsWith("%Error"))
@@ -281,6 +284,7 @@ namespace hal
     void SimulationProcess::handleReadyReadStandardOutput()
     {
         QString outTxt;
+        if (!mProcess) return;
 
         for (const QByteArray& line : mProcess->readAllStandardOutput().split('\n'))
         {
@@ -292,6 +296,9 @@ namespace hal
 
     void SimulationProcess::handleFinished(int exitCode, QProcess::ExitStatus exitStatus)
     {
+        mProcess->waitForFinished();
+        handleReadyReadStandardError();
+        handleReadyReadStandardOutput();
         QString endTxt = QString("<p>exit code %1</p></body></html>\n").arg(exitCode);
         (*mProcessLog) << endTxt;
         mProcessLog->flush();

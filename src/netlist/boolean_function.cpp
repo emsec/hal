@@ -415,7 +415,8 @@ namespace hal
         auto end   = p2.get_index_value().get();
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
-            return ERR("could not apply SLICE operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
+            return ERR("could not apply SLICE operation: bit indices are not valid, p1 must be larger or equal than p1 and smaller than p0 (p0 = " + std::to_string(p0.size())
+                       + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
@@ -742,7 +743,7 @@ namespace hal
 
     u16 BooleanFunction::size() const
     {
-        return this->m_nodes.back().size;
+        return this->get_top_level_node().size;
     }
 
     bool BooleanFunction::is(u16 type) const

@@ -204,6 +204,7 @@ namespace hal
         void handleRenameClicked();
         void handleDuplicateContextClicked();
         void handleDeleteClicked();
+        void handleHeaderSectionClicked(int column);
 
         void handleContextMenuRequest(const QPoint& point);
         void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
