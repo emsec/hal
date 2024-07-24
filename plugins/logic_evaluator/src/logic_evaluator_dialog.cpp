@@ -135,6 +135,7 @@ namespace hal {
         mActionCompile = options->addAction("Run compiled logic");
         connect(mActionCompile, &QAction::toggled, this, &LogicEvaluatorDialog::handleCompiledToggled);
         mActionCompile->setCheckable(true);
+        mActionCompile->setChecked(false);
         mActionIndicate = options->addAction("Show in graphic view");
         connect(mActionIndicate, &QAction::toggled, this, &LogicEvaluatorDialog::handleIndicateToggled);
         mActionIndicate->setCheckable(true);
@@ -153,7 +154,9 @@ namespace hal {
         tview->setMinimumWidth(400);
 
         if (!skipCompile)
-            compile();
+        {
+            mActionCompile->setChecked(true);
+        }
 
         QStyle* s = style();
 
