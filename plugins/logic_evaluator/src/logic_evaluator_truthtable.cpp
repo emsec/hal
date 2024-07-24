@@ -173,6 +173,7 @@ namespace hal {
     LogicEvaluatorTruthtable::LogicEvaluatorTruthtable(LogicEvaluatorTruthtableModel* model, QWidget* parent)
         : mModel(model), mColumnDubbleClicked(-1)
     {
+        setWindowTitle("Truth Table from Logic Evaluator");
         QGridLayout* layout = new QGridLayout(this);
         QMenuBar* menuBar = new QMenuBar(this);
         QMenu* displForm = menuBar->addMenu("Format");

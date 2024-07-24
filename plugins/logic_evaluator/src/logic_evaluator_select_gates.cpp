@@ -270,7 +270,7 @@ namespace hal {
 
     void LogicEvaluatorSelectGates::accept()
     {
-        LogicEvaluatorDialog* led = new LogicEvaluatorDialog(mSelectGateModel->selectedGates(),mCompile->isChecked());
+        LogicEvaluatorDialog* led = new LogicEvaluatorDialog(mSelectGateModel->selectedGates(),!mCompile->isChecked());
         led->show();
         led->raise();
         QDialog::accept();

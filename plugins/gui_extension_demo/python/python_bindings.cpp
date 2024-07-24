@@ -54,6 +54,7 @@ namespace hal
                 .value("ComboBox",    PluginParameter::ComboBox,    R"(Combo box to select string from semicolon separated input list.)")
                 .value("Dictionary",  PluginParameter::Dictionary,  R"(Key value pairs (string).)")
                 .value("ExistingDir", PluginParameter::ExistingDir, R"(Existing directory.)")
+                .value("ExistingFile",PluginParameter::ExistingFile,R"(Existing file.)")
                 .value("Float",       PluginParameter::Float,       R"(Floating point number.)")
                 .value("Gate",        PluginParameter::Gate,        R"(Gate ID.)")
                 .value("Integer",     PluginParameter::Integer,     R"(Integer number.)")
