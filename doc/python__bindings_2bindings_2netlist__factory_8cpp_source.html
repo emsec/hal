@@ -104,11 +104,11 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__f
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">            .def(</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">                </span><span class="stringliteral">&quot;load_netlist&quot;</span>,</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                [](<span class="keyword">const</span> std::filesystem::path&amp; netlist_file, <span class="keyword">const</span> std::filesystem::path&amp; gate_library_file) {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                [](<span class="keyword">const</span> std::filesystem::path&amp; netlist_file, <span class="keyword">const</span> std::filesystem::path&amp; gate_library_file = std::filesystem::path()) {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                    <span class="keywordflow">return</span> std::shared_ptr&lt;Netlist&gt;(<a class="code" href="namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb">netlist_factory::load_netlist</a>(netlist_file, gate_library_file));</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                },</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                py::arg(<span class="stringliteral">&quot;netlist_file&quot;</span>),</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                py::arg(<span class="stringliteral">&quot;gate_library_file&quot;</span>) = <span class="stringliteral">&quot;&quot;</span>,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                py::arg(<span class="stringliteral">&quot;gate_library_file&quot;</span>) = std::filesystem::path(),</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">                Create a netlist from the given file using the specified gate library file.</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">                Will either deserialize ``.hal`` file or call parser plugin for other formats.</span></div>
@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__f
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">                Will either deserialize ``.hal`` file or call parser plugin for other formats.</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">                :param pathlib.Path netlist_file: Path to the file.</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                :param pathlib.Path gate_library_file: Path to the gate library file.</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">                :param hal_py.GateLibrary gate_library_file: Path to the gate library file.</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">                :returns: The netlist on success, ``None`` otherwise.</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">                :rtype: hal_py.Netlist or None</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">            )&quot;)</span></div>
@@ -198,7 +198,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2netlist__f
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2netlist__factory_8cpp.html">netlist_factory.cpp</a></li>
-    <li class="footer">Generated on Wed Jul 24 2024 13:10:59 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Jul 29 2024 12:52:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
