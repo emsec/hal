@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased] 
 
+## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
+* fixed `hal_py.GateLibrary.gate_types` pybind
+* fixed `hal_py.NetlistFactory.load_netlist` pybind
+
 ## [4.4.0](v4.4.0) - 2024-07-19 15:55:24+02:00 (urgency: medium)
 * **WARNING:** this release breaks the API of the `boolean_influence` and `bitorder_propagation` plugin
 * **WARNING:** this release contains many new unstable plugin APIs that will likely change in the future
