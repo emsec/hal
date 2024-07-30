@@ -53,7 +53,8 @@ namespace hal
             Net,
             Grouping,
             Netlist,
-            Context,
+            ContextView,
+            ContextDir,
             MaxObjectType
         };
         Q_ENUM(ObjectType)

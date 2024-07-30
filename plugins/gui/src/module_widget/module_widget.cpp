@@ -350,7 +350,7 @@ namespace hal
         if (clicked == &extractPythonAction){
             switch(type)
             {
-                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_Module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
                 case ModuleItem::TreeItemType::Gate: QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
                 case ModuleItem::TreeItemType::Net: QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
             }
@@ -506,7 +506,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         act->addAction(new ActionAddItemsToObject(moduleId, gateId));
         act->exec();
     }
@@ -534,7 +534,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         auto actionAITO = new ActionAddItemsToObject({}, allGates);
         actionAITO->setPlacementHint(plc);
         act->addAction(actionAITO);
@@ -590,7 +590,7 @@ namespace hal
             UserActionCompound* act = new UserActionCompound;
             act->setUseCreatedObject();
             QString name = QString::fromStdString(module->get_name()) + " (ID: " + QString::number(moduleId) + ")";
-            act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+            act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
             act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
             if (unfold) act->addAction(new ActionUnfoldModule(module->get_id()));
             act->exec();

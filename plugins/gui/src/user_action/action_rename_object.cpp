@@ -1,5 +1,6 @@
 #include "gui/user_action/action_rename_object.h"
 
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -32,7 +33,6 @@ namespace hal
 
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("name", mNewName);
     }
 
@@ -40,7 +40,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
         }
@@ -53,6 +52,8 @@ namespace hal
         Gate* gat;
         Net* net;
         GraphContext* ctx;
+        ContextDirectory* ctxDir;
+
         switch (mObject.type())
         {
             case UserActionObjectType::Module:
@@ -92,7 +93,7 @@ namespace hal
             case UserActionObjectType::Grouping:
                 oldName = gContentManager->getGroupingManagerWidget()->getModel()->renameGrouping(mObject.id(), mNewName);
                 break;
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {
@@ -104,53 +105,25 @@ namespace hal
                     return false;
                 }
                 break;
-                /* TODO PIN
-            case UserActionObjectType::Pin: {
-                mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (!mod)
+            case UserActionObjectType::ContextDir:
+                ctxDir = gGraphContextManager->getDirectoryById(mObject.id());
+                if (ctxDir)
+                {
+                    oldName = ctxDir->name();
+                    gGraphContextManager->renameContextDirectoryAction(ctxDir, mNewName);
+                }
+                else
                 {
                     return false;
                 }
+                break;
 
-                auto pin = mod->get_pin_by_id(mObject.id());
-                if (pin == nullptr)
-                {
-                    return false;
-                }
-
-                oldName = QString::fromStdString(pin->get_name());
-                mod->set_pin_name(pin, mNewName.toStdString());
-            }
-            break;
-            case UserActionObjectType::PinGroup: {
-                mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (!mod)
-                {
-                    return false;
-                }
-
-                auto pinGroup = mod->get_pin_group_by_id(mObject.id());
-                if (pinGroup == nullptr)
-                {
-                    return false;
-                }
-
-                oldName = QString::fromStdString(pinGroup->get_name());
-                mod->set_pin_group_name(pinGroup, mNewName.toStdString());
-            }
-            break;
-            */
             default:
                 return false;
         }
         ActionRenameObject* undo = new ActionRenameObject(oldName);
         undo->setObject(mObject);
-        /* TODO PIN
-        if (mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
-        {
-            undo->setParentObject(mParentObject);
-        }
-        */
+
         mUndoAction = undo;
         return UserAction::exec();
     }

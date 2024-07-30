@@ -40,5 +40,5 @@ namespace hal
             };
 
         }    // namespace evaluation
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

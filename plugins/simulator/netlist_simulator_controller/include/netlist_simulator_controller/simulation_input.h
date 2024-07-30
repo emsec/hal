@@ -30,6 +30,9 @@
 #include <unordered_map>
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/pins/module_pin.h"
+#include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
 
 namespace hal {
     class Gate;
@@ -54,9 +57,21 @@ namespace hal {
             u64 period() const { return switch_time * 2; }
         };
 
+        struct NetGroup
+        {
+            bool is_input;
+            const Gate* gate;
+            PinGroup<ModulePin>* module_pin_group;
+            PinGroup<GatePin>* gate_pin_group;
+            NetGroup() : is_input(true), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
+            std::vector<const Net*> get_nets() const;
+            std::string get_name() const;
+        };
+
     private:
         std::unordered_set<const Gate*> mSimulationSet;
         std::vector<Clock> m_clocks;
+        std::vector<NetGroup> m_netgroups;
 
         std::unordered_set<const Net*> m_input_nets;
         std::vector<const Net*> m_output_nets;
@@ -115,6 +130,12 @@ namespace hal {
         void set_no_clock_used();
 
         /**
+         * Check wether no clock signal will be automatically generated as simulation input. Either there
+         * is no clock present or the clock signal will be passed as normal waveform input.
+         */
+        bool is_no_clock_used() const;
+
+        /**
          * Tests whether net is an input net
          * @param[in] n pointer to net
          * @return true if net is input net, false otherwise
@@ -135,6 +156,9 @@ namespace hal {
          */
         void add_gates(const std::vector<Gate*>& gates);
 
+        /**
+         * Clear all internal container (gate set, input nets ...)
+         */
         void clear();
 
         /**
@@ -163,5 +187,18 @@ namespace hal {
          * @param filename name of file to be created
          */
         void dump(std::string filename = std::string()) const;
+
+        /**
+         * Group one-bit signals to multi-bit bus according to pingroups.
+         * Pingroups are only evaluated if all connected nets are part of the simulation.
+         * Module pingroups have priority before gate pingroups.
+         */
+        void compute_net_groups();
+
+        /**
+         * Get groups computed in method above.
+         * @return Vector of groups.
+         */
+        const std::vector<NetGroup>& get_net_groups() const { return m_netgroups; }
     };
 }

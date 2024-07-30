@@ -10,6 +10,10 @@
 #include <iostream>
 #include <vector>
 
+// debug options to enforce using default implementation
+// #undef __AVX2__
+// #undef __ARM_NEON
+
 #ifdef __AVX2__
 #include <immintrin.h>
 
@@ -36,7 +40,7 @@ public:
     smallset_t operator^(const smallset_t& other) const;
     smallset_t shuffle(u8 shift) const;
 
-    void to_array(u64* arr) const;
+    void to_array(u64* arr, bool swap = false) const;
 
     u8 least_bit() const;
     static int least_bit(u64 dw);
@@ -81,7 +85,9 @@ bool smallset_t::empty() const
     for (int i = 0; i < 4; i++)
     {
         if (dw64[i])
+        {
             return false;
+        }
     }
     return true;
 }
@@ -91,7 +97,9 @@ u8 smallset_t::least_bit() const
     for (int i = 0; i < 4; i++)
     {
         if (dw64[i])
+        {
             return i * 64 + least_bit(dw64[i]);
+        }
     }
     std::cerr << "Called smallset_t::least_bit() on empty set\n" << std::endl;
     return 0;
@@ -120,7 +128,7 @@ smallset_t smallset_t::shuffle(u8 shift) const
     {
         for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 16) | ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 16);
+            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 32) | ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 32);
         }
     }
     if (shift & 0x10)
@@ -161,9 +169,12 @@ smallset_t smallset_t::shuffle(u8 shift) const
     return retval;
 }
 
-void smallset_t::to_array(u64* arr) const
+void smallset_t::to_array(u64* arr, bool swap) const
 {
-    memcpy(arr, dw64, sizeof(dw64));
+    for (int i = 0; i < 4; i++)
+    {
+        arr[i] = dw64[swap ? 3 - i : i];
+    }
 }
 
 void smallset_t::set(u8 bit)
@@ -173,7 +184,7 @@ void smallset_t::set(u8 bit)
 
 bool smallset_t::is_set(u8 bit) const
 {
-    return (dw64[bit / 64] & (_ONE_ << (bit % 64)) != 0);
+    return (dw64[bit / 64] & (_ONE_ << (bit % 64))) != 0;
 }
 
 int smallset_t::size() const
@@ -255,7 +266,7 @@ smallset_t smallset_t::operator^(const smallset_t& other) const
 {
     smallset_t retval = other;
     for (int i = 0; i < 4; i++)
-        retval.dw64[i] = dw64[i];
+        retval.dw64[i] ^= dw64[i];
     return retval;
 }
 
@@ -513,7 +524,7 @@ namespace hal
                 elements[2] = a.val[0][1];
                 elements[3] = a.val[0][0];
 #else
-                a.to_array(elements);
+                a.to_array(elements, true);
 #endif
                 std::cout << name << ": 0b";
                 for (u32 i = 0; i < 4; i++)
@@ -638,7 +649,7 @@ namespace hal
                     return {a.val[0], vorrq_u64(a.val[1], _mask)};
                 }
 #else
-                smallset_t retval;
+                smallset_t retval(a);
                 retval.set(elm);
                 return retval;
 #endif
@@ -907,11 +918,12 @@ namespace hal
             {
 #if !defined(__AVX2__) && !defined(__ARM_NEON)
                 return a.is_set(e);
-#endif
+#else
                 smallset_t b = smallset_init_empty();
                 b            = smallset_add_element(b, e);
                 b            = smallset_intersect(a, b);
                 return !smallset_is_empty(b);
+#endif
             }
             // END OF SMALL SET //
 
@@ -987,12 +999,14 @@ namespace hal
                 {
                     u8 x = smallset_least_element(N_A);
                     u8 y = smallset_least_element(U_B);
+
                     B[y] = S[A[x]];
                     if (!update_linear(B, y, len))
                         return false;
                     smallset_t D_B_new = smallset_shift(D_B, y);
                     D_B                = smallset_union(D_B, D_B_new);
                     U_B                = smallset_setminus(U_B, D_B_new, len);
+
                     smallset_t SoA_N_A = smallset_init_empty();
                     for (u8 x : smallset_get_elements(N_A))
                     {
@@ -1035,7 +1049,10 @@ namespace hal
                         R_S[x] = y;
                     }
                     if (is_greater(R_S, R_S_best, len))
+                    {
                         return false;
+                    }
+
                     while (smallset_is_empty(N_A) && !smallset_is_empty(N_B))
                     {
                         u8 x = smallset_least_element(U_A);
@@ -1090,7 +1107,9 @@ namespace hal
                             R_S[x] = y;
                         }
                         if (is_greater(R_S, R_S_best, len))
+                        {
                             return false;
+                        }
                     }
                 }
                 if (smallset_is_empty(U_A) && smallset_is_empty(U_B))

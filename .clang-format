@@ -32,6 +32,7 @@ BraceWrapping:
   BeforeCatch:     true
   BeforeElse:      true
   IndentBraces:    false
+InsertBraces: true
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
 # BreakBeforeInheritanceComma: false
@@ -90,7 +91,7 @@ SpacesInContainerLiterals: false
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard:        Cpp11
+Standard:        c++17
 TabWidth:        4
 UseTab:          Never
 ...

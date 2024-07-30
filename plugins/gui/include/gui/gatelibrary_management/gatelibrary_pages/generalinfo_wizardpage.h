@@ -35,10 +35,16 @@
 #include <QListWidget>
 #include <QComboBox>
 #include <QPushButton>
+#include <QIcon>
 
 namespace hal {
     class GeneralInfoWizardPage:public QWizardPage{
         Q_OBJECT
+
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString enabledIconStyle READ enabledIconStyle WRITE setEnabledIconStyle)
+        Q_PROPERTY(QString leftArrowIconPath READ leftArrowIconPath WRITE setLeftArrowIconPath)
+        Q_PROPERTY(QString rightArrowIconPath READ rightArrowIconPath WRITE setRightArrowIconPath)
     public:
         GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
         void setData(QString name, QStringList properties);
@@ -47,6 +53,17 @@ namespace hal {
         void setMode(bool edit);
         bool isEdit();
         bool validatePage() override;
+
+        QString disabledIconStyle()  const { return mDisabledIconStyle; }
+        QString enabledIconStyle()   const { return mEnabledIconStyle; }
+        QString leftArrowIconPath()  const { return mLeftArrowIconPath; }
+        QString rightArrowIconPath() const { return mRightArrowIconPath; }
+
+        void setDisabledIconStyle (const QString& s) { mDisabledIconStyle = s; }
+        void setEnabledIconStyle  (const QString& s) { mEnabledIconStyle = s; }
+        void setLeftArrowIconPath (const QString& p) { mLeftArrowIconPath = p; }
+        void setRightArrowIconPath(const QString& p) { mRightArrowIconPath = p; }
+
     public Q_SLOTS:
         void addProperty();
         void deleteProperty();
@@ -54,19 +71,28 @@ namespace hal {
         QWizard* mWizard;
         QGridLayout* mLayout;
         QLabel* mLabelName;
-        QLabel* mLabelProperties;
         QLabel* mLabelAddProperty;
 
         QLineEdit* mName;
-        QListWidget* mProperties;
+        QListWidget* mPropertiesSelected;
+        QListWidget* mPropertiesAvailable;
+
         QComboBox* mAddProperty;
 
         QPushButton* mDelBtn;
         QPushButton* mAddBtn;
 
+        QIcon mLeftArrowIcon;
+        QIcon mRightArrowIcon;
+
         const GateLibrary* mGateLibrary;
         bool mIsEdit;
         QString gateInit;
+
+        QString mDisabledIconStyle;
+        QString mEnabledIconStyle;
+        QString mLeftArrowIconPath;
+        QString mRightArrowIconPath;
         //QStringList mPropertiesList;
     };
 }

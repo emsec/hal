@@ -146,6 +146,8 @@ namespace hal
          */
         BaseTreeItem* getRootItem() const;
 
+        void insertChildItem(BaseTreeItem* childItem, BaseTreeItem* parentItem = nullptr, int row = -1);
+
     protected:
         RootTreeItem* mRootItem;
     };

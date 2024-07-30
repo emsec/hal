@@ -194,6 +194,9 @@ namespace hal
         std::unordered_map<std::string, Net*> m_net_by_name;
         std::vector<std::pair<std::string, std::string>> m_nets_to_merge;
 
+        // parser settings
+        const std::string instance_name_seperator = "/";
+
         // parse HDL into intermediate format
         void tokenize();
         Result<std::monostate> parse_tokens();

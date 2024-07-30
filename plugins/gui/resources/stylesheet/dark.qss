@@ -937,6 +937,14 @@ hal--GatelibraryContentWidget
     qproperty-deleteIconPath:        ":/icons/trashcan";
 }
 
+hal--GeneralInfoWizardPage
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-leftArrowIconPath:    ":/icons/left-arrow";
+    qproperty-rightArrowIconPath:   ":/icons/right-arrow";
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -1163,6 +1171,7 @@ hal--ContextManagerWidget
 
     qproperty-newViewIconStyle: "all->#e8e8e8";
     qproperty-newViewIconPath: ":/icons/plus";
+    qproperty-newDirIconPath: ":/icons/plusdir";
 
     qproperty-renameIconStyle: "all->#e8e8e8";
     qproperty-renameIconPath: ":/icons/pen";

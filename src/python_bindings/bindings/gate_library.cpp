@@ -101,7 +101,7 @@ namespace hal
             :rtype: hal_py.GateType or None
         )");
 
-        py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
+        py_gate_library.def_property_readonly("gate_types", [](const GateLibrary& self) { return self.get_gate_types(); }, R"(
             All gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]

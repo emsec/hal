@@ -109,22 +109,6 @@ namespace hal
         virtual void setObject(const UserActionObject& obj);
 
         /**
-         * Setter for parent object argument. Used to identify pins and
-         * pingroups in which case the parent obj must be the corresponding
-         * module.
-         *
-         * @param obj - The parent object.
-         */
-        virtual void setParentObject(const UserActionObject& obj);
-
-        /**
-         * Getter for parent object argument.
-         *
-         * @return The parent object argument.
-         */
-        virtual UserActionObject parentObject() const {return mParentObject;}
-
-        /**
          * Get the order number in action compound, -1 if not in compound.
          *
          * @return The order number in action compount.

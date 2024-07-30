@@ -40,6 +40,6 @@ namespace hal
                 return new_state;
             }    // namespace merge_states
 
-        }        // namespace merge_states
-    }            // namespace dataflow
+        }    // namespace merge_states
+    }    // namespace dataflow
 }    // namespace hal

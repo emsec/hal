@@ -35,6 +35,7 @@
 
 #include <hal_core/defines.h>
 #include "waveform_viewer/wave_item.h"
+#include "waveform_viewer/wave_selection_dialog.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
@@ -62,6 +63,7 @@ namespace hal {
         bool triggerClose();
         void setGates(const std::vector<Gate*>& gats);
         void addResults();
+        void addSelectedResults(const QMap<WaveSelectionEntry,int>& sel);
         NetlistSimulatorController::SimulationState state() const;
         void createEngine(const QString& engineFactoryName);
         void refreshNetNames();
@@ -70,9 +72,7 @@ namespace hal {
         bool canImportWires() const;
         bool isEmpty() const;
         WaveGraphicsCanvas* graphicCanvas() { return mGraphicsCanvas; }
-
-    public Q_SLOTS:
-        void handleEngineFinished(bool success);
+        QMap<WaveSelectionEntry,int> addableEntries() const;
 
     private Q_SLOTS:
 

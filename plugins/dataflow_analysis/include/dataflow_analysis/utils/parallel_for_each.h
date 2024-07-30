@@ -104,5 +104,5 @@ namespace hal
                 parallel_for_each(vec, func);
             }
         }    // namespace utils
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

@@ -22,5 +22,5 @@ namespace hal
             }
 
         }    // namespace merge_successor_predecessor_groupings
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

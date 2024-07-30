@@ -26,8 +26,10 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/utilities/result.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/result.h"
 
 #include <list>
 #include <string>
@@ -57,9 +59,10 @@ namespace hal
          * @param[in] type - The type of the pin group.
          * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param[in] ordered - Set `true` if the pin group features an inherent order, `false` otherwise. Defaults to `false`.
          */
-        PinGroup(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending = true, u32 start_index = 0)
-            : m_id(id), m_name(name), m_direction(direction), m_type(type), m_ascending(ascending), m_start_index(start_index), m_next_index(start_index)
+        PinGroup(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending = true, u32 start_index = 0, bool ordered = false)
+            : m_id(id), m_name(name), m_direction(direction), m_type(type), m_ascending(ascending), m_start_index(start_index), m_next_index(start_index), m_ordered(ordered)
         {
         }
 
@@ -74,7 +77,7 @@ namespace hal
         bool operator==(const PinGroup<T>& other) const
         {
             if (m_id != other.get_id() || m_name != other.get_name() || m_direction != other.get_direction() || m_type != other.get_type() || m_start_index != other.get_start_index()
-                || m_ascending != other.is_ascending())
+                || m_ascending != other.is_ascending() || m_ordered != other.is_ordered())
             {
                 return false;
             }
@@ -270,7 +273,7 @@ namespace hal
         /**
          * Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).
          * 
-         * @returns True for ascending bit order, false otherwise.
+         * @returns `true` for ascending bit order, `false` otherwise.
          */
         bool is_ascending() const
         {
@@ -287,6 +290,26 @@ namespace hal
         i32 get_start_index() const
         {
             return m_start_index;
+        }
+
+        /**
+         * Check whether the pin group features an inherent order.
+         * 
+         * @returns `true` if the pin group is inherently ordered, `false` otherwise.
+         */
+        bool is_ordered() const
+        {
+            return m_ordered;
+        }
+
+        /**
+         * Set whether the pin group features an inherent order.
+         * 
+         * @param[in] ordered - Set `true` if the pin group is inherently ordered, `false` otherwise. Defaults to `true`.
+         */
+        void set_ordered(bool ordered = true)
+        {
+            m_ordered = ordered;
         }
 
         /**
@@ -319,8 +342,7 @@ namespace hal
         {
             if (pin == nullptr)
             {
-                log_warning("pin_group", "'nullptr' given instead of a pin when trying to assign a pin to pin group '{}' with ID {}",
-                            m_name, m_id);
+                log_warning("pin_group", "'nullptr' given instead of a pin when trying to assign a pin to pin group '{}' with ID {}", m_name, m_id);
                 return false;
             }
 
@@ -336,7 +358,7 @@ namespace hal
                 {
                     // special case empty pin group
                     index = m_start_index;
-                   -- m_next_index;
+                    --m_next_index;
                 }
                 else
                 {
@@ -456,7 +478,7 @@ namespace hal
             }
             else
             {
-                if (m_pins.size()==1)
+                if (m_pins.size() == 1)
                 {
                     m_pins.clear();
                     m_next_index++;
@@ -464,14 +486,14 @@ namespace hal
                 else
                 {
                     auto it = m_pins.begin();
-                    for (int i=m_start_index; i>index;i--)
+                    for (int i = m_start_index; i > index; i--)
                     {
                         std::get<1>((*(it++))->m_group)--;
                     }
                     m_pins.erase(it);
                     --m_start_index;
                 }
-             }
+            }
 
             return true;
         }
@@ -506,6 +528,7 @@ namespace hal
         bool m_ascending;
         i32 m_start_index;
         i32 m_next_index;
+        bool m_ordered;
 
         PinGroup(const PinGroup&)            = delete;
         PinGroup(PinGroup&&)                 = delete;

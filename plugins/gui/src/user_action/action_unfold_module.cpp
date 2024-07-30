@@ -39,7 +39,7 @@ namespace hal
         case UserActionObjectType::Module:
             UserAction::setObject(obj);
             break;
-        case UserActionObjectType::Context:
+        case UserActionObjectType::ContextView:
             mContextId = obj.id();
             break;
         default:

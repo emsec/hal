@@ -44,9 +44,9 @@ namespace hal
     namespace dataflow
     {
         /**
-         * @brief Analyze the gate-level netlist to identify word-level registers.
+         * @brief Analyze the gate-level netlist to identify word-level structures such as registers.
          * 
-         * Reconstructs registers based on properties such as the control inputs of, e.g., their flip-flops and common successors/predecessors.
+         * Reconstructs word-level structures such as registers based on properties such as the control inputs of, e.g., their flip-flops and common successors/predecessors.
          * Operates on an abstraction of the netlist that, e.g., contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.
          * 
          * @param[in] config - The dataflow analysis configuration.
