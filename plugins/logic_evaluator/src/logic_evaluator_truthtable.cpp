@@ -190,7 +190,8 @@ namespace hal {
         mActionDisplayFormat[LogicEvaluatorTruthtableModel::ZeroOne]->setChecked(true);
         handleDisplayFormatChanged(mActionDisplayFormat[LogicEvaluatorTruthtableModel::ZeroOne]);
 
-        QAction* actSort = menuBar->addAction("Sort");
+        QMenu* sortMenu = menuBar->addMenu("Sort");
+        QAction* actSort = sortMenu->addAction("Sort");
         connect(actSort, &QAction::triggered, this, &LogicEvaluatorTruthtable::handleSortTriggered);
 
         QTableView* view = new QTableView(this);

@@ -139,9 +139,10 @@ namespace hal {
         mActionIndicate = options->addAction("Show in graphic view");
         connect(mActionIndicate, &QAction::toggled, this, &LogicEvaluatorDialog::handleIndicateToggled);
         mActionIndicate->setCheckable(true);
-        QAction* relaunch = mMenuBar->addAction("Relaunch");
+        QMenu* launch = mMenuBar->addMenu("Launch");
+        QAction* relaunch = launch->addAction("Relaunch");
         connect(relaunch, &QAction::triggered, this, &LogicEvaluatorDialog::handleRelaunchTriggered);
-        QAction* ttable = mMenuBar->addAction("Truth Table");
+        QAction* ttable = launch->addAction("Truth Table");
         connect(ttable, &QAction::triggered, this, &LogicEvaluatorDialog::handleTruthtableTriggered);
 
         inpLayout->addStretch();
