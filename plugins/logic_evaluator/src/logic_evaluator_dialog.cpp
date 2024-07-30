@@ -269,7 +269,6 @@ namespace hal {
     bool LogicEvaluatorDialog::compile()
     {
         // get input signals
-        QMap<QString,int> pinVars;
         QString codeEvalFunction;
         mExternalArrayIndex.clear();
 
@@ -288,29 +287,29 @@ namespace hal {
         // propagate by gates
         for (const Gate* g : mEvaluationOrder)
         {
-            for (const GatePin* gp : g->get_type()->get_input_pins())
-            {
-                QString pinName = QString::fromStdString(gp->get_name());
-                pinVars[pinName]++;
-                const Net* n = g->get_fan_in_net(gp);
-                int inx = mExternalArrayIndex.value(n,-1);
-                if (inx < 0) return false;
-                codeEvalFunction += QString("  %1 = logic_evaluator_signals[%2];\n").arg(pinName).arg(inx);
-            }
             for (const GatePin* gp : g->get_type()->get_output_pins())
             {
                 QString pinName = QString::fromStdString(gp->get_name());
-                pinVars[pinName]++;
-                const Net* n = g->get_fan_out_net(gp);
-                if (!mExternalArrayIndex.contains(n))
+                const Net* nOut = g->get_fan_out_net(gp);
+                if (!mExternalArrayIndex.contains(nOut))
                 {
                     int sz = mExternalArrayIndex.size();
-                    mExternalArrayIndex[n] = sz;
+                    mExternalArrayIndex[nOut] = sz;
                 }
-                codeEvalFunction += QString("  %1 = %2;\n").arg(pinName).arg(QString::fromStdString(g->get_boolean_function(gp).to_string()));
-                int inx = mExternalArrayIndex.value(n,-1);
-                if (inx < 0) return false;
-                codeEvalFunction += QString("  logic_evaluator_signals[%1] = %2;\n").arg(inx).arg(pinName);
+
+                QString theFunction = QString::fromStdString(g->get_boolean_function(gp).to_string());
+                for (const GatePin* gp : g->get_type()->get_input_pins())
+                {
+                    QString pinName = QString::fromStdString(gp->get_name());
+                    const Net* nIn = g->get_fan_in_net(gp);
+                    int inxIn = mExternalArrayIndex.value(nIn,-1);
+                    if (inxIn < 0) return false;
+                    QString ccVar = QString("logic_evaluator_signals[%1]").arg(inxIn);
+                    theFunction.replace(pinName, ccVar);
+                }
+                int inxOut = mExternalArrayIndex.value(nOut,-1);
+                if (inxOut < 0) return false;
+                codeEvalFunction += QString("  logic_evaluator_signals[%1] = %2;\n").arg(inxOut).arg(theFunction);
             }
         }
 
@@ -337,10 +336,6 @@ namespace hal {
                 "}\n\n";
         ccode += "void " + QString(LOGIC_EVALUATOR_CALC);
         ccode += "() {\n";
-        for (QString var : pinVars.keys())
-        {
-            ccode += QString("  int %1;\n").arg(var);
-        }
         ccode += codeEvalFunction + "\n}\n";
 
         // write code to file
