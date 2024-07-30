@@ -48,7 +48,7 @@
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "gui/module_context_menu/module_context_menu.h"
 
 #include <QAction>
 #include <QApplication>
@@ -847,33 +847,15 @@ namespace hal
         // QAction* none_action         = type_menu->addAction("None");
         // connect(action, &QAction::triggered, this, SLOT);
         // }
+        if(isModule)
+            ModuleContextMenu::addModuleSubmenu(&context_menu, static_cast<GraphicsItem*>(item)->id());
 
-        contextPluginContribution(&context_menu);
+        GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
+                                            gSelectionRelay->selectedModulesVector(),
+                                            gSelectionRelay->selectedGatesVector(),
+                                            gSelectionRelay->selectedNetsVector());
         context_menu.exec(mapToGlobal(pos));
         update();
-    }
-
-    void GraphGraphicsView::contextPluginContribution(QMenu* contextMenu)
-    {
-
-        mPluginContribution.clear();
-        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
-        {
-            geif->netlist_loaded(gNetlist);
-            mPluginContribution.append( QVector<ContextMenuContribution>::fromStdVector(geif->get_context_contribution(gNetlist,
-                                                                                                                       gSelectionRelay->selectedModulesVector(),
-                                                                                                                       gSelectionRelay->selectedGatesVector(),
-                                                                                                                       gSelectionRelay->selectedNetsVector())));
-        }
-
-        if (mPluginContribution.isEmpty()) return;
-        contextMenu->addSeparator();
-        for (ContextMenuContribution& cmc : mPluginContribution)
-        {
-            QAction* act = contextMenu->addAction(QString::fromStdString(cmc.mEntry));
-            act->setData(QVariant::fromValue<void*>(&cmc));
-            connect(act,&QAction::triggered,this,&GraphGraphicsView::handlePluginContextContributionTriggered);
-        }
     }
 
     void GraphGraphicsView::handlePluginContextContributionTriggered()

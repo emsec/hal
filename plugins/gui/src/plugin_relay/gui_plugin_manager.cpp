@@ -243,6 +243,29 @@ namespace hal {
         mHilightBackgroundColor = c;
     }
 
+    void GuiPluginManager::addPluginSubmenus(QMenu* contextMenu, Netlist* netlist,
+                                            const std::vector<u32>& modules,
+                                            const std::vector<u32>& gates,
+                                            const std::vector<u32>& nets)
+    {
+        for(GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions())
+        {
+            geif->netlist_loaded(netlist);
+            auto contribution = geif->get_context_contribution(netlist, modules, gates, nets);
+            if(contribution.size() <= 0)
+                continue;
+
+            QMenu *subMenu = contextMenu->addMenu(QString::fromStdString(contribution[0].mTagname));
+            for (ContextMenuContribution cmc : contribution)
+            {
+                QAction *act = subMenu->addAction(QString::fromStdString(cmc.mEntry));
+                connect(act,&QAction::triggered,contextMenu,[cmc, netlist, modules, gates, nets]()
+                    {cmc.mContributer->execute_function(cmc.mTagname, netlist, modules, gates, nets);}
+                );
+            }
+        }
+    }
+
     //_________________VIEW_______________________________
     GuiPluginView::GuiPluginView(QWidget* parent)
         : QTableView(parent)

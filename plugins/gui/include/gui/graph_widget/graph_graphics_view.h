@@ -228,7 +228,6 @@ namespace hal
 
 
         GraphicsItem* mItem;
-        QVector<ContextMenuContribution> mPluginContribution;
 
         bool mMinimapEnabled;
 
@@ -270,6 +269,5 @@ namespace hal
         }
 
         static const QString sAssignToGrouping;
-        void contextPluginContribution(QMenu* contextMenu);
     };
 }

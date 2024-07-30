@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QClipboard>
+#include "gui/plugin_relay/gui_plugin_manager.h"
 
 namespace hal
 {
@@ -341,6 +342,11 @@ namespace hal
 
         if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
             context_menu.addAction(&delete_action);
+
+        GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
+                                            type==ModuleItem::TreeItemType::Module?std::vector<u32>({module_id}):std::vector<u32>(),
+                                            type==ModuleItem::TreeItemType::Gate?std::vector<u32>({module_id}):std::vector<u32>(),
+                                            type==ModuleItem::TreeItemType::Net?std::vector<u32>({module_id}):std::vector<u32>());
 
         QAction* clicked = context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
 
