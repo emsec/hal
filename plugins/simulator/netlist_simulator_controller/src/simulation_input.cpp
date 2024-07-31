@@ -14,7 +14,11 @@ namespace hal {
         {
             for (GatePin* gp : gate_pin_group->get_pins())
             {
-                Net* n = gate->get_fan_in_net(gp);
+                Net* n = nullptr;
+                if (gp->get_direction() == PinDirection::input || gp->get_direction() == PinDirection::inout)
+                    n = gate->get_fan_in_net(gp);
+                else
+                    n = gate->get_fan_out_net(gp);
                 if (n) retval.push_back(n);
             }
         }

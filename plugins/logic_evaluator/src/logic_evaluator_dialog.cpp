@@ -287,9 +287,11 @@ namespace hal {
         // propagate by gates
         for (const Gate* g : mEvaluationOrder)
         {
+            QMap<QString,QString> referableOutputPins;
+
             for (const GatePin* gp : g->get_type()->get_output_pins())
             {
-                QString pinName = QString::fromStdString(gp->get_name());
+                QString pinNameOut = QString::fromStdString(gp->get_name());
                 const Net* nOut = g->get_fan_out_net(gp);
                 if (!mExternalArrayIndex.contains(nOut))
                 {
@@ -300,16 +302,23 @@ namespace hal {
                 QString theFunction = QString::fromStdString(g->get_boolean_function(gp).to_string());
                 for (const GatePin* gp : g->get_type()->get_input_pins())
                 {
-                    QString pinName = QString::fromStdString(gp->get_name());
+                    QString pinNameIn = QString::fromStdString(gp->get_name());
                     const Net* nIn = g->get_fan_in_net(gp);
                     int inxIn = mExternalArrayIndex.value(nIn,-1);
                     if (inxIn < 0) return false;
                     QString ccVar = QString("logic_evaluator_signals[%1]").arg(inxIn);
-                    theFunction.replace(pinName, ccVar);
+                    theFunction.replace(pinNameIn, ccVar);
                 }
+                for (auto it = referableOutputPins.constBegin(); it != referableOutputPins.constEnd(); ++it)
+                {
+                    theFunction.replace(it.key(),it.value());
+                }
+
                 int inxOut = mExternalArrayIndex.value(nOut,-1);
                 if (inxOut < 0) return false;
                 codeEvalFunction += QString("  logic_evaluator_signals[%1] = %2;\n").arg(inxOut).arg(theFunction);
+
+                referableOutputPins[pinNameOut] = QString("logic_evaluator_signals[%1]").arg(inxOut);
             }
         }
 
