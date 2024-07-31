@@ -47,7 +47,6 @@ namespace hal {
     public Q_SLOTS:
         void handleDeleteClicked();
     private:
-        QGridLayout* mLayout;
         GateLibraryWizard* mWizard;
         PinModel* mPinModel;
         QTreeView* mPinsTreeView;

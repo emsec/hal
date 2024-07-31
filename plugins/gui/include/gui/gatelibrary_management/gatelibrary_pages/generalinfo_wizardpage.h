@@ -32,12 +32,44 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QListWidget>
+#include <QListView>
 #include <QComboBox>
 #include <QPushButton>
 #include <QIcon>
+#include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 
 namespace hal {
+    class ListPropertyModel : public QAbstractTableModel
+    {
+        Q_OBJECT
+    public:
+        struct ListPropertyEntry
+        {
+            GateTypeProperty property;
+            bool isSelected;
+        };
+    private:
+        QList<ListPropertyEntry> mList;
+    public:
+        ListPropertyModel(QObject* parent = nullptr);
+        QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+        int columnCount(const QModelIndex& index = QModelIndex()) const override { return 1; }
+        int rowCount(const QModelIndex& index = QModelIndex()) const override    { return mList.size(); }
+        bool isSelected(int irow) const                                          { return mList.at(irow).isSelected; }
+        GateTypeProperty property(int irow) const                                { return mList.at(irow).property; }
+        void setSelected(GateTypeProperty gtp, bool select);
+    };
+
+    class ListPropertyProxy : public QSortFilterProxyModel
+    {
+        Q_OBJECT
+        bool mShowSelected;
+    public:
+        ListPropertyProxy(bool showSel, QObject* parent = nullptr);
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent = QModelIndex()) const override;
+    };
+
     class GeneralInfoWizardPage:public QWizardPage{
         Q_OBJECT
 
@@ -47,9 +79,9 @@ namespace hal {
         Q_PROPERTY(QString rightArrowIconPath READ rightArrowIconPath WRITE setRightArrowIconPath)
     public:
         GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
-        void setData(QString name, QStringList properties);
+        void setData(QString name, const std::vector<GateTypeProperty>& properties);
         QString getName();
-        QStringList getProperties();
+        QList<GateTypeProperty> getProperties();
         void setMode(bool edit);
         bool isEdit();
         bool validatePage() override;
@@ -71,13 +103,11 @@ namespace hal {
         QWizard* mWizard;
         QGridLayout* mLayout;
         QLabel* mLabelName;
-        QLabel* mLabelAddProperty;
 
         QLineEdit* mName;
-        QListWidget* mPropertiesSelected;
-        QListWidget* mPropertiesAvailable;
-
-        QComboBox* mAddProperty;
+        QListView* mPropertiesSelected;
+        QListView* mPropertiesAvailable;
+        ListPropertyModel* mPropertyModel;
 
         QPushButton* mDelBtn;
         QPushButton* mAddBtn;

@@ -12,10 +12,10 @@ namespace hal
 
     GateLibraryTabPin::GateLibraryTabPin(QWidget* parent) : GateLibraryTabInterface(parent)
     {
-        mGridLayout = new QGridLayout(parent);
+        mGridLayout = new QGridLayout(this);
 
-        mTreeView   = new QTreeView(parent);
-        mPinModel = new PinModel(parent);
+        mTreeView   = new QTreeView(this);
+        mPinModel = new PinModel(this);
 
         mTreeView->setModel(mPinModel);
 
@@ -26,11 +26,11 @@ namespace hal
 
     GateLibraryTabPin::GateLibraryTabPin(QWidget* parent, bool editable)
     {
-        mGridLayout = new QGridLayout(parent);
+        mGridLayout = new QGridLayout(this);
 
-        mTreeView   = new QTreeView(parent);
-        mPinModel = new PinModel(parent, editable);
-        auto pinDelegate = new PinDelegate(parent);
+        mTreeView   = new QTreeView(this);
+        mPinModel = new PinModel(this, editable);
+        auto pinDelegate = new PinDelegate(this);
         mTreeView->setItemDelegate(pinDelegate);
         mTreeView->setModel(mPinModel);
 

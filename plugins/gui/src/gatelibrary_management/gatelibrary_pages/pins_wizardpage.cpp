@@ -9,18 +9,16 @@ namespace hal
     {
         setTitle("Pins and Pingroups");
         setSubTitle("Edit pins and pingroups");
-        mLayout = new QGridLayout(this);
+        QGridLayout* layout = new QGridLayout(this);
 
         mPinTab = new GateLibraryTabPin(this, true);
         mDelBtn = new QPushButton("Delete", this);
 
 
-        mLayout->addWidget(mDelBtn, 1, 0);
-        mLayout->addWidget(mPinTab, 0, 0, 1, 2);
+        layout->addWidget(mDelBtn, 1, 0);
+        layout->addWidget(mPinTab, 0, 0, 1, 2);
 
         connect(mDelBtn, &QPushButton::clicked, this, &PinsWizardPage::handleDeleteClicked);
-
-        setLayout(mLayout);
     }
 
     void PinsWizardPage::initializePage(){

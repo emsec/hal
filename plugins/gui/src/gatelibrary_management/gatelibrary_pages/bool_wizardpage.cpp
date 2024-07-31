@@ -91,7 +91,8 @@ namespace hal
                 QLabel* label = new QLabel(QString::fromStdString(bf.first));
                 BooleanFunctionEdit* lineEdit;
 
-                if(mWizard->generalInfoPage->getProperties().contains("ff") || mWizard->generalInfoPage->getProperties().contains("latch"))
+                if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff)
+                        || mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
                 {
                     legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
                     legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
@@ -120,7 +121,8 @@ namespace hal
                                 QString name = label->text();
                                 BooleanFunctionEdit* lineEdit;
 
-                                if(mWizard->generalInfoPage->getProperties().contains("ff") || mWizard->generalInfoPage->getProperties().contains("latch"))
+                                if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff) ||
+                                        mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
                                 {
                                     legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
                                     legVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());

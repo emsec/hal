@@ -51,11 +51,7 @@ namespace hal
         if(mGateType != nullptr)
         {
             generalInfoPage->setMode(true);
-            QStringList prop = QStringList();
-            for (GateTypeProperty p : mGateType->get_property_list()) {
-                prop.append(QString::fromStdString(enum_to_string(p)));
-            }
-            generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), prop);
+            generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), mGateType->get_property_list());
             ffPage->setData(mGateType);
             latchPage->setData(mGateType);
             lutPage->setData(mGateType);
@@ -78,8 +74,8 @@ namespace hal
     {
         //Convert QStringList to std::set
         std::set<GateTypeProperty> properties_set;
-        for(QString prop : generalInfoPage->getProperties())
-            properties_set.insert(enum_from_string<GateTypeProperty>(prop.toStdString()));
+        for(GateTypeProperty prop : generalInfoPage->getProperties())
+            properties_set.insert(prop);
 
         if(generalInfoPage->isEdit())
         {
@@ -144,10 +140,10 @@ namespace hal
     std::unique_ptr<GateTypeComponent> GateLibraryWizard::setComponents()
     {
         std::unique_ptr<GateTypeComponent> parentComponent;
-        for(QString prop : generalInfoPage->getProperties())
+        for(GateTypeProperty prop : generalInfoPage->getProperties())
         {
             //Set components
-            if(prop == "c_lut")
+            if(prop == GateTypeProperty::c_lut)
             {
                 std::vector<std::string> identifiers;
                 for (QString id : initPage->mIdentifiers->toPlainText().split('\n', SKIP_EMPTY_PARTS) ) {
@@ -156,7 +152,7 @@ namespace hal
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
                 parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->isChecked());
             }
-            else if(prop == "ff")
+            else if(prop == GateTypeProperty::ff)
             {
                 std::vector<std::string> identifiers;
                 for (QString id : initPage->mIdentifiers->toPlainText().split('\n', SKIP_EMPTY_PARTS) ) {
@@ -195,7 +191,7 @@ namespace hal
                 ff_component->set_async_set_reset_behavior(behav_state, behav_neg_state);
                 parentComponent = std::move(component);
             }
-            else if(prop == "latch")
+            else if(prop == GateTypeProperty::latch)
             {
                 std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr,
                                                                                                                statePage->mStateIdentifier->text().toStdString(),
@@ -225,7 +221,7 @@ namespace hal
 
                 parentComponent = std::move(component);
             }
-            else if(prop == "ram")
+            else if(prop == GateTypeProperty::ram)
             {
                 std::unique_ptr<GateTypeComponent> sub_component = nullptr;
                 std::vector<std::string> identifiers;
@@ -258,39 +254,39 @@ namespace hal
 
     int GateLibraryWizard::nextId() const
     {
-        const QStringList properties = generalInfoPage->getProperties();
+        const QList<GateTypeProperty> properties = generalInfoPage->getProperties();
 
         switch(currentId()){
         case GeneralInfo:
             return Pin;
         case Pin:
-            if(properties.contains("ff")) return FlipFlop;
-            else if(properties.contains("latch")) return Latch;
-            else if(properties.contains("c_lut")) return LUT;
-            else if(properties.contains("ram")) return RAM;
+            if(properties.contains(GateTypeProperty::ff)) return FlipFlop;
+            else if(properties.contains(GateTypeProperty::latch)) return Latch;
+            else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
+            else if(properties.contains(GateTypeProperty::ram)) return RAM;
             return BoolFunc;
         case FlipFlop:
-            if(properties.contains("latch")) return Latch;
-            else if(properties.contains("c_lut")) return LUT;
-            else if(properties.contains("ram")) return RAM;
+            if(properties.contains(GateTypeProperty::latch)) return Latch;
+            else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
+            else if(properties.contains(GateTypeProperty::ram)) return RAM;
             return State;
         case Latch:
-            if(properties.contains("c_lut")) return LUT;
-            else if(properties.contains("ram")) return RAM;
+            if(properties.contains(GateTypeProperty::c_lut)) return LUT;
+            else if(properties.contains(GateTypeProperty::ram)) return RAM;
             return State;
         case LUT:
-            if(properties.contains("ram")) return RAM;
+            if(properties.contains(GateTypeProperty::ram)) return RAM;
             return Init;
         case RAM:
             return RAMPort;
         case RAMPort:
-            if(properties.contains("ff") || properties.contains("latch")) return State;
+            if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch)) return State;
             return Init;
         case State:
-            if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
+            if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch) || properties.contains(GateTypeProperty::c_lut) || properties.contains(GateTypeProperty::ram)) return Init;
             return BoolFunc;
         case Init:
-            if(properties.contains("c_lut")) return -1;
+            if(properties.contains(GateTypeProperty::c_lut)) return -1;
             return BoolFunc;
         case BoolFunc:
         default:

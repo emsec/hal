@@ -25,7 +25,7 @@ QPushButton
     padding-bottom : 4px;
     padding-left   : 14px;
     padding-right  : 14px;
-    min-width      : 50px;
+    /* min-width      : 50px; */
 }
 
 QMenuBar
@@ -941,8 +941,23 @@ hal--GeneralInfoWizardPage
 {
     qproperty-disabledIconStyle:    "all->#515050";
     qproperty-enabledIconStyle:     "all->#e8e8e8";
-    qproperty-leftArrowIconPath:    ":/icons/left-arrow";
-    qproperty-rightArrowIconPath:   ":/icons/right-arrow";
+    qproperty-leftArrowIconPath:    ":/icons/arrow-left";
+    qproperty-rightArrowIconPath:   ":/icons/arrow-right";
+}
+
+hal--GeneralInfoWizardPage #labProperties
+{
+    border-width : 2px 2px 0px 2px;
+    border-style : solid;
+    border-color : #515050;
+    margin-top   : 40px;
+    margin-bottom:  0px;
+}
+
+hal--GeneralInfoWizardPage #arrowButton
+{
+    min-width  : 12px;
+    max-width  : 12px;
 }
 
 hal--ImportNetlistDialog

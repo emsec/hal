@@ -6,75 +6,100 @@
 
 namespace hal
 {
+    ListPropertyModel::ListPropertyModel(QObject *parent)
+        : QAbstractTableModel(parent)
+    {
+        for (int i=(int)GateTypeProperty::combinational; i<=(int)GateTypeProperty::c_lut; i++)
+            mList.append({(GateTypeProperty)i,false});
+    }
+
+    QVariant ListPropertyModel::data(const QModelIndex& index, int role) const
+    {
+        if (role != Qt::DisplayRole || index.row() >= mList.size()) return QVariant();
+
+        GateTypeProperty gtp = mList.at(index.row()).property;
+        return QString::fromStdString(enum_to_string<GateTypeProperty>(gtp));
+    }
+
+    void ListPropertyModel::setSelected(GateTypeProperty gtp, bool select)
+    {
+        for (int irow=0; irow < mList.size(); irow++)
+        {
+            ListPropertyEntry& lpe = mList[irow];
+            if (lpe.property == gtp)
+            {
+                if (lpe.isSelected == select) return; // nothing to do
+                lpe.isSelected = select;
+                QModelIndex inx = index(irow,0);
+                Q_EMIT dataChanged(inx,inx);
+                return;
+            }
+        }
+    }
+
+    ListPropertyProxy::ListPropertyProxy(bool showSel, QObject* parent)
+        : QSortFilterProxyModel(parent), mShowSelected(showSel)
+    {;}
+
+    bool ListPropertyProxy::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+    {
+        Q_UNUSED(sourceParent);
+        const ListPropertyModel* model = static_cast<const ListPropertyModel*>(sourceModel());
+
+        return (model->isSelected(sourceRow) == mShowSelected);
+    }
+
     GeneralInfoWizardPage::GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent) : QWizardPage(parent)
     {
         setTitle("General Information");
         setSubTitle("Add general information about the gate, such as name and properties");
         mLayout = new QGridLayout(this);
         mName = new QLineEdit(this);
-        mPropertiesSelected = new QListWidget(this);
-        mPropertiesAvailable = new QListWidget(this);
-        mAddProperty = new QComboBox(this);
+        mPropertyModel = new ListPropertyModel(this);
+
+        mPropertiesSelected = new QListView(this);
+        ListPropertyProxy* selectedProxy = new ListPropertyProxy(true, this);
+        selectedProxy->setSourceModel(mPropertyModel);
+        mPropertiesSelected->setModel(selectedProxy);
+
+        mPropertiesAvailable = new QListView(this);
+        ListPropertyProxy* availableProxy = new ListPropertyProxy(false, this);
+        availableProxy->setSourceModel(mPropertyModel);
+        mPropertiesAvailable->setModel(availableProxy);
+
         mGateLibrary = gt;
 
-        mLabelName = new QLabel("Name *", this);
-        QLabel* labPropertiesSelected = new QLabel("Selected properties *", this);
-        QLabel* labPropertiesAvailable = new QLabel("Available properties", this);
+        QLabel* labName = new QLabel("Name *", this);
+        QLabel* labProperties = new QLabel("Properties:", this);
+        labProperties->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+        labProperties->setObjectName("labProperties");
+        QLabel* labPropertiesSelected = new QLabel(" Selected properties *", this);
+        QLabel* labPropertiesAvailable = new QLabel(" Available properties", this);
         labPropertiesSelected->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         labPropertiesAvailable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        mLabelAddProperty = new QLabel("Add property", this);
 
         mAddBtn = new QPushButton(this);
+        mAddBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mAddBtn->setObjectName("arrowButton");
         mDelBtn = new QPushButton(this);
+        mDelBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        mDelBtn->setObjectName("arrowButton");
 
-        mAddBtn->setMaximumWidth(40);
-        mDelBtn->setMaximumWidth(40);
-        mLayout->addWidget(mLabelName, 0, 0);
+        mLayout->addWidget(labName, 0, 0);
         mLayout->addWidget(mName, 0, 1, 1, 2);
-        mLayout->addWidget(labPropertiesSelected, 1, 0);
-        mLayout->addWidget(labPropertiesAvailable, 1, 2);
-        mLayout->addWidget(mPropertiesSelected, 2, 0, 3, 1);
-        mLayout->addWidget(mAddBtn, 2, 1);
-        mLayout->addWidget(mDelBtn, 3, 1);
-        mLayout->addWidget(mPropertiesAvailable, 2, 2, 3, 1);
-        mLayout->addWidget(mLabelAddProperty, 5, 0);
-        mLayout->addWidget(mAddProperty, 5, 1, 1, 2);
+        mLayout->addWidget(labProperties, 1, 0, 1, 3);
+        mLayout->addWidget(labPropertiesSelected, 2, 0);
+        mLayout->addWidget(labPropertiesAvailable, 2, 2);
+        mLayout->addWidget(mPropertiesSelected, 3, 0, 3, 1);
+        mLayout->addWidget(mAddBtn, 3, 1);
+        mLayout->addWidget(mDelBtn, 4, 1);
+        mLayout->addWidget(mPropertiesAvailable, 3, 2, 3, 1);
 
         setLayout(mLayout);
 
-        //TODO: fetch data from enum GateTypeProperty
-        mAddProperty->addItems(QStringList{
-                                   "combinational",
-                                   "sequential",
-                                   "tristate",
-                                   "power",
-                                   "ground",
-                                   "ff",
-                                   "latch",
-                                   "ram",
-                                   "io",
-                                   "dsp",
-                                   "pll",
-                                   "oscillator",
-                                   "scan",
-                                   "c_buffer",
-                                   "c_inverter",
-                                   "c_and",
-                                   "c_nand",
-                                   "c_or",
-                                   "c_nor",
-                                   "c_xor",
-                                   "c_xnor",
-                                   "c_aoi",
-                                   "c_oai",
-                                   "c_mux",
-                                   "c_carry",
-                                   "c_half_adder",
-                                   "c_full_adder",
-                                   "c_lut"
-                               });
         connect(mAddBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::addProperty);
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
+        qDebug() << "B" << mAddBtn->sizeHint() << mDelBtn->sizeHint();
 
     }
 
@@ -88,40 +113,10 @@ namespace hal
         return mIsEdit;
     }
 
-    void GeneralInfoWizardPage::setData(QString name, QStringList properties)
+    void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)
     {
         mName->setText(name);
-        mPropertiesSelected->addItems(properties);
-        mPropertiesSelected->addItems(QStringList{
-                                          "combinational",
-                                          "sequential",
-                                          "tristate",
-                                          "power",
-                                          "ground",
-                                          "ff",
-                                          "latch",
-                                          "ram",
-                                          "io",
-                                          "dsp",
-                                          "pll",
-                                          "oscillator",
-                                          "scan",
-                                          "c_buffer",
-                                          "c_inverter",
-                                          "c_and",
-                                          "c_nand",
-                                          "c_or",
-                                          "c_nor",
-                                          "c_xor",
-                                          "c_xnor",
-                                          "c_aoi",
-                                          "c_oai",
-                                          "c_mux",
-                                          "c_carry",
-                                          "c_half_adder",
-                                          "c_full_adder",
-                                          "c_lut"
-                                      });
+
         if(gateInit == "") gateInit = name;
 
         QStyle* s = style();
@@ -129,10 +124,17 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        mLeftArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mLeftArrowIconPath);
-        mRightArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mRightArrowIconPath);
+        mLeftArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mLeftArrowIconPath, mDisabledIconStyle);
+        mRightArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mRightArrowIconPath, mDisabledIconStyle);
         mAddBtn->setIcon(mLeftArrowIcon);
         mDelBtn->setIcon(mRightArrowIcon);
+        mAddBtn->setIconSize(QSize(24,24));
+        mDelBtn->setIconSize(QSize(24,24));
+
+        for (GateTypeProperty gtp : properties)
+        {
+            mPropertyModel->setSelected(gtp, true);
+        }
     }
 
     QString GeneralInfoWizardPage::getName()
@@ -140,33 +142,42 @@ namespace hal
         return mName->text();
     }
 
-    QStringList GeneralInfoWizardPage::getProperties()
+    QList<GateTypeProperty> GeneralInfoWizardPage::getProperties()
     {
-        QStringList res;
-        for (int i = 0; i < mPropertiesSelected->count(); i++) {
-            res.append(mPropertiesSelected->item(i)->text());
-        }
-        return res;
+        QList<GateTypeProperty> retval;
+        for (int irow = 0; irow < mPropertyModel->rowCount(); irow++)
+            if (mPropertyModel->isSelected(irow))
+                retval.append(mPropertyModel->property(irow));
+
+        return retval;
     }
 
     void GeneralInfoWizardPage::addProperty()
     {
-        QList<QListWidgetItem*> items = mPropertiesSelected->findItems(mAddProperty->currentText(), Qt::MatchExactly);
-        if(items.size() == 0) mPropertiesSelected->addItem(mAddProperty->currentText());
-
+        QModelIndex inx = mPropertiesAvailable->currentIndex();
+        if (!inx.isValid()) return;
+        GateTypeProperty gtp = enum_from_string<GateTypeProperty>(mPropertiesAvailable->model()->data(inx).toString().toStdString(),GateTypeProperty::combinational);
+        mPropertyModel->setSelected(gtp,true);
+        mAddBtn->setEnabled(mPropertiesAvailable->model()->rowCount());
+        mDelBtn->setEnabled(mPropertiesSelected->model()->rowCount());
     }
 
     void GeneralInfoWizardPage::deleteProperty()
     {
-        QListWidgetItem *it = mPropertiesSelected->takeItem(mPropertiesSelected->currentRow());
-        delete it;
+        QModelIndex inx = mPropertiesSelected->currentIndex();
+        if (!inx.isValid()) return;
+        GateTypeProperty gtp = enum_from_string<GateTypeProperty>(mPropertiesSelected->model()->data(inx).toString().toStdString(),GateTypeProperty::combinational);
+        mPropertyModel->setSelected(gtp,false);
+        mAddBtn->setEnabled(mPropertiesAvailable->model()->rowCount());
+        mDelBtn->setEnabled(mPropertiesSelected->model()->rowCount());
     }
 
     bool GeneralInfoWizardPage::validatePage()
     {
+        if (getProperties().isEmpty()) return false;
         for (auto it : mGateLibrary->get_gate_types()) {
-            if(!mIsEdit & (QString::fromStdString(it.first) == mName->text() || mPropertiesSelected->count() == 0)) return false;
-            else if (mIsEdit & mName->text() != gateInit & (QString::fromStdString(it.first) == mName->text() || mPropertiesSelected->count() == 0)) return false;
+            if(!mIsEdit & (QString::fromStdString(it.first) == mName->text())) return false;
+            else if (mIsEdit & mName->text() != gateInit & (QString::fromStdString(it.first) == mName->text())) return false;
         }
         return true;
     }
