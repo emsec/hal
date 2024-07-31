@@ -8,7 +8,6 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_delete_object.h"
-#include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/user_action_compound.h"
@@ -88,24 +87,6 @@ namespace hal
     ModuleColorManager* NetlistRelay::getModuleColorManager() const
     {
         return mModuleColorManager;
-    }
-
-    void NetlistRelay::changeModuleName(const u32 id)
-    {
-        // NOT THREADSAFE
-
-        Module* m = gNetlist->get_module_by_id(id);
-        assert(m);
-
-        bool ok;
-        QString text = QInputDialog::getText(nullptr, "Rename Module", "New Name", QLineEdit::Normal, QString::fromStdString(m->get_name()), &ok);
-
-        if (ok && !text.isEmpty())
-        {
-            ActionRenameObject* act = new ActionRenameObject(text);
-            act->setObject(UserActionObject(id, UserActionObjectType::Module));
-            act->exec();
-        }
     }
 
     void NetlistRelay::changeModuleType(const u32 id)

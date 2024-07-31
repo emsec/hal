@@ -94,13 +94,6 @@ namespace hal
         ModuleColorManager* getModuleColorManager() const;
 
         /**
-         * Changes the name of a specific module by asking the user for a new name in a 'Rename'-dialogue.
-         *
-         * @param id - The id of the module to rename
-         */
-        void changeModuleName(const u32 id);
-
-        /**
          * Changes the type of a specific module by asking the user for a new name in a 'New Type'-dialogue.
          *
          * @param id - The id of the module whose type is to be changed

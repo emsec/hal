@@ -16,8 +16,10 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 #include "hal_core/utilities/log.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/grouping_dialog/grouping_dialog.h"
 
 #include <QAction>
 #include <QApplication>
@@ -429,6 +431,71 @@ namespace hal
                 act->exec();
             }
         }
+    }
+
+    void GroupingManagerWidget::assignElementsToGroupingDialog(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    {
+        GroupingDialog gd;
+        if (gd.exec() != QDialog::Accepted) return;
+
+        UserActionCompound* compound = new UserActionCompound;
+        if (gd.isNewGrouping())
+        {
+            compound->addAction(new ActionCreateObject(UserActionObjectType::Grouping));
+            compound->setUseCreatedObject();
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(modules, gates, nets);
+        act->setObject(UserActionObject(gd.groupId(),UserActionObjectType::Grouping));
+        compound->addAction(act);
+        compound->exec();
+    }
+
+    void GroupingManagerWidget::removeElementsFromGrouping(const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
+    {
+        QMap<Grouping*, std::array<QSet<u32>,3>> groupingMap;
+        for (const u32 id : modules)
+        {
+            Module* module = gNetlist->get_module_by_id(id);
+            if (!module) continue;
+            Grouping* group = module->get_grouping();
+            if(!group) continue;
+            if(!groupingMap.contains(group))
+                groupingMap.insert(group, {QSet<u32>({id}),QSet<u32>(),QSet<u32>()});
+            else
+                groupingMap[group][0].insert(id);
+        }
+        for (const u32 id : gates)
+        {
+            Gate* gate = gNetlist->get_gate_by_id(id);
+            if (!gate) continue;
+            Grouping* group = gate->get_grouping();
+            if(!group) continue;
+            if(!groupingMap.contains(group))
+                groupingMap.insert(group, {QSet<u32>(),QSet<u32>({id}),QSet<u32>()});
+            else
+                groupingMap[group][1].insert(id);
+        }
+        for (const u32 id : nets)
+        {
+            Net* net = gNetlist->get_net_by_id(id);
+            if (!net) continue;
+            Grouping* group = net->get_grouping();
+            if(!group) continue;
+            if(!groupingMap.contains(group))
+                groupingMap.insert(group, {QSet<u32>(),QSet<u32>(),QSet<u32>({id})});
+            else
+                groupingMap[group][2].insert(id);
+        }
+        if (groupingMap.isEmpty()) return;
+        
+        UserActionCompound* compound = new UserActionCompound;
+        for (auto it = groupingMap.keyValueBegin(); it != groupingMap.keyValueEnd(); ++it){
+            auto elements = it->second;
+            ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(elements[0],elements[1],elements[2]);
+            act->setObject(UserActionObject(it->first->get_id(), UserActionObjectType::Grouping));
+            compound->addAction(act);
+        }
+        compound->exec();
     }
 
     void GroupingManagerWidget::handleToSelectionClicked()

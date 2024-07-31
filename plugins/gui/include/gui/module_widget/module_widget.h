@@ -287,10 +287,6 @@ namespace hal
 
         void openNetEndpointsInView(const QModelIndex &index);
 
-        void changeGateName(const QModelIndex& index);
-
-        void changeNetName(const QModelIndex& index);
-
         void enableDeleteAction(bool enable);
 
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);

@@ -36,6 +36,7 @@
 #include <QTableView>
 #include <QItemDelegate>
 #include <QMenu>
+
 #include "gui/gui_utils/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"

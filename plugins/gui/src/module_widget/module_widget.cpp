@@ -16,6 +16,7 @@
 #include "hal_core/netlist/net.h"
 #include "gui/module_model/module_model.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/module_context_menu/module_context_menu.h"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -165,15 +166,8 @@ namespace hal
 
     void ModuleWidget::handleRenameClicked()
     {
-        QModelIndex index = mTreeView->currentIndex();
-        ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
-
-        switch(type)
-        {
-            case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
-            case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
-            case ModuleItem::TreeItemType::Net: changeNetName(index); break;
-        }
+        ModuleItem* item = getModuleItemFromIndex(mTreeView->currentIndex());
+        ModuleContextMenu::changeElementNameDialog(item->getType(), item->id());
     }
 
     void ModuleWidget::setupToolbar(Toolbar* toolbar)
@@ -233,186 +227,101 @@ namespace hal
         if (!index.isValid())
             return;
 
+        ModuleItem* item = getModuleItemFromIndex(index);
         ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
 
         QMenu context_menu;
 
-        QAction isolate_action;
-        QAction add_selection_action;
-        QAction add_child_action;
-        QAction change_name_action;
-        QAction change_type_action;
-        QAction change_color_action;
-        QAction delete_action;
-        QAction extractPythonAction;
-        QAction focus_in_view;
-
         switch(type) {
-
             case ModuleItem::TreeItemType::Module:{
-                extractPythonAction.setIcon(QIcon(":/icons/python"));
-                extractPythonAction.setText("Extract Module as python code (copy to clipboard)");
-                extractPythonAction.setParent(&context_menu);
+                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
+                    "Extract Module as python code (copy to clipboard)", 
+                    [item](){
+                        QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
+                });
 
-                isolate_action.setText("Isolate in new view");
-                isolate_action.setParent(&context_menu);
+                act = context_menu.addAction("Isolate in new view", [this,index](){openModuleInView(index);});
 
-                add_selection_action.setText("Add selected gates to module");
-                add_selection_action.setParent(&context_menu);
+                act = context_menu.addAction("Add selected gates to module", 
+                    [this,index](){gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());});
 
-                add_child_action.setText("Add child module");
-                add_child_action.setParent(&context_menu);
+                act = context_menu.addAction("Add child module", 
+                    [this,index](){
+                        gNetlistRelay->addChildModule(getModuleItemFromIndex(index)->id());
+                        mTreeView->setExpanded(index, true);
+                });
 
-                change_name_action.setText("Change module name");
-                change_name_action.setParent(&context_menu);
+                act = context_menu.addAction("Change module name", 
+                    [item,type](){ModuleContextMenu::changeElementNameDialog(type, item->id());});
 
-                change_type_action.setText("Change module type");
-                change_type_action.setParent(&context_menu);
+                act = context_menu.addAction("Change module type", 
+                    [item](){gNetlistRelay->changeModuleType(item->id());});
 
-                change_color_action.setText("Change module color");
-                change_color_action.setParent(&context_menu);
+                act = context_menu.addAction("Change module color", 
+                    [this,item](){gNetlistRelay->changeModuleColor(item->id());});
+                
+                if(gNetlist->get_module_by_id(item->id()) != gNetlist->get_top_module())
+                {
+                    act = context_menu.addAction("Delete module", 
+                        [item](){gNetlistRelay->deleteModule(item->id());});
+                }
 
-                delete_action.setText("Delete module");
-                delete_action.setParent(&context_menu);
-
-                focus_in_view.setText("Focus item in Graph View");
-                focus_in_view.setParent(&context_menu);
+                act = context_menu.addAction("Focus module in Graph View", 
+                    [item](){
+                        gContentManager->getGraphTabWidget()->handleModuleFocus(item->id());
+                });
                 break;
             }
             case ModuleItem::TreeItemType::Gate: {
-                extractPythonAction.setIcon(QIcon(":/icons/python"));
-                extractPythonAction.setText("Extract Gate as python code (copy to clipboard)");
-                extractPythonAction.setParent(&context_menu);
+                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
+                                                            "Extract Gate as python code (copy to clipboard)", 
+                                                            [item](){QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");});
 
-                isolate_action.setText("Isolate in new view");
-                isolate_action.setParent(&context_menu);
+                act = context_menu.addAction("Isolate in new view", [this,index](){openGateInView(index);});
 
-                change_name_action.setText("Change Gate name");
-                change_name_action.setParent(&context_menu);
+                act = context_menu.addAction("Change gate name", 
+                    [this,index,type](){ModuleContextMenu::changeElementNameDialog(type, getModuleItemFromIndex(index)->id());});
 
-                focus_in_view.setText("Focus item in Graph View");
-                focus_in_view.setParent(&context_menu);
+                act = context_menu.addAction("Focus gate in Graph View", 
+                    [item](){
+                        gContentManager->getGraphTabWidget()->handleGateFocus(item->id());
+                });
                 break;
             }
             case ModuleItem::TreeItemType::Net: {
-                extractPythonAction.setIcon(QIcon(":/icons/python"));
-                extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
-                extractPythonAction.setParent(&context_menu);
+                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
+                                                            "Extract Net as python code (copy to clipboard)", 
+                                                            [item](){QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");});
 
-                isolate_action.setText("Isolate in new view");
-                isolate_action.setParent(&context_menu);
+                act = context_menu.addAction("Isolate in new view", [this,index](){openNetEndpointsInView(index);});
 
-                change_name_action.setText("Change Net name");
-                change_name_action.setParent(&context_menu);
+                act = context_menu.addAction("Change net name", 
+                    [this,index,type](){ModuleContextMenu::changeElementNameDialog(type, getModuleItemFromIndex(index)->id());});
 
-                focus_in_view.setText("Focus item in Graph View");
-                focus_in_view.setParent(&context_menu);
+                act = context_menu.addAction("Focus net in Graph View", 
+                    [item](){
+                        gContentManager->getGraphTabWidget()->handleNetFocus(item->id());
+                });
                 break;
             }
-        }
-
-        if (type == ModuleItem::TreeItemType::Gate){
-            context_menu.addAction(&extractPythonAction);
-            context_menu.addAction(&isolate_action);
-            context_menu.addAction(&change_name_action);
-            context_menu.addAction(&focus_in_view);
-
-        }
-
-        if (type == ModuleItem::TreeItemType::Module){
-            context_menu.addAction(&extractPythonAction);
-            context_menu.addAction(&isolate_action);
-            context_menu.addAction(&change_name_action);
-            context_menu.addAction(&add_selection_action);
-            context_menu.addAction(&add_child_action);
-            context_menu.addAction(&change_type_action);
-            context_menu.addAction(&change_color_action);
-            context_menu.addAction(&focus_in_view);
-        }
-
-        if (type == ModuleItem::TreeItemType::Net){
-            context_menu.addAction(&extractPythonAction);
-            context_menu.addAction(&isolate_action);
-            context_menu.addAction(&change_name_action);
-            context_menu.addAction(&focus_in_view);
         }
 
         u32 module_id = getModuleItemFromIndex(index)->id();
         auto module = gNetlist->get_module_by_id(module_id);
 
-        if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
-            context_menu.addAction(&delete_action);
+        if(type == ModuleItem::TreeItemType::Module)
+            ModuleContextMenu::addModuleSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
+        else if(type == ModuleItem::TreeItemType::Gate)
+            ModuleContextMenu::addGateSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
+        else if(type == ModuleItem::TreeItemType::Net)
+            ModuleContextMenu::addNetSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
 
         GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
                                             type==ModuleItem::TreeItemType::Module?std::vector<u32>({module_id}):std::vector<u32>(),
                                             type==ModuleItem::TreeItemType::Gate?std::vector<u32>({module_id}):std::vector<u32>(),
                                             type==ModuleItem::TreeItemType::Net?std::vector<u32>({module_id}):std::vector<u32>());
 
-        QAction* clicked = context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
-
-        if (!clicked)
-            return;
-
-        if (clicked == &extractPythonAction){
-            switch(type)
-            {
-                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
-                case ModuleItem::TreeItemType::Gate: QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
-                case ModuleItem::TreeItemType::Net: QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
-            }
-        }
-
-        if (clicked == &isolate_action)
-        {
-            switch(type)
-            {
-            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
-            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
-            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
-            default:
-                break;
-            }
-        }
-
-        if (clicked == &add_selection_action)
-            gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());
-
-        if (clicked == &add_child_action)
-        {
-            gNetlistRelay->addChildModule(getModuleItemFromIndex(index)->id());
-            mTreeView->setExpanded(index, true);
-        }
-
-        if (clicked == &change_name_action)
-        {
-            switch(type)
-            {
-                case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
-                case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
-                case ModuleItem::TreeItemType::Net: changeNetName(index); break;
-            }
-        }
-
-        if (clicked == &change_type_action)
-            gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
-
-        if (clicked == &change_color_action)
-            gNetlistRelay->changeModuleColor(getModuleItemFromIndex(index)->id());
-
-        if (clicked == &delete_action){
-            gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
-        }
-
-        if (clicked == &focus_in_view){
-            switch(type)
-            {
-                case ModuleItem::TreeItemType::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(getModuleItemFromIndex(index)->id()); break;
-                case ModuleItem::TreeItemType::Gate: gContentManager->getGraphTabWidget()->handleGateFocus(getModuleItemFromIndex(index)->id()); break;
-                case ModuleItem::TreeItemType::Net: gContentManager->getGraphTabWidget()->handleNetFocus(getModuleItemFromIndex(index)->id()); break;
-            }
-
-         }
-
+        context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
     }
 
     void ModuleWidget::handleModuleRemoved(Module* module, u32 module_id)
@@ -545,36 +454,6 @@ namespace hal
         actionAITO->setPlacementHint(plc);
         act->addAction(actionAITO);
         act->exec();
-    }
-
-    void ModuleWidget::changeGateName(const QModelIndex &index)
-    {
-        QString oldName = getModuleItemFromIndex(index)->name();
-
-        bool confirm;
-        QString newName = QInputDialog::getText(this, "Rename Gate", "New name:", QLineEdit::Normal, oldName, &confirm);
-
-        if (confirm && !newName.isEmpty())
-        {
-            ActionRenameObject* act = new ActionRenameObject(newName);
-            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Gate));
-            act->exec();
-        }
-    }
-
-    void ModuleWidget::changeNetName(const QModelIndex &index)
-    {
-        QString oldName = getModuleItemFromIndex(index)->name();
-
-        bool confirm;
-        QString newName = QInputDialog::getText(this, "Rename Net", "New name:", QLineEdit::Normal, oldName, &confirm);
-
-        if (confirm && !newName.isEmpty())
-        {
-            ActionRenameObject* act = new ActionRenameObject(newName);
-            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Net));
-            act->exec();
-        }
     }
 
     void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
