@@ -805,7 +805,6 @@ namespace hal
         auto ity = mCoordY.find(iy0);
         while(ity != mCoordY.end())
         {
-            std::cerr << iy0 << " mYValues[" << mYValues.size() << "] = " << ity.value().lanePosition(0) << std::endl;
             mYValues.append(ity.value().lanePosition(0));
             iy0 += 2;
             ity = mCoordY.find(iy0);
