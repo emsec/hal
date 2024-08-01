@@ -1,6 +1,5 @@
 var NAVTREEINDEX26 =
 {
-"index.html#autotoc_md39":[0,7],
 "init__component_8cpp.html":[7,0,2,0,3,3,2],
 "init__component_8cpp_source.html":[7,0,2,0,3,3,2],
 "init__component_8h.html":[7,0,0,0,1,3,3,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX26 =
 "namespacehal.html#a2fda0a2fc6dd0b4d21a78211df2040bd":[5,0,2,483],
 "namespacehal.html#a333af70b1e33469fe3bfc21658825bca":[5,0,2,551],
 "namespacehal.html#a337caabfa36ac06809b28aa5cc95b2de":[5,0,2,561],
-"namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4":[5,0,2,583]
+"namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4":[5,0,2,583],
+"namespacehal.html#a38887b161c4caa1ab4c0f1ff1d1bb873":[5,0,2,509]
 };
