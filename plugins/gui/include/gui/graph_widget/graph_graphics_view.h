@@ -151,7 +151,6 @@ namespace hal
         void handleQueryShortestPath();
         void handleSelectOutputs();
         void handleSelectInputs();
-        void handleGroupingUnassign();
 
         void handleAddModuleToView();
         void handleAddGateToView();
