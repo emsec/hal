@@ -60,8 +60,12 @@ namespace hal
             ramportPage->setData(mGateType);
             statePage->setData(mGateType);
             boolPage->setData(mGateType);
-            //pinsPage->setGateType(mGateType);
+
+            setWindowTitle(QString("Modify gatetype %1").arg(QString::fromStdString(mGateType->get_name())));
         }
+        else
+            setWindowTitle("Create new gatetype");
+
     }
 
     void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)

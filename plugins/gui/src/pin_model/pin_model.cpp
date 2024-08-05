@@ -431,15 +431,17 @@ namespace hal
             mAssignedGroupNames.insert(newName);
 
             //rename PinItem
+
             groupItem->setName(newName);
 
             //rename corresponding pinGroup
-            for(auto group : getPinGroups()){
+            /*for(auto group : getPinGroups()){
                 if(group->getId() == groupItem->getId()){
+                    //stop here
                     group->setName(newName);
                     break;
                 }
-            }
+            }*/
             return true;
         }
 

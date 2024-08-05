@@ -123,6 +123,5 @@ namespace hal {
         QString mEnabledIconStyle;
         QString mLeftArrowIconPath;
         QString mRightArrowIconPath;
-        //QStringList mPropertiesList;
     };
 }
