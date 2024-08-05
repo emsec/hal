@@ -17,6 +17,7 @@
 #include "gui/module_model/module_model.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/module_context_menu/module_context_menu.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 
 #include <QApplication>
 #include <QHeaderView>
@@ -31,7 +32,6 @@
 #include <QVBoxLayout>
 #include <QInputDialog>
 #include <QClipboard>
-#include "gui/plugin_relay/gui_plugin_manager.h"
 
 namespace hal
 {
@@ -167,7 +167,7 @@ namespace hal
     void ModuleWidget::handleRenameClicked()
     {
         ModuleItem* item = getModuleItemFromIndex(mTreeView->currentIndex());
-        ModuleContextMenu::changeElementNameDialog(item->getType(), item->id());
+        gNetlistRelay->changeElementNameDialog(item->getType(), item->id());
     }
 
     void ModuleWidget::setupToolbar(Toolbar* toolbar)
@@ -223,103 +223,50 @@ namespace hal
     void ModuleWidget::handleTreeViewContextMenuRequested(const QPoint& point)
     {
         QModelIndex index = mTreeView->indexAt(point);
-
         if (!index.isValid())
             return;
 
         ModuleItem* item = getModuleItemFromIndex(index);
-        ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
+        ModuleItem::TreeItemType type = item->getType();
+        u32 id = item->id();
 
         QMenu context_menu;
 
         switch(type) {
             case ModuleItem::TreeItemType::Module:{
-                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
-                    "Extract Module as python code (copy to clipboard)", 
-                    [item](){
-                        QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
-                });
-
-                act = context_menu.addAction("Isolate in new view", [this,index](){openModuleInView(index);});
+                QAction* act = context_menu.addAction("Isolate in new view", [this,id](){openModuleInView(id, false);});
 
                 act = context_menu.addAction("Add selected gates to module", 
-                    [this,index](){gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());});
+                    [this,id](){gNetlistRelay->addSelectionToModule(id);});
 
                 act = context_menu.addAction("Add child module", 
-                    [this,index](){
-                        gNetlistRelay->addChildModule(getModuleItemFromIndex(index)->id());
+                    [this,id,index](){
+                        gNetlistRelay->addChildModuleDialog(id);
                         mTreeView->setExpanded(index, true);
-                });
-
-                act = context_menu.addAction("Change module name", 
-                    [item,type](){ModuleContextMenu::changeElementNameDialog(type, item->id());});
-
-                act = context_menu.addAction("Change module type", 
-                    [item](){gNetlistRelay->changeModuleType(item->id());});
-
-                act = context_menu.addAction("Change module color", 
-                    [this,item](){gNetlistRelay->changeModuleColor(item->id());});
-                
-                if(gNetlist->get_module_by_id(item->id()) != gNetlist->get_top_module())
-                {
-                    act = context_menu.addAction("Delete module", 
-                        [item](){gNetlistRelay->deleteModule(item->id());});
-                }
-
-                act = context_menu.addAction("Focus module in Graph View", 
-                    [item](){
-                        gContentManager->getGraphTabWidget()->handleModuleFocus(item->id());
                 });
                 break;
             }
             case ModuleItem::TreeItemType::Gate: {
-                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
-                                                            "Extract Gate as python code (copy to clipboard)", 
-                                                            [item](){QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");});
-
-                act = context_menu.addAction("Isolate in new view", [this,index](){openGateInView(index);});
-
-                act = context_menu.addAction("Change gate name", 
-                    [this,index,type](){ModuleContextMenu::changeElementNameDialog(type, getModuleItemFromIndex(index)->id());});
-
-                act = context_menu.addAction("Focus gate in Graph View", 
-                    [item](){
-                        gContentManager->getGraphTabWidget()->handleGateFocus(item->id());
-                });
+                QAction* act = context_menu.addAction("Isolate in new view", [this,index](){openGateInView(index);});
                 break;
             }
             case ModuleItem::TreeItemType::Net: {
-                QAction* act = context_menu.addAction(QIcon(":/icons/python"), 
-                                                            "Extract Net as python code (copy to clipboard)", 
-                                                            [item](){QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");});
-
-                act = context_menu.addAction("Isolate in new view", [this,index](){openNetEndpointsInView(index);});
-
-                act = context_menu.addAction("Change net name", 
-                    [this,index,type](){ModuleContextMenu::changeElementNameDialog(type, getModuleItemFromIndex(index)->id());});
-
-                act = context_menu.addAction("Focus net in Graph View", 
-                    [item](){
-                        gContentManager->getGraphTabWidget()->handleNetFocus(item->id());
-                });
+                QAction* act = context_menu.addAction("Isolate in new view", [this,index](){openNetEndpointsInView(index);});
                 break;
             }
         }
 
-        u32 module_id = getModuleItemFromIndex(index)->id();
-        auto module = gNetlist->get_module_by_id(module_id);
-
         if(type == ModuleItem::TreeItemType::Module)
-            ModuleContextMenu::addModuleSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
+            ModuleContextMenu::addModuleSubmenu(&context_menu, id);
         else if(type == ModuleItem::TreeItemType::Gate)
-            ModuleContextMenu::addGateSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
+            ModuleContextMenu::addGateSubmenu(&context_menu, id);
         else if(type == ModuleItem::TreeItemType::Net)
-            ModuleContextMenu::addNetSubmenu(&context_menu, getModuleItemFromIndex(index)->id());
+            ModuleContextMenu::addNetSubmenu(&context_menu, id);
 
         GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
-                                            type==ModuleItem::TreeItemType::Module?std::vector<u32>({module_id}):std::vector<u32>(),
-                                            type==ModuleItem::TreeItemType::Gate?std::vector<u32>({module_id}):std::vector<u32>(),
-                                            type==ModuleItem::TreeItemType::Net?std::vector<u32>({module_id}):std::vector<u32>());
+                                            type==ModuleItem::TreeItemType::Module?std::vector<u32>({id}):std::vector<u32>(),
+                                            type==ModuleItem::TreeItemType::Gate?std::vector<u32>({id}):std::vector<u32>(),
+                                            type==ModuleItem::TreeItemType::Net?std::vector<u32>({id}):std::vector<u32>());
 
         context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
     }
@@ -399,15 +346,10 @@ namespace hal
     {
         ModuleItem* mi = getModuleItemFromIndex(index);
         switch(mi->getType()){
-            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+            case ModuleItem::TreeItemType::Module: openModuleInView(getModuleItemFromIndex(index)->id(), false); break;
             case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
             case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
         }
-    }
-
-    void ModuleWidget::openModuleInView(const QModelIndex& index)
-    {
-        openModuleInView(getModuleItemFromIndex(index)->id(), false);
     }
 
     void ModuleWidget::openGateInView(const QModelIndex &index)

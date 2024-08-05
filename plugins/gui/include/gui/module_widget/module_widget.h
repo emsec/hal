@@ -281,8 +281,7 @@ namespace hal
 
         QShortcut* mShortCutDeleteItem;
 
-        void openModuleInView(const QModelIndex& index);
-
+        // the next 2 methods and the one for modules should be moved to a better suited place.
         void openGateInView(const QModelIndex& index);
 
         void openNetEndpointsInView(const QModelIndex &index);

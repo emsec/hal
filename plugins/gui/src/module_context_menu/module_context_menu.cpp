@@ -2,8 +2,6 @@
 
 #include "hal_core/defines.h"
 #include "gui/gui_globals.h"
-#include "gui/user_action/action_rename_object.h"
-#include "gui/user_action/action_set_object_type.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
@@ -69,7 +67,19 @@ namespace hal {
         menu->addAction("Change name",
            [id]()
            {
-               ModuleContextMenu::changeElementNameDialog(ModuleItem::TreeItemType::Module, id);
+               gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Module, id);
+           }
+        );
+        menu->addAction("Change type",
+           [id]()
+           {
+               gNetlistRelay->changeModuleTypeDialog(id);
+           }
+        );
+        menu->addAction("Change color",
+           [id]()
+           {
+               gNetlistRelay->changeModuleColorDialog(id);
            }
         );
         menu->addAction("Assign to grouping",
@@ -90,6 +100,14 @@ namespace hal {
                 gContentManager->getGraphTabWidget()->handleModuleFocus(id);
            }
         );
+        QAction* delAction = menu->addAction("Delete module", 
+            [id]()
+            {
+                gNetlistRelay->deleteModule(id);
+            }
+        );
+        if(gNetlist->get_module_by_id(id) == gNetlist->get_top_module())
+            delAction->setEnabled(false);
     }
 
     void ModuleContextMenu::addGateSubmenu(QMenu* contextMenu, u32 id)
@@ -123,7 +141,7 @@ namespace hal {
         menu->addAction("Change name",
            [id]()
            {
-               ModuleContextMenu::changeElementNameDialog(ModuleItem::TreeItemType::Gate, id);
+               gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Gate, id);
            }
         );
         menu->addAction("Assign to grouping",
@@ -171,7 +189,7 @@ namespace hal {
         menu->addAction("Change name",
            [id]()
            {
-               ModuleContextMenu::changeElementNameDialog(ModuleItem::TreeItemType::Net, id);
+              gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Net, id);
            }
         );
         menu->addAction("Assign to grouping",
@@ -209,67 +227,5 @@ namespace hal {
                 gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping(modules, gates, nets);
            }
         );
-    }
-
-    void ModuleContextMenu::changeElementNameDialog(ModuleItem::TreeItemType type, u32 id)
-    {
-        QString oldName;
-        QString prompt;
-        UserActionObject uao;
-
-        if (type == ModuleItem::TreeItemType::Module)
-        {
-            Module* m = gNetlist->get_module_by_id(id);
-            assert(m);
-            oldName   = QString::fromStdString(m->get_name());
-            prompt    = "Change module name";
-            uao = UserActionObject(id, UserActionObjectType::Module);
-        }
-        else if (type == ModuleItem::TreeItemType::Gate)
-        {
-            Gate* g   = gNetlist->get_gate_by_id(id);
-            assert(g);
-            oldName   = QString::fromStdString(g->get_name());
-            prompt    = "Change gate name";
-            uao = UserActionObject(id, UserActionObjectType::Gate);
-        }
-        else if (type == ModuleItem::TreeItemType::Net)
-        {
-            Net* n    = gNetlist->get_net_by_id(id);
-            assert(n);
-            oldName   = QString::fromStdString(n->get_name());
-            prompt    = "Change net name";
-            uao = UserActionObject(id, UserActionObjectType::Net);
-        }
-        else return;
-
-        bool confirm;
-        QString newName =
-                QInputDialog::getText(nullptr, prompt, "New name:", QLineEdit::Normal,
-                                      oldName, &confirm);
-        if (confirm)
-        {
-            ActionRenameObject* act = new ActionRenameObject(newName);
-            act->setObject(uao);
-            act->exec();
-        }
-    }
-
-    void ModuleContextMenu::changeModuleTypeDialog(const u32 id)
-    {
-        // NOT THREADSAFE
-
-        Module* m = gNetlist->get_module_by_id(id);
-        assert(m);
-
-        bool ok;
-        QString type = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
-
-        if (ok)
-        {
-            ActionSetObjectType* act = new ActionSetObjectType(type);
-            act->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
-            act->exec();
-        }
     }
 }
