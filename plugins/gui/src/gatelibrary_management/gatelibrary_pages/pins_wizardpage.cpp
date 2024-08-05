@@ -19,27 +19,18 @@ namespace hal
         layout->addWidget(mPinTab, 0, 0, 1, 2);
 
         connect(mDelBtn, &QPushButton::clicked, this, &PinsWizardPage::handleDeleteClicked);
+
     }
 
-    void PinsWizardPage::initializePage(){
+    void PinsWizardPage::initializePage()
+    {
 
-        //2
-        //mPinTab = mWizard->mPinTab;
         mWizard = static_cast<GateLibraryWizard*>(wizard());
         mPinModel = mPinTab->getPinModel();
         mWizard->mPinModel = mPinModel;
 
         mPinTab->update(mWizard->mGateType);
-
     }
-
-    /*void PinsWizardPage::setGateType(GateType* gate)
-    {
-        //1
-        mWizard = static_cast<GateLibraryWizard*>(wizard());
-        mPinModel = mWizard->mPinModel;
-        mPinTab->update(gate);
-    }*/
 
     void PinsWizardPage::handleDeleteClicked()
     {
@@ -53,4 +44,13 @@ namespace hal
         return mPinModel->getPinGroups();
     }
 
+    bool PinsWizardPage::validatePage()
+    {
+        for(auto ch : mPinModel->getRootItem()->getChildren()) //check pin direction of groups
+        {
+            PinItem* pg = static_cast<PinItem*>(ch);
+            if(pg->getItemType() != PinItem::TreeItemType::GroupCreator && pg->getDirection() == PinDirection::none) return false;
+        }
+        return true;
+    }
 }

@@ -87,7 +87,7 @@ namespace hal
 
         //connect(mWizard, &QDialog::accepted, this, &GateLibraryManager::handleSelectionChanged);
 
-        setLayout(mLayout);GateLibraryTabGeneral
+        setLayout(mLayout);
         repolish();    // CALL FROM PARENT
     }
 
@@ -132,6 +132,9 @@ namespace hal
                 mEditableGatelibrary = gateLibrary;
                 mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
                 mReadOnly = false;
+
+                QDir dir(QDir::home());
+                window()->setWindowTitle(QString("GateLibrary %1").arg(dir.relativeFilePath(fileName)));
             }
 
         }

@@ -71,11 +71,12 @@ namespace hal
         QList<PinItem*> pinGroups = mWizard->getPingroups();
 
         QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
+        QList<PinItem*> outputPins = mWizard->mPinModel->getOutputPins();
         std::set<std::string> legVars;
         for (PinItem* pi : inputPins)
             legVars.insert(pi->getName().toStdString());
 
-        if (mEditFunctions.isEmpty())
+        if (!mEditFunctions.isEmpty())
         {
             for (BooleanFunctionEdit* bfe : mEditFunctions)
                 delete bfe;
@@ -83,14 +84,14 @@ namespace hal
         }
 
         if(mGate != nullptr){
-            auto boolFunctions = mGate->get_boolean_functions();
+            std::unordered_map<std::string, BooleanFunction> boolFunctions = mGate->get_boolean_functions();
             auto list = QList<QPair<QString, BooleanFunction>>();
             int boolFuncCnt = 0;
 
-            for(std::pair<const std::basic_string<char>, BooleanFunction> bf : boolFunctions){
-                QLabel* label = new QLabel(QString::fromStdString(bf.first));
+            for(PinItem* pi : outputPins)
+            {
+                QLabel* label = new QLabel(pi->getName());
                 BooleanFunctionEdit* lineEdit;
-
                 if(mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::ff)
                         || mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::latch))
                 {
@@ -100,7 +101,11 @@ namespace hal
                 lineEdit = new BooleanFunctionEdit(legVars, this);
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
-                lineEdit->setText(QString::fromStdString(bf.second.to_string()));
+
+                if(auto bf = boolFunctions.find(pi->getName().toStdString()); bf != boolFunctions.end())
+                {
+                    lineEdit->setText(QString::fromStdString(bf->second.to_string()));
+                }
                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
                 mEditFunctions.append(lineEdit);
                 mOutputPins.append(label->text());

@@ -84,6 +84,18 @@ namespace hal
         mDelBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         mDelBtn->setObjectName("arrowButton");
 
+        QStyle* s = style();
+
+        s->unpolish(this);
+        s->polish(this);
+
+        mLeftArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mLeftArrowIconPath, mDisabledIconStyle);
+        mRightArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mRightArrowIconPath, mDisabledIconStyle);
+        mAddBtn->setIcon(mLeftArrowIcon);
+        mDelBtn->setIcon(mRightArrowIcon);
+        mAddBtn->setIconSize(QSize(24,24));
+        mDelBtn->setIconSize(QSize(24,24));
+
         mLayout->addWidget(labName, 0, 0);
         mLayout->addWidget(mName, 0, 1, 1, 2);
         mLayout->addWidget(labProperties, 1, 0, 1, 3);
@@ -100,17 +112,7 @@ namespace hal
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
         connect(mName, &QLineEdit::textChanged, this, &GeneralInfoWizardPage::handleNameChanged);
 
-        QStyle* s = style();
 
-        s->unpolish(this);
-        s->polish(this);
-
-        mLeftArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mLeftArrowIconPath, mDisabledIconStyle);
-        mRightArrowIcon = gui_utility::getStyledSvgIcon(mEnabledIconStyle, mRightArrowIconPath, mDisabledIconStyle);
-        mAddBtn->setIcon(mLeftArrowIcon);
-        mDelBtn->setIcon(mRightArrowIcon);
-        mAddBtn->setIconSize(QSize(24,24));
-        mDelBtn->setIconSize(QSize(24,24));
     }
 
     void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)

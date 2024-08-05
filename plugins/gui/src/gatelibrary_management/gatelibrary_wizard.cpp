@@ -53,7 +53,7 @@ namespace hal
         }
         else
         {
-            setWindowTitle("Modiry gate type " + QString::fromStdString(mGateType->get_name()));
+            setWindowTitle("Modify gate type " + QString::fromStdString(mGateType->get_name()));
 
             generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), mGateType->get_property_list());
             ffPage->setData(mGateType);
@@ -64,7 +64,6 @@ namespace hal
             ramportPage->setData(mGateType);
             statePage->setData(mGateType);
             boolPage->setData(mGateType);
-            //pinsPage->setGateType(mGateType);
         }
     }
 
