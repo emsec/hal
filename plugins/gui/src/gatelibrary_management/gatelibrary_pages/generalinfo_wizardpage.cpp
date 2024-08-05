@@ -1,6 +1,5 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
-#include <QDebug>
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "gui/gui_utils/graphics.h"
 
@@ -99,25 +98,7 @@ namespace hal
 
         connect(mAddBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::addProperty);
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
-        qDebug() << "B" << mAddBtn->sizeHint() << mDelBtn->sizeHint();
-
-    }
-
-    void GeneralInfoWizardPage::setMode(bool edit)
-    {
-        mIsEdit = edit;
-    }
-
-    bool GeneralInfoWizardPage::isEdit()
-    {
-        return mIsEdit;
-    }
-
-    void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)
-    {
-        mName->setText(name);
-
-        if(gateInit == "") gateInit = name;
+        connect(mName, &QLineEdit::textChanged, this, &GeneralInfoWizardPage::handleNameChanged);
 
         QStyle* s = style();
 
@@ -130,11 +111,20 @@ namespace hal
         mDelBtn->setIcon(mRightArrowIcon);
         mAddBtn->setIconSize(QSize(24,24));
         mDelBtn->setIconSize(QSize(24,24));
+    }
+
+    void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)
+    {
+        mName->setText(name);
+
+        mNameInit = name;
 
         for (GateTypeProperty gtp : properties)
         {
             mPropertyModel->setSelected(gtp, true);
         }
+
+        Q_EMIT completeChanged();
     }
 
     QString GeneralInfoWizardPage::getName()
@@ -142,7 +132,7 @@ namespace hal
         return mName->text();
     }
 
-    QList<GateTypeProperty> GeneralInfoWizardPage::getProperties()
+    QList<GateTypeProperty> GeneralInfoWizardPage::getProperties() const
     {
         QList<GateTypeProperty> retval;
         for (int irow = 0; irow < mPropertyModel->rowCount(); irow++)
@@ -160,6 +150,7 @@ namespace hal
         mPropertyModel->setSelected(gtp,true);
         mAddBtn->setEnabled(mPropertiesAvailable->model()->rowCount());
         mDelBtn->setEnabled(mPropertiesSelected->model()->rowCount());
+        Q_EMIT completeChanged();
     }
 
     void GeneralInfoWizardPage::deleteProperty()
@@ -170,14 +161,24 @@ namespace hal
         mPropertyModel->setSelected(gtp,false);
         mAddBtn->setEnabled(mPropertiesAvailable->model()->rowCount());
         mDelBtn->setEnabled(mPropertiesSelected->model()->rowCount());
+        Q_EMIT completeChanged();
     }
 
-    bool GeneralInfoWizardPage::validatePage()
+    void GeneralInfoWizardPage::handleNameChanged(const QString &txt)
     {
-        if (getProperties().isEmpty()) return false;
-        for (auto it : mGateLibrary->get_gate_types()) {
-            if(!mIsEdit & (QString::fromStdString(it.first) == mName->text())) return false;
-            else if (mIsEdit & mName->text() != gateInit & (QString::fromStdString(it.first) == mName->text())) return false;
+        Q_UNUSED (txt);
+        Q_EMIT completeChanged();
+    }
+
+    bool GeneralInfoWizardPage::isComplete() const
+    {
+        if (getProperties().isEmpty() || mName->text().isEmpty()) return false;
+
+        if (mName->text() == mNameInit) return true; // name of existing type unchanged
+        for (auto it : mGateLibrary->get_gate_types())
+        {
+            if (QString::fromStdString(it.first) == mName->text())
+                return false;
         }
         return true;
     }

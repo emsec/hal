@@ -44,13 +44,17 @@ namespace hal
 
         mGateLibrary = gateLibrary;
         mGateType = gateType;
-        generalInfoPage->setMode(false);
         mPinModel = new PinModel(this, true);
         mPinTab = new GateLibraryTabPin(this, true);
 
-        if(mGateType != nullptr)
+        if(mGateType == nullptr)
         {
-            generalInfoPage->setMode(true);
+            setWindowTitle("Create new gate type");
+        }
+        else
+        {
+            setWindowTitle("Modiry gate type " + QString::fromStdString(mGateType->get_name()));
+
             generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), mGateType->get_property_list());
             ffPage->setData(mGateType);
             latchPage->setData(mGateType);
@@ -64,11 +68,13 @@ namespace hal
         }
     }
 
+    /*
     void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)
     {
         mGateLibrary = gateLibrary;
         mGateType = gateType;
     }
+    */
 
     void GateLibraryWizard::accept()
     {
@@ -77,7 +83,7 @@ namespace hal
         for(GateTypeProperty prop : generalInfoPage->getProperties())
             properties_set.insert(prop);
 
-        if(generalInfoPage->isEdit())
+        if(mGateType)
         {
             mGateType = mGateLibrary->replace_gate_type(mGateType->get_id(), generalInfoPage->getName().toStdString(), properties_set, setComponents());
             //Set pingroups and pins

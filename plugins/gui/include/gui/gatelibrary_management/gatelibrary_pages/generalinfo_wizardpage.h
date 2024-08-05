@@ -81,10 +81,8 @@ namespace hal {
         GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
         void setData(QString name, const std::vector<GateTypeProperty>& properties);
         QString getName();
-        QList<GateTypeProperty> getProperties();
-        void setMode(bool edit);
-        bool isEdit();
-        bool validatePage() override;
+        QList<GateTypeProperty> getProperties() const;
+        bool isComplete() const override;
 
         QString disabledIconStyle()  const { return mDisabledIconStyle; }
         QString enabledIconStyle()   const { return mEnabledIconStyle; }
@@ -96,9 +94,11 @@ namespace hal {
         void setLeftArrowIconPath (const QString& p) { mLeftArrowIconPath = p; }
         void setRightArrowIconPath(const QString& p) { mRightArrowIconPath = p; }
 
-    public Q_SLOTS:
+    private Q_SLOTS:
         void addProperty();
         void deleteProperty();
+        void handleNameChanged(const QString& txt);
+
     private:
         QWizard* mWizard;
         QGridLayout* mLayout;
@@ -116,8 +116,7 @@ namespace hal {
         QIcon mRightArrowIcon;
 
         const GateLibrary* mGateLibrary;
-        bool mIsEdit;
-        QString gateInit;
+        QString mNameInit;
 
         QString mDisabledIconStyle;
         QString mEnabledIconStyle;
