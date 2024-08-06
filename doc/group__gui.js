@@ -407,6 +407,7 @@ var group__gui =
       [ "isModifying", "classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d", null ],
       [ "moduleAssignGate", "classhal_1_1_module_model.html#ae12115af71e541b27ce7c63a40df50e9", null ],
       [ "moduleAssignNets", "classhal_1_1_module_model.html#a5054952ed8223b6b50cea83dedfa090b", null ],
+      [ "populateFromGatelist", "classhal_1_1_module_model.html#a7f7038bfa295db890f3093859417c75d", null ],
       [ "populateTree", "classhal_1_1_module_model.html#ad71349cba1c0411437ea063d84a85a67", null ],
       [ "removeChildItem", "classhal_1_1_module_model.html#ad1fc84abc9e0ed3dd140c02cc83c75fc", null ],
       [ "removeGate", "classhal_1_1_module_model.html#a4bbb17f1eb8cae8afd62ad9fdae6ca65", null ],

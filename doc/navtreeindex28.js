@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"namespacehal_1_1boolean__influence.html#ae4db5ecda63a25949aa5d2098568f4cc":[5,0,2,0,4],
+"namespacehal_1_1core__strings.html":[5,0,2,2],
 "namespacehal_1_1core__strings.html#a37f09aeed09bf8c9d56b599ffcdceef2":[5,0,2,2,2],
 "namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6":[5,0,2,2,1],
 "namespacehal_1_1dataflow.html":[5,0,2,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "namespacemembers_func_e.html":[5,1,1,4],
 "namespacemembers_func_f.html":[5,1,1,5],
 "namespacemembers_func_g.html":[5,1,1,6],
-"namespacemembers_func_h.html":[5,1,1,7],
-"namespacemembers_func_i.html":[5,1,1,8],
-"namespacemembers_func_j.html":[5,1,1,9]
+"namespacemembers_func_h.html":[5,1,1,7]
 };

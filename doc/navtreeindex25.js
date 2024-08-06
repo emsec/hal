@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"group__events.html":[4,1,0,6],
+"group__file__management.html":[4,0,6],
 "group__gate__lib.html":[4,1,0,4],
 "group__gate__lib__parser.html":[4,1,0,4,0],
 "group__gate__lib__writer.html":[4,1,0,4,1],
@@ -37,8 +39,8 @@ var NAVTREEINDEX25 =
 "group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[4,1,3,17],
 "group__pybind.html#ga23445061a41678f413471f3459e241d4":[5,0,2,500],
 "group__pybind.html#ga23445061a41678f413471f3459e241d4":[4,1,3,16],
-"group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[4,1,3,21],
 "group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[5,0,2,508],
+"group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[4,1,3,21],
 "group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[5,0,2,517],
 "group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[4,1,3,29],
 "group__pybind.html#ga3e97835fd6fda5f038f92cefbcdcf57b":[5,0,2,493],
@@ -93,8 +95,8 @@ var NAVTREEINDEX25 =
 "group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[5,0,2,515],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[5,0,2,486],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[4,1,3,6],
-"group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[5,0,2,480],
 "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[4,1,3,2],
+"group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[5,0,2,480],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[5,0,2,526],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[4,1,3,30],
 "group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb":[5,0,2,481],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "index.html#autotoc_md34":[0,4],
 "index.html#autotoc_md35":[0,4,0],
 "index.html#autotoc_md36":[0,4,1],
-"index.html#autotoc_md37":[0,5],
-"index.html#autotoc_md38":[0,6],
-"index.html#autotoc_md39":[0,7]
+"index.html#autotoc_md37":[0,5]
 };

@@ -11,6 +11,7 @@ var classhal_1_1_plugin_parameter =
       [ "Float", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599", null ],
       [ "Gate", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3ab42f70edfee84b9b60cb31400e0459dd", null ],
       [ "Integer", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a4195f8457db73a0026d759cde17117fd", null ],
+      [ "Label", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3add4373227cfaa6913da0d7f431f7fc1a", null ],
       [ "Module", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3aff7defeebd439fa0afc0445f0350e158", null ],
       [ "NewFile", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a3e2a0a737547345462b8eefb23f77de2", null ],
       [ "PushButton", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3ac582236d1763d8baed9b45dc9ec2d473", null ],
