@@ -25,6 +25,8 @@
 !hgl_writer/**/*
 !liberty_parser*
 !liberty_parser/**/*
+!logic_evaluator*
+!logic_evaluator/**/*
 !module_identification*
 !module_identification/**/*
 !netlist_preprocessing*

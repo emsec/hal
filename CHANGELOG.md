@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
     * added `json.hpp` from nlohmann to deps to offer a light weight json api
     * adapted cmake to consider the correct flags when finding and linking against the new version of Bitwuzla
 * miscellaneous
+  * added logic evaluator plugin
   * added backward compatibility for view management
   * slightly improved symbolic execution engine
   * added a version of `netlist_factory::load_netlist` that takes a path to a netlist file as well as a pointer to a gate library
