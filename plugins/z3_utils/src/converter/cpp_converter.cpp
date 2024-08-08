@@ -1,4 +1,4 @@
-#include "converter/cpp_converter.h"
+#include "z3_utils/converter/cpp_converter.h"
 
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
@@ -26,6 +26,7 @@ namespace hal
             }
 
             log_error("z3_utils", "Unkown operand format for {}!", operand);
+            exit(0);
             return "NOT IMPLEMENTED REACHED";
         }
 

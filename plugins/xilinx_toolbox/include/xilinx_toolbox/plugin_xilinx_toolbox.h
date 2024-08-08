@@ -31,7 +31,6 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/result.h"
 
 namespace hal
 {
@@ -83,24 +82,5 @@ namespace hal
          * @returns A set of plugin names that this plugin depends on.
          */
         std::set<std::string> get_dependencies() const override;
-
-        // preprocessing
-
-        /**
-         * Removes all LUTs with multiple outputs and replaces them with equivalent smaller LUTs.
-         * 
-         * @param[in] nl - The netlist to operate on. 
-         * @return The number of removed gates on success, an error otherwise.
-         */
-        static Result<u32> split_luts(Netlist* nl);
-
-        /**
-         * Parses an .xdc file and extracts the position LOC and BEL data.
-         * Afterwards translates the found LOC and BEL data into integer coordinates.
-         * 
-         * @param[in] nl - The netlist to operate on. 
-         * @return The number of removed gates on success, an error otherwise.
-         */
-        static Result<std::monostate> parse_xdc_file(Netlist* nl, const std::filesystem::path& xdc_file);
     };
 }    // namespace hal

@@ -669,6 +669,12 @@ namespace hal
             mCoordY[pnt.y()].testMinMax(rect.bottom());
         }
 
+        // add topmost and leftmost coordinate entry (unless it already exists)
+        if (!mCoordX.contains(mNodeBoundingBox.left()))
+            mCoordX[mNodeBoundingBox.left()].testMinMax(0);
+        if (!mCoordY.contains(mNodeBoundingBox.top()))
+            mCoordY[mNodeBoundingBox.top()].testMinMax(0);
+
         // fill gaps in coordinate system if any
         if (!mCoordX.isEmpty())
         {

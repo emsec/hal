@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 4,
     "library": "EXAMPLE_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",
@@ -166,7 +166,7 @@
                         {
                             "name": "I0",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -180,7 +180,7 @@
                         {
                             "name": "I1",
                             "direction": "input",
-                            "type": "none"
+                            "type": "data"
                         }
                     ]
                 },
@@ -208,7 +208,7 @@
                         {
                             "name": "O",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! S) & I0) | (S & I1))"
                         }
                     ]

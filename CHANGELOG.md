@@ -1,7 +1,63 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [Unreleased] 
+
+## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
+* fixed `hal_py.GateLibrary.gate_types` pybind
+* fixed `hal_py.NetlistFactory.load_netlist` pybind
+
+## [4.4.0](v4.4.0) - 2024-07-19 15:55:24+02:00 (urgency: medium)
+* **WARNING:** this release breaks the API of the `boolean_influence` and `bitorder_propagation` plugin
+* **WARNING:** this release contains many new unstable plugin APIs that will likely change in the future
+* plugins
+  * updated `boolean_influence` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * file structure and namespace clean up
+  * added `resynthesis` plugin
+    * moved `decompose_gate` and `decompose_gates_of_type` from `netlist_preprocessing` plugin and slightly changed their API
+    * added functions for logic re-synthesis that write out parts of the current netlist and call Yosys as an open-source synthesizer to produce a new gate-level netlist based on a user-defined gate library
+  * changed `bitorder_propagation` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * changed propagation logic for better results
+  * updated `z3_utils`plugin
+    * general code and file structure clean up as well as more documentation
+    * added comprehensive simplification logic that is able to simplify `z3::expr` using an extended rule set as the simplification of `hal::BooleanFunction`
+  * added `module_identification` plugin 
+    * allows a user to automatically search for arithmetic structures in the netlist
+  * added `sequential_symbolic_execution` plugin
+    * allows the user to perform symbolic execution over mulitple cycles including sequential elements
+  * added first rudimentary version of `genlib_writer` that allows to write the combinational gates of a gate library in genlib format which is required for resynthesis.
+* core
+  * decorators
+    * added `NetlistModificationDecorator::add_vcc/gnd_nets()` to create ground and power nets for netlists that do not have a ground/power net already
+  * added `SMT::Solver::query_local()` variant that directly takes an SMT representation of a Solver query
+  * added `Netlist::get_gnd/vcc_nets()` to get all global ground and power nets
+* deps
+    * added `json.hpp` from nlohmann to deps to offer a light weight json api
+    * adapted cmake to consider the correct flags when finding and linking against the new version of Bitwuzla
+* miscellaneous
+  * added logic evaluator plugin
+  * added backward compatibility for view management
+  * slightly improved symbolic execution engine
+  * added a version of `netlist_factory::load_netlist` that takes a path to a netlist file as well as a pointer to a gate library
+  * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
+  * added `utils::get_unique_temp_directory`
+  * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
+  * added `all_global_io` parameter to `SubgraphNetlistDecorator::copy_subgraph_netlist` to configure labeling of global inputs and outputs
+  * added datatype `ExistingFile` to plugin parameter 
+  * added helper gate libraries needed for resynthesis; this is a dirty hack, expect more changes later
+  * changed MUX data input and output pins in all gate libraries to `PinType::data`
+* bugfixes
+  * fixed incompatibility between shipped zlib and QuaZip libraries
+  * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
+  * fixed bugs related to the Boolean function SLICE operation 
+  * fixed VCD writer of `netlist_simulation_controller` plugin
+  * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
+  * fixed layout bug which occured when leftmost node had no inputs
+  * fixed missing sort indicator when sorting entries in `Views` widget
+  * fixed bug loading simulation data by cleaning map before loading controller from project
+  * fixed bug that occured when trying to generate the Boolean influence for a constant Boolean function  
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS

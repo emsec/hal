@@ -52,8 +52,6 @@ namespace hal
             assert(ordered_modules.back()->is_top_module() == true);
         }
 
-        // TODO take care of 1 and 0 nets (probably rework their handling within the core to supply a "is_gnd_net" and "is_vcc_net" function)
-
         std::unordered_map<const Module*, std::string> module_aliases;
         std::unordered_map<std::string, u32> module_identifier_occurrences;
         for (Module* mod : ordered_modules)
@@ -177,8 +175,21 @@ namespace hal
 
             if (aliases.find(net) == aliases.end())
             {
-                aliases[net] = escape(get_unique_alias(identifier_occurrences, net->get_name()));
-                res_stream << "    wire " << aliases.at(net) << ";" << std::endl;
+                auto net_alias = escape(get_unique_alias(identifier_occurrences, net->get_name()));
+                aliases[net]   = net_alias;
+
+                res_stream << "    wire " << net_alias;
+
+                if (net->is_vcc_net() && net->get_num_of_sources() == 0)
+                {
+                    res_stream << " = 1'b1";
+                }
+                else if (net->is_gnd_net() && net->get_num_of_sources() == 0)
+                {
+                    res_stream << " = 1'b0";
+                }
+
+                res_stream << ";" << std::endl;
             }
         }
 
@@ -367,7 +378,7 @@ namespace hal
             res_stream << "        ." << escape(pin) << "(";
             if (nets.size() > 1)
             {
-                res_stream << "{";
+                res_stream << "{" << std::endl << "            ";
             }
 
             bool first_net = true;
@@ -375,17 +386,14 @@ namespace hal
             {
                 const Net* net = *it;
 
+                if (!first_net)
+                {
+                    res_stream << "," << std::endl << "            ";
+                }
+                first_net = false;
+
                 if (net != nullptr)
                 {
-                    if (first_net)
-                    {
-                        first_net = false;
-                    }
-                    else
-                    {
-                        res_stream << "," << std::endl;
-                    }
-
                     if (const auto alias_it = aliases.find(net); alias_it != aliases.end())
                     {
                         res_stream << alias_it->second;
@@ -398,13 +406,13 @@ namespace hal
                 else
                 {
                     // unconnected pin of a group with at least one connection
-                    res_stream << "1'bz";
+                    res_stream << "HAL_UNUSED_SIGNAL";
                 }
             }
 
             if (nets.size() > 1)
             {
-                res_stream << "}";
+                res_stream << std::endl << "        }";
             }
 
             res_stream << ")";
@@ -474,7 +482,7 @@ namespace hal
     std::string VerilogWriter::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
         name_occurrences[name]++;
-        
+
         // if the name only appears once, we don't have to suffix it
         if (name_occurrences[name] < 2)
         {

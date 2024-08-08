@@ -1,0 +1,12 @@
+option(PL_GENLIB_WRITER "PL_GENLIB_WRITER" OFF)
+if(PL_GENLIB_WRITER OR BUILD_ALL_PLUGINS)
+    file(GLOB_RECURSE GENLIB_WRITER_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+    file(GLOB_RECURSE GENLIB_WRITER_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+    file(GLOB_RECURSE GENLIB_WRITER_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
+
+    hal_add_plugin(genlib_writer
+                   SHARED
+                   HEADER ${GENLIB_WRITER_INC}
+                   SOURCES ${GENLIB_WRITER_SRC} ${GENLIB_WRITER_PYTHON_SRC}
+                   )
+endif()

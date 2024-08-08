@@ -8,7 +8,7 @@ if(PL_Z3_UTILS OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${Z3_UTILS_INC}
                    SOURCES ${Z3_UTILS_SRC} ${Z3_UTILS_PYTHON_SRC}
-                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} OpenMP::OpenMP_CXX
+                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} OpenMP::OpenMP_CXX nlohmann_json::nlohmann_json
                    )
     
     add_subdirectory(test)
