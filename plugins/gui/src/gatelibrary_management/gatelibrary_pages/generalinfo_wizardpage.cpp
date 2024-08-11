@@ -112,7 +112,9 @@ namespace hal
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
         connect(mName, &QLineEdit::textChanged, this, &GeneralInfoWizardPage::handleNameChanged);
 
-
+        QRegExp rx("[A-Z]([A-Z]|\\d|_)*");
+        mValidator = new QRegExpValidator(rx, this);
+        mName->setValidator(mValidator);
     }
 
     void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)
@@ -177,9 +179,14 @@ namespace hal
         if (getProperties().isEmpty() || mName->text().isEmpty()) return false;
 
         if (mName->text() == mNameInit) return true; // name of existing type unchanged
+
         for (auto it : mGateLibrary->get_gate_types())
         {
             if (QString::fromStdString(it.first) == mName->text())
+                return false;
+            int pos=0;
+            QString name = mName->text();
+            if(mValidator->validate(name, pos) != QValidator::Acceptable)
                 return false;
         }
         return true;

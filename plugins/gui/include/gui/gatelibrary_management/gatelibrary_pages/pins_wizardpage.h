@@ -42,11 +42,12 @@ namespace hal {
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
         void initializePage() override;
-        bool validatePage() override;
+        bool isComplete() const override;
         QList<PinItem*> getPingroups();
 
     public Q_SLOTS:
         void handleDeleteClicked();
+        void handlePinModelChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     private:
         GateLibraryWizard* mWizard;
         PinModel* mPinModel;

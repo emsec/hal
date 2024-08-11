@@ -117,6 +117,7 @@ namespace hal {
 
         const GateLibrary* mGateLibrary;
         QString mNameInit;
+        QValidator* mValidator;
 
         QString mDisabledIconStyle;
         QString mEnabledIconStyle;
