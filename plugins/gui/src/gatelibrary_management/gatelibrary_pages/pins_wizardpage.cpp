@@ -54,6 +54,7 @@ namespace hal
         for(auto ch : mPinModel->getRootItem()->getChildren()) //check pin direction of groups
         {
             PinItem* pg = static_cast<PinItem*>(ch);
+            if(pg->getItemType() != PinItem::TreeItemType::GroupCreator) hasPingroup = true;
             if(pg->getItemType() == PinItem::TreeItemType::InvalidPinGroup) return false;
             if(!pg->getChildren().isEmpty())
             {
@@ -63,6 +64,6 @@ namespace hal
                 }
             }
         }
-        return true;
+        return hasPingroup;
     }
 }

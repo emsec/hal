@@ -25,6 +25,7 @@
 
 #pragma once
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
+#include "gui/pin_model/pin_item.h"
 
 
 #include <QWizardPage>
@@ -35,13 +36,19 @@
 #include <QLabel>
 
 namespace hal {
+    class GateLibraryWizard;
     class StateWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
         friend class BoolWizardPage;
     public:
+        Q_OBJECT
         StateWizardPage(QWidget* parent = nullptr);
         void setData(GateType* gate);
-
+        void initializePage() override;
+        bool isComplete() const override;
+    private Q_SLOTS:
+        void handleTextChanged(const QString &text);
+        void handleNegTextChanged(const QString &text);
     private:
         QGridLayout* mLayout;
 
@@ -50,5 +57,9 @@ namespace hal {
 
         QLabel* mLabStateIdentifier;
         QLabel* mLabNegStateIdentifier;
+
+        GateLibraryWizard* mWizard;
+        QList<PinItem*> mPinGroups;
+        QValidator* mValidator;
     };
 }

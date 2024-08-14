@@ -184,10 +184,6 @@ namespace hal
         {
             if (QString::fromStdString(it.first) == mName->text())
                 return false;
-            int pos=0;
-            QString name = mName->text();
-            if(mValidator->validate(name, pos) != QValidator::Acceptable)
-                return false;
         }
         return true;
     }

@@ -67,14 +67,6 @@ namespace hal
         }
     }
 
-    /*
-    void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)
-    {
-        mGateLibrary = gateLibrary;
-        mGateType = gateType;
-    }
-    */
-
     void GateLibraryWizard::accept()
     {
         //Convert QStringList to std::set
@@ -265,20 +257,27 @@ namespace hal
         case GeneralInfo:
             return Pin;
         case Pin:
-            if(properties.contains(GateTypeProperty::ff)) return FlipFlop;
-            else if(properties.contains(GateTypeProperty::latch)) return Latch;
+            if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch)) return State;
+            /*if(properties.contains(GateTypeProperty::ff)) return FlipFlop;
+            else if(properties.contains(GateTypeProperty::latch)) return Latch;*/
             else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
+            return BoolFunc;  
+        case State:
+            if(properties.contains(GateTypeProperty::ff)) return FlipFlop;
+            else if (properties.contains(GateTypeProperty::latch)) return Latch;
+            else if (properties.contains(GateTypeProperty::c_lut)) return LUT;
+            else if (properties.contains(GateTypeProperty::ram)) return Init;
             return BoolFunc;
         case FlipFlop:
             if(properties.contains(GateTypeProperty::latch)) return Latch;
             else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
-            return State;
+            return BoolFunc;
         case Latch:
             if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
-            return State;
+            return BoolFunc;
         case LUT:
             if(properties.contains(GateTypeProperty::ram)) return RAM;
             return Init;
@@ -287,9 +286,6 @@ namespace hal
         case RAMPort:
             if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch)) return State;
             return Init;
-        case State:
-            if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch) || properties.contains(GateTypeProperty::c_lut) || properties.contains(GateTypeProperty::ram)) return Init;
-            return BoolFunc;
         case Init:
             if(properties.contains(GateTypeProperty::c_lut)) return -1;
             return BoolFunc;

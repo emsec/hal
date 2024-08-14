@@ -22,6 +22,20 @@ namespace hal
         mLayout->addWidget(mNegStateIdentifier, 1, 1);
 
         setLayout(mLayout);
+
+        connect(mStateIdentifier, &QLineEdit::textChanged, this, &StateWizardPage::handleTextChanged);
+        connect(mNegStateIdentifier, &QLineEdit::textChanged, this, &StateWizardPage::handleNegTextChanged);
+
+        QRegExp rx("[A-Z]([A-Z]|\\d|_)*");
+        mValidator = new QRegExpValidator(rx, this);
+        mStateIdentifier->setValidator(mValidator);
+        mNegStateIdentifier->setValidator(mValidator);
+    }
+
+    void StateWizardPage::initializePage()
+    {
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        mPinGroups = mWizard->getPingroups();
     }
 
     void StateWizardPage::setData(GateType *gate){
@@ -35,5 +49,34 @@ namespace hal
                 mNegStateIdentifier->setText(QString::fromStdString(stat->get_neg_state_identifier()));
             }
         }
+    }
+
+    void StateWizardPage::handleTextChanged(const QString &text)
+    {
+        mNegStateIdentifier->setText(QString("%1N").arg(mStateIdentifier->text()));
+        Q_UNUSED(text);
+        Q_EMIT completeChanged();
+    }
+
+    void StateWizardPage::handleNegTextChanged(const QString &text)
+    {
+        Q_UNUSED(text);
+        Q_EMIT completeChanged();
+    }
+
+    bool StateWizardPage::isComplete() const
+    {
+        if(mStateIdentifier->text().isEmpty() || mNegStateIdentifier->text().isEmpty()) return false;
+        for (auto pingroup : mPinGroups) { //check if pins name is used as a state identifier name
+            QString groupName = pingroup->getName();
+            if(mStateIdentifier->text() == groupName || mNegStateIdentifier->text() == groupName) return false;
+            for(auto it : pingroup->getChildren())
+            {
+                PinItem* pin = static_cast<PinItem*>(it);
+                QString pinName = pin->getName();
+                if(mStateIdentifier->text() == pinName || mNegStateIdentifier->text() == pinName) return false;
+            }
+        }
+        return true;
     }
 }
