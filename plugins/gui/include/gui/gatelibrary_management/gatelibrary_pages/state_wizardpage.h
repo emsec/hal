@@ -39,6 +39,7 @@ namespace hal {
     class GateLibraryWizard;
     class StateWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
+        friend class FlipFlopWizardPage;
         friend class BoolWizardPage;
     public:
         Q_OBJECT

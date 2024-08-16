@@ -13,10 +13,10 @@ namespace hal
         mLayout = new QGridLayout(this);
         mTabWidget = new QTabWidget(this);
 
-        mClock = new QLineEdit(this);
-        mNextState = new QLineEdit(this);
-        mAReset = new QLineEdit(this);
-        mASet = new QLineEdit(this);
+        mClock = new BooleanFunctionEdit(mLegVars, this);
+        mNextState = new BooleanFunctionEdit(mLegVars, this);
+        mAReset = new BooleanFunctionEdit(mLegVars, this);
+        mASet = new BooleanFunctionEdit(mLegVars, this);
         mIntState = new QLineEdit(this);
         mNegIntState = new QLineEdit(this);
 
@@ -43,17 +43,67 @@ namespace hal
         //TODO:
         //mTabWidget->addTab(mStateTableTab, "State Table");
 
-        //mAReset->setDisabled(true);
-        //mASet->setDisabled(true);
-
         setLayout(mLayout);
 
+        connect(mClock, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
+        connect(mNextState, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
+        connect(mAReset, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
+        connect(mASet, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
+        connect(mIntState, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
+        connect(mNegIntState, &QLineEdit::textChanged, this, &FlipFlopWizardPage::handleTextChanged);
     }
 
     void FlipFlopWizardPage::initializePage()
     {
-        //qInfo() << field("name").toString();
-        //qInfo() << field("properties").toInt();
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
+        for (PinItem* pi : inputPins)
+            mLegVars.insert(pi->getName().toStdString());
+
+        mClock->setLegalVariables(mLegVars);
+        mNextState->setLegalVariables(mLegVars);
+        mAReset->setLegalVariables(mLegVars);
+        mASet->setLegalVariables(mLegVars);
+
+        if(mWizard->statePage->mNegStateIdentifier->text().isEmpty())
+        {
+            mNegIntState->clear();
+            mNegIntState->setDisabled(true);
+        }
+        else mNegIntState->setDisabled(false);
+
+        QList<PinItem*> pingroups = mWizard->getPingroups();
+        for (PinItem* pg : pingroups) {
+            if(pg->getPinType() == PinType::clock) { //assuming pins have the same type as the pingroup
+                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
+                mClock->setText(p->getName()); //name of first pin with type clock
+            }
+            if(pg->getPinType() == PinType::reset) {
+                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
+                mAReset->setText(p->getName()); //name of first pin with type reset
+            }
+            if(pg->getPinType() == PinType::set) {
+                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
+                mASet->setText(p->getName()); //name of first pin with type set
+            }
+        }
+    }
+
+    void FlipFlopWizardPage::handleTextChanged(const QString& text){
+        Q_UNUSED(text);
+        if(mASet->text().isEmpty() || mAReset->text().isEmpty())
+        {
+            mIntState->clear();
+            mNegIntState->clear();
+            mIntState->setDisabled(true);
+            mNegIntState->setDisabled(true);
+        }
+        else
+        {
+            mIntState->setDisabled(false);
+            mNegIntState->setDisabled(false);
+        }
+        Q_EMIT completeChanged();
     }
 
     void FlipFlopWizardPage::setData(GateType *gate){
@@ -86,5 +136,27 @@ namespace hal
                 else mNegIntState->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(negStateBeh)));
             }
         }
+    }
+
+
+    bool FlipFlopWizardPage::isComplete() const{
+        if(mClock->text().isEmpty() || mNextState->text().isEmpty()) return false;
+        if(!mClock->isValid() || !mNextState->isValid() || !mAReset->isValid() || !mASet->isValid()) return false;
+        if(!mASet->text().isEmpty() && !mAReset->text().isEmpty())
+        {
+            if(mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::H) &&
+                    mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::L) &&
+                    mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::N) &&
+                    mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::T) &&
+                    mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::X))
+                return false;
+            if(mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::H) &&
+                    mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::L) &&
+                    mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::N) &&
+                    mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::T) &&
+                    mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::X))
+                return false;
+        }
+        return true;
     }
 }

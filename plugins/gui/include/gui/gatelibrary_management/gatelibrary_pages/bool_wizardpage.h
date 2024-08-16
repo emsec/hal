@@ -60,12 +60,14 @@ namespace hal {
         static const char* STATE_INVALID;
     Q_SIGNALS:
         void stateChanged(QString s);
+        void legalVariablesChanged(std::set<std::string> legalVar);
     private Q_SLOTS:
         void handleEditingFinished();
     public:
         BooleanFunctionEdit(std::set<std::string>& legalVar, QWidget* parent = nullptr);
         QString state() const { return mState; }
         void setState(const QString& s);
+        void setLegalVariables(std::set<std::string>& legalVar);
         bool isValid() const { return mState == STATE_VALID; }
     };
 

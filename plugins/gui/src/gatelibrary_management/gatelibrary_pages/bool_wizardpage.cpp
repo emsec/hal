@@ -12,6 +12,7 @@ namespace hal
         : QLineEdit(parent), mState(STATE_VALID), mLegalVariables(legalVar)
     {
         connect(this, &QLineEdit::textChanged, this, &BooleanFunctionEdit::handleEditingFinished);
+        connect(this, &BooleanFunctionEdit::legalVariablesChanged, this, &BooleanFunctionEdit::handleEditingFinished);
 
         setState(STATE_EMPTY); // do an active transition to enforce style
     }
@@ -25,6 +26,12 @@ namespace hal
 
         sty->unpolish(this);
         sty->polish(this);
+    }
+
+    void BooleanFunctionEdit::setLegalVariables(std::set<std::string> &legalVar)
+    {
+        mLegalVariables = legalVar;
+        Q_EMIT legalVariablesChanged(legalVar);
     }
 
     void BooleanFunctionEdit::handleEditingFinished()

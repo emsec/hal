@@ -47,6 +47,7 @@ namespace hal
     {
         friend class RAMPortWizardPage;
         friend class PinsWizardPage;
+        friend class FlipFlopWizardPage;
         friend class StateWizardPage;
         friend class BoolWizardPage;
     public:

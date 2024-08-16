@@ -24,8 +24,8 @@
 // SOFTWARE.
 
 #pragma once
-//#include "gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.cpp"
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/bool_wizardpage.h"
 
 
 #include <QWizardPage>
@@ -35,21 +35,26 @@
 #include <QLabel>
 
 namespace hal {
+    class GateLibraryWizard;
     class FlipFlopWizardPage:public QWizardPage{
+        Q_OBJECT
         friend class GateLibraryWizard;
     public:
         FlipFlopWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
         void setData(GateType* gate);
+        bool isComplete() const override;
 
+    public Q_SLOTS:
+        void handleTextChanged(const QString& txt);
     private:
         QGridLayout* mLayout;
         QTabWidget* mTabWidget;
 
-        QLineEdit* mClock;
-        QLineEdit* mNextState;
-        QLineEdit* mAReset;
-        QLineEdit* mASet;
+        BooleanFunctionEdit* mClock;
+        BooleanFunctionEdit* mNextState;
+        BooleanFunctionEdit* mAReset;
+        BooleanFunctionEdit* mASet;
         QLineEdit* mIntState;
         QLineEdit* mNegIntState;
 
@@ -59,5 +64,8 @@ namespace hal {
         QLabel* mLabASet;
         QLabel* mLabIntState;
         QLabel* mLabNegIntState;
+
+        GateLibraryWizard* mWizard;
+        std::set<std::string> mLegVars;
     };
 }

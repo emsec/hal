@@ -66,7 +66,7 @@ namespace hal
 
     bool StateWizardPage::isComplete() const
     {
-        if(mStateIdentifier->text().isEmpty() || mNegStateIdentifier->text().isEmpty()) return false;
+        if(mStateIdentifier->text().isEmpty()) return false;
         for (auto pingroup : mPinGroups) { //check if pins name is used as a state identifier name
             QString groupName = pingroup->getName();
             if(mStateIdentifier->text() == groupName || mNegStateIdentifier->text() == groupName) return false;
