@@ -36,6 +36,7 @@
 #include <QVariant>
 #include <set>
 #include <array>
+#include <vector>
 #include <QTextStream>
 
 namespace hal
@@ -152,6 +153,15 @@ namespace hal
          * @param netIds QVector of ids of nets to be added to the item model. 
         */
         void populateTree(const QVector<u32>& modIds = {}, const QVector<u32>& gatIds = {}, const QVector<u32>& netIds = {});
+
+        /**
+         * Clears current tree item model and repopulates it by a list of gates. This function will
+         * automatically load all parent modules to gates listed. Thus gates will be shown at their
+         * place within the module hierarchy.
+         *
+         * @param gates std::vector of gates to be added to the item model.
+        */
+        void populateFromGatelist(const std::vector<Gate*>& gates);
 
         /**
          * Add a module to the item model. For the specified module new ModuleItems are created and stored.
