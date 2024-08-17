@@ -26,7 +26,7 @@ namespace hal
         connect(mStateIdentifier, &QLineEdit::textChanged, this, &StateWizardPage::handleTextChanged);
         connect(mNegStateIdentifier, &QLineEdit::textChanged, this, &StateWizardPage::handleNegTextChanged);
 
-        QRegExp rx("[A-Z]([A-Z]|\\d|_)*");
+        QRegExp rx("[A-z]([A-z]|\\d|_)*");
         mValidator = new QRegExpValidator(rx, this);
         mStateIdentifier->setValidator(mValidator);
         mNegStateIdentifier->setValidator(mValidator);

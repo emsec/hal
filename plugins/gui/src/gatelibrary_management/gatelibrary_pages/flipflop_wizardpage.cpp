@@ -65,6 +65,9 @@ namespace hal
         mAReset->setLegalVariables(mLegVars);
         mASet->setLegalVariables(mLegVars);
 
+        if(mASet->text().isEmpty() || mASet->text() == "N/A") mASet->setState("Valid");
+        if(mAReset->text().isEmpty() || mAReset->text() == "N/A") mAReset->setState("Valid");
+
         if(mWizard->statePage->mNegStateIdentifier->text().isEmpty())
         {
             mNegIntState->clear();
@@ -87,10 +90,14 @@ namespace hal
                 mASet->setText(p->getName()); //name of first pin with type set
             }
         }
+        Q_EMIT completeChanged();
     }
 
     void FlipFlopWizardPage::handleTextChanged(const QString& text){
         Q_UNUSED(text);
+        if(mASet->text().isEmpty() || mASet->text() == "N/A") mASet->setState("Valid");
+        if(mAReset->text().isEmpty() || mAReset->text() == "N/A") mAReset->setState("Valid");
+
         if(mASet->text().isEmpty() || mAReset->text().isEmpty())
         {
             mIntState->clear();
@@ -103,6 +110,7 @@ namespace hal
             mIntState->setDisabled(false);
             mNegIntState->setDisabled(false);
         }
+
         Q_EMIT completeChanged();
     }
 
