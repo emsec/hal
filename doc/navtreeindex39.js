@@ -1,5 +1,8 @@
 var NAVTREEINDEX39 =
 {
+"splitter_8h.html":[7,0,1,3,0,0,45,0],
+"splitter_8h_source.html":[7,0,1,3,0,0,45,0],
+"splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8cpp_source.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8h.html":[7,0,1,3,0,0,11,4],
 "splitter__anchor_8h_source.html":[7,0,1,3,0,0,11,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX39 =
 "struct_hop___obj__t__.html":[6,0,6],
 "struct_hop___obj__t__.html#a006caf7c7691e1c3b903825ad0620445":[6,0,6,11],
 "struct_hop___obj__t__.html#a0b17d970cfa4eddbabcedbeb2c772e35":[6,0,6,4],
-"struct_hop___obj__t__.html#a10b2958b6d36ba028fa6e40a6556d028":[6,0,6,5],
-"struct_hop___obj__t__.html#a1787bdb7ae1047d4d4c24c18cd4c7374":[6,0,6,2],
-"struct_hop___obj__t__.html#a1800cbcf86c24fbcb12843c30df454f4":[6,0,6,10],
-"struct_hop___obj__t__.html#a2a8eeb9bd50600247e6a76c773ee5f0d":[6,0,6,0]
+"struct_hop___obj__t__.html#a10b2958b6d36ba028fa6e40a6556d028":[6,0,6,5]
 };
