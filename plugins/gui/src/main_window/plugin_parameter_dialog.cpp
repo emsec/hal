@@ -132,6 +132,13 @@ namespace hal {
                 mWidgetMap[parTagname] = floatBox;
                 break;
             }
+            case PluginParameter::Label:
+            {
+                QLabel* label = new QLabel(this);
+                label->setText(parDefault);
+                mWidgetMap[parTagname] = label;
+                break;
+            }
             case PluginParameter::String:
             {
                 QLineEdit* ledit = new QLineEdit(this);
@@ -245,6 +252,11 @@ namespace hal {
             {
                 const QDoubleSpinBox* floatBox = static_cast<const QDoubleSpinBox*>(w);
                 par.set_value(QString::number(floatBox->value()).toStdString());
+                break;
+            }
+            case PluginParameter::Label:
+            {
+                par.set_value(std::string());
                 break;
             }
             case PluginParameter::String:

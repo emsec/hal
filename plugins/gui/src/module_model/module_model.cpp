@@ -118,6 +118,47 @@ namespace hal
         endResetModel();
     }
 
+    void ModuleModel::populateFromGatelist(const std::vector<Gate *> &gates)
+    {
+        setIsModifying(true);
+        beginResetModel();
+        clear();
+
+        QMap<Module*,ModuleItem*> parentMap;
+        for (const Gate* g : gates)
+        {
+            Module* parentModule = g->get_module();
+            ModuleItem* parentItem;
+            bool insertToRoot = true;
+            ModuleItem* childItem = new ModuleItem(g->get_id(), ModuleItem::TreeItemType::Gate);
+
+            while (parentModule && insertToRoot)
+            {
+                parentItem = parentMap.value(parentModule);
+                if (!parentItem)
+                {
+                    parentItem = new ModuleItem(parentModule->get_id(), ModuleItem::TreeItemType::Module);
+                    parentMap.insert(parentModule, parentItem);
+                }
+                else
+                {
+                    insertToRoot = false;
+                }
+                parentItem->appendChild(childItem);
+                parentModule = parentModule->get_parent_module();
+                childItem = parentItem;
+            }
+
+            if (insertToRoot)
+            {
+                mRootItem->appendChild(parentItem);
+            }
+        }
+
+        setIsModifying(false);
+        endResetModel();
+    }
+
     void ModuleModel::populateTree(const QVector<u32>& modIds, const QVector<u32>& gateIds, const QVector<u32>& netIds)
     {
         setIsModifying(true);

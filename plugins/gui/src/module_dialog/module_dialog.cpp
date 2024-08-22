@@ -96,11 +96,6 @@ namespace hal {
         mTreeView->setModel(mModuleTreeProxyModel);
         mTreeView->expandAll();
 
-        mModuleTableProxyModel = new ModuleSelectProxy(this),
-        mModuleTableProxyModel->setSourceModel(mTableView->model());
-        mTableView->setModel(mModuleTableProxyModel);
-
-
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 
@@ -116,7 +111,7 @@ namespace hal {
         if(mTabWidget->currentWidget() == mTreeView)
             mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
         else
-            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
+            mSearchbar->setColumnNames(static_cast<ModuleSelectProxy*>(mTableView->model())->getColumnNames());
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
         connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
@@ -128,7 +123,7 @@ namespace hal {
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTreeProxyModel, &ModuleProxyModel::startSearch);
-        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTableProxyModel, &ModuleSelectProxy::startSearch);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, static_cast<ModuleSelectProxy*>(mTableView->model()), &ModuleSelectProxy::startSearch);
     }
 
     void ModuleDialog::enableButtons()
@@ -247,7 +242,7 @@ namespace hal {
         if(mTabWidget->currentWidget() == mTreeView)
             mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
         else
-            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
+            mSearchbar->setColumnNames(static_cast<ModuleSelectProxy*>(mTableView->model())->getColumnNames());
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();

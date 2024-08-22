@@ -868,6 +868,7 @@ namespace hal
             GraphContext* ctx = gGraphContextManager->getContextById(ctxId);
             if (ctx) ctx->endChange();
         }
+        mBlockedContextIds.clear();
 
         mFileModifiedBar->setHidden(true);
     }
