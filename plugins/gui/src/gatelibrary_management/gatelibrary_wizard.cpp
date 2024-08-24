@@ -273,11 +273,11 @@ namespace hal
             if(properties.contains(GateTypeProperty::latch)) return Latch;
             else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
-            return BoolFunc;
+            return Init;
         case Latch:
             if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
-            return BoolFunc;
+            return Init;
         case LUT:
             if(properties.contains(GateTypeProperty::ram)) return RAM;
             return Init;

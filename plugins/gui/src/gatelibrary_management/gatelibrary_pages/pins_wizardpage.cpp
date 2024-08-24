@@ -15,6 +15,8 @@ namespace hal
         mDelBtn = new QPushButton("Delete", this);
         mPinModel = mPinTab->getPinModel();
 
+        mGateset = false;
+
         layout->addWidget(mDelBtn, 1, 0);
         layout->addWidget(mPinTab, 0, 0, 1, 2);
 
@@ -27,7 +29,11 @@ namespace hal
         mWizard = static_cast<GateLibraryWizard*>(wizard());
         mWizard->mPinModel = mPinModel;
 
-        mPinTab->update(mWizard->mGateType);
+        if(!mGateset)
+        {
+            mPinTab->update(mWizard->mGateType);
+            mGateset = true;
+        }
     }
 
     void PinsWizardPage::handleDeleteClicked()

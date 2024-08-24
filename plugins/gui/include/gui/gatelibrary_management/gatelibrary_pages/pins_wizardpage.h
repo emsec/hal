@@ -53,6 +53,7 @@ namespace hal {
         PinModel* mPinModel;
         QTreeView* mPinsTreeView;
         GateLibrary* mGateLibrary;
+        bool mGateset;
 
         GateLibraryTabPin* mPinTab;
         QPushButton* mDelBtn;

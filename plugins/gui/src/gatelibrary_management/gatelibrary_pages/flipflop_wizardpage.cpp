@@ -57,6 +57,8 @@ namespace hal
     {
         mWizard = static_cast<GateLibraryWizard*>(wizard());
         QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
+
+        mLegVars.clear();
         for (PinItem* pi : inputPins)
             mLegVars.insert(pi->getName().toStdString());
 
@@ -65,9 +67,6 @@ namespace hal
         mAReset->setLegalVariables(mLegVars);
         mASet->setLegalVariables(mLegVars);
 
-        if(mASet->text().isEmpty() || mASet->text() == "N/A") mASet->setState("Valid");
-        if(mAReset->text().isEmpty() || mAReset->text() == "N/A") mAReset->setState("Valid");
-
         if(mWizard->statePage->mNegStateIdentifier->text().isEmpty())
         {
             mNegIntState->clear();
@@ -75,29 +74,52 @@ namespace hal
         }
         else mNegIntState->setDisabled(false);
 
+        bool clock = false;
+        bool set = false;
+        bool reset = false;
+
         QList<PinItem*> pingroups = mWizard->getPingroups();
         for (PinItem* pg : pingroups) {
-            if(pg->getPinType() == PinType::clock) { //assuming pins have the same type as the pingroup
-                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
-                mClock->setText(p->getName()); //name of first pin with type clock
-            }
-            if(pg->getPinType() == PinType::reset) {
-                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
-                mAReset->setText(p->getName()); //name of first pin with type reset
-            }
-            if(pg->getPinType() == PinType::set) {
-                PinItem* p = static_cast<PinItem*>(pg->getChild(0));
-                mASet->setText(p->getName()); //name of first pin with type set
+            for(BaseTreeItem* it: pg->getChildren())
+            {
+                PinItem* p = static_cast<PinItem*>(it);
+                if(!clock && p->getPinType() == PinType::clock) {
+                    mClock->setText(p->getName()); //name of first pin with type clock
+                    clock = true;
+                }
+                if(!reset && p->getPinType() == PinType::reset) {
+                    mAReset->setText(p->getName()); //name of first pin with type reset
+                    reset = true;
+                }
+                if(!set && p->getPinType() == PinType::set) {
+                    mASet->setText(p->getName()); //name of first pin with type set
+                    set = true;
+                }
             }
         }
+
+        if(!clock) mClock->clear();
+        if(!reset) mAReset->clear();
+        if(!set) mASet->clear();
+
+        if(mASet->text().isEmpty() || mAReset->text().isEmpty())
+        {
+            mIntState->clear();
+            mNegIntState->clear();
+            mIntState->setDisabled(true);
+            mNegIntState->setDisabled(true);
+        }
+        else
+        {
+            mIntState->setDisabled(false);
+            mNegIntState->setDisabled(false);
+        }
+
         Q_EMIT completeChanged();
     }
 
     void FlipFlopWizardPage::handleTextChanged(const QString& text){
         Q_UNUSED(text);
-        if(mASet->text().isEmpty() || mASet->text() == "N/A") mASet->setState("Valid");
-        if(mAReset->text().isEmpty() || mAReset->text() == "N/A") mAReset->setState("Valid");
-
         if(mASet->text().isEmpty() || mAReset->text().isEmpty())
         {
             mIntState->clear();
@@ -149,7 +171,7 @@ namespace hal
 
     bool FlipFlopWizardPage::isComplete() const{
         if(mClock->text().isEmpty() || mNextState->text().isEmpty()) return false;
-        if(!mClock->isValid() || !mNextState->isValid() || !mAReset->isValid() || !mASet->isValid()) return false;
+        if(!mClock->isValid() || !mNextState->isValid() || mAReset->state() == "Invalid" || mASet->state() == "Invalid") return false;
         if(!mASet->text().isEmpty() && !mAReset->text().isEmpty())
         {
             if(mIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::H) &&
