@@ -142,6 +142,27 @@ if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
 endif()
 
 
+# ###############################
+# ####   Python support
+# ###############################
+
+# set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
+find_package(Python3 COMPONENTS Interpreter Development)
+
+if(Python3_Interpreter_FOUND)
+    message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
+    message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
+    message(STATUS "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
+    message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
+elseif(NOT Python3_Interpreter_FOUND)
+    set(Missing_package "TRUE")
+
+    if(APPLE AND CMAKE_HOST_APPLE)
+        message(STATUS "To install python3 on MacOS using homebrew run following command:")
+        message(STATUS "    brew install python3")
+    endif(APPLE AND CMAKE_HOST_APPLE)
+endif(Python3_Interpreter_FOUND)
+
 
 # ###############################
 # ####   pybind11
@@ -198,28 +219,6 @@ add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
 set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/nlohmann_json"
 )
-
-
-# ###############################
-# ####   Python support
-# ###############################
-
-# set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
-find_package(Python3 COMPONENTS Interpreter Development)
-
-if(Python3_Interpreter_FOUND)
-    message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
-    message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
-    message(STATUS "PYTHON_MODULE_PREFIX: ${PYTHON_MODULE_PREFIX}")
-    message(STATUS "PYTHON_MODULE_EXTENSION: ${PYTHON_MODULE_EXTENSION}")
-elseif(NOT Python3_Interpreter_FOUND)
-    set(Missing_package "TRUE")
-
-    if(APPLE AND CMAKE_HOST_APPLE)
-        message(STATUS "To install python3 on MacOS using homebrew run following command:")
-        message(STATUS "    brew install python3")
-    endif(APPLE AND CMAKE_HOST_APPLE)
-endif(Python3_Interpreter_FOUND)
 
 # ###############################
 # ####   Graphviz
