@@ -806,7 +806,7 @@ namespace hal
             act->exec();
         }
         else
-            gContentManager->getModuleWidget()->openModuleInView(id, true);
+            gGraphContextManager->openModuleInView(id, true);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)

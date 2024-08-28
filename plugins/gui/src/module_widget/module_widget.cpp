@@ -6,10 +6,6 @@
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/module_model/module_proxy_model.h"
-#include "gui/user_action/action_add_items_to_object.h"
-#include "gui/user_action/action_create_object.h"
-#include "gui/user_action/action_unfold_module.h"
-#include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -232,30 +228,6 @@ namespace hal
 
         QMenu context_menu;
 
-        switch(type) {
-            case ModuleItem::TreeItemType::Module:{
-                QAction* act = context_menu.addAction("Isolate in new view", [this,id](){openModuleInView(id, false);});
-
-                act = context_menu.addAction("Add selected gates to module", 
-                    [this,id](){gNetlistRelay->addSelectionToModule(id);});
-
-                act = context_menu.addAction("Add child module", 
-                    [this,id,index](){
-                        gNetlistRelay->addChildModuleDialog(id);
-                        mTreeView->setExpanded(index, true);
-                });
-                break;
-            }
-            case ModuleItem::TreeItemType::Gate: {
-                QAction* act = context_menu.addAction("Isolate in new view", [this,index](){openGateInView(index);});
-                break;
-            }
-            case ModuleItem::TreeItemType::Net: {
-                QAction* act = context_menu.addAction("Isolate in new view", [this,index](){openNetEndpointsInView(index);});
-                break;
-            }
-        }
-
         if(type == ModuleItem::TreeItemType::Module)
             ModuleContextMenu::addModuleSubmenu(&context_menu, id);
         else if(type == ModuleItem::TreeItemType::Gate)
@@ -264,9 +236,9 @@ namespace hal
             ModuleContextMenu::addNetSubmenu(&context_menu, id);
 
         GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
-                                            type==ModuleItem::TreeItemType::Module?std::vector<u32>({id}):std::vector<u32>(),
-                                            type==ModuleItem::TreeItemType::Gate?std::vector<u32>({id}):std::vector<u32>(),
-                                            type==ModuleItem::TreeItemType::Net?std::vector<u32>({id}):std::vector<u32>());
+            type==ModuleItem::TreeItemType::Module ? std::vector<u32>({id}) : std::vector<u32>(),
+            type==ModuleItem::TreeItemType::Gate ? std::vector<u32>({id}) : std::vector<u32>(),
+            type==ModuleItem::TreeItemType::Net ? std::vector<u32>({id}) : std::vector<u32>());
 
         context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
     }
@@ -346,84 +318,9 @@ namespace hal
     {
         ModuleItem* mi = getModuleItemFromIndex(index);
         switch(mi->getType()){
-            case ModuleItem::TreeItemType::Module: openModuleInView(getModuleItemFromIndex(index)->id(), false); break;
-            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
-            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
-        }
-    }
-
-    void ModuleWidget::openGateInView(const QModelIndex &index)
-    {
-        QSet<u32> gateId;
-        QSet<u32> moduleId;
-        QString name;
-
-        name = gGraphContextManager->nextViewName("Isolated View");
-        gateId.insert(getModuleItemFromIndex(index)->id());
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
-        act->addAction(new ActionAddItemsToObject(moduleId, gateId));
-        act->exec();
-    }
-
-    void ModuleWidget::openNetEndpointsInView(const QModelIndex &index){
-        QSet<u32> allGates;
-
-        Net* net = gNetlist->get_net_by_id(getModuleItemFromIndex(index)->id());
-
-        PlacementHint plc(PlacementHint::PlacementModeType::GridPosition);
-        int currentY = -(int)(net->get_num_of_sources()/2);
-        for(auto endpoint : net->get_sources()) {
-            u32 id = endpoint->get_gate()->get_id();
-            allGates.insert(id);
-            plc.addGridPosition(Node(id, Node::NodeType::Gate), {0, currentY++});
-        }
-        currentY = -(int)(net->get_num_of_destinations()/2);
-        for(auto endpoint : net->get_destinations()) {
-            u32 id = endpoint->get_gate()->get_id();
-            allGates.insert(id);
-            plc.addGridPosition(Node(id, Node::NodeType::Gate), {1, currentY++});
-        }
-
-        QString name = gGraphContextManager->nextViewName("Isolated View");
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
-        auto actionAITO = new ActionAddItemsToObject({}, allGates);
-        actionAITO->setPlacementHint(plc);
-        act->addAction(actionAITO);
-        act->exec();
-    }
-
-    void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
-    {
-        const Module* module = gNetlist->get_module_by_id(moduleId);
-
-        if (!module)
-            return;
-
-        GraphContext* moduleContext =
-                gGraphContextManager->getContextByExclusiveModuleId(moduleId);
-        if (moduleContext)
-        {
-            gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
-            gContentManager->getContextManagerWidget()->handleOpenContextClicked();
-        }
-        else
-        {
-            UserActionCompound* act = new UserActionCompound;
-            act->setUseCreatedObject();
-            QString name = QString::fromStdString(module->get_name()) + " (ID: " + QString::number(moduleId) + ")";
-            act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
-            act->addAction(new ActionAddItemsToObject({module->get_id()}, {}));
-            if (unfold) act->addAction(new ActionUnfoldModule(module->get_id()));
-            act->exec();
-            moduleContext = gGraphContextManager->getContextById(act->object().id());
-            moduleContext->setDirty(false);
-            moduleContext->setExclusiveModuleId(module->get_id());
+            case ModuleItem::TreeItemType::Module: gGraphContextManager->openModuleInView(mi->id(), false); break;
+            case ModuleItem::TreeItemType::Gate: gGraphContextManager->openGateInView(mi->id()); break;
+            case ModuleItem::TreeItemType::Net: gGraphContextManager->openNetEndpointsInView(mi->id()); break;
         }
     }
 

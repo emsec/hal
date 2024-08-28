@@ -117,7 +117,7 @@ namespace hal
         void changeModuleColorDialog(const u32 id);
 
         /**
-         * Adds the current selection to a specific module.
+         * Adds the currently selected gates to a specific module.
          *
          * @param id - The id of the module that should be appended
          */

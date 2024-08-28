@@ -76,8 +76,30 @@ namespace hal
          */
         GraphContext* createNewContext(const QString& name, u32 parentId = 0);
 
-
         ContextDirectory* createNewDirectory(const QString &name, u32 parentId = 0);
+
+        /**
+         * Opens a existing view that contains the given module, otherwise creates a new context
+         * and opens it.
+         *
+         * @param moduleId - The module to open.
+         * @param unfold - True to unfold the module upon opening.
+         */
+        void openModuleInView(u32 moduleId, bool unfold);
+
+        /**
+         * Creates and opens a new view that contains the given gate.
+         *
+         * @param netId - The gate to open.
+         */
+        void openGateInView(u32 gateId);
+
+        /**
+         * Creates and opens a new view that contains the sources and desinations of the given net.
+         *
+         * @param netId - The net to open.
+         */
+        void openNetEndpointsInView(u32 netId);
 
         /**
          * Renames a GraphContext. <br>

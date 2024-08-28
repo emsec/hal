@@ -248,6 +248,7 @@ namespace hal {
                                             const std::vector<u32>& gates,
                                             const std::vector<u32>& nets)
     {
+        bool addedSeparator = false;
         for(GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions())
         {
             geif->netlist_loaded(netlist);
@@ -255,7 +256,14 @@ namespace hal {
             if(contribution.size() <= 0)
                 continue;
 
-            QMenu *subMenu = contextMenu->addMenu(QString::fromStdString(contribution[0].mTagname));
+            if(!addedSeparator)
+            {
+                contextMenu->addSeparator();
+                contextMenu->addAction("Plugin actions:")->setEnabled(false);
+                addedSeparator = true;
+            }
+
+            QMenu *subMenu = contextMenu->addMenu("  " + QString::fromStdString(contribution[0].mTagname));
             for (ContextMenuContribution cmc : contribution)
             {
                 QAction *act = subMenu->addAction(QString::fromStdString(cmc.mEntry));
