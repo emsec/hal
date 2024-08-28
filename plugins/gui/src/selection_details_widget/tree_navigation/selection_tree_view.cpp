@@ -4,6 +4,8 @@
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/module_context_menu/module_context_menu.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/user_action_compound.h"
@@ -29,7 +31,6 @@ namespace hal
         connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handleCustomContextMenuRequested);
 
         connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
-        connect(this, &SelectionTreeView::focusItemClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
         connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionTreeView::handleModuleColorChanged);
     }
 
@@ -94,142 +95,22 @@ namespace hal
             QMenu menu;
 
             ModuleItem* item = itemFromIndex(index);
+            u32 id = item->id();
+            ModuleItem::TreeItemType type = item->getType();
 
-            if (item)
-            {
-                switch (item->getType())
-                {
-                    case ModuleItem::TreeItemType::Module:
+            if(type == ModuleItem::TreeItemType::Module)
+                ModuleContextMenu::addModuleSubmenu(&menu, id);
+            else if(type == ModuleItem::TreeItemType::Gate)
+                ModuleContextMenu::addGateSubmenu(&menu, id);
+            else if(type == ModuleItem::TreeItemType::Net)
+                ModuleContextMenu::addNetSubmenu(&menu, id);
 
-                        menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)", [item]() {
-                            QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
-                        });
-
-                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
-                        if (mIsGrouping)
-                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
-
-                        break;
-                    case ModuleItem::TreeItemType::Gate:
-
-                        menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)", [item]() {
-                            QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
-                        });
-
-                        menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
-                        if (mIsGrouping)
-                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
-
-                        break;
-                    case ModuleItem::TreeItemType::Net:
-
-                        menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)", [item]() {
-                            QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
-                        });
-                        if (mIsGrouping)
-                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
-
-                        break;
-                    default:    // make compiler happy
-                        break;
-                }
-            }
-
-            menu.addAction("Focus item in Graph View", [this, item]() { Q_EMIT focusItemClicked(item); });
+            GuiPluginManager::addPluginSubmenus(&menu, gNetlist, 
+                type==ModuleItem::TreeItemType::Module ? std::vector<u32>({id}) : std::vector<u32>(),
+                type==ModuleItem::TreeItemType::Gate ? std::vector<u32>({id}) : std::vector<u32>(),
+                type==ModuleItem::TreeItemType::Net ? std::vector<u32>({id}) : std::vector<u32>());
 
             menu.exec(viewport()->mapToGlobal(point));
-        }
-    }
-
-    void SelectionTreeView::handleIsolationViewAction(const ModuleItem* sti)
-    {
-        Node nd;
-        if (sti->getType() == ModuleItem::TreeItemType::Gate)
-        {
-            nd = Node(sti->id(),Node::Gate);
-        }
-        else if (sti->getType() == ModuleItem::TreeItemType::Module)
-        {
-            nd = Node(sti->id(),Node::Module);
-        }
-        else
-        {
-            return;
-        }
-        isolateInNewViewAction(nd);
-    }
-
-    void SelectionTreeView::handleAddToSelection(const ModuleItem* sti)
-    {
-        switch (sti->getType())
-        {
-            case ModuleItem::TreeItemType::Module:
-            {
-                gSelectionRelay->addModule(sti->id());
-                break;
-            }
-
-            case ModuleItem::TreeItemType::Gate:
-            {
-                gSelectionRelay->addGate(sti->id());
-                break;
-            }
-
-            case ModuleItem::TreeItemType::Net:
-            {
-                gSelectionRelay->addNet(sti->id());
-                break;
-            }
-
-            default:
-                // Unknown or invalid type
-                return;
-        }
-        gSelectionRelay->relaySelectionChanged(this);
-    }
-
-
-    void SelectionTreeView::isolateInNewViewAction(Node nd)
-    {
-        QSet<u32> gateId;
-        QSet<u32> moduleId;
-        QString name;
-
-        if (nd.type() == Node::Gate)
-        {
-            name = gGraphContextManager->nextViewName("Isolated View");
-            gateId.insert(nd.id());
-        }
-        else if (nd.type() == Node::Module)
-        {
-            GraphContext* moduleContext =
-                    gGraphContextManager->getContextByExclusiveModuleId(nd.id());
-            if (moduleContext)
-            {
-                // open existing view
-                gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
-                gContentManager->getContextManagerWidget()->handleOpenContextClicked();
-                return;
-            }
-
-            name = QString::fromStdString(gNetlist->get_module_by_id(nd.id())->get_name()) + " (ID: " + QString::number(nd.id()) + ")";
-            moduleId.insert(nd.id());
-        }
-        else
-        {
-            return;
-        }
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
-        act->addAction(new ActionAddItemsToObject(moduleId, gateId));
-        act->exec();
-        if (nd.type() == Node::Module)
-        {
-            GraphContext* moduleContext = gGraphContextManager->getContextById(act->object().id());
-            moduleContext->setDirty(false);
-            moduleContext->setExclusiveModuleId(nd.id());
         }
     }
 

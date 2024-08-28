@@ -146,6 +146,7 @@ namespace hal
                 gGraphContextManager->getContextByExclusiveModuleId(moduleId);
         if (moduleContext)
         {
+            // open existing view
             gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
             gContentManager->getContextManagerWidget()->handleOpenContextClicked();
         }

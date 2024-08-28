@@ -239,30 +239,6 @@ namespace hal
          */
         void triggerHighlight(QVector<const ModuleItem*> highlight);
 
-        /**
-         * Q_SIGNAL that is emitted when a gate-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param gateId - The id of the clicked gate item.
-         */
-        void focusGateClicked(u32 gateId);
-
-        /**
-         * Q_SIGNAL that is emitted when a net-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param netId - The id of the clicked net item.
-         */
-        void focusNetClicked(u32 netId);
-
-        /**
-         * Q_SIGNAL that is emitted when a module-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param moduleId - The id of the clicked module item.
-         */
-        void focusModuleClicked(u32 moduleId);
-
     public Q_SLOTS:
 
         /**
@@ -312,14 +288,6 @@ namespace hal
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
-
-        /**
-         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
-         * type of the clicked item.
-         *
-         * @param sti - The clicked item in the selection-treeview.
-         */
-        void handleTreeViewItemFocusClicked(const ModuleItem* sti);
 
     private:
 

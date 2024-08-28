@@ -77,6 +77,18 @@ namespace hal {
             [id]()
             {gNetlistRelay->addSelectionToModule(id);}
         );
+        contextMenu->addAction("  Set module as selection",
+            [id](){
+                gSelectionRelay->setSelectedModules({id});
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+        );
+        contextMenu->addAction("  Add module to selection",
+            [id](){
+                gSelectionRelay->addModule(id);
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+        );
         contextMenu->addAction("  Assign module to grouping",
            [id]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({id});}
@@ -103,6 +115,8 @@ namespace hal {
 
     void ModuleContextMenu::addGateSubmenu(QMenu* contextMenu, u32 id)
     {
+        QAction *act;
+
         contextMenu->addSeparator();
         contextMenu->addAction("This gate (" + QString::number(id)+"):")->setDisabled(true);
         contextMenu->addAction("  Gate name to clipboard",
@@ -126,6 +140,20 @@ namespace hal {
            [id]()
            {gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Gate, id);}
         );
+        contextMenu->addAction("  Set gate as selection",
+            [id](){
+                gSelectionRelay->setSelectedGates({id});
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+        );
+        act = contextMenu->addAction("  Add gate to selection",
+            [id](){
+                gSelectionRelay->addGate(id);
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+        );
+        if(gSelectionRelay->selectedGates().contains(id))
+            act->setEnabled(false);
         contextMenu->addAction("  Assign gate to grouping",
            [id]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{id});}
@@ -165,6 +193,20 @@ namespace hal {
            [id]()
            {gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Net, id);}
         );
+        contextMenu->addAction("  Set net as selection",
+            [id]()
+            {
+                gSelectionRelay->setSelectedNets({id});
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+        );
+        contextMenu->addAction("  Add net to selection",
+            [id]()
+            {
+                gSelectionRelay->addNet(id);
+                gSelectionRelay->relaySelectionChanged(nullptr);
+            }
+         );
         contextMenu->addAction("  Assign net to grouping",
            [id]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{},{id});}

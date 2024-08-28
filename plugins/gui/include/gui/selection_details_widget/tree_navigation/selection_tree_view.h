@@ -62,14 +62,6 @@ namespace hal
          */
         void itemDoubleClicked(const ModuleItem* sti);
 
-        /**
-         * Q_SIGNAL that is emitted when the action "Focus item in Graph View" in the context
-         * menu (that appears when you right click on an item) is chosen.
-         *
-         * @param sti - The item that thas right-clicked.
-         */
-        void focusItemClicked(const ModuleItem* sti);
-
     public Q_SLOTS:
         /**
          * Tells its intern proxy model to filter its items based on the given string.
@@ -141,15 +133,8 @@ namespace hal
          */
         SelectionTreeProxyModel* proxyModel();
 
-        /**
-         * Isolate given node in new view or open existing exclusive module view.
-         * @param nd The node.
-         */
-        static void isolateInNewViewAction(Node nd);
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
-        void handleIsolationViewAction(const ModuleItem* sti);
-        void handleAddToSelection(const ModuleItem* sti);
 
         /**
          * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
