@@ -47,6 +47,9 @@ namespace hal
         mDeleteAction = new QAction("Delete gate type", this);
         mSearchAction = new QAction("Search", this);
 
+        mSaveAction = new QAction("Save", this);
+        mSaveAsAction = new QAction("Save as...", this);
+
         //connections
         connect(mTableView, &QTableView::customContextMenuRequested, this, &GatelibraryContentWidget::handleContextMenuRequested);
         connect(mTableView, &QTableView::doubleClicked, this, &GatelibraryContentWidget::handleDoubleClicked);
@@ -54,12 +57,17 @@ namespace hal
         connect(mSearchAction, &QAction::triggered, this, &GatelibraryContentWidget::toggleSearchbar);
         connect(mEditAction, &QAction::triggered, this, &GatelibraryContentWidget::handleEditAction);
         connect(mDeleteAction, &QAction::triggered, this, &GatelibraryContentWidget::handleDeleteAction);
+        connect(mSaveAction, &QAction::triggered, this, &GatelibraryContentWidget::handleSaveAction);
+        connect(mSaveAsAction, &QAction::triggered, this, &GatelibraryContentWidget::handleSaveAsAction);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mPinProxyModel, &SearchProxyModel::startSearch);
 
         mToolbar->addAction(mAddAction);
         mToolbar->addAction(mEditAction);
         mToolbar->addAction(mDeleteAction);
         mToolbar->addAction(mSearchAction);
+
+        mToolbar->addAction(mSaveAction);
+        mToolbar->addAction(mSaveAsAction);
 
 
         layout->addWidget(mToolbar);
@@ -84,6 +92,21 @@ namespace hal
 
         menu.move(mapToGlobal(pos));
         menu.exec();
+    }
+
+    void GatelibraryContentWidget::setUuid(QUuid uid)
+    {
+        mUuid = uid;
+    }
+
+    void GatelibraryContentWidget::setGateLibrary(GateLibrary *gl)
+    {
+        mGateLibrary = gl;
+    }
+
+    void GatelibraryContentWidget::setGateLibraryPath(std::filesystem::path p)
+    {
+        mPath = p;
     }
 
     void GatelibraryContentWidget::handleEditAction()
@@ -114,6 +137,22 @@ namespace hal
             Q_EMIT triggerDoubleClicked(inx);
     }
 
+    void GatelibraryContentWidget::handleSaveAction()
+    {
+        //TODO
+
+        gFileStatusManager->fileSaved(mUuid);
+        HGLWriter* writer = new HGLWriter();
+        writer->write(mGateLibrary, mPath);
+    }
+
+    void GatelibraryContentWidget::handleSaveAsAction()
+    {
+        //TODO
+        gFileStatusManager->fileSaved(mUuid);
+        HGLWriter* writer = new HGLWriter();
+        writer->write(mGateLibrary, mPath);
+    }
 
     void GatelibraryContentWidget::toggleSearchbar()
     {
@@ -143,6 +182,8 @@ namespace hal
         toggleReadOnlyMode(readOnly);
 
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSearchIconPath));
+        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveIconPath));
+        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
 
     }
 
@@ -156,6 +197,12 @@ namespace hal
 
         mAddAction->setEnabled(!readOnly);
         mAddAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mAddTypeIconPath));
+
+        mSaveAction->setEnabled(!readOnly);
+        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mSaveIconPath));
+
+        mSaveAsAction->setEnabled(!readOnly);
+        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mSaveAsIconPath));
     }
 
     void GatelibraryContentWidget::toggleSelection(bool selected)
@@ -164,6 +211,12 @@ namespace hal
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle, mDeleteIconPath));
         mEditAction->setEnabled(selected);
         mEditAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle,mEditTypeIconPath));
+
+        mSaveAction->setEnabled(selected);
+        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle,mSaveIconPath));
+        mSaveAsAction->setEnabled(selected);
+        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle,mSaveAsIconPath));
+
     }
 
     QString GatelibraryContentWidget::disabledIconStyle() const
@@ -211,6 +264,26 @@ namespace hal
         return mDeleteIconStyle;
     }
 
+    QString GatelibraryContentWidget::saveIconPath() const
+    {
+        return mSaveIconPath;
+    }
+
+    QString GatelibraryContentWidget::saveIconStyle() const
+    {
+        return mSaveIconStyle;
+    }
+
+    QString GatelibraryContentWidget::saveAsIconPath() const
+    {
+        return mSaveAsIconPath;
+    }
+
+    QString GatelibraryContentWidget::saveAsIconStyle() const
+    {
+        return mSaveAsIconStyle;
+    }
+
     void GatelibraryContentWidget::setDisabledIconStyle(const QString& s)
     {
         mDisabledIconStyle = s;
@@ -256,5 +329,23 @@ namespace hal
         mDeleteIconStyle = s;
     }
 
+    void GatelibraryContentWidget::setSaveIconPath(const QString& s)
+    {
+        mSaveIconPath = s;
+    }
 
+    void GatelibraryContentWidget::setSaveIconStyle(const QString& s)
+    {
+        mSaveIconStyle = s;
+    }
+
+    void GatelibraryContentWidget::setSaveAsIconPath(const QString& s)
+    {
+        mSaveAsIconPath = s;
+    }
+
+    void GatelibraryContentWidget::setSaveAsIconStyle(const QString& s)
+    {
+        mSaveAsIconStyle = s;
+    }
 }

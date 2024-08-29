@@ -31,10 +31,11 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
+
 #include <QFrame>
-#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.h>
-#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
-#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
+#include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.h"
+#include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h"
+#include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h"
 
 class QGridLayout;
 class QPushButton;
@@ -67,6 +68,7 @@ namespace hal
         bool initialize(GateLibrary* gateLibrary = nullptr, bool readOnly = false);
         u32 getNextGateId();
         void updateTabs(GateType* gateType);
+        QUuid getUuid();
 
     public Q_SLOTS:
         /**
@@ -115,6 +117,7 @@ namespace hal
         const GateLibrary* mNonEditableGateLibrary;
         GateLibrary* mEditableGatelibrary;
         std::unique_ptr<Netlist> mDemoNetlist;
+        std::filesystem::path mPath;
 
         bool mReadOnly = false;
 

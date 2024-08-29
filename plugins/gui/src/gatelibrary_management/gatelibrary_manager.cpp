@@ -135,6 +135,7 @@ namespace hal
 
                 QDir dir(QDir::home());
                 window()->setWindowTitle(QString("GateLibrary %1").arg(dir.relativeFilePath(fileName)));
+                mPath = fileName.toStdString();
             }
 
         }
@@ -161,6 +162,11 @@ namespace hal
         return true;
     }
 
+    QUuid GateLibraryManager::getUuid()
+    {
+        return mWizard->getUuid();
+    }
+
     void GateLibraryManager::handleEditWizard(const QModelIndex& index)
     {
         if(mReadOnly)
@@ -170,6 +176,9 @@ namespace hal
         initialize(mEditableGatelibrary);
 
         mContentWidget->mTableView->selectRow(index.row());
+        mContentWidget->setUuid(mWizard->getUuid());
+        mContentWidget->setGateLibrary(mEditableGatelibrary);
+        mContentWidget->setGateLibraryPath(mPath);
     }
 
     void GateLibraryManager::handleAddWizard()
@@ -183,6 +192,9 @@ namespace hal
             if(mTableModel->getGateTypeAtIndex(r) == mWizard->getRecentCreatedGate())
                 mContentWidget->mTableView->selectRow(r);
         }
+        mContentWidget->setUuid(mWizard->getUuid());
+        mContentWidget->setGateLibrary(mEditableGatelibrary);
+        mContentWidget->setGateLibraryPath(mPath);
     }
 
     void GateLibraryManager::handleDeleteType(QModelIndex index)

@@ -120,9 +120,14 @@ namespace hal
             //Set boolean functions
             mNewGateType->add_boolean_functions(boolPage->getBoolFunctions());
         }
-
-
         this->close();
+
+        mUuid = QUuid::createUuid();
+        gFileStatusManager->fileChanged(mUuid, QString("GateLibrary %1 modified").arg(QString::fromStdString(mGateLibrary->get_name())));
+    }
+
+    QUuid GateLibraryWizard::getUuid(){
+        return mUuid;
     }
 
     GateType* GateLibraryWizard::getRecentCreatedGate(){

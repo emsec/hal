@@ -73,6 +73,7 @@ namespace hal
         GateType* getRecentCreatedGate();
         void accept() override;
         int nextId() const override;
+        QUuid getUuid();
     private:
         GateLibrary* mGateLibrary;
         GateType* mGateType;
@@ -90,5 +91,7 @@ namespace hal
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
         GateType* mNewGateType;
+
+        QUuid mUuid;
     };
 }
