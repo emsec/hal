@@ -253,7 +253,7 @@ namespace hal
         else
         {
             log_warning("simulation_plugin", "No QApplication running, event loop not entered, will poll for process to finish.");
-            if (!mProcess->waitForFinished()) return false;
+            if (!mProcess->waitForFinished(-1)) return false;
             handleReadyReadStandardError();
             handleReadyReadStandardOutput();
         }
