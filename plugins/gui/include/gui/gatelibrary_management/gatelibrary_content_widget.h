@@ -31,6 +31,8 @@
 #include <QFrame>
 #include <QUuid>
 #include <QTableView>
+#include <QMessageBox>
+#include <QFileDialog>
 #include "gui/pin_model/pin_proxy_model.h"
 #include "hgl_writer/include/hgl_writer/hgl_writer.h"
 
@@ -102,6 +104,7 @@ namespace hal
         void handleDoubleClicked(QModelIndex index);
         void handleSaveAction();
         void handleSaveAsAction();
+        void handleUnsavedChanges();
 
     public:
         GatelibraryContentWidget(GatelibraryTableModel* model, QWidget* parent = nullptr);
@@ -176,5 +179,7 @@ namespace hal
         QUuid mUuid;
         GateLibrary* mGateLibrary;
         std::filesystem::path mPath;
+
+        bool mDirty;
     };
 }

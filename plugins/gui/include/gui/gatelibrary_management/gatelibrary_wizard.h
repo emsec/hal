@@ -45,6 +45,8 @@ namespace hal
 {
     class GateLibraryWizard : public QWizard
     {
+        Q_OBJECT
+
         friend class RAMPortWizardPage;
         friend class PinsWizardPage;
         friend class FlipFlopWizardPage;
@@ -67,13 +69,14 @@ namespace hal
 
         GateLibraryWizard(GateLibrary* gateLibrary, GateType* gateType = nullptr, QWidget* parent = nullptr);
 
- //       void setData(GateLibrary* gateLibrary, GateType* gateType);
         QList<PinItem*> getPingroups();
         std::unique_ptr<GateTypeComponent> setComponents();
         GateType* getRecentCreatedGate();
         void accept() override;
         int nextId() const override;
         QUuid getUuid();
+    Q_SIGNALS:
+        void triggerUnsavedChanges();
     private:
         GateLibrary* mGateLibrary;
         GateType* mGateType;

@@ -961,10 +961,10 @@ hal--GatelibraryContentWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-deleteIconStyle:       "all->#FFFFFF";
     qproperty-deleteIconPath:        ":/icons/trashcan";
-    qproperty-saveIconStyle:         "all->#3192C5";
     qproperty-saveIconPath:         ":/icons/folder-down";
-    qproperty-saveAsIconStyle:      "all->#FFFFFF";
+    qproperty-saveIconStyle:        "all->#FFFFFF";
     qproperty-saveAsIconPath:       ":/icons/save-as";
+    qproperty-saveAsIconStyle:      "all->#FFFFFF";
 }
 
 hal--ImportNetlistDialog

@@ -334,21 +334,6 @@
                             "function": "(I0 & I1)"
                         }
                     ]
-                },
-                {
-                    "name": "test",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": true,
-                    "start_index": 0,
-                    "ordered": false,
-                    "pins": [
-                        {
-                            "name": "test",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
                 }
             ]
         },
@@ -518,7 +503,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -533,7 +518,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -548,7 +533,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -563,7 +548,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -578,7 +563,7 @@
                     "name": "I4",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -593,7 +578,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [

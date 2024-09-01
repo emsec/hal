@@ -172,6 +172,8 @@ namespace hal
         if(mReadOnly)
             return;
         mWizard = new GateLibraryWizard(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
+        connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
+
         mWizard->exec();
         initialize(mEditableGatelibrary);
 
@@ -184,6 +186,8 @@ namespace hal
     void GateLibraryManager::handleAddWizard()
     {
         mWizard = new GateLibraryWizard(mEditableGatelibrary);
+        connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
+
         mWizard->exec();
 
         initialize(mEditableGatelibrary);
@@ -241,7 +245,31 @@ namespace hal
 
     void GateLibraryManager::handleCancelClicked()
     {
-        Q_EMIT close();
+        if(!mContentWidget->mDirty)
+            Q_EMIT close();
+        else
+        {
+            QMessageBox* msgBox = new QMessageBox(this);
+            msgBox->setWindowTitle("Unsaved changes");
+            msgBox->setInformativeText("The current gate library has been modified. Do you want to save your changes or discard them?");
+            msgBox->setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+            int r = msgBox->exec();
+            switch(r)
+            {
+                case QMessageBox::Save:
+                    mContentWidget->handleSaveAsAction();
+                    Q_EMIT close();
+                break;
+                case QMessageBox::Discard:
+                    Q_EMIT close();
+                break;
+                case QMessageBox::Cancel:
+                    msgBox->reject();
+                break;
+            }
+
+        }
     }
 
     GateType* GateLibraryManager::getSelectedGate()

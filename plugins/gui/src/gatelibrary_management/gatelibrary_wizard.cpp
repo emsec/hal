@@ -65,6 +65,7 @@ namespace hal
             statePage->setData(mGateType);
             boolPage->setData(mGateType);
         }
+
     }
 
     void GateLibraryWizard::accept()
@@ -124,6 +125,7 @@ namespace hal
 
         mUuid = QUuid::createUuid();
         gFileStatusManager->fileChanged(mUuid, QString("GateLibrary %1 modified").arg(QString::fromStdString(mGateLibrary->get_name())));
+        Q_EMIT triggerUnsavedChanges();
     }
 
     QUuid GateLibraryWizard::getUuid(){
@@ -263,8 +265,6 @@ namespace hal
             return Pin;
         case Pin:
             if(properties.contains(GateTypeProperty::ff) || properties.contains(GateTypeProperty::latch)) return State;
-            /*if(properties.contains(GateTypeProperty::ff)) return FlipFlop;
-            else if(properties.contains(GateTypeProperty::latch)) return Latch;*/
             else if(properties.contains(GateTypeProperty::c_lut)) return LUT;
             else if(properties.contains(GateTypeProperty::ram)) return RAM;
             return BoolFunc;  
