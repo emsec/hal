@@ -11,6 +11,8 @@ namespace hal
         mAssignedGroupNames = QSet<QString>();
         mAssignedPinNames = QSet<QString>();
         mEditable = false;
+
+        //connect(this, &PinModel::dataChanged, this, &PinModel::handleInvalidGroupUpdate);
     }
 
     PinModel::PinModel(QObject* parent, bool editable) : BaseTreeModel(parent)
@@ -241,6 +243,7 @@ namespace hal
                 break;
             }
         }
+
         Q_EMIT dataChanged(index, index);
     }
 
@@ -255,19 +258,6 @@ namespace hal
 
         switch(itemType){
             case PinItem::TreeItemType::PinGroup:
-        /*{
-                pinItem->setDirection(direction);
-                qInfo()<<pinItem->getChildren().length();
-                for(auto child : pinItem->getChildren()) //set same direction for all pins of the pingroup
-                {
-                    PinItem* pin = static_cast<PinItem*>(child);
-                    qInfo()<<"1";
-                    pin->setDirection(direction);
-                }
-                handleInvalidGroupUpdate(pinItem);
-                //qInfo()<<"handleEditDirection PinGroup";
-                break;
-            }*/
             case PinItem::TreeItemType::InvalidPinGroup:{
                 pinItem->setDirection(directionString);
                 for(auto child : pinItem->getChildren()) //set same direction for all pins of the pingroup
@@ -282,14 +272,6 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::Pin:
-        /*{
-                pinItem->setDirection(direction);
-                //get the groupItem and update it
-                //auto groupItem = static_cast<PinItem*>(pinItem->getParent());
-                //handleGroupDirectionUpdate(groupItem);
-                handleInvalidPinUpdate(pinItem);
-                break;
-            }*/
             case PinItem::TreeItemType::InvalidPin:{
                 QMessageBox warning;
                 QPushButton* acceptBtn = warning.addButton(tr("Continue with changes"), QMessageBox::AcceptRole);
@@ -312,7 +294,6 @@ namespace hal
                     pinItem->setDirection(pinDirection);
                     handleInvalidPinUpdate(pinItem);
                 }
-
                 break;
             }
         }
@@ -498,7 +479,6 @@ namespace hal
         //checks if the groups status is affected and if so it updates the group
         auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
         handleInvalidGroupUpdate(pinGroup);
-
     }
 
     void PinModel::handleInvalidGroupUpdate(PinItem* groupItem){

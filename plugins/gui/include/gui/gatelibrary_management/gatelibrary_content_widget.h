@@ -179,6 +179,7 @@ namespace hal
         QUuid mUuid;
         GateLibrary* mGateLibrary;
         std::filesystem::path mPath;
+        QString mTitle;
 
         bool mDirty;
     };

@@ -73,6 +73,7 @@ namespace hal
         mToolbar->addAction(mSaveAsAction);
         mDirty = false;
 
+
         layout->addWidget(mToolbar);
         layout->addWidget(mTableView);
         layout->addWidget(mSearchbar);
@@ -157,6 +158,7 @@ namespace hal
         mSaveAsAction->setEnabled(mDirty);
         mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
 
+        window()->setWindowTitle(mTitle);
     }
 
     void GatelibraryContentWidget::handleSaveAsAction()
@@ -177,6 +179,8 @@ namespace hal
 
         mSaveAsAction->setEnabled(mDirty);
         mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
+
+        window()->setWindowTitle(mTitle);
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()
@@ -187,6 +191,9 @@ namespace hal
 
         mSaveAsAction->setEnabled(mDirty);
         mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSaveAsIconPath));
+
+        mTitle = window()->windowTitle();
+        window()->setWindowTitle(mTitle + " *");
     }
 
     void GatelibraryContentWidget::toggleSearchbar()

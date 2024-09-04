@@ -38,6 +38,7 @@
 #include <QVariant>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QComboBox>
 #include <array>
 #include <set>
 

@@ -262,13 +262,14 @@ namespace hal
                     Q_EMIT close();
                 break;
                 case QMessageBox::Discard:
+                    gate_library_manager::remove(std::filesystem::path(mEditableGatelibrary->get_path()));
+                    window()->setWindowTitle("HAL");
                     Q_EMIT close();
                 break;
                 case QMessageBox::Cancel:
                     msgBox->reject();
                 break;
             }
-
         }
     }
 
