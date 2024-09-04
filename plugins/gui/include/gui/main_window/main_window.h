@@ -45,6 +45,7 @@ namespace hal
     class plugin_manager_dialog;
     class PythonEditor;
     class FileManager;
+    class FileActions;
     class ContentManager;
     class WelcomeScreen;
     class SettingsItemKeybind;
@@ -72,10 +73,6 @@ namespace hal
         Q_PROPERTY(QString openFileIconStyle READ openFileIconStyle WRITE setOpenFileIconStyle)
         Q_PROPERTY(QString openProjIconPath READ openProjIconPath WRITE setOpenProjIconPath)
         Q_PROPERTY(QString openProjIconStyle READ openProjIconStyle WRITE setOpenProjIconStyle)
-        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
-        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
-        Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
-        Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
         Q_PROPERTY(QString closeIconPath READ closeIconPath WRITE setCloseIconPath)
         Q_PROPERTY(QString closeIconStyle READ closeIconStyle WRITE setCloseIconStyle)
         Q_PROPERTY(QString quitIconPath READ quitIconPath WRITE setQuitIconPath)
@@ -160,32 +157,6 @@ namespace hal
         * @returns the 'Open Proj'-icon style
         */
         QString openProjIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Save File'-icon path.
-         *
-         * @returns the 'SaveFile'-icon path
-         */
-        QString saveIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'Save File'-icon style.
-         *
-         * @returns the 'Save File'-icon style
-         */
-        QString saveIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'SaveAs File'-icon path.
-         *
-         * @returns the 'SaveAsFile'-icon path
-         */
-        QString saveAsIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'SaveAs File'-icon style.
-         *
-         * @returns the 'SaveAs File'-icon style
-         */
-        QString saveAsIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Close Project'-icon path.
@@ -296,32 +267,6 @@ namespace hal
          * @param style - The new style
         */
         void setOpenProjIconStyle(const QString& style);
-
-        /**
-         * Q_PROPERTY WRITE function for the 'Save File'-icon path.
-         *
-         * @param path - The new path
-         */
-        void setSaveIconPath(const QString& path);
-        /**
-         * Q_PROPERTY WRITE function for the 'Save File'-icon style.
-         *
-         * @param style - The new style
-         */
-        void setSaveIconStyle(const QString& style);
-
-        /**
-         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon path.
-         *
-         * @param path - The new path
-         */
-        void setSaveAsIconPath(const QString& path);
-        /**
-         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon style.
-         *
-         * @param style - The new style
-         */
-        void setSaveAsIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Close Project'-icon path.
@@ -621,11 +566,10 @@ namespace hal
         QToolBar* mRightToolBar;
         ContentLayoutArea* mLayoutArea;
 
+        FileActions* mFileActions;
         Action* mActionNew;
         Action* mActionOpenProject;
         Action* mActionImportNetlist;
-        Action* mActionSave;
-        Action* mActionSaveAs;
         Action* mActionGateLibraryManager;
         Action* mActionAbout;
         Action* mActionStartRecording;
@@ -657,12 +601,6 @@ namespace hal
         QString mOpenProjIconPath;
         QString mOpenProjIconStyle;
 
-        QString mSaveIconPath;
-        QString mSaveIconStyle;
-
-        QString mSaveAsIconPath;
-        QString mSaveAsIconStyle;
-
         QString mCloseIconPath;
         QString mCloseIconStyle;
 
@@ -685,7 +623,6 @@ namespace hal
 
         SettingsItemKeybind* mSettingCreateFile;
         SettingsItemKeybind* mSettingOpenFile;
-        SettingsItemKeybind* mSettingSaveFile;
         SettingsItemKeybind* mSettingUndoLast;
 
     };

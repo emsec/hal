@@ -123,13 +123,8 @@ namespace hal
         }
         this->close();
 
-        mUuid = QUuid::createUuid();
-        gFileStatusManager->fileChanged(mUuid, QString("GateLibrary %1 modified").arg(QString::fromStdString(mGateLibrary->get_name())));
+        gFileStatusManager->gatelibChanged();
         Q_EMIT triggerUnsavedChanges();
-    }
-
-    QUuid GateLibraryWizard::getUuid(){
-        return mUuid;
     }
 
     GateType* GateLibraryWizard::getRecentCreatedGate(){

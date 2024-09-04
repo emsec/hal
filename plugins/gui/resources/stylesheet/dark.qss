@@ -935,10 +935,6 @@ hal--GatelibraryContentWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-deleteIconStyle:       "all->#e8e8e8";
     qproperty-deleteIconPath:        ":/icons/trashcan";
-    qproperty-saveIconPath:         ":/icons/folder-down";
-    qproperty-saveIconStyle:        "all->#e8e8e8";
-    qproperty-saveAsIconPath:       ":/icons/save-as";
-    qproperty-saveAsIconStyle:      "all->#e8e8e8";
 }
 
 hal--GeneralInfoWizardPage
@@ -1292,12 +1288,6 @@ hal--MainWindow
     qproperty-openFileIconStyle: "all->#AFB1B3";
     qproperty-openFileIconPath: ":/icons/detach";
 
-    qproperty-saveIconStyle: "all->#3192C5";
-    qproperty-saveIconPath: ":/icons/folder-down";
-
-    qproperty-saveAsIconStyle: "all->#3192C5";
-    qproperty-saveAsIconPath: ":/icons/save-as";
-
     qproperty-closeIconStyle: "all->#AFB1B3";
     qproperty-closeIconPath: ":/icons/cross";
 
@@ -1317,6 +1307,14 @@ hal--MainWindow
 
     qproperty-neGateIconStyle: "all->#AFB1B3";
     qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->#3192C5";
+    qproperty-disabledIconStyle: "all->#515050";
 }
 
 hal--PythonQssAdapter

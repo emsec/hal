@@ -99,6 +99,16 @@ namespace hal
         s->polish(this);
     }
 
+    void GateLibraryManager::handleSaveAction()
+    {
+        mContentWidget->handleSaveAction();
+    }
+
+    void GateLibraryManager::handleSaveAsAction()
+    {
+        mContentWidget->handleSaveAsAction();
+    }
+
     bool GateLibraryManager::initialize(GateLibrary* gateLibrary, bool readOnly)
     {
         if(!gateLibrary)
@@ -162,11 +172,6 @@ namespace hal
         return true;
     }
 
-    QUuid GateLibraryManager::getUuid()
-    {
-        return mWizard->getUuid();
-    }
-
     void GateLibraryManager::handleEditWizard(const QModelIndex& index)
     {
         if(mReadOnly)
@@ -178,7 +183,6 @@ namespace hal
         initialize(mEditableGatelibrary);
 
         mContentWidget->mTableView->selectRow(index.row());
-        mContentWidget->setUuid(mWizard->getUuid());
         mContentWidget->setGateLibrary(mEditableGatelibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
@@ -196,7 +200,6 @@ namespace hal
             if(mTableModel->getGateTypeAtIndex(r) == mWizard->getRecentCreatedGate())
                 mContentWidget->mTableView->selectRow(r);
         }
-        mContentWidget->setUuid(mWizard->getUuid());
         mContentWidget->setGateLibrary(mEditableGatelibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
@@ -206,6 +209,7 @@ namespace hal
         GateType* gate = mTableModel->getGateTypeAtIndex(index.row());
         mEditableGatelibrary->remove_gate_type(gate->get_name());
         initialize(mEditableGatelibrary);
+        gFileStatusManager->gatelibChanged();
         //qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
     }
 
@@ -245,7 +249,7 @@ namespace hal
 
     void GateLibraryManager::handleCancelClicked()
     {
-        if(!mContentWidget->mDirty)
+        if(!gFileStatusManager->isGatelibModified())
             Q_EMIT close();
         else
         {

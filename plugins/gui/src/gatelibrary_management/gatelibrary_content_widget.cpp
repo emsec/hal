@@ -47,9 +47,6 @@ namespace hal
         mDeleteAction = new QAction("Delete gate type", this);
         mSearchAction = new QAction("Search", this);
 
-        mSaveAction = new QAction("Save", this);
-        mSaveAsAction = new QAction("Save as...", this);
-
         //connections
         connect(mTableView, &QTableView::customContextMenuRequested, this, &GatelibraryContentWidget::handleContextMenuRequested);
         connect(mTableView, &QTableView::doubleClicked, this, &GatelibraryContentWidget::handleDoubleClicked);
@@ -60,18 +57,12 @@ namespace hal
 
         connect(mDeleteAction, &QAction::triggered, this, &GatelibraryContentWidget::handleUnsavedChanges);
 
-        connect(mSaveAction, &QAction::triggered, this, &GatelibraryContentWidget::handleSaveAction);
-        connect(mSaveAsAction, &QAction::triggered, this, &GatelibraryContentWidget::handleSaveAsAction);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mPinProxyModel, &SearchProxyModel::startSearch);
 
         mToolbar->addAction(mAddAction);
         mToolbar->addAction(mEditAction);
         mToolbar->addAction(mDeleteAction);
         mToolbar->addAction(mSearchAction);
-
-        mToolbar->addAction(mSaveAction);
-        mToolbar->addAction(mSaveAsAction);
-        mDirty = false;
 
         layout->addWidget(mToolbar);
         layout->addWidget(mTableView);
@@ -95,11 +86,6 @@ namespace hal
 
         menu.move(mapToGlobal(pos));
         menu.exec();
-    }
-
-    void GatelibraryContentWidget::setUuid(QUuid uid)
-    {
-        mUuid = uid;
     }
 
     void GatelibraryContentWidget::setGateLibrary(GateLibrary *gl)
@@ -145,18 +131,10 @@ namespace hal
         msg.setWindowTitle("Save");
         msg.setText("Gate library saved successfully");
 
-        gFileStatusManager->fileSaved(mUuid);
+        gFileStatusManager->gatelibSaved();
         HGLWriter* writer = new HGLWriter();
         if(writer->write(mGateLibrary, mPath))
             msg.exec();
-
-        mDirty = false;
-        mSaveAction->setEnabled(mDirty);
-        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveIconPath));
-
-        mSaveAsAction->setEnabled(mDirty);
-        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
-
     }
 
     void GatelibraryContentWidget::handleSaveAsAction()
@@ -167,27 +145,13 @@ namespace hal
             path = QString::fromUtf8(gldpath.readAll());
 
         QString filename = QFileDialog::getSaveFileName(this, "Save as", path, "HGL *.hgl");
-        gFileStatusManager->fileSaved(mUuid);
+        gFileStatusManager->gatelibSaved();
         HGLWriter* writer = new HGLWriter();
         writer->write(mGateLibrary, std::filesystem::path(filename.toStdString()));
-
-        mDirty = false;
-        mSaveAction->setEnabled(mDirty);
-        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveIconPath));
-
-        mSaveAsAction->setEnabled(mDirty);
-        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()
-    {
-        mDirty = true;
-        mSaveAction->setEnabled(mDirty);
-        mSaveAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSaveIconPath));
-
-        mSaveAsAction->setEnabled(mDirty);
-        mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSaveAsIconPath));
-    }
+    {;}
 
     void GatelibraryContentWidget::toggleSearchbar()
     {
@@ -231,20 +195,6 @@ namespace hal
         mAddAction->setEnabled(!readOnly);
         mAddAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mAddTypeIconPath));
 
-        if (mDirty)
-        {
-            mSaveAction->setEnabled(!readOnly);
-            mSaveAsAction->setEnabled(!readOnly);
-            mSaveAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mSaveIconPath));
-            mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mSaveAsIconPath));
-        }
-        else
-        {
-            mSaveAction->setEnabled(mDirty);
-            mSaveAsAction->setEnabled(mDirty);
-            mSaveAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveIconPath));
-            mSaveAsAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle,mSaveAsIconPath));
-        }
     }
 
     void GatelibraryContentWidget::toggleSelection(bool selected)
@@ -301,26 +251,6 @@ namespace hal
         return mDeleteIconStyle;
     }
 
-    QString GatelibraryContentWidget::saveIconPath() const
-    {
-        return mSaveIconPath;
-    }
-
-    QString GatelibraryContentWidget::saveIconStyle() const
-    {
-        return mSaveIconStyle;
-    }
-
-    QString GatelibraryContentWidget::saveAsIconPath() const
-    {
-        return mSaveAsIconPath;
-    }
-
-    QString GatelibraryContentWidget::saveAsIconStyle() const
-    {
-        return mSaveAsIconStyle;
-    }
-
     void GatelibraryContentWidget::setDisabledIconStyle(const QString& s)
     {
         mDisabledIconStyle = s;
@@ -364,25 +294,5 @@ namespace hal
     void GatelibraryContentWidget::setDeleteIconStyle(const QString& s)
     {
         mDeleteIconStyle = s;
-    }
-
-    void GatelibraryContentWidget::setSaveIconPath(const QString& s)
-    {
-        mSaveIconPath = s;
-    }
-
-    void GatelibraryContentWidget::setSaveIconStyle(const QString& s)
-    {
-        mSaveIconStyle = s;
-    }
-
-    void GatelibraryContentWidget::setSaveAsIconPath(const QString& s)
-    {
-        mSaveAsIconPath = s;
-    }
-
-    void GatelibraryContentWidget::setSaveAsIconStyle(const QString& s)
-    {
-        mSaveAsIconStyle = s;
     }
 }

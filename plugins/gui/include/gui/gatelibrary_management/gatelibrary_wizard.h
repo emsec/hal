@@ -74,7 +74,6 @@ namespace hal
         GateType* getRecentCreatedGate();
         void accept() override;
         int nextId() const override;
-        QUuid getUuid();
     Q_SIGNALS:
         void triggerUnsavedChanges();
     private:
@@ -94,7 +93,5 @@ namespace hal
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
         GateType* mNewGateType;
-
-        QUuid mUuid;
     };
 }

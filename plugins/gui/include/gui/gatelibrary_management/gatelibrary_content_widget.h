@@ -29,7 +29,6 @@
 
 #include <QAction>
 #include <QFrame>
-#include <QUuid>
 #include <QTableView>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -55,10 +54,6 @@ namespace hal
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
         Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath);
         Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle);
-        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath);
-        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle);
-        Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath);
-        Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle);
 
         friend class GateLibraryManager;
 
@@ -83,10 +78,6 @@ namespace hal
         QString mSearchActiveIconStyle;
         QString mDeleteIconPath;
         QString mDeleteIconStyle;
-        QString mSaveIconPath;
-        QString mSaveIconStyle;
-        QString mSaveAsIconPath;
-        QString mSaveAsIconStyle;
 
         bool mReadOnly = false;
 
@@ -102,9 +93,11 @@ namespace hal
         void handleDeleteAction();
         void handleCurrentSelectionChanged(QModelIndex prevIndex);
         void handleDoubleClicked(QModelIndex index);
+        void handleUnsavedChanges();
+
+    public Q_SLOTS:
         void handleSaveAction();
         void handleSaveAsAction();
-        void handleUnsavedChanges();
 
     public:
         GatelibraryContentWidget(GatelibraryTableModel* model, QWidget* parent = nullptr);
@@ -116,8 +109,6 @@ namespace hal
         void toggleReadOnlyMode(bool readOnly);
 
         void toggleSelection(bool selected);
-
-        void setUuid(QUuid uid);
 
         void setGateLibrary(GateLibrary* gl);
 
@@ -141,14 +132,6 @@ namespace hal
 
         QString deleteIconStyle() const;
 
-        QString saveIconPath() const;
-
-        QString saveIconStyle() const;
-
-        QString saveAsIconPath() const;
-
-        QString saveAsIconStyle() const;
-
         void setDisabledIconStyle(const QString& s);
 
         void setEnabledIconStyle(const QString& s);
@@ -167,19 +150,8 @@ namespace hal
 
         void setDeleteIconStyle(const QString& s);
 
-        void setSaveIconPath(const QString& s);
-
-        void setSaveIconStyle(const QString& s);
-
-        void setSaveAsIconPath(const QString& s);
-
-        void setSaveAsIconStyle(const QString& s);
-
     private:
-        QUuid mUuid;
         GateLibrary* mGateLibrary;
         std::filesystem::path mPath;
-
-        bool mDirty;
     };
 }
