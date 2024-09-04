@@ -153,5 +153,6 @@ namespace hal
     private:
         GateLibrary* mGateLibrary;
         std::filesystem::path mPath;
+        QString mTitle;
     };
 }

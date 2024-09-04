@@ -64,6 +64,7 @@ namespace hal
         mToolbar->addAction(mDeleteAction);
         mToolbar->addAction(mSearchAction);
 
+
         layout->addWidget(mToolbar);
         layout->addWidget(mTableView);
         layout->addWidget(mSearchbar);
@@ -135,6 +136,7 @@ namespace hal
         HGLWriter* writer = new HGLWriter();
         if(writer->write(mGateLibrary, mPath))
             msg.exec();
+        window()->setWindowTitle(mTitle);
     }
 
     void GatelibraryContentWidget::handleSaveAsAction()
@@ -148,10 +150,15 @@ namespace hal
         gFileStatusManager->gatelibSaved();
         HGLWriter* writer = new HGLWriter();
         writer->write(mGateLibrary, std::filesystem::path(filename.toStdString()));
+
+        window()->setWindowTitle(mTitle);
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()
-    {;}
+    {
+        mTitle = window()->windowTitle();
+        window()->setWindowTitle(mTitle + " *");
+    }
 
     void GatelibraryContentWidget::toggleSearchbar()
     {
