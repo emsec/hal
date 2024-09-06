@@ -132,6 +132,13 @@ namespace hal {
                 mWidgetMap[parTagname] = floatBox;
                 break;
             }
+            case PluginParameter::Label:
+            {
+                QLabel* label = new QLabel(this);
+                label->setText(parDefault);
+                mWidgetMap[parTagname] = label;
+                break;
+            }
             case PluginParameter::String:
             {
                 QLineEdit* ledit = new QLineEdit(this);
@@ -140,6 +147,7 @@ namespace hal {
                 break;
             }
             case PluginParameter::ExistingDir:
+            case PluginParameter::ExistingFile:
             case PluginParameter::NewFile:
                 mWidgetMap[parTagname] = new PluginParameterFileDialog(par,this);
                 break;
@@ -246,6 +254,11 @@ namespace hal {
                 par.set_value(QString::number(floatBox->value()).toStdString());
                 break;
             }
+            case PluginParameter::Label:
+            {
+                par.set_value(std::string());
+                break;
+            }
             case PluginParameter::String:
             {
                 const QLineEdit* ledit = static_cast<const QLineEdit*>(w);
@@ -253,6 +266,7 @@ namespace hal {
                 break;
             }
             case PluginParameter::ExistingDir:
+            case PluginParameter::ExistingFile:
             case PluginParameter::NewFile:
             {
                 const PluginParameterFileDialog* fileDlg = static_cast<const PluginParameterFileDialog*>(w);
@@ -314,9 +328,9 @@ namespace hal {
         mEditor->setText(parDefault);
         layout->addWidget(mEditor,0,0);
 
-        QString iconPath = (mParameter.get_type() == PluginParameter::ExistingDir)
-                ? ":/icons/folder"
-                : ":/icons/folder-down";
+        QString iconPath = (mParameter.get_type() == PluginParameter::NewFile)
+                ? ":/icons/folder-down"
+                : ":/icons/folder";
         mButton = new QPushButton(gui_utility::getStyledSvgIcon("all->#3192C5",iconPath),"",this);
         mButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
         connect(mButton,&QPushButton::clicked,this,&PluginParameterFileDialog::handleActivateFileDialog);
@@ -328,9 +342,20 @@ namespace hal {
         QString parLabel = QString::fromStdString(mParameter.get_label());
         QString parDefault = QString::fromStdString(mParameter.get_value());
         QString dir = QFileInfo(parDefault).isDir() ? parDefault : QFileInfo(parDefault).path();
-        QString filename = (mParameter.get_type() == PluginParameter::ExistingDir)
-                ? QFileDialog::getExistingDirectory(this,parLabel,dir)
-                : QFileDialog::getSaveFileName(this,parLabel,dir);
+        QString filename;
+        switch (mParameter.get_type()) {
+        case PluginParameter::ExistingDir:
+            filename = QFileDialog::getExistingDirectory(this,parLabel,dir);
+            break;
+        case PluginParameter::ExistingFile:
+            filename = QFileDialog::getOpenFileName(this,parLabel,dir);
+            break;
+        case PluginParameter::NewFile:
+            filename = QFileDialog::getSaveFileName(this,parLabel,dir);
+            break;
+        default:
+            Q_ASSERT (1==0); // should never happen
+        }
         if (!filename.isEmpty())
             mEditor->setText(filename);
     }
@@ -419,7 +444,7 @@ namespace hal {
 
     void PluginParameterNodeDialog::handleActivateModuleDialog()
     {
-        ModuleDialog md({}, "Select module", nullptr, this);
+        ModuleDialog md({}, "Select module", false, nullptr, this);
         if (md.exec() == QDialog::Accepted)
         {
             setModule(md.selectedId());

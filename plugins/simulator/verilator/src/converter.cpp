@@ -16,6 +16,7 @@
 #include <set>
 #include <sstream>
 #include <vector>
+#include <cctype>
 
 namespace hal
 {
@@ -29,7 +30,7 @@ namespace hal
             {
                 log_info("verilator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
 
-                std::set<GateType*> gate_types = get_gate_gate_types_from_netlist(nl);
+                std::unordered_map<GateType*,std::string> gate_type_names = get_gate_gate_types_from_netlist(nl);
 
                 // get preset simulation gate models if path given
                 std::filesystem::path gate_definitions_path = verilator_sim_path / "gate_definitions/";
@@ -41,26 +42,34 @@ namespace hal
                 }
 
                 // create all remaining gate type simulation models
-                for (const auto& gate_type : gate_types)
+                for (auto& it : gate_type_names)
                 {
                     // check if model has been given
-                    if (provided_models.find(gate_type->get_name()) != provided_models.end())
+                    if (provided_models.find(it.first->get_name()) != provided_models.end())
                     {
-                        log_debug("verilator", "using provided model for gate: {}", gate_type->get_name());
+                        log_debug("verilator", "using provided model for gate: {}", it.first->get_name());
                         continue;
                     }
 
-                    log_info("verilator", "creating verilog simulation model for {}", gate_type->get_name());
+                    bool replace_name = false;
+                    if (it.second == it.first->get_name())
+                        log_info("verilator", "creating verilog simulation model for '{}'", it.first->get_name());
+                    else
+                    {
+                        log_info("verilator", "creating verilog simulation model for '{}' which corresponds to gate type '{}'",
+                                 it.second, it.first->get_name());
+                        replace_name = true;
+                    }
                     std::stringstream gate_description;
 
                     // insert prologue
-                    gate_description << get_prologue_for_gate_type(gate_type) << std::endl;
+                    gate_description << get_prologue_for_gate_type(it.first) << std::endl;
 
                     // get function of gate
-                    std::string gate_function = get_function_for_gate(gate_type);
+                    std::string gate_function = get_function_for_gate(it.first);
                     if (gate_function.empty())
                     {
-                        log_error("verilator", "unimplemented reached: gate type: '{}', cannot create simulation model...", gate_type->get_name());
+                        log_error("verilator", "unimplemented reached: gate type: '{}', cannot create simulation model...", it.first->get_name());
                         return false;
                     }
                     gate_description << gate_function << std::endl;
@@ -69,8 +78,22 @@ namespace hal
                     gate_description << get_epilogue_for_gate_type() << std::endl;
 
                     // write file
-                    std::ofstream gate_file(gate_definitions_path / (gate_type->get_name() + ".v"));
-                    gate_file << gate_description.str();
+                    std::ofstream gate_file(gate_definitions_path / (it.second + ".v"));
+                    if (replace_name)
+                    {
+                        std::string buffer =  gate_description.str();
+                        size_t pos = 0;
+                        for (;;)
+                        {
+                            pos = buffer.find(it.first->get_name());
+                            if (pos == std::string::npos) break;
+                            buffer.replace(pos, it.first->get_name().size(), it.second);
+                            pos += it.second.size();
+                        }
+                        gate_file << buffer;
+                    }
+                    else
+                        gate_file << gate_description.str();
                     gate_file.close();
                 }
 
@@ -80,6 +103,11 @@ namespace hal
             std::set<std::string> get_provided_models(const std::filesystem::path model_path, const std::filesystem::path gate_definition_path)
             {
                 std::set<std::string> supported_gate_types;
+                if (!std::filesystem::exists(model_path))
+                {
+                    log_warning("verilator", "provided_models path '{}' does not exist", model_path.string());
+                    return supported_gate_types;
+                }
                 for (const auto& entry : std::filesystem::directory_iterator(model_path))
                 {
                     std::string file = entry.path().filename();
@@ -94,7 +122,7 @@ namespace hal
                     supported_gate_types.insert(file);
 
                     // copy gate lib to verilator folder
-                    std::filesystem::copy(model_path / entry, gate_definition_path);
+                    std::filesystem::copy(entry.path(), gate_definition_path);
                 }
 
                 if (!supported_gate_types.empty())
@@ -113,16 +141,37 @@ namespace hal
                 return supported_gate_types;
             }
 
-            std::set<GateType*> get_gate_gate_types_from_netlist(const Netlist* nl)
+            std::unordered_map<GateType*,std::string> get_gate_gate_types_from_netlist(const Netlist* nl)
             {
-                std::set<GateType*> gate_types;
+                std::unordered_map<GateType*,std::string> gate_types;
 
                 for (const auto& gate : nl->get_gates())
                 {
-                    gate_types.emplace(gate->get_type());
+                    gate_types.emplace(std::make_pair<GateType*,std::string>(gate->get_type(),get_name_for_gate_type(gate->get_type())));
                 }
 
                 return gate_types;
+            }
+
+            std::string get_name_for_gate_type(const GateType* gt)
+            {
+                std::stringstream retval;
+                for (char cc : gt->get_name())
+                {
+                    if (isalnum(cc))
+                    {
+                        if (isdigit(cc) && retval.str().empty())
+                           retval << 'G';
+                        retval << cc;
+                    }
+                    else if (cc == '_')
+                        retval << cc;
+                    else
+                    {
+                        retval << '_' << std::hex << static_cast<unsigned int>(cc) << "_";
+                    }
+                }
+                return retval.str();
             }
 
             std::vector<std::string> get_parameters_for_gate(const GateType* gt)

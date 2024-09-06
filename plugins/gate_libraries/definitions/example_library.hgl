@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 4,
     "library": "EXAMPLE_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",

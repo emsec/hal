@@ -249,7 +249,9 @@ namespace hal
     Net* test_utils::get_net_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
+        {
             return nullptr;
+        }
         auto nets = nl->get_nets();
         Net* res  = nullptr;
         for (auto n : nets)
@@ -271,7 +273,9 @@ namespace hal
     Gate* test_utils::get_gate_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
+        {
             return nullptr;
+        }
         auto gates = nl->get_gates();
         Gate* res  = nullptr;
         for (auto g : gates)
@@ -472,7 +476,9 @@ namespace hal
         if (n0 == nullptr || n1 == nullptr)
         {
             if (n0 == n1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a nullptr.");
@@ -529,7 +535,9 @@ namespace hal
         if (g0 == nullptr || g1 == nullptr)
         {
             if (g0 == g1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a nullptr.");
@@ -582,7 +590,9 @@ namespace hal
         if (m_0 == nullptr || m_1 == nullptr)
         {
             if (m_0 == m_1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: One netlist is a nullptr.");
@@ -735,7 +745,9 @@ namespace hal
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
+            {
                 continue;
+            }
             if (ignore_id)
             {
                 auto sm_1_list = m_1->get_submodules(module_name_filter(sm_0->get_name()));
@@ -777,7 +789,9 @@ namespace hal
         if (g_0 == nullptr || g_1 == nullptr)
         {
             if (g_0 == g_1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: One netlist is a nullptr.");

@@ -26,14 +26,10 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
 
 namespace hal
 {
-    class GateType;
-
     /**
      * @ingroup netlist
      */
@@ -44,8 +40,10 @@ namespace hal
         ~GenlibWriter() = default;
 
         /**
-         * Write the gate library to a genlib file at the provided location.
-         *
+         * @brief Write all single output combinational gate types of the gate library to a genlib file at the provided location.
+         * 
+         * The area for the gate types is currently estimated by their input pin count and reduced in the case of multiplexers to motivate a possible resynthesis to use MUX gates when possible.
+         * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
          * @returns True on success, false otherwise.

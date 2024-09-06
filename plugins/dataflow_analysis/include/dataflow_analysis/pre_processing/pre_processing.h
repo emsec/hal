@@ -38,5 +38,5 @@ namespace hal
         {
             NetlistAbstraction run(const dataflow::Configuration& config, std::shared_ptr<dataflow::Grouping>& initial_grouping);
         }    // namespace pre_processing
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

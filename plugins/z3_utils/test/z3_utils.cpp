@@ -1,4 +1,4 @@
-#include "z3_utils/include/z3_utils.h"
+#include "z3_utils/z3_utils.h"
 
 #include "gate_library_test_utils.h"
 #include "netlist_test_utils.h"

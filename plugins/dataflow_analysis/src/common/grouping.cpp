@@ -19,12 +19,12 @@ namespace hal
             u32 new_id_counter = -1;
             bool group_is_known;
 
-            for (const auto& gate : na.target_gates)
+            for (const auto* gate : na.target_gates)
             {
                 group_is_known = false;
                 for (const auto& gates : groups)
                 {
-                    for (const auto& g : gates)
+                    for (const auto* g : gates)
                     {
                         if (gate == g)
                         {
@@ -33,7 +33,9 @@ namespace hal
                         }
                     }
                     if (group_is_known)
+                    {
                         break;
+                    }
                 }
                 if (!group_is_known)
                 {
@@ -109,6 +111,21 @@ namespace hal
             std::map<PinType, std::unordered_set<u32>> res;
 
             for (auto gate : gates_of_group.at(group_id))
+            {
+                if (auto it = this->netlist_abstr.gate_to_control_signals.find(gate); it != this->netlist_abstr.gate_to_control_signals.end())
+                {
+                    res.insert(it->second.begin(), it->second.end());
+                }
+            }
+
+            return res;
+        }
+
+        std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals) const
+        {
+            std::unordered_set<u32> res;
+
+            for (auto gate : gates_of_group.at(id))
             {
                 if (auto it = this->netlist_abstr.gate_to_control_signals.find(gate); it != this->netlist_abstr.gate_to_control_signals.end())
                 {

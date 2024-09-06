@@ -33,6 +33,11 @@
 
 namespace hal
 {
+    /**
+     * A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API SubgraphNetlistDecorator
     {
     public:
@@ -47,28 +52,28 @@ namespace hal
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
-         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
+         * @param[in] all_global_io - Set `true` to mark all nets as global input or output that lost at least one source or destination in the copied netlist, `false` to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to `false`.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool all_global_io = false) const;
 
         /**
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
-         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
+         * @param[in] all_global_io - Set `true` to mark all nets as global input or output that lost at least one source or destination in the copied netlist, `false` to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to `false`.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool all_global_io = false) const;
 
         /**
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_module - The module making up the subgraph that shall be copied from the netlist.
-         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
+         * @param[in] all_global_io - Set `true` to mark all nets as global input or output that lost at least one source or destination in the copied netlist, `false` to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to `false`.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const Module* subgraph_module, const bool outside_conncetions_as_global_io) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const Module* subgraph_module, const bool all_global_io = false) const;
 
         /**
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.

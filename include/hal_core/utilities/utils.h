@@ -637,11 +637,11 @@ namespace hal
         /**
          * Try to generate a unique temporary directory.
          * 
-         * @param[in] max_attmeps - The maximum amount of attempts before the function fails.
-         * @param[in] prefix - A prefix that is added in front of the unique identifier.
-         * @returns OK and the created directory path on success, an ERROR otherwise
+         * @param[in] prefix - A prefix that is added in front of the unique identifier. Defaults to an empty string.
+         * @param[in] max_attmeps - The maximum amount of attempts before the function fails. Defaults to `5`.
+         * @returns OK and the created directory path on success, an error otherwise.
          */
-        CORE_API Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix = "", const u32 max_attmeps = 42);
+        CORE_API Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix = "", const u32 max_attempts = 5);
 
         /**
          * Get the licenses of all embedded OpenSource Projects.

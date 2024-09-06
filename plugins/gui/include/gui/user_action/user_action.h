@@ -109,22 +109,6 @@ namespace hal
         virtual void setObject(const UserActionObject& obj);
 
         /**
-         * Setter for parent object argument. Used to identify pins and
-         * pingroups in which case the parent obj must be the corresponding
-         * module.
-         *
-         * @param obj - The parent object.
-         */
-        virtual void setParentObject(const UserActionObject& obj);
-
-        /**
-         * Getter for parent object argument.
-         *
-         * @return The parent object argument.
-         */
-        virtual UserActionObject parentObject() const {return mParentObject;}
-
-        /**
          * Get the order number in action compound, -1 if not in compound.
          *
          * @return The order number in action compount.
@@ -207,6 +191,9 @@ namespace hal
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
+
+        static QString gridToText(const QHash<hal::Node,QPoint>& grid);
+        static QHash<hal::Node,QPoint> gridFromText(const QString& txt);
 
         /**
          * Utility function to write the parent object.

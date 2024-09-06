@@ -123,5 +123,5 @@ namespace hal
                 return new_state;
             }
         }    // namespace remove_duplicates
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

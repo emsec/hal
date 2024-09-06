@@ -74,6 +74,13 @@ public:
         NoFilter
     };
 
+    struct InputColumnHeader
+    {
+        std::vector<const Net*> nets;
+        std::string name;
+        bool is_clock;
+    };
+
     NetlistSimulatorController(u32 id, const std::string nam, const std::string& workdir, QObject* parent = nullptr);
 
     NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent = nullptr);
@@ -121,6 +128,12 @@ public:
     void set_no_clock_used();
 
     /**
+     * Check wether no clock signal will be automatically generated as simulation input. Either there
+     * is no clock present or the clock signal will be passed as normal waveform input.
+     */
+    bool is_no_clock_used() const;
+
+    /**
      * Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
      * @param name The waveform group name
      * @param nets List of nets for group
@@ -136,6 +149,13 @@ public:
      */
     u32 add_waveform_group(const PinGroup<ModulePin>* pin_group);
 
+    /**
+     * Create a waveform group from the nets of a given gate pin group.
+     *
+     * @param pin_group The pin_group to create waveform group from.
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const Gate* gate, const PinGroup<GatePin>* pin_group);
 
     /**
      * Create a waveform group from the nets of a given module pin group.
@@ -182,6 +202,21 @@ public:
      * @param[in] gates - The gates to add.
      */
     void add_gates(const std::vector<Gate*>& gates);
+
+    /**
+     * Create groups of waveform signals. Internally the routine is evaluating whether simulated nets are
+     * connected to pins which are grouped either by module pingroups or gate pingroups.
+     * Note that this method only identifies the groups. No waveform data gets loaded at this point since
+     * the singals might not be available yet (e.g. before simulation has run)
+     */
+    void compute_waveform_groups();
+
+    /**
+     * Load waveform signal groups into container either for inputs or for everything except inputs
+     *
+     * @param inputs[in] - If true only waveform groups providing simulation input are loaded. Otherwise these groups are omitted.
+     */
+    void load_waveform_groups(bool inputs);
 
     /**
      * Set the signal for a specific wire to control input signals between simulation cycles.
@@ -261,6 +296,11 @@ public:
      * Shortcut to SimulationInput::get_input_nets
      */
     const std::unordered_set<const Net*>& get_input_nets() const;
+
+    /**
+     * Get headers for input columns. A column might comprise a single net or a group of nets
+     */
+    std::vector<InputColumnHeader> get_input_column_headers() const;
 
     /**
      * Shortcut to SimulationInput::get_output_nets
@@ -449,10 +489,28 @@ public:
     bool can_import_data() const;
 
     /**
+     * Discard all results except listed probes
+     * @param probes List of nets which will be simulated (aka probes)
+     */
+    void simulate_only_probes(const std::vector<const Net*>& probes);
+
+    /**
+     * Discard all results except listed probes
+     * @param probes Set of net IDs which will be simulated (aka probes)
+     */
+    void simulate_only_probes(const QSet<u32>& probes);
+
+    /**
      * Store significant information into working directory
      * @return True if JSON file created successfully, false otherwise.
      */
     bool persist() const;
+
+    /**
+     * Set log receiver instance which gets called whenever new engine output is available
+     * @param logrec Log receiver instance derived from abstract base class SimulationLogReceiver
+     */
+    void setLogReceiver(SimulationLogReceiver* logrec);
 
     static const char* sPersistFile;
 
@@ -473,7 +531,6 @@ private:
     void setState(SimulationState stat);
     bool getResultsInternal();
 
-    bool isClockSet() const;
     bool isInputSet() const;
     void checkReadyState();
     void restoreComposed(const SaleaeDirectory& sd);
@@ -490,8 +547,10 @@ private:
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;
+    QSet<u32> mSimulateOnlyProbes;
 
     QHash<u32,int> mBadAssignInputWarnings;
+    SimulationLogReceiver* mLogReceiver;
 };
 
 class NetlistSimulatorControllerMap : public QObject {
@@ -510,6 +569,7 @@ public:
     void addController(NetlistSimulatorController* ctrl);
     void removeController(u32 id);
     void shutdown() { mMap.clear(); }
+    void clearAll();
     QList<NetlistSimulatorController*> toList() const { return mMap.values(); }
     NetlistSimulatorController* controller(u32 id) const { return mMap.value(id); }
 };

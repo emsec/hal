@@ -1604,7 +1604,9 @@ namespace hal
             {
                 std::string unique_net_name = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
                 if (unique_net_name != expanded_name)
+                {
                     m_net_name_occurences[unique_net_name]++;
+                }
                 signal_alias[expanded_name] = unique_net_name;
 
                 // create new net for the signal
@@ -1738,7 +1740,7 @@ namespace hal
             {
                 // create the new gate
                 instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
-                Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
+                Gate* new_gate                   = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
                 {
                     return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create gate '" + instance->m_name + "'");
@@ -1943,14 +1945,14 @@ namespace hal
 
             // it is OK if base name (first loop cnt=0) is already in name_occurences once
             // unique_alias (cnt > 0) must not be in name_occurences
-            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1) )
+            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1))
             {
                 std::string extension;
                 if (cnt++)
                 {
                     extension = "_u" + std::to_string(cnt);
                 }
-                unique_alias = parent_name + instance_name_seperator + unique_alias + extension;
+                unique_alias     = parent_name + instance_name_seperator + unique_alias + extension;
                 instance_name_it = name_occurences.find(unique_alias);
             }
         }

@@ -93,7 +93,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("module", "module name cannot be empty.");
+            log_warning("module", "module name cannot be empty.");
             return;
         }
         if (name != m_name)
@@ -660,20 +660,20 @@ namespace hal
                 {
                     m_output_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
-                    PinChangedEvent(this,PinEvent::PinTypeChange,pin->get_id()).send();
+                    PinChangedEvent(this, PinEvent::PinTypeChange, pin->get_id()).send();
                 }
                 else if (direction == PinDirection::output)
                 {
                     m_input_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
-                    PinChangedEvent(this,PinEvent::PinTypeChange,pin->get_id()).send();
+                    PinChangedEvent(this, PinEvent::PinTypeChange, pin->get_id()).send();
                 }
             }
             else
             {
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::inout))
                 {
-                    return ERR("could not assign inout pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
+                    return ERR("could not assign inout pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
                 }
             }
         }
@@ -687,7 +687,7 @@ namespace hal
                     m_input_nets.insert(net);
                     m_output_nets.erase(net);
                     pin->set_direction(PinDirection::input);
-                    PinChangedEvent(this,PinEvent::PinTypeChange,pin->get_id()).send();
+                    PinChangedEvent(this, PinEvent::PinTypeChange, pin->get_id()).send();
                 }
             }
             else
@@ -695,7 +695,7 @@ namespace hal
                 m_input_nets.insert(net);
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::input))
                 {
-                    return ERR("could not assign input pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
+                    return ERR("could not assign input pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
                 }
             }
         }
@@ -709,7 +709,7 @@ namespace hal
                     m_output_nets.insert(net);
                     m_input_nets.erase(net);
                     pin->set_direction(PinDirection::output);
-                    PinChangedEvent(this,PinEvent::PinTypeChange,pin->get_id()).send();
+                    PinChangedEvent(this, PinEvent::PinTypeChange, pin->get_id()).send();
                 }
             }
             else
@@ -717,7 +717,7 @@ namespace hal
                 m_output_nets.insert(net);
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::output))
                 {
-                    return ERR("could not assign output pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
+                    return ERR("could not assign output pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
                 }
             }
         }
@@ -851,13 +851,13 @@ namespace hal
                     else
                     {
                         // pin assigned to new group OK
-                        PinChangedEvent(this,PinEvent::GroupCreate,group_res.get()->get_id()).send();
+                        PinChangedEvent(this, PinEvent::GroupCreate, group_res.get()->get_id()).send();
                     }
                 }
             }
             else
             {
-                PinChangedEvent(this,PinEvent::PinCreate,pin_res.get()->get_id()).send();
+                PinChangedEvent(this, PinEvent::PinCreate, pin_res.get()->get_id()).send();
             }
             return pin_res;
         }
@@ -1113,7 +1113,7 @@ namespace hal
             m_pin_names_map.erase(old_name);
             pin->set_name(new_name);
             m_pin_names_map[new_name] = pin;
-            PinChangedEvent(this,PinEvent::PinRename,pin->get_id()).send();
+            PinChangedEvent(this, PinEvent::PinRename, pin->get_id()).send();
         }
 
         return true;
@@ -1136,7 +1136,7 @@ namespace hal
         if (pin->get_type() != new_type)
         {
             pin->set_type(new_type);
-            PinChangedEvent(this,PinEvent::PinTypeChange,pin->get_id()).send();
+            PinChangedEvent(this, PinEvent::PinTypeChange, pin->get_id()).send();
         }
 
         return true;
@@ -1192,7 +1192,7 @@ namespace hal
             m_pin_group_names_map.erase(old_name);
             pin_group->set_name(new_name);
             m_pin_group_names_map[new_name] = pin_group;
-            PinChangedEvent(this,PinEvent::GroupRename,pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupRename, pin_group->get_id()).send();
         }
 
         return true;
@@ -1216,7 +1216,7 @@ namespace hal
         if (pin_group->get_type() != new_type)
         {
             pin_group->set_type(new_type);
-            PinChangedEvent(this,PinEvent::GroupTypeChange,pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupTypeChange, pin_group->get_id()).send();
         }
         return true;
     }
@@ -1243,7 +1243,7 @@ namespace hal
         if (pin_group->get_direction() != new_direction)
         {
             pin_group->set_direction(new_direction);
-            PinChangedEvent(this,PinEvent::GroupTypeChange,pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupTypeChange, pin_group->get_id()).send();
         }
         return true;
     }
@@ -1269,7 +1269,7 @@ namespace hal
         if (!ascending && !pins.empty())
         {
             // compensate for shifting the start index
-            start_index -= (pins.size()-1);
+            start_index -= (pins.size() - 1);
         }
 
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index, force_name); res.is_error())
@@ -1300,7 +1300,7 @@ namespace hal
                 }
         }
 
-        PinChangedEvent(this,PinEvent::GroupCreate,pin_group->get_id()).send();
+        PinChangedEvent(this, PinEvent::GroupCreate, pin_group->get_id()).send();
         scope.send_events();
         return OK(pin_group);
     }
@@ -1328,9 +1328,8 @@ namespace hal
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("module",
-                        "could not delete pin group '{}' with ID {} from module '{}' with ID {}: pin group does not belong to module",
-                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning(
+                "module", "could not delete pin group '{}' with ID {} from module '{}' with ID {}: pin group does not belong to module", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
@@ -1342,8 +1341,8 @@ namespace hal
             {
                 return false;
             }
-            PinChangedEvent(this,PinEvent::GroupCreate,res.get()->get_id()).send();
-            PinChangedEvent(this,PinEvent::PinAssignToGroup,pin->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupCreate, res.get()->get_id()).send();
+            PinChangedEvent(this, PinEvent::PinAssignToGroup, pin->get_id()).send();
         }
 
         u32 pin_group_id_to_delete = pin_group->get_id();
@@ -1353,7 +1352,7 @@ namespace hal
             return false;
         }
 
-        PinChangedEvent(this,PinEvent::GroupDelete,pin_group_id_to_delete).send();
+        PinChangedEvent(this, PinEvent::GroupDelete, pin_group_id_to_delete).send();
         scope.send_events();
         return true;
     }
@@ -1368,15 +1367,14 @@ namespace hal
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("module", "could not move pin group '{}' with ID {} within module '{}' with ID {}: pin group does not belong to module",
-                     pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning(
+                "module", "could not move pin group '{}' with ID {} within module '{}' with ID {}: pin group does not belong to module", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
         if (new_index >= m_pin_groups_ordered.size())
         {
-            log_warning("module", "could not move pin group '{}' with ID {} of module '{}' with ID {}: index {} is out of bounds",
-                        pin_group->get_name(), pin_group->get_id(), m_name, m_id, new_index);
+            log_warning("module", "could not move pin group '{}' with ID {} of module '{}' with ID {}: index {} is out of bounds", pin_group->get_name(), pin_group->get_id(), m_name, m_id, new_index);
             return false;
         }
 
@@ -1397,7 +1395,7 @@ namespace hal
             m_pin_groups_ordered.splice(dst_it, m_pin_groups_ordered, src_it);
         }
 
-        PinChangedEvent(this,PinEvent::GroupReorder,pin_group->get_id()).send();
+        PinChangedEvent(this, PinEvent::GroupReorder, pin_group->get_id()).send();
         return true;
     }
 
@@ -1413,22 +1411,33 @@ namespace hal
 
         if (pin == nullptr)
         {
-            log_warning("module", "could not assign pin to pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'",
-                         pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module", "could not assign pin to pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("module", "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
-                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module",
+                        "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            log_warning("module", "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module",
-                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module",
+                        "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
@@ -1444,18 +1453,32 @@ namespace hal
             {
                 log_warning("module",
                             "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: unable to remove pin from pin group '{}' with ID {}",
-                            pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id, pg->get_name(), pg->get_id());
+                            pin->get_name(),
+                            pin->get_id(),
+                            pin_group->get_name(),
+                            pin_group->get_id(),
+                            m_name,
+                            m_id,
+                            pg->get_name(),
+                            pg->get_id());
                 return false;
             }
 
             if (delete_empty_groups && pg->empty())
             {
-                PinChangedEvent(this,PinEvent::GroupDelete,pg->get_id()).send();
+                PinChangedEvent(this, PinEvent::GroupDelete, pg->get_id()).send();
                 if (!delete_pin_group_internal(pg))
                 {
                     log_warning("module",
                                 "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: unable to delete pin group '{}' with ID {}",
-                                pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id, pg->get_name(), pg->get_id());
+                                pin->get_name(),
+                                pin->get_id(),
+                                pin_group->get_name(),
+                                pin_group->get_id(),
+                                m_name,
+                                m_id,
+                                pg->get_name(),
+                                pg->get_id());
                     return false;
                 }
             }
@@ -1464,13 +1487,20 @@ namespace hal
         if (!pin_group->assign_pin(pin))
         {
             log_warning("module",
-                              "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+                        "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
-        PinChangedEvent(this,PinEvent::PinAssignToGroup,pin->get_id()).send();
+        PinChangedEvent(this, PinEvent::PinAssignToGroup, pin->get_id()).send();
         scope.send_events();
-        return true;;
+        return true;
+        ;
     }
 
     bool Module::move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index)
@@ -1483,8 +1513,7 @@ namespace hal
 
         if (pin == nullptr)
         {
-            log_warning("module", "could not move pin within pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'",
-                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module", "could not move pin within pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
@@ -1492,7 +1521,12 @@ namespace hal
         {
             log_warning("module",
                         "could not move pin '{}' with ID {} within pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
-                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
@@ -1500,7 +1534,12 @@ namespace hal
         {
             log_warning("module",
                         "could not move pin '{}' with ID {} within pin group '{}' with return ERRID {} of module '{}' with ID {}: pin does not belong to module",
-                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
@@ -1508,11 +1547,16 @@ namespace hal
         {
             log_warning("module",
                         "could not move pin '{}' with ID {} within pin group '{}' with ID {} of module '{}' with ID {}",
-                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
-        PinChangedEvent(this,PinEvent::PinReorder,pin->get_id()).send();
+        PinChangedEvent(this, PinEvent::PinReorder, pin->get_id()).send();
         return true;
     }
 
@@ -1532,19 +1576,40 @@ namespace hal
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module",
+                        "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module",
+                        "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
         if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, delete_empty_groups); res.is_error())
         {
-            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID : unable to create new pin group for pin", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning("module",
+                        "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID : unable to create new pin group for pin",
+                        pin->get_name(),
+                        pin->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
             return false;
         }
 
@@ -1555,27 +1620,27 @@ namespace hal
     {
         PinChangedEventScope scope(this);
         std::string port_prefix;
-		u32 ctr = 0;
+        u32 ctr = 0;
         switch (direction)
         {
-        case PinDirection::input:
-            port_prefix = "I";
-            break;
-        case PinDirection::inout:
-            port_prefix = "IO";
-            break;
-        case PinDirection::output:
-            port_prefix = "O";
-            break;
-        default:
-            log_warning("module", "could not assign pin to net ID {}: invalid pin direction '{}'", net->get_id(), enum_to_string(direction));
-            return false;
+            case PinDirection::input:
+                port_prefix = "I";
+                break;
+            case PinDirection::inout:
+                port_prefix = "IO";
+                break;
+            case PinDirection::output:
+                port_prefix = "O";
+                break;
+            default:
+                log_warning("module", "could not assign pin to net ID {}: invalid pin direction '{}'", net->get_id(), enum_to_string(direction));
+                return false;
         }
 
         std::string name_internal;
         do
         {
-        	name_internal = port_prefix + "(" + std::to_string(ctr) + ")";
+            name_internal = port_prefix + "(" + std::to_string(ctr) + ")";
             ctr++;
         } while (m_pin_names_map.find(name_internal) != m_pin_names_map.end() || m_pin_group_names_map.find(name_internal) != m_pin_group_names_map.end());
 
@@ -1589,7 +1654,7 @@ namespace hal
         else
         {
             pin = res.get();
-            PinChangedEvent(this,PinEvent::PinCreate,pin->get_id()).send();
+            PinChangedEvent(this, PinEvent::PinCreate, pin->get_id()).send();
         }
 
         if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0, false); group_res.is_error())
@@ -1599,14 +1664,14 @@ namespace hal
         }
         else
         {
-            PinChangedEvent(this,PinEvent::GroupCreate,group_res.get()->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupCreate, group_res.get()->get_id()).send();
             if (!group_res.get()->assign_pin(pin))
             {
                 log_warning("module", "could not assign pin '{}' to net: failed to assign pin to pin group", name_internal);
                 return false;
             }
             else
-                PinChangedEvent(this,PinEvent::PinAssignToGroup,pin->get_id()).send();
+                PinChangedEvent(this, PinEvent::PinAssignToGroup, pin->get_id()).send();
         }
 
         scope.send_events();
@@ -1628,16 +1693,30 @@ namespace hal
 
         if (!pin_group->remove_pin(pin))
         {
-            log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to remove pin from pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
+            log_warning("module",
+                        "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to remove pin from pin group '{}' with ID {}",
+                        pin->get_name(),
+                        pin->get_id(),
+                        net->get_name(),
+                        net->get_id(),
+                        pin_group->get_name(),
+                        pin_group->get_id());
             return false;
         }
 
         if (pin_group->empty())
         {
-            PinChangedEvent(this,PinEvent::GroupDelete,pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupDelete, pin_group->get_id()).send();
             if (!delete_pin_group_internal(pin_group))
             {
-                log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
+                log_warning("module",
+                            "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin group '{}' with ID {}",
+                            pin->get_name(),
+                            pin->get_id(),
+                            net->get_name(),
+                            net->get_id(),
+                            pin_group->get_name(),
+                            pin_group->get_id());
                 return false;
             }
         }
@@ -1646,12 +1725,18 @@ namespace hal
 
         if (!delete_pin_internal(pin))
         {
-
-            log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin->get_name(), pin->get_id());
+            log_warning("module",
+                        "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin '{}' with ID {}",
+                        pin->get_name(),
+                        pin->get_id(),
+                        net->get_name(),
+                        net->get_id(),
+                        pin->get_name(),
+                        pin->get_id());
             return false;
         }
 
-        PinChangedEvent(this,PinEvent::PinDelete,pin_id_to_delete).send();
+        PinChangedEvent(this, PinEvent::PinDelete, pin_id_to_delete).send();
         scope.send_events();
         return true;
     }
@@ -1791,9 +1876,8 @@ namespace hal
         }
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("module",
-                        "could not delete pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
-                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning(
+                "module", "could not delete pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 

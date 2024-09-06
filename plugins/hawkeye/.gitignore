@@ -1,0 +1,13 @@
+*
+!include*
+!include/**/*
+!src*
+!src/**/*
+!python*
+!python/**/*
+!documentation*
+!documentation/**/*
+!scripts*
+!scripts/**/*
+!.gitignore
+!README.md

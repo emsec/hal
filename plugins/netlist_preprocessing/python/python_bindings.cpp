@@ -1,5 +1,6 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "netlist_preprocessing/netlist_preprocessing.h"
 #include "netlist_preprocessing/plugin_netlist_preprocessing.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
@@ -51,10 +52,10 @@ namespace hal
             :rtype: str
         )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_unused_lut_inputs",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_unused_lut_inputs(nl);
+                auto res = netlist_preprocessing::remove_unused_lut_inputs(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -74,10 +75,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_buffers",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_buffers(nl);
+                auto res = netlist_preprocessing::remove_buffers(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -99,10 +100,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_redundant_gates",
             [](Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_redundant_gates(nl, filter);
+                auto res = netlist_preprocessing::remove_redundant_gates(nl, filter);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -116,18 +117,22 @@ namespace hal
             py::arg("nl"),
             py::arg("filter") = nullptr,
             R"(
-                Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
-
+                Removes redundant sequential feedback loops.
+                Sometimes flip-flops and some of their combinational fan-in form a feedback loop where the flip-flop input depends on its own output.
+                For optimization, some synthesizers create multiple equivalent instances of these feedback loops.
+                To simplify structural analysis, this function removes the redundant flip-flop gate of the loop from the netlist.
+                Other preprocessing functions can then take care of the remaining combination gates of the loop.
+                
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param lambda filter: Optional filter to fine-tune which gates are being replaced. Default to a ``None``.
                 :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_redundant_loops",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_redundant_loops(nl);
+                auto res = netlist_preprocessing::remove_redundant_loops(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -151,10 +156,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_redundant_logic_trees",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_redundant_logic_trees(nl);
+                auto res = netlist_preprocessing::remove_redundant_logic_trees(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -175,10 +180,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_unconnected_gates",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);
+                auto res = netlist_preprocessing::remove_unconnected_gates(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -198,10 +203,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_unconnected_nets",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_unconnected_nets(nl);
+                auto res = netlist_preprocessing::remove_unconnected_nets(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -221,10 +226,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_unconnected_looped",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_unconnected_looped(nl);
+                auto res = netlist_preprocessing::remove_unconnected_looped(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -244,10 +249,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "manual_mux_optimizations",
             [](Netlist* nl, GateLibrary* mux_inv_gl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::manual_mux_optimizations(nl, mux_inv_gl);
+                auto res = netlist_preprocessing::manual_mux_optimizations(nl, mux_inv_gl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -272,10 +277,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "propagate_constants",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::propagate_constants(nl);
+                auto res = netlist_preprocessing::propagate_constants(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -296,10 +301,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "remove_consecutive_inverters",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_consecutive_inverters(nl);
+                auto res = netlist_preprocessing::remove_consecutive_inverters(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -320,10 +325,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "simplify_lut_inits",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::simplify_lut_inits(nl);
+                auto res = netlist_preprocessing::simplify_lut_inits(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -343,215 +348,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
-            "decompose_gate",
-            [](Netlist* nl, Gate* g, const bool delete_gate = true) -> bool {
-                auto res = NetlistPreprocessingPlugin::decompose_gate(nl, g, delete_gate);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("nl"),
-            py::arg("g"),
-            py::arg("delete_gate") = true,
-            R"(
-                Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
-                Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ``delete_gate`` flag is set.
-
-                For the decomposition we currently only support the base operands AND, OR, INVERT.
-                The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param hal_py.Gate gate: The gate to decompose.
-                :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to ``True``. 
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "decompose_gates_of_type",
-            [](Netlist* nl, const std::vector<const GateType*>& gate_types) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::decompose_gates_of_type(nl, gate_types);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nl"),
-            py::arg("gate_types"),
-            R"(
-                Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and constructing a gate tree implementing it.
-                Afterwards the original gate is deleted and the output net is connected to the built gate tree.
-
-                For the decomposition we currently only support the base operands AND, OR, INVERT.
-                The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param list[hal_py.GateType] gate_types: The gate types that should be decomposed.
-                :returns: The number of decomposed gates on success, ``None`` otherwise.
-                :rtype: int or ``None``
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "resynthesize_gate",
-            [](Netlist* nl, Gate* g, GateLibrary* target_lib, const std::filesystem::path& genlib_path, const bool delete_gate) -> bool {
-                auto res = NetlistPreprocessingPlugin::resynthesize_gate(nl, g, target_lib, genlib_path, delete_gate);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("nl"),
-            py::arg("g"),
-            py::arg("target_lib"),
-            py::arg("genlib_path"),
-            py::arg("delete_gate") = true,
-            R"(
-                Build the Boolean function of the gate and resynthesize a functional description of that function with a logic synthesizer.
-                Afterwards the original gate is replaced by the technology mapped netlist produced by the synthesizer.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param hal_py.Gate g: The gate to resynthesize.
-                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
-                :param path genlib_path: Path to file containing the target library in genlib format.
-                :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to true.
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "resynthesize_gates",
-            [](Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_lib) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::resynthesize_gates(nl, gates, target_lib);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nl"),
-            py::arg("gates"),
-            py::arg("target_lib"),
-            R"(
-                Build the Boolean function for each gate and resynthesize a functional description of that function with a logic synthesizer.
-                Afterwards all the original gates are replaced by the technology mapped netlists produced by the synthesizer.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param hal_py.Gate g: The gates to resynthesize.
-                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
-                :returns: The number of resynthesized gates on success, ``None``otherwise.
-                :rtype: int or ``None``
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "resynthesize_gates_of_type",
-            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::resynthesize_gates_of_type(nl, gate_types, target_gl);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nl"),
-            py::arg("gate_types"),
-            py::arg("target_gl"),
-            R"(
-                Build the Boolean functions of all gates of the specified types and resynthesize a functional description of those functions with a logic synthesizer.
-                Afterwards the original gates are replaced by the technology mapped netlists produced by the synthesizer.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param list[hal_py.GateType] gate_types: The gate types specifying which gates should be resynthesized.
-                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
-                :returns: The number of resynthesized gates on success, ``None`` otherwise.
-                :rtype: int or ``None``
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "resynthesize_subgraph",
-            [](Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, target_gl);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nl"),
-            py::arg("subgraph"),
-            py::arg("target_gl"),
-            R"(
-                Build a verilog description of a subgraph of gates and synthesize a new technology mapped netlist of the whole subgraph with a logic synthesizer.
-                Afterwards the original subgraph is replaced by the technology mapped netlist produced by the synthesizer.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param list[hal_py.Gate] subgraph: The subgraph to be resynthesized.
-                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
-                :returns: The number of resynthesized gates on success, ``None`` otherwise.
-                :rtype: int or ``None``
-            )");
-
-        py_netlist_preprocessing.def_static(
-            "resynthesize_subgraph_of_type",
-            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(nl, gate_types, target_gl);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nl"),
-            py::arg("gate_types"),
-            py::arg("target_gl"),
-            R"(
-                Build a verilog description of the subgraph consisting of all the gates of the specified types. 
-                Then synthesize a new technology mapped netlist of the whole subgraph with a logic synthesizer.
-                Afterwards the original subgraph is replaced by the technology mapped netlist produced by the synthesizer.
-
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param list[hal_py.GateType] gate_types: The gate types specifying which gates should be part of the subgraph.
-                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
-                :returns: The number of resynthesized gates on success, ``None`` otherwise.
-                :rtype: int or ``None``
-            )");
-
-        py_netlist_preprocessing.def_static(
+        m.def(
             "reconstruct_indexed_ff_identifiers",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifiers(nl);
+                auto res = netlist_preprocessing::reconstruct_indexed_ff_identifiers(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -574,10 +374,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "reconstruct_top_module_pin_groups",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::reconstruct_top_module_pin_groups(nl);
+                auto res = netlist_preprocessing::reconstruct_top_module_pin_groups(nl);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -597,10 +397,10 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "parse_def_file",
             [](Netlist* nl, const std::filesystem::path& def_file) -> bool {
-                auto res = NetlistPreprocessingPlugin::parse_def_file(nl, def_file);
+                auto res = netlist_preprocessing::parse_def_file(nl, def_file);
                 if (res.is_ok())
                 {
                     return true;
@@ -623,10 +423,10 @@ namespace hal
                 :rtype: bool
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
             "create_multi_bit_gate_modules",
             [](Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups) -> std::vector<Module*> {
-                auto res = NetlistPreprocessingPlugin::create_multi_bit_gate_modules(nl, concatenated_pin_groups);
+                auto res = netlist_preprocessing::create_multi_bit_gate_modules(nl, concatenated_pin_groups);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -648,10 +448,26 @@ namespace hal
                 :rtype: bool
             )");
 
-        py_netlist_preprocessing.def_static(
+        m.def(
+            "create_nets_at_unconnected_pins",
+            [](Netlist* nl) -> std::vector<Net*> {
+                auto res = netlist_preprocessing::create_nets_at_unconnected_pins(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("nl"));
+
+        m.def(
             "unify_ff_outputs",
             [](Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::unify_ff_outputs(nl, ffs, inverter_type);
+                auto res = netlist_preprocessing::unify_ff_outputs(nl, ffs, inverter_type);
                 if (res.is_ok())
                 {
                     return res.get();

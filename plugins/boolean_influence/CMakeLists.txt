@@ -7,8 +7,8 @@ if(PL_BOOLEAN_INFLUENCE OR BUILD_ALL_PLUGINS)
     hal_add_plugin(boolean_influence
                    SHARED
                    HEADER ${BOOLEAN_INFLUENCE_INC}
-                   SOURCES ${BOOLEAN_INFLUENCE_SRC} ${BOOLEAN_INFLUENCE_PYTHON_SRC}  ${MOC_HDR}
-                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils OpenMP::OpenMP_CXX subprocess::subprocess
+                   SOURCES ${BOOLEAN_INFLUENCE_SRC} ${BOOLEAN_INFLUENCE_PYTHON_SRC}
+                   LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils subprocess::subprocess
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/boolean_influence.rst
                    )
 endif()

@@ -213,13 +213,13 @@ ABC_NAMESPACE_IMPL_START
 /* =========================================================================
  * This function can be used by asm versions of crc32()
  */
-const unsigned long FAR * ZEXPORT get_crc_table()
+const unsigned FAR * ZEXPORT get_crc_table() /* changed long -> unsigned (see crc32.h) */
 {
 #ifdef DYNAMIC_CRC_TABLE
     if (crc_table_empty)
         make_crc_table();
 #endif /* DYNAMIC_CRC_TABLE */
-    return (const unsigned long FAR *)crc_table;
+    return (const unsigned FAR *)crc_table;
 }
 
 /* ========================================================================= */

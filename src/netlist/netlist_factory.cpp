@@ -27,6 +27,23 @@ namespace hal
             return std::make_unique<Netlist>(gate_library);
         }
 
+        std::unique_ptr<Netlist> load_netlist_from_string(const std::string& netlist_string, const std::filesystem::path& gate_library_file)
+        {
+            GateLibrary* lib = nullptr;
+
+            if (!gate_library_file.empty())
+            {
+                lib = gate_library_manager::load(gate_library_file);
+                if (!lib)
+                {
+                    log_critical("netlist", "could not parse gate library '{}', will not read netlist.", gate_library_file.string());
+                    return nullptr;
+                }
+            }
+
+            return netlist_serializer::deserialize_from_string(netlist_string, lib);
+        }
+
         std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file)
         {
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
@@ -42,7 +59,7 @@ namespace hal
                 lib = gate_library_manager::load(gate_library_file);
                 if (!lib)
                 {
-                    log_critical("netlist", "could not parse gate library '{}', will not read netlist.", gate_library_file.string());
+                    log_critical("netlist", "could not parse gate library '{}', will not load netlist.", gate_library_file.string());
                     return nullptr;
                 }
             }
@@ -55,7 +72,7 @@ namespace hal
             {
                 if (!lib)
                 {
-                    log_critical("netlist", "could not read netlist '{}' without gate library.", netlist_file.string());
+                    log_critical("netlist", "could not load netlist '{}' without gate library.", netlist_file.string());
                     return nullptr;
                 }
                 return netlist_parser_manager::parse(netlist_file, lib);
@@ -72,7 +89,7 @@ namespace hal
 
             if (!gate_library)
             {
-                log_critical("netlist", "gate library is null '{}', will not read netlist.");
+                log_critical("netlist", "gate library is a nullptr, will not load netlist.");
                 return nullptr;
             }
 

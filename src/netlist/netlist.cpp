@@ -526,6 +526,40 @@ namespace hal
         return m_global_output_nets;
     }
 
+    std::vector<Net*> Netlist::get_gnd_nets() const
+    {
+        std::vector<Net*> gnd_nets;
+        for (const auto& gnd_gate : m_gnd_gates)
+        {
+            for (const auto& o_net : gnd_gate->get_fan_out_nets())
+            {
+                if (o_net->is_gnd_net())
+                {
+                    gnd_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return gnd_nets;
+    }
+
+    std::vector<Net*> Netlist::get_vcc_nets() const
+    {
+        std::vector<Net*> vcc_nets;
+        for (const auto& vcc_gate : m_vcc_gates)
+        {
+            for (const auto& o_net : vcc_gate->get_fan_out_nets())
+            {
+                if (o_net->is_vcc_net())
+                {
+                    vcc_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return vcc_nets;
+    }
+
     void Netlist::enable_automatic_net_checks(bool enable_checks)
     {
         m_manager->m_net_checks_enabled = enable_checks;

@@ -14,7 +14,7 @@ namespace hal
     {
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool all_global_io) const
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(m_netlist.get_gate_library());
         c_netlist->enable_automatic_net_checks(false);
@@ -87,7 +87,7 @@ namespace hal
         {
             Net* net = m_netlist.get_net_by_id(c_net->get_id());
 
-            if (outside_conncetions_as_global_io)
+            if (all_global_io)
             {
                 // mark all nets as global input that either lost a source or were a global input originally
                 if ((c_net->get_num_of_sources() < net->get_num_of_sources()) || net->is_global_input_net())
@@ -163,10 +163,10 @@ namespace hal
         return OK(std::move(c_netlist));
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool all_global_io) const
     {
         const auto subgraph_gates_const = std::vector<const Gate*>(subgraph_gates.begin(), subgraph_gates.end());
-        if (auto res = copy_subgraph_netlist(subgraph_gates_const, outside_conncetions_as_global_io); res.is_ok())
+        if (auto res = copy_subgraph_netlist(subgraph_gates_const, all_global_io); res.is_ok())
         {
             return res;
         }
@@ -176,9 +176,9 @@ namespace hal
         }
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const Module* subgraph_module, const bool outside_conncetions_as_global_io) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const Module* subgraph_module, const bool all_global_io) const
     {
-        if (auto res = copy_subgraph_netlist(subgraph_module->get_gates(), outside_conncetions_as_global_io); res.is_ok())
+        if (auto res = copy_subgraph_netlist(subgraph_module->get_gates(), all_global_io); res.is_ok())
         {
             return res;
         }

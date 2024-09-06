@@ -4,7 +4,8 @@
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <mutex>
-#include <string.h>
+#include <sstream>
+#include <string>
 
 extern "C" {
 ////////////////////////////////////////////////////////////////////////////

@@ -34,7 +34,7 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 13;
+            const int SERIALIZATION_FORMAT_VERSION = 14;
             int encoded_format_version;
 
             // Ver 12 : location of gates
@@ -66,6 +66,7 @@ namespace hal
                     std::vector<PinInformation> pins;
                     bool ascending  = false;
                     u32 start_index = 0;
+                    bool ordered    = false;
                 };
 
             }    // namespace
@@ -443,6 +444,7 @@ namespace hal
                         json_pin_group.AddMember("direction", enum_to_string(pin_group->get_direction()), allocator);
                         json_pin_group.AddMember("type", enum_to_string(pin_group->get_type()), allocator);
                         json_pin_group.AddMember("ascending", pin_group->is_ascending(), allocator);
+                        json_pin_group.AddMember("ordered", pin_group->is_ordered(), allocator);
                         json_pin_group.AddMember("start_index", pin_group->get_start_index(), allocator);
                         rapidjson::Value json_pins(rapidjson::kArrayType);
                         for (const ModulePin* pin : pin_group->get_pins())
@@ -544,6 +546,14 @@ namespace hal
                         {
                             pin_group.type = PinType::none;
                         }
+                        if (json_pin_group.HasMember("ordered"))
+                        {
+                            pin_group.ordered = json_pin_group["ordered"].GetBool();
+                        }
+                        else
+                        {
+                            pin_group.type = PinType::none;
+                        }
                         pin_group.ascending   = json_pin_group["ascending"].GetBool();
                         pin_group.start_index = json_pin_group["start_index"].GetUint();
 
@@ -616,7 +626,7 @@ namespace hal
                             }
                         }
                         u32 pgid = (pg.id > 0) ? (u32)pg.id : sm->get_unique_pin_group_id();
-                        if (auto res = sm->create_pin_group(pgid, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index); res.is_error())
+                        if (auto res = sm->create_pin_group(pgid, pg.name, pins, pg.direction, pg.type, pg.ascending, pg.start_index, pg.ordered); res.is_error())
                         {
                             log_error("netlist_persistent",
                                       "could not deserialize pin group '" + pg.name + "' of module '" + sm->get_name() + "' with ID " + std::to_string(sm->get_id())
@@ -917,6 +927,44 @@ namespace hal
 
                 return nl;
             }
+
+            std::unique_ptr<Netlist> deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source,
+                                                          std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
+            {
+                if (document.HasParseError())
+                {
+                    log_error("netlist_persistent", "invalid json string for deserialization");
+                    return nullptr;
+                }
+
+                if (document.HasMember("serialization_format_version"))
+                {
+                    encoded_format_version = document["serialization_format_version"].GetUint();
+                    if (encoded_format_version < SERIALIZATION_FORMAT_VERSION)
+                    {
+                        log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                    }
+                    else if (encoded_format_version > SERIALIZATION_FORMAT_VERSION)
+                    {
+                        log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+                    }
+                }
+                else
+                {
+                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                }
+
+                auto netlist = deserialize(document, gatelib);
+
+                if (netlist)
+                {
+                    log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", source, DURATION(begin_time));
+                }
+
+                // event_controls::enable_all(true);
+                return netlist;
+            }
+
         }    // namespace
 
         bool serialize_to_file(const Netlist* nl, const std::filesystem::path& hal_file)
@@ -997,38 +1045,19 @@ namespace hal
             document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
             fclose(pFile);
 
-            if (document.HasParseError())
-            {
-                log_error("netlist_persistent", "invalid json string for deserialization");
-                return nullptr;
-            }
+            return deserialize_document(document, gatelib, hal_file.string(), begin_time);
+        }
 
-            if (document.HasMember("serialization_format_version"))
-            {
-                encoded_format_version = document["serialization_format_version"].GetUint();
-                if (encoded_format_version < SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-                }
-                else if (encoded_format_version > SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
-                }
-            }
-            else
-            {
-                log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-            }
+        std::unique_ptr<Netlist> deserialize_from_string(const std::string& hal_string, GateLibrary* gatelib)
+        {
+            auto begin_time = std::chrono::high_resolution_clock::now();
 
-            auto netlist = deserialize(document, gatelib);
+            // event_controls::enable_all(false);
 
-            if (netlist)
-            {
-                log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
-            }
+            rapidjson::Document document;
+            document.Parse<0, rapidjson::UTF8<> >(hal_string.c_str());
 
-            // event_controls::enable_all(true);
-            return netlist;
+            return deserialize_document(document, gatelib, "source string", begin_time);
         }
     }    // namespace netlist_serializer
 }    // namespace hal

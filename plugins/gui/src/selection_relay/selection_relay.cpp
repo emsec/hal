@@ -375,14 +375,14 @@ namespace hal
         relaySubfocusChanged(nullptr);
     }
 
-    void SelectionRelay::suppressedByFilter(const QList<u32>& modIds, const QList<u32>& gatIds, const QList<u32>& netIds)
+    /*void SelectionRelay::suppressedByFilter(const QList<u32>& modIds, const QList<u32>& gatIds, const QList<u32>& netIds)
     {
         initializeAction();
         mModulesSuppressedByFilter = modIds.toSet();
         mGatesSuppressedByFilter   = gatIds.toSet();
         mNetsSuppressedByFilter    = netIds.toSet();
         executeAction();
-    }
+    }*/
 
     bool SelectionRelay::isModuleSelected(u32 id) const
     {
