@@ -133,9 +133,6 @@ namespace hal {
         QTabWidget* mTabWidget;
 
         ModuleProxyModel* mModuleTreeProxyModel;
-        ModuleSelectProxy* mModuleTableProxyModel;
-        ModuleSelectModel* mModuleSelectModel;
-
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;

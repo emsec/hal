@@ -16,11 +16,11 @@ namespace hal
 
             .def(
                 "load_netlist",
-                [](const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file) {
+                [](const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path()) {
                     return std::shared_ptr<Netlist>(netlist_factory::load_netlist(netlist_file, gate_library_file));
                 },
                 py::arg("netlist_file"),
-                py::arg("gate_library_file") = "",
+                py::arg("gate_library_file") = std::filesystem::path(),
                 R"(
                 Create a netlist from the given file using the specified gate library file.
                 Will either deserialize ``.hal`` file or call parser plugin for other formats.
@@ -42,7 +42,7 @@ namespace hal
                 Will either deserialize ``.hal`` file or call parser plugin for other formats.
 
                 :param pathlib.Path netlist_file: Path to the file.
-                :param pathlib.Path gate_library_file: Path to the gate library file.
+                :param hal_py.GateLibrary gate_library_file: Path to the gate library file.
                 :returns: The netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None
             )")
