@@ -146,8 +146,16 @@ endif()
 # ####   Python support
 # ###############################
 
-# set(Python_ADDITIONAL_VERSIONS 3.5 3.6 3.8)
-find_package(Python3 COMPONENTS Interpreter Development)
+# List versions in order of preference
+set(desired_python_versions "3.12" "3.11" "3.10" "3.9" "3.8" "3.7" "3.6")
+
+foreach(ver ${desired_python_versions})
+  find_package(Python3 ${ver} QUIET COMPONENTS Interpreter Development)
+  if(Python3_FOUND)
+    message(STATUS "Using Python ${ver}")
+    break()
+  endif()
+endforeach()
 
 if(Python3_Interpreter_FOUND)
     message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
