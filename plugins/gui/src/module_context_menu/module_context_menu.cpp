@@ -6,66 +6,49 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/python/py_code_provider.h"
+#include "gui/user_action/action_set_selection_focus.h"
 
 #include <QApplication>
 #include <QClipboard>
 #include <QInputDialog>
 
 namespace hal {
-    /**void ModuleContextMenu::addSubmenu(QMenu* contextMenu, const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets, ) // extra id and type for showing all selected menu and clicked menu
-    {
-        if(modules.size() == 1 && gates.size() <= 0 && nets.size() <= 0) 
-            addModuleSubmenu(contextMenu, *(modules.begin()));
-        else if(modules.size() <= 0 && gates.size() == 1 && nets.size() <= 0) 
-            addGateSubmenu(contextMenu, *(gates.begin()));
-        else if(modules.size() <= 0 && gates.size() <= 0 && nets.size() == 1) 
-            addNetSubmenu(contextMenu, *(nets.begin()));
-        else if(modules.size() >=1 || gates.size() >= 1 || nets.size() >= 1) 
-            addMultipleElementsSubmenu(contextMenu, modules, gates, nets);
-    }**/
-
-    void ModuleContextMenu::addSubmenu(QMenu* contextMenu, const QSet<u32>& modules, const QSet<u32>& gates, const QSet<u32>& nets)
-    {
-        if(modules.size() == 1 && gates.size() <= 0 && nets.size() <= 0) 
-            addModuleSubmenu(contextMenu, *(modules.begin()));
-        else if(modules.size() <= 0 && gates.size() == 1 && nets.size() <= 0) 
-            addGateSubmenu(contextMenu, *(gates.begin()));
-        else if(modules.size() <= 0 && gates.size() <= 0 && nets.size() == 1) 
-            addNetSubmenu(contextMenu, *(nets.begin()));
-        else if(modules.size() >=1 || gates.size() >= 1 || nets.size() >= 1) 
-            addMultipleElementsSubmenu(contextMenu, modules, gates, nets);
-    }
-
     void ModuleContextMenu::addModuleSubmenu(QMenu* contextMenu, u32 id)
     {
+        QAction* act;
+        Module* module = gNetlist->get_module_by_id(id);
+
         contextMenu->addSeparator();
-        contextMenu->addAction("This module (" + QString::number(id)+"):")->setDisabled(true);
-        contextMenu->addAction("  Module name to clipboard",
-           [id]()
-           {QApplication::clipboard()->setText(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));}
+        contextMenu->addAction("This module (ID:" + QString::number(id)+"):")->setDisabled(true);
+        QMenu *sm = contextMenu->addMenu("  To clipboard …");
+        sm->addAction("Module name",
+           [id, module]()
+           {QApplication::clipboard()->setText(QString::fromStdString(module->get_name()));}
         );
-        contextMenu->addAction("  Module ID to clipboard",
+        sm->addAction("Module ID",
            [id]()
            {QApplication::clipboard()->setText(QString::number(id));}
         );
-        contextMenu->addAction("  Module type to clipboard",
-           [id]()
-           {QApplication::clipboard()->setText(QString::fromStdString(gNetlist->get_module_by_id(id)->get_type()));}
+        sm->addAction("Module type",
+           [id, module]()
+           {QApplication::clipboard()->setText(QString::fromStdString(module->get_type()));}
         );
-        contextMenu->addAction(QIcon(":/icons/python"), 
-            "  Extract module as python code (copy to clipboard)", 
+        sm->addAction(QIcon(":/icons/python"),
+            "  Module as python code", 
             [id]()
-            {QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(id) + ")");}
+            {QApplication::clipboard()->setText(PyCodeProvider::pyCodeModule(id));}
         );
-        contextMenu->addAction("  Change module name",
+        sm = contextMenu->addMenu("  Change …");
+        sm->addAction("Module name",
            [id]()
            {gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Module, id);}
         );
-        contextMenu->addAction("  Change module type",
+        sm->addAction("Module type",
            [id]()
            {gNetlistRelay->changeModuleTypeDialog(id);}
         );
-        contextMenu->addAction("  Change module color",
+        sm->addAction("Module color",
            [id]()
            {gNetlistRelay->changeModuleColorDialog(id);}
         );
@@ -73,30 +56,38 @@ namespace hal {
             [id]()
             {gNetlistRelay->addChildModuleDialog(id);}
         );
-        contextMenu->addAction("  Add selected gates to module", 
-            [id]()
-            {gNetlistRelay->addSelectionToModule(id);}
-        );
-        contextMenu->addAction("  Set module as selection",
+        sm = contextMenu->addMenu("  To selection …");
+        sm->addAction("Set module as selection",
             [id](){
-                gSelectionRelay->setSelectedModules({id});
-                gSelectionRelay->relaySelectionChanged(nullptr);
+                ActionSetSelectionFocus *assf = new ActionSetSelectionFocus();
+                assf->setObject(UserActionObject(id, UserActionObjectType::Module));
+                assf->exec();
             }
         );
-        contextMenu->addAction("  Add module to selection",
+        act = sm->addAction("Add module to selection",
             [id](){
                 gSelectionRelay->addModule(id);
                 gSelectionRelay->relaySelectionChanged(nullptr);
             }
         );
-        contextMenu->addAction("  Assign module to grouping",
-           [id]()
-           {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({id});}
+        if(gSelectionRelay->selectedModules().contains(id))
+            act->setEnabled(false);
+
+        QString actionText = "  Assign module to grouping";
+        if(module->get_grouping() != nullptr)
+            actionText = "  Reassign module to grouping";
+        contextMenu->addAction(actionText,
+            [id]()
+            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({id});}
         );
-        contextMenu->addAction("  Remove module from grouping",
-           [id]()
-           {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({id});}
+
+        act = contextMenu->addAction("  Remove module from grouping",
+            [id]()
+            {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({id});}
         );
+        if(module->get_grouping() == nullptr)
+            act->setEnabled(false);
+
         contextMenu->addAction("  Focus module in Graph View",
            [id]()
            {gContentManager->getGraphTabWidget()->handleModuleFocus(id);}
@@ -109,44 +100,48 @@ namespace hal {
             [id]()
             {gNetlistRelay->deleteModule(id);}
         );
-        if(gNetlist->get_module_by_id(id) == gNetlist->get_top_module())
+        if(module == gNetlist->get_top_module())
             delAction->setEnabled(false);
     }
 
     void ModuleContextMenu::addGateSubmenu(QMenu* contextMenu, u32 id)
     {
         QAction *act;
+        Gate* gate = gNetlist->get_gate_by_id(id);
 
         contextMenu->addSeparator();
-        contextMenu->addAction("This gate (" + QString::number(id)+"):")->setDisabled(true);
-        contextMenu->addAction("  Gate name to clipboard",
-           [id]()
-           {QApplication::clipboard()->setText(QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name()));}
+        contextMenu->addAction("This gate (ID:" + QString::number(id)+"):")->setDisabled(true);
+        QMenu *sm = contextMenu->addMenu("  To clipboard …");
+        sm->addAction("Gate name",
+           [id, gate]()
+           {QApplication::clipboard()->setText(QString::fromStdString(gate->get_name()));}
         );
-        contextMenu->addAction("  Gate ID to clipboard",
+        sm->addAction("Gate ID",
            [id]()
            {QApplication::clipboard()->setText(QString::number(id));}
         );
-        contextMenu->addAction("  Gate type to clipboard",
-           [id]()
-           {QApplication::clipboard()->setText(QString::fromStdString(gNetlist->get_gate_by_id(id)->get_type()->get_name()));}
+        sm->addAction("Gate type",
+           [id, gate]()
+           {QApplication::clipboard()->setText(QString::fromStdString(gate->get_type()->get_name()));}
         );
-        contextMenu->addAction(QIcon(":/icons/python"), 
-            "  Extract gate as python code (copy to clipboard)", 
+        sm->addAction(QIcon(":/icons/python"), 
+            "  Gate as python code", 
             [id]()
-            {QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(id) + ")");}
+            {QApplication::clipboard()->setText(PyCodeProvider::pyCodeGate(id));}
         );
         contextMenu->addAction("  Change gate name",
            [id]()
            {gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Gate, id);}
         );
-        contextMenu->addAction("  Set gate as selection",
+        sm = contextMenu->addMenu("  To selection …");
+        sm->addAction("  Set gate as selection",
             [id](){
-                gSelectionRelay->setSelectedGates({id});
-                gSelectionRelay->relaySelectionChanged(nullptr);
+                ActionSetSelectionFocus *assf = new ActionSetSelectionFocus();
+                assf->setObject(UserActionObject(id, UserActionObjectType::Gate));
+                assf->exec();
             }
         );
-        act = contextMenu->addAction("  Add gate to selection",
+        act = sm->addAction("  Add gate to selection",
             [id](){
                 gSelectionRelay->addGate(id);
                 gSelectionRelay->relaySelectionChanged(nullptr);
@@ -154,14 +149,22 @@ namespace hal {
         );
         if(gSelectionRelay->selectedGates().contains(id))
             act->setEnabled(false);
-        contextMenu->addAction("  Assign gate to grouping",
-           [id]()
-           {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{id});}
+
+        QString actionText = "  Assign gate to grouping";
+        if(gate->get_grouping() != nullptr)
+            actionText = "  Reassign gate to grouping";
+        contextMenu->addAction(actionText,
+            [id]()
+            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{id});}
         );
-        contextMenu->addAction("  Remove gate from grouping",
-           [id]()
-           {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({},{id});}
+
+        act = contextMenu->addAction("  Remove gate from grouping",
+            [id]()
+            {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({},{id});}
         );
+        if(gate->get_grouping() == nullptr)
+            act->setEnabled(false);
+        
         contextMenu->addAction("  Focus gate in Graph View",
            [id]()
            {gContentManager->getGraphTabWidget()->handleGateFocus(id);}
@@ -174,47 +177,63 @@ namespace hal {
 
     void ModuleContextMenu::addNetSubmenu(QMenu* contextMenu, u32 id)
     {
+        QAction* act;
+        Net* net = gNetlist->get_net_by_id(id);
+
         contextMenu->addSeparator();
-        contextMenu->addAction("This net (" + QString::number(id)+"):")->setDisabled(true);
-        contextMenu->addAction("  Net name to clipboard",
-           [id]()
-           {QApplication::clipboard()->setText(QString::fromStdString(gNetlist->get_net_by_id(id)->get_name()));}
+        contextMenu->addAction("This net (ID:" + QString::number(id)+"):")->setDisabled(true);
+        QMenu *sm = contextMenu->addMenu("  To clipboard …");
+        sm->addAction("Net name",
+           [id, net]()
+           {QApplication::clipboard()->setText(QString::fromStdString(net->get_name()));}
         );
-        contextMenu->addAction("  Net ID to clipboard",
+        sm->addAction("Net ID",
            [id]()
            {QApplication::clipboard()->setText(QString::number(id));}
         );
-        contextMenu->addAction(QIcon(":/icons/python"), 
-            "  Extract net as python code (copy to clipboard)", 
+        sm->addAction(QIcon(":/icons/python"), 
+            "  Net as python code", 
             [id]()
-            {QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(id) + ")");}
+            {QApplication::clipboard()->setText(PyCodeProvider::pyCodeNet(id));}
         );
         contextMenu->addAction("  Change net name",
            [id]()
            {gNetlistRelay->changeElementNameDialog(ModuleItem::TreeItemType::Net, id);}
         );
-        contextMenu->addAction("  Set net as selection",
+        sm = contextMenu->addMenu("  To selection …");
+        sm->addAction("Set net as selection",
             [id]()
             {
-                gSelectionRelay->setSelectedNets({id});
-                gSelectionRelay->relaySelectionChanged(nullptr);
+                ActionSetSelectionFocus *assf = new ActionSetSelectionFocus();
+                assf->setObject(UserActionObject(id, UserActionObjectType::Net));
+                assf->exec();
             }
         );
-        contextMenu->addAction("  Add net to selection",
+        act = sm->addAction("Add net to selection",
             [id]()
             {
                 gSelectionRelay->addNet(id);
                 gSelectionRelay->relaySelectionChanged(nullptr);
             }
-         );
-        contextMenu->addAction("  Assign net to grouping",
+        );
+        if(gSelectionRelay->selectedNets().contains(id))
+            act->setEnabled(false);
+
+        QString actionText = "  Assign net to grouping";
+        if(net->get_grouping() != nullptr)
+            actionText = "  Reassign net to grouping";
+        contextMenu->addAction(actionText,
            [id]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{},{id});}
         );
-        contextMenu->addAction("  Remove net from grouping",
+
+        act = contextMenu->addAction("  Remove net from grouping",
            [id]()
            {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({},{},{id});}
         );
+        if(net->get_grouping() == nullptr)
+            act->setEnabled(false);
+
         contextMenu->addAction("  Focus net in Graph View",
            [id]()
            {gContentManager->getGraphTabWidget()->handleNetFocus(id);}

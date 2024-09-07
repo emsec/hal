@@ -144,7 +144,7 @@ namespace hal
         bool ok;
         QString text = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
 
-        if (ok && !text.isEmpty())
+        if (ok)
         {
             ActionSetObjectType* act = new ActionSetObjectType(text);
             act->setObject(UserActionObject(id, UserActionObjectType::Module));
@@ -165,16 +165,6 @@ namespace hal
             return;
 
         ActionSetObjectColor* act = new ActionSetObjectColor(color);
-        act->setObject(UserActionObject(id, UserActionObjectType::Module));
-        act->exec();
-    }
-
-    void NetlistRelay::addSelectionToModule(const u32 id)
-    {
-        // NOT THREADSAFE
-        // DECIDE HOW TO HANDLE MODULES
-
-        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gSelectionRelay->selectedGates());
         act->setObject(UserActionObject(id, UserActionObjectType::Module));
         act->exec();
     }

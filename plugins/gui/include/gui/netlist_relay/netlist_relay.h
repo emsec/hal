@@ -117,13 +117,6 @@ namespace hal
         void changeModuleColorDialog(const u32 id);
 
         /**
-         * Adds the currently selected gates to a specific module.
-         *
-         * @param id - The id of the module that should be appended
-         */
-        void addSelectionToModule(const u32 id);
-
-        /**
          * Adds an empty child module to the specified module by asking the user for a new name in a dialogue.
          *
          * @param id - The id of the module that becomes the parent of the empty child module

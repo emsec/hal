@@ -603,17 +603,6 @@ namespace hal
                 }
             }
 
-            if(isGate || isModule)
-            {
-                action = context_menu.addAction("Fold parent module");
-                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentSingle);
-            }
-            if(isModule)
-            {
-                action = context_menu.addAction("Unfold module");
-                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldSingleAction);
-            }
-
             if (isGate || isModule)
             {
                 QMenu* preSucMenu = context_menu.addMenu("Successor/Predecessor …");
@@ -655,45 +644,57 @@ namespace hal
                 }
             }
 
-            if (isGate || isModule)
+            if (!gContentManager->getGraphTabWidget()->isSelectMode())
             {
-                action = context_menu.addAction("Fold all parent modules");
+                action = context_menu.addAction("Cancel pick-item mode");
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickMode);
+            }
+
+            if(isModule)
+                ModuleContextMenu::addModuleSubmenu(&context_menu, mItem->id());
+            else if(isGate)
+                ModuleContextMenu::addGateSubmenu(&context_menu, mItem->id());
+            else if(isNet)
+                ModuleContextMenu::addNetSubmenu(&context_menu, mItem->id());
+
+            // Appended to single selected item menu
+            if(isGate || isModule)
+            {
+                action = context_menu.addAction("  Fold parent module");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentSingle);
+            }
+            if(isModule)
+            {
+                action = context_menu.addAction("  Unfold module");
+                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldSingleAction);
+            }
+
+            if (gSelectionRelay->numberSelectedItems() > 1)
+            {
+                ModuleContextMenu::addMultipleElementsSubmenu(&context_menu, gSelectionRelay->selectedModules(), gSelectionRelay->selectedGates(), gSelectionRelay->selectedNets());
+
+                // Appended to multiple selected items menu
+                action = context_menu.addAction("  Fold all parent modules");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleFoldParentAll);
-                if(gSelectionRelay->numberSelectedItems() <= 1) action->setEnabled(false);
-
-                action = context_menu.addAction("Isolate all in new view");
+                action = context_menu.addAction("  Isolate all in new view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
-                if(gSelectionRelay->numberSelectedItems() <= 1) action->setEnabled(false);
-
-
-                action = context_menu.addAction("Unfold all selected modules");
+                action = context_menu.addAction("  Unfold all selected modules");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldAllAction);
-                if(gSelectionRelay->numberSelectedModules() <= 1) action->setEnabled(false);
-
-                action = context_menu.addAction("Remove item from view");
+                action = context_menu.addAction("  Remove items from view");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
-                // Gate* g   = isGate ? gNetlist->get_gate_by_id(mItem->id()) : nullptr;
-                Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
 
-                action = context_menu.addAction("Add comment");
+                action = context_menu.addAction("  Add comment");
                 QVariant data;
                 data.setValue(Node(mItem->id(), isGate ? Node::NodeType::Gate : Node::NodeType::Module));
                 action->setData(data);
-                QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddCommentAction);
+                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddCommentAction);
 
                 // only allow move actions on anything that is not the top module
-                if (!gContentManager->getGraphTabWidget()->isSelectMode())
+                Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
+                if (!(isModule && m == gNetlist->get_top_module()))
                 {
-                    action = context_menu.addAction("Cancel pick-item mode");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleCancelPickMode);
-                }
-                else
-                {
-                    if (!(isModule && m == gNetlist->get_top_module()))
-                    {
-                        action = context_menu.addAction("Move to module …");
-                        connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
-                    }
+                    action = context_menu.addAction("  Move to module …");
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
                 }
             }
         }
@@ -702,32 +703,23 @@ namespace hal
             context_menu.addAction("This view:")->setEnabled(false);
 
             action = context_menu.addAction("  Add module to view");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
 
             int selectable_modules_count = 0;
             QSet<u32> not_selectable_modules = getNotSelectableModules();
 
             for (Module* m : gNetlist->get_modules())
-            {
                 if (!not_selectable_modules.contains(m->get_id()))
-                {
                     selectable_modules_count++;
-                }
-            }
 
-            if (selectable_modules_count == 0) {
+            if (selectable_modules_count == 0)
                 action->setDisabled(true);
-            }
-
-            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
 
             action = context_menu.addAction("  Add gate to view");
-
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
             if (getSelectableGates().empty())
                  action->setDisabled(true);
-
-            QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
         }
-
 
         // if (!item || isNet)
         // {
@@ -741,8 +733,6 @@ namespace hal
         // QAction* none_action         = type_menu->addAction("None");
         // connect(action, &QAction::triggered, this, SLOT);
         // }
-
-        ModuleContextMenu::addSubmenu(&context_menu, gSelectionRelay->selectedModules(), gSelectionRelay->selectedGates(), gSelectionRelay->selectedNets());
 
         GuiPluginManager::addPluginSubmenus(&context_menu, gNetlist, 
                                             gSelectionRelay->selectedModulesVector(),
