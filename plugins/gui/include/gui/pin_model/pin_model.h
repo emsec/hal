@@ -50,6 +50,9 @@ namespace hal
     {
         Q_OBJECT
 
+    Q_SIGNALS:
+        void editNewDone(QModelIndex index);
+
     public:
 
         explicit PinModel(QObject* parent = nullptr);

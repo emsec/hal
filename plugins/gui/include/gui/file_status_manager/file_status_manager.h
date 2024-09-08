@@ -116,12 +116,6 @@ namespace hal
         bool isGatelibModified() const;
 
         /**
-         * Removes all registered files and unsets every modified-flag, effectively resetting
-         * the state of the manager.
-         */
-        void flushUnsavedChanges();
-
-        /**
          * Get a list of the descriptions of all modified files that are registered to this manager.
          * Appends "Netlist modifications"  to the list if the netlist-modified flag is set.
          *

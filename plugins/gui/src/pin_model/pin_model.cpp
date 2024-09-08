@@ -209,6 +209,7 @@ namespace hal
                 //add pin to group
                 //addPinToPinGroup(initialPin, pinItem);
 
+                Q_EMIT editNewDone(index);
                 break;
             }
             case PinItem::TreeItemType::PinCreator:{
@@ -235,6 +236,7 @@ namespace hal
                 //auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
                 //addPinToPinGroup(pinItem, pinGroup);
 
+                Q_EMIT editNewDone(index);
                 break;
             }
             case PinItem::TreeItemType::InvalidPin:{
@@ -254,6 +256,7 @@ namespace hal
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
 
+        PinDirection oldDirection = pinItem->getDirection();
         PinDirection pinDirection = enum_from_string<PinDirection>(directionString.toStdString());
 
         switch(itemType){
@@ -298,6 +301,8 @@ namespace hal
             }
         }
         Q_EMIT dataChanged(index, index);
+        if (oldDirection == PinDirection::none)
+            Q_EMIT editNewDone(index);
     }
 
     void PinModel::handleEditType(QModelIndex index, const QString& typeString)

@@ -39,13 +39,6 @@ namespace hal
         return !mModifiedFilesUuid.empty() || mNetlistModified;
     }
 
-    void FileStatusManager::flushUnsavedChanges()
-    {
-        mModifiedFilesUuid.clear();
-        mModifiedFilesDescriptors.clear();
-        netlistSaved();
-    }
-
     void FileStatusManager::netlistChanged()
     {
         bool before = modifiedFilesExisting();
@@ -65,6 +58,8 @@ namespace hal
     void FileStatusManager::netlistClosed()
     {
         mNetlistModified = false;
+        mModifiedFilesUuid.clear();
+        mModifiedFilesDescriptors.clear();
         Q_EMIT status_changed(false, false);
     }
 

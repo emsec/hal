@@ -43,7 +43,7 @@ namespace hal
 
         //pages for the tab widget
         mGeneralTab = new GateLibraryTabGeneral(this);
-        mPinTab = new GateLibraryTabPin(this);
+        mPinTab = new GateLibraryTabPin(false,this);
         mBooleanFunctionTab = new GateLibraryTabTruthTable(this);
 
 
@@ -267,6 +267,7 @@ namespace hal
                 break;
                 case QMessageBox::Discard:
                     gate_library_manager::remove(std::filesystem::path(mEditableGatelibrary->get_path()));
+                    gFileStatusManager->gatelibSaved();
                     window()->setWindowTitle("HAL");
                     Q_EMIT close();
                 break;

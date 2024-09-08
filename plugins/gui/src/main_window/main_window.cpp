@@ -966,7 +966,7 @@ namespace hal
 
     void MainWindow::closeEvent(QCloseEvent* event)
     {
-        if (FileManager::get_instance()->fileOpen())
+        if (gFileStatusManager->isGatelibModified() || FileManager::get_instance()->fileOpen())
         {
             if (tryToCloseFile())
                 event->accept();

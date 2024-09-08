@@ -45,7 +45,6 @@ namespace hal
         mGateLibrary = gateLibrary;
         mGateType = gateType;
         mPinModel = new PinModel(this, true);
-        mPinTab = new GateLibraryTabPin(this, true);
 
         if(mGateType == nullptr)
         {

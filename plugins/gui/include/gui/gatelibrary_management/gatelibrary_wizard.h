@@ -91,7 +91,6 @@ namespace hal
         BoolWizardPage* boolPage;
 
         PinModel* mPinModel;
-        GateLibraryTabPin* mPinTab;
         GateType* mNewGateType;
     };
 }

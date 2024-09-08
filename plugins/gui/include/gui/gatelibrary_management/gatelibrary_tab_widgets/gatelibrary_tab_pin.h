@@ -37,6 +37,22 @@
 
 namespace hal
 {
+    class PinTreeView : public QTreeView
+    {
+        Q_OBJECT
+
+    /* controll tree navigation using arrow keys
+    protected:
+        QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
+     */
+
+    public Q_SLOTS:
+        void handleEditNewDone(const QModelIndex& index);
+
+    public:
+        PinTreeView(QWidget* parent = nullptr);
+    };
+
     /**
      * Widget which shows information of the boolean functions of a gate
      */
@@ -45,8 +61,7 @@ namespace hal
         Q_OBJECT
 
     public:
-        GateLibraryTabPin(QWidget* parent = nullptr);
-        GateLibraryTabPin(QWidget* parent, bool editable);
+        GateLibraryTabPin(bool editable = false, QWidget* parent = nullptr);
         QTreeView* getTreeView();
         PinModel* getPinModel();
 
@@ -55,7 +70,7 @@ namespace hal
 
     private:
         PinModel* mPinModel;
-        QTreeView* mTreeView;
+        PinTreeView* mTreeView;
 
         QGridLayout* mGridLayout;
 

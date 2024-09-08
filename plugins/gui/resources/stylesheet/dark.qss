@@ -960,6 +960,24 @@ hal--GeneralInfoWizardPage #arrowButton
     max-width  : 12px;
 }
 
+hal--PinTreeView::item:focus
+{
+    background : rgba(10,20,80,0.6);
+    selection-background-color : rgba(10,20,80,0.6);
+}
+
+/*
+hal--PinTreeView
+{
+    background : gray;
+}
+
+hal--PinTreeView::item:selected
+{
+    background : red;
+}
+*/
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
