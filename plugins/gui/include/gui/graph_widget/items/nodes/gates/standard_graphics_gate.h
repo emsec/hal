@@ -146,7 +146,8 @@ namespace hal
 
         QPointF mTextPosition[2];
 
-        QVector<QPointF> mOutputPinPositions;
+        QVector<float> mInputPinTextWidth;
+        QVector<float> mOutputPinTextWidth;
         static const int sIconPadding;
         static const QSize sIconSize;
 
