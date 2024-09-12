@@ -81,8 +81,7 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_gate_pin_group.def_property_readonly(
-            "pins", [](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, R"(
+        py_gate_pin_group.def_property_readonly("pins", [](const PinGroup<GatePin>& self) -> std::vector<GatePin*> { return self.get_pins(nullptr); }, R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.GatePin]
@@ -152,7 +151,7 @@ namespace hal
         )");
 
         py_gate_pin_group.def_property_readonly("ascending", &PinGroup<GatePin>::is_ascending, R"(
-            True if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), False if it is descending (from n-1 to 0).
+            ``True`` if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), ``False`` if it is descending (from n-1 to 0).
 
             :type: bool
         )");
@@ -160,7 +159,7 @@ namespace hal
         py_gate_pin_group.def("is_ascending", &PinGroup<GatePin>::is_ascending, R"(
             Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).
 
-            :returns: True for ascending bit order, False otherwise.
+            :returns: ``True`` for ascending bit order, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -179,6 +178,19 @@ namespace hal
 
             :returns: The start index. 
             :rtype: int
+        )");
+
+        py_gate_pin_group.def_property_readonly("ordered", &PinGroup<GatePin>::is_ordered, R"(
+            ``True`` if the pin group is inherently ordered, ``False`` otherwise.
+
+            :type: bool
+        )");
+
+        py_gate_pin_group.def("is_ordered", &PinGroup<GatePin>::is_ordered, R"(
+            Check whether the pin group features an inherent order.
+
+            :returns: ``True`` if the pin group is inherently ordered, ``False`` otherwise.
+            :rtype: bool
         )");
 
         py_gate_pin_group.def("empty", &PinGroup<GatePin>::empty, R"(

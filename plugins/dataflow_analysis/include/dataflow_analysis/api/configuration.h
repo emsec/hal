@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file configuration.h
+ * @brief This file contains the struct that holds all information on a dataflow analysis configuration.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -47,64 +52,67 @@ namespace hal
     namespace dataflow
     {
         /**
-         * Holds the configuration of a dataflow analysis run.
+         * @struct Configuration
+         * @brief Configuration of a dataflow analysis run.
+         * 
+         * This struct holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze. 
          */
         struct Configuration
         {
             /**
-             * Constructs a new dataflow analysis configuration for the given netlist.
+             * @brief Construct a new dataflow analysis configuration for the given netlist.
              * 
              * @param[in] nl - The netlist.
              */
             Configuration(Netlist* nl);
 
             /**
-             * The netlist to be analyzed.
+             * @brief The netlist to be analyzed.
              */
             Netlist* netlist;
 
             /**
-             * Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.
+             * @brief Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.
              */
             u32 min_group_size = 8;
 
             /**
-             * Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty vector.
+             * @brief Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty vector.
              */
             std::vector<u32> expected_sizes = {};
 
             /**
-             * Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty vector.
+             * @brief Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty vector.
              */
             std::vector<std::vector<Gate*>> known_gate_groups = {};
 
             /**
-             * Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty vector.
+             * @brief Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty vector.
              */
             std::vector<std::vector<Net*>> known_net_groups = {};
 
             /**
-             * The gate types to be grouped by dataflow analysis. Defaults to an empty set.
+             * @brief The gate types to be grouped by dataflow analysis. Defaults to an empty set.
              */
             std::set<const GateType*> gate_types = {};
 
             /**
-             * The pin types of the pins to be considered control pins. Defaults to an empty set.
+             * @brief The pin types of the pins to be considered control pins. Defaults to an empty set.
              */
             std::set<PinType> control_pin_types = {};
 
             /**
-             * Enable stage identification as part of dataflow analysis. Defaults to `false`.
+             * @brief Enable stage identification as part of dataflow analysis. Defaults to `false`.
              */
             bool enable_stages = false;
 
             /**
-             * Enforce gate type consistency inside of a group. Defaults to `false`.
+             * @brief Enforce gate type consistency inside of a group. Defaults to `false`.
              */
             bool enforce_type_consistency = false;
 
             /**
-             * Set the minimum size of a group. Smaller groups will be penalized during analysis.
+             * @brief Set the minimum size of a group. Smaller groups will be penalized during analysis.
              * 
              * @param[in] size - The minimum group size.
              * @returns The updated dataflow analysis configuration.
@@ -112,7 +120,7 @@ namespace hal
             Configuration& with_min_group_size(u32 size);
 
             /**
-             * Set the expected group sizes. Groups of these sizes will be prioritized.
+             * @brief Set the expected group sizes. Groups of these sizes will be prioritized.
              * 
              * @param[in] sizes - The expected group sizes.
              * @returns The updated dataflow analysis configuration.
@@ -120,7 +128,8 @@ namespace hal
             Configuration& with_expected_sizes(const std::vector<u32>& sizes);
 
             /**
-             * Add modules to the set of previously identified word-level structures.
+             * @brief Add modules to the set of previously identified word-level structures.
+             * 
              * The gates contained in the modules do not have to be of the target gate types.
              * The input and output pin groups of these modules will be used to guide datapath analysis.
              * Only pin groups larger than `min_group_size´ will be considered.
@@ -132,7 +141,8 @@ namespace hal
             Configuration& with_known_structures(const std::vector<Module*>& structures, bool overwrite = false);
 
             /**
-             * Add modules to the set of previously identified word-level structures.
+             * @brief Add modules to the set of previously identified word-level structures.
+             * 
              * The gates contained in the modules do not have to be of the target gate types.
              * The input and output pin groups of these modules will be used to guide datapath analysis.
              * For each module, the input and output pin groups to be considered for analysis must be specified. 
@@ -146,7 +156,8 @@ namespace hal
             Configuration& with_known_structures(const std::vector<std::pair<Module*, std::vector<PinGroup<ModulePin>*>>>& structures, bool overwrite = false);
 
             /**
-             * Add (typically large) gates to the set of previously identified word-level structures.
+             * @brief Add (typically large) gates to the set of previously identified word-level structures.
+             * 
              * The gates do not have to be of the target gate types.
              * The input and output pin groups of these gates will be used to guide datapath analysis.
              * Only pin groups larger than `min_group_size´ will be considered.
@@ -158,7 +169,8 @@ namespace hal
             Configuration& with_known_structures(const std::vector<Gate*>& structures, bool overwrite = false);
 
             /**
-             * Add (typically large) gates to the set of previously identified word-level structures.
+             * @brief Add (typically large) gates to the set of previously identified word-level structures.
+             * 
              * The gates do not have to be of the target gate types.
              * The input and output pin groups of these gates will be used to guide datapath analysis.
              * For each gate, the input and output pin groups to be considered for analysis must be specified. 
@@ -172,7 +184,8 @@ namespace hal
             Configuration& with_known_structures(const std::vector<std::pair<Gate*, std::vector<PinGroup<GatePin>*>>>& structures, bool overwrite = false);
 
             /**
-             * Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * @brief Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * 
              * The gate types do not have to be part of the target gate types.
              * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
              * Only pin groups larger than `min_group_size´ will be considered.
@@ -184,7 +197,8 @@ namespace hal
             Configuration& with_known_structures(const std::unordered_set<const GateType*>& structures, bool overwrite = false);
 
             /**
-             * Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * @brief Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * 
              * The gate types do not have to be part of the target gate types.
              * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
              * For each gate type, the input and output pin groups to be considered for analysis must be specified. 
@@ -198,7 +212,8 @@ namespace hal
             Configuration& with_known_structures(const std::unordered_map<const GateType*, std::vector<PinGroup<GatePin>*>>& structures, bool overwrite = false);
 
             /**
-             * Add modules to the set of previously identified word-level groups.
+             * @brief Add modules to the set of previously identified word-level groups.
+             * 
              * These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
              * The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
              * 
@@ -209,7 +224,8 @@ namespace hal
             Configuration& with_known_groups(const std::vector<Module*>& groups, bool overwrite = false);
 
             /**
-             * Add vectors of gates to the set of previously identified word-level groups.
+             * @brief Add vectors of gates to the set of previously identified word-level groups.
+             * 
              * These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
              * The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
              *
@@ -220,7 +236,8 @@ namespace hal
             Configuration& with_known_groups(const std::vector<std::vector<Gate*>>& groups, bool overwrite = false);
 
             /**
-             * Add vectors of gate IDs to the set of previously identified word-level groups.
+             * @brief Add vectors of gate IDs to the set of previously identified word-level groups.
+             * 
              * These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
              * The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
              *
@@ -231,7 +248,8 @@ namespace hal
             Configuration& with_known_groups(const std::vector<std::vector<u32>>& groups, bool overwrite = false);
 
             /**
-             * Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.
+             * @brief Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.
+             * 
              * These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
              * The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
              * The group IDs will be ignored during analysis and the same group may be assigned a new ID.
@@ -243,7 +261,8 @@ namespace hal
             Configuration& with_known_groups(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups, bool overwrite = false);
 
             /**
-             * Add the gate types to the set of gate types to be grouped by dataflow analysis.
+             * @brief Add the gate types to the set of gate types to be grouped by dataflow analysis.
+             * 
              * Overwrite the existing set of gate types by setting the optional `overwrite` flag to `true`.
              * 
              * @param[in] types - A set of gate types.
@@ -253,7 +272,8 @@ namespace hal
             Configuration& with_gate_types(const std::set<const GateType*>& types, bool overwrite = false);
 
             /**
-             * Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.
+             * @brief Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.
+             * 
              * Overwrite the existing set of gate types by setting the optional `overwrite` flag to `true`.
              * 
              * @param[in] type_properties - A set of gate type properties.
@@ -263,7 +283,8 @@ namespace hal
             Configuration& with_gate_types(const std::set<GateTypeProperty>& type_properties, bool overwrite = false);
 
             /**
-             * Set the pin types of the pins to be considered control pins by dataflow analysis.
+             * @brief Set the pin types of the pins to be considered control pins by dataflow analysis.
+             * 
              * Overwrite the existing set of pin types by setting the optional `overwrite` flag to `true`.
              * 
              * @param[in] types - A set of pin types.
@@ -273,7 +294,17 @@ namespace hal
             Configuration& with_control_pin_types(const std::set<PinType>& types, bool overwrite = false);
 
             /**
-             * Enable stage identification as part of dataflow analysis.
+             * @brief Use the default detection configuration for flip-flops.
+             * 
+             * Includes all flip-flop types as target gate types and sets `clock`, `enable`, `set`, and `reset` pins as control pins.
+             * Overwrites any existing gate type and control pin configuration.
+             * 
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_flip_flops();
+
+            /**
+             * @brief Enable stage identification as part of dataflow analysis.
              * 
              * @param[in] enable - Set `true` to enable stage identification, `false` otherwise. Defaults to `true`.
              * @returns The updated dataflow analysis configuration.
@@ -281,7 +312,7 @@ namespace hal
             Configuration& with_stage_identification(bool enable = true);
 
             /**
-             * Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.
+             * @brief Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.
              * 
              * @param[in] enable - Set `true` to enable type consistency inside of a group, `false` otherwise. Defaults to `true`.
              * @returns The updated dataflow analysis configuration.

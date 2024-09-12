@@ -4,6 +4,7 @@
 #include "hal_core/netlist/grouping.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 
 namespace hal
 {
@@ -24,7 +25,7 @@ namespace hal
 
     ActionCreateObject::ActionCreateObject(UserActionObjectType::ObjectType type,
                                            const QString &objName)
-      : mObjectName(objName), mParentId(0)
+      : mObjectName(objName), mParentId(0), mLinkedObjectId(0)
     {
         setObject(UserActionObject(0,type));
     }
@@ -33,26 +34,26 @@ namespace hal
     {
         cryptoHash.addData(mObjectName.toUtf8());
         cryptoHash.addData((char*)(&mParentId),sizeof(mParentId));
+        cryptoHash.addData((char*)(&mLinkedObjectId),sizeof(mLinkedObjectId));
     }
 
     void ActionCreateObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        //todo: remove parentId, switch entirely to parentObject
-        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("objectname", mObjectName);
         xmlOut.writeTextElement("parentid", QString::number(mParentId));
+        xmlOut.writeTextElement("linkedid", QString::number(mLinkedObjectId));
     }
 
     void ActionCreateObject::readFromXml(QXmlStreamReader& xmlIn)
     {
         while (xmlIn.readNextStartElement())
         {
-            //todo: emove parentId, switch entirely to parentObject
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "objectname")
                 mObjectName = xmlIn.readElementText();
             if (xmlIn.name() == "parentid")
                 mParentId = xmlIn.readElementText().toInt();
+            if (xmlIn.name() == "linkedid")
+                mLinkedObjectId = xmlIn.readElementText().toInt();
         }
     }
 
@@ -62,23 +63,6 @@ namespace hal
 
         switch (mObject.type())
         {
-
-        /* TODO PIN
-        case UserActionObjectType::PinGroup:
-        {
-            Module* parentModule = gNetlist->get_module_by_id(mParentObject.id());
-            if(parentModule)
-            {
-                auto res = parentModule->create_pin_group(mObjectName.toStdString());
-                if(res.is_error())
-                    return false;
-                setObject(UserActionObject(res.get()->get_id(), UserActionObjectType::PinGroup));
-                standardUndo = true;
-            }
-            else
-                return false;
-        }
-        */
             break;
 
         case UserActionObjectType::Module:
@@ -126,14 +110,27 @@ namespace hal
             standardUndo = true;
         }
             break;
-        case UserActionObjectType::Context:
+        case UserActionObjectType::ContextView:
         {
             QString contextName = mObjectName.isEmpty()
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
-            GraphContext* ctx = gGraphContextManager->createNewContext(contextName);
-            if (mObject.id() > 0) gGraphContextManager->setContextId(ctx,mObject.id());
-            setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+            GraphContext* ctxView = gGraphContextManager->createNewContext(contextName, mParentId);
+            if (mLinkedObjectId > 0) ctxView->setExclusiveModuleId(mLinkedObjectId);
+            if (mObject.id() > 0) gGraphContextManager->setContextId(ctxView,mObject.id());
+            setObject(UserActionObject(ctxView->id(),UserActionObjectType::ContextView));
+            standardUndo = true;
+        }
+            break;
+        case UserActionObjectType::ContextDir:
+        {
+            QString directoryName = mObjectName.isEmpty()
+                    ? gGraphContextManager->nextDefaultName()
+                    : mObjectName;
+
+            ContextDirectory* ctxDir = gGraphContextManager->createNewDirectory(directoryName, mParentId);
+            if (mObject.id() > 0) ctxDir->setId(mObject.id());
+            setObject(UserActionObject(ctxDir->id(),UserActionObjectType::ContextDir));
             standardUndo = true;
         }
             break;
@@ -144,7 +141,6 @@ namespace hal
         {
             mUndoAction = new ActionDeleteObject;
             mUndoAction->setObject(mObject);
-            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }

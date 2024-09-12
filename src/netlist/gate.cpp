@@ -284,10 +284,10 @@ namespace hal
         return res;
     }
 
-    Result<BooleanFunction> Gate::get_resolved_boolean_function(const GatePin* pin, const bool stop_at_input_pins) const
+    Result<BooleanFunction> Gate::get_resolved_boolean_function(const GatePin* pin, const bool use_net_variables) const
     {
         const std::function<Result<BooleanFunction>(const GatePin*, std::unordered_set<std::string>&)> get_resolved_boolean_function_internal =
-            [this, &get_resolved_boolean_function_internal, stop_at_input_pins](const GatePin* output_pin, std::unordered_set<std::string>& on_stack) -> Result<BooleanFunction> {
+            [this, &get_resolved_boolean_function_internal, use_net_variables](const GatePin* output_pin, std::unordered_set<std::string>& on_stack) -> Result<BooleanFunction> {
             if (output_pin == nullptr)
             {
                 return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": given output pin is null.");
@@ -316,7 +316,7 @@ namespace hal
                 const PinDirection pin_dir = pin->get_direction();
                 if (pin_dir == PinDirection::input)
                 {
-                    if (!stop_at_input_pins)
+                    if (!use_net_variables)
                     {
                         const Net* const input_net = this->get_fan_in_net(var);
                         if (input_net == nullptr)

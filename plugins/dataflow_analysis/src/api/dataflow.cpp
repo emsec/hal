@@ -49,7 +49,7 @@ namespace hal
 
             std::shared_ptr<dataflow::Grouping> initial_grouping = nullptr;
             auto netlist_abstr                                   = dataflow::pre_processing::run(config, initial_grouping);
-            std::shared_ptr<dataflow::Grouping> final_grouping;
+            std::shared_ptr<dataflow::Grouping> final_grouping   = nullptr;
 
             u32 iteration = 0;
             while (true)
@@ -72,6 +72,8 @@ namespace hal
 
                 iteration++;
             }
+
+            dataflow::processing::clear();
 
             total_time = (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000;
 

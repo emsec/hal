@@ -364,7 +364,7 @@ namespace hal
             QSet<u32> mods;
             if (gSelectionRelay->numberSelectedModules()) gSelectionRelay->clearAndUpdate();
             PythonModuleSelectionReceiver* pms = new PythonModuleSelectionReceiver(mThread,this);
-            ModuleDialog md({}, prompt, pms, qApp->activeWindow());
+            ModuleDialog md({}, prompt, false, pms, qApp->activeWindow());
             Module* modSelect = (md.exec() == QDialog::Accepted)
                     ? gNetlist->get_module_by_id(md.selectedId())
                     : nullptr;

@@ -108,7 +108,7 @@ namespace hal
         ActionRemoveItemsFromObject* act =
                 new ActionRemoveItemsFromObject(gSelectionRelay->selectedModules(),
                                                 gSelectionRelay->selectedGates());
-        act->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+        act->setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
 
         //  delete context/view if nothing left to show
         QSet<u32> remainingMods = ctx->modules() - gSelectionRelay->selectedModules();
@@ -148,7 +148,7 @@ namespace hal
                 UserActionCompound* act = new UserActionCompound;
                 act->setUseCreatedObject();
                 QString name = QString::fromStdString(gNetlist->get_module_by_id(module_id)->get_name()) + " (ID: " + QString::number(module_id) + ")";
-                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+                act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
                 act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
                 act->exec();
                 GraphContext* context = gGraphContextManager->getContextById(act->object().id());
@@ -161,7 +161,7 @@ namespace hal
         QString name = gGraphContextManager->nextViewName("Isolated View");
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
         act->exec();
         GraphContext* context = gGraphContextManager->getContextById(act->object().id());
@@ -1029,13 +1029,13 @@ namespace hal
 //            }
 //        }
 
-        ModuleDialog module_dialog(getNotSelectableModules(),"Add module to view", nullptr, this);
+        ModuleDialog module_dialog(getNotSelectableModules(),"Add module to view", true, nullptr, this);
         if (module_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> module_to_add;
             module_to_add.insert(module_dialog.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add, {});
-            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::ContextView));
             act->exec();
         }
     }
@@ -1154,7 +1154,7 @@ namespace hal
             QSet<u32> gate_to_add;
             gate_to_add.insert(gate_dialog.selectedId());
             ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gate_to_add);
-            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::ContextView));
             act->exec();
         }
     }
@@ -1264,7 +1264,7 @@ namespace hal
         }
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
-        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::ContextView));
         act->setPlacementHint(plc);
         act->exec();
     }
@@ -1282,7 +1282,7 @@ namespace hal
             gatsNew.insert(g->get_id());
         }
         ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gatsNew);
-        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::ContextView));
         act->exec();
     }
 
@@ -1377,7 +1377,7 @@ namespace hal
         }
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject({},gats);
-        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::Context));
+        act->setObject(UserActionObject(mGraphWidget->getContext()->id(),UserActionObjectType::ContextView));
         act->setPlacementHint(plc);
         act->exec();
     }
@@ -1471,7 +1471,7 @@ namespace hal
         }
 
         AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
-        ModuleDialog md(exclude_ids, "Move to module", receiver, this);
+        ModuleDialog md(exclude_ids, "Move to module", false, receiver, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {
@@ -1539,7 +1539,7 @@ namespace hal
 
             gates = context->getLayouter()->boxes().filterNotInView(gates);
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
-            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::ContextView));
             if (gSelectionRelay->numberSelectedNodes()==1)
             {
                 Node origin = (gSelectionRelay->numberSelectedModules()==1)
@@ -1608,7 +1608,7 @@ namespace hal
 
             gates = context->getLayouter()->boxes().filterNotInView(gates);
             ActionAddItemsToObject* act = new ActionAddItemsToObject({},gates);
-            act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
+            act->setObject(UserActionObject(context->id(),UserActionObjectType::ContextView));
             if (gSelectionRelay->numberSelectedNodes()==1)
             {
                 Node origin = (gSelectionRelay->numberSelectedModules()==1)

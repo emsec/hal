@@ -44,5 +44,5 @@ namespace hal
             std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors);
 
         }    // namespace split_by_successors_predecessors
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

@@ -1,6 +1,5 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_item.h"
 
 #include "gui/gui_globals.h"
 
@@ -40,7 +39,7 @@ namespace hal
         return comparison;
     }
 
-    void SelectionTreeProxyModel::applyFilterOnGraphics()
+    /*void SelectionTreeProxyModel::applyFilterOnGraphics()
     {
         if (isGraphicsBusy()) return;
         ++ mGraphicsBusy;
@@ -50,14 +49,14 @@ namespace hal
         static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, mFilterExpression);
         gSelectionRelay->suppressedByFilter(modIds, gatIds, netIds);
         -- mGraphicsBusy;
-    }
+    }*/
 
-    void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
+    /*void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
         mFilterExpression.setPattern(filter_text);
         invalidateFilter();
         applyFilterOnGraphics();
-    }
+    }*/
 
     gui_utility::mSortMechanism SelectionTreeProxyModel::sortMechanism()
     {

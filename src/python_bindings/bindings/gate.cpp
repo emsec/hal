@@ -42,15 +42,13 @@ namespace hal
             :type: int
         )");
 
-        py_gate.def_property_readonly(
-            "netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
+        py_gate.def_property_readonly("netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
             The netlist this gate is associated with.
 
             :type: hal_py.Netlist
         )");
 
-        py_gate.def(
-            "get_netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
+        py_gate.def("get_netlist", [](Gate* g) { return RawPtrWrapper<Netlist>(g->get_netlist()); }, R"(
             Get the netlist this gate is associated with.
 
             :returns: The netlist.
@@ -174,8 +172,7 @@ namespace hal
             :rtype: hal_py.Module
         )");
 
-        py_gate.def_property_readonly(
-            "modules", [](Gate* g) { return g->get_modules(); }, R"(
+        py_gate.def_property_readonly("modules", [](Gate* g) { return g->get_modules(); }, R"(
             A list of all modules that contain this gate, either directly or as parent of another module.
 
             :type: list[hal_py.Module]
@@ -220,8 +217,8 @@ namespace hal
 
         py_gate.def(
             "get_resolved_boolean_function",
-            [](const Gate& self, const GatePin* pin, const bool stop_at_input_pins = false) -> std::optional<BooleanFunction> {
-                auto res = self.get_resolved_boolean_function(pin, stop_at_input_pins);
+            [](const Gate& self, const GatePin* pin, const bool use_net_variables = false) -> std::optional<BooleanFunction> {
+                auto res = self.get_resolved_boolean_function(pin, use_net_variables);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -232,18 +229,19 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("pin")                = nullptr,
-            py::arg("stop_at_input_pins") = false,
+            py::arg("pin"),
+            py::arg("use_net_variables") = false,
             R"(
-            Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
+            Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
+            If fan-in nets are used to derive variable names, the variable names are generated using the ``BooleanFunctionNetDecorator``.
 
             :param hal_py.GatePin pin: The output pin.
-            :returns: The Boolean function on success, an error otherwise.
-            :rtype: hal_py.BooleanFunction
+            :param bool use_net_variables: Set ``True`` to use variable names derived from fan-in nets of the gate, ``False`` to use input pin names instead. Defaults to ``False``.
+            :returns: The Boolean function on success, ``None`` otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
-        py_gate.def_property_readonly(
-            "boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
+        py_gate.def_property_readonly("boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
             A dictionary from function name to Boolean function for all boolean functions associated with this gate.
 
             :rtype: dict[str,hal_py.BooleanFunction]
@@ -492,8 +490,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly(
-            "unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, R"(
+        py_gate.def_property_readonly("unique_predecessors", [](Gate* g) { return g->get_unique_predecessors(); }, R"(
             A list of all unique predecessor gates of the gate.
 
             :type: list[hal_py.Gate]
@@ -508,8 +505,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly(
-            "predecessors", [](Gate* g) { return g->get_predecessors(); }, R"(
+        py_gate.def_property_readonly("predecessors", [](Gate* g) { return g->get_predecessors(); }, R"(
             A list of all direct predecessor endpoints of the gate, i.e., all predecessor endpoints that are connected to an input pin of the gate. 
 
             :type: list[hal_py.Endpoint]
@@ -542,8 +538,7 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly(
-            "unique_successors", [](Gate* g) { return g->get_unique_successors(); }, R"(
+        py_gate.def_property_readonly("unique_successors", [](Gate* g) { return g->get_unique_successors(); }, R"(
             A list of all unique successor gates of the gate.
 
             :type: list[hal_py.Gate]
@@ -558,8 +553,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_gate.def_property_readonly(
-            "successors", [](Gate* g) { return g->get_successors(); }, R"(
+        py_gate.def_property_readonly("successors", [](Gate* g) { return g->get_successors(); }, R"(
             A list of all direct successor endpoints of the gate, i.e., all successor endpoints that are connected to an output pin of the gate. 
 
             :type: list[hal_py.Endpoint]

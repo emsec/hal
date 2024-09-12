@@ -44,7 +44,6 @@ namespace hal
                     {
                         std::vector<u32> fingerprint;
                         auto id = sg->get_id();
-                        sg->get_name();
 
                         for (auto type : config.control_pin_types)
                         {
@@ -134,7 +133,7 @@ namespace hal
                         const auto& start_fan_out_nets = gate->get_fan_out_nets();
                         std::vector<const Net*> stack(start_fan_out_nets.cbegin(), start_fan_out_nets.cend());    // init stack with fan-out of start gate
                         std::unordered_set<const Net*> visited;
-                        std::vector<const Net*> previous;                                                         // will keep track of all predecessor nets of the current net
+                        std::vector<const Net*> previous;    // will keep track of all predecessor nets of the current net
                         while (!stack.empty())
                         {
                             const Net* current = stack.back();    // do not pop last item yet
@@ -172,6 +171,7 @@ namespace hal
                             {
                                 if (const auto group_it = net_to_group_index.find(current); group_it != net_to_group_index.end())
                                 {
+                                    std::get<1>(suc_cache[current]).insert(group_it->second);
                                     for (const auto* n : previous)
                                     {
                                         std::get<1>(suc_cache[n]).insert(group_it->second);
@@ -257,6 +257,7 @@ namespace hal
                             {
                                 if (const auto group_it = net_to_group_index.find(current); group_it != net_to_group_index.end())
                                 {
+                                    pred_cache[current].insert(group_it->second);
                                     for (const auto* n : previous)
                                     {
                                         pred_cache[n].insert(group_it->second);
@@ -338,5 +339,5 @@ namespace hal
                 return netlist_abstr;
             }
         }    // namespace pre_processing
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

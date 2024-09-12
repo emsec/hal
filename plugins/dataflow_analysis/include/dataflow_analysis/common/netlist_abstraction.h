@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file netlist_abstraction.h
+ * @brief This file contains the struct that holds all information on the netlist abstraction used for dataflow analysis.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -43,17 +48,30 @@ namespace hal
     {
         struct Grouping;
 
+        /**
+         * @struct NetlistAbstraction
+         * @brief The abstraction of the netlist that only contains gates of a specified type, e.g., flip-flops.
+         */
         struct NetlistAbstraction
         {
+            /**
+             * @brief Construct a netlist abstraction from a netlist.
+             * 
+             * @param[in] nl_arg - The netlist.
+             */
             NetlistAbstraction(const Netlist* nl_arg);
 
-            // netlist
+            /**
+             * The netlist associated with the netlist abstraction.
+             */
             const Netlist* nl;
 
             // utils
             bool yosys;
 
-            // all target gates to group
+            /**
+             * The target gates that should be grouped by dataflow analysis.
+             */
             std::vector<Gate*> target_gates;
 
             /* pre_processed_data */

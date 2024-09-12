@@ -163,5 +163,5 @@ namespace hal
                 }
             }
         }    // namespace Translator
-    }        // namespace SMT
+    }    // namespace SMT
 }    // namespace hal

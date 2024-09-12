@@ -43,5 +43,5 @@ namespace hal
         {
             std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state);
         }    // namespace group_by_control_signals
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

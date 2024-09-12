@@ -68,6 +68,8 @@ namespace hal
         mDefaultIcons[ModuleIcon] = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_module"));
         mDefaultIcons[GateIcon]   = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate"));
         mDefaultIcons[NetIcon]    = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_net"));
+        mDefaultIcons[ViewDir]    = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/view-dir"));
+        mDefaultIcons[ViewCtx]    = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/view-ctx"));
 
         if (!mGateIcons.isEmpty())
         {

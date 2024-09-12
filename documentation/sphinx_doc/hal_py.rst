@@ -27,8 +27,9 @@ HAL Core Documentation
    netlist
    netlist_factory
    netlist_modification_decorator
-   netlist_utils
    netlist_serializer
+   netlist_traversal_decorator
+   netlist_utils
    netlist_writer_manager
    pin_direction
    pin_type

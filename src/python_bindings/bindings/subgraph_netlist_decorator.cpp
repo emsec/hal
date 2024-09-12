@@ -16,8 +16,8 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) -> std::shared_ptr<Netlist> {
-                auto res = self.copy_subgraph_netlist(subgraph_gates, outside_conncetions_as_global_io);
+            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates, const bool all_global_io = false) -> std::shared_ptr<Netlist> {
+                auto res = self.copy_subgraph_netlist(subgraph_gates, all_global_io);
                 if (res.is_ok())
                 {
                     return std::shared_ptr<Netlist>(res.get());
@@ -29,20 +29,20 @@ namespace hal
                 }
             },
             py::arg("subgraph_gates"),
-            py::arg("outside_conncetions_as_global_io"),
+            py::arg("all_global_io") = false,
             R"(
             Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph that shall be copied from the netlist.
-            :param bool outside_conncetions_as_global_io: Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
+            :param bool all_global_io: Set ``True`` to mark all nets as global input or output that lost at least one source or destination in the copied netlist, ``False`` to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to ``False``.
             :returns: The copied subgraph netlist on success, None otherwise.
             :rtype: hal_py.Netlist or None
         )");
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const bool outside_conncetions_as_global_io) -> std::shared_ptr<Netlist> {
-                auto res = self.copy_subgraph_netlist(subgraph_module, outside_conncetions_as_global_io);
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const bool all_global_io = false) -> std::shared_ptr<Netlist> {
+                auto res = self.copy_subgraph_netlist(subgraph_module, all_global_io);
                 if (res.is_ok())
                 {
                     return std::shared_ptr<Netlist>(res.get());
@@ -54,12 +54,12 @@ namespace hal
                 }
             },
             py::arg("subgraph_module"),
-            py::arg("outside_conncetions_as_global_io"),
+            py::arg("all_global_io") = false,
             R"(
             Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph that shall be copied from the netlist.
-            :param bool outside_conncetions_as_global_io: Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
+            :param bool all_global_io: Set ``True`` to mark all nets as global input or output that lost at least one source or destination in the copied netlist, ``False`` to only mark them if all sources or destinations were removed. Global inputs and outputs of the parent netlist will always also be annotated as global inputs or outputs. Defaults to ``False``.
             :returns: The copied subgraph netlist on success, None otherwise.
             :rtype: hal_py.Netlist or None
         )");

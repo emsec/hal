@@ -1,11 +1,14 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
-#include "plugin_z3_utils.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "z3_utils.h"
+#include "z3_utils/netlist_comparison.h"
+#include "z3_utils/plugin_z3_utils.h"
+#include "z3_utils/simplification.h"
+#include "z3_utils/subgraph_function_generation.h"
+#include "z3_utils/z3_utils.h"
 
 namespace py = pybind11;
 
@@ -30,9 +33,37 @@ namespace hal
         py_z3_utils.def("get_name", &Z3UtilsPlugin::get_name);
         py_z3_utils.def_property_readonly("version", &Z3UtilsPlugin::get_version);
         py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version);
-        py_z3_utils.def("get_subgraph_function", &Z3UtilsPlugin::get_subgraph_function_py);
 
-        py_z3_utils.def_static(
+        m.def(
+            "get_subgraph_function",
+            [](const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) -> std::optional<hal::BooleanFunction> {
+                z3::context ctx;
+
+                const auto res = z3_utils::get_subgraph_z3_function(subgraph_gates, subgraph_output, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                BooleanFunction bf = z3_utils::to_bf(res.get()).get();
+
+                return bf;
+            },
+            py::arg("subgraph_gates"),
+            py::arg("subgraph_output"),
+            R"(
+            Compare two nets from two different netlist. 
+            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+
+            :param list[hal_py.Gate] subgraph_gates: List containing the gates of the subgraph. 
+            :param hal_py.Net subgraph_output: The output net of the subgraph that whose function should be generated 
+            :returns: The Boolean function implemented by the subgraph on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        m.def(
             "compare_nets",
             [](const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10) -> std::optional<bool> {
                 auto res = z3_utils::compare_nets(netlist_a, netlist_b, net_a, net_b, fail_on_unknown, solver_timeout);
@@ -67,7 +98,7 @@ namespace hal
             :rtype: bool or None
         )");
 
-        py_z3_utils.def_static(
+        m.def(
             "compare_nets",
             [](const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown = true, const u32 solver_timeout = 10)
                 -> std::optional<bool> {
@@ -101,7 +132,7 @@ namespace hal
             :rtype: bool or None
         )");
 
-        py_z3_utils.def_static(
+        m.def(
             "compare_netlists",
             [](const Netlist* netlist_a, const Netlist* netlist_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10) -> std::optional<bool> {
                 auto res = z3_utils::compare_netlists(netlist_a, netlist_b, fail_on_unknown, solver_timeout);

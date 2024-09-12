@@ -4,7 +4,7 @@ platform='unknown'
 unamestr=$(uname)
 distribution='unknown'
 release='unknown'
-if [[ -f "/.dockerenv" ]]; then
+if [[ "${HAL_DOCKER:-0}" == "1" ]]; then
    platform='docker'
    distribution=$(lsb_release -is)
    release=$(lsb_release -rs)

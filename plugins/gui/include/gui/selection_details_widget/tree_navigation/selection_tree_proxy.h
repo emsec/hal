@@ -57,7 +57,7 @@ namespace hal
          * in the view because they do not match the filter-string. Then it tells the selection
          * relay to update these items.
          */
-        void applyFilterOnGraphics();
+        //void applyFilterOnGraphics();
 
         /**
          * Checks if the model is still busy with applying the changes (in applyFilterOnGraphics()).
@@ -102,7 +102,7 @@ namespace hal
          *
          * @param filter_text - The text to filter the model by.
          */
-        void handleFilterTextChanged(const QString& filter_text);
+        //void handleFilterTextChanged(const QString& filter_text);
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

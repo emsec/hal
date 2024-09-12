@@ -136,7 +136,8 @@ namespace hal
             std::vector<std::filesystem::path> retval;
             for (const auto& lib_dir : utils::get_gate_library_directories())
             {
-                if (!std::filesystem::exists(lib_dir)) continue;
+                if (!std::filesystem::exists(lib_dir))
+                    continue;
                 for (const auto& lib_path : utils::RecursiveDirectoryRange(lib_dir))
                     retval.push_back(lib_path.path());
             }

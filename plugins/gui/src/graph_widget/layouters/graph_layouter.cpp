@@ -669,6 +669,12 @@ namespace hal
             mCoordY[pnt.y()].testMinMax(rect.bottom());
         }
 
+        // add topmost and leftmost coordinate entry (unless it already exists)
+        if (!mCoordX.contains(mNodeBoundingBox.left()))
+            mCoordX[mNodeBoundingBox.left()].testMinMax(0);
+        if (!mCoordY.contains(mNodeBoundingBox.top()))
+            mCoordY[mNodeBoundingBox.top()].testMinMax(0);
+
         // fill gaps in coordinate system if any
         if (!mCoordX.isEmpty())
         {
@@ -772,7 +778,6 @@ namespace hal
         int iy0  = mNodeBoundingBox.y() * 2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
-        mYValues.append(mCoordY.value(iy0).lanePosition(0));
         auto ityLast = mCoordY.begin();
         for (auto itNext = ityLast + 1; itNext != mCoordY.end(); ++itNext)
         {
@@ -783,7 +788,6 @@ namespace hal
             {
                 // netjunction -> endpoint
                 itNext->setOffsetYje(ityLast.value(), mJunctionMinDistanceY.value(iy1));
-                mYValues.append(itNext.value().lanePosition(0));
             }
             else
             {
@@ -795,6 +799,15 @@ namespace hal
                 itNext->setOffsetYej(ityLast.value(), ydelta, mJunctionMinDistanceY.value(iy1));
             }
             ityLast = itNext;
+        }
+
+        iy0 = mNodeBoundingBox.y() * 2;
+        auto ity = mCoordY.find(iy0);
+        while(ity != mCoordY.end())
+        {
+            mYValues.append(ity.value().lanePosition(0));
+            iy0 += 2;
+            ity = mCoordY.find(iy0);
         }
     }
 

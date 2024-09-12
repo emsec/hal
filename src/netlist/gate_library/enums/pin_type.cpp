@@ -18,5 +18,10 @@ namespace hal
                                                                  {PinType::io_pad, "io_pad"},
                                                                  {PinType::select, "select"},
                                                                  {PinType::carry, "carry"},
-                                                                 {PinType::sum, "sum"}};
+                                                                 {PinType::sum, "sum"},
+                                                                 {PinType::status, "status"},
+                                                                 {PinType::error, "error"},
+                                                                 {PinType::error_detection, "error_detection"},
+                                                                 {PinType::done, "done"},
+                                                                 {PinType::control, "control"}};
 }

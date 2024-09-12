@@ -4,7 +4,15 @@
 
 ABC_NAMESPACE_HEADER_START
 
-local const unsigned long FAR crc_table[TBLS][256] =
+/* changed long -> unsigned 
+
+   The curse of having a library frozen at an rather old version. In recent
+   versions the variable bit size gets adjusted according to system and
+   compile flags. By now we need unsigned (32 bit) since that is what
+   QuaZip expects.
+*/
+
+local const unsigned FAR crc_table[TBLS][256] =
 {
   {
     0x00000000UL, 0x77073096UL, 0xee0e612cUL, 0x990951baUL, 0x076dc419UL,

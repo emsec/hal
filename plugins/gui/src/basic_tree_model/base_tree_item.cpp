@@ -1,5 +1,5 @@
 #include "gui/basic_tree_model/base_tree_item.h"
-
+#include <iostream>
 
 namespace hal
 {

@@ -132,6 +132,20 @@ namespace hal
              */
             BooleanFunction Add(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
+                if (p0.size() <= 64 && p1.size() <= 64)
+                {
+                    const auto a_res = BooleanFunction::to_u64(p0);
+                    const auto b_res = BooleanFunction::to_u64(p1);
+
+                    if (a_res.is_ok() && b_res.is_ok())
+                    {
+                        const auto res = (a_res.get() + b_res.get()) & 0xffffffff;
+                        return BooleanFunction::Const(res, p0.size());
+                    }
+
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
@@ -159,6 +173,20 @@ namespace hal
              */
             BooleanFunction Sub(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
+                if (p0.size() <= 64 && p1.size() <= 64)
+                {
+                    const auto a_res = BooleanFunction::to_u64(p0);
+                    const auto b_res = BooleanFunction::to_u64(p1);
+
+                    if (a_res.is_ok() && b_res.is_ok())
+                    {
+                        const auto res = (a_res.get() - b_res.get()) & 0xffffffff;
+                        return BooleanFunction::Const(res, p0.size());
+                    }
+
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {

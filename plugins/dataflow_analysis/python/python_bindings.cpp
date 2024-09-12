@@ -12,79 +12,61 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(dataflow, m)
     {
-        m.doc() = "hal DataflowPlugin python bindings";
+        m.doc() = "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.";
 #else
     PYBIND11_PLUGIN(dataflow)
     {
-        py::module m("dataflow", "hal DataflowPlugin python bindings");
+        py::module m("dataflow", "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.");
 #endif    // ifdef PYBIND11_MODULE
-        py::class_<plugin_dataflow, RawPtrWrapper<plugin_dataflow>, BasePluginInterface>(m, "DataflowPlugin")
-            .def_property_readonly("name", &plugin_dataflow::get_name, R"(
-                The name of the plugin.
+        py::class_<DataflowPlugin, RawPtrWrapper<DataflowPlugin>, BasePluginInterface> py_dataflow_plugin(
+            m, "DataflowPlugin", R"(This class provides an interface to integrate the DANA tool as a plugin within the HAL framework.)");
 
-                :type: str
-                )")
-            .def("get_name", &plugin_dataflow::get_name, R"(
-                Get the name of the plugin.
+        py_dataflow_plugin.def_property_readonly("name", &DataflowPlugin::get_name, R"(
+            The name of the plugin.
 
-                :returns: The name of the plugin.
-                :rtype: str
-                )")
-            .def_property_readonly("description", &plugin_dataflow::get_description, R"(
-                The description of the plugin.
+            :type: str
+        )");
 
-                :type: str
-                )")
-            .def("get_description", &plugin_dataflow::get_description, R"(
-                Get the description of the plugin.
+        py_dataflow_plugin.def("get_name", &DataflowPlugin::get_name, R"(
+            Get the name of the plugin.
 
-                :returns: The description of the plugin.
-                :rtype: str
-                )")
-            .def_property_readonly("version", &plugin_dataflow::get_version, R"(
-                The version of the plugin.
+            :returns: The name of the plugin.
+            :rtype: str
+        )");
 
-                :type: str
-                )")
-            .def("get_version", &plugin_dataflow::get_version, R"(
-                Get the version of the plugin.
+        py_dataflow_plugin.def_property_readonly("description", &DataflowPlugin::get_description, R"(
+            The short description of the plugin.
 
-                :returns: The version of the plugin.
-                :rtype: str
-                )")
-            .def("execute",
-                 &plugin_dataflow::execute,
-                 py::arg("netlist"),
-                 py::arg("output_path"),
-                 py::arg("sizes"),
-                 py::arg("draw_graph")                    = false,
-                 py::arg("create_modules")                = false,
-                 py::arg("register_stage_identification") = false,
-                 py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
-                 py::arg("min_group_size")                = 8,
-                 R"(
-                Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.
+            :type: str
+        )");
 
-                :param hal_py.Netlist netlist: The netlist to operate on.
-                :param str output_path: Path where the dataflow graph should be written to
-                :param list[int] sizes: Prioritized sizes.
-                :param bool draw_graph: Switch to turn on/off the generation of the graph.
-                :param bool create_modules: Switch to turn on/off the creation of HAL modules for the registers.
-                :param bool register_stage_identification: Switch to turn on/off the register stage rule. Note that this rule can be too restrictive and is turned off by default.
-                :param list[list[int]] known_groups: Previously known groups that stay untouched.
-                :returns: Register groups created by DANA
-                :rtype: list[list[hal_py.Gate]]
-                )");
+        py_dataflow_plugin.def("get_description", &DataflowPlugin::get_description, R"(
+            Get the short description of the plugin.
 
-        auto py_dataflow = m.def_submodule("Dataflow");
+            :returns: The short description of the plugin.
+            :rtype: str
+        )");
 
-        py::class_<dataflow::Configuration, RawPtrWrapper<dataflow::Configuration>> py_dataflow_configuration(py_dataflow, "Configuration", R"(
-            Holds the configuration of a dataflow analysis run.
+        py_dataflow_plugin.def_property_readonly("version", &DataflowPlugin::get_version, R"(
+            The version of the plugin.
+
+            :type: str
+        )");
+
+        py_dataflow_plugin.def("get_version", &DataflowPlugin::get_version, R"(
+            Get the version of the plugin.
+
+            :returns: The version of the plugin.
+            :rtype: str
+        )");
+
+        py::class_<dataflow::Configuration, RawPtrWrapper<dataflow::Configuration>> py_dataflow_configuration(m, "Configuration", R"(
+            This class holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze.
         )");
 
         py_dataflow_configuration.def(py::init<Netlist*>(), py::arg("nl"), R"(
-            Constructs a new dataflow analysis configuration for the given netlist.
-
+            Construct a new dataflow analysis configuration for the given netlist.
+            
             :param hal_py.Netlist nl: The netlist.
         )");
 
@@ -125,7 +107,13 @@ namespace hal
         )");
 
         py_dataflow_configuration.def_readwrite("enable_stages", &dataflow::Configuration::enable_stages, R"(
-            Enable register stage identification as part of dataflow analysis. Defaults to ``False``.
+            Enable stage identification as part of dataflow analysis. Defaults to ``False``.
+
+            :type: bool
+        )");
+
+        py_dataflow_configuration.def_readwrite("enforce_type_consistency", &dataflow::Configuration::enforce_type_consistency, R"(
+            Enforce gate type consistency inside of a group. Defaults to ``False``.
 
             :type: bool
         )");
@@ -335,10 +323,19 @@ namespace hal
             :rtype: dataflow.Dataflow.Configuration
         )");
 
-        py_dataflow_configuration.def("with_stage_identification", &dataflow::Configuration::with_stage_identification, py::arg("enable") = true, R"(
-            Enable register stage identification as part of dataflow analysis.
+        py_dataflow_configuration.def("with_flip_flops", &dataflow::Configuration::with_flip_flops, R"(
+            Use the default detection configuration for flip-flops.
+            Includes all flip-flop types as target gate types and sets ``clock``, ``enable``, ``set``, and ``reset`` pins as control pins.
+            Overwrites any existing gate type and control pin configuration.
 
-            :param bool enable: Set ``True`` to enable register stage identification, ``False`` otherwise. Defaults to ``True``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_stage_identification", &dataflow::Configuration::with_stage_identification, py::arg("enable") = true, R"(
+            Enable stage identification as part of dataflow analysis.
+
+            :param bool enable: Set ``True`` to enable stage identification, ``False`` otherwise. Defaults to ``True``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");
@@ -351,7 +348,7 @@ namespace hal
             :rtype: dataflow.Dataflow.Configuration
         )");
 
-        py_dataflow.def(
+        m.def(
             "analyze",
             [](const dataflow::Configuration& config) -> std::optional<dataflow::Result> {
                 auto res = dataflow::analyze(config);
@@ -367,15 +364,19 @@ namespace hal
             },
             py::arg("config"),
             R"(
-                Analyze the datapath to identify word-level registers in the netlist specified in the configuration.
+                Analyze the gate-level netlist to identify word-level structures such as registers.
+                Reconstructs word-level structures such as registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
+                Operates on an abstraction of the netlist that contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.
 
                 :param dataflow.Dataflow.Configuration config: The dataflow analysis configuration.
                 :returns: The dataflow analysis result on success, ``None`` otherwise.
                 :rtype: dataflow.Dataflow.Result or None
             )");
 
-        py::class_<dataflow::Result, RawPtrWrapper<dataflow::Result>> py_dataflow_result(py_dataflow, "Result", R"(
-            The result of a dataflow analysis run containing the identified groups of sequential gates and their interconnections.
+        py::class_<dataflow::Result, RawPtrWrapper<dataflow::Result>> py_dataflow_result(m, "Result", R"(
+            This class holds result of a dataflow analysis run, which contains the identified groups of sequential gates and their interconnections.
+            Each such group is assigned a unique ID by which it can be addressed in many of the member functions of this class.
+            Please note that this ID is not related to any other HAL ID.
         )");
 
         py_dataflow_result.def("get_netlist", &dataflow::Result::get_netlist, R"(
@@ -657,7 +658,6 @@ namespace hal
             py::arg("module_suffixes") = std::map<const GateType*, std::string>(),
             py::arg("pin_prefixes")    = std::map<std::pair<PinDirection, std::string>, std::string>(),
             py::arg("group_ids")       = std::unordered_set<u32>(),
-
             R"(
                 Create modules for the dataflow analysis result.
 
@@ -688,7 +688,6 @@ namespace hal
             py::arg("module_suffixes"),
             py::arg("pin_prefixes") = std::map<std::pair<PinDirection, std::string>, std::string>(),
             py::arg("group_ids")    = std::unordered_set<u32>(),
-
             R"(
                 Create modules for the dataflow analysis result.
 
@@ -730,7 +729,7 @@ namespace hal
                 All specified groups are merged into the first group of the provided vector and are subsequently deleted.
 
                 :param set[int] group_ids: The group IDs of the groups to merge.
-                :returns: The ID of the group that all over groups have been merged into on success, ``None`` otherwise.
+                :returns: The ID of the group that all other groups have been merged into on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 

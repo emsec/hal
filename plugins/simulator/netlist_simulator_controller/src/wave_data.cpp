@@ -11,7 +11,6 @@
 #include <QMap>
 #include <QDir>
 #include <stdio.h>
-#include <QDebug>
 
 namespace hal {
 
@@ -61,11 +60,6 @@ namespace hal {
           mName(QString::fromStdString(n->get_name())),
           mNetType(tp), mBits(1), mValueBase(16), mDirty(true)
     {;}
-
-    WaveData::~WaveData()
-    {
-    //    qDebug() << "~WaveData" << mId << mName;
-    }
 
     void WaveData::resetWave()
     {
@@ -1290,20 +1284,17 @@ namespace hal {
 
         mTimeframe.setSceneMaxTime(tmax);
         if (mustUpdateClocks) updateClocks();
-        qDebug() << "setMaxTime-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::emitTimeframeChanged()
     {
-        qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
-        qDebug() << "incrementSimulTime-Tfc" << mTimeframe.mSimulateMaxTime << ">" << mTimeframe.mSceneMaxTime;
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
@@ -1323,7 +1314,6 @@ namespace hal {
                 wd->clear();
             }
         }
-        qDebug() << "setUserTimeframe-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
@@ -1630,6 +1620,11 @@ namespace hal {
             add(it.value(),false);
         }
         setMaxTime(mSaleaeDirectory.get_max_time());
+
+        for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
+        {
+            (*it)->recalcData();
+        }
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)
@@ -1689,14 +1684,31 @@ namespace hal {
     void WaveDataList::testDoubleCount()
     {
         QMap<u32,int> doubleCount;
+        QSet<QString> notInNetlist;
         for (const WaveData* wd : *this)
-           ++doubleCount[wd->id()];
+        {
+            if (!wd->id())
+            {
+                if (!mNotInNetlist.contains(wd->name()))
+                    notInNetlist.insert(wd->name());
+            }
+            else
+                ++doubleCount[wd->id()];
+        }
         for (auto it=doubleCount.constBegin(); it!=doubleCount.constEnd(); ++it)
         {
             if (it.value() > 1)
             {
-                qDebug() << "duplicate net" << it.value() << at(mIds.value(it.key()))->name();
+                log_warning("simulation_plugin", "Duplicate waveform ({}x) found : '{}'", it.value(), at(mIds.value(it.key()))->name().toStdString());
             }
+        }
+        if (!notInNetlist.isEmpty())
+        {
+            for (const QString& name : notInNetlist)
+            {
+                log_warning("simulation_plugin", "Waveform not in (partial) netlist : '{}'", name.toStdString());
+            }
+            mNotInNetlist += notInNetlist;
         }
     }
 

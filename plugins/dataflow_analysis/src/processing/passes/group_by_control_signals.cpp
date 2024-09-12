@@ -81,5 +81,5 @@ namespace hal
                 return new_state;
             }
         }    // namespace group_by_control_signals
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

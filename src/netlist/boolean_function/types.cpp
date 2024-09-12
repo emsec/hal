@@ -3,6 +3,7 @@
 #include <boost/spirit/home/x3.hpp>
 #include <mutex>
 #include <numeric>
+#include <sstream>
 
 namespace hal
 {
@@ -355,9 +356,7 @@ namespace hal
                                                                                  {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"},
-                                                                                 {SMT::SolverCall::Binary, "Binary"}};
-
+    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"}, {SMT::SolverCall::Binary, "Binary"}};
 
     template<>
     std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},

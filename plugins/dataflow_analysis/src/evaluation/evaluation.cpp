@@ -304,5 +304,5 @@ namespace hal
                 return output;
             }
         }    // namespace evaluation
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

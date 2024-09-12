@@ -59,6 +59,7 @@ namespace hal
         mNetlist = netlist;
         if (!loaddir.empty())
             mProjDir = QDir(QString::fromStdString(loaddir.string()));
+        NetlistSimulatorControllerMap::instance()->clearAll();
     }
 
     std::vector<std::unique_ptr<NetlistSimulatorController>> SimulatorSerializer::restore()

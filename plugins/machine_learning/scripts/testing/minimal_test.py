@@ -3,7 +3,18 @@ import sys, os
 import pathlib
 
 #some necessary configuration:
-base_path = "/home/simon/projects/hal/"
+user_name = os.getlogin()
+
+# some necessary configuration:
+if user_name == "simon":
+    base_path = "/home/simon/projects/hal/"
+    benchmarks_base_path = pathlib.Path("/home/simon/projects/benchmarks")
+if user_name == "klix":
+    base_path = "/home/klix/projects/hal/"
+    benchmarks_base_path = pathlib.Path("/home/klix/projects/benchmarks")
+else:
+    print("add base paths foe user {}before executing...".format(user_name))
+    exit()
 
 sys.path.append(base_path + "build/lib/") #this is where your hal python lib is located
 os.environ["HAL_BASE_PATH"] = base_path + "build" # hal base path

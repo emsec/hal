@@ -11,6 +11,11 @@ namespace hal
         m_next_pin_group_id = 1;
     }
 
+    ssize_t GateType::get_hash() const
+    {
+        return (uintptr_t)this;
+    }
+
     std::vector<GateTypeComponent*> GateType::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         if (m_component != nullptr)
@@ -78,12 +83,18 @@ namespace hal
         for (GateTypeProperty gtp : m_properties)
         {
             if (gtp >= GateTypeProperty::c_buffer)
+            {
                 ctype_properties.push_back(gtp);
+            }
             else
+            {
                 other_properties.push_back(gtp);
+            }
         }
         if (!other_properties.empty())
+        {
             ctype_properties.insert(ctype_properties.end(), other_properties.begin(), other_properties.end());
+        }
         return ctype_properties;
     }
 
@@ -373,7 +384,7 @@ namespace hal
         if (!ascending && !pins.empty())
         {
             // compensate for shifting the start index
-            start_index -= (pins.size()-1);
+            start_index -= (pins.size() - 1);
         }
 
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
@@ -427,7 +438,8 @@ namespace hal
         }
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("gate", "could not delete pin group '{}' with ID {} of gate type '{}' with ID {}: pin group does not belong to gate type", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning(
+                "gate", "could not delete pin group '{}' with ID {} of gate type '{}' with ID {}: pin group does not belong to gate type", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
         }
 
         // erase pin group
@@ -455,7 +467,8 @@ namespace hal
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            log_warning("gate", "could not delete pin group '{}' with ID {} from gate type '{}' with ID {}: pin group does not belong to gate type", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            log_warning(
+                "gate", "could not delete pin group '{}' with ID {} from gate type '{}' with ID {}: pin group does not belong to gate type", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
             return false;
         }
 
@@ -508,8 +521,8 @@ namespace hal
             if (!pg->remove_pin(pin))
             {
                 return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                      + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to remove pin from pin group '"
-                                      + pg->get_name() + "' with ID " + std::to_string(pg->get_id()));
+                           + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to remove pin from pin group '" + pg->get_name()
+                           + "' with ID " + std::to_string(pg->get_id()));
             }
 
             if (delete_empty_groups && pg->empty())
@@ -517,8 +530,8 @@ namespace hal
                 if (!delete_pin_group_internal(pg))
                 {
                     return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                          + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to delete pin group '" + pg->get_name()
-                                          + "' with ID " + std::to_string(pg->get_id()));
+                               + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to delete pin group '" + pg->get_name()
+                               + "' with ID " + std::to_string(pg->get_id()));
                 }
             }
         }
@@ -526,7 +539,7 @@ namespace hal
         if (!pin_group->assign_pin(pin))
         {
             return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                  + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id));
+                       + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id));
         }
 
         return OK({});

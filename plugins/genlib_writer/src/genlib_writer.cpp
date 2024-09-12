@@ -25,6 +25,9 @@ namespace hal
         // set name
         std::string file_str = "#" + gate_lib->get_name() + "\n";
 
+        // TODO since we are using the standard gate library writer interface we can not pass any other parameters,
+        //      in the future it would be nice if we could for example pass a list of gate types that are being written.
+
         // process combinational gates
         for (const auto& [name, gt] : gate_lib->get_gate_types([](const GateType* gt) { return gt->has_property(GateTypeProperty::combinational); }))
         {
@@ -49,6 +52,7 @@ namespace hal
             u32 other_values       = base_value * 0.3 + 1;
             const double gate_area = gt->has_property(GateTypeProperty::c_mux) ? mux_value : other_values;
             auto [output_pin, bf]  = *(gt->get_boolean_functions().begin());
+
             // simplify to get rid of XOR which we currently cannot translate to genlib
             bf          = bf.simplify();
             auto bf_str = bf.is_constant() ? (bf.has_constant_value(0) ? "CONST0" : "CONST1") : bf.to_string();

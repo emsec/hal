@@ -26,6 +26,9 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "gui/module_model/module_model.h"
+#include "gui/selection_details_widget/module_details_widget/filter_elements_proxy_model.h"
+
 #include <QTreeView>
 
 namespace hal
@@ -85,7 +88,8 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        ModuleTreeModel* mModel;
+        ModuleModel* mModel;
+        FilterElementsProxyModel* mProxyModel;
         int mModuleID;
 
         void handleNumberSubmodulesChanged(const int number);

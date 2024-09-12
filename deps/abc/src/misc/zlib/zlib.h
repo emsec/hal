@@ -1611,7 +1611,7 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
 /* undocumented functions */
 ZEXTERN const char   * ZEXPORT zError           OF((int));
 ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp));
-ZEXTERN const uLongf * ZEXPORT get_crc_table    OF((void));
+ZEXTERN const unsigned * ZEXPORT get_crc_table    OF((void));  /* changed long -> unsigned (see crc32.h) */
 ZEXTERN int            ZEXPORT inflateUndermine OF((z_streamp, int));
 
 ABC_NAMESPACE_HEADER_END
