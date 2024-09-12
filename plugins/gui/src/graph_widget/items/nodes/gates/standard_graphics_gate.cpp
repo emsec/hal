@@ -169,10 +169,11 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                         QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
                         if (pinBackground.isValid())
                         {
+                            float wbox = mInputPinTextWidth.at(i) > sPinFontHeight ? mInputPinTextWidth.at(i) : sPinFontHeight;
                             QBrush lastBrush = painter->brush();
                             painter->setBrush(pinBackground);
                             painter->setPen(QPen(pinBackground,0));
-                            painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                            painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
                             painter->setBrush(lastBrush);
                             pinTextColor = legibleColor(pinBackground);
                         }
@@ -208,7 +209,14 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                             QBrush lastBrush = painter->brush();
                             painter->setBrush(pinBackground);
                             painter->setPen(QPen(pinBackground,0));
-                            painter->drawRoundRect(mWidth - sPinOuterHorizontalSpacing - sPinFontHeight,yText-sPinFontAscent,sPinFontHeight,sPinFontHeight,35,35);
+                            float wbox = sPinFontHeight;
+                            float xbox = mWidth - sPinOuterHorizontalSpacing - sPinFontHeight;
+                            if (mOutputPinTextWidth.at(i) > wbox)
+                            {
+                                xbox -= (mOutputPinTextWidth.at(i) - wbox);
+                                wbox = mOutputPinTextWidth.at(i);
+                            }
+                            painter->drawRoundRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
                             painter->setBrush(lastBrush);
                             pinTextColor = legibleColor(pinBackground);
                         }
@@ -217,7 +225,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                 sPen.setColor(pinTextColor);
             }
             painter->setPen(sPen);
-            painter->drawText(mOutputPinPositions.at(i), mOutputPins.at(i));
+            painter->drawText(QPointF(mWidth - sPinOuterHorizontalSpacing - mOutputPinTextWidth.at(i), yText), mOutputPins.at(i));
         }
 
         if (sLod < graph_widget_constants::sGateMaxLod)
@@ -378,11 +386,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
+    for (const QString& input_pin : mInputPins)
+        mInputPinTextWidth.append(pin_fm.size(0, input_pin).rwidth());
+
     for (const QString& output_pin : mOutputPins)
-    {
-        qreal x = mWidth - (pin_fm.size(0, output_pin).rwidth() + sPinOuterHorizontalSpacing);
-        mOutputPinPositions.append(QPointF(x, y));
-        y += (sPinFontHeight + sPinInnerVerticalSpacing);
-    }
+        mOutputPinTextWidth.append(pin_fm.size(0, output_pin).rwidth());
 }
 }

@@ -1,12 +1,15 @@
 #include "bitorder_propagation/bitorder_propagation.h"
 
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/module_pin.h"
+#include "nlohmann_json/json.hpp"
 
 #include <deque>
+#include <fstream>
 
 // #define PRINT_CONFLICT
 // #define PRINT_CONNECTIVITY
@@ -1366,5 +1369,228 @@ namespace hal
 
             return OK(all_wellformed_module_pin_groups);
         }
+
+        Result<std::map<MPG, u32>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+                                                                           const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
+                                                                           const std::string& export_filepath)
+        {
+            std::map<MPG, std::map<Net*, u32>> known_bitorders;
+            std::set<MPG> unknown_bitorders = {dst.begin(), dst.end()};
+
+            // collect known bit orders
+            for (auto& [m, pg] : src)
+            {
+                std::map<Net*, u32> src_bitorder;
+
+                // TODO this is gonna crash if pin does not start at index 0
+                for (u32 index = 0; index < pg->get_pins().size(); index++)
+                {
+                    auto pin_res = pg->get_pin_at_index(index);
+                    if (pin_res.is_error())
+                    {
+                        return ERR_APPEND(pin_res.get_error(), "cannot propagate bit order: failed to get pin at index " + std::to_string(index) + " inside of pin group '" + pg->get_name() + "'");
+                    }
+                    const ModulePin* pin = pin_res.get();
+
+                    src_bitorder.insert({pin->get_net(), index});
+                }
+
+                known_bitorders.insert({{m, pg}, src_bitorder});
+            }
+
+            return export_bitorder_propagation_information(known_bitorders, unknown_bitorders, export_filepath);
+        }
+
+        Result<std::map<MPG, u32>> export_bitorder_propagation_information(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& known_bitorders,
+                                                                           const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
+                                                                           const std::string& export_filepath)
+        {
+            std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_inwards;
+            std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_outwards;
+
+            std::set<MPG> relevant_pin_groups = unknown_bitorders;
+            for (const auto& [kb, _] : known_bitorders)
+            {
+                relevant_pin_groups.insert(kb);
+            }
+
+            std::map<std::tuple<Endpoint*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_outwards;
+            std::map<std::tuple<Endpoint*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_inwards;
+
+            // Build connectivity
+            for (const auto& [m, pg] : relevant_pin_groups)
+            {
+                bool successors = pg->get_direction() == PinDirection::output;
+
+                for (const auto& p : pg->get_pins())
+                {
+                    const auto starting_net = p->get_net();
+
+                    std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_outwards;
+                    const auto res_outwards = gather_connected_neighbors(starting_net, successors, relevant_pin_groups, false, nullptr, visited_outwards, cache_outwards);
+                    if (res_outwards.is_error())
+                    {
+                        return ERR_APPEND(res_outwards.get_error(),
+                                          "cannot porpagate bitorder: failed to gather bit indices outwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
+                                              + pg->get_name());
+                    }
+                    const auto connected_outwards = res_outwards.get();
+
+                    std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_inwards;
+                    // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
+                    const auto res_inwards = gather_connected_neighbors(starting_net, !successors, relevant_pin_groups, true, m, visited_inwards, cache_inwards);
+                    if (res_inwards.is_error())
+                    {
+                        return ERR_APPEND(res_inwards.get_error(),
+                                          "cannot porpagate bitorder: failed to gather bit indices inwwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
+                                              + pg->get_name());
+                    }
+                    const auto connected_inwards = res_inwards.get();
+
+                    for (const auto& [org_mpg, nets] : connected_outwards)
+                    {
+                        connectivity_outwards[{{m, pg}, starting_net}].push_back({org_mpg, nets});
+                    }
+
+                    for (const auto& [org_mpg, nets] : connected_inwards)
+                    {
+                        connectivity_inwards[{{m, pg}, starting_net}].push_back({org_mpg, nets});
+                    }
+                }
+            }
+
+            nlohmann::json info;
+
+            // export word definitions
+            std::vector<MPG> mpgs;
+            std::map<MPG, u32> mpg_to_idx;
+            std::vector<std::vector<Net*>> words;
+            std::map<std::string, std::vector<std::string>> word_definitions;
+
+            for (const auto& [m, pg] : relevant_pin_groups)
+            {
+                std::vector<Net*> nets;
+                std::vector<std::string> nets_str;
+
+                for (const auto& p : pg->get_pins())
+                {
+                    const auto& n = p->get_net();
+                    nets.push_back(n);
+                    nets_str.push_back(BooleanFunctionNetDecorator(*n).get_boolean_variable_name());
+                }
+
+                word_definitions.insert({std::to_string(words.size()), nets_str});
+                mpg_to_idx.insert({{m, pg}, mpg_to_idx.size()});
+                mpgs.push_back({m, pg});
+                words.push_back(nets);
+            }
+
+            info["word_definitions"] = word_definitions;
+
+            // export known bitorders
+            std::map<std::string, std::vector<std::string>> known_word_orders;
+
+            for (u32 i = 0; i < mpgs.size(); i++)
+            {
+                const auto& mpg = mpgs.at(i);
+
+                if (const auto it = known_bitorders.find(mpg); it != known_bitorders.end())
+                {
+                    std::vector<std::string> ordered_nets_str;
+
+                    std::vector<std::pair<Net*, u32>> net_index_vec = {it->second.begin(), it->second.end()};
+                    std::sort(net_index_vec.begin(), net_index_vec.end(), [](const auto& p1, const auto& p2) { return p1.second < p2.second; });
+                    for (const auto& [n, _idx] : net_index_vec)
+                    {
+                        ordered_nets_str.push_back(BooleanFunctionNetDecorator(*n).get_boolean_variable_name());
+                    }
+
+                    known_word_orders.insert({std::to_string(i), ordered_nets_str});
+                }
+            }
+
+            info["known_bit_order"] = known_word_orders;
+
+            // export connectivity
+            std::map<std::string, std::vector<std::pair<u32, std::string>>> connected_words;
+            std::map<std::string, std::vector<std::pair<u32, std::string>>> connected_words_forward;
+            std::map<std::string, std::vector<std::pair<u32, std::string>>> connected_words_backward;
+
+            for (u32 i = 0; i < mpgs.size(); i++)
+            {
+                const auto& mpg  = mpgs.at(i);
+                const auto& nets = words.at(i);
+
+                for (const auto& src_net : nets)
+                {
+                    std::vector<std::pair<u32, std::string>> connections;
+                    std::vector<std::pair<u32, std::string>> connections_forward;
+                    std::vector<std::pair<u32, std::string>> connections_backward;
+
+                    const auto it_in = connectivity_inwards.find({mpg, src_net});
+                    if (it_in != connectivity_inwards.end())
+                    {
+                        for (const auto& [dst_mpg, dst_nets] : it_in->second)
+                        {
+                            for (const auto& dst_net : dst_nets)
+                            {
+                                connections.push_back({mpg_to_idx.at(dst_mpg), BooleanFunctionNetDecorator(*dst_net).get_boolean_variable_name()});
+                                connections_backward.push_back({mpg_to_idx.at(dst_mpg), BooleanFunctionNetDecorator(*dst_net).get_boolean_variable_name()});
+                            }
+                        }
+                    }
+
+                    const auto it_out = connectivity_outwards.find({mpg, src_net});
+                    if (it_out != connectivity_outwards.end())
+                    {
+                        for (const auto& [dst_mpg, dst_nets] : it_out->second)
+                        {
+                            for (const auto& dst_net : dst_nets)
+                            {
+                                connections.push_back({mpg_to_idx.at(dst_mpg), BooleanFunctionNetDecorator(*dst_net).get_boolean_variable_name()});
+                                connections_forward.push_back({mpg_to_idx.at(dst_mpg), BooleanFunctionNetDecorator(*dst_net).get_boolean_variable_name()});
+                            }
+                        }
+                    }
+
+                    if (!connections.empty())
+                    {
+                        const std::string identifier = "(" + std::to_string(i) + ", " + BooleanFunctionNetDecorator(*src_net).get_boolean_variable_name() + ")";
+
+                        connected_words.insert({identifier, connections});
+
+                        if (!connections_backward.empty())
+                        {
+                            connected_words_backward.insert({identifier, connections_backward});
+                        }
+
+                        if (!connections_forward.empty())
+                        {
+                            connected_words_forward.insert({identifier, connections_forward});
+                        }
+                    }
+                }
+            }
+
+            info["connected_words"]          = connected_words;
+            info["connected_words_backward"] = connected_words_backward;
+            info["connected_words_forward"]  = connected_words_forward;
+
+            // Open a file in write mode
+            std::ofstream json_file(export_filepath);
+
+            // Serialize the JSON object to the json_file
+            if (json_file.is_open())
+            {
+                json_file << info.dump(4);    // Pretty print with an indentation of 4 spaces
+            }
+            else
+            {
+                return ERR("cannot export bitorder information: failed to open file at path " + export_filepath + " for writing");
+            }
+
+            return OK(mpg_to_idx);
+        }
+
     }    // namespace bitorder_propagation
 }    // namespace hal
