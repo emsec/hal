@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
 * fixed `hal_py.GateLibrary.gate_types` pybind
 * fixed `hal_py.NetlistFactory.load_netlist` pybind
+* plugins
+  * updated `bitorder_propagation_plugin`
+    * added functionality to export collected bitorder information as a `.json` file to use external tools for propgating and solving conflicts, like SMT solvers 
 
 ## [4.4.0](v4.4.0) - 2024-07-19 15:55:24+02:00 (urgency: medium)
 * **WARNING:** this release breaks the API of the `boolean_influence` and `bitorder_propagation` plugin
