@@ -28,6 +28,8 @@ namespace hal
         mIsGrouping = isGrouping;
 
         setContextMenuPolicy(Qt::CustomContextMenu);
+        setDragEnabled(true);
+        setDragDropMode(QAbstractItemView::DragOnly);
         connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handleCustomContextMenuRequested);
 
         connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);

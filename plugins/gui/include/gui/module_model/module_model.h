@@ -141,6 +141,8 @@ namespace hal
          */
         void clear() override;
 
+        QMimeData* mimeData(const QModelIndexList &indexes) const override;
+
         /**
          * Clears current tree item model and repopulates it with new ModuleItems for the netlist elements
          * specified in the parameters.

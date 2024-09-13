@@ -157,7 +157,6 @@ namespace hal
         void numberOfPortsChanged(const int newNumber);
 
     private:        
-        int mModuleId; // perhaps remove?
         Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, BaseTreeItem*> mNameToTreeItem;
