@@ -73,15 +73,16 @@ namespace hal {
         if(gSelectionRelay->selectedModules().contains(id))
             act->setEnabled(false);
 
+        sm = contextMenu->addMenu("  To grouping …");
         QString actionText = "  Assign module to grouping";
         if(module->get_grouping() != nullptr)
             actionText = "  Reassign module to grouping";
-        contextMenu->addAction(actionText,
+        sm->addAction(actionText,
             [id]()
             {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({id});}
         );
 
-        act = contextMenu->addAction("  Remove module from grouping",
+        act = sm->addAction("  Remove module from grouping",
             [id]()
             {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({id});}
         );
@@ -150,15 +151,16 @@ namespace hal {
         if(gSelectionRelay->selectedGates().contains(id))
             act->setEnabled(false);
 
+        sm = contextMenu->addMenu("  To grouping …");
         QString actionText = "  Assign gate to grouping";
         if(gate->get_grouping() != nullptr)
             actionText = "  Reassign gate to grouping";
-        contextMenu->addAction(actionText,
+        sm->addAction(actionText,
             [id]()
             {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{id});}
         );
 
-        act = contextMenu->addAction("  Remove gate from grouping",
+        act = sm->addAction("  Remove gate from grouping",
             [id]()
             {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({},{id});}
         );
@@ -219,15 +221,16 @@ namespace hal {
         if(gSelectionRelay->selectedNets().contains(id))
             act->setEnabled(false);
 
+        sm = contextMenu->addMenu("  To grouping …");
         QString actionText = "  Assign net to grouping";
         if(net->get_grouping() != nullptr)
             actionText = "  Reassign net to grouping";
-        contextMenu->addAction(actionText,
+        sm->addAction(actionText,
            [id]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog({},{},{id});}
         );
 
-        act = contextMenu->addAction("  Remove net from grouping",
+        act = sm->addAction("  Remove net from grouping",
            [id]()
            {gContentManager->getGroupingManagerWidget()->removeElementsFromGrouping({},{},{id});}
         );
