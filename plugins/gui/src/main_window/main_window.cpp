@@ -608,6 +608,10 @@ namespace hal
 
     void MainWindow::openSettings()
     {
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
         if (mStackedWidget->currentWidget() == mSettings)
             return; //nothing todo, already fetchGateLibrary
 
@@ -637,6 +641,11 @@ namespace hal
 
     void MainWindow::openPluginManager()
     {
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
+
         mPluginManager->repolish();
         if (mStackedWidget->currentWidget() == mPluginManager)
             return; //nothing todo, already fetchGateLibrary
@@ -786,6 +795,10 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
         if(mGateLibraryManager->initialize())
         {
             mStackedWidget->setCurrentWidget(mGateLibraryManager);

@@ -1742,7 +1742,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -1757,7 +1757,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -1772,7 +1772,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -2190,7 +2190,7 @@
                     "name": "C",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -2205,7 +2205,7 @@
                     "name": "CE",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -2220,7 +2220,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [
@@ -2235,7 +2235,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "ordered": false,
                     "pins": [

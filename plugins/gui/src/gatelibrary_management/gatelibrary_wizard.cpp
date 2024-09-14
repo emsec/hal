@@ -122,8 +122,8 @@ namespace hal
         }
         this->close();
 
+        if (!gFileStatusManager->isGatelibModified()) Q_EMIT triggerUnsavedChanges();
         gFileStatusManager->gatelibChanged();
-        Q_EMIT triggerUnsavedChanges();
     }
 
     GateType* GateLibraryWizard::getRecentCreatedGate(){

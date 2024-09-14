@@ -68,6 +68,7 @@ namespace hal
         bool initialize(GateLibrary* gateLibrary = nullptr, bool readOnly = false);
         u32 getNextGateId();
         void updateTabs(GateType* gateType);
+        bool callUnsavedChangesWindow();
 
     public Q_SLOTS:
         /**
@@ -87,6 +88,8 @@ namespace hal
          * Emits close() and closes the widget.
          */
         void handleCancelClicked();
+
+        void handleOkClicked();
 
         void handleSaveAction();
         void handleSaveAsAction();

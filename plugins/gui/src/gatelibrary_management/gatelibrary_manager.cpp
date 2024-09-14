@@ -31,7 +31,6 @@ namespace hal
     GateLibraryManager::GateLibraryManager(MainWindow *parent)
         : QFrame(parent), mFrameWidth(0), mLayout(new QGridLayout()), mNonEditableGateLibrary(nullptr), mEditableGatelibrary(nullptr)
     {
-
         //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
         mSplitter = new QSplitter(this);
         QWidget* rightWindow = new QWidget(mSplitter);
@@ -46,10 +45,8 @@ namespace hal
         mPinTab = new GateLibraryTabPin(false,this);
         mBooleanFunctionTab = new GateLibraryTabTruthTable(this);
 
-
         //buttons
         mOkBtn = bbox->button(QDialogButtonBox::Ok);
-        mOkBtn->setDisabled(true);
         mCancelBtn = bbox->button(QDialogButtonBox::Cancel);
         mCancelBtn->setEnabled(true);
 
@@ -74,18 +71,13 @@ namespace hal
 
         mLayout->addWidget(mSplitter);
 
-        //signal - slots
-//        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleAddWizard);
-        //connect(mEditBtn, &QPushButton::clicked, this, &GateLibraryManager::handleEditWizard);
- //       connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
         connect(mCancelBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCancelClicked);
+        connect(mOkBtn, &QPushButton::clicked, this, &GateLibraryManager::handleOkClicked);
         connect(mContentWidget, &GatelibraryContentWidget::triggerCurrentSelectionChanged, this, &GateLibraryManager::handleSelectionChanged);
         connect(mContentWidget->mAddAction, &QAction::triggered, this, &GateLibraryManager::handleAddWizard);
         connect(mContentWidget, &GatelibraryContentWidget::triggerEditType, this, &GateLibraryManager::handleEditWizard);
         connect(mContentWidget, &GatelibraryContentWidget::triggerDeleteType, this, &GateLibraryManager::handleDeleteType);
         connect(mContentWidget, &GatelibraryContentWidget::triggerDoubleClicked, this, &GateLibraryManager::handleEditWizard);
-
-        //connect(mWizard, &QDialog::accepted, this, &GateLibraryManager::handleSelectionChanged);
 
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
@@ -253,29 +245,15 @@ namespace hal
             Q_EMIT close();
         else
         {
-            QMessageBox* msgBox = new QMessageBox(this);
-            msgBox->setWindowTitle("Unsaved changes");
-            msgBox->setInformativeText("The current gate library has been modified. Do you want to save your changes or discard them?");
-            msgBox->setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-
-            int r = msgBox->exec();
-            switch(r)
-            {
-                case QMessageBox::Save:
-                    mContentWidget->handleSaveAsAction();
-                    Q_EMIT close();
-                break;
-                case QMessageBox::Discard:
-                    gate_library_manager::remove(std::filesystem::path(mEditableGatelibrary->get_path()));
-                    gFileStatusManager->gatelibSaved();
-                    window()->setWindowTitle("HAL");
-                    Q_EMIT close();
-                break;
-                case QMessageBox::Cancel:
-                    msgBox->reject();
-                break;
-            }
+            callUnsavedChangesWindow();
         }
+    }
+
+    void GateLibraryManager::handleOkClicked()
+    {
+        if(gFileStatusManager->isGatelibModified())
+            mContentWidget->handleSaveAction();
+        Q_EMIT close();
     }
 
     GateType* GateLibraryManager::getSelectedGate()
@@ -292,6 +270,34 @@ namespace hal
         mGeneralTab->update(gateType);
         mBooleanFunctionTab->update(gateType);
         mPinTab->update(gateType);
+    }
+
+    bool GateLibraryManager::callUnsavedChangesWindow()
+    {
+        QMessageBox* msgBox = new QMessageBox(this);
+        msgBox->setWindowTitle("Unsaved changes");
+        msgBox->setInformativeText("The current gate library has been modified. Do you want to save your changes or discard them?");
+        msgBox->setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+        int r = msgBox->exec();
+        switch(r)
+        {
+            case QMessageBox::Save:
+                mContentWidget->handleSaveAsAction();
+                Q_EMIT close();
+            break;
+            case QMessageBox::Discard:
+                gate_library_manager::remove(std::filesystem::path(mEditableGatelibrary->get_path()));
+                mDemoNetlist.reset(); //delete unique pointer
+                gFileStatusManager->gatelibSaved();
+                window()->setWindowTitle("HAL");
+                Q_EMIT close();
+            break;
+            case QMessageBox::Cancel:
+                msgBox->reject();
+                return false;
+        }
+        return true;
     }
 
     void GateLibraryManager::resizeEvent(QResizeEvent* evt)
