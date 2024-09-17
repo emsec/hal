@@ -1,4 +1,5 @@
 #include "gui/module_model/module_item.h"
+#include "gui/module_model/module_model.h"
 
 #include "hal_core/netlist/module.h"
 
@@ -8,11 +9,12 @@
 namespace hal
 {
 
-ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
+ModuleItem::ModuleItem(const u32 id, const TreeItemType type, ModuleModel *model) :
         BaseTreeItem(),
         mId(id),
         mItemType(type),
-        mHighlighted(false)
+        mHighlighted(false),
+        mModuleModel(model)
     {
         switch(type)
         {
@@ -39,6 +41,19 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
             mName = QString::fromStdString(n->get_name());
             break;
         }
+        }
+        mModuleModel->mModuleItemMaps[(int)mItemType]->insertMulti(id,this);
+    }
+
+    ModuleItem::~ModuleItem()
+    {
+        auto it = mModuleModel->mModuleItemMaps[(int)mItemType]->lowerBound(mId);
+        while (it != mModuleModel->mModuleItemMaps[(int)mItemType]->upperBound(mId))
+        {
+            if (it.value() == this)
+                it = mModuleModel->mModuleItemMaps[(int)mItemType]->erase(it);
+            else
+                ++it;
         }
     }
 
