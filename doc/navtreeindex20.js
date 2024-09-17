@@ -1,5 +1,8 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_token_stream.html#a95f8c575e74c1ba56b1699278611791a":[4,1,2,5,6],
+"classhal_1_1_token_stream.html#aa392c95edbe32bc27ed99c8cc56339c8":[4,1,2,5,2],
+"classhal_1_1_token_stream.html#aaeabe8f9d40cf8bf44ecf598b0d39e03":[4,1,2,5,15],
 "classhal_1_1_token_stream.html#abeb97a5ae00e35a6ce00d4fa211de61a":[4,1,2,5,11],
 "classhal_1_1_token_stream.html#ac6cef3a7cc3c9f73c83843119e6f95b6":[4,1,2,5,18],
 "classhal_1_1_token_stream.html#ac78663ded2f48ed5c0001f98e28aad7f":[4,1,2,5,7],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab3dec1533b9c528e76eda2f4c075d32f":[6,0,0,3,0,26],
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab7ebd7465d0bfe0ca0f7ede175a6fe17":[6,0,0,3,0,24],
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44":[6,0,0,3,0,15],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931":[6,0,0,3,0,7],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad9ac753041fa357f528f7f705cceb7b3":[6,0,0,3,0,8],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#af023be0105fabe45836fae46e5a99fbd":[6,0,0,3,0,23],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#afd9b42ee5a97346f3d12aa4f4dca8402":[6,0,0,3,0,18]
+"classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931":[6,0,0,3,0,7]
 };

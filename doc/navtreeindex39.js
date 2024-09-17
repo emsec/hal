@@ -1,5 +1,8 @@
 var NAVTREEINDEX39 =
 {
+"split__by__successors__predecessors_8h_source.html":[7,0,1,1,0,0,4,0,9],
+"splitter_8cpp.html":[7,0,1,3,2,42,0],
+"splitter_8cpp_source.html":[7,0,1,3,2,42,0],
 "splitter_8h.html":[7,0,1,3,0,0,45,0],
 "splitter_8h_source.html":[7,0,1,3,0,0,45,0],
 "splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
@@ -246,8 +249,5 @@ var NAVTREEINDEX39 =
 "struct_hop___man__t__.html#ae126b9a36f062c940ad7c85d2ae383eb":[6,0,5,7],
 "struct_hop___man__t__.html#af124f1174516cc7c14734eb7e45345b3":[6,0,5,15],
 "struct_hop___man__t__.html#af6c5f2dfd561ce7de4e3a304dc5dbe1e":[6,0,5,17],
-"struct_hop___obj__t__.html":[6,0,6],
-"struct_hop___obj__t__.html#a006caf7c7691e1c3b903825ad0620445":[6,0,6,11],
-"struct_hop___obj__t__.html#a0b17d970cfa4eddbabcedbeb2c772e35":[6,0,6,4],
-"struct_hop___obj__t__.html#a10b2958b6d36ba028fa6e40a6556d028":[6,0,6,5]
+"struct_hop___obj__t__.html":[6,0,6]
 };

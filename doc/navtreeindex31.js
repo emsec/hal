@@ -1,5 +1,8 @@
 var NAVTREEINDEX31 =
 {
+"plugin__interface__base_8h.html#af1388a5c4377a81f3215cac5d274fd60":[7,0,0,0,2,4,0],
+"plugin__interface__base_8h_source.html":[7,0,0,0,2,4],
+"plugin__interface__ui_8h.html":[7,0,0,0,2,5],
 "plugin__interface__ui_8h_source.html":[7,0,0,0,2,5],
 "plugin__interfaces_8cpp.html":[7,0,2,2,0,27],
 "plugin__interfaces_8cpp.html#gae288c84ff5c0b70e6f9571669aa29eb7":[7,0,2,2,0,27,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX31 =
 "python__bindings_2bindings_2project__manager_8cpp.html":[7,0,2,2,0,29],
 "python__bindings_2bindings_2project__manager_8cpp.html#gac072de2b8e9f09d8320090e5873be90d":[7,0,2,2,0,29,0],
 "python__bindings_2bindings_2project__manager_8cpp_source.html":[7,0,2,2,0,29],
-"python__bindings_2bindings_2subgraph__netlist__decorator_8cpp.html":[7,0,2,2,0,31],
-"python__bindings_2bindings_2subgraph__netlist__decorator_8cpp.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[7,0,2,2,0,31,0],
-"python__bindings_2bindings_2subgraph__netlist__decorator_8cpp_source.html":[7,0,2,2,0,31],
-"python__bindings_8h.html":[7,0,0,0,3,0]
+"python__bindings_2bindings_2subgraph__netlist__decorator_8cpp.html":[7,0,2,2,0,31]
 };

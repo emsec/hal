@@ -26,5 +26,6 @@ var classhal_1_1_module_model =
     [ "updateModuleName", "classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9", null ],
     [ "updateModuleParent", "classhal_1_1_module_model.html#a1244c475cef303c88d73eaaafad72484", null ],
     [ "updateNetName", "classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69", null ],
-    [ "updateNetParent", "classhal_1_1_module_model.html#a9d097fd872cfc849e2aa85dbf51a336f", null ]
+    [ "updateNetParent", "classhal_1_1_module_model.html#a9d097fd872cfc849e2aa85dbf51a336f", null ],
+    [ "ModuleItem", "classhal_1_1_module_model.html#ada0de3bfd2de607363f73e8c2e3b3bdf", null ]
 ];

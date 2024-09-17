@@ -375,7 +375,8 @@ var group__gui =
         [ "Gate", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16", null ],
         [ "Net", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca", null ]
       ] ],
-      [ "ModuleItem", "classhal_1_1_module_item.html#a5fda4644b7fef29a73c218211b57bf58", null ],
+      [ "ModuleItem", "classhal_1_1_module_item.html#af643bd098bba224ac5bc6e4f08b58e8c", null ],
+      [ "~ModuleItem", "classhal_1_1_module_item.html#ad84e9ff8534e857ba4b9a1cef972636a", null ],
       [ "appendData", "classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881", null ],
       [ "appendExistingChildIfAny", "classhal_1_1_module_item.html#a2378322995e661d6d0538d4007652b3c", null ],
       [ "getColumnCount", "classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288", null ],
@@ -418,7 +419,8 @@ var group__gui =
       [ "updateModuleName", "classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9", null ],
       [ "updateModuleParent", "classhal_1_1_module_model.html#a1244c475cef303c88d73eaaafad72484", null ],
       [ "updateNetName", "classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69", null ],
-      [ "updateNetParent", "classhal_1_1_module_model.html#a9d097fd872cfc849e2aa85dbf51a336f", null ]
+      [ "updateNetParent", "classhal_1_1_module_model.html#a9d097fd872cfc849e2aa85dbf51a336f", null ],
+      [ "ModuleItem", "classhal_1_1_module_model.html#ada0de3bfd2de607363f73e8c2e3b3bdf", null ]
     ] ],
     [ "ModuleProxyModel", "classhal_1_1_module_proxy_model.html", [
       [ "ModuleProxyModel", "classhal_1_1_module_proxy_model.html#ae559ea75f0314cc0d831ba57f58c2e3f", null ],

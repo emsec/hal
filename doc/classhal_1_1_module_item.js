@@ -5,7 +5,8 @@ var classhal_1_1_module_item =
       [ "Gate", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16", null ],
       [ "Net", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca", null ]
     ] ],
-    [ "ModuleItem", "classhal_1_1_module_item.html#a5fda4644b7fef29a73c218211b57bf58", null ],
+    [ "ModuleItem", "classhal_1_1_module_item.html#af643bd098bba224ac5bc6e4f08b58e8c", null ],
+    [ "~ModuleItem", "classhal_1_1_module_item.html#ad84e9ff8534e857ba4b9a1cef972636a", null ],
     [ "appendData", "classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881", null ],
     [ "appendExistingChildIfAny", "classhal_1_1_module_item.html#a2378322995e661d6d0538d4007652b3c", null ],
     [ "getColumnCount", "classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288", null ],
