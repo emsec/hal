@@ -177,6 +177,7 @@ namespace hal
                 return false;
             }
         }
+        if(!mWizard->mWasEdited) return false;
         return true;
     }
 

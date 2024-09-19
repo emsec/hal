@@ -70,6 +70,7 @@ namespace hal {
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent = QModelIndex()) const override;
     };
 
+    class GateLibraryWizard;
     class GeneralInfoWizardPage:public QWizardPage{
         Q_OBJECT
 
@@ -100,7 +101,7 @@ namespace hal {
         void handleNameChanged(const QString& txt);
 
     private:
-        QWizard* mWizard;
+        GateLibraryWizard* mWizard;
         QGridLayout* mLayout;
         QLabel* mLabelName;
 

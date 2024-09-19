@@ -45,6 +45,7 @@ namespace hal
         mGateLibrary = gateLibrary;
         mGateType = gateType;
         mPinModel = new PinModel(this, true);
+        mWasEdited = false;
 
         if(mGateType == nullptr)
         {
@@ -65,6 +66,18 @@ namespace hal
             boolPage->setData(mGateType);
         }
 
+        setButtonText(WizardButton::FinishButton, "Save changes");
+
+        connect(generalInfoPage, &GeneralInfoWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(pinsPage, &PinsWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(ffPage, &FlipFlopWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(boolPage, &BoolWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(latchPage, &LatchWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(lutPage, &LUTWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(initPage, &InitWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(ramPage, &RAMWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(ramportPage, &RAMPortWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(statePage, &StateWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
     }
 
     void GateLibraryWizard::accept()
@@ -124,6 +137,11 @@ namespace hal
 
         if (!gFileStatusManager->isGatelibModified()) Q_EMIT triggerUnsavedChanges();
         gFileStatusManager->gatelibChanged();
+    }
+
+    void GateLibraryWizard::handleWasEdited()
+    {
+        mWasEdited = true;
     }
 
     GateType* GateLibraryWizard::getRecentCreatedGate(){

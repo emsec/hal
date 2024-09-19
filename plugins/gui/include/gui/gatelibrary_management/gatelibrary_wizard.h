@@ -76,6 +76,8 @@ namespace hal
         int nextId() const override;
     Q_SIGNALS:
         void triggerUnsavedChanges();
+    private Q_SLOTS:
+        void handleWasEdited();
     private:
         GateLibrary* mGateLibrary;
         GateType* mGateType;
@@ -92,5 +94,6 @@ namespace hal
 
         PinModel* mPinModel;
         GateType* mNewGateType;
+        bool mWasEdited;
     };
 }
