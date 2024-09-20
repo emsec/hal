@@ -80,7 +80,7 @@ namespace hal {
             mActionSave->setText("Save Gate Libraray");
             mActionSaveAs->setText("Save Gate Library As");
             connect(mActionCreate, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCreateAction);
-            connect(mActionOpen,   &Action::triggered, mGatelibReference, &GateLibraryManager::handleOpenAction);
+            connect(mActionOpen,   &Action::triggered, mMainWindowReference, &MainWindow::handleActionGatelibraryManager);
             connect(mActionSave, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAction);
             connect(mActionSaveAs, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAsAction);
             mActionSave->setEnabled(gFileStatusManager->isGatelibModified());

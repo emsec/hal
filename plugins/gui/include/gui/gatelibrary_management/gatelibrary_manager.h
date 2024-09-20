@@ -92,7 +92,6 @@ namespace hal
         void handleOkClicked();
 
         void handleCreateAction();
-        void handleOpenAction();
         void handleSaveAction();
         void handleSaveAsAction();
 

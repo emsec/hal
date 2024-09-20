@@ -96,15 +96,6 @@ namespace hal
         // TODO
     }
 
-    void GateLibraryManager::handleOpenAction()
-    {
-        if(gFileStatusManager->isGatelibModified())
-        {
-            if(callUnsavedChangesWindow()) return;
-        }
-        initialize(nullptr, false);
-    }
-
     void GateLibraryManager::handleSaveAction()
     {
         mContentWidget->handleSaveAction();
