@@ -65,6 +65,7 @@ namespace hal {
         bool mUserInterface;
         bool mGuiExtensions;
         QString mCliOptions;
+        bool mFileFound;
 
     public:
         GuiPluginEntry(const QFileInfo& info);
@@ -75,6 +76,8 @@ namespace hal {
         bool isLoaded() const { return mState == AutoLoad || mState == UserLoad; }
         bool isPlugin() const { return mState != NotAPlugin; }
         void updateFromLoaded(const BasePluginInterface* bpif, bool isUser, const QDateTime& modified = QDateTime());
+        bool isFileFound() const { return mFileFound; }
+        void setFileFound(bool fnd) { mFileFound = fnd; }
     };
 
     class GuiPluginManager;

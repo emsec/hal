@@ -233,6 +233,7 @@ namespace hal
                 [this](int exitCode, QProcess::ExitStatus exitStatus){ this->handleFinished(exitCode,exitStatus); });
 
         (*mProcessLog) << logCommand;
+        mProcessLog->flush();
 
         mProcess->start(prog, args);
 
@@ -247,13 +248,27 @@ namespace hal
 
         if (qApp)
         {
-            if (exec())  // event loop ended with non-zero value
-                return false;
+            // entering event loop
+            if (exec())
+                return false; // event loop ended with non-zero value
         }
         else
         {
+            int msecs = 30000;
+            QString timeoutAfterSec = QString::fromStdString(mEngine->get_engine_property("timeout_after_sec"));
+            if (!timeoutAfterSec.isEmpty())
+            {
+                bool ok;
+                msecs = timeoutAfterSec.toInt(&ok) * 1000;
+                if (!ok || msecs <= 0) msecs = -1;
+            }
             log_warning("simulation_plugin", "No QApplication running, event loop not entered, will poll for process to finish.");
-            if (!mProcess->waitForFinished()) return false;
+            if (!mProcess->waitForFinished(msecs))
+            {
+                (*mProcessLog) << "<p><font color=\"#ff4040\">Process timeout after 30 sec.</font></p>\n";
+                mProcessLog->flush();
+                return false;
+            }
             handleReadyReadStandardError();
             handleReadyReadStandardOutput();
         }

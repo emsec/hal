@@ -52,6 +52,7 @@ namespace hal
      */
     class ModuleModel : public BaseTreeModel
     {
+        friend class ModuleItem;
         Q_OBJECT
 
         /**

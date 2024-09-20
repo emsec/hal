@@ -182,14 +182,14 @@ namespace hal
             Module* parentModule = g->get_module();
             ModuleItem* parentItem;
             bool insertToRoot = true;
-            ModuleItem* childItem = new ModuleItem(g->get_id(), ModuleItem::TreeItemType::Gate);
+            ModuleItem* childItem = new ModuleItem(g->get_id(), ModuleItem::TreeItemType::Gate, this);
 
             while (parentModule && insertToRoot)
             {
                 parentItem = parentMap.value(parentModule);
                 if (!parentItem)
                 {
-                    parentItem = new ModuleItem(parentModule->get_id(), ModuleItem::TreeItemType::Module);
+                    parentItem = new ModuleItem(parentModule->get_id(), ModuleItem::TreeItemType::Module, this);
                     parentMap.insert(parentModule, parentItem);
                 }
                 else
@@ -224,10 +224,10 @@ namespace hal
         moduleAssignNets();
 
         for(u32 id : gateIds)
-            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Gate));
+            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Gate, this));
         
         for(u32 id : netIds)
-            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Net));
+            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Net, this));
 
         for(auto item : newRootList)
             mRootItem->appendChild(item);
@@ -284,50 +284,49 @@ namespace hal
 
     void ModuleModel::removeModule(const u32 id)
     {
-        auto it = mModuleMap.lowerBound(id);
-        while (it != mModuleMap.upperBound(id))
+        QList<ModuleItem*> trashcan;  // access items to delete without map
+
+        for (auto it = mModuleMap.lowerBound(id); it != mModuleMap.upperBound(id); ++it)
+            trashcan.append(it.value());
+
+        for (ModuleItem* item : trashcan)
         {
-            ModuleItem* item   = it.value();
             BaseTreeItem* parentItem = item->getParent();
-
             removeChildItem(item,parentItem);
-
-            it = mModuleMap.erase(it);
         }
     }
 
     void ModuleModel::removeGate(const u32 id)
     {
-        auto it = mGateMap.lowerBound(id);
-        while (it != mGateMap.upperBound(id))
+        QList<ModuleItem*> trashcan;  // access items to delete without map
+
+        for (auto it = mGateMap.lowerBound(id); it != mGateMap.upperBound(id); ++it)
+            trashcan.append(it.value());
+
+        for (ModuleItem* item : trashcan)
         {
-            ModuleItem* item   = it.value();
             BaseTreeItem* parentItem = item->getParent();
-
-            removeChildItem(item, parentItem);
-
-            it = mGateMap.erase(it);
+            removeChildItem(item,parentItem);
         }
     }
 
     void ModuleModel::removeNet(const u32 id)
     {
-        auto it = mNetMap.lowerBound(id);
-        while (it != mNetMap.upperBound(id))
+        QList<ModuleItem*> trashcan;  // access items to delete without map
+
+        for (auto it = mNetMap.lowerBound(id); it != mNetMap.upperBound(id); ++it)
+            trashcan.append(it.value());
+
+        for (ModuleItem* item : trashcan)
         {
-            ModuleItem* item   = it.value();
             BaseTreeItem* parentItem = item->getParent();
-
-            removeChildItem(item, parentItem);
-
-            it = mNetMap.erase(it);
+            removeChildItem(item,parentItem);
         }
     }
 
     ModuleItem* ModuleModel::createChildItem(u32 id, ModuleItem::TreeItemType itemType, BaseTreeItem *parentItem)
     {
-        ModuleItem* retval = new ModuleItem(id, itemType);
-        mModuleItemMaps[(int)itemType]->insertMulti(id,retval);
+        ModuleItem* retval = new ModuleItem(id, itemType, this);
 
         if (!parentItem) parentItem = mRootItem;
         QModelIndex index = getIndexFromItem(parentItem);
@@ -349,15 +348,6 @@ namespace hal
         while (itemToRemove->getChildCount())
         {
             ModuleItem* childItem = static_cast<ModuleItem*>(itemToRemove->getChildren().at(0));
-            int ityp = static_cast<int>(childItem->getType());
-            auto it = mModuleItemMaps[ityp]->lowerBound(childItem->id());
-            while (it != mModuleItemMaps[ityp]->upperBound(childItem->id()))
-            {
-                if (it.value() == childItem)
-                    it = mModuleItemMaps[ityp]->erase(it);
-                else
-                    ++it;
-            }
             removeChildItem(childItem,itemToRemove);
         }
 
@@ -403,27 +393,25 @@ namespace hal
 
     void ModuleModel::handleModuleGateRemoved(Module* mod, u32 gateId)
     {
+        QList<QPair<ModuleItem*,ModuleItem*> > trashcan;  // item to delete, parent
+
         if (mTempGateAssignment.isAccumulate())
             mTempGateAssignment.removeGateFromModule(gateId,mod);
         else
         {
-            auto it = mGateMap.lowerBound(gateId);
-            while (it != mGateMap.upperBound(gateId))
+            for (auto it = mGateMap.lowerBound(gateId); it != mGateMap.upperBound(gateId); ++it)
             {
                 ModuleItem* item   = it.value();
-                if (!item->isToplevelItem())
-                {
-                    ModuleItem* parentItem = static_cast<ModuleItem*>(item->getParent());
-                    if (parentItem->id() == mod->get_id())
-                    {
-                        removeChildItem(item, parentItem);
-                        it = mGateMap.erase(it);
-                        continue;
-                    }
-                }
-                ++it;
+                if (item->isToplevelItem()) continue;;
+
+                ModuleItem* parentItem = static_cast<ModuleItem*>(item->getParent());
+                if (parentItem->id() == mod->get_id())
+                    trashcan.append(QPair<ModuleItem*,ModuleItem*>(item, parentItem));
             }
         }
+
+        for (const QPair<ModuleItem*,ModuleItem*>& trash : trashcan)
+            removeChildItem(trash.first, trash.second);
     }
 
     void ModuleModel::handleModuleGatesAssignBegin(Module* mod, u32 numberGates)
@@ -592,8 +580,8 @@ namespace hal
         QSet<ModuleItem*> parentsHandled;
         Q_ASSERT(gNetlist->get_gate_by_id(gateId));
 
-        auto itGat = mGateMap.lowerBound(gateId);
-        while (itGat != mGateMap.upperBound(gateId))
+        QList<QPair<ModuleItem*,ModuleItem*> > trashcan;  // item to delete, parent
+        for (auto itGat = mGateMap.lowerBound(gateId); itGat != mGateMap.upperBound(gateId); ++itGat)
         {
             ModuleItem* gatItem = itGat.value();
             if (gatItem->isToplevelItem()) continue;
@@ -602,16 +590,15 @@ namespace hal
 
             if (oldParentItem->id() != moduleId)
             {
-                removeChildItem(gatItem,oldParentItem);
-                itGat = mGateMap.erase(itGat);
+                trashcan.append(QPair<ModuleItem*,ModuleItem*>(gatItem,oldParentItem));
             }
             else
             {
                 parentsHandled.insert(oldParentItem);
-                ++itGat;
             }
-
         }
+        for (const QPair<ModuleItem*,ModuleItem*>& trash : trashcan)
+            removeChildItem(trash.first, trash.second);
 
         if (!moduleId) return;
         for (auto itMod = mModuleMap.lowerBound(moduleId); itMod != mModuleMap.upperBound(moduleId); ++itMod)
@@ -675,27 +662,29 @@ namespace hal
                 newParentId = newParentModule->get_id();
         }
 
-        auto itNet = mNetMap.lowerBound(netId);
-        while (itNet != mNetMap.upperBound(netId))
+        QList<QPair<ModuleItem*,ModuleItem*> > trashcan;  // item to delete, parent
+
+        for (auto itNet = mNetMap.lowerBound(netId); itNet != mNetMap.upperBound(netId); ++itNet)
         {
             if (itNet.value()->isToplevelItem()) continue;
-            
+
             ModuleItem* netItem = itNet.value();
             ModuleItem* oldParentItem = static_cast<ModuleItem*>(netItem->getParent());
             Q_ASSERT(oldParentItem);
 
-
             if (newParentId == 0 || newParentId != oldParentItem->id())
             {
-                removeChildItem(netItem,oldParentItem);
-                itNet = mNetMap.erase(itNet);
+                trashcan.append(QPair<ModuleItem*,ModuleItem*>(netItem,oldParentItem));
+                break;
             }
             else
             {
                 parentsHandled.insert(oldParentItem);
-                ++itNet;
             }
         }
+
+        for (const QPair<ModuleItem*,ModuleItem*>& trash : trashcan)
+            removeChildItem(trash.first, trash.second);
 
         if (!newParentId) return;
         for (auto itMod = mModuleMap.lowerBound(newParentId); itMod != mModuleMap.upperBound(newParentId); ++itMod)
@@ -719,15 +708,13 @@ namespace hal
         u32 parentId = module->get_parent_module()->get_id();
         Q_ASSERT(parentId > 0);
 
-        auto itSubm = mModuleMap.lowerBound(id);
-        while (itSubm != mModuleMap.upperBound(id))
+        QList<QPair<ModuleItem*,ModuleItem*> > trashcan;  // item to delete, parent
+
+        for (auto itSubm = mModuleMap.lowerBound(id); itSubm != mModuleMap.upperBound(id); ++itSubm)
         {
             ModuleItem* submItem = itSubm.value();
-            if (submItem->isToplevelItem())
-            {
-                ++itSubm;
-                continue;
-            }
+            if (submItem->isToplevelItem()) continue;
+
             ModuleItem* oldParentItem = static_cast<ModuleItem*>(submItem->getParent());
             Q_ASSERT(oldParentItem);
 
@@ -736,8 +723,7 @@ namespace hal
                 if (moduleItemToBeMoved)
                 {
                     // remove tree item recursively
-                    removeChildItem(submItem,oldParentItem);
-                    itSubm = mModuleMap.erase(itSubm);
+                    trashcan.append(QPair<ModuleItem*,ModuleItem*>(submItem,oldParentItem));
                 }
                 else
                 {
@@ -752,15 +738,15 @@ namespace hal
                     oldParentItem->removeChild(submItem);
                     endRemoveRows();
                     mIsModifying = false;
-                    ++itSubm;
                 }
             }
             else
             {
                 parentsHandled.insert(oldParentItem);
-                ++itSubm;
             }
         }
+        for (const QPair<ModuleItem*,ModuleItem*>& trash : trashcan)
+            removeChildItem(trash.first, trash.second);
 
         if (!parentId) return;
         for (auto itMod = mModuleMap.lowerBound(parentId); itMod != mModuleMap.upperBound(parentId); ++itMod)
@@ -786,16 +772,7 @@ namespace hal
 
         if (moduleItemToBeMoved && !moduleItemReassigned)
         {
-            // stored item could not be reassigned, delete it
-            auto it = mModuleMap.lowerBound(id);
-            while (it != mModuleMap.upperBound(id))
-            {
-                if (it.value() == moduleItemToBeMoved)
-                    it = mModuleMap.erase(it);
-                else
-                    ++it;
-            }
-            delete moduleItemToBeMoved;
+            removeChildItem(moduleItemToBeMoved, moduleItemToBeMoved->getParent());
         }
 
     }

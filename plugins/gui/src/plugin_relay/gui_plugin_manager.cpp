@@ -339,6 +339,7 @@ namespace hal {
                 if (gpe)
                 {
                    needUpdate = gpe->mFileModified != info.lastModified();
+                   gpe->setFileFound(true);
                 }
                 else
                 {
@@ -417,18 +418,25 @@ namespace hal {
         mEntries.clear();
         mAvoid.clear();
         mLookup.clear();
-        for (auto it = pluginEntries.constBegin(); it != pluginEntries.constEnd(); ++it)
+        auto it = pluginEntries.begin();
+        while (it != pluginEntries.end())
         {
             GuiPluginEntry* gpe = it.value();
-            if (gpe->isPlugin())
+            if (gpe->isFileFound())
             {
-                mLookup.insert(gpe->mName,mEntries.size());
-                mEntries.append(gpe);
+                if (gpe->isPlugin())
+                {
+                    mLookup.insert(gpe->mName,mEntries.size());
+                    mEntries.append(gpe);
+                }
+                else
+                {
+                    mAvoid.append(gpe);
+                }
+                ++it;
             }
             else
-            {
-                mAvoid.append(gpe);
-            }
+                it = pluginEntries.erase(it);
         }
         persist();
     }
@@ -763,7 +771,8 @@ namespace hal {
           mFileModified(info.lastModified()),
           mFeature(FacExtensionInterface::FacUnknown),
           mUserInterface(false),
-          mGuiExtensions(false)
+          mGuiExtensions(false),
+          mFileFound(true)
     {;}
 
     QVariant GuiPluginEntry::data(int icol) const
@@ -813,6 +822,7 @@ namespace hal {
     }
 
     GuiPluginEntry::GuiPluginEntry(const QSettings *settings)
+        : mFileFound(false)
     {
         mState    = (State) settings->value("state").toInt();
         mName             = settings->value("name").toString();
