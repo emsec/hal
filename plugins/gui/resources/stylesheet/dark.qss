@@ -1297,12 +1297,6 @@ hal--MainWindow
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
 
-    qproperty-newFileIconStyle: "";
-    qproperty-newFileIconPath: ":/icons/new-file";
-
-    qproperty-openProjIconStyle: "all->#3192C5";
-    qproperty-openProjIconPath: ":/icons/folder";
-
     qproperty-openFileIconStyle: "all->#AFB1B3";
     qproperty-openFileIconPath: ":/icons/detach";
 
@@ -1329,6 +1323,10 @@ hal--MainWindow
 
 hal--FileActions
 {
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->#3192C5";
+    qproperty-openProjIconPath: ":/icons/folder";
     qproperty-saveIconPath: ":/icons/folder-down";
     qproperty-saveAsIconPath: ":/icons/save-as";
     qproperty-enabledIconStyle: "all->#3192C5";

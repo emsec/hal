@@ -139,8 +139,6 @@ namespace hal
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        mActionNew                = new Action(this);
-        mActionOpenProject        = new Action(this);
         mActionImportNetlist      = new Action(this);
         mActionExportProject      = new Action(this);
         mActionImportProject      = new Action(this);
@@ -182,10 +180,7 @@ namespace hal
 
         setWindowIcon(gui_utility::getStyledSvgIcon(mHalIconStyle, mHalIconPath));
 
-        mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
-        mActionOpenProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
         mActionImportNetlist->setIcon(gui_utility::getStyledSvgIcon(mOpenFileIconStyle, mOpenFileIconPath));
-        mActionImportProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mNeGateIconStyle, mNeGateIconPath));
@@ -193,21 +188,22 @@ namespace hal
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
 
-        mMenuFile  = new QMenu(mMenuBar);
-        mMenuEdit  = new QMenu(mMenuBar);
-        mMenuMacro = new QMenu(mMenuBar);
-        mMenuHelp  = new QMenu(mMenuBar);
+        mMenuFile      = new QMenu(mMenuBar);
+        mMenuEdit      = new QMenu(mMenuBar);
+        mMenuMacro     = new QMenu(mMenuBar);
+        mMenuUtilities = new QMenu(mMenuBar);
+        mMenuHelp      = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
+        mMenuBar->addAction(mMenuUtilities->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
-        mMenuFile->addAction(mActionNew);
-        mMenuFile->addAction(mActionOpenProject);
+        mMenuFile->addAction(mFileActions->create());
+        mMenuFile->addAction(mFileActions->open());
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mFileActions->save());
         mMenuFile->addAction(mFileActions->saveAs());
-        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -262,11 +258,11 @@ namespace hal
         mMenuMacro->addAction(mActionStopRecording);
         mMenuMacro->addSeparator();
         mMenuMacro->addAction(mActionPlayMacro);
+        mMenuUtilities->addAction(mActionGateLibraryManager);
+        mMenuUtilities->addAction(mActionPlugins);
         mMenuHelp->addAction(mActionAbout);
-        mMenuHelp->addSeparator();
-        mMenuHelp->addAction(mActionPlugins);
-        mLeftToolBar->addAction(mActionNew);
-        mLeftToolBar->addAction(mActionOpenProject);
+        mLeftToolBar->addAction(mFileActions->create());
+        mLeftToolBar->addAction(mFileActions->open());
         mLeftToolBar->addAction(mFileActions->save());
         mLeftToolBar->addAction(mFileActions->saveAs());
         mLeftToolBar->addAction(mActionUndo);
@@ -283,8 +279,6 @@ namespace hal
         mActionPlayMacro->setEnabled(true);
 
         setWindowTitle("HAL");
-        mActionNew->setText("New Project");
-        mActionOpenProject->setText("Open Project");
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
@@ -298,6 +292,7 @@ namespace hal
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
+        mMenuUtilities->setTitle("Utilities");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = new PythonContext(this);
@@ -305,27 +300,14 @@ namespace hal
         gContentManager = new ContentManager(this);
         gCommentManager = new CommentManager(this);
 
-        mSettingCreateFile = new SettingsItemKeybind(
-            "HAL Shortcut 'Create Empty Netlist'", "keybinds/project_create_file", QKeySequence("Ctrl+N"), "Keybindings:Global", "Keybind for creating a new and empty netlist in HAL.");
-
-        mSettingOpenFile = new SettingsItemKeybind("HAL Shortcut 'Open File'", "keybinds/project_open_file", QKeySequence("Ctrl+O"), "Keybindings:Global", "Keybind for opening a new File in HAL.");
-
         mSettingUndoLast = new SettingsItemKeybind("Undo Last Action", "keybinds/action_undo", QKeySequence("Ctrl+Z"), "Keybindings:Global", "Keybind for having last user interaction undone.");
 
-        QShortcut* shortCutNewFile  = new QShortcut(mSettingCreateFile->value().toString(), this);
-        QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
         QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
 
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
-        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
         connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
 
-        connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
-        connect(shortCutOpenFile, &QShortcut::activated, mActionOpenProject, &QAction::trigger);
         connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
 
-        connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
-        connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);
         connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
@@ -378,26 +360,6 @@ namespace hal
     QString MainWindow::halIconStyle() const
     {
         return mHalIconStyle;
-    }
-
-    QString MainWindow::newFileIconPath() const
-    {
-        return mNewFileIconPath;
-    }
-
-    QString MainWindow::newFileIconStyle() const
-    {
-        return mNewFileIconStyle;
-    }
-
-    QString MainWindow::openProjIconPath() const
-    {
-        return mOpenProjIconPath;
-    }
-
-    QString MainWindow::openProjIconStyle() const
-    {
-        return mOpenProjIconStyle;
     }
 
     QString MainWindow::openFileIconPath() const
@@ -484,16 +446,6 @@ namespace hal
         mHalIconStyle = style;
     }
 
-    void MainWindow::setNewFileIconPath(const QString& path)
-    {
-        mNewFileIconPath = path;
-    }
-
-    void MainWindow::setNewFileIconStyle(const QString& style)
-    {
-        mNewFileIconStyle = style;
-    }
-
     void MainWindow::setOpenFileIconPath(const QString& path)
     {
         mOpenFileIconPath = path;
@@ -502,16 +454,6 @@ namespace hal
     void MainWindow::setOpenFileIconStyle(const QString& style)
     {
         mOpenFileIconStyle = style;
-    }
-
-    void MainWindow::setOpenProjIconPath(const QString& path)
-    {
-        mOpenProjIconPath = path;
-    }
-
-    void MainWindow::setOpenProjIconStyle(const QString& style)
-    {
-        mOpenProjIconStyle = style;
     }
 
     void MainWindow::setCloseIconPath(const QString& path)

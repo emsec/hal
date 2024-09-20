@@ -40,33 +40,32 @@ namespace hal {
         Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
         Q_PROPERTY(QString enabledIconStyle READ enabledIconStyle WRITE setEnabledIconStyle)
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
+        Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
+        Q_PROPERTY(QString openProjIconPath READ openProjIconPath WRITE setOpenProjIconPath)
+        Q_PROPERTY(QString openProjIconStyle READ openProjIconStyle WRITE setOpenProjIconStyle)
 
         MainWindow* mMainWindowReference;
         GateLibraryManager* mGatelibReference;
 
+        Action* mActionCreate;
+        Action* mActionOpen;
         Action* mActionSave;
         Action* mActionSaveAs;
+
+        QString mNewFileIconStyle;
+        QString mNewFileIconPath;
+        QString mOpenProjIconPath;
+        QString mOpenProjIconStyle;
+
         QString mSaveIconPath;
         QString mSaveAsIconPath;
 
         QString mEnabledIconStyle;
         QString mDisabledIconStyle;
+        SettingsItemKeybind* mSettingCreateFile;
+        SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingSaveFile;
-
-    private Q_SLOTS:
-
-       /**
-        * Q_SLOT to save the current project as a .hal file.
-        * call to FileManager::emitSaveTriggered().
-        */
-        void handleSaveTriggered();
-
-       /**
-        * Q_SLOT to save the current project as a new .hal file.
-        * Will query for new name.
-        * call to FileManager::emitSaveTriggered().
-        */
-        void handleSaveAsTriggered();
 
     public Q_SLOTS:
         void handleFileStatusChanged(bool gateLibrary, bool isDirty);
@@ -75,62 +74,120 @@ namespace hal {
         FileActions(QWidget* parent = nullptr);
 
         /**
-     * Q_PROPERTY READ function for the 'Save File'-icon path.
-     *
-     * @returns the 'SaveFile'-icon path
-     */
+         * Q_PROPERTY READ function for the 'New File'-icon path.
+         *
+         * @returns the 'New File'-icon path
+         */
+        QString newFileIconPath() const { return mNewFileIconPath; }
+
+        /**
+         * Q_PROPERTY READ function for the 'New File'-icon style.
+         *
+         * @returns the 'New File'-icon style
+         */
+        QString newFileIconStyle() const { return mNewFileIconStyle; }
+
+        /**
+         * Q_PROPERTY READ function for the 'Open Proj'-icon path.
+         *
+         * @returns the 'Open Proj'-icon path
+         */
+        QString openProjIconPath() const { return mOpenProjIconPath; }
+
+        /**
+         * Q_PROPERTY READ function for the 'Open Proj'-icon style.
+         *
+         * @returns the 'Open Proj'-icon style
+         */
+        QString openProjIconStyle() const { return mOpenProjIconStyle; }
+
+        /**
+         * Q_PROPERTY READ function for the 'Save File'-icon path.
+         *
+         * @returns the 'SaveFile'-icon path
+         */
         QString saveIconPath() const {return mSaveIconPath; }
 
         /**
-     * Q_PROPERTY READ function for the 'SaveAs File'-icon path.
-     *
-     * @returns the 'SaveAsFile'-icon path
-     */
+         * Q_PROPERTY READ function for the 'SaveAs File'-icon path.
+         *
+         * @returns the 'SaveAsFile'-icon path
+         */
         QString saveAsIconPath() const { return mSaveAsIconPath; }
 
         /**
-     * Q_PROPERTY READ function for the 'Enabled'-icon style.
-     *
-     * @returns the 'Enabled'-icon style
-     */
+         * Q_PROPERTY READ function for the 'Enabled'-icon style.
+         *
+         * @returns the 'Enabled'-icon style
+         */
         QString enabledIconStyle() const { return mEnabledIconStyle; }
 
         /**
-     * Q_PROPERTY READ function for the 'Disabled'-icon style.
-     *
-     * @returns the 'Disabled'-icon style
-     */
+         * Q_PROPERTY READ function for the 'Disabled'-icon style.
+         *
+         * @returns the 'Disabled'-icon style
+         */
         QString disabledIconStyle() const { return mDisabledIconStyle; }
 
         /**
-     * Q_PROPERTY WRITE function for the 'Save File'-icon path.
-     *
-     * @param path - The new path
-     */
+         * Q_PROPERTY WRITE function for the 'New File'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setNewFileIconPath(const QString& path) { mNewFileIconPath = path; }
+
+        /**
+         * Q_PROPERTY WRITE function for the 'New File'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setNewFileIconStyle(const QString &style) { mNewFileIconStyle = style; }
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Open Proj'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setOpenProjIconPath(const QString& path) { mOpenProjIconPath = path; }
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Open Proj'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setOpenProjIconStyle(const QString& style) { mOpenProjIconStyle = style; };
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Save File'-icon path.
+         *yle
+         * @param path - The new path
+         */
         void setSaveIconPath(const QString& path) { mSaveIconPath = path; }
 
         /**
-     * Q_PROPERTY WRITE function for the 'SaveAs File'-icon path.
-     *
-     * @param path - The new path
-     */
+         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon path.
+         *
+         * @param path - The new path
+         */
         void setSaveAsIconPath(const QString& path) { mSaveAsIconPath = path; }
 
         /**
-     * Q_PROPERTY WRITE function for the 'Enabled'-icon style.
-     *
-     * @param style - The new style
-     */
+         * Q_PROPERTY WRITE function for the 'Enabled'-icon style.
+         *
+         * @param style - The new style
+         */
         void setEnabledIconStyle(const QString& style) { mEnabledIconStyle = style; }
 
         /**
-     * Q_PROPERTY WRITE function for the 'Disabled'-icon style.
-     *
-     * @param style - The new style
-     */
+         * Q_PROPERTY WRITE function for the 'Disabled'-icon style.
+         *
+         * @param style - The new style
+         */
         void setDisabledIconStyle(const QString& style) { mDisabledIconStyle = style; }
 
-        Action* save() const { return mActionSave; }
+        Action* create() const { return mActionCreate; }
+        Action* open()   const { return mActionOpen; }
+        Action* save()   const { return mActionSave; }
         Action* saveAs() const { return mActionSaveAs; }
 
         void setup(GateLibraryManager* glcw = nullptr);

@@ -67,12 +67,8 @@ namespace hal
         Q_PROPERTY(QString halIconPath READ halIconPath WRITE setHalIconPath)
         Q_PROPERTY(QString halIconStyle READ halIconStyle WRITE setHalIconStyle)
 
-        Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
-        Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
         Q_PROPERTY(QString openFileIconPath READ openFileIconPath WRITE setOpenFileIconPath)
         Q_PROPERTY(QString openFileIconStyle READ openFileIconStyle WRITE setOpenFileIconStyle)
-        Q_PROPERTY(QString openProjIconPath READ openProjIconPath WRITE setOpenProjIconPath)
-        Q_PROPERTY(QString openProjIconStyle READ openProjIconStyle WRITE setOpenProjIconStyle)
         Q_PROPERTY(QString closeIconPath READ closeIconPath WRITE setCloseIconPath)
         Q_PROPERTY(QString closeIconStyle READ closeIconStyle WRITE setCloseIconStyle)
         Q_PROPERTY(QString quitIconPath READ quitIconPath WRITE setQuitIconPath)
@@ -120,19 +116,6 @@ namespace hal
         QString halIconStyle() const;
 
         /**
-         * Q_PROPERTY READ function for the 'New File'-icon path.
-         *
-         * @returns the 'New File'-icon path
-         */
-        QString newFileIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'New File'-icon style.
-         *
-         * @returns the 'New File'-icon style
-         */
-        QString newFileIconStyle() const;
-
-        /**
          * Q_PROPERTY READ function for the 'Open File'-icon path.
          *
          * @returns the 'Open File'-icon path
@@ -144,19 +127,6 @@ namespace hal
         * @returns the 'Open File'-icon style
         */
         QString openFileIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Open Proj'-icon path.
-         *
-         * @returns the 'Open Proj'-icon path
-         */
-        QString openProjIconPath() const;
-        /**
-        * Q_PROPERTY READ function for the 'Open Proj'-icon style.
-         *
-        * @returns the 'Open Proj'-icon style
-        */
-        QString openProjIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Close Project'-icon path.
@@ -230,43 +200,17 @@ namespace hal
         void setHalIconStyle(const QString &style);
 
         /**
-         * Q_PROPERTY WRITE function for the 'New File'-icon path.
+         * Q_PROPERTY WRITE function for the 'Open File'-icon path.
          *
          * @param path - The new path
          */
-        void setNewFileIconPath(const QString& path);
-        /**
-         * Q_PROPERTY WRITE function for the 'New File'-icon style.
-         *
-         * @param style - The new style
-         */
-        void setNewFileIconStyle(const QString &style);
-
-        /**
-        * Q_PROPERTY WRITE function for the 'Open File'-icon path.
-         *
-         * @param path - The new path
-        */
         void setOpenFileIconPath(const QString& path);
         /**
-        * Q_PROPERTY WRITE function for the 'Open File'-icon style.
+         * Q_PROPERTY WRITE function for the 'Open File'-icon style.
          *
          * @param style - The new style
-        */
+         */
         void setOpenFileIconStyle(const QString& style);
-
-        /**
-        * Q_PROPERTY WRITE function for the 'Open Proj'-icon path.
-         *
-         * @param path - The new path
-        */
-        void setOpenProjIconPath(const QString& path);
-        /**
-        * Q_PROPERTY WRITE function for the 'Open Proj'-icon style.
-         *
-         * @param style - The new style
-        */
-        void setOpenProjIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Close Project'-icon path.
@@ -567,8 +511,6 @@ namespace hal
         ContentLayoutArea* mLayoutArea;
 
         FileActions* mFileActions;
-        Action* mActionNew;
-        Action* mActionOpenProject;
         Action* mActionImportNetlist;
         Action* mActionGateLibraryManager;
         Action* mActionAbout;
@@ -587,19 +529,14 @@ namespace hal
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
+        QMenu* mMenuUtilities;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;
         QString mHalIconPath;
 
-        QString mNewFileIconStyle;
-        QString mNewFileIconPath;
-
         QString mOpenFileIconPath;
         QString mOpenFileIconStyle;
-
-        QString mOpenProjIconPath;
-        QString mOpenProjIconStyle;
 
         QString mCloseIconPath;
         QString mCloseIconStyle;
@@ -621,8 +558,6 @@ namespace hal
         QString mNeGateIconPath;
         QString mNeGateIconStyle;
 
-        SettingsItemKeybind* mSettingCreateFile;
-        SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingUndoLast;
 
     };
