@@ -91,13 +91,13 @@ namespace hal {
     int SelectGateModel::insertModuleRecursion(const Module* mod, SelectGateItem* parentItem)
     {
         int countCheckable = 0;
-        SelectGateItem* child = new SelectGateItem(mod->get_id(), ModuleItem::TreeItemType::Module);
+        SelectGateItem* child = new SelectGateItem(mod->get_id(), ModuleItem::TreeItemType::Module, this);
         for (const Module* subm : mod->get_submodules())
             countCheckable += insertModuleRecursion(subm, child);
         for (const Gate* g : mod->get_gates(nullptr, false))
         {
             bool isSel = GuiExtensionLogicEvaluator::acceptGate(g);
-            child->appendChild(new SelectGateItem(g->get_id(), ModuleItem::TreeItemType::Gate, isSel));
+            child->appendChild(new SelectGateItem(g->get_id(), ModuleItem::TreeItemType::Gate, this, isSel));
             if (isSel) ++countCheckable;
         }
         if (!countCheckable) child->setSelectable(false);

@@ -36,6 +36,8 @@
 
 namespace hal
 {
+    class ModuleModel;
+
     /**
      * @ingroup gui
      * @brief An item in the ModuleModel.
@@ -61,7 +63,14 @@ namespace hal
          * @param id - The id of the netlist item this ModuleItem represents
          * @param type - The type of the netlist item
          */
-        ModuleItem(const u32 id, const TreeItemType type);
+        ModuleItem(const u32 id, const TreeItemType type, ModuleModel* model);
+
+        /**
+         * Destructor.
+         *
+         * Must remove item from ModuleModel map as well.
+         */
+        virtual ~ModuleItem();
 
         /**
          * Given a set of ModuleItems (in a map [id]->[ModuleItem]) this function adds each ModuleItem of this set as
@@ -142,5 +151,6 @@ namespace hal
         QString mModuleType;
 
         bool mHighlighted;
+        ModuleModel* mModuleModel; // reference to parent model
     };
 }
