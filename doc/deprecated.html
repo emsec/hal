@@ -108,6 +108,8 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <dd><a class="anchor" id="_deprecated000012"></a> Find all sequential predecessors or successors of a net. Traverses combinational logic of all input or output nets until sequential gates are found. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a11b7573f3ebb05f841f575e072767795">hal::netlist_utils::get_partial_netlist</a>  (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
 <dd><a class="anchor" id="_deprecated000006"></a> Get a deep copy of an entire partial netlist including all of its gates, nets, excluding modules and groupings. </dd>
+<dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#aed730c36a6fe7e185bf8b936ad7e0d6d">hal::netlist_utils::get_shortest_path</a>  (<a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, bool search_both_directions)</dt>
+<dd><a class="anchor" id="_deprecated000016"></a> Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. The gate where the search started from will be the first in the result vector, the end gate will be the last. If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#ab8c3054566941b75019e3f599ec16814">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates, std::map&lt; std::pair&lt; u32, const GatePin * &gt;, <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; &amp;cache)</dt>
 <dd><a class="anchor" id="_deprecated000003"></a> Get the combined Boolean function of a subgraph of combinational gates starting at the source of the given net. The variables of the resulting Boolean function are made up of the IDs of the nets that influence the output ('net_[ID]'). Utilizes a cache for speedup on consecutive calls. </dd>
 <dt>Member <a class="el" href="namespacehal_1_1netlist__utils.html#a77025d97353281c42b543f073de27099">hal::netlist_utils::get_subgraph_function</a>  (const <a class="el" href="classhal_1_1_net.html">Net</a> *net, const std::vector&lt; const Gate * &gt; &amp;subgraph_gates)</dt>
@@ -125,7 +127,7 @@ $(document).ready(function(){initNavTree('deprecated.html',''); initResizable();
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 17 2024 09:43:27 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 23 2024 16:45:42 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

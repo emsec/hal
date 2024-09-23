@@ -126,11 +126,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac9019a807f99e85e2efd6434b44d02d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3677964003410e4de7c04f302ec5abf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ae3677964003410e4de7c04f302ec5abf">get_next_combinational_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;forbidden_pins={}, std::unordered_map&lt; const <a class="el" href="classhal_1_1_net.html">Net</a> *, std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; *cache=nullptr) const</td></tr>
 <tr class="separator:ae3677964003410e4de7c04f302ec5abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8400ffb54852c929241fc3d83f61ab8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac8400ffb54852c929241fc3d83f61ab8">get_shortest_path_distance</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:ac8400ffb54852c929241fc3d83f61ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1d89f5a3aa73e8cb94a5bb924663e85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac1d89f5a3aa73e8cb94a5bb924663e85">get_shortest_path</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:ac1d89f5a3aa73e8cb94a5bb924663e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A netlist decorator that provides functionality to traverse the associated netlist without making any modifications. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__traversal__decorator_8h_source.html#l00039">39</a> of file <a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__traversal__decorator_8h_source.html#l00041">41</a> of file <a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a126a3148fa0457449c524263444dce28"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a126a3148fa0457449c524263444dce28">&#9670;&nbsp;</a></span>NetlistTraversalDecorator()</h2>
@@ -795,6 +799,130 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ac1d89f5a3aa73e8cb94a5bb924663e85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1d89f5a3aa73e8cb94a5bb924663e85">&#9670;&nbsp;</a></span>get_shortest_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &gt; hal::NetlistTraversalDecorator::get_shortest_path </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>start_gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>end_gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. The gate where the search started from will be the first in the result vector, the end gate will be the last. If there is no such path an empty optional is returned. If there is more than one path with the same length only the first one is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate to start from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_gate</td><td>- The gate to connect to. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction to search in. Can be <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">PinDirection::input</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> or <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a> to search both directions and return the shorter one. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">exit_endpoint_filter</td><td>- Filter condition that determines whether to stop traversal on a fan-in/out endpoint. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">entry_endpoint_filter</td><td>- Filter condition that determines whether to stop traversal on a successor/predecessor endpoint. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional vector of gates that connect the start with end gate incase of successs, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00813">813</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
+<a id="ac8400ffb54852c929241fc3d83f61ab8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8400ffb54852c929241fc3d83f61ab8">&#9670;&nbsp;</a></span>get_shortest_path_distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::NetlistTraversalDecorator::get_shortest_path_distance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>start_gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>end_gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Find the length of shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. If there is no such path an empty optional is returned. Computing only the shortest distance to a gate is faster than computing the shortest path, since it does not have to keep track of the path to reach each gate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_gate</td><td>- The gate to start from. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">end_gate</td><td>- The gate to connect to. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">direction</td><td>- The direction to search in. Can be <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">PinDirection::input</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> or <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a> to search both directions and return the shorter one. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">exit_endpoint_filter</td><td>- Filter condition that determines whether to stop traversal on a fan-in/out endpoint. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">entry_endpoint_filter</td><td>- Filter condition that determines whether to stop traversal on a successor/predecessor endpoint. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional unsigned integer representing the shortest distance between the start and end gate incase of success, an erro otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00704">704</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/hal/hal/include/hal_core/netlist/decorators/<a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a></li>
 <li>/home/runner/work/hal/hal/src/netlist/decorators/<a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a></li>
@@ -805,7 +933,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html">NetlistTraversalDecorator</a></li>
-    <li class="footer">Generated on Tue Sep 17 2024 09:43:29 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 23 2024 16:45:44 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"namespacehal.html#a2319a036cfb2272af66101db753b7b5c":[5,0,2,489],
+"namespacehal.html#a26043d445e88c55f2c8cb048e9abc291":[5,0,2,587],
 "namespacehal.html#a269baf7c77d18645a4d0a9f759725f8f":[5,0,2,519],
 "namespacehal.html#a2920c40f8d677cd4749e841f24654f89":[5,0,2,596],
 "namespacehal.html#a2e3db4982e305f70525168688ff68a22":[5,0,2,560],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e":[5,0,2,22,0],
 "namespacehal_1_1boolean__influence.html":[5,0,2,0],
 "namespacehal_1_1boolean__influence.html#a012f7e70d113d81ebf0369360abf709f":[5,0,2,0,8],
-"namespacehal_1_1boolean__influence.html#a067fb558be7e4b302226adbd283f6138":[5,0,2,0,6],
-"namespacehal_1_1boolean__influence.html#a13862a6e7f196e4c32ed1ab58db30a84":[5,0,2,0,5],
-"namespacehal_1_1boolean__influence.html#a195203f8eb98d98ddce1fa90fb6cccdb":[5,0,2,0,9]
+"namespacehal_1_1boolean__influence.html#a067fb558be7e4b302226adbd283f6138":[5,0,2,0,6]
 };
