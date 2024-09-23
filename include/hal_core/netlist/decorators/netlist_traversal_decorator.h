@@ -29,6 +29,8 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/result.h"
 
+#include <optional>
+
 namespace hal
 {
     /**
@@ -231,7 +233,41 @@ namespace hal
         Result<std::set<Gate*>>
             get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
-        // TODO move get_path and get_shortest_path here
+        /**
+         * Find the length of shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
+         * If there is no such path an empty optional is returned.
+         * Computing only the shortest distance to a gate is faster than computing the shortest path, since it does not have to keep track of the path to reach each gate.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_gate - The gate to connect to.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return An optional unsigned integer representing the shortest distance between the start and end gate incase of success, an erro otherwise. 
+         */
+        Result<std::optional<u32>> get_shortest_path_distance(const Gate* start_gate,
+                                                              const Gate* end_gate,
+                                                              const PinDirection& direction,
+                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
+         * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
+         * If there is no such path an empty optional is returned. If there is more than one path with the same length only the first one is returned.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_gate - The gate to connect to.
+         * @param[in] direction - The direction to search in. Can be PinDirection::input, PinDirection::output or PinDirection::inout to search both directions and return the shorter one.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @return An optional vector of gates that connect the start with end gate incase of successs, an error otherwise.
+         */
+        Result<std::optional<std::vector<Gate*>>> get_shortest_path(const Gate* start_gate,
+                                                                    const Gate* end_gate,
+                                                                    const PinDirection& direction,
+                                                                    const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                    const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         // TODO move get_gate_chain and get_complex_gate_chain here
 
