@@ -29,9 +29,8 @@
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(MainWindow *parent)
-        : QFrame(parent), mFrameWidth(0), mLayout(new QGridLayout()), mNonEditableGateLibrary(nullptr), mEditableGatelibrary(nullptr)
+        : QFrame(parent), mFrameWidth(0), mLayout(new QGridLayout()), mGateLibrary(nullptr)
     {
-        //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
         mSplitter = new QSplitter(this);
         QWidget* rightWindow = new QWidget(mSplitter);
         QGridLayout* rlay = new QGridLayout(rightWindow);
@@ -111,11 +110,9 @@ namespace hal
         if(!gateLibrary)
         {
             if(gNetlist && gNetlist->get_gate_library()){
-                //TODO find better way to handle const/not const gateLibrary
-                mNonEditableGateLibrary = gNetlist->get_gate_library();
-                mDemoNetlist = netlist_factory::create_netlist(mNonEditableGateLibrary);
+                // readonly flag makes sure mGateLibrary does not get modified, const attribute not needed
+                mGateLibrary = const_cast<GateLibrary*>(gNetlist->get_gate_library());
                 mReadOnly = true;
-
             }
             else
             {
@@ -136,8 +133,7 @@ namespace hal
 
                 auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
 
-                mEditableGatelibrary = gateLibrary;
-                mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
+                mGateLibrary = gateLibrary;
                 mReadOnly = false;
 
                 QDir dir(QDir::home());
@@ -149,20 +145,13 @@ namespace hal
         else
         {
             mReadOnly = readOnly;
-            if(mReadOnly)
-            {
-                mDemoNetlist = netlist_factory::create_netlist(mNonEditableGateLibrary);
-                mNonEditableGateLibrary = gateLibrary;
-            }
-            else
-            {
-                mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
-                mEditableGatelibrary = gateLibrary;
-            }
+            mGateLibrary = gateLibrary;
         }
+
+        mDemoNetlist = netlist_factory::create_netlist(mGateLibrary);
         mGraphicsView->showGate(nullptr);
         updateTabs(nullptr);
-        mTableModel->loadFile(mReadOnly ? mNonEditableGateLibrary : mEditableGatelibrary);
+        mTableModel->loadFile(mGateLibrary);
         mContentWidget->activate(mReadOnly);
 
         mContentWidget->toggleSelection(false);
@@ -173,39 +162,38 @@ namespace hal
     {
         if(mReadOnly)
             return;
-        mWizard = new GateLibraryWizard(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
+        mWizard = new GateLibraryWizard(mGateLibrary, mTableModel->getGateTypeAtIndex(index.row()));
         connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
 
         mWizard->exec();
-        initialize(mEditableGatelibrary);
+        initialize(mGateLibrary);
 
         mContentWidget->mTableView->selectRow(index.row());
-        mContentWidget->setGateLibrary(mEditableGatelibrary);
+        mContentWidget->setGateLibrary(mGateLibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
 
     void GateLibraryManager::handleAddWizard()
     {
-        mWizard = new GateLibraryWizard(mEditableGatelibrary);
+        mWizard = new GateLibraryWizard(mGateLibrary);
         connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
 
         mWizard->exec();
-
-        initialize(mEditableGatelibrary);
+        initialize(mGateLibrary);
 
         for (int r=0; r<mTableModel->rowCount(); r++) {
             if(mTableModel->getGateTypeAtIndex(r) == mWizard->getRecentCreatedGate())
                 mContentWidget->mTableView->selectRow(r);
         }
-        mContentWidget->setGateLibrary(mEditableGatelibrary);
+        mContentWidget->setGateLibrary(mGateLibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
 
     void GateLibraryManager::handleDeleteType(QModelIndex index)
     {
         GateType* gate = mTableModel->getGateTypeAtIndex(index.row());
-        mEditableGatelibrary->remove_gate_type(gate->get_name());
-        initialize(mEditableGatelibrary);
+        mGateLibrary->remove_gate_type(gate->get_name());
+        initialize(mGateLibrary);
         gFileStatusManager->gatelibChanged();
         //qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
     }
@@ -214,7 +202,7 @@ namespace hal
     {
         QSet<u32>* occupiedIds = new QSet<u32>;
         u32 freeId = 1;
-        for (auto gt : mEditableGatelibrary->get_gate_types()) {
+        for (auto gt : mGateLibrary->get_gate_types()) {
             occupiedIds->insert(gt.second->get_id());
         }
         while(occupiedIds->contains(freeId))
@@ -292,7 +280,7 @@ namespace hal
                 Q_EMIT close();
             break;
             case QMessageBox::Discard:
-                gate_library_manager::remove(std::filesystem::path(mEditableGatelibrary->get_path()));
+                gate_library_manager::remove(std::filesystem::path(mGateLibrary->get_path()));
                 mDemoNetlist.reset(); //delete unique pointer
                 gFileStatusManager->gatelibSaved();
                 window()->setWindowTitle("HAL");
