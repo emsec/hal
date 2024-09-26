@@ -1,6 +1,5 @@
 var NAVTREEINDEX24 =
 {
-"gate__pin__tree_8h.html":[7,0,1,3,0,0,40,0,3],
 "gate__pin__tree_8h_source.html":[7,0,1,3,0,0,40,0,3],
 "gate__select__model_8cpp.html":[7,0,1,3,2,30,1],
 "gate__select__model_8cpp_source.html":[7,0,1,3,2,30,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX24 =
 "group__by__successors__predecessors__iteratively_8h_source.html":[7,0,1,1,0,0,4,0,4],
 "group__core.html":[4,1],
 "group__decorators.html":[4,1,0,0],
-"group__docking.html":[4,0,2]
+"group__docking.html":[4,0,2],
+"group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[5,0,2,472]
 };

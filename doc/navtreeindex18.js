@@ -1,6 +1,5 @@
 var NAVTREEINDEX18 =
 {
-"classhal_1_1_search_options_dialog.html#aa2f1eaefd3ec2262b1cf08c7e95406e6":[6,0,0,229,4],
 "classhal_1_1_search_options_dialog.html#ab19a0a150d3ec68e97463cedc3a38628":[6,0,0,229,7],
 "classhal_1_1_search_options_dialog.html#ae4767496a55b24434d56f7c7993ba45b":[6,0,0,229,1],
 "classhal_1_1_search_proxy_model.html":[6,0,0,224],
@@ -249,5 +248,6 @@ var NAVTREEINDEX18 =
 "classhal_1_1_settings_item_keybind.html":[4,0,4,12],
 "classhal_1_1_settings_item_keybind.html#a1a0c9f668fe5efebeb788c99bf97e297":[4,0,4,12,2],
 "classhal_1_1_settings_item_keybind.html#a1e614620132e15d0d166de636d466fd4":[4,0,4,12,4],
-"classhal_1_1_settings_item_keybind.html#a2552a08bf7d57dc2e5853d6766cd8a06":[4,0,4,12,3]
+"classhal_1_1_settings_item_keybind.html#a2552a08bf7d57dc2e5853d6766cd8a06":[4,0,4,12,3],
+"classhal_1_1_settings_item_keybind.html#a3af9226f0e8dab351ac42e2c9cce3317":[4,0,4,12,5]
 };

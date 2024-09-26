@@ -1,6 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"netlist__internal__manager_8h_source.html":[7,0,0,0,1,17],
 "netlist__modification__decorator_8h.html":[7,0,0,0,1,1,2],
 "netlist__modification__decorator_8h_source.html":[7,0,0,0,1,1,2],
 "netlist__parser_8h.html":[7,0,0,0,1,4,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX30 =
 "plugin__hgl__writer_8h.html":[7,0,1,5,0,0,1],
 "plugin__hgl__writer_8h_source.html":[7,0,1,5,0,0,1],
 "plugin__interface__base_8cpp.html":[7,0,2,1,3],
-"plugin__interface__base_8cpp_source.html":[7,0,2,1,3]
+"plugin__interface__base_8cpp_source.html":[7,0,2,1,3],
+"plugin__interface__base_8h.html":[7,0,0,0,2,4]
 };
