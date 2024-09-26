@@ -163,7 +163,7 @@ namespace hal
         if(mReadOnly)
             return;
         GateType* gtEditable = mTableModel->getGateTypeAtIndex(index.row());
-        mWizard = new GateLibraryWizard(mEditableGatelibrary, gtEditable);
+        mWizard = new GateLibraryWizard(mGateLibrary, gtEditable);
         connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
 
         mWizard->exec();
@@ -173,7 +173,7 @@ namespace hal
             if(mTableModel->getGateTypeAtIndex(r) == gtEditable)
                 mContentWidget->mTableView->selectRow(r);
         }
-        mContentWidget->setGateLibrary(mEditableGatelibrary);
+        mContentWidget->setGateLibrary(mGateLibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
 

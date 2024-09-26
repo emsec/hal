@@ -100,5 +100,6 @@ namespace hal
         GateType* mNewGateType;
         bool mWasEdited;
         bool mEditMode;
+        QString mTitle;
     };
 }

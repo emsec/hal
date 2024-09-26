@@ -21,13 +21,13 @@ namespace hal
     {
         mEditMode = false;
 
-        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);//
-        pinsPage = new PinsWizardPage(this); //
-        ffPage = new FlipFlopWizardPage(this); //
-        boolPage = new BoolWizardPage(this); //
-        latchPage = new LatchWizardPage(this); //
-        lutPage = new LUTWizardPage(this); //
-        initPage = new InitWizardPage(this);//
+        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);
+        pinsPage = new PinsWizardPage(this);
+        ffPage = new FlipFlopWizardPage(this);
+        boolPage = new BoolWizardPage(this);
+        latchPage = new LatchWizardPage(this);
+        lutPage = new LUTWizardPage(this);
+        initPage = new InitWizardPage(this);
         ramPage = new RAMWizardPage(this);
         ramportPage = new RAMPortWizardPage(this);
         statePage = new StateWizardPage(this);
@@ -68,9 +68,10 @@ namespace hal
             statePage->setData(mGateType);
             boolPage->setData(mGateType);
         }
+        mTitle = windowTitle();
+
         connect(generalInfoPage, &GeneralInfoWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(pinsPage, &PinsWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
-        //TODO: do something with booleans
         connect(ffPage, &FlipFlopWizardPage::hasChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(boolPage, &BoolWizardPage::hasChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(latchPage, &LatchWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
@@ -143,6 +144,7 @@ namespace hal
     void GateLibraryWizard::handleWasEdited()
     {
         mWasEdited = true;
+        setWindowTitle(mTitle+" *");
     }
 
     GateType* GateLibraryWizard::getRecentCreatedGate(){
