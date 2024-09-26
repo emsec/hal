@@ -120,8 +120,7 @@ namespace hal
         GateLibraryTabTruthTable* mBooleanFunctionTab;
         GateLibraryTabPin* mPinTab;
 
-        const GateLibrary* mNonEditableGateLibrary;
-        GateLibrary* mEditableGatelibrary;
+        GateLibrary* mGateLibrary;
         std::unique_ptr<Netlist> mDemoNetlist;
         std::filesystem::path mPath;
 

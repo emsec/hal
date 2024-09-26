@@ -70,9 +70,9 @@ namespace hal
     {
         // Clear existing labels
         QLayoutItem* item;
-        if (!mLayout->isEmpty())
+        while (!mLayout->isEmpty())
         {
-            while ((item = mLayout->takeAt(0)) != nullptr)  {
+            if ((item = mLayout->takeAt(0)) != nullptr)  {
                 delete item->widget();
                 delete item;
             }
