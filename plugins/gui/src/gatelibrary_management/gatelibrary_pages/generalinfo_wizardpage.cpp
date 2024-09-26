@@ -117,6 +117,12 @@ namespace hal
         mName->setValidator(mValidator);
     }
 
+    void GeneralInfoWizardPage::initializePage()
+    {
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        mWizard->mEditMode = true;
+    }
+
     void GeneralInfoWizardPage::setData(QString name, const std::vector<GateTypeProperty>& properties)
     {
         mName->setText(name);
@@ -185,6 +191,7 @@ namespace hal
             if (QString::fromStdString(it.first) == mName->text())
                 return false;
         }
+        mWizard->mEditMode = false;
         return true;
     }
 }

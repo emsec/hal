@@ -116,10 +116,14 @@ namespace hal
         }
 
         Q_EMIT completeChanged();
+
+        mWizard->mEditMode = true;
     }
 
     void FlipFlopWizardPage::handleTextChanged(const QString& text){
         Q_UNUSED(text);
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+
         if(mASet->text().isEmpty() || mAReset->text().isEmpty())
         {
             mIntState->clear();
@@ -132,8 +136,9 @@ namespace hal
             mIntState->setDisabled(false);
             mNegIntState->setDisabled(false);
         }
-
         Q_EMIT completeChanged();
+
+        if(mWizard->mEditMode) Q_EMIT hasChanged();
     }
 
     void FlipFlopWizardPage::setData(GateType *gate){
@@ -187,6 +192,7 @@ namespace hal
                     mNegIntState->text().toStdString() != enum_to_string(AsyncSetResetBehavior::X))
                 return false;
         }
+        mWizard->mEditMode = false;
         return true;
     }
 }

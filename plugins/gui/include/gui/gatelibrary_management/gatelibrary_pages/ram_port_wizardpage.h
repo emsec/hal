@@ -51,6 +51,7 @@ namespace hal {
         QList<RAMPort> getRamPorts();
         void setData(GateType* gate);
         void initializePage() override;
+        bool isComplete() const override;
 
     private:
         GateLibraryWizard* mWizard;

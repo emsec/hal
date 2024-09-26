@@ -80,9 +80,11 @@ namespace hal {
         bool isComplete() const override;
         void setData(GateType* gate);
         std::unordered_map<std::string, BooleanFunction> getBoolFunctions();
+    Q_SIGNALS:
+        void hasChanged();
     private Q_SLOTS:
         void handleStateChanged(const QString& stat);
-
+        void handleTextChanged(const QString& txt);
     private:
         QGridLayout* mLayout;
         GateLibraryWizard* mWizard;

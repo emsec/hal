@@ -19,6 +19,7 @@ namespace hal
 
         setLayout(mLayout);
 
+        connect(mAscending, &QCheckBox::stateChanged, this, &LUTWizardPage::completeChanged);
     }
 
     void LUTWizardPage::setData(GateType *gate){

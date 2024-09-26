@@ -19,14 +19,15 @@ namespace hal
 {
     GateLibraryWizard::GateLibraryWizard(GateLibrary *gateLibrary, GateType *gateType, QWidget* parent): QWizard(parent)
     {
-        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);
-        pinsPage = new PinsWizardPage(this);
-        ffPage = new FlipFlopWizardPage(this);
-        boolPage = new BoolWizardPage(this);
+        mEditMode = false;
 
-        latchPage = new LatchWizardPage(this);
-        lutPage = new LUTWizardPage(this);
-        initPage = new InitWizardPage(this);
+        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);//
+        pinsPage = new PinsWizardPage(this); //
+        ffPage = new FlipFlopWizardPage(this); //
+        boolPage = new BoolWizardPage(this); //
+        latchPage = new LatchWizardPage(this); //
+        lutPage = new LUTWizardPage(this); //
+        initPage = new InitWizardPage(this);//
         ramPage = new RAMWizardPage(this);
         ramportPage = new RAMPortWizardPage(this);
         statePage = new StateWizardPage(this);
@@ -50,10 +51,12 @@ namespace hal
         if(mGateType == nullptr)
         {
             setWindowTitle("Create new gate type");
+            setButtonText(WizardButton::FinishButton, "Finish");
         }
         else
         {
             setWindowTitle("Modify gate type " + QString::fromStdString(mGateType->get_name()));
+            setButtonText(WizardButton::FinishButton, "Save changes");
 
             generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), mGateType->get_property_list());
             ffPage->setData(mGateType);
@@ -65,13 +68,11 @@ namespace hal
             statePage->setData(mGateType);
             boolPage->setData(mGateType);
         }
-
-        setButtonText(WizardButton::FinishButton, "Save changes");
-
         connect(generalInfoPage, &GeneralInfoWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(pinsPage, &PinsWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
-        connect(ffPage, &FlipFlopWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
-        connect(boolPage, &BoolWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
+        //TODO: do something with booleans
+        connect(ffPage, &FlipFlopWizardPage::hasChanged, this, &GateLibraryWizard::handleWasEdited);
+        connect(boolPage, &BoolWizardPage::hasChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(latchPage, &LatchWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(lutPage, &LUTWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);
         connect(initPage, &InitWizardPage::completeChanged, this, &GateLibraryWizard::handleWasEdited);

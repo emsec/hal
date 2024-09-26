@@ -22,6 +22,15 @@ namespace hal
         mLayout->addWidget(mIdentifiers, 1, 1);
 
         setLayout(mLayout);
+
+        connect(mCategory, &QLineEdit::textChanged, this, &InitWizardPage::handleTextChanged);
+        connect(mIdentifiers, &QTextEdit::textChanged, this, &InitWizardPage::handleTextEditChanged);
+    }
+
+    void InitWizardPage::initializePage()
+    {
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        mWizard->mEditMode = true;
     }
 
     void InitWizardPage::setData(GateType *gate){
@@ -46,5 +55,35 @@ namespace hal
                 mIdentifiers->setText(ids);
             }
         }
+    }
+
+    void InitWizardPage::handleTextChanged(const QString& txt)
+    {
+        Q_UNUSED(txt);
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+
+        //explicitly needed here because isComplete() is called
+        //before mWasEdited is changed in the wizard
+        if(mWizard->mEditMode) mWizard->mWasEdited = true;
+
+        Q_EMIT completeChanged();
+    }
+
+    void InitWizardPage::handleTextEditChanged()
+    {
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+
+        //explicitly needed here because isComplete() is called
+        //before mWasEdited is changed in the wizard
+        if(mWizard->mEditMode) mWizard->mWasEdited = true;
+
+        Q_EMIT completeChanged();
+    }
+
+    bool InitWizardPage::isComplete() const
+    {
+        if(isFinalPage() && !mWizard->mWasEdited) return false;
+        mWizard->mEditMode = false;
+        return true;
     }
 }

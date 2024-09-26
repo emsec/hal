@@ -37,13 +37,19 @@
 namespace hal {
     class InitWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
+        Q_OBJECT
     public:
         InitWizardPage(QWidget* parent = nullptr);
-        //void initializePage() override;
-        //int nextId() const override;
+        void initializePage() override;
+        bool isComplete() const override;
         void setData(GateType* gate);
 
+    private Q_SLOTS:
+        void handleTextChanged(const QString& txt);
+        void handleTextEditChanged();
+
     private:
+        GateLibraryWizard* mWizard;
         QGridLayout* mLayout;
 
         QLineEdit* mCategory;

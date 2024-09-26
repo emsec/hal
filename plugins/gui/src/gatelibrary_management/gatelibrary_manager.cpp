@@ -173,13 +173,17 @@ namespace hal
     {
         if(mReadOnly)
             return;
-        mWizard = new GateLibraryWizard(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
+        GateType* gtEditable = mTableModel->getGateTypeAtIndex(index.row());
+        mWizard = new GateLibraryWizard(mEditableGatelibrary, gtEditable);
         connect(mWizard, &GateLibraryWizard::triggerUnsavedChanges, mContentWidget, &GatelibraryContentWidget::handleUnsavedChanges);
 
         mWizard->exec();
         initialize(mEditableGatelibrary);
 
-        mContentWidget->mTableView->selectRow(index.row());
+        for (int r=0; r<mTableModel->rowCount(); r++) {
+            if(mTableModel->getGateTypeAtIndex(r) == gtEditable)
+                mContentWidget->mTableView->selectRow(r);
+        }
         mContentWidget->setGateLibrary(mEditableGatelibrary);
         mContentWidget->setGateLibraryPath(mPath);
     }
@@ -247,7 +251,10 @@ namespace hal
     void GateLibraryManager::handleCancelClicked()
     {
         if(!gFileStatusManager->isGatelibModified())
+        {
+            window()->setWindowTitle("HAL");
             Q_EMIT close();
+        }
         else
         {
             callUnsavedChangesWindow();

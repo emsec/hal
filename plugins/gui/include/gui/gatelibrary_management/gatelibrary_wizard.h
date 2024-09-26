@@ -47,11 +47,15 @@ namespace hal
     {
         Q_OBJECT
 
-        friend class RAMPortWizardPage;
+        friend class GeneralInfoWizardPage;
         friend class PinsWizardPage;
         friend class FlipFlopWizardPage;
-        friend class StateWizardPage;
         friend class BoolWizardPage;
+        friend class LatchWizardPage;
+
+        friend class RAMPortWizardPage;
+        friend class StateWizardPage;
+        friend class InitWizardPage;
     public:
         enum PAGE
         {
@@ -95,5 +99,6 @@ namespace hal
         PinModel* mPinModel;
         GateType* mNewGateType;
         bool mWasEdited;
+        bool mEditMode;
     };
 }

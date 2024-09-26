@@ -42,6 +42,12 @@ namespace hal
 
         setLayout(mLayout);
 
+        connect(mDataIn, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
+        connect(mEnableOn, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
+        connect(mAReset, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
+        connect(mASet, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
+        connect(mIntState, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
+        connect(mNegIntState, &QLineEdit::textChanged, this, &LatchWizardPage::completeChanged);
     }
 
     void LatchWizardPage::setData(GateType *gate){
