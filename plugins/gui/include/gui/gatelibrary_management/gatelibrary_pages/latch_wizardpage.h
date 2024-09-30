@@ -34,6 +34,7 @@
 #include <QLabel>
 
 namespace hal {
+    class GateLibraryWizard;
     class LatchWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
     public:

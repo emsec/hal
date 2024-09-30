@@ -19,6 +19,7 @@ namespace hal
 
         setLayout(mLayout);
 
+        connect(mBitSize, &QLineEdit::textChanged, this, &RAMWizardPage::completeChanged);
     }
 
     void RAMWizardPage::setData(GateType *gate){

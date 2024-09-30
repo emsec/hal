@@ -44,7 +44,8 @@ namespace hal {
         void initializePage() override;
         void setData(GateType* gate);
         bool isComplete() const override;
-
+    Q_SIGNALS:
+        void hasChanged();
     public Q_SLOTS:
         void handleTextChanged(const QString& txt);
     private:

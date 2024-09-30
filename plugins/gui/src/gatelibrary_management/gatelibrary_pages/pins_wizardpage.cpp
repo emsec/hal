@@ -28,6 +28,7 @@ namespace hal
     {
         mWizard = static_cast<GateLibraryWizard*>(wizard());
         mWizard->mPinModel = mPinModel;
+        mWizard->mEditMode = true;
 
         if(!mGateset)
         {
@@ -70,6 +71,7 @@ namespace hal
                 }
             }
         }
+        mWizard->mEditMode = false;
         return hasPingroup;
     }
 }

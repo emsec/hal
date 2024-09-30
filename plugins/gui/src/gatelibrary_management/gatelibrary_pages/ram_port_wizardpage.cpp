@@ -66,9 +66,16 @@ void RAMPortWizardPage::initializePage(){
                 rp.isWritePort->setChecked(ram_port->is_write_port());
             }
             mRamPortEdits.append(rp);
+
+            connect(rp.dataGroup, &QLineEdit::textChanged, this, &RAMPortWizardPage::completeChanged);
+            connect(rp.addressGroup, &QLineEdit::textChanged, this, &RAMPortWizardPage::completeChanged);
+            connect(rp.clockFunction, &QLineEdit::textChanged, this, &RAMPortWizardPage::completeChanged);
+            connect(rp.enableFunciton, &QLineEdit::textChanged, this, &RAMPortWizardPage::completeChanged);
+            connect(rp.isWritePort, &QCheckBox::stateChanged, this, &RAMPortWizardPage::completeChanged);
         }
     }
 
+    mWizard->mEditMode = true;
     setLayout(mLayout);
 }
 
@@ -78,5 +85,11 @@ void RAMPortWizardPage::initializePage(){
 
     QList<RAMPortWizardPage::RAMPort> RAMPortWizardPage::getRamPorts(){
         return mRamPortEdits;
+    }
+
+    bool RAMPortWizardPage::isComplete() const
+    {
+        mWizard->mEditMode = false;
+        return true;
     }
 }

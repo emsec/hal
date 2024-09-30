@@ -84,6 +84,7 @@ namespace hal {
         QString getName();
         QList<GateTypeProperty> getProperties() const;
         bool isComplete() const override;
+        void initializePage() override;
 
         QString disabledIconStyle()  const { return mDisabledIconStyle; }
         QString enabledIconStyle()   const { return mEnabledIconStyle; }

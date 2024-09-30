@@ -63,6 +63,7 @@ namespace hal
         }
         if (mState != nextState)
             setState(nextState);
+
     }
 //--------------------------------------------
     BoolWizardPage::BoolWizardPage(QWidget* parent)
@@ -113,7 +114,8 @@ namespace hal
                 {
                     lineEdit->setText(QString::fromStdString(bf->second.to_string()));
                 }
-                connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+                connect(lineEdit, &BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+                connect(lineEdit, &BooleanFunctionEdit::textChanged, this, &BoolWizardPage::handleTextChanged);
                 mEditFunctions.append(lineEdit);
                 mOutputPins.append(label->text());
                 boolFuncCnt++;
@@ -144,6 +146,7 @@ namespace hal
                                 mLayout->addWidget(label, rowCount, 0);
                                 mLayout->addWidget(lineEdit, rowCount, 1);
                                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+                                connect(lineEdit, &BooleanFunctionEdit::textChanged, this, &BoolWizardPage::handleTextChanged);
                                 mEditFunctions.append(lineEdit);
                                 mOutputPins.append(label->text());
                                 rowCount++;
@@ -155,6 +158,8 @@ namespace hal
         }
 
         setLayout(mLayout);
+        Q_EMIT completeChanged();
+        mWizard->mEditMode = true;
     }
 
     void BoolWizardPage::setData(GateType *gate)
@@ -166,6 +171,23 @@ namespace hal
     {
         Q_UNUSED(stat);
         Q_EMIT completeChanged();
+        if(mWizard->mEditMode) Q_EMIT hasChanged();
+    }
+
+    void BoolWizardPage::handleTextChanged(const QString& txt)
+    {
+        Q_UNUSED(txt);
+
+        //explicitly needed here because isComplete() is called
+        //before mWasEdited is changed in the wizard
+        //
+
+        Q_EMIT completeChanged();
+        if(mWizard->mEditMode)
+        {
+            mWizard->mWasEdited = true;
+            Q_EMIT hasChanged();
+        }
     }
 
     bool BoolWizardPage::isComplete() const
@@ -177,7 +199,8 @@ namespace hal
                 return false;
             }
         }
-        if(!mWizard->mWasEdited) return false;
+        if(isFinalPage() && !mWizard->mWasEdited) return false;
+        mWizard->mEditMode = false;
         return true;
     }
 
