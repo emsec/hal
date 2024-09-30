@@ -1,9 +1,11 @@
 #include "gui/gatelibrary_management/gatelibrary_content_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/gatelibrary_management/gatelibrary_table_model.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/toolbar/toolbar.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/gui_utils/graphics.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -127,16 +129,14 @@ namespace hal
     }
 
     void GatelibraryContentWidget::handleSaveAction()
-    {
-        QMessageBox msg;
-        msg.setWindowTitle("Save");
-        msg.setText("Gate library saved successfully");
-
-        gFileStatusManager->gatelibSaved();
-        HGLWriter* writer = new HGLWriter();
-        if(writer->write(mGateLibrary, mPath))
-            msg.exec();
-        window()->setWindowTitle(mTitle);
+    { 
+        if (gPluginRelay->mGuiPluginTable)
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,QString::fromStdString(mPath.extension().string()));
+        if(gate_library_manager::save(mPath,mGateLibrary,true))
+        {
+            gFileStatusManager->gatelibSaved();
+            window()->setWindowTitle(mTitle);
+        }
     }
 
     void GatelibraryContentWidget::handleSaveAsAction()
@@ -146,12 +146,15 @@ namespace hal
         if (gldpath.open(QIODevice::ReadOnly))
             path = QString::fromUtf8(gldpath.readAll());
 
+        if (gPluginRelay->mGuiPluginTable)
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,".hgl");
         QString filename = QFileDialog::getSaveFileName(this, "Save as", path, "HGL *.hgl");
-        gFileStatusManager->gatelibSaved();
-        HGLWriter* writer = new HGLWriter();
-        writer->write(mGateLibrary, std::filesystem::path(filename.toStdString()));
-
-        window()->setWindowTitle(mTitle);
+        if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true))
+        {
+            mPath = filename.toStdString();
+            gFileStatusManager->gatelibSaved();
+            window()->setWindowTitle(mTitle);
+        }
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()
