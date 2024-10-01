@@ -149,11 +149,17 @@ namespace hal
         if (gPluginRelay->mGuiPluginTable)
             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,".hgl");
         QString filename = QFileDialog::getSaveFileName(this, "Save as", path, "HGL *.hgl");
+        QRegExp rx("*.hgl");
+        rx.setPatternSyntax(QRegExp::Wildcard);
+        if(!filename.isEmpty() && !rx.exactMatch(filename))
+        {
+            filename = filename + ".hgl";
+        }
         if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true))
         {
             mPath = filename.toStdString();
             gFileStatusManager->gatelibSaved();
-            window()->setWindowTitle(mTitle);
+            window()->setWindowTitle(filename);
         }
     }
 
