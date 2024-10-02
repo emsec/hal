@@ -160,7 +160,9 @@ namespace hal
             mPath = filename.toStdString();
             gFileStatusManager->gatelibSaved();
             window()->setWindowTitle(filename);
+            mGateLibrary->set_path(std::filesystem::path(mPath));
         }
+        std::string p = mGateLibrary->get_path().generic_string();
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()
