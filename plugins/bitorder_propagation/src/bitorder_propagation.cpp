@@ -854,12 +854,16 @@ namespace hal
 
 #ifdef PRINT_GENERAL
             std::cout << "Known bitorders [" << known_bitorders.size() << "]:" << std::endl;
-            for (const auto& [mpg, _] : known_bitorders)
+            for (const auto& [mpg, net_indices] : known_bitorders)
             {
                 std::cout << "\t" << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                for (const auto& [net, index] : net_indices)
+                {
+                    std::cout << "\t\t" << net->get_id() << " / " << net->get_name() << " - " << index << std::endl;
+                }
             }
 
-            std::cout << "Unknown bitorders [" << known_bitorders.size() << "]:" << std::endl;
+            std::cout << "Unknown bitorders [" << unknown_bitorders.size() << "]:" << std::endl;
             for (const auto& [m, pg] : unknown_bitorders)
             {
                 std::cout << "\t" << m->get_name() << " - " << pg->get_name() << std::endl;
@@ -1022,39 +1026,37 @@ namespace hal
 
                         if (auto con_it = connectivity_inwards.find({{m, pg}, starting_net}); con_it == connectivity_inwards.end())
                         {
-                            // log_warning("bitorder_propagation",
-                            //             "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
-                            //             m->get_id(),
-                            //             m->get_name(),
-                            //             pg->get_name(),
-                            //             starting_net->get_id(),
-                            //             starting_net->get_name());
-                            continue;
+#ifdef PRINT_CONNECTIVITY
+                            std::cout << "There are no valid origins connected inwards to modue " << m->get_id() << " / " << m->get_name() << " with pin group " << pg->get_name() << " and net "
+                                      << starting_net->get_id() << " / " << starting_net->get_name() << "." << std::endl;
+#endif
                         }
-
-                        const auto& connected_inwards = connectivity_inwards.at({{m, pg}, starting_net});
-
-                        for (const auto& [org_mpg, org_nets] : connected_inwards)
+                        else
                         {
-                            if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
+                            const auto& connected_inwards = con_it->second;
+
+                            for (const auto& [org_mpg, org_nets] : connected_inwards)
                             {
-                                const auto& nets = mpg_it->second;
-                                for (const auto& org_net : org_nets)
+                                if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
                                 {
-                                    if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                    const auto& nets = mpg_it->second;
+                                    for (const auto& org_net : org_nets)
                                     {
-                                        collected_inwards[starting_net][org_mpg].insert(net_it->second);
-                                        collected_combined[starting_net][org_mpg].insert(net_it->second);
-                                    }
-                                    else
-                                    {
-                                        log_warning("bitorder_propagation",
-                                                    "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
-                                                    org_mpg.first->get_id(),
-                                                    org_mpg.first->get_name(),
-                                                    org_mpg.second->get_name(),
-                                                    org_net->get_id(),
-                                                    org_net->get_name());
+                                        if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                        {
+                                            collected_inwards[starting_net][org_mpg].insert(net_it->second);
+                                            collected_combined[starting_net][org_mpg].insert(net_it->second);
+                                        }
+                                        else
+                                        {
+                                            log_warning("bitorder_propagation",
+                                                        "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                                        org_mpg.first->get_id(),
+                                                        org_mpg.first->get_name(),
+                                                        org_mpg.second->get_name(),
+                                                        org_net->get_id(),
+                                                        org_net->get_name());
+                                        }
                                     }
                                 }
                             }
@@ -1064,41 +1066,40 @@ namespace hal
                         // ################### OUTWARDS ################## //
                         // ############################################### //
 
-                        if (auto con_it = connectivity_outwards.find({{m, pg}, starting_net}); con_it == connectivity_outwards.end())
+                        if (const auto con_it = connectivity_outwards.find({{m, pg}, starting_net}); con_it == connectivity_outwards.end())
                         {
-                            // log_warning("bitorder_propagation",
-                            //             "There are no valid origins connected to modue {} / {} with pin group {} and net {} / {}.",
-                            //             m->get_id(),
-                            //             m->get_name(),
-                            //             pg->get_name(),
-                            //             starting_net->get_id(),
-                            //             starting_net->get_name());
+#ifdef PRINT_CONNECTIVITY
+                            std::cout << "There are no valid origins connected outwards to modue " << m->get_id() << " / " << m->get_name() << " with pin group " << pg->get_name() << " and net "
+                                      << starting_net->get_id() << " / " << starting_net->get_name() << "." << std::endl;
+#endif
                             continue;
                         }
-
-                        const auto& connected_outwards = connectivity_outwards.at({{m, pg}, starting_net});
-
-                        for (const auto& [org_mpg, org_nets] : connected_outwards)
+                        else
                         {
-                            if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
+                            const auto& connected_outwards = con_it->second;
+
+                            for (const auto& [org_mpg, org_nets] : connected_outwards)
                             {
-                                const auto& nets = mpg_it->second;
-                                for (const auto& org_net : org_nets)
+                                if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
                                 {
-                                    if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                    const auto& nets = mpg_it->second;
+                                    for (const auto& org_net : org_nets)
                                     {
-                                        collected_outwards[starting_net][org_mpg].insert(net_it->second);
-                                        collected_combined[starting_net][org_mpg].insert(net_it->second);
-                                    }
-                                    else
-                                    {
-                                        log_warning("bitorder_propagation",
-                                                    "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
-                                                    org_mpg.first->get_id(),
-                                                    org_mpg.first->get_name(),
-                                                    org_mpg.second->get_name(),
-                                                    org_net->get_id(),
-                                                    org_net->get_name());
+                                        if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                        {
+                                            collected_outwards[starting_net][org_mpg].insert(net_it->second);
+                                            collected_combined[starting_net][org_mpg].insert(net_it->second);
+                                        }
+                                        else
+                                        {
+                                            log_warning("bitorder_propagation",
+                                                        "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                                        org_mpg.first->get_id(),
+                                                        org_mpg.first->get_name(),
+                                                        org_mpg.second->get_name(),
+                                                        org_net->get_id(),
+                                                        org_net->get_name());
+                                        }
                                     }
                                 }
                             }
@@ -1107,6 +1108,20 @@ namespace hal
 
 #ifdef PRINT_CONFLICT
                     std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (INWARDS) " << std::endl;
+                    for (const auto& [net, collected] : collected_inwards)
+                    {
+                        std::cout << net->get_id() << " / " << net->get_name() << std::endl;
+                        for (const auto& [mpg, indices] : collected)
+                        {
+                            std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                            std::cout << "\t\t";
+                            for (const auto& index : indices)
+                            {
+                                std::cout << index << ", ";
+                            }
+                            std::cout << std::endl;
+                        }
+                    }
 #endif
 
                     const auto newly_wellformed_inwards = extract_well_formed_bitorder({m, pg}, collected_inwards, enforce_continuous_bitorders);
@@ -1118,6 +1133,20 @@ namespace hal
 
 #ifdef PRINT_CONFLICT
                     std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (OUTWARDS) " << std::endl;
+                    for (const auto& [net, collected] : collected_outwards)
+                    {
+                        std::cout << net->get_id() << " / " << net->get_name() << std::endl;
+                        for (const auto& [mpg, indices] : collected)
+                        {
+                            std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                            std::cout << "\t\t";
+                            for (const auto& index : indices)
+                            {
+                                std::cout << index << ", ";
+                            }
+                            std::cout << std::endl;
+                        }
+                    }
 #endif
                     const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, enforce_continuous_bitorders);
                     if (!newly_wellformed_outwards.empty())

@@ -395,5 +395,82 @@ namespace hal
             :returns: The next combinational gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
+
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path_distance",
+            [](NetlistTraversalDecorator& self,
+               const Gate* start_gate,
+               const Gate* end_gate,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<u32> {
+                auto res = self.get_shortest_path_distance(start_gate, end_gate, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting shortest path distance:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("end_gate"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+                Find the length of the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.
+                If there is no such path, ``None`` is returned.
+                Computing only the shortest distance to a gate is faster than computing the shortest path, since it does not have to keep track of the path to reach each gate.
+
+                :param hal_py.Gate start_gate: The gate to start from.
+                :param hal_py.Gate end_gate: The gate to connect to.
+                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
+                :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+                :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+                :returns: The shortest distance between the start and end gate on success, ``None`` otherwise.
+                :rtype: int or None
+            )");
+
+        // Binding for get_shortest_path
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path",
+            [](NetlistTraversalDecorator& self,
+               const Gate* start_gate,
+               const Gate* end_gate,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<std::vector<Gate*>> {
+                auto res = self.get_shortest_path(start_gate, end_gate, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting shortest path:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("start_gate"),
+            py::arg("end_gate"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+                Find the shortest path (i.e., the smallest number of gates) that connects the start gate with the end gate.
+                The gate where the search started from will be the first in the result list, the end gate will be the last.
+                If there is no such path, ``None`` is returned. If there is more than one path with the same length, only the first one is returned.
+
+                :param hal_py.Gate start_gate: The gate to start from.
+                :param hal_py.Gate end_gate: The gate to connect to.
+                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
+                :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+                :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+                :returns: A list of gates that connect the start with end gate on success, ``None`` otherwise.
+                :rtype: list[hal_py.Gate] or None
+            )");
     }
 }    // namespace hal

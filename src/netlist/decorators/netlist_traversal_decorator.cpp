@@ -700,4 +700,249 @@ namespace hal
         }
         return OK(res);
     }
+
+    Result<std::optional<u32>> NetlistTraversalDecorator::get_shortest_path_distance(const Gate* start_gate,
+                                                                                     const Gate* end_gate,
+                                                                                     const PinDirection& direction,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (direction == PinDirection::output || direction == PinDirection::input)
+        {
+            std::unordered_set<Gate*> visited;
+            u32 distance = 0;
+
+            Gate* _start_gate          = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
+            std::vector<Gate*> current = {_start_gate};
+            std::vector<Gate*> next;
+
+            while (true)
+            {
+                distance++;
+
+                for (const auto& curr_g : current)
+                {
+                    for (const auto& exit_ep : (direction == PinDirection::output) ? curr_g->get_fan_out_endpoints() : curr_g->get_fan_in_endpoints())
+                    {
+                        if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, distance))
+                        {
+                            continue;
+                        }
+
+                        for (const auto& entry_ep : (direction == PinDirection::output) ? exit_ep->get_net()->get_destinations() : exit_ep->get_net()->get_sources())
+                        {
+                            if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
+                            {
+                                continue;
+                            }
+
+                            const auto next_g = entry_ep->get_gate();
+
+                            if (const auto it = visited.find(next_g); it != visited.end())
+                            {
+                                continue;
+                            }
+                            visited.insert(next_g);
+
+                            if (next_g == end_gate)
+                            {
+                                return OK(distance);
+                            }
+
+                            next.push_back(next_g);
+                        }
+                    }
+                }
+
+                if (next.empty())
+                {
+                    break;
+                }
+
+                current = next;
+                next.clear();
+            }
+
+            return OK({});
+        }
+
+        if (direction == PinDirection::inout)
+        {
+            const auto res_backward = get_shortest_path_distance(start_gate, end_gate, PinDirection::input);
+            if (res_backward.is_error())
+            {
+                return res_backward;
+            }
+
+            const auto res_forward = get_shortest_path_distance(start_gate, end_gate, PinDirection::output);
+            if (res_forward.is_error())
+            {
+                return res_forward;
+            }
+
+            const auto distance_backward = res_backward.get();
+            const auto distance_forward  = res_forward.get();
+
+            if (!distance_forward.has_value() && !distance_backward.has_value())
+            {
+                return OK({});
+            }
+
+            if (!distance_backward.has_value())
+            {
+                return OK(distance_forward);
+            }
+
+            if (!distance_forward.has_value())
+            {
+                return OK(distance_backward);
+            }
+
+            if (distance_backward.value() < distance_forward.value())
+            {
+                return OK(distance_backward);
+            }
+
+            return OK(distance_forward);
+        }
+
+        return ERR("cannot get shortest path distance between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
+                   + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+    }
+
+    Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
+                                                                                           const Gate* end_gate,
+                                                                                           const PinDirection& direction,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        const auto reconstruct_shortest_path = [](const Gate* start_gate, const Gate* end_gate, const std::unordered_map<Gate*, Gate*>& origin_map) -> Result<std::optional<std::vector<Gate*>>> {
+            Gate* _start_gate       = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
+            Gate* _end_gate         = end_gate->get_netlist()->get_gate_by_id(end_gate->get_id());
+            std::vector<Gate*> path = {_end_gate};
+
+            Gate* curr = _end_gate;
+            do
+            {
+                if (const auto& it = origin_map.find(curr); it != origin_map.end())
+                {
+                    path.push_back(it->second);
+                    curr = it->second;
+                }
+                else
+                {
+                    return ERR("cannot reconstruct shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name()
+                               + " with ID " + std::to_string(end_gate->get_id()) + ": failed to find origin for Gate " + curr->get_name() + " with ID " + std::to_string(curr->get_id()));
+                }
+            } while (curr != start_gate);
+
+            std::reverse(path.begin(), path.end());
+
+            return OK(path);
+        };
+
+        if (direction == PinDirection::output || direction == PinDirection::input)
+        {
+            std::unordered_map<Gate*, Gate*> origin_map;
+
+            u32 distance = 0;
+
+            Gate* _start_gate          = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
+            std::vector<Gate*> current = {_start_gate};
+            std::vector<Gate*> next;
+
+            while (true)
+            {
+                distance++;
+
+                for (const auto& curr_g : current)
+                {
+                    for (const auto& exit_ep : (direction == PinDirection::output) ? curr_g->get_fan_out_endpoints() : curr_g->get_fan_in_endpoints())
+                    {
+                        if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, distance))
+                        {
+                            continue;
+                        }
+
+                        for (const auto& entry_ep : (direction == PinDirection::output) ? exit_ep->get_net()->get_destinations() : exit_ep->get_net()->get_sources())
+                        {
+                            if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
+                            {
+                                continue;
+                            }
+
+                            const auto next_g = entry_ep->get_gate();
+
+                            if (const auto it = origin_map.find(next_g); it != origin_map.end())
+                            {
+                                continue;
+                            }
+                            origin_map.insert({next_g, curr_g});
+
+                            if (next_g == end_gate)
+                            {
+                                return reconstruct_shortest_path(start_gate, end_gate, origin_map);
+                            }
+
+                            next.push_back(next_g);
+                        }
+                    }
+                }
+
+                if (next.empty())
+                {
+                    break;
+                }
+
+                current = next;
+                next.clear();
+            }
+
+            return OK({});
+        }
+
+        if (direction == PinDirection::inout)
+        {
+            const auto res_backward = get_shortest_path(start_gate, end_gate, PinDirection::input);
+            if (res_backward.is_error())
+            {
+                return res_backward;
+            }
+
+            const auto res_forward = get_shortest_path(start_gate, end_gate, PinDirection::output);
+            if (res_forward.is_error())
+            {
+                return res_forward;
+            }
+
+            const auto path_backward = res_backward.get();
+            const auto path_forward  = res_forward.get();
+
+            if (!path_forward.has_value() && !path_backward.has_value())
+            {
+                return OK({});
+            }
+
+            if (!path_backward.has_value())
+            {
+                return OK(path_forward);
+            }
+
+            if (!path_forward.has_value())
+            {
+                return OK(path_backward);
+            }
+
+            if (path_backward.value().size() < path_forward.value().size())
+            {
+                return OK(path_backward);
+            }
+
+            return OK(path_forward);
+        }
+
+        return ERR("cannot get shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
+                   + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+    }
+
 }    // namespace hal
