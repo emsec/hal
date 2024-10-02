@@ -644,6 +644,9 @@ namespace hal
                 }
             }
 
+            action = context_menu.addAction("Remove selected items from view");
+            connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
+
             if (!gContentManager->getGraphTabWidget()->isSelectMode())
             {
                 action = context_menu.addAction("Cancel pick-item mode");
@@ -680,8 +683,6 @@ namespace hal
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleIsolationViewAction);
                 action = context_menu.addAction("  Unfold all selected modules");
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleUnfoldAllAction);
-                action = context_menu.addAction("  Remove items from view");
-                connect(action, &QAction::triggered, this, &GraphGraphicsView::handleRemoveFromView);
 
                 action = context_menu.addAction("  Add comment");
                 QVariant data;
