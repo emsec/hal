@@ -410,17 +410,17 @@ namespace hal
 
         if (gSelectionRelay->numberSelectedModules())
         {
-            ModuleItem sti(gSelectionRelay->selectedModulesList().at(0), ModuleItem::TreeItemType::Module);
+            ModuleItem sti(gSelectionRelay->selectedModulesList().at(0), ModuleItem::TreeItemType::Module, mModuleModel);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedGates())
         {
-            ModuleItem sti(gSelectionRelay->selectedGatesList().at(0), ModuleItem::TreeItemType::Gate);
+            ModuleItem sti(gSelectionRelay->selectedGatesList().at(0), ModuleItem::TreeItemType::Gate, mModuleModel);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedNets())
         {
-            ModuleItem sti(gSelectionRelay->selectedNetsList().at(0), ModuleItem::TreeItemType::Net);
+            ModuleItem sti(gSelectionRelay->selectedNetsList().at(0), ModuleItem::TreeItemType::Net, mModuleModel);
             singleSelectionInternal(&sti);
         }
 

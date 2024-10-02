@@ -241,6 +241,64 @@ namespace hal
                 :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
             )");
 
+        m.def(
+            "export_bitorder_propagation_information",
+            [](const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,
+               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
+               const std::string& export_filepath) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> {
+                const auto res = bitorder_propagation::export_bitorder_propagation_information(src, dst, export_filepath);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("src"),
+            py::arg("dst"),
+            py::arg("export_filepath"),
+            R"(
+                    Export collected bitorder information like word composition, known bitorder and connectivity in .json format to solve with external tools.
+         
+                    :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] src: The known indices for the nets belonging to the given module pin groups. 
+                    :param set[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst: The pairs of module ID and pin group name with unknown bit order.
+                    :param str export_filepath: The filepath where the .json file should be written to.
+                    :returns: The mapping from each mdoule/pingroup pair to its index on success, ``None`` otherwise.
+                    :rtype: dict[tuple(hal_py.Module, hal_py.ModulePinGroup), int] or None
+                )");
+
+        m.def(
+            "export_bitorder_propagation_information",
+            [](const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
+               const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
+               const std::string& export_filepath) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> {
+                const auto res = bitorder_propagation::export_bitorder_propagation_information(src, dst, export_filepath);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("src"),
+            py::arg("dst"),
+            py::arg("export_filepath"),
+            R"(
+                    Export collected bitorder information like word composition, known bitorder and connectivity in .json format to solve with external tools.
+         
+                   :param tuple(hal_py.Module,hal_py.ModulePinGroup) src: The pair of module and pin group with known bit order. 
+                    :param tuple(hal_py.Module,hal_py.ModulePinGroup) dst: The pair of module and pin group with unknown bit order.
+                    :param str export_filepath: The filepath where the .json file should be written to.
+                    :returns: The mapping from each mdoule/pingroup pair to its index on success, ``None`` otherwise.
+                    :rtype: dict[tuple(hal_py.Module, hal_py.ModulePinGroup), int] or None
+                )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

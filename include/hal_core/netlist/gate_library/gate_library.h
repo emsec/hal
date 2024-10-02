@@ -67,6 +67,14 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
+         * Hack to alter the path if gate library gets modified and written to a new location.
+         * Use this function only if you know exactly what you are doing
+         *
+         * @param[in] modified_path - The path to the new location.
+         */
+        void set_path(const std::filesystem::path& modified_path);
+
+        /**
          * Set the data category of the gate location information.
          * 
          * @param[in] category - The data category.

@@ -45,8 +45,8 @@
             Qt::CheckState mState;
             bool mSelectable;
         public:
-            SelectGateItem(u32 id, ModuleItem::TreeItemType type, bool isSel = true)
-                : ModuleItem(id, type), mState(Qt::Unchecked), mSelectable(isSel) {;}
+            SelectGateItem(u32 id, ModuleItem::TreeItemType type, ModuleModel* model, bool isSel = true)
+                : ModuleItem(id, type, model), mState(Qt::Unchecked), mSelectable(isSel) {;}
             Qt::CheckState state() const { return mState; }
             bool isSelectable() const { return mSelectable; }
             void setSelectable(bool isSel) { mSelectable = isSel; }
