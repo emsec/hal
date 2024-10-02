@@ -22,7 +22,8 @@ var group__gate__lib =
       [ "mark_vcc_gate_type", "classhal_1_1_gate_library.html#a365e5c3131c9a1c9d753a43468aced8d", null ],
       [ "replace_gate_type", "classhal_1_1_gate_library.html#a0372abbc16439f3286b44e80d7edca18", null ],
       [ "set_gate_location_data_category", "classhal_1_1_gate_library.html#a7bfa20c066532a2e405200b30f719348", null ],
-      [ "set_gate_location_data_identifiers", "classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1", null ]
+      [ "set_gate_location_data_identifiers", "classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1", null ],
+      [ "set_path", "classhal_1_1_gate_library.html#a5a43b831cc73cde1aa6e45327cc911d6", null ]
     ] ],
     [ "GateType", "classhal_1_1_gate_type.html", [
       [ "add_boolean_function", "classhal_1_1_gate_type.html#a442f9f880418eef2c01c91e69d1b0f7e", null ],

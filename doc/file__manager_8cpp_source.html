@@ -570,9 +570,9 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
 <div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a> = std::move(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a2f20511e4a9dd1ff2c5fda551db6265d">get_netlist</a>());</div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>       = <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>.get();</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040">registerNetlistCallbacks</a>();</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filename = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a7e5824885fc2581ee4f7f13100cf03c3">get_netlist_filename</a>());</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        projectSuccessfullyLoaded(projPath, filename);</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filename = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a7e5824885fc2581ee4f7f13100cf03c3">get_netlist_filename</a>());</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        projectSuccessfullyLoaded(projPath, filename);</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a3dc315c75ac5ecbcbedf3e26ee75e040">registerNetlistCallbacks</a>();</div>
 <div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160; </div>
 <div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        std::filesystem::path lpath = pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().<a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename</a>(<span class="stringliteral">&quot;.log&quot;</span>);</div>
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        LogManager::get_instance()-&gt;set_file_name(lpath);</div>
@@ -1025,7 +1025,7 @@ $(document).ready(function(){initNavTree('file__manager_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7c60c7799a36d4b54909bd1a1d09337f.html">file_manager</a></li><li class="navelem"><a class="el" href="file__manager_8cpp.html">file_manager.cpp</a></li>
-    <li class="footer">Generated on Thu Sep 26 2024 13:22:38 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Oct 2 2024 16:47:21 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
