@@ -482,9 +482,9 @@ namespace hal
 
         gNetlistOwner = std::move(pm->get_netlist());
         gNetlist       = gNetlistOwner.get();
-        gNetlistRelay->registerNetlistCallbacks();
         QString filename = QString::fromStdString(pm->get_netlist_filename());
         projectSuccessfullyLoaded(projPath, filename);
+        gNetlistRelay->registerNetlistCallbacks();
 
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
         LogManager::get_instance()->set_file_name(lpath);
