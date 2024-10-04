@@ -3,6 +3,7 @@ var classhal_1_1dataflow_1_1_result =
     [ "Result", "classhal_1_1dataflow_1_1_result.html#a85d7a2ece2595f9fc5fd00a11ddf50c4", null ],
     [ "create_modules", "classhal_1_1dataflow_1_1_result.html#aa63fa18bc7197460052c61127f83220c", null ],
     [ "create_modules", "classhal_1_1dataflow_1_1_result.html#a62eacde3b37f31496688332c8058a0db", null ],
+    [ "create_modules", "classhal_1_1dataflow_1_1_result.html#a3c46656f21327214f58700724dd30ebe", null ],
     [ "get_gate_control_nets", "classhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80", null ],
     [ "get_gate_predecessors", "classhal_1_1dataflow_1_1_result.html#a99ba1c572d1ff38c08ce2aa75a04c871", null ],
     [ "get_gate_successors", "classhal_1_1dataflow_1_1_result.html#a68a284076b673025d2397867d4738a37", null ],
