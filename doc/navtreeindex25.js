@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"group__decorators.html":[4,1,0,0],
 "group__docking.html":[4,0,2],
 "group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[5,0,2,472],
 "group__docking.html#ga96c899c45d7192341d04caf575c7f02c":[4,0,2,8],
@@ -70,8 +71,8 @@ var NAVTREEINDEX25 =
 "group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9":[4,1,3,7],
 "group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[5,0,2,541],
 "group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[4,1,3,33],
-"group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[4,1,3,1],
 "group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[5,0,2,479],
+"group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[4,1,3,1],
 "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c":[5,0,2,470],
 "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c":[4,1,3,0],
 "group__pybind.html#ga99c6b86dabda84a9ccb3b6612557f10f":[5,0,2,507],
@@ -100,12 +101,12 @@ var NAVTREEINDEX25 =
 "group__pybind.html#gad09c61daaa174b451b0519d0f54a2382":[5,0,2,498],
 "group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98":[5,0,2,513],
 "group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98":[4,1,3,25],
-"group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[5,0,2,515],
 "group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[4,1,3,27],
+"group__pybind.html#gada2e57065ce648d389abb22e94a9ab69":[5,0,2,515],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[5,0,2,486],
 "group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4":[4,1,3,6],
-"group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[5,0,2,480],
 "group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[4,1,3,2],
+"group__pybind.html#gadcbe9ddba67d0061af0b3f101c727c6e":[5,0,2,480],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[5,0,2,526],
 "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7":[4,1,3,30],
 "group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb":[5,0,2,481],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "include_2hal__core_2utilities_2result_8h_source.html":[7,0,0,0,4,8],
 "index.html":[],
 "index.html":[0],
-"index.html#autotoc_md27":[0,0],
-"index.html#autotoc_md28":[0,1]
+"index.html#autotoc_md27":[0,0]
 };
