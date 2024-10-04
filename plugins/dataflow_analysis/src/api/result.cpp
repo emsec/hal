@@ -414,6 +414,11 @@ namespace hal
             return ERR("failed to open file at '" + write_path.string() + "' for writing dataflow gate groups.");
         }
 
+        hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::unordered_set<u32>& group_ids) const
+        {
+            return create_modules(std::map<const GateType*, std::string>(), std::map<std::pair<PinDirection, std::string>, std::string>(), group_ids);
+        }
+
         hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::map<const GateType*, std::string>& module_suffixes,
                                                                                        const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
                                                                                        const std::unordered_set<u32>& group_ids) const

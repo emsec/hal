@@ -634,6 +634,29 @@ namespace hal
 
         py_dataflow_result.def(
             "create_modules",
+            [](const dataflow::Result& self, const std::unordered_set<u32>& group_ids) -> std::optional<std::unordered_map<u32, Module*>> {
+                auto res = self.create_modules(group_ids);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating modules:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_ids"),
+            R"(
+                Create modules for the dataflow analysis result.
+
+                :param set[int] group_ids: The group IDs to consider. If an empty set is provided, all groups will be considered.
+                :returns: A map from group IDs to Modules on success, ``None`` otherwise.
+                :rtype: dict[int,hal_py.Module] or None
+            )");
+
+        py_dataflow_result.def(
+            "create_modules",
             [](const dataflow::Result& self,
                const std::map<const GateType*, std::string>& module_suffixes                   = {},
                const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes = {},

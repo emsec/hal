@@ -168,6 +168,16 @@ namespace hal
              * 
              * Please note that the IDs of the module are assigned independent of the group IDs of the register groups.
              * 
+             * @param[in] group_ids - The group IDs to consider. If an empty set is provided, all groups will be considered.
+             * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
+             */
+            hal::Result<std::unordered_map<u32, Module*>> create_modules(const std::unordered_set<u32>& group_ids) const;
+
+            /**
+             * @brief Create modules for the dataflow analysis result.
+             * 
+             * Please note that the IDs of the module are assigned independent of the group IDs of the register groups.
+             * 
              * @param[in] module_suffixes - The suffixes to use for modules containing only gates of a specific gate type. Defaults to `"module"` for mixed and unspecified gate types.
              * @param[in] pin_prefixes - The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
              * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
