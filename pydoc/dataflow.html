@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.4.1-34-g476df3b0d documentation</title>
+  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.4.1-35-g60c62fce8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-34-g476df3b0d
+                v4.4.1-35-g60c62fce8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -613,12 +613,12 @@ Please note that this ID is not related to any other HAL ID.</p>
 <span class="sig-name descname"><span class="pre">create_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Result.create_modules" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>create_modules(self: dataflow.Result, group_ids: Set[int]) -&gt; Optional[Dict[int, hal_py.Module]]</p>
+<li><p>create_modules(self: dataflow.Result, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
 <blockquote>
 <div><p>Create modules for the dataflow analysis result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param set[int] group_ids</dt>
-<dd class="field-odd"><p>The group IDs to consider. If an empty set is provided, all groups will be considered.</p>
+<dd class="field-odd"><p>The group IDs to consider. If an empty set is provided, all groups will be considered. Defaults to an empty set.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -629,7 +629,7 @@ Please note that this ID is not related to any other HAL ID.</p>
 </dl>
 </div></blockquote>
 </li>
-<li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateType, str] = {}, pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
+<li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateType, str], pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str], group_ids: Set[int]) -&gt; Optional[Dict[int, hal_py.Module]]</p>
 <blockquote>
 <div><p>Create modules for the dataflow analysis result.</p>
 <dl class="field-list simple">
@@ -637,10 +637,10 @@ Please note that this ID is not related to any other HAL ID.</p>
 <dd class="field-odd"><p>The suffixes to use for modules containing only gates of a specific gate type. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.</p>
 </dd>
 <dt class="field-even">param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes</dt>
-<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.</p>
+<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.</p>
 </dd>
 <dt class="field-odd">param set[int] group_ids</dt>
-<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</p>
+<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -651,7 +651,7 @@ Please note that this ID is not related to any other HAL ID.</p>
 </dl>
 </div></blockquote>
 </li>
-<li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateTypeProperty, str], pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
+<li><p>create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateTypeProperty, str], pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str], group_ids: Set[int]) -&gt; Optional[Dict[int, hal_py.Module]]</p>
 <blockquote>
 <div><p>Create modules for the dataflow analysis result.</p>
 <dl class="field-list simple">
@@ -659,10 +659,10 @@ Please note that this ID is not related to any other HAL ID.</p>
 <dd class="field-odd"><p>The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.</p>
 </dd>
 <dt class="field-even">param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes</dt>
-<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.</p>
+<dd class="field-even"><p>The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.</p>
 </dd>
 <dt class="field-odd">param set[int] group_ids</dt>
-<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</p>
+<dd class="field-odd"><p>The group IDs to consider. If no IDs are provided, all groups will be considered.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
