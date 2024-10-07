@@ -45,13 +45,13 @@ namespace hal
             struct Context
             {
                 /* pass process */
-                bool done;
-                bool end_reached;
-                u32 phase;
+                bool done        = false;
+                bool end_reached = false;
+                u32 phase        = 0;
 
-                u32 pass_counter;
-                u32 finished_passes;
-                u32 num_iterations;
+                u32 pass_counter    = 0;
+                u32 finished_passes = 0;
+                u32 num_iterations  = 0;
 
                 // std::shared_ptr<grouping> main_state;
                 // std::shared_ptr<grouping> control_state;

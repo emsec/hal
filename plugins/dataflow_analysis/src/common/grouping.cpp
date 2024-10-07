@@ -16,7 +16,7 @@ namespace hal
         Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<Gate*>>& groups) : Grouping(na)
         {
             /* initialize state */
-            u32 new_id_counter = -1;
+            i32 new_id_counter = -1;
             bool group_is_known;
 
             for (const auto* gate : na.target_gates)
@@ -39,7 +39,7 @@ namespace hal
                 }
                 if (!group_is_known)
                 {
-                    u32 new_group_id = ++new_id_counter;
+                    u32 new_group_id = (u32)(++new_id_counter);
 
                     this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(gate->get_id());
 
@@ -58,7 +58,7 @@ namespace hal
                     continue;
                 }
 
-                u32 new_group_id = ++new_id_counter;
+                u32 new_group_id = (u32)(++new_id_counter);
 
                 this->operations_on_group_allowed[new_group_id]   = false;
                 this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(gates.front()->get_id());
