@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2src_2comm
 <div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_grouping.html#ab2216067e8753e6bbabfa680b96ec06d">   16</a></span>&#160;        <a class="code" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">Grouping::Grouping</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a>&amp; na, <span class="keyword">const</span> std::vector&lt;std::vector&lt;Gate*&gt;&gt;&amp; groups) : <a class="code" href="structhal_1_1dataflow_1_1_grouping.html">Grouping</a>(na)</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        {</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="comment">/* initialize state */</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> new_id_counter = -1;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> new_id_counter = -1;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keywordtype">bool</span> group_is_known;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* gate : na.<a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#aad7e8395eb8ad80a279989a014eb39bc">target_gates</a>)</div>
@@ -127,7 +127,7 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2src_2comm
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                }</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">if</span> (!group_is_known)</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;                {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> new_group_id = ++new_id_counter;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> new_group_id = (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>)(++new_id_counter);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                    this-&gt;<a class="code" href="structhal_1_1dataflow_1_1_grouping.html#a0ff5fec8f6a2fcad52be7b847e255d48">group_control_fingerprint_map</a>[new_group_id] = na.<a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a0dddbac87e60f675f17c407cef867c3d">gate_to_fingerprint</a>.at(gate-&gt;get_id());</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2src_2comm
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                }</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> new_group_id = ++new_id_counter;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> new_group_id = (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>)(++new_id_counter);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                this-&gt;<a class="code" href="structhal_1_1dataflow_1_1_grouping.html#acc7636477510306a612736fe808ef1ec">operations_on_group_allowed</a>[new_group_id]   = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                this-&gt;<a class="code" href="structhal_1_1dataflow_1_1_grouping.html#a0ff5fec8f6a2fcad52be7b847e255d48">group_control_fingerprint_map</a>[new_group_id] = na.<a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a0dddbac87e60f675f17c407cef867c3d">gate_to_fingerprint</a>.at(gates.front()-&gt;get_id());</div>
@@ -425,6 +425,7 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2src_2comm
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_gate_html_a24e1a29c3fc812588acb673c214af128"><div class="ttname"><a href="classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128">hal::Gate::get_type</a></div><div class="ttdeci">GateType * get_type() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00125">gate.cpp:125</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_a26d0f67be01c66f22422f40938e29237"><div class="ttname"><a href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">hal::Netlist::get_gate_by_id</a></div><div class="ttdeci">Gate * get_gate_by_id(const u32 gate_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00193">netlist.cpp:193</a></div></div>
+<div class="ttc" id="adefines_8h_html_aec41e5f8e4b7aef2540e84268692fa84"><div class="ttname"><a href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a></div><div class="ttdeci">int32_t i32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00036">defines.h:36</a></div></div>
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="gate_8h.html">gate.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
@@ -466,7 +467,7 @@ $(document).ready(function(){initNavTree('plugins_2dataflow__analysis_2src_2comm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_d403abb1edaf9798a708a5c27b77a528.html">common</a></li><li class="navelem"><a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp.html">grouping.cpp</a></li>
-    <li class="footer">Generated on Fri Oct 4 2024 14:36:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Oct 7 2024 09:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
