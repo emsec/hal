@@ -102,15 +102,6 @@ namespace hal
         ModuleModel* getModuleModel() const;
 
         /**
-         * Opens a existing view that contains the given module, otherwise creates a new context
-         * and opens it.
-         *
-         * @param moduleId - The module to open.
-         * @param unfold - True to unfold the module upon opening.
-         */
-        void openModuleInView(u32 moduleId, bool unfold);
-
-        /**
          * Get the widget's proxy model that represents the ModuleModel.
          *
          * @return The proxy model.
@@ -280,16 +271,6 @@ namespace hal
         ModuleProxyModel* mModuleProxyModel;
 
         QShortcut* mShortCutDeleteItem;
-
-        void openModuleInView(const QModelIndex& index);
-
-        void openGateInView(const QModelIndex& index);
-
-        void openNetEndpointsInView(const QModelIndex &index);
-
-        void changeGateName(const QModelIndex& index);
-
-        void changeNetName(const QModelIndex& index);
 
         void enableDeleteAction(bool enable);
 

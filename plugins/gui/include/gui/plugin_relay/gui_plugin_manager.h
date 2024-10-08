@@ -35,6 +35,9 @@
 #include <QAbstractTableModel>
 #include <QTableView>
 #include <QItemDelegate>
+#include <QMenu>
+
+#include "gui/gui_utils/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
 #include "hal_core/utilities/program_options.h"
@@ -199,6 +202,10 @@ namespace hal {
     public:
         GuiPluginManager(QWidget* parent = nullptr);
         static QMap<QString,GuiExtensionInterface*> getGuiExtensions();
+        static void addPluginSubmenus(QMenu* contextMenu, Netlist* netlist,
+                                      const std::vector<u32>& modules,
+                                      const std::vector<u32>& gates,
+                                      const std::vector<u32>& nets);
         void repolish();
 
         QString loadIconPath() const;

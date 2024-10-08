@@ -93,21 +93,24 @@ namespace hal
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
         QString moveType;
+        QString moveText;
         int id;
         if (item->isDirectory())
         {
             id = item->directory()->id();
             moveType = "dir";
+            moveText = QString("gui.View.setCurrentDirectory(%1)").arg(id);
         }
         else if (item->isContext())
         {
             id = item->context()->id();
             moveType = "view";
+            moveText = QString("gui.View.getName(%1)").arg(id);
         }
         else
             Q_ASSERT (1==0);
         stream << moveType << id << row << (quintptr) parentItem;
-        retval->setText(moveType);
+        retval->setText(moveText);
         retval->setData("contexttreemodel/item", encodedData);
         return retval;
 

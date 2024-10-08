@@ -29,6 +29,7 @@
 #include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "gui/grouping/grouping_color_serializer.h"
 #include "gui/module_model/module_color_manager.h"
+#include "gui/module_model/module_item.h"
 #include <QMap>
 #include <QObject>
 
@@ -94,39 +95,33 @@ namespace hal
         ModuleColorManager* getModuleColorManager() const;
 
         /**
-         * Changes the name of a specific module by asking the user for a new name in a 'Rename'-dialogue.
+         * Changes the name of a specific netlist element by asking the user for a new name in a dialogue.
          *
-         * @param id - The id of the module to rename
+         * @param type - The type of the element to rename
+         * @param id - The id of the element to rename
          */
-        void changeModuleName(const u32 id);
+        void changeElementNameDialog(ModuleItem::TreeItemType type, u32 id);
 
         /**
          * Changes the type of a specific module by asking the user for a new name in a 'New Type'-dialogue.
          *
          * @param id - The id of the module whose type is to be changed
          */
-        void changeModuleType(const u32 id);
+        void changeModuleTypeDialog(const u32 id);
 
         /**
          * Changes the type of a specific module by asking the user to select a new color in a color dialogue.
          *
          * @param id - The id of the module whose color is to be changed
          */
-        void changeModuleColor(const u32 id);
+        void changeModuleColorDialog(const u32 id);
 
         /**
-         * Adds the current selection to a specific module.
-         *
-         * @param id - The id of the module that should be appended
-         */
-        void addSelectionToModule(const u32 id);
-
-        /**
-         * Adds an empty child module to the specified module.
+         * Adds an empty child module to the specified module by asking the user for a new name in a dialogue.
          *
          * @param id - The id of the module that becomes the parent of the empty child module
          */
-        void addChildModule(const u32 id);
+        void addChildModuleDialog(const u32 id);
 
         /**
          * Deletes the specified module from the netlist.

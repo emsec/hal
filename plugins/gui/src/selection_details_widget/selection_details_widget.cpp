@@ -154,9 +154,6 @@ namespace hal
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
 
-        connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-        connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
     }
@@ -519,19 +516,6 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-    }
-
-    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const ModuleItem* sti)
-    {
-        u32 itemId = sti->id();
-
-        switch (sti->getType())
-        {
-            case ModuleItem::TreeItemType::Module:   Q_EMIT focusModuleClicked(itemId);   break;
-            case ModuleItem::TreeItemType::Gate:     Q_EMIT focusGateClicked(itemId);     break;
-            case ModuleItem::TreeItemType::Net:      Q_EMIT focusNetClicked(itemId);      break;
-            default: break;
-        }
     }
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)
