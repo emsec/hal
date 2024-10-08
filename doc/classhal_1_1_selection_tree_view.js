@@ -2,7 +2,6 @@ var classhal_1_1_selection_tree_view =
 [
     [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html#a6537e37433bc1b2118c57cb7b150ddcc", null ],
     [ "currentChanged", "classhal_1_1_selection_tree_view.html#a4b2c31d0cc60ab474ccb1c17109f467c", null ],
-    [ "focusItemClicked", "classhal_1_1_selection_tree_view.html#a8d24660773d6ad251a9041e17cddf681", null ],
     [ "handleModuleColorChanged", "classhal_1_1_selection_tree_view.html#a03e180010458d0b85f22f0523c1e72cb", null ],
     [ "itemDoubleClicked", "classhal_1_1_selection_tree_view.html#a2d2fd153d7a574f30de10a927c4ebb09", null ],
     [ "itemFromIndex", "classhal_1_1_selection_tree_view.html#ac15c8cbdba606611892f5126ce4d010f", null ],

@@ -304,6 +304,7 @@ var namespacehal =
     [ "PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", "classhal_1_1_plugin_parameter_file_dialog" ],
     [ "PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", "classhal_1_1_plugin_parameter_node_dialog" ],
     [ "PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", "classhal_1_1_plugin_parameter_dialog" ],
+    [ "ModuleContextMenu", "classhal_1_1_module_context_menu.html", null ],
     [ "GateDialog", "classhal_1_1_gate_dialog.html", "classhal_1_1_gate_dialog" ],
     [ "GateSelectEntry", "classhal_1_1_gate_select_entry.html", "classhal_1_1_gate_select_entry" ],
     [ "GateSelectModel", "classhal_1_1_gate_select_model.html", "classhal_1_1_gate_select_model" ],

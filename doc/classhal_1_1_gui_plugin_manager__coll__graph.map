@@ -1,5 +1,5 @@
 <map id="hal::GuiPluginManager" name="hal::GuiPluginManager">
-<area shape="rect" id="node1" title=" " alt="" coords="93,887,263,1125"/>
+<area shape="rect" id="node1" title=" " alt="" coords="89,887,267,1140"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="75,395,281,839"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpaintdevice.html" title=" " alt="" coords="196,49,341,303"/>

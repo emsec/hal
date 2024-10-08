@@ -1,4 +1,4 @@
 <map id="hal::GraphContextManager" name="hal::GraphContextManager">
-<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,395,255,560"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="47,5,213,347"/>
+<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,395,224,560"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="31,5,198,347"/>
 </map>

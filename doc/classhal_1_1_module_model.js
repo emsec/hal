@@ -13,6 +13,7 @@ var classhal_1_1_module_model =
     [ "getItem", "classhal_1_1_module_model.html#af5a06c7a1416730ebfde2e9f294d63a4", null ],
     [ "getItems", "classhal_1_1_module_model.html#a7042227704380b03593cb92f7955f71f", null ],
     [ "isModifying", "classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d", null ],
+    [ "mimeData", "classhal_1_1_module_model.html#aaff0d37dca5cd1b5abbeb7fbf1b3607a", null ],
     [ "moduleAssignGate", "classhal_1_1_module_model.html#ae12115af71e541b27ce7c63a40df50e9", null ],
     [ "moduleAssignNets", "classhal_1_1_module_model.html#a5054952ed8223b6b50cea83dedfa090b", null ],
     [ "populateFromGatelist", "classhal_1_1_module_model.html#a7f7038bfa295db890f3093859417c75d", null ],

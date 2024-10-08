@@ -30,6 +30,7 @@ var dir_8f3a6e7567706389d7af07afaa901854 =
     [ "label_button", "dir_58be482ae90996595342e629b14c1292.html", "dir_58be482ae90996595342e629b14c1292" ],
     [ "logger", "dir_3289c0b25645da64c6ebac696b339a89.html", "dir_3289c0b25645da64c6ebac696b339a89" ],
     [ "main_window", "dir_7a0626338f63bd87363790a595d37c04.html", "dir_7a0626338f63bd87363790a595d37c04" ],
+    [ "module_context_menu", "dir_592f2c811b6d898243b12ac0bf4956ce.html", "dir_592f2c811b6d898243b12ac0bf4956ce" ],
     [ "module_dialog", "dir_bcefa311af1425b7d7db7620311d37c8.html", "dir_bcefa311af1425b7d7db7620311d37c8" ],
     [ "module_model", "dir_01dabd8fa09be66818ad5ae09846abf1.html", "dir_01dabd8fa09be66818ad5ae09846abf1" ],
     [ "module_widget", "dir_9931ff14da9bf21a4a9836e435fa5a59.html", "dir_9931ff14da9bf21a4a9836e435fa5a59" ],

@@ -161,6 +161,7 @@ var hierarchy =
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
     [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
+    [ "hal::ModuleContextMenu", "classhal_1_1_module_context_menu.html", null ],
     [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
     [ "hal::GuiApiClasses::View::ModuleGateIdPair", "structhal_1_1_gui_api_classes_1_1_view_1_1_module_gate_id_pair.html", null ],
     [ "hal::GraphicsModule::ModulePin", "structhal_1_1_graphics_module_1_1_module_pin.html", null ],

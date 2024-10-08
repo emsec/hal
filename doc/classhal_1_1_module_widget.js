@@ -17,7 +17,6 @@ var classhal_1_1_module_widget =
     [ "handleTreeViewContextMenuRequested", "classhal_1_1_module_widget.html#a6f77bd7d4014d13234e94bb7291e27be", null ],
     [ "hideGatesIconPath", "classhal_1_1_module_widget.html#ad7c0b452fa43033789ffbb7708128eef", null ],
     [ "hideNetsIconPath", "classhal_1_1_module_widget.html#a6bc03dc8b07261a0f6578d733e576d67", null ],
-    [ "openModuleInView", "classhal_1_1_module_widget.html#ac8d737f32e3ca6867a90cd7885045b23", null ],
     [ "proxyModel", "classhal_1_1_module_widget.html#a7f6a80be5f36a0705a6e41b1bf9cfe1b", null ],
     [ "renameIconPath", "classhal_1_1_module_widget.html#a36226f6e1ef99edf76d92f029a6e8b62", null ],
     [ "searchActiveIconStyle", "classhal_1_1_module_widget.html#aed823ed041abc3b9047822f4276c7669", null ],

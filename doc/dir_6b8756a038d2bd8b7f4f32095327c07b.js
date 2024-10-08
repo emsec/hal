@@ -32,6 +32,7 @@ var dir_6b8756a038d2bd8b7f4f32095327c07b =
     [ "label_button", "dir_245f191bc3fac16cf6c8668b2065e8e1.html", "dir_245f191bc3fac16cf6c8668b2065e8e1" ],
     [ "logger", "dir_4a8579db386ef695e67dd0763cf247a7.html", "dir_4a8579db386ef695e67dd0763cf247a7" ],
     [ "main_window", "dir_0a12066b2078697757e25e9f28d5f2f1.html", "dir_0a12066b2078697757e25e9f28d5f2f1" ],
+    [ "module_context_menu", "dir_e002d9e1dae542c1a4ac567735e7f438.html", "dir_e002d9e1dae542c1a4ac567735e7f438" ],
     [ "module_dialog", "dir_4879fcb29556b162a25e28b16e2ad258.html", "dir_4879fcb29556b162a25e28b16e2ad258" ],
     [ "module_model", "dir_5dcb373bbc43d48bf653854ce72972b3.html", "dir_5dcb373bbc43d48bf653854ce72972b3" ],
     [ "module_widget", "dir_a1a7ea623db7fbde45d66a8439465037.html", "dir_a1a7ea623db7fbde45d66a8439465037" ],

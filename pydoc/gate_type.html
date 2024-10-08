@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate Type &mdash; hal_py v4.4.1-38-gabd78a8c1 documentation</title>
+  <title>Gate Type &mdash; hal_py v4.4.1-53-g11e00d4fb documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-38-gabd78a8c1
+                v4.4.1-53-g11e00d4fb
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -115,12 +115,12 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.add_boolean_function">
-<span class="sig-name descname"><span class="pre">add_boolean_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function:</span> <span class="pre">hal::BooleanFunction</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_function" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_boolean_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function:</span> <span class="pre">hal::BooleanFunction</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_function" title="Permalink to this definition"></a></dt>
 <dd><p>Add a Boolean function with the specified name to the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the Boolean function.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the Boolean function.</p></li>
 <li><p><strong>function</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</p></li>
 </ul>
 </dd>
@@ -129,39 +129,39 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.add_boolean_functions">
-<span class="sig-name descname"><span class="pre">add_boolean_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.GateType,</span> <span class="pre">functions:</span> <span class="pre">Dict[str,</span> <span class="pre">hal::BooleanFunction]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_functions" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_boolean_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.GateType,</span> <span class="pre">functions:</span> <span class="pre">Dict[str,</span> <span class="pre">hal::BooleanFunction]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_functions" title="Permalink to this definition"></a></dt>
 <dd><p>Add multiple boolean functions to the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – A dict from names to Boolean functions.</p>
+<dd class="field-odd"><p><strong>functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>,</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – A dict from names to Boolean functions.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.assign_pin_to_group">
-<span class="sig-name descname"><span class="pre">assign_pin_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin:</span> <span class="pre">hal::GatePin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_empty_groups:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.assign_pin_to_group" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">assign_pin_to_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin:</span> <span class="pre">hal::GatePin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_empty_groups:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.assign_pin_to_group" title="Permalink to this definition"></a></dt>
 <dd><p>Assign a pin to a pin group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pin_group</strong> (<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup"><em>hal_py.GatePinGroup</em></a>) – The new pin group.</p></li>
 <li><p><strong>pin</strong> (<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin"><em>hal_py.GatePin</em></a>) – The pin to be added.</p></li>
-<li><p><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pin has been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pin has been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.assign_property">
-<span class="sig-name descname"><span class="pre">assign_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.assign_property" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">assign_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.assign_property" title="Permalink to this definition"></a></dt>
 <dd><p>Assign a new property to the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -176,7 +176,7 @@
 <dd><p>All Boolean functions of the gate type as a dict from names to Boolean functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -187,7 +187,7 @@
 <dd><p>All components of the gate type as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -336,7 +336,7 @@ The ID of the pin group is set automatically.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.delete_pin_group">
-<span class="sig-name descname"><span class="pre">delete_pin_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.delete_pin_group" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">delete_pin_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.delete_pin_group" title="Permalink to this definition"></a></dt>
 <dd><p>Delete the given pin group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -346,7 +346,7 @@ The ID of the pin group is set automatically.</p>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -413,7 +413,7 @@ If pin is a None, the Boolean function of the first output pin is returned.</p>
 <dd class="field-odd"><p>A map from names to Boolean functions.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -431,7 +431,7 @@ Returns None if (i) the gate type does not contain any components, (ii) multiple
 <dd class="field-even"><p>The component or None.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -449,7 +449,7 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <dd class="field-even"><p>The components.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -470,28 +470,28 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_id">
-<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.GateType.get_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.GateType.get_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the unique ID of the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The unique ID of the gate type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_input_pin_names">
-<span class="sig-name descname"><span class="pre">get_input_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_input_pin_names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_input_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_input_pin_names" title="Permalink to this definition"></a></dt>
 <dd><p>Get an ordered list of the names of all input pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>An ordered list of input pin names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,35 +505,35 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <dd class="field-odd"><p>An ordered list of input pins.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.GateType.get_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.GateType.get_name" title="Permalink to this definition"></a></dt>
 <dd><p>Get the name of the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The name of the gate type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_output_pin_names">
-<span class="sig-name descname"><span class="pre">get_output_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_output_pin_names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_output_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_output_pin_names" title="Permalink to this definition"></a></dt>
 <dd><p>Get an ordered list of the names of all output pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>An ordered list of output pin names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -547,75 +547,75 @@ Returns an empty list if (i) the gate type does not contain any components or (i
 <dd class="field-odd"><p>An ordered list of output pins.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_pin_by_id">
-<span class="sig-name descname"><span class="pre">get_pin_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GatePin</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_by_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_pin_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GatePin</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_by_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the pin corresponding to the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the pin.</p>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The ID of the pin.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_pin_by_name">
-<span class="sig-name descname"><span class="pre">get_pin_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GatePin</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_by_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_pin_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GatePin</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_by_name" title="Permalink to this definition"></a></dt>
 <dd><p>Get the pin corresponding to the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the pin.</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the pin.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_pin_group_by_id">
-<span class="sig-name descname"><span class="pre">get_pin_group_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_group_by_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_pin_group_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_group_by_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the pin group corresponding to the given ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the pin group.</p>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The ID of the pin group.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_pin_group_by_name">
-<span class="sig-name descname"><span class="pre">get_pin_group_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_group_by_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_pin_group_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_group_by_name" title="Permalink to this definition"></a></dt>
 <dd><p>Get the pin group corresponding to the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the pin group.</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the pin group.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -633,14 +633,14 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p>An ordered list of pin groups.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup">hal_py.GatePinGroup</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.get_pin_names">
-<span class="sig-name descname"><span class="pre">get_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.GateType,</span> <span class="pre">filter:</span> <span class="pre">Callable[[hal::GatePin],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_names" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_pin_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.GateType,</span> <span class="pre">filter:</span> <span class="pre">Callable[[hal::GatePin],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.GateType.get_pin_names" title="Permalink to this definition"></a></dt>
 <dd><p>Get an ordered list of the names of all pins of the gate type.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <dl class="field-list simple">
@@ -654,7 +654,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p>An ordered list of pins.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -672,7 +672,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p>An ordered list of pins.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -686,7 +686,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p>The properties of the gate type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -700,14 +700,14 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p>The properties of the gate type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.has_component_of_type">
-<span class="sig-name descname"><span class="pre">has_component_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">hal::GateTypeComponent::ComponentType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_component_of_type" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">has_component_of_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">hal::GateTypeComponent::ComponentType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_component_of_type" title="Permalink to this definition"></a></dt>
 <dd><p>Check if the gate type contains a component of the specified type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -717,14 +717,14 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p>True if the gate type contains a component of the speciifed type, False otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.has_property">
-<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether the gate type has the specified property.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -734,7 +734,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p>True if the gate type has the specified property, false otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -755,7 +755,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of the names of all input pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -766,7 +766,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of all input pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -777,7 +777,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>The name of the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -788,7 +788,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of the names of all output pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -799,7 +799,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of all output pins of the gate type (including inout pins).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -810,7 +810,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of the names of all pins of the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -821,7 +821,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>An ordered list of all pins of the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -832,14 +832,14 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>The properties assigned to the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.13)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.set_pin_group_direction">
-<span class="sig-name descname"><span class="pre">set_pin_group_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_direction:</span> <span class="pre">hal_py.PinDirection</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_direction" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_pin_group_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_direction:</span> <span class="pre">hal_py.PinDirection</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_direction" title="Permalink to this definition"></a></dt>
 <dd><p>Set the direction of the given pin group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -852,34 +852,34 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.set_pin_group_name">
-<span class="sig-name descname"><span class="pre">set_pin_group_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name:</span> <span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_pin_group_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name:</span> <span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_name" title="Permalink to this definition"></a></dt>
 <dd><p>Set the name of the given pin group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pin_group</strong> (<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup"><em>hal_py.GatePinGroup</em></a>) – The pin group.</p></li>
-<li><p><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name to be assigned to the pin group.</p></li>
+<li><p><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name to be assigned to the pin group.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.set_pin_group_type">
-<span class="sig-name descname"><span class="pre">set_pin_group_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_type:</span> <span class="pre">hal_py.PinType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_type" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_pin_group_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_group:</span> <span class="pre">hal::PinGroup&lt;hal::GatePin&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_type:</span> <span class="pre">hal_py.PinType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.set_pin_group_type" title="Permalink to this definition"></a></dt>
 <dd><p>Set the type of the given pin group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -892,7 +892,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>

@@ -152,9 +152,6 @@ var group__utility__widgets_selection__details =
       [ "SelectionDetailsWidget", "classhal_1_1_selection_details_widget.html#a1869e13594d994732d4c105f9e751c59", null ],
       [ "createShortcuts", "classhal_1_1_selection_details_widget.html#a2e56df6fcde04ef6ad58f755bac46a39", null ],
       [ "disabledIconStyle", "classhal_1_1_selection_details_widget.html#af7bea19b748dfc54a047b824ee8d87d5", null ],
-      [ "focusGateClicked", "classhal_1_1_selection_details_widget.html#a49460fa4394f7ecaa989a6f8e44e0e68", null ],
-      [ "focusModuleClicked", "classhal_1_1_selection_details_widget.html#ad7f764ee5c4f032562b22b5d01ee4b92", null ],
-      [ "focusNetClicked", "classhal_1_1_selection_details_widget.html#a36b921a6229c6367ac9180f4894cbe33", null ],
       [ "groupingUnassignActionFactory", "classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b", null ],
       [ "handleSelectionUpdate", "classhal_1_1_selection_details_widget.html#ad33fdda076a48dbfc7b76db3fa9a0159", null ],
       [ "handleTreeSelection", "classhal_1_1_selection_details_widget.html#a607c12a4ffe1ab517817c65f1904b416", null ],
@@ -198,7 +195,6 @@ var group__utility__widgets_selection__details =
     [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html", [
       [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html#a6537e37433bc1b2118c57cb7b150ddcc", null ],
       [ "currentChanged", "classhal_1_1_selection_tree_view.html#a4b2c31d0cc60ab474ccb1c17109f467c", null ],
-      [ "focusItemClicked", "classhal_1_1_selection_tree_view.html#a8d24660773d6ad251a9041e17cddf681", null ],
       [ "handleModuleColorChanged", "classhal_1_1_selection_tree_view.html#a03e180010458d0b85f22f0523c1e72cb", null ],
       [ "itemDoubleClicked", "classhal_1_1_selection_tree_view.html#a2d2fd153d7a574f30de10a927c4ebb09", null ],
       [ "itemFromIndex", "classhal_1_1_selection_tree_view.html#ac15c8cbdba606611892f5126ce4d010f", null ],

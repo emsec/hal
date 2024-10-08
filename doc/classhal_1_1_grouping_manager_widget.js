@@ -1,6 +1,7 @@
 var classhal_1_1_grouping_manager_widget =
 [
     [ "GroupingManagerWidget", "classhal_1_1_grouping_manager_widget.html#a21ed1eb13fdf38669b6e9e69ca65acf0", null ],
+    [ "assignElementsToGroupingDialog", "classhal_1_1_grouping_manager_widget.html#a90ec00757a21b322b917ff99d3264a9a", null ],
     [ "colorSelectIconPath", "classhal_1_1_grouping_manager_widget.html#a9ab8f5b08ba5b1762f543aebe8d29efb", null ],
     [ "colorSelectIconStyle", "classhal_1_1_grouping_manager_widget.html#a1b38af319b2484f5c41d6082d0e0ff01", null ],
     [ "createShortcuts", "classhal_1_1_grouping_manager_widget.html#a50579b43f210408c9da1b484e22c89ba", null ],
@@ -21,6 +22,7 @@ var classhal_1_1_grouping_manager_widget =
     [ "newGroupingIconPath", "classhal_1_1_grouping_manager_widget.html#aae28563e5626e3e9cf6f9b86f61e88cd", null ],
     [ "newGroupingIconStyle", "classhal_1_1_grouping_manager_widget.html#af60e944026ca34ae1851e3957790c9c4", null ],
     [ "newGroupingSuccOrPred", "classhal_1_1_grouping_manager_widget.html#a5275ea3b1d070b0591101a7ac0b13a80", null ],
+    [ "removeElementsFromGrouping", "classhal_1_1_grouping_manager_widget.html#a9b65007000880a6084c1c5d0a45f58f1", null ],
     [ "renameGroupingIconPath", "classhal_1_1_grouping_manager_widget.html#a7c1b04accc5ed3973841b2c6cbb74c78", null ],
     [ "renameGroupingIconStyle", "classhal_1_1_grouping_manager_widget.html#a36a893ff3ac968936ae50664fbaf7265", null ],
     [ "searchActiveIconStyle", "classhal_1_1_grouping_manager_widget.html#a1be583fb2d998beb70bfa541cbb5df48", null ],
