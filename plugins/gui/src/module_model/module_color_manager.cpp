@@ -55,6 +55,7 @@ namespace hal
     {
         QColor retval = mModuleColors.value(id);
         mModuleColors.insert(id,getRandomColor());
+        Q_EMIT moduleColorChanged(id);
         return retval;
     }
 
