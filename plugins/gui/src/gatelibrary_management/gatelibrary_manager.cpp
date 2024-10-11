@@ -133,7 +133,16 @@ namespace hal
 
                 auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
 
-                mGateLibrary = gateLibrary;
+                if(gateLibrary)
+                    mGateLibrary = gateLibrary;
+                else
+                {
+                    //extract gatelibrary name from path
+                    u32 startInd = fileName.lastIndexOf('/');
+                    QString name = fileName.mid(startInd+1, fileName.length()-startInd-5);
+                    mGateLibrary = new GateLibrary(std::filesystem::path(fileName.toStdString()), name.toStdString());
+                }
+
                 mReadOnly = false;
 
                 QDir dir(QDir::home());
