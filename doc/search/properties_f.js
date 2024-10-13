@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['quiticonpath_40499',['quitIconPath',['../classhal_1_1_main_window.html#a5f4a876e8a68676748e0e1558863cb4e',1,'hal::MainWindow']]],
-  ['quiticonstyle_40500',['quitIconStyle',['../classhal_1_1_main_window.html#a18e7e877007107d3c97c1474abea9eda',1,'hal::MainWindow']]],
-  ['quitlockenabled_40501',['quitLockEnabled',['https://doc.qt.io/qt-5/qcoreapplication.html#quitLockEnabled-prop',1,'QCoreApplication']]],
-  ['quitonlastwindowclosed_40502',['quitOnLastWindowClosed',['https://doc.qt.io/qt-5/qguiapplication.html#quitOnLastWindowClosed-prop',1,'QGuiApplication']]]
+  ['quiticonpath_40498',['quitIconPath',['../classhal_1_1_main_window.html#a5f4a876e8a68676748e0e1558863cb4e',1,'hal::MainWindow']]],
+  ['quiticonstyle_40499',['quitIconStyle',['../classhal_1_1_main_window.html#a18e7e877007107d3c97c1474abea9eda',1,'hal::MainWindow']]],
+  ['quitlockenabled_40500',['quitLockEnabled',['https://doc.qt.io/qt-5/qcoreapplication.html#quitLockEnabled-prop',1,'QCoreApplication']]],
+  ['quitonlastwindowclosed_40501',['quitOnLastWindowClosed',['https://doc.qt.io/qt-5/qguiapplication.html#quitOnLastWindowClosed-prop',1,'QGuiApplication']]]
 ];

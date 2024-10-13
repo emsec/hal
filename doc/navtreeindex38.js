@@ -1,5 +1,7 @@
 var NAVTREEINDEX38 =
 {
+"searchoptions__dialog_8h.html":[7,0,1,3,0,0,40,5],
+"searchoptions__dialog_8h_source.html":[7,0,1,3,0,0,40,5],
 "selection__details__icon__provider_8cpp.html":[7,0,1,3,2,39,15],
 "selection__details__icon__provider_8cpp_source.html":[7,0,1,3,2,39,15],
 "selection__details__icon__provider_8h.html":[7,0,1,3,0,0,41,15],
@@ -247,7 +249,5 @@ var NAVTREEINDEX38 =
 "special__strings_8h_source.html":[7,0,0,0,4,9],
 "spinner__widget_8cpp.html":[7,0,1,3,2,42,0],
 "spinner__widget_8cpp_source.html":[7,0,1,3,2,42,0],
-"spinner__widget_8h.html":[7,0,1,3,0,0,45,0],
-"spinner__widget_8h_source.html":[7,0,1,3,0,0,45,0],
-"split__by__successor__predecessor__known__groups_8cpp.html":[7,0,1,1,3,4,0,8]
+"spinner__widget_8h.html":[7,0,1,3,0,0,45,0]
 };
