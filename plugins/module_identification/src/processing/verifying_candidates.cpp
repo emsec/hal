@@ -500,7 +500,37 @@ namespace hal
             return OK(VerifiedCandidate());
         }
 
-        Result<VerifiedCandidate> check_add(FunctionalCandidate& fc, const std::vector<BooleanFunction>& output_functions)
+        Result<VerifiedCandidate> check_addition(FunctionalCandidate& fc, const std::vector<BooleanFunction>& output_functions)
+        {
+            auto bf_sum = create_operand(fc.m_operands.at(0));
+
+            // SUM(operands)
+            for (u32 op_idx = 1; op_idx < fc.m_operands.size(); op_idx++)
+            {
+                auto bf_op      = create_operand(fc.m_operands.at(op_idx));
+                auto bf_add_res = BooleanFunction::Add(std::move(bf_sum), std::move(bf_op), bf_sum.size());
+                if (bf_add_res.is_error())
+                {
+                    return ERR_APPEND(bf_add_res.get_error(), "failed to concatenate boolean functions");
+                }
+                bf_sum = bf_add_res.get();
+            }
+
+            auto smt_check_res = smt_check(output_functions, bf_sum.clone(), 8, fc.m_timings["SMT_CHECK"]["ADD"]);
+            if (smt_check_res.is_error())
+            {
+                return ERR_APPEND(smt_check_res.get_error(), "failed equal check for constant multiplication candidate");
+            }
+
+            if (smt_check_res.get())
+            {
+                return create_verified_candidate(fc, CandidateType::addition, bf_sum);
+            }
+
+            return OK(VerifiedCandidate());
+        }
+
+        Result<VerifiedCandidate> check_addition_offset(FunctionalCandidate& fc, const std::vector<BooleanFunction>& output_functions)
         {
             auto bf_sum = create_operand(fc.m_operands.at(0));
 
@@ -558,6 +588,11 @@ namespace hal
                 }
                 bf_sum = bf_sum_plus_offset.get();
             }
+            else
+            {
+                // Do not check a candidate with a zero offset
+                return OK(VerifiedCandidate());
+            }
 
             auto smt_check_res = smt_check(output_functions, bf_sum.clone(), 8, fc.m_timings["SMT_CHECK"]["ADD"]);
             if (smt_check_res.is_error())
@@ -567,7 +602,7 @@ namespace hal
 
             if (smt_check_res.get())
             {
-                return create_verified_candidate(fc, CandidateType::adder, bf_sum);
+                return create_verified_candidate(fc, CandidateType::addition_offset, bf_sum);
             }
 
             return OK(VerifiedCandidate());
@@ -757,7 +792,7 @@ namespace hal
             auto initial_bf_slice_res    = BooleanFunction::Slice(bf_sum.clone(), std::move(initial_i0), std::move(initial_i1), initial_end_index);
             if (initial_bf_slice_res.is_error())
             {
-                return ERR_APPEND(initial_bf_slice_res.get_error(), "cannot check adder slice: failed to build sliced boolean function");
+                return ERR_APPEND(initial_bf_slice_res.get_error(), "cannot check addition slice: failed to build sliced boolean function");
             }
             auto initial_bf_slice = initial_bf_slice_res.get();
 
@@ -788,7 +823,7 @@ namespace hal
                     auto bf_slice_res    = BooleanFunction::Slice(bf_sum.clone(), std::move(i0), std::move(i1), end_index);
                     if (bf_slice_res.is_error())
                     {
-                        return ERR_APPEND(bf_slice_res.get_error(), "cannot check adder slice: failed to build sliced boolean function");
+                        return ERR_APPEND(bf_slice_res.get_error(), "cannot check addition slice: failed to build sliced boolean function");
                     }
                     auto bf_slice = bf_slice_res.get();
 
@@ -805,7 +840,7 @@ namespace hal
 
                         if (next_bit_candidates.size() == 1)
                         {
-                            return create_verified_candidate(fc, CandidateType::adder, bf_slice);
+                            return create_verified_candidate(fc, CandidateType::addition, bf_slice);
                         }
 
                         // TODO check whether we can insert this break
@@ -834,7 +869,7 @@ namespace hal
                 return OK(VerifiedCandidate());
             }
 
-            auto check_add_res = check_add(fc, output_functions);
+            auto check_add_res = check_addition(fc, output_functions);
             if (check_add_res.is_error())
             {
                 return check_add_res;
@@ -864,6 +899,26 @@ namespace hal
             // {
             //     return check_sliced_add_res;
             // }
+
+            return OK(VerifiedCandidate());
+        }
+
+        Result<VerifiedCandidate> check_add_sub_offset(FunctionalCandidate& fc, const std::vector<BooleanFunction>& output_functions, const std::vector<std::vector<Gate*>>& registers)
+        {
+            if (fc.m_operands.size() < 2)
+            {
+                return OK(VerifiedCandidate());
+            }
+
+            auto check_add_res = check_addition_offset(fc, output_functions);
+            if (check_add_res.is_error())
+            {
+                return check_add_res;
+            }
+            if (check_add_res.get().is_verified())
+            {
+                return check_add_res;
+            }
 
             return OK(VerifiedCandidate());
         }
@@ -975,7 +1030,7 @@ namespace hal
                 auto bf_add_res = BooleanFunction::Add(std::move(bf_sum), std::move(bf_op), bf_sum.size());
                 if (bf_add_res.is_error())
                 {
-                    return ERR_APPEND(bf_add_res.get_error(), "failed to concatenate boolean functions");
+                    return ERR_APPEND(bf_add_res.get_error(), "failed to add boolean functions");
                 }
                 bf_sum = bf_add_res.get();
             }
@@ -1023,6 +1078,94 @@ namespace hal
                     return OK(c);
                 }
             }
+
+            return OK(VerifiedCandidate());
+        }
+
+        Result<VerifiedCandidate> check_constant_multiplication_offset(FunctionalCandidate& fc, const std::vector<BooleanFunction>& output_functions)
+        {
+            if (fc.m_operands.size() < 2)
+            {
+                return OK(VerifiedCandidate());
+            }
+
+            auto bf_sum = create_operand(fc.m_operands.at(0));
+
+            // building constraint
+            // SUM(operands)
+            for (u32 op_idx = 1; op_idx < fc.m_operands.size(); op_idx++)
+            {
+                auto bf_op      = create_operand(fc.m_operands.at(op_idx));
+                auto bf_add_res = BooleanFunction::Add(std::move(bf_sum), std::move(bf_op), bf_sum.size());
+                if (bf_add_res.is_error())
+                {
+                    return ERR_APPEND(bf_add_res.get_error(), "failed to add boolean functions");
+                }
+                bf_sum = bf_add_res.get();
+            }
+
+            auto bf_o = output_functions.at(0);
+            for (u32 i = 1; i < output_functions.size(); i++)
+            {
+                auto bf_res = BooleanFunction::Concat(output_functions.at(i).clone(), std::move(bf_o), bf_o.size() + 1);
+                if (bf_res.is_error())
+                {
+                    return ERR_APPEND(bf_res.get_error(), "cannot check for counter: failed to build conactenated output function");
+                }
+                bf_o = bf_res.get();
+            }
+
+            // check for a constant offset
+            std::set<std::string> input_operands = bf_o.get_variable_names();
+            std::map<std::string, BooleanFunction> eval_mapping;
+            for (const auto& operand : input_operands)
+            {
+                eval_mapping.insert({operand, BooleanFunction::Const(0, 1)});
+            }
+
+            const auto substitution_res = bf_o.substitute(eval_mapping);
+            if (substitution_res.is_error())
+            {
+                return ERR_APPEND(substitution_res.get_error(), "cannot check for constant offset: failed to evaluate output functions for zero input");
+            }
+            const auto eval = substitution_res.get().simplify_local();
+
+            const auto increment_res = eval.get_constant_value();
+            if (increment_res.is_error())
+            {
+                return ERR_APPEND(increment_res.get_error(), "cannot check for constant offset: failed to get constant value of substituted boolean function");
+            }
+            const auto increment_vec = increment_res.get();
+            const auto increment     = BooleanFunction::Const(increment_vec);
+
+            if (!increment.has_constant_value(0))
+            {
+                auto bf_inc_res = BooleanFunction::Add(std::move(bf_sum), increment.clone(), bf_sum.size());
+
+                if (bf_inc_res.is_error())
+                {
+                    return ERR_APPEND(bf_inc_res.get_error(), "failed to add increment to boolean function");
+                }
+                bf_sum = bf_inc_res.get();
+            }
+            else
+            {
+                // Do not check for an offest candidate with a 0 offset
+                return OK(VerifiedCandidate());
+            }
+
+            auto smt_check_res = smt_check(output_functions, bf_sum.clone(), 2, fc.m_timings["SMT_CHECK"]["CONST_MULT"]);
+            if (smt_check_res.is_error())
+            {
+                return ERR_APPEND(smt_check_res.get_error(), "failed equal check for constant multiplication candidate");
+            }
+
+            if (smt_check_res.get())
+            {
+                return create_verified_candidate(fc, CandidateType::constant_multiplication_offset, bf_sum);
+            }
+
+            // sum with subtractions not implemented
 
             return OK(VerifiedCandidate());
         }
@@ -1256,7 +1399,10 @@ namespace hal
                 case module_identification::CandidateType::less_equal:
                     return check_leq(*this, output_functions);
                     break;
-                case module_identification::CandidateType::adder:
+                case module_identification::CandidateType::addition:
+                    return check_add_sub(*this, output_functions, registers);
+                    break;
+                case module_identification::CandidateType::addition_offset:
                     return check_add_sub(*this, output_functions, registers);
                     break;
                 case module_identification::CandidateType::absolute:
@@ -1267,6 +1413,9 @@ namespace hal
                     break;
                 case module_identification::CandidateType::constant_multiplication:
                     return check_constant_multiplication(*this, output_functions);
+                    break;
+                case module_identification::CandidateType::constant_multiplication_offset:
+                    return check_constant_multiplication_offset(*this, output_functions);
                     break;
                 case module_identification::CandidateType::counter:
                     return check_counter(*this, output_functions);

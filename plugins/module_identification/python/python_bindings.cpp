@@ -462,12 +462,14 @@ namespace hal
                 This enum specifies the types of operations that the module identification process can recognize and verify, such as arithmetic operations and comparisons.
             )");
 
-        py_candidate_type.value("adder", module_identification::CandidateType::adder, R"(Addition operation.)")
+        py_candidate_type.value("addition", module_identification::CandidateType::addition, R"(Addition operation.)")
+            .value("addition_offset", module_identification::CandidateType::addition, R"(Addition with constant offset operation.)")
             .value("subtraction", module_identification::CandidateType::subtraction, R"(Subtraction operation.)")
             .value("counter", module_identification::CandidateType::counter, R"(Counter operation.)")
             .value("negation", module_identification::CandidateType::negation, R"(Negation operation.)")
             .value("absolute", module_identification::CandidateType::absolute, R"(Absolute value operation.)")
             .value("constant_multiplication", module_identification::CandidateType::constant_multiplication, R"(Constant multiplication operation.)")
+            .value("constant_multiplication_offset", module_identification::CandidateType::constant_multiplication_offset, R"(Constant multiplication with constant offset operation.)")
             .value("equal", module_identification::CandidateType::equal, R"(Equality comparison.)")
             .value("less_than", module_identification::CandidateType::less_than, R"(Less-than comparison.)")
             .value("less_equal", module_identification::CandidateType::less_equal, R"(Less-than-or-equal comparison.)")

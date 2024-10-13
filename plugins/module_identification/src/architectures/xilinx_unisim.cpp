@@ -8,6 +8,7 @@
 #include "hal_core/utilities/log.h"
 #include "module_identification/candidates/base_candidate.h"
 #include "module_identification/candidates/structural_candidate.h"
+#include "module_identification/utils/utils.h"
 
 #include <vector>
 
@@ -17,7 +18,8 @@ namespace hal
     {
         namespace xilinx_unisim
         {
-            namespace {
+            namespace
+            {
                 /**
                  * @brief Finds and returns carry chains within a given netlist.
                  *
@@ -550,7 +552,7 @@ namespace hal
 
                                     bool is_inverter         = dst->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter);
                                     bool is_single_input_lut = dst->get_gate()->get_type()->has_property(GateTypeProperty::c_lut) && (dst->get_gate()->get_boolean_functions().size() == 1)
-                                                            && (dst->get_gate()->get_boolean_functions().begin()->second.get_variable_names().size() == 1);
+                                                               && (dst->get_gate()->get_boolean_functions().begin()->second.get_variable_names().size() == 1);
                                     // place some constraints on the added gate
                                     if (!is_inverter && !is_single_input_lut)
                                     {
@@ -567,6 +569,88 @@ namespace hal
                         {
                             candidates.push_back(std::move(nc));
                         }
+                    }
+
+                    // TODO only required for debugging
+                    // std::vector<std::unique_ptr<StructuralCandidate>> filtered_candidates;
+                    // for (auto& c : candidates)
+                    // {
+                    //     std::set<u32> id_set;
+                    //     for (const auto& g : c->m_gates)
+                    //     {
+                    //         id_set.insert(g->get_id());
+                    //     }
+
+                    //     std::set<u32> filter_set = {};
+                    //     if (id_set == filter_set)
+                    //     {
+                    //         std::cout << "Found filter candidate!" << std::endl;
+                    //         filtered_candidates.push_back(std::move(c));
+                    //         break;
+                    //     }
+                    // }
+                    // candidates = std::move(filtered_candidates);
+
+                    // iterate over all candidates and add additional candidate variants that include all gates that are only connected to inputs that are already leading to the candidate
+                    std::vector<std::unique_ptr<StructuralCandidate>> new_candidates;
+                    for (const auto& c : candidates)
+                    {
+                        std::set<Gate*> additional_gates;
+
+                        const auto c_gates    = utils::to_set(c->m_gates);
+                        const auto all_inputs = utils::to_set(get_input_nets(c->m_gates));
+                        for (const auto& input : all_inputs)
+                        {
+                            for (const auto& dest : input->get_destinations())
+                            {
+                                if (dest->get_gate() == nullptr)
+                                {
+                                    continue;
+                                }
+
+                                if (c_gates.find(dest->get_gate()) != c_gates.end())
+                                {
+                                    continue;
+                                }
+
+                                if (additional_gates.find(dest->get_gate()) != additional_gates.end())
+                                {
+                                    continue;
+                                }
+
+                                const auto gate_inputs = dest->get_gate()->get_fan_in_nets();
+
+                                bool is_subset = true;
+                                for (auto& gi : gate_inputs)
+                                {
+                                    if (all_inputs.find(gi) == all_inputs.end())
+                                    {
+                                        is_subset = false;
+                                        break;
+                                    }
+                                }
+
+                                if (is_subset)
+                                {
+                                    additional_gates.insert(dest->get_gate());
+                                }
+                            }
+                        }
+
+                        // TODO remove debug print
+                        // std::cout << "considering additional gates: " << std::endl;
+                        // for (const auto& g : additional_gates)
+                        // {
+                        //     std::cout << g->get_id() << " / " << g->get_name() << std::endl;
+                        // }
+
+                        auto total_gates = c->m_gates;
+                        total_gates.insert(total_gates.end(), additional_gates.begin(), additional_gates.end());
+                        new_candidates.push_back(std::make_unique<StructuralCandidate>(base_candidate, total_gates));
+                    }
+                    for (auto& nc : new_candidates)
+                    {
+                        candidates.push_back(std::move(nc));
                     }
 
                     // remove same candidates
@@ -586,7 +670,7 @@ namespace hal
 
                     return candidates_to_return;
                 }
-            }   // namespace
+            }    // namespace
 
             std::vector<std::pair<std::unique_ptr<BaseCandidate>, std::vector<std::unique_ptr<StructuralCandidate>>>> generate_structural_candidates(const Netlist* nl)
             {
@@ -605,5 +689,5 @@ namespace hal
                 return base_to_structural_candidates;
             }
         }    // namespace xilinx_unisim
-    }        // namespace module_identification
+    }    // namespace module_identification
 }    // namespace hal

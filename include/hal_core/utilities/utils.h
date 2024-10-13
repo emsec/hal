@@ -515,6 +515,39 @@ namespace hal
         }
 
         /**
+         * Turn a given iterable collection into a set.
+         *
+         * @param[in] container - The input collection.
+         * @returns The set containing all items copied from the collection.
+         */
+        template<typename T, template<typename, typename...> class Container, typename... Args>
+        CORE_API inline std::set<T> to_set(const Container<T, Args...>& container)
+        {
+            return std::set<T>(container.begin(), container.end());
+        }
+
+        /**
+         * Check whether one container is a subset of another container.
+         * The function checks whether all elements of the subset container are contained in the superset container.
+         *
+         * @param[in] subset - The container containing the possible subset.
+         * @param[in] superset - The container containing the possible superset.
+         * @returns True if the subset container actually is a subset of the superset.
+         */
+        template<typename T1, typename T2>
+        CORE_API bool is_subset(const T1& subset, const T2& superset)
+        {
+            for (const auto& element : subset)
+            {
+                if (std::find(std::begin(superset), std::end(superset), element) == std::end(superset))
+                {
+                    return false;    // Element not found in superset
+                }
+            }
+            return true;    // All elements found; subset is indeed a subset of superset
+        }
+
+        /**
          * Check whether a file exists.
          *
          * @param[in] filename - The file to check.

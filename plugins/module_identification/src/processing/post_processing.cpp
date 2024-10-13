@@ -36,7 +36,8 @@ namespace hal
                 std::vector<std::vector<VerifiedCandidate>> filtered_candidates;
                 for (const auto& cs : candidate_sets)
                 {
-                    if (std::find(cs.front().m_types.begin(), cs.front().m_types.end(), CandidateType::constant_multiplication) != cs.front().m_types.end())
+                    if (std::find(cs.front().m_types.begin(), cs.front().m_types.end(), CandidateType::constant_multiplication) != cs.front().m_types.end()
+                        || std::find(cs.front().m_types.begin(), cs.front().m_types.end(), CandidateType::constant_multiplication_offset) != cs.front().m_types.end())
                     {
                         if (found_counter_for_output.find(cs.front().m_output_nets) != found_counter_for_output.end())
                         {
@@ -46,6 +47,18 @@ namespace hal
 
                     filtered_candidates.push_back(cs);
                 }
+
+#ifdef DEBUG_PRINT
+                std::cout << "Left with the following sets: " << std::endl;
+                for (const auto& cs : filtered_candidates)
+                {
+                    std::cout << enum_to_string(*cs.front().m_types.begin()) << ": " << cs.size() << std::endl;
+                    for (const auto& o_net : cs.front().m_output_nets)
+                    {
+                        std::cout << "\t" << o_net->get_name() << std::endl;
+                    }
+                }
+#endif
 
                 return filtered_candidates;
             }
@@ -124,10 +137,10 @@ namespace hal
             u32 calcualte_ignored_input_signals(const std::vector<VerifiedCandidate>& candidate_set)
             {
                 u32 max_inputs_ignored = 0;
+                std::set<Net*> covered_nets;
                 for (const auto& c : candidate_set)
                 {
                     // first collect all operand nets
-                    std::set<Net*> covered_nets;
                     for (const auto& op : c.m_operands)
                     {
                         for (const auto& net : op)
@@ -142,7 +155,10 @@ namespace hal
 
                     // we treat control signals as covered
                     covered_nets.insert(c.m_control_signals.begin(), c.m_control_signals.end());
+                }
 
+                for (const auto& c : candidate_set)
+                {
                     // second collect all nets that are not part of the operands
                     u32 ignored_inputs        = 0;
                     const auto all_input_nets = get_input_nets(c.m_gates);
@@ -291,6 +307,15 @@ namespace hal
                     return calcualte_ignored_input_signals(c_set);
                 });
 #ifdef DEBUG_PRINT
+                std::cout << "Left with the following sets: " << std::endl;
+                for (const auto& cs : candidate_sets)
+                {
+                    std::cout << enum_to_string(*cs.front().m_types.begin()) << ": " << cs.size() << std::endl;
+                    for (const auto& o_net : cs.front().m_output_nets)
+                    {
+                        std::cout << "\t" << o_net->get_name() << std::endl;
+                    }
+                }
                 std::cout << "Filtered candidates with ignored input signals, left with " << candidate_sets.size() << std::endl;
 #endif
 
@@ -342,7 +367,7 @@ namespace hal
                     return c_set.size();
                 });
 #ifdef DEBUG_PRINT
-                std::cout << "Reduced candidates to {} sets" << candidate_sets.size() << std::endl;
+                std::cout << "Reduced candidates to " << candidate_sets.size() << " sets." << std::endl;
 #endif
 
                 // TODO remove debug printing
@@ -760,6 +785,8 @@ namespace hal
                     for (u32 net_idx = 0; net_idx < operand.size(); net_idx++)
                     {
                         const auto& net = operand.at(net_idx);
+
+                        // TODO think about whether this actually works or we cannot just ignore all gnd and power nets all together
                         if (!net->is_gnd_net() && !net->is_vcc_net())
                         {
                             found_non_const_net = true;
@@ -822,6 +849,11 @@ namespace hal
                 std::vector<Net*> ordered_nets;
                 for (const auto& [net, _] : consens_bitindices)
                 {
+                    if (net->is_gnd_net() || net->is_vcc_net())
+                    {
+                        continue;
+                    }
+
                     ordered_nets.push_back(net);
                 }
 
@@ -843,7 +875,7 @@ namespace hal
                 }
                 const auto candidate_type = *(vc.m_types.begin());
 
-                if (candidate_type == CandidateType::constant_multiplication)
+                if (candidate_type == CandidateType::constant_multiplication || candidate_type == CandidateType::constant_multiplication_offset)
                 {
                     reconstructed_operands = {reconstruct_shifted_operand(operands)};
                     vc.m_operands          = reconstructed_operands;
@@ -920,12 +952,13 @@ namespace hal
 
         VerifiedCandidate post_processing(const std::vector<VerifiedCandidate>& verified_candidates, const Netlist* nl, const std::vector<std::vector<Gate*>>& registers)
         {
-            log_info("module_identification", "processing module for carry chain with {} verified variants", verified_candidates.size());
-
             if (verified_candidates.empty())
             {
                 return VerifiedCandidate();
             }
+
+            log_info(
+                "module_identification", "processing module for carry chain {} with {} verified variants", verified_candidates.front().m_base_gates.front()->get_name(), verified_candidates.size());
 
 #ifdef DEBUG_PRINT
             std::cout << "ALL CANDIDATES [" << verified_candidates.size() << "]: " << std::endl;
