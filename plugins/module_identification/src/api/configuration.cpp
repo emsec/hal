@@ -4,9 +4,9 @@ namespace hal
 {
     namespace module_identification
     {
-        Configuration::Configuration(Netlist* nl) : m_netlist(nl){};
+        Configuration::Configuration(Netlist* nl) : m_netlist(nl) {};
 
-        Configuration::Configuration(){};
+        Configuration::Configuration() {};
 
         Configuration& Configuration::with_known_registers(const std::vector<std::vector<hal::Gate*>>& registers)
         {
@@ -53,13 +53,15 @@ namespace hal
 
     template<>
     std::map<module_identification::CandidateType, std::string> EnumStrings<module_identification::CandidateType>::data = {
-        {module_identification::CandidateType::adder, "ADDER"},
+        {module_identification::CandidateType::addition, "ADDITION"},
+        {module_identification::CandidateType::addition_offset, "ADDITION_OFFSET"},
         {module_identification::CandidateType::absolute, "ABSOLUTE"},
         {module_identification::CandidateType::subtraction, "SUBTRACTION"},
         {module_identification::CandidateType::equal, "EQUAL"},
         {module_identification::CandidateType::less_equal, "LESS_EQUAL"},
         {module_identification::CandidateType::less_than, "LESS_THAN"},
         {module_identification::CandidateType::constant_multiplication, "CONSTANT_MULTIPLICATION"},
+        {module_identification::CandidateType::constant_multiplication_offset, "CONSTANT_MULTIPLICATION_OFFSET"},
         {module_identification::CandidateType::counter, "COUNTER"},
         {module_identification::CandidateType::value_check, "VALUE_CHECK"},
         {module_identification::CandidateType::negation, "NEGATION"},

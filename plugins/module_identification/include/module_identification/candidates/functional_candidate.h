@@ -251,7 +251,16 @@ namespace hal
              * @param[in] candidate - The functional candidate.
              * @returns OK() and a vector of functional candidates on success, an error otherwise.
              */
-            static hal::Result<std::vector<FunctionalCandidate>> add_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate);
+            static hal::Result<std::vector<FunctionalCandidate>> add_selected_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate);
+
+            /**
+             * @brief Add all possible variations of possible shifted operands to the functional candidate. 
+             * 
+             * @param[in] ctx - The candidate context.
+             * @param[in] candidate - The functional candidate.
+             * @returns OK() and a vector of functional candidates on success, an error otherwise.
+             */
+            static hal::Result<std::vector<FunctionalCandidate>> add_all_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate);
 
             // Value check
 
