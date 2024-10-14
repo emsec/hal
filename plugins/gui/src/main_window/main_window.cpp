@@ -739,8 +739,12 @@ namespace hal
     {
         QMessageBox optBox;
         QPushButton* newBtn = optBox.addButton("New", QMessageBox::AcceptRole);
+        newBtn->setToolTip("Create new gate library");
         QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
+        openBtn->setToolTip("Open existing gate library");
         QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
+        cancelBtn->setToolTip("Cancel");
+
         optBox.setText("Gate Library Manager");
 
         auto btn = optBox.exec();
