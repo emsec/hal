@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solve FSM &mdash; hal_py v4.4.1-60-g0323ebc40 documentation</title>
+  <title>Solve FSM &mdash; hal_py v4.4.1-61-g2a653d719 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-60-g0323ebc40
+                v4.4.1-61-g2a653d719
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -86,87 +86,6 @@
   <section id="module-solve_fsm">
 <span id="solve-fsm"></span><h1>Solve FSM<a class="headerlink" href="#module-solve_fsm" title="Permalink to this headline"></a></h1>
 <p>Plugin to automatically generate FSM state transition graphs for given FSMs.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">solve_fsm.</span></span><span class="sig-name descname"><span class="pre">SolveFsmPlugin</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin" title="Permalink to this definition"></a></dt>
-<dd><p>This class provides an interface to integrate FSM solving as a plugin within the HAL framework.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.description">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.description" title="Permalink to this definition"></a></dt>
-<dd><p>The description of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_description">
-<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_description" title="Permalink to this definition"></a></dt>
-<dd><p>Get the description of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The description of the plugin.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_name" title="Permalink to this definition"></a></dt>
-<dd><p>Get the name of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Plugin name.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_version">
-<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_version" title="Permalink to this definition"></a></dt>
-<dd><p>Get the version of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Plugin version.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.name" title="Permalink to this definition"></a></dt>
-<dd><p>The name of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.version">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.version" title="Permalink to this definition"></a></dt>
-<dd><p>The version of the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="solve_fsm.generate_dot_graph">
 <span class="sig-prename descclassname"><span class="pre">solve_fsm.</span></span><span class="sig-name descname"><span class="pre">generate_dot_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state_reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transitions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_condition_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#solve_fsm.generate_dot_graph" title="Permalink to this definition"></a></dt>
@@ -243,12 +162,12 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">solve_fsm.</span></span><span class="sig-name descname"><span class="pre">SolveFsmPlugin</span></span><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">solve_fsm.</span></span><span class="sig-name descname"><span class="pre">SolveFsmPlugin</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin" title="Permalink to this definition"></a></dt>
 <dd><p>This class provides an interface to integrate FSM solving as a plugin within the HAL framework.</p>
 <dl class="py property">
-<dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.description" title="Permalink to this definition"></a></dt>
 <dd><p>The description of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -258,8 +177,8 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#solve_fsm.SolveFsmPlugin" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_description" title="Permalink to this definition"></a></dt>
 <dd><p>Get the description of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -272,8 +191,8 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#id3" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#solve_fsm.SolveFsmPlugin" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_name" title="Permalink to this definition"></a></dt>
 <dd><p>Get the name of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -286,8 +205,8 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#id0" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#id4" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.get_version">
+<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#solve_fsm.SolveFsmPlugin" title="solve_fsm.SolveFsmPlugin"><span class="pre">solve_fsm.SolveFsmPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.get_version" title="Permalink to this definition"></a></dt>
 <dd><p>Get the version of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -300,8 +219,8 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id5">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id5" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.name" title="Permalink to this definition"></a></dt>
 <dd><p>The name of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -311,8 +230,8 @@ Optionally also produces a DOT file representing the state transition graph.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id6">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#id6" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="solve_fsm.SolveFsmPlugin.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#solve_fsm.SolveFsmPlugin.version" title="Permalink to this definition"></a></dt>
 <dd><p>The version of the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
