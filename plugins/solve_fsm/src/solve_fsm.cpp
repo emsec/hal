@@ -10,6 +10,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/netlist/net.h"
 
+#include <bitset>
 #include <fstream>
 #include <queue>
 
