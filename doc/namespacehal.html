@@ -145,6 +145,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1_s_m_t"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehal_1_1solve__fsm"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1solve__fsm.html">solve_fsm</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1style"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1style.html">style</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehal_1_1utils"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html">utils</a></td></tr>
@@ -1067,6 +1069,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plugin interface for the dataflow analysis plugin (DANA).  <a href="classhal_1_1_dataflow_plugin.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_solve_fsm_plugin.html">SolveFsmPlugin</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plugin interface for the solve FSM plugin.  <a href="classhal_1_1_solve_fsm_plugin.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_h_g_l_parser.html">HGLParser</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2797,9 +2800,9 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">24</a> of file <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html">python_bindings.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00025">25</a> of file <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html">python_bindings.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00557">hal::SolveFsmPlugin::generate_dot_graph()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00034">hal::SolveFsmPlugin::get_name()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00039">hal::SolveFsmPlugin::get_version()</a>, <a class="el" href="test__plugin_8py_source.html#l00029">test_plugin::graph_path</a>, <a class="el" href="test__plugin_8py_source.html#l00028">test_plugin::initial_state</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00813">hal::ShortestPath::module()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00405">hal::SolveFsmPlugin::solve_fsm()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00309">hal::SolveFsmPlugin::solve_fsm_brute_force()</a>, and <a class="el" href="test__plugin_8py_source.html#l00030">test_plugin::timeout</a>.</p>
+<p class="reference">References <a class="el" href="solve__fsm_8cpp_source.html#l00533">hal::solve_fsm::generate_dot_graph()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00020">hal::SolveFsmPlugin::get_description()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00010">hal::SolveFsmPlugin::get_name()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00015">hal::SolveFsmPlugin::get_version()</a>, <a class="el" href="test__plugin_8py_source.html#l00029">test_plugin::graph_path</a>, <a class="el" href="test__plugin_8py_source.html#l00028">test_plugin::initial_state</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00813">hal::ShortestPath::module()</a>, <a class="el" href="solve__fsm_8cpp_source.html#l00381">hal::solve_fsm::solve_fsm()</a>, <a class="el" href="solve__fsm_8cpp_source.html#l00285">hal::solve_fsm::solve_fsm_brute_force()</a>, and <a class="el" href="test__plugin_8py_source.html#l00030">test_plugin::timeout</a>.</p>
 
 </div>
 </div>
@@ -4545,7 +4548,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li>
-    <li class="footer">Generated on Sun Oct 13 2024 21:25:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Oct 14 2024 11:06:12 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -136,6 +136,11 @@ var namespacehal =
       [ "local_simplification", "namespacehal_1_1_simplification.html#a079b46fa168981ee4628cc3b8d01ced9", null ]
     ] ],
     [ "SMT", "namespacehal_1_1_s_m_t.html", "namespacehal_1_1_s_m_t" ],
+    [ "solve_fsm", "namespacehal_1_1solve__fsm.html", [
+      [ "generate_dot_graph", "namespacehal_1_1solve__fsm.html#a24f943c01e42614c046aa7e611791508", null ],
+      [ "solve_fsm", "namespacehal_1_1solve__fsm.html#a7a1322acc23dc95f262d57df42cf9b5c", null ],
+      [ "solve_fsm_brute_force", "namespacehal_1_1solve__fsm.html#a9cbe139c5b06c205079be2e675b8cdc1", null ]
+    ] ],
     [ "style", "namespacehal_1_1style.html", [
       [ "debugUpdate", "namespacehal_1_1style.html#af1c64f88684b924fc0403ad8305ed98a", null ]
     ] ],
