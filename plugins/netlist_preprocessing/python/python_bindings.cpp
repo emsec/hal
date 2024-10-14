@@ -52,6 +52,32 @@ namespace hal
             :rtype: str
         )");
 
+        py_netlist_preprocessing.def_property_readonly("description", &NetlistPreprocessingPlugin::get_description, R"(
+            The description of the plugin.
+
+            :type: str
+        )");
+
+        py_netlist_preprocessing.def("get_description", &NetlistPreprocessingPlugin::get_description, R"(
+            Get the description of the plugin.
+
+            :returns: The description of the plugin.
+            :rtype: str
+        )");
+
+        py_netlist_preprocessing.def_property_readonly("dependencies", &NetlistPreprocessingPlugin::get_dependencies, R"(
+            A set of plugin names that this plugin depends on.
+
+            :type: set[str]
+        )");
+
+        py_netlist_preprocessing.def("get_dependencies", &NetlistPreprocessingPlugin::get_dependencies, R"(
+            Get a set of plugin names that this plugin depends on.
+
+            :returns: A set of plugin names that this plugin depends on.
+            :rtype: set[str]
+        )");
+
         m.def(
             "remove_unused_lut_inputs",
             [](Netlist* nl) -> std::optional<u32> {
