@@ -1,4 +1,3 @@
-
 // MIT License
 //
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
