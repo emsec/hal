@@ -93,6 +93,32 @@ namespace hal
     void GateLibraryManager::handleCreateAction()
     {
         // TODO
+        mCreationMode = true; //needed for callUnsavedChangesWindow
+        std::filesystem::path path;
+        QFile gldpath(":/path/gate_library_definitions");
+        if (gldpath.open(QIODevice::ReadOnly))
+        {
+            //path = QString::fromUtf8(gldpath.readAll()).toStdString() + "/unnamed_gate_library.hgl";
+            path = QString::fromUtf8(gldpath.readAll()).toStdString();
+            QStringList allNames = QDir(QString::fromStdString(path.string())).entryList();
+            if(allNames.contains("unnamed_gate_library.hgl"))
+            {
+                u32 cnt = 1;
+                while(allNames.contains(QString("unnamed_gate_library(%1).hgl").arg(cnt)))
+                    cnt++;
+                path += std::filesystem::path(QString("/unnamed_gate_library(%1).hgl").arg(cnt).toStdString());
+            }
+            else path += "/unnamed_gate_library.hgl";
+        }
+
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!callUnsavedChangesWindow()) return;
+            else window()->setWindowTitle(QString("GateLibrary %1").arg(QDir::home().relativeFilePath(QString::fromStdString(path.string()))));
+        }
+        mGateLibrary = new GateLibrary(path, "unnamed_gate_library");
+        initialize(mGateLibrary);
+        mCreationMode = false;
     }
 
     void GateLibraryManager::handleSaveAction()
@@ -144,10 +170,6 @@ namespace hal
                 }
 
                 mReadOnly = false;
-
-                QDir dir(QDir::home());
-                window()->setWindowTitle(QString("GateLibrary %1").arg(dir.relativeFilePath(fileName)));
-                mPath = fileName.toStdString();
             }
 
         }
@@ -155,7 +177,11 @@ namespace hal
         {
             mReadOnly = readOnly;
             mGateLibrary = gateLibrary;
+            mProjectName = window()->windowTitle();
         }
+        QDir dir(QDir::home());
+        if(!gFileStatusManager->isGatelibModified()) window()->setWindowTitle(QString("GateLibrary %1").arg(QDir::home().relativeFilePath(QString::fromStdString(mGateLibrary->get_path().string()))));
+        mPath = mGateLibrary->get_path().generic_string();
 
         mDemoNetlist = netlist_factory::create_netlist(mGateLibrary);
         mGraphicsView->showGate(nullptr);
@@ -249,7 +275,8 @@ namespace hal
     {
         if(!gFileStatusManager->isGatelibModified())
         {
-            window()->setWindowTitle("HAL");
+            if(!mReadOnly) window()->setWindowTitle("HAL");
+            else window()->setWindowTitle(mProjectName);
             Q_EMIT close();
         }
         else
@@ -296,11 +323,21 @@ namespace hal
                 Q_EMIT close();
             break;
             case QMessageBox::Discard:
-                gate_library_manager::remove(std::filesystem::path(mGateLibrary->get_path()));
-                mDemoNetlist.reset(); //delete unique pointer
-                gFileStatusManager->gatelibSaved();
-                window()->setWindowTitle("HAL");
-                Q_EMIT close();
+                if(!mCreationMode)
+                {
+                    gate_library_manager::remove(std::filesystem::path(mGateLibrary->get_path()));
+                    mDemoNetlist.reset(); //delete unique pointer
+                    gFileStatusManager->gatelibSaved();
+                    if(!mReadOnly) window()->setWindowTitle("HAL");
+                    else window()->setWindowTitle(mProjectName);
+                    Q_EMIT close();
+                }
+                else
+                {
+                    gate_library_manager::remove(std::filesystem::path(mGateLibrary->get_path()));
+                    mDemoNetlist.reset(); //delete unique pointer
+                    gFileStatusManager->gatelibSaved();
+                }
             break;
             case QMessageBox::Cancel:
                 msgBox->reject();

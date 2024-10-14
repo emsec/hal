@@ -75,9 +75,9 @@ namespace hal {
         if (mGatelibReference)
         {
             mActionCreate->setText("New Gate Library");
-            mActionCreate->setDisabled(true);
+            //mActionCreate->setDisabled(true);
             mActionOpen->setText("Open Gate Library");
-            mActionSave->setText("Save Gate Libraray");
+            mActionSave->setText("Save Gate Library");
             mActionSaveAs->setText("Save Gate Library As");
             connect(mActionCreate, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCreateAction);
             connect(mActionOpen,   &Action::triggered, mMainWindowReference, &MainWindow::handleActionGatelibraryManager);

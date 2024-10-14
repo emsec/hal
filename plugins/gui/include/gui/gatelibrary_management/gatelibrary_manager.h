@@ -123,8 +123,10 @@ namespace hal
         GateLibrary* mGateLibrary;
         std::unique_ptr<Netlist> mDemoNetlist;
         std::filesystem::path mPath;
+        QString mProjectName;
 
         bool mReadOnly = false;
+        bool mCreationMode = false;
 
         GateType* getSelectedGate();
     };

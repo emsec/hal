@@ -167,8 +167,11 @@ namespace hal
 
     void GatelibraryContentWidget::handleUnsavedChanges()
     {
-        mTitle = window()->windowTitle();
-        window()->setWindowTitle(mTitle + " *");
+        if(!(window()->windowTitle().right(1) == "*"))
+        {
+            mTitle = window()->windowTitle();
+            window()->setWindowTitle(mTitle + " *");
+        }
     }
 
     void GatelibraryContentWidget::toggleSearchbar()

@@ -137,7 +137,7 @@ namespace hal
         }
         this->close();
 
-        if (!gFileStatusManager->isGatelibModified()) Q_EMIT triggerUnsavedChanges();
+        if (mWasEdited) Q_EMIT triggerUnsavedChanges();
         gFileStatusManager->gatelibChanged();
     }
 
