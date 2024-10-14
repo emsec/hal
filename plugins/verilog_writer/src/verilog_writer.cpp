@@ -362,6 +362,8 @@ namespace hal
                                                                 const std::vector<std::pair<std::string, std::vector<const Net*>>>& pin_assignments,
                                                                 std::unordered_map<const DataContainer*, std::string>& aliases) const
     {
+        static u32 unused_signal_counter = 0;
+
         res_stream << " (" << std::endl;
         bool first_pin = true;
         for (const auto& [pin, nets] : pin_assignments)
@@ -406,7 +408,7 @@ namespace hal
                 else
                 {
                     // unconnected pin of a group with at least one connection
-                    res_stream << "HAL_UNUSED_SIGNAL";
+                    res_stream << "HAL_UNUSED_SIGNAL_" + std::to_string(unused_signal_counter++);
                 }
             }
 
