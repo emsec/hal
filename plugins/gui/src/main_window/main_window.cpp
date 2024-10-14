@@ -737,6 +737,24 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
+        QMessageBox optBox;
+        QPushButton* newBtn = optBox.addButton("New", QMessageBox::AcceptRole);
+        QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
+        QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
+        optBox.setText("Gate Library Manager");
+
+        auto btn = optBox.exec();
+
+        if(optBox.clickedButton() == newBtn)
+        {
+            mGateLibraryManager->handleCreateAction();
+            mStackedWidget->setCurrentWidget(mGateLibraryManager);
+            mFileActions->setup(mGateLibraryManager);
+            return;
+        }
+        else if (optBox.clickedButton() == cancelBtn)
+            return;
+        else
         if(gFileStatusManager->isGatelibModified())
         {
             if(!mGateLibraryManager->callUnsavedChangesWindow()) return;

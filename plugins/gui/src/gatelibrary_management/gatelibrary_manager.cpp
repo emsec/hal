@@ -98,7 +98,6 @@ namespace hal
         QFile gldpath(":/path/gate_library_definitions");
         if (gldpath.open(QIODevice::ReadOnly))
         {
-            //path = QString::fromUtf8(gldpath.readAll()).toStdString() + "/unnamed_gate_library.hgl";
             path = QString::fromUtf8(gldpath.readAll()).toStdString();
             QStringList allNames = QDir(QString::fromStdString(path.string())).entryList();
             if(allNames.contains("unnamed_gate_library.hgl"))
