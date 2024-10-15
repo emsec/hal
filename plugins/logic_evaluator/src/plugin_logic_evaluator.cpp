@@ -1,12 +1,13 @@
 #include "logic_evaluator/plugin_logic_evaluator.h"
 
-#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
+#include "gui/content_manager/content_manager.h"
+#include "gui/gui_api/gui_api.h"
+#include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "logic_evaluator/logic_evaluator_dialog.h"
 #include "logic_evaluator/logic_evaluator_select_gates.h"
-#include "gui/content_manager/content_manager.h"
-#include "gui/gui_globals.h"
-#include "gui/gui_api/gui_api.h"
+
 #include <QDebug>
 
 namespace hal
@@ -59,7 +60,9 @@ namespace hal
     std::vector<PluginParameter> GuiExtensionLogicEvaluator::get_parameter() const
     {
         std::vector<PluginParameter> retval;
-        retval.push_back(PluginParameter(PluginParameter::Label, "help", "",
+        retval.push_back(PluginParameter(PluginParameter::Label,
+                                         "help",
+                                         "",
                                          "Press 'Launch' to launch logic evaluator\n"
                                          "with the gates that are currently selected.\n\n"
                                          "Per default boolean logic gets compiled and\n"
@@ -74,29 +77,46 @@ namespace hal
     void GuiExtensionLogicEvaluator::set_parameter(const std::vector<PluginParameter>& params)
     {
         bool launchPressed = false;
-        bool skipCompile = false;
+        bool skipCompile   = false;
         for (const PluginParameter& pp : params)
         {
             if (pp.get_tagname() == "exec" && pp.get_value() == "clicked")
+            {
                 launchPressed = true;
+            }
             if (pp.get_tagname() == "skip")
+            {
                 skipCompile = (pp.get_value() == "true");
+            }
         }
 
-        if (!launchPressed) return;
+        if (!launchPressed)
+        {
+            return;
+        }
 
         std::unordered_set<Gate*> gates;
         for (Gate* g : GuiApi().getSelectedGates())
+        {
             if (acceptGate(g))
+            {
                 gates.insert(g);
+            }
+        }
         for (Module* m : GuiApi().getSelectedModules())
-            for (Gate* g : m->get_gates(nullptr,true))
+        {
+            for (Gate* g : m->get_gates(nullptr, true))
+            {
                 if (acceptGate(g))
+                {
                     gates.insert(g);
+                }
+            }
+        }
 
         if (gates.empty())
         {
-            std::vector<Gate *> emptyList;
+            std::vector<Gate*> emptyList;
             LogicEvaluatorSelectGates lesg(emptyList);
             lesg.exec();
             return;
@@ -107,58 +127,75 @@ namespace hal
         led->show();
     }
 
-    bool GuiExtensionLogicEvaluator::acceptGate(const Gate *g)
+    bool GuiExtensionLogicEvaluator::acceptGate(const Gate* g)
     {
         const GateType* gt = g->get_type();
-        if (gt->has_property(GateTypeProperty::ff)) return false;
-        if (gt->has_property(GateTypeProperty::latch)) return false;
-        if (gt->has_property(GateTypeProperty::ram)) return false;
+        if (gt->has_property(GateTypeProperty::ff))
+        {
+            return false;
+        }
+        if (gt->has_property(GateTypeProperty::latch))
+        {
+            return false;
+        }
+        if (gt->has_property(GateTypeProperty::ram))
+        {
+            return false;
+        }
         return true;
     }
 
-    std::vector<ContextMenuContribution> GuiExtensionLogicEvaluator::get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
+    std::vector<ContextMenuContribution>
+        GuiExtensionLogicEvaluator::get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
         std::vector<ContextMenuContribution> retval;
         if (nl && (!mods.empty() || !gats.empty()))
-            retval.push_back({this,"context", "Launch logic evaluator"});
+        {
+            retval.push_back({this, "Logic Evaluator", "Launch logic evaluator..."});
+        }
         return retval;
     }
 
     void GuiExtensionLogicEvaluator::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets)
     {
-       if (nl && (!mods.empty() || !gats.empty()))
-       {
-           std::unordered_set<Gate*> gates;
-           for (u32 gatId : gats)
-           {
-               Gate* g = nl->get_gate_by_id(gatId);
-               if (g && acceptGate(g))
-                   gates.insert(g);
-           }
-           for (u32 modId : mods)
-           {
-               Module* m = nl->get_module_by_id(modId);
-               if (m)
-               {
-                   for (Gate* g : m->get_gates(nullptr,true))
-                       if (acceptGate(g))
-                           gates.insert(g);
-               }
-           }
+        if (nl && (!mods.empty() || !gats.empty()))
+        {
+            std::unordered_set<Gate*> gates;
+            for (u32 gatId : gats)
+            {
+                Gate* g = nl->get_gate_by_id(gatId);
+                if (g && acceptGate(g))
+                {
+                    gates.insert(g);
+                }
+            }
+            for (u32 modId : mods)
+            {
+                Module* m = nl->get_module_by_id(modId);
+                if (m)
+                {
+                    for (Gate* g : m->get_gates(nullptr, true))
+                    {
+                        if (acceptGate(g))
+                        {
+                            gates.insert(g);
+                        }
+                    }
+                }
+            }
 
-           if (gates.empty())
-           {
-               std::vector<Gate *> emptyList;
-               LogicEvaluatorSelectGates lesg(emptyList);
-               lesg.exec();
-               return;
-           }
+            if (gates.empty())
+            {
+                std::vector<Gate*> emptyList;
+                LogicEvaluatorSelectGates lesg(emptyList);
+                lesg.exec();
+                return;
+            }
 
-           std::vector<Gate*> vgates(gates.begin(), gates.end());
-           LogicEvaluatorDialog* led = new LogicEvaluatorDialog(vgates, false);
-           led->show();
-
-       }
+            std::vector<Gate*> vgates(gates.begin(), gates.end());
+            LogicEvaluatorDialog* led = new LogicEvaluatorDialog(vgates, false);
+            led->show();
+        }
     }
 
 }    // namespace hal
