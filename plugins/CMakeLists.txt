@@ -5,6 +5,9 @@ foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
     endforeach()
 endforeach()
 
+# Build netlist_preprocessing and dependend libraries
+option(PL_NETLIST_PREPROCESSING "PL_NETLIST_PREPROCESSING" ON)
+
 include_directories(${include_directories}
                     ${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/hal_plugins
@@ -13,6 +16,7 @@ include_directories(${include_directories}
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib/hal_plugins/)
 file(WRITE ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py "")
 install(FILES ${CMAKE_BINARY_DIR}/lib/hal_plugins/__init__.py DESTINATION ${PLUGIN_LIBRARY_INSTALL_DIRECTORY})
+
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
