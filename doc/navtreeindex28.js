@@ -1,6 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"namespacehal_1_1_s_m_t_1_1_z3.html#ac0b35d4ddc9276e4d78e2fbe5a6833f9":[5,0,2,23,5,0],
 "namespacehal_1_1_s_m_t_1_1_z3.html#aec83d53e618e88eb356a2a34c5b0bd56":[5,0,2,23,5,1],
 "namespacehal_1_1_shortest_path.html":[5,0,2,21],
 "namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9":[5,0,2,21,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX28 =
 "namespacehal_1_1utils.html#aa84f04771420e5c67784826253d48901":[5,0,2,26,17],
 "namespacehal_1_1utils.html#abe865cd13e526c5228f269a9c7b2629b":[5,0,2,26,44],
 "namespacehal_1_1utils.html#ac066333866ab6d67d66f1d9ec5671d79":[5,0,2,26,23],
-"namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828":[5,0,2,26,38]
+"namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828":[5,0,2,26,38],
+"namespacehal_1_1utils.html#acc1ab1edf5587b57530713faa040fb92":[5,0,2,26,11]
 };
