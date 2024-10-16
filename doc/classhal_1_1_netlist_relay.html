@@ -247,6 +247,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4d906709e393ed89cf9159c596147325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31b104d19049d0e85c3bf8004f35ef57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a31b104d19049d0e85c3bf8004f35ef57">addChildModuleDialog</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a31b104d19049d0e85c3bf8004f35ef57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079040f92859a52a5fabba755ae8f8a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a079040f92859a52a5fabba755ae8f8a2">addToModuleDialog</a> (const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;node=<a class="el" href="classhal_1_1_node.html">Node</a>())</td></tr>
+<tr class="separator:a079040f92859a52a5fabba755ae8f8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49f8f9a0322f1f1e0231f02b4fceb79b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a49f8f9a0322f1f1e0231f02b4fceb79b">deleteModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a49f8f9a0322f1f1e0231f02b4fceb79b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b1738463cab64e14d9392a43b77a357"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">reset</a> ()</td></tr>
@@ -447,7 +449,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The <a class="el" href="classhal_1_1_netlist_relay.html" title="Connects the hal-core events to the gui.">NetlistRelay</a> is used to capture events from the hal-core and to delegate their handling to various gui objects. These objects may connect to one of the numerous Q_SIGNALS provided by this class to implement an individual reaction to the registered events.</p>
 <p>Also the <a class="el" href="classhal_1_1_netlist_relay.html" title="Connects the hal-core events to the gui.">NetlistRelay</a> stores the color for modules which can accessed via <a class="el" href="classhal_1_1_netlist_relay.html#afe4ad79c97e3b5c42c9568e744f2b369">NetlistRelay::getModuleColor</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8h_source.html#l00053">53</a> of file <a class="el" href="netlist__relay_8h_source.html">netlist_relay.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8h_source.html#l00054">54</a> of file <a class="el" href="netlist__relay_8h_source.html">netlist_relay.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8cf02b82f480840075036cccecf46ef0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8cf02b82f480840075036cccecf46ef0">&#9670;&nbsp;</a></span>NetlistRelay()</h2>
@@ -480,9 +482,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00030">30</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00035">35</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::BlockingQueuedConnection</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00689">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, <a class="el" href="file__manager_8cpp_source.html#l00080">hal::FileManager::get_instance()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00653">handleThreadEvent()</a>, and <a class="el" href="classhal_1_1_netlist_relay.html#ad67296d2731c213dbb88b98a66687b41">signalThreadEvent()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::BlockingQueuedConnection</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00782">debugHandleFileOpened()</a>, <a class="el" href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened()</a>, <a class="el" href="file__manager_8cpp_source.html#l00080">hal::FileManager::get_instance()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00746">handleThreadEvent()</a>, and <a class="el" href="classhal_1_1_netlist_relay.html#ad67296d2731c213dbb88b98a66687b41">signalThreadEvent()</a>.</p>
 
 </div>
 </div>
@@ -502,9 +504,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Destructor. Disconnects this relay from the event system of the hal-core. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00037">37</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00042">42</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__relay_8cpp_source.html#l00042">unregisterNetlistCallbacks()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__relay_8cpp_source.html#l00047">unregisterNetlistCallbacks()</a>.</p>
 
 </div>
 </div>
@@ -532,11 +534,41 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00172">172</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00265">265</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="action__create__object_8h_source.html#l00059">hal::ActionCreateObject::setParentId()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00017">hal::ModuleContextMenu::addModuleSubmenu()</a>.</p>
+
+</div>
+</div>
+<a id="a079040f92859a52a5fabba755ae8f8a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a079040f92859a52a5fabba755ae8f8a2">&#9670;&nbsp;</a></span>addToModuleDialog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetlistRelay::addToModuleDialog </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em> = <code><a class="el" href="classhal_1_1_node.html">Node</a>()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Opens 'add to module' Dialog. <a class="el" href="classhal_1_1_node.html" title="The Node class object represents a module or a gate.">Node</a> gets added to selected module or new module. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>- The node to be added. If node is empty the current selection will be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00177">177</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00077">hal::SelectionRelay::addModule()</a>, <a class="el" href="graph__layouter_8h_source.html#l00312">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00200">hal::NodeBoxes::boxForNode()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00178">hal::GraphTabWidget::ensureSelectionVisible()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">QDialog::exec()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00030">hal::UserActionCompound::exec()</a>, <a class="el" href="plugins_2gui_2src_2gui__utils_2netlist_8cpp_source.html#l00034">hal::gui_utility::firstCommonAncestor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="content__manager_8cpp_source.html#l00146">hal::ContentManager::getContextManagerWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00392">hal::ContextManagerWidget::getCurrentContext()</a>, <a class="el" href="content__manager_8cpp_source.html#l00126">hal::ContentManager::getGraphTabWidget()</a>, <a class="el" href="graph__context_8h_source.html#l00319">hal::GraphContext::getLayouter()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="graph__context_8cpp_source.html#l00451">hal::GraphContext::id()</a>, <a class="el" href="gui__def_8h_source.html#l00077">hal::Node::id()</a>, <a class="el" href="user__action__object_8h_source.html#l00097">hal::UserActionObject::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00095">hal::Node::isModule()</a>, <a class="el" href="module__dialog_8h_source.html#l00087">hal::ModuleDialog::isNewModule()</a>, <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aae55f75a29310d7b60f7ac1d390c8ae42">hal::SelectionRelay::Module</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00231">hal::SelectionRelay::selectedGatesList()</a>, <a class="el" href="module__dialog_8h_source.html#l00080">hal::ModuleDialog::selectedId()</a>, <a class="el" href="selection__relay_8h_source.html#l00251">hal::SelectionRelay::selectedModulesList()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00139">hal::SelectionRelay::setFocus()</a>, <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>, <a class="el" href="action__create__object_8h_source.html#l00059">hal::ActionCreateObject::setParentId()</a>, <a class="el" href="user__action__compound_8h_source.html#l00044">hal::UserActionCompound::setUseCreatedObject()</a>, <a class="el" href="node__box_8h_source.html#l00093">hal::NodeBox::x()</a>, and <a class="el" href="node__box_8h_source.html#l00099">hal::NodeBox::y()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00114">hal::ModuleContextMenu::addGateSubmenu()</a>, <a class="el" href="module__context__menu_8cpp_source.html#l00017">hal::ModuleContextMenu::addModuleSubmenu()</a>, <a class="el" href="module__context__menu_8cpp_source.html#l00262">hal::ModuleContextMenu::addMultipleElementsSubmenu()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
 
 </div>
 </div>
@@ -574,11 +606,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00098">98</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="action__rename__object_8cpp_source.html#l00048">hal::ActionRenameObject::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="el" href="user__action__object_8h_source.html#l00052">hal::UserActionObjectType::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">hal::ModuleItem::Module</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, <a class="el" href="user__action__object_8h_source.html#l00053">hal::UserActionObjectType::Net</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00108">hal::ModuleContextMenu::addGateSubmenu()</a>, <a class="el" href="module__context__menu_8cpp_source.html#l00017">hal::ModuleContextMenu::addModuleSubmenu()</a>, and <a class="el" href="module__context__menu_8cpp_source.html#l00180">hal::ModuleContextMenu::addNetSubmenu()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__context__menu_8cpp_source.html#l00114">hal::ModuleContextMenu::addGateSubmenu()</a>, <a class="el" href="module__context__menu_8cpp_source.html#l00017">hal::ModuleContextMenu::addModuleSubmenu()</a>, and <a class="el" href="module__context__menu_8cpp_source.html#l00192">hal::ModuleContextMenu::addNetSubmenu()</a>.</p>
 
 </div>
 </div>
@@ -605,7 +637,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00155">155</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00160">160</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolordialog.html#getColor">QColorDialog::getColor()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html#isValid">QColor::isValid()</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
 
@@ -636,7 +668,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00137">137</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00142">142</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="action__set__object__type_8cpp_source.html#l00046">hal::ActionSetObjectType::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00106">hal::Module::get_type()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
 
@@ -668,7 +700,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been closed. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00696">696</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00789">789</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00668">hal::FileManager::closeFile()</a>.</p>
 
@@ -698,11 +730,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a netlist has been opened. Used to initially assign all modules a color. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00689">689</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00782">782</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00624">hal::Netlist::get_modules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="module__color__manager_8cpp_source.html#l00076">hal::ModuleColorSerializer::restore()</a>, and <a class="el" href="module__color__manager_8cpp_source.html#l00054">hal::ModuleColorManager::setRandomColor()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00030">NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00035">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -729,7 +761,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00192">192</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00285">285</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00030">hal::UserActionCompound::exec()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00278">hal::GraphContextManager::getContextByExclusiveModuleId()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="graph__context_8cpp_source.html#l00451">hal::GraphContext::id()</a>, <a class="el" href="user__action__object_8h_source.html#l00051">hal::UserActionObjectType::Module</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
 
@@ -940,7 +972,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the color of the specified module </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00083">83</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="module__color__manager_8cpp_source.html#l00027">hal::ModuleColorManager::moduleColor()</a>.</p>
 
@@ -965,7 +997,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Accesses the module color manager</p>
 <dl class="section return"><dt>Returns</dt><dd>the module color manager </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__set__object__color_8cpp_source.html#l00043">hal::ActionSetObjectColor::exec()</a>, <a class="el" href="module__details__tab__widget_8cpp_source.html#l00016">hal::ModuleDetailsTabWidget::ModuleDetailsTabWidget()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00022">hal::SelectionTreeView::SelectionTreeView()</a>, and <a class="el" href="module__color__manager_8cpp_source.html#l00097">hal::ModuleColorSerializer::serialize()</a>.</p>
 
@@ -1444,11 +1476,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00653">653</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00746">746</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00030">NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00035">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -2885,7 +2917,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Adds the relay functions of the <a class="el" href="classhal_1_1_netlist_relay.html" title="Connects the hal-core events to the gui.">NetlistRelay</a> as callbacks for hal-core events. Must be called after netlist is loaded </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00053">53</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00058">58</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00137">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="classhal_1_1_event_handler.html#aab69a24745b3c0df656cbe4955b08466">hal::EventHandler::register_callback()</a>.</p>
 
@@ -2909,7 +2941,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>The <a class="el" href="classhal_1_1_file_status_manager.html" title="Holds information about the state (e.g. saved/unsaved) of all laded files (i.e. .hal/....">FileStatusManager</a> is only notified once. Afterwards this function has to be called to enable the notification again. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00214">214</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00307">307</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 </div>
 </div>
@@ -2959,7 +2991,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00030">NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00035">NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -2979,11 +3011,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Unregister callback entries in hal-core. Must be called when netlist gets closed </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00042">42</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__relay_8cpp_source.html#l00047">47</a> of file <a class="el" href="netlist__relay_8cpp_source.html">netlist_relay.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00137">hal::Netlist::get_event_handler()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="event__handler_8cpp_source.html#l00152">hal::EventHandler::unregister_callback()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00668">hal::FileManager::closeFile()</a>, and <a class="el" href="netlist__relay_8cpp_source.html#l00037">~NetlistRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00668">hal::FileManager::closeFile()</a>, and <a class="el" href="netlist__relay_8cpp_source.html#l00042">~NetlistRelay()</a>.</p>
 
 </div>
 </div>
@@ -2997,7 +3029,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_relay.html">NetlistRelay</a></li>
-    <li class="footer">Generated on Tue Oct 15 2024 03:14:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Oct 16 2024 00:32:09 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

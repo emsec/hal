@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9":[7,0,0,0,4,8,4],
 "include_2hal__core_2utilities_2result_8h_source.html":[7,0,0,0,4,8],
 "index.html":[],
 "index.html":[0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "namespacehal.html#a03ceb066126cbb00eb42bbfc12c0d503":[5,0,2,532],
 "namespacehal.html#a0cd05eb343d9af79934226e60f1ee55e":[5,0,2,492],
 "namespacehal.html#a0e50ae83293af552d8b06e2de9881b59":[5,0,2,597],
-"namespacehal.html#a0e63eee41c47a088e0e466b421430a43":[5,0,2,549],
-"namespacehal.html#a106dc68fe74b941953c5801c2e3e4fa8":[5,0,2,550]
+"namespacehal.html#a0e63eee41c47a088e0e466b421430a43":[5,0,2,549]
 };

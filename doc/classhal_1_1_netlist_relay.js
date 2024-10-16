@@ -3,6 +3,7 @@ var classhal_1_1_netlist_relay =
     [ "NetlistRelay", "classhal_1_1_netlist_relay.html#a8cf02b82f480840075036cccecf46ef0", null ],
     [ "~NetlistRelay", "classhal_1_1_netlist_relay.html#adb040e4ac46be469f7d04f3a61836e23", null ],
     [ "addChildModuleDialog", "classhal_1_1_netlist_relay.html#a31b104d19049d0e85c3bf8004f35ef57", null ],
+    [ "addToModuleDialog", "classhal_1_1_netlist_relay.html#a079040f92859a52a5fabba755ae8f8a2", null ],
     [ "changeElementNameDialog", "classhal_1_1_netlist_relay.html#a602b76c6622410cc630f047f54d8e63d", null ],
     [ "changeModuleColorDialog", "classhal_1_1_netlist_relay.html#a4d906709e393ed89cf9159c596147325", null ],
     [ "changeModuleTypeDialog", "classhal_1_1_netlist_relay.html#ac3d055a6da1f9a39d8e0dfc7daf6f2eb", null ],
