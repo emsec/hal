@@ -4,6 +4,7 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 
 namespace hal
@@ -94,6 +95,54 @@ namespace hal
                 }
             }
         }
+        return OK(tmp_bf);
+    }
+
+    Result<BooleanFunction> BooleanFunctionDecorator::substitute_module_pins(const std::vector<Module*>& modules) const
+    {
+        if (modules.empty())
+        {
+            return OK(m_bf);
+        }
+
+        const auto& netlist = modules.front()->get_netlist();
+        auto tmp_bf         = m_bf.clone();
+
+        for (const auto& var : m_bf.get_variable_names())
+        {
+            const auto var_net_res = BooleanFunctionNetDecorator::get_net_from(netlist, var);
+            if (var_net_res.is_error())
+            {
+                continue;
+            }
+            const auto var_net = var_net_res.get();
+
+            for (const auto& m : modules)
+            {
+                const auto& pin = m->get_pin_by_net(var_net);
+                if (pin == nullptr)
+                {
+                    continue;
+                }
+
+                const auto& [pg, index] = pin->get_group();
+
+                if (index > pg->size())
+                {
+                    return ERR("cannot substitute variables with module pins: pin " + pin->get_name() + " has index " + std::to_string(index) + " with is larger than the size of its pin group "
+                               + pg->get_name());
+                }
+
+                const auto var_name = m->get_name() + "_" + pg->get_name();
+                const auto index_bf = BooleanFunction::Index(index, pg->size());
+                const auto sub_bf   = BooleanFunction::Slice(BooleanFunction::Var(var_name, pg->size()), index_bf.clone(), index_bf.clone(), 1).get();
+                tmp_bf              = tmp_bf.substitute(var, sub_bf).get();
+
+                // only consider first found module pin
+                break;
+            }
+        }
+
         return OK(tmp_bf);
     }
 

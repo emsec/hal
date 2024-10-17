@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -63,6 +64,15 @@ namespace hal
          * @return The resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute_power_ground_pins(const Gate* g) const;
+
+        /**
+         * Substitute all Boolean function variables that are either 1) output or 2) input nets to one of the passed module with a BooleanFunction of the form Extract(Var(<module_name>_<pin_group_name>), index, index).
+         * This allows a simplification in case multiple pins of the same pin group are concatenated.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @return The resulting Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> substitute_module_pins(const std::vector<Module*>& modules) const;
 
         /**
          * Get the Boolean function that is the concatenation of Boolean functions.
