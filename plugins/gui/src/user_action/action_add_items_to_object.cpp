@@ -5,6 +5,8 @@
 #include "gui/gui_globals.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_move_node.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
 
@@ -125,7 +127,11 @@ namespace hal
                             return retval;
                         }
                     };
+                    // hash parent module id and collect moved items to generate UNDO action
                     QHash<u32, ChildSet> parentHash;
+                    GridPlacement* plc = nullptr;
+                    const GraphContext* ctx = gContentManager->getContextManagerWidget()->getCurrentContext();
+                    if (ctx) plc = ctx->getLayouter()->gridPlacementFactory();
 
                     std::vector<Gate*> gates;
                     for (u32 id : mGates)
@@ -145,17 +151,17 @@ namespace hal
                         sm->set_parent_module(m);
                     }
 
-                    if (parentHash.size() > 1)
+                    if (!parentHash.isEmpty())
                     {
                         UserActionCompound* compound = new UserActionCompound;
                         for (auto it = parentHash.begin(); it != parentHash.end(); ++it)
                             compound->addAction(it.value().actionFactory(it.key()));
+                        if (ctx && plc)
+                        {
+                            compound->addAction(new ActionMoveNode(ctx->id(),plc));
+                            delete plc;
+                        }
                         mUndoAction = compound;
-                    }
-                    else if (!parentHash.isEmpty())
-                    {
-                        u32 id      = parentHash.keys().at(0);
-                        mUndoAction = parentHash.value(id).actionFactory(id);
                     }
                 }
                 else

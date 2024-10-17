@@ -166,70 +166,6 @@ namespace hal
         context->setDirty(false);
     }
 
-    void GraphGraphicsView::handleMoveAction(u32 moduleId)
-    {
-        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                                 gSelectionRelay->selectedGates());
-        act->setObject(UserActionObject(moduleId,UserActionObjectType::Module));
-        act->exec();
-        gSelectionRelay->clear();
-        gSelectionRelay->addModule(moduleId);
-        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,moduleId);
-        gSelectionRelay->relaySelectionChanged(this);
-        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
-    }
-
-    void GraphGraphicsView::handleMoveNewAction()
-    {
-        std::unordered_set<Gate*> gate_objs;
-        std::unordered_set<Module*> module_objs;
-        for (const auto& id : gSelectionRelay->selectedGatesList())
-        {
-            gate_objs.insert(gNetlist->get_gate_by_id(id));
-        }
-        for (const auto& id : gSelectionRelay->selectedModulesList())
-        {
-            module_objs.insert(gNetlist->get_module_by_id(id));
-        }
-        Module* parent      = gui_utility::firstCommonAncestor(module_objs, gate_objs);
-        QString parent_name = QString::fromStdString(parent->get_name());
-        bool ok;
-        QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parent_name + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
-        if (!ok || name.isEmpty())
-            return;
-
-        ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
-        actNewModule->setParentId(parent->get_id());
-
-        UserActionCompound* compound = new UserActionCompound;
-        compound->setUseCreatedObject();
-        compound->addAction(actNewModule);
-        compound->addAction(new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                  gSelectionRelay->selectedGates()));
-        if (mItem && (mItem->itemType()==ItemType::Gate || mItem->itemType()==ItemType::Module))
-        {
-            Node nd(mItem->id(),mItem->itemType()==ItemType::Gate ? Node::Gate : Node::Module);
-            const NodeBox* box = mGraphWidget->getContext()->getLayouter()->boxes().boxForNode(nd);
-            if (box)
-            {
-                ActionMoveNode* actMoveNode = new ActionMoveNode(mGraphWidget->getContext()->id(),
-                                                                 QPoint(box->x(),box->y()));
-                compound->addAction(actMoveNode);
-            }
-        }
-
-        GraphContext* context = mGraphWidget->getContext();
-        context->setSpecialUpdate(true);
-        context->setScheduleRemove(gSelectionRelay->selectedModules(),gSelectionRelay->selectedGates());
-
-        compound->exec();
-        gSelectionRelay->clear();
-        gSelectionRelay->addModule(compound->object().id());
-        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
-        gSelectionRelay->relaySelectionChanged(this);
-        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
-    }
-
     void GraphGraphicsView::adjustMinScale()
     {
         if (!scene())
@@ -689,14 +625,6 @@ namespace hal
                 data.setValue(Node(mItem->id(), isGate ? Node::NodeType::Gate : Node::NodeType::Module));
                 action->setData(data);
                 connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddCommentAction);
-
-                // only allow move actions on anything that is not the top module
-                Module* m = isModule ? gNetlist->get_module_by_id(mItem->id()) : nullptr;
-                if (!(isModule && m == gNetlist->get_top_module()))
-                {
-                    action = context_menu.addAction("  Move to module …");
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleModuleDialog);
-                }
             }
         }
         else
@@ -1308,44 +1236,6 @@ namespace hal
         act->addAction(new ActionAddItemsToObject(mods,gats,nets));
         act->addAction(new ActionSetSelectionFocus());
         act->exec();
-    }
-
-    void GraphGraphicsView::handleModuleDialog()
-    {
-        QSet<u32> exclude_ids;
-        QList<u32> modules = gSelectionRelay->selectedModulesList();
-        QList<u32> gates   = gSelectionRelay->selectedGatesList();
-
-        for (u32 gid : gates)
-        {
-            Gate* g = gNetlist->get_gate_by_id(gid);
-            if (!g)
-                continue;
-            exclude_ids.insert(g->get_module()->get_id());
-        }
-
-        for (u32 mid : modules)
-        {
-            exclude_ids.insert(mid);
-            Module* m = gNetlist->get_module_by_id(mid);
-            if (!m)
-                continue;
-            Module* pm = m->get_parent_module();
-            if (pm)
-                exclude_ids.insert(pm->get_id());
-            for (Module* sm : m->get_submodules(nullptr, true))
-                exclude_ids.insert(sm->get_id());
-        }
-
-        AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
-        ModuleDialog md(exclude_ids, "Move to module", false, receiver, this);
-        if (md.exec() != QDialog::Accepted) return;
-        if (md.isNewModule())
-        {
-            handleMoveNewAction();
-            return;
-        }
-        handleMoveAction(md.selectedId());
     }
 
     void GraphGraphicsView::handleSelectOutputs()

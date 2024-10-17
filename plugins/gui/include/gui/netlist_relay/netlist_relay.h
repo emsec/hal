@@ -30,6 +30,7 @@
 #include "gui/grouping/grouping_color_serializer.h"
 #include "gui/module_model/module_color_manager.h"
 #include "gui/module_model/module_item.h"
+#include "gui/gui_def.h"
 #include <QMap>
 #include <QObject>
 
@@ -122,6 +123,12 @@ namespace hal
          * @param id - The id of the module that becomes the parent of the empty child module
          */
         void addChildModuleDialog(const u32 id);
+
+        /**
+         * Opens 'add to module' Dialog. Node gets added to selected module or new module.
+         * @param node - The node to be added. If node is empty the current selection will be added.
+         */
+        void addToModuleDialog(const Node& node = Node());
 
         /**
          * Deletes the specified module from the netlist.

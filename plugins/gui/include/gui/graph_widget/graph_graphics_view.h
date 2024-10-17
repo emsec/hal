@@ -137,8 +137,6 @@ namespace hal
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
-        void handleMoveAction(u32 moduleId);
-        void handleMoveNewAction();
         void adjustMinScale();
         void handleAddCommentAction();
 
@@ -163,7 +161,6 @@ namespace hal
         void handleHighlightPredecessor();
         void handleSuccessorDistance();
         void handlePredecessorDistance();
-        void handleModuleDialog();
         void handleCancelPickMode();
         void handlePluginContextContributionTriggered();
         void selectedNodeToItem();

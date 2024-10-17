@@ -73,6 +73,12 @@ namespace hal {
         if(gSelectionRelay->selectedModules().contains(id))
             act->setEnabled(false);
 
+        if (gSelectionRelay->numberSelectedNodes() == 1)
+            contextMenu->addAction("  Move to module …",
+                [id](){
+                    gNetlistRelay->addToModuleDialog(Node(id,Node::Module));
+                }
+            );
         sm = contextMenu->addMenu("  To grouping …");
         QString actionText = "  Assign module to grouping";
         if(module->get_grouping() != nullptr)
@@ -151,6 +157,12 @@ namespace hal {
         if(gSelectionRelay->selectedGates().contains(id))
             act->setEnabled(false);
 
+        if (gSelectionRelay->numberSelectedNodes() == 1)
+            contextMenu->addAction("  Move to module …",
+                [id](){
+                    gNetlistRelay->addToModuleDialog(Node(id,Node::Gate));
+                }
+            );
         sm = contextMenu->addMenu("  To grouping …");
         QString actionText = "  Assign gate to grouping";
         if(gate->get_grouping() != nullptr)
@@ -251,6 +263,13 @@ namespace hal {
     {
         contextMenu->addSeparator();
         contextMenu->addAction("Entire selection:")->setDisabled(true);
+        if (gSelectionRelay->numberSelectedNodes() > 1)
+            contextMenu->addAction("  Move to module …",
+                [](){
+                    gNetlistRelay->addToModuleDialog();
+                }
+            );
+
         contextMenu->addAction("  Assign all to grouping",
            [modules, gates, nets]()
            {gContentManager->getGroupingManagerWidget()->assignElementsToGroupingDialog(modules, gates, nets);}

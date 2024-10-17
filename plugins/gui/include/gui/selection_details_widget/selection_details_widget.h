@@ -279,12 +279,6 @@ namespace hal
         void selectionToGrouping();
 
         /**
-         * Checks all modules if the current selection can be added to that specific module. Thereafter it
-         * creates a context menu with all valid modules as options as well as a "New module..." option.
-         */
-        void selectionToModuleMenu();
-
-        /**
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
@@ -298,12 +292,6 @@ namespace hal
          * @param sti - The item that is to be displayed.
          */
         void singleSelectionInternal(const ModuleItem* sti);
-
-        /**
-         * Adds the current selection to a module selected by id (=actionCode if positive).
-         * Create new module an pops up new module dialog if actionCode is negative.
-         */
-        void selectionToModuleAction(int actionCode);
 
         void showNoSelection();
 
