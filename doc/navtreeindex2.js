@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classhal_1_1_boolean_function.html#a4e4fcd20a4cf6c5bf096d8eb26bc6e22":[4,1,0,10,15],
 "classhal_1_1_boolean_function.html#a4ee676327286829f09fe28b80d4fcf53":[4,1,0,10,6],
 "classhal_1_1_boolean_function.html#a535e68b32ac7bfd72cd9c166699e5138":[4,1,0,10,47],
 "classhal_1_1_boolean_function.html#a5602e429bdcfaf2e1edd906c905b9491":[4,1,0,10,18],
@@ -43,9 +44,10 @@ var NAVTREEINDEX2 =
 "classhal_1_1_boolean_function.html#aedca6490a5318ecc24b64e9d0753568d":[4,1,0,10,7],
 "classhal_1_1_boolean_function.html#af98903ba34ce51e73df303318996d4ea":[4,1,0,10,43],
 "classhal_1_1_boolean_function_decorator.html":[4,1,0,0,0],
-"classhal_1_1_boolean_function_decorator.html#a033064c8f8a022e02b093366f3997e6d":[4,1,0,0,0,1],
+"classhal_1_1_boolean_function_decorator.html#a033064c8f8a022e02b093366f3997e6d":[4,1,0,0,0,2],
+"classhal_1_1_boolean_function_decorator.html#ab07b0010c5de25108e9a378e7a56a1c1":[4,1,0,0,0,1],
 "classhal_1_1_boolean_function_decorator.html#ad2fa1dcb5d71de4bc95766630dc30a57":[4,1,0,0,0,0],
-"classhal_1_1_boolean_function_decorator.html#afb16861fbaa063a412a9ffd43d66fff3":[4,1,0,0,0,2],
+"classhal_1_1_boolean_function_decorator.html#afb16861fbaa063a412a9ffd43d66fff3":[4,1,0,0,0,3],
 "classhal_1_1_boolean_function_entry.html":[4,0,7,3,6],
 "classhal_1_1_boolean_function_entry.html#a1f13532a558932726ffb3fc36276662c":[4,0,7,3,6,1],
 "classhal_1_1_boolean_function_entry.html#a2c860557931d5a17fbb00a4ac5318b85":[4,0,7,3,6,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classhal_1_1_comment_dialog.html#a1070c10067626f942ae4ce7dbb99c578":[6,0,0,30,13],
 "classhal_1_1_comment_dialog.html#a152343abdfe085a3f07d357087b12525":[6,0,0,30,3],
 "classhal_1_1_comment_dialog.html#a1612aa369de6bce9e49861563179bfcd":[6,0,0,30,14],
-"classhal_1_1_comment_dialog.html#a1707766aab8cdc1b481b7423ac9ebd94":[6,0,0,30,5],
-"classhal_1_1_comment_dialog.html#a2ca93f06c1dcd5292e1576bf9e5a1b2f":[6,0,0,30,10],
-"classhal_1_1_comment_dialog.html#a442ee0c3cedea9fd30640af7f7500b84":[6,0,0,30,8]
+"classhal_1_1_comment_dialog.html#a1707766aab8cdc1b481b7423ac9ebd94":[6,0,0,30,5]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX30 =
 {
+"netlist__abstraction_8cpp_source.html":[7,0,1,1,3,1,1],
+"netlist__abstraction_8h.html":[7,0,1,1,0,0,1,1],
 "netlist__abstraction_8h_source.html":[7,0,1,1,0,0,1,1],
 "netlist__factory_8h.html":[7,0,0,0,1,16],
 "netlist__factory_8h.html#a02885346f0ee983f70af158fdb0f3968":[7,0,0,0,1,16,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX30 =
 "plugin__graph__algorithm_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,2,2,2,0],
 "plugin__graph__algorithm_8cpp_source.html":[7,0,1,2,2,2],
 "plugin__graph__algorithm_8h.html":[7,0,1,2,0,0,2],
-"plugin__graph__algorithm_8h_source.html":[7,0,1,2,0,0,2],
-"plugin__gui_8cpp.html":[7,0,1,3,2,52],
-"plugin__gui_8cpp.html#a38887b161c4caa1ab4c0f1ff1d1bb873":[7,0,1,3,2,52,1]
+"plugin__graph__algorithm_8h_source.html":[7,0,1,2,0,0,2]
 };
