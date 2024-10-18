@@ -155,7 +155,7 @@ namespace hal
     void GuiExtensionModuleIdentification::execute_function(std::string tag, Netlist* nl, const std::vector<u32>& module_ids, const std::vector<u32>& gate_ids, const std::vector<u32>&)
     {
         std::vector<module_identification::CandidateType> types_to_check = module_identification::all_checkable_candidate_types;
-        if (tag == "exec_gates")
+        if (tag == "Module Identification")
         {
             m_max_thread_count    = 1;
             m_max_control_signals = 4;
@@ -280,18 +280,18 @@ namespace hal
         std::vector<ContextMenuContribution> retval;
         auto context         = ContextMenuContribution();
         context.mContributer = this;
-        context.mTagname     = "exec_gates";
-        context.mEntry       = "run module identification on selected gates";
+        context.mTagname     = "Module Identification";
+        context.mEntry       = "Run module identification on selected gates";
         retval.push_back(context);
         auto context2         = ContextMenuContribution();
         context2.mContributer = this;
         context2.mTagname     = "exec_module";
-        context2.mEntry       = "run module identification on selected modules";
+        context2.mEntry       = "Run module identification on selected modules";
         retval.push_back(context2);
         auto context3         = ContextMenuContribution();
         context3.mContributer = this;
         context3.mTagname     = "exec_nl";
-        context3.mEntry       = "run module identification on netlist";
+        context3.mEntry       = "Run module identification on netlist";
         retval.push_back(context3);
         return retval;
     }

@@ -3,9 +3,11 @@
 #include "gui/gui_globals.h"
 
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
+#include "gui/python/py_code_provider.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
+#include <QMimeData>
 
 namespace hal
 {
@@ -81,12 +83,62 @@ namespace hal
         return QVariant();
     }
 
+    QMimeData* ModuleModel::mimeData(const QModelIndexList &indexes) const
+    {
+        QMimeData* retval = new QMimeData;
+        // only single row allowed
+        int row = -1;
+        for (const QModelIndex& inx : indexes)
+        {
+            if (row < 0)
+                row = inx.row();
+            else if (row != inx.row())
+                return retval;
+        }
+        if (row < 0)
+            return retval;
+
+        QModelIndex firstIndex = indexes.at(0);
+        BaseTreeItem* bti = getItemFromIndex(firstIndex);
+        row = firstIndex.row();
+        BaseTreeItem* parentItem = bti->getParent();
+        ModuleItem* item = dynamic_cast<ModuleItem*>(bti);
+        if (!item)
+        {
+            qDebug() << "cannot cast" << indexes.at(0);
+            return retval;
+        }
+        QByteArray encodedData;
+        QDataStream stream(&encodedData, QIODevice::WriteOnly);
+        QString moveText;
+        int id = item->id();
+
+        switch (item->getType())
+        {
+        case ModuleItem::TreeItemType::Module:
+            moveText = PyCodeProvider::pyCodeModule(id);
+            break;
+        case ModuleItem::TreeItemType::Gate:
+            moveText = PyCodeProvider::pyCodeGate(id);
+            break;
+        case ModuleItem::TreeItemType::Net:
+            moveText = PyCodeProvider::pyCodeNet(id);
+            break;
+        }
+
+        stream << item->getType() << id << row << (quintptr) parentItem;
+        retval->setText(moveText);
+        retval->setData("modulemodel/item", encodedData);
+        return retval;
+
+    }
+
     Qt::ItemFlags ModuleModel::flags(const QModelIndex& index) const
     {
         if (!index.isValid())
             return 0;
 
-        return QAbstractItemModel::flags(index);
+        return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
     }
 
     ModuleItem* ModuleModel::getItem(const QModelIndex& index) const

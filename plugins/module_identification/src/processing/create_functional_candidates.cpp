@@ -485,6 +485,16 @@ namespace hal
                     size_to_occurence[vars.size()] += 1;
                 }
 
+                // TODO remove debug printing
+                // for (const auto& [c, nets] : candidate.m_influence_count_to_input_nets)
+                // {
+                //     std::cout << c << ": " << std::endl;
+                //     for (const auto& n : nets)
+                //     {
+                //         std::cout << "\t" << n->get_id() << " / " << n->get_name() << std::endl;
+                //     }
+                // }
+
                 std::sort(size_list.begin(), size_list.end());
 
                 // TODO this happens for the lattice canny edge detector benchmark, need to investigate
@@ -518,7 +528,7 @@ namespace hal
                     control_input_splits.clear();
                 }
 
-                // TODO remove debug pru32ing
+                // TODO remove debug printing
                 // std::cout << "Found " << control_input_splits.size() << " control splits for " << threshold << " max operands and " << candidate.m_max_control_signals << " max control signals ." << std::endl;
 
                 if (threshold_alt != threshold)
@@ -547,10 +557,36 @@ namespace hal
                     }
                 }
 
+                // add input splits that take the top n bins of nets as control nets until the max control nets are reached
+                // std::vector<Net*> ctrl_vars;
+                // for (auto it = candidate.m_influence_count_to_input_nets.rbegin(); it != candidate.m_influence_count_to_input_nets.rend(); it++)
+                // {
+                //     ctrl_vars.insert(ctrl_vars.end(), it->second.begin(), it->second.end());
+                //     if (ctrl_vars.size() <= candidate.m_max_control_signals)
+                //     {
+                //         control_input_splits.push_back({{}, ctrl_vars});
+                //     }
+                //     else
+                //     {
+                //         break;
+                //     }
+                // }
+
+                if (candidate.m_influence_count_to_input_nets.rbegin()->second.size() < candidate.m_max_control_signals)
+                {
+                    control_input_splits.push_back({{}, candidate.m_influence_count_to_input_nets.rbegin()->second});
+                }
+
                 // for each split generate a new candidate
                 bool added_vanilla_candidate = false;
                 for (const auto& [_variable_count, ctrl_vars] : control_input_splits)
                 {
+                    // std::cout << "Ctrl vars: " << std::endl;
+                    // for (const auto& c : ctrl_vars)
+                    // {
+                    //     std::cout << "\t" << c->get_id() << " / " << c->get_name() << std::endl;
+                    // }
+
                     auto new_candidate = FunctionalCandidate(candidate);
 
                     // new_candidate.m_variable_count = variable_count;
@@ -685,19 +721,19 @@ namespace hal
             std::vector<std::vector<Net*>> reorder_overfull_input_bins(const std::map<u32, std::vector<Net*>>& initial, const u32 max_overfull_bins)
             {
                 std::vector<std::vector<Net*>> results;
-                std::vector<Net*> singleton_bins;
+                std::vector<Net*> singleton_bins_before;
+                std::vector<Net*> singleton_bins_after;
                 std::vector<Net*> to_permute;
                 std::vector<std::vector<Net*>> overfull_bins;
 
-                bool found_singleton_bin = false;
                 for (auto it = initial.rbegin(); it != initial.rend(); it++)
                 {
                     const auto nets = it->second;
                     if (nets.size() != 1)
                     {
-                        // we only reorder overfull bins that starting from the start.
-                        // after encountering the first bin with only one element we abort when we find another overfull bin further down.
-                        if (found_singleton_bin)
+                        // we allow input counts with the following pattern single* | overfull* | single*
+
+                        if (!singleton_bins_after.empty())
                         {
                             return {};
                         }
@@ -707,15 +743,22 @@ namespace hal
                     }
                     else
                     {
-                        found_singleton_bin = true;
-
-                        singleton_bins.push_back(nets.front());
+                        if (to_permute.empty())
+                        {
+                            singleton_bins_before.push_back(nets.front());
+                        }
+                        else
+                        {
+                            singleton_bins_after.push_back(nets.front());
+                        }
                     }
                 }
 
                 // Due to computational complexity we limit the number of overfull bins to permute to 5
                 if (overfull_bins.size() > max_overfull_bins)
                 {
+                    // TODO remove debug printing
+                    // std::cout << "Abort, found " << overfull_bins.size() << " overfull bins." << std::endl;
                     return {};
                 }
 
@@ -726,8 +769,10 @@ namespace hal
 
                     do
                     {
-                        std::vector<Net*> tmp = {to_permute.begin(), to_permute.end()};
-                        tmp.insert(tmp.end(), singleton_bins.begin(), singleton_bins.end());
+                        std::vector<Net*> tmp;
+                        tmp.insert(tmp.end(), singleton_bins_before.begin(), singleton_bins_before.end());
+                        tmp.insert(tmp.end(), to_permute.begin(), to_permute.end());
+                        tmp.insert(tmp.end(), singleton_bins_after.begin(), singleton_bins_after.end());
 
                         results.push_back(tmp);
                     } while (std::next_permutation(to_permute.begin(), to_permute.end()));
@@ -743,6 +788,16 @@ namespace hal
 
                     if (overfull_sizes.size() != 1)
                     {
+                        // TODO remove debug printing
+                        // std::cout << "Abort, found " << overfull_sizes.size() << " overfull bin sizes." << std::endl;
+                        return {};
+                    }
+
+                    const u32 bin_size = *overfull_sizes.begin();
+                    if (bin_size > 5)
+                    {
+                        // TODO remove debug printing
+                        // std::cout << "Abort, found overfull bins of size " << bin_size << "." << std::endl;
                         return {};
                     }
 
@@ -751,11 +806,6 @@ namespace hal
                     std::vector<std::vector<std::vector<Net*>>> new_isolated_permuted_bins;
                     for (auto bin : overfull_bins)
                     {
-                        if (bin.size() > 5)
-                        {
-                            return {};
-                        }
-
                         std::sort(bin.begin(), bin.end());
                         do
                         {
@@ -764,6 +814,13 @@ namespace hal
                                 auto new_bin_set = bin_set;
                                 new_bin_set.push_back(bin);
                                 new_isolated_permuted_bins.push_back(new_bin_set);
+
+                                if (new_isolated_permuted_bins.size() > 1000)
+                                {
+                                    // TODO remove debug printing
+                                    // std::cout << "Abort, found too many overfull bin permutations." << std::endl;
+                                    return {};
+                                }
                             }
                         } while (std::next_permutation(bin.begin(), bin.end()));
 
@@ -774,6 +831,7 @@ namespace hal
                     for (const auto& bin_set : isolated_permuted_bins)
                     {
                         std::vector<Net*> input_operand;
+                        input_operand.insert(input_operand.end(), singleton_bins_before.begin(), singleton_bins_before.end());
                         for (u32 idx = 0; idx < bin_set.front().size(); idx++)
                         {
                             for (const auto& bin : bin_set)
@@ -781,7 +839,7 @@ namespace hal
                                 input_operand.push_back(bin.at(idx));
                             }
                         }
-                        input_operand.insert(input_operand.end(), singleton_bins.begin(), singleton_bins.end());
+                        input_operand.insert(input_operand.end(), singleton_bins_after.begin(), singleton_bins_after.end());
                         results.push_back(input_operand);
                     }
                 }
@@ -893,8 +951,8 @@ namespace hal
                 {
                     // TODO check why we dont do this for constant multiplications
                     // ignore single inputs from the input operand count for adders and counters
-                    if (candidate.m_candidate_type == module_identification::CandidateType::adder || candidate.m_candidate_type == module_identification::CandidateType::counter
-                        || candidate.m_candidate_type == module_identification::CandidateType::absolute)
+                    if (candidate.m_candidate_type == module_identification::CandidateType::addition || candidate.m_candidate_type == module_identification::CandidateType::addition_offset
+                        || candidate.m_candidate_type == module_identification::CandidateType::counter || candidate.m_candidate_type == module_identification::CandidateType::absolute)
                     {
                         if (single_input_to_output.find(input_net) != single_input_to_output.end())
                         {
@@ -951,8 +1009,10 @@ namespace hal
             std::map<u32, std::vector<Net*>> input_count_to_output_nets;
             for (const auto& [n, c] : output_net_to_input_count)
             {
-                if ((candidate.m_candidate_type == module_identification::CandidateType::adder || candidate.m_candidate_type == module_identification::CandidateType::counter
-                     || candidate.m_candidate_type == module_identification::CandidateType::absolute || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication)
+                if ((candidate.m_candidate_type == module_identification::CandidateType::addition || candidate.m_candidate_type == module_identification::CandidateType::addition_offset
+                     || candidate.m_candidate_type == module_identification::CandidateType::counter || candidate.m_candidate_type == module_identification::CandidateType::absolute
+                     || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication
+                     || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication_offset)
                     && c == 1)
                 {
                     continue;
@@ -1014,7 +1074,7 @@ namespace hal
                 return OK({});
             }
 
-            if (candidate.m_candidate_type == module_identification::CandidateType::adder)
+            if (candidate.m_candidate_type == module_identification::CandidateType::addition || candidate.m_candidate_type == module_identification::CandidateType::addition_offset)
             {
                 // 1) Edge Case - Shifted Operand
                 // Check whether there is a "hump" in the distribution of var count to input signals and pad the higher var counts with logical zeros to get a continously decreasing amount of variables
@@ -1198,14 +1258,43 @@ namespace hal
                     new_candidates.push_back(new_candidate);
                 }
             }
-            else if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication)
+            else if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication
+                     || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication_offset)
             {
+                // TODO remove debug printing
+                // std::cout << "New Candidate: " << std::endl;
+                // std::cout << candidate.get_candidate_info() << std::endl;
+                // for (const auto& [c, nets] : candidate.m_influence_count_to_input_nets)
+                // {
+                //     std::cout << c << ": " << std::endl;
+                //     for (const auto& n : nets)
+                //     {
+                //         std::cout << "\t" << n->get_id() << " / " << n->get_name() << std::endl;
+                //     }
+                // }
+
                 // generate all possible combinations of nets such that in any bin are only two input vars left at max while the rest of the vars is considered control variables
                 const auto reorderings = reorder_overfull_input_bins(candidate.m_influence_count_to_input_nets, 5);
                 // for each split generate a new candidate
                 for (const auto& nets : reorderings)
                 {
                     if (nets.empty())
+                    {
+                        continue;
+                    }
+
+                    // check whether the permutation matches the already permuted single inputs
+                    bool found_missmatch = false;
+                    for (u32 i = 0; i < candidate.m_permuted_single_pairs.size(); i++)
+                    {
+                        if (nets.at(i) != candidate.m_permuted_single_pairs.at(i).first)
+                        {
+                            found_missmatch = true;
+                            break;
+                        }
+                    }
+
+                    if (found_missmatch)
                     {
                         continue;
                     }
@@ -1331,7 +1420,7 @@ namespace hal
 
         Result<std::vector<FunctionalCandidate>> FunctionalCandidate::early_abort(CandidateContext& ctx, const FunctionalCandidate& candidate)
         {
-            if (candidate.m_candidate_type == CandidateType::adder)
+            if (candidate.m_candidate_type == CandidateType::addition)
             {
                 std::map<std::string, BooleanFunction::Value> zero_eval_mapping;
                 for (const auto& n : candidate.m_input_nets)
@@ -1363,7 +1452,7 @@ namespace hal
                         non_zero_count++;
                     }
 
-                    if (non_zero_count > 1)
+                    if (non_zero_count != 0)
                     {
                         // early abort
                         return OK({});
@@ -1611,7 +1700,8 @@ namespace hal
             std::vector<FunctionalCandidate> new_candidates;
 
             std::vector<u32> possible_extensions;
-            if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication)
+            if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication
+                || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication_offset)
             {
                 possible_extensions = {0, 1, 2};
             }
@@ -1637,7 +1727,8 @@ namespace hal
 
             std::vector<std::vector<u32>> extension_sets;
 
-            if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication)
+            if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication
+                || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication_offset)
             {
                 extension_sets = combinations_with_repetittions(possible_extensions, {}, candidate.m_operands.size());
             }
@@ -1676,7 +1767,8 @@ namespace hal
                     auto new_candidate = FunctionalCandidate(candidate);
                     for (u32 op_idx = 0; op_idx < new_candidate.m_operands.size(); op_idx++)
                     {
-                        if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication)
+                        if (candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication
+                            || candidate.m_candidate_type == module_identification::CandidateType::constant_multiplication_offset)
                         {
                             // new_candidate.m_operands.at(op_idx) = apply_extension_const_mul(new_candidate.m_operands.at(op_idx), new_candidate.m_output_nets.size(), ex_s.at(op_idx), msb);
                             auto sign_net                       = candidate.m_operands.front().back();
@@ -1825,28 +1917,49 @@ namespace hal
             return new_candidate;
         }
 
-        Result<std::vector<FunctionalCandidate>> FunctionalCandidate::add_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate)
+        Result<std::vector<FunctionalCandidate>> FunctionalCandidate::add_selected_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate)
         {
             UNUSED(ctx);
 
             std::vector<FunctionalCandidate> new_candidates;
 
-            static const std::map<std::vector<std::vector<u32>>, std::vector<std::vector<i32>>> finger_print_library = {
-                {{{0, 4, 5}, {1, 6}, {2, 7}}, {{-5, -4}}},
-                {{{0, 3, 5}, {1, 4, 6}, {2, 7}}, {{-5, -3}}},
-                {{{0, 2, 5}, {1, 3, 6}, {4, 7}}, {{-5, -2}}},
-                {{{0, 1, 5}, {2, 6}, {3, 7}}, {{-5, -1}}},
-                {{{0, 5}, {1, 6}, {2, 7}}, {{-5}, {-5, 1}, {-5, 2}, {-5, 3}, {-5, 4}, {-5, 5}, {5}}},
-                {{{0, 3, 4}, {1, 5}, {2, 6}}, {{-4, -3}}},
-                {{{0, 2, 4}, {1, 3, 5}, {6}}, {{-4, -2}}},
-                {{{0, 1, 4}, {2, 5}, {3, 6}}, {{-4, -1}}},
-                {{{0, 4}, {1, 5}, {2, 6}}, {{-4}, {-4, 1}, {-4, 2}, {-4, 3}, {-4, 4}, {-4, 5}, {4}, {4, 5}}},
-                {{{0, 2, 3}, {1, 4}, {5}}, {{-3, -2}}},
-                {{{0, 1, 3}, {2, 4}, {5}}, {{-3, -1}}},
-                {{{0, 3}, {1, 4}, {2, 5}}, {{-3}, {-3, 1}, {-3, 2}, {-3, 3}, {-3, 4}, {-3, 5}, {3}, {3, 4}, {3, 5}}},
-                {{{0, 1, 2}, {3}, {4}}, {{-2, -1}}},
-                {{{0, 2}, {1, 3}, {4}}, {{-2}, {-2, 1}, {-2, 2}, {-2, 3}, {-2, 4}, {-2, 5}, {2}, {2, 3}, {2, 4}, {2, 5}}},
-                {{{0, 1}, {2}, {3}}, {{-1}, {-1, 1}, {-1, 2}, {-1, 3}, {-1, 4}, {-1, 5}, {1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}}}};
+            // static const std::map<std::vector<std::vector<u32>>, std::vector<std::vector<i32>>> finger_print_library = {
+            //     {{{0, 4, 5}, {1, 6}, {2, 7}}, {{-5, -4}}},
+            //     {{{0, 3, 5}, {1, 4, 6}, {2, 7}}, {{-5, -3}}},
+            //     {{{0, 2, 5}, {1, 3, 6}, {4, 7}}, {{-5, -2}}},
+            //     {{{0, 1, 5}, {2, 6}, {3, 7}}, {{-5, -1}}},
+            //     {{{0, 5}, {1, 6}, {2, 7}}, {{-5}, {-5, 1}, {-5, 2}, {-5, 3}, {-5, 4}, {-5, 5}, {5}}},
+            //     {{{0, 3, 4}, {1, 5}, {2, 6}}, {{-4, -3}}},
+            //     {{{0, 2, 4}, {1, 3, 5}, {6}}, {{-4, -2}}},
+            //     {{{0, 1, 4}, {2, 5}, {3, 6}}, {{-4, -1}}},
+            //     {{{0, 4}, {1, 5}, {2, 6}}, {{-4}, {-4, 1}, {-4, 2}, {-4, 3}, {-4, 4}, {-4, 5}, {4}, {4, 5}}},
+            //     {{{0, 2, 3}, {1, 4}, {5}}, {{-3, -2}}},
+            //     {{{0, 1, 3}, {2, 4}, {5}}, {{-3, -1}}},
+            //     {{{0, 3}, {1, 4}, {2, 5}}, {{-3}, {-3, 1}, {-3, 2}, {-3, 3}, {-3, 4}, {-3, 5}, {3}, {3, 4}, {3, 5}}},
+            //     {{{0, 1, 2}, {3}, {4}}, {{-2, -1}}},
+            //     {{{0, 2}, {1, 3}, {4}}, {{-2}, {-2, 1}, {-2, 2}, {-2, 3}, {-2, 4}, {-2, 5}, {2}, {2, 3}, {2, 4}, {2, 5}}},
+            //     {{{0, 1}, {2}, {3}}, {{-1}, {-1, 1}, {-1, 2}, {-1, 3}, {-1, 4}, {-1, 5}, {1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}}}};
+
+            static const std::map<std::vector<std::vector<u32>>, std::vector<std::vector<i32>>> finger_print_library = {{{{0, 4, 5}, {1, 6}, {2, 7}}, {{-5, -4}}},
+                                                                                                                        {{{0, 3, 5}, {1, 4, 6}, {2, 7}}, {{-5, -3}}},
+                                                                                                                        {{{0, 2, 5}, {1, 3, 6}, {4, 7}}, {{-5, -2}}},
+                                                                                                                        {{{0, 1, 5}, {2, 6}, {3, 7}}, {{-5, -1}}},
+                                                                                                                        {{{0, 5}, {1, 6}, {2, 7}}, {{-5}, {-5, 1}, {-5, 2}, {-5, 3}, {-5, 4}, {-5, 5}}},
+                                                                                                                        {{{0, 3, 4}, {1, 5}, {2, 6}}, {{-4, -3}}},
+                                                                                                                        {{{0, 2, 4}, {1, 3, 5}, {6}}, {{-4, -2}}},
+                                                                                                                        {{{0, 1, 4}, {2, 5}, {3, 6}}, {{-4, -1}}},
+                                                                                                                        {{{0, 4}, {1, 5}, {2, 6}}, {{-4}, {-4, 1}, {-4, 2}, {-4, 3}, {-4, 4}, {-4, 5}}},
+                                                                                                                        {{{0, 2, 3}, {1, 4}, {5}}, {{-3, -2}}},
+                                                                                                                        {{{0, 1, 3}, {2, 4}, {5}}, {{-3, -1}}},
+                                                                                                                        {{{0, 3}, {1, 4}, {2, 5}}, {{-3}, {-3, 1}, {-3, 2}, {-3, 3}, {-3, 4}, {-3, 5}}},
+                                                                                                                        {{{0, 1, 2}, {3}, {4}}, {{-2, -1}}},
+                                                                                                                        {{{0, 2}, {1, 3}, {4}}, {{-2}, {-2, 1}, {-2, 2}, {-2, 3}, {-2, 4}, {-2, 5}}},
+                                                                                                                        {{{0, 1}, {2}, {3}}, {{-1}, {-1, 1}, {-1, 2}, {-1, 3}, {-1, 4}, {-1, 5}}},
+                                                                                                                        // {{{0}, {1}, {2}}, {{1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}}},
+                                                                                                                        {{{0}, {1, 2}, {3}}, {{2}, {2, 3}, {2, 4}, {2, 5}}},
+                                                                                                                        {{{0}, {1, 3}, {2, 4}}, {{3}, {3, 4}, {3, 5}}},
+                                                                                                                        {{{0}, {1, 4}, {2, 5}}, {{4}, {4, 5}}},
+                                                                                                                        {{{0}, {1, 5}, {2, 6}}, {{5}}}};
 
             // generate new influence_count with single inputs ignored
             std::vector<std::set<hal::Net*>> variable_nets;
@@ -1916,6 +2029,27 @@ namespace hal
                 finger_print.push_back(net_indices);
             }
 
+            // TODO remove debug printing
+            // for (const auto& [c, nets] : candidate.m_influence_count_to_input_nets)
+            // {
+            //     std::cout << c << ": " << std::endl;
+            //     for (const auto& n : nets)
+            //     {
+            //         std::cout << "\t" << n->get_id() << " / " << n->get_name() << std::endl;
+            //     }
+            // }
+
+            // std::cout << "Found Fingerprint: " << std::endl;
+            // for (const auto& v : finger_print)
+            // {
+            //     std::cout << "{" << std::endl;
+            //     for (const auto& n : v)
+            //     {
+            //         std::cout << "\t" << n << " / " << candidate.m_operands.front().at(n)->get_name() << std::endl;
+            //     }
+            //     std::cout << "}" << std::endl;
+            // }
+
             if (const auto fpl_it = finger_print_library.find(finger_print); fpl_it != finger_print_library.end())
             {
                 for (const auto& offsets : fpl_it->second)
@@ -1923,31 +2057,30 @@ namespace hal
                     auto new_candidate_nm = add_n_shifted_operands(candidate, offsets);
                     new_candidate_nm.add_additional_data("OPERAND_SHIFTS", utils::join(", ", offsets));
                     new_candidates.push_back(new_candidate_nm);
-
-                    // add candidate with buffered nets, but this makes only sense if we shifted left
-                    if (!new_candidate_nm.m_single_input_to_output.empty())
-                    {
-                        auto buffered_new_candidate_nm = new_candidate_nm;
-                        buffered_new_candidate_nm.add_additional_data("OPERAND_SHIFTS", utils::join(", ", offsets));
-
-                        // add buffered signals to output
-                        for (i32 i = 0; i < offsets.back(); i++)
-                        {
-                            if (i >= (i32)buffered_new_candidate_nm.m_operands.front().size())
-                            {
-                                continue;
-                            }
-
-                            Net* new_o_net = buffered_new_candidate_nm.m_operands.front().at(i);
-                            if (const auto it = buffered_new_candidate_nm.m_single_input_to_output.find(new_o_net); it != buffered_new_candidate_nm.m_single_input_to_output.end())
-                            {
-                                new_o_net = it->second;
-                            }
-                            buffered_new_candidate_nm.m_output_nets.insert(buffered_new_candidate_nm.m_output_nets.begin() + i, new_o_net);
-                        }
-                        new_candidates.push_back(buffered_new_candidate_nm);
-                    }
                 }
+            }
+
+            return OK(new_candidates);
+        }
+
+        Result<std::vector<FunctionalCandidate>> FunctionalCandidate::add_all_shifted_operand(CandidateContext& ctx, const FunctionalCandidate& candidate)
+        {
+            UNUSED(ctx);
+
+            std::vector<FunctionalCandidate> new_candidates;
+
+            // static const std::vector<std::vector<i32>> all_possible_offsets = {
+            //     {-5, -4}, {-5, -3}, {-5, -2}, {-5, -1}, {-5},    {-5, 1}, {-5, 2}, {-5, 3}, {-5, 4},  {-5, 5}, {-4, -3}, {-4, -2}, {-4, -1}, {-4},    {-4, 1}, {-4, 2}, {-4, 3}, {-4, 4}, {-4, 5},
+            //     {-3, -2}, {-3, -1}, {-3},     {-3, 1},  {-3, 2}, {-3, 3}, {-3, 4}, {-3, 5}, {-2, -1}, {-2},    {-2, 1},  {-2, 2},  {-2, 3},  {-2, 4}, {-2, 5}, {-1},    {-1, 1}, {-1, 2}, {-1, 3},
+            //     {-1, 4},  {-1, 5},  {1},      {1, 2},   {1, 3},  {1, 4},  {1, 5},  {2},     {2, 3},   {2, 4},  {2, 5},   {3},      {3, 4},   {3, 5},  {4},     {4, 5},  {5}};
+
+            static const std::vector<std::vector<i32>> all_possible_offsets = {{1}, {2}, {3}, {-2}, {-3}};
+
+            for (const auto& offsets : all_possible_offsets)
+            {
+                auto new_candidate_nm = add_n_shifted_operands(candidate, offsets);
+                new_candidate_nm.add_additional_data("OPERAND_SHIFTS", utils::join(", ", offsets));
+                new_candidates.push_back(new_candidate_nm);
             }
 
             return OK(new_candidates);
@@ -1983,13 +2116,35 @@ namespace hal
                         create_sign_bit_variants,
                     };
                     break;
-                case module_identification::CandidateType::adder:
+                case module_identification::CandidateType::addition:
                     operations = {
                         create_output_net_variant,
                         update_input_output_stats,
                         identify_control_signals,
                         realize_control_signals,
                         early_abort,
+                        update_input_output_stats,
+                        permute_single_input_signals,
+                        build_input_operands,
+                        order_output_signals,
+                        add_single_input_signals,
+                        create_sign_bit_variants,
+                        create_input_extension_variants,
+                        [registers](CandidateContext& c_ctx, const FunctionalCandidate& fc) -> Result<std::vector<FunctionalCandidate>> {
+                            UNUSED(c_ctx);
+                            const auto reordered_operands = reorder_commutative_operands(fc.m_operands, registers);
+                            auto new_candidate            = FunctionalCandidate(fc);
+                            new_candidate.m_operands      = reordered_operands;
+                            return OK({fc, new_candidate});
+                        },
+                    };
+                    break;
+                case module_identification::CandidateType::addition_offset:
+                    operations = {
+                        create_output_net_variant,
+                        update_input_output_stats,
+                        identify_control_signals,
+                        realize_control_signals,
                         update_input_output_stats,
                         permute_single_input_signals,
                         build_input_operands,
@@ -2015,10 +2170,29 @@ namespace hal
                 case module_identification::CandidateType::constant_multiplication:
                     operations = {
                         update_input_output_stats,
+                        identify_control_signals,
+                        realize_control_signals,
                         early_abort,
-                        build_input_operands,
+                        update_input_output_stats,
+                        permute_single_input_signals,
                         order_output_signals,
-                        add_shifted_operand,
+                        add_single_input_signals,
+                        build_input_operands,
+                        add_selected_shifted_operand,
+                        create_input_extension_variants,
+                    };
+                    break;
+                case module_identification::CandidateType::constant_multiplication_offset:
+                    operations = {
+                        update_input_output_stats,
+                        identify_control_signals,
+                        realize_control_signals,
+                        update_input_output_stats,
+                        permute_single_input_signals,
+                        order_output_signals,
+                        add_single_input_signals,
+                        build_input_operands,
+                        add_all_shifted_operand,
                         create_input_extension_variants,
                     };
                     break;

@@ -149,78 +149,13 @@ namespace hal
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
-        connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
+        connect(mSelectionToModule, &QAction::triggered, gNetlistRelay, &NetlistRelay::addToModuleDialog);
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
 
-        connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-        connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
-    }
-
-    void SelectionDetailsWidget::selectionToModuleMenu()
-    {
-        if (gSelectionRelay->numberSelectedNodes() <= 0) return;
-
-        ModuleDialog md({},"Move to module",false,nullptr,this);
-        if (md.exec() != QDialog::Accepted) return;
-
-        if (md.isNewModule())
-            SelectionDetailsWidget::selectionToModuleAction(-1);
-        else
-            SelectionDetailsWidget::selectionToModuleAction(md.selectedId());
-    }
-
-    void SelectionDetailsWidget::selectionToModuleAction(int actionCode)
-    {
-
-        ActionAddItemsToObject* actAddSelected =
-                new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                           gSelectionRelay->selectedGates());
-        u32 targetModuleId = 0;
-
-        if (actionCode < 0)
-        {
-            // add to new module
-            std::unordered_set<Gate*> gatesSelected;
-            std::unordered_set<Module*> modulesSelected;
-            for (u32 id : gSelectionRelay->selectedGatesList())
-                gatesSelected.insert(gNetlist->get_gate_by_id(id));
-
-            for (u32 id : gSelectionRelay->selectedModulesList())
-                modulesSelected.insert(gNetlist->get_module_by_id(id));
-
-            Module* parentModule = gui_utility::firstCommonAncestor(modulesSelected, gatesSelected);
-            if(!parentModule) return; //hotfix, when the top-level module is in modulesSelected, this will be a nullptr
-            QString parentName            = QString::fromStdString(parentModule->get_name());
-            bool ok;
-            QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
-            if (!ok || name.isEmpty()) return;
-            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
-            actNewModule->setParentId(parentModule->get_id());
-            UserActionCompound* act = new UserActionCompound;
-            act->setUseCreatedObject();
-            act->addAction(actNewModule);
-            act->addAction(actAddSelected);
-            act->exec();
-            targetModuleId = act->object().id();
-        }
-        else
-        {
-            // add to existing module
-            targetModuleId = actionCode;
-            actAddSelected->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
-            actAddSelected->exec();
-        }
-
-        gSelectionRelay->clear();
-        gSelectionRelay->addModule(targetModuleId);
-        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,targetModuleId);
-        gSelectionRelay->relaySelectionChanged(this);
-        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
@@ -519,19 +454,6 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-    }
-
-    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const ModuleItem* sti)
-    {
-        u32 itemId = sti->id();
-
-        switch (sti->getType())
-        {
-            case ModuleItem::TreeItemType::Module:   Q_EMIT focusModuleClicked(itemId);   break;
-            case ModuleItem::TreeItemType::Gate:     Q_EMIT focusGateClicked(itemId);     break;
-            case ModuleItem::TreeItemType::Net:      Q_EMIT focusNetClicked(itemId);      break;
-            default: break;
-        }
     }
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)

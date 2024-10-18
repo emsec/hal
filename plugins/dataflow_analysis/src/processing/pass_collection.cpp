@@ -98,6 +98,8 @@ namespace hal
                 {
                     if (!m_initialized)
                     {
+                        m_all_passes.clear();
+                        m_useless_follow_ups.clear();
                         initialize(config);
                     }
                     std::vector<pass_id> last_pass_ids;

@@ -137,10 +137,6 @@ namespace hal
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
-        void handleMoveAction(u32 moduleId);
-        void handleMoveNewAction();
-        void handleRenameAction();
-        void handleChangeTypeAction();
         void adjustMinScale();
         void handleAddCommentAction();
 
@@ -153,10 +149,6 @@ namespace hal
         void handleQueryShortestPath();
         void handleSelectOutputs();
         void handleSelectInputs();
-        void handleGroupingDialog();
-        void handleGroupingUnassign();
-        void handleGroupingAssignNew();
-        void handleGroupingAssingExisting();
 
         void handleAddModuleToView();
         void handleAddGateToView();
@@ -169,7 +161,6 @@ namespace hal
         void handleHighlightPredecessor();
         void handleSuccessorDistance();
         void handlePredecessorDistance();
-        void handleModuleDialog();
         void handleCancelPickMode();
         void handlePluginContextContributionTriggered();
         void selectedNodeToItem();
@@ -228,7 +219,6 @@ namespace hal
 
 
         GraphicsItem* mItem;
-        QVector<ContextMenuContribution> mPluginContribution;
 
         bool mMinimapEnabled;
 
@@ -270,6 +260,5 @@ namespace hal
         }
 
         static const QString sAssignToGrouping;
-        void contextPluginContribution(QMenu* contextMenu);
     };
 }

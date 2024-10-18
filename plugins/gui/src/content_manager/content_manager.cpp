@@ -232,11 +232,6 @@ namespace hal
         mSpecialLogContentManager = new SpecialLogContentManager(mMainWindow, mPythonWidget);
         mSpecialLogContentManager->startLogging(60000);
 #endif
-
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusGateClicked, mGraphTabWidget, &GraphTabWidget::handleGateFocus);
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusNetClicked, mGraphTabWidget, &GraphTabWidget::handleNetFocus);
-        connect(mSelectionDetailsWidget, &SelectionDetailsWidget::focusModuleClicked, mGraphTabWidget, &GraphTabWidget::handleModuleFocus);
-
         connect(sSettingSortMechanism, &SettingsItemDropdown::intChanged, mSelectionDetailsWidget, [this](int value) {
             mSelectionDetailsWidget->selectionTreeView()->proxyModel()->setSortMechanism(gui_utility::mSortMechanism(value));
         });

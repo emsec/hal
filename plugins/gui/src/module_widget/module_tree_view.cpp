@@ -7,6 +7,8 @@ namespace hal
     ModuleTreeView::ModuleTreeView(QWidget *parent)
         : QTreeView(parent), mToggleStateExpanded(true)
     {
+        setDragEnabled(true);
+        setDragDropMode(QAbstractItemView::DragOnly);
     }
 
     void ModuleTreeView::expandAllModules()

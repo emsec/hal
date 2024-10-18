@@ -3,6 +3,7 @@
 #include "gui/basic_tree_model/base_tree_item.h"
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
+#include "gui/python/py_code_provider.h"
 #include "gui/user_action/action_pingroup.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/user_action_compound.h"
@@ -140,7 +141,9 @@ namespace hal
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
         QString type = item->itemType() == PortTreeItem::Pin ? "pin" : "group";
         stream << type << item->id();
-        data->setText(item->getData(sNameColumn).toString());
+        data->setText(item->itemType() == PortTreeItem::Pin
+                        ? PyCodeProvider::pyCodeModulePinById(mModule->get_id(),item->id())
+                        : PyCodeProvider::pyCodeModulePinGroup(mModule->get_id(),item->id()));
         data->setData("pintreemodel/item", encodedData);
         return data;
     }
@@ -260,7 +263,6 @@ namespace hal
     void ModulePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
-        mModuleId = -1; // perhaps remove?
         mModule = nullptr;
         mNameToTreeItem.clear();
         mIdToGroupItem.clear();
@@ -270,7 +272,6 @@ namespace hal
     void ModulePinsTreeModel::setModule(Module* m)
     {
         clear();
-        mModuleId = m->get_id();
         mModule = m;
         beginResetModel();
 
@@ -354,13 +355,13 @@ namespace hal
 
     Net* ModulePinsTreeModel::getNetFromItem(PortTreeItem* item)
     {
-        if (mModuleId == -1)    //no current module = no represented net
+        if (!mModule)    //no current module = no represented net
             return nullptr;
 
         if (item->itemType() == PortTreeItem::Group && item->getChildCount() > 1)
             return nullptr;
 
-        Module* m = gNetlist->get_module_by_id(mModuleId);
+        Module* m = gNetlist->get_module_by_id(mModule->get_id());
         if (!m)
             return nullptr;
 
@@ -375,7 +376,8 @@ namespace hal
 
     int ModulePinsTreeModel::getRepresentedModuleId()
     {
-        return mModuleId;
+        if (!mModule) return -1;
+        return mModule->get_id();
     }
 
     void ModulePinsTreeModel::handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid)
@@ -388,7 +390,7 @@ namespace hal
                                                       PinEvent::GroupDelete};
         Q_UNUSED(pev);
         Q_UNUSED(pgid);
-        if ((int)m->get_id() != mModuleId) return;
+        if (m != mModule) return;
 
         // debug pingroups  log_info("gui", "Handle pin_changed event {} ID={}", enum_to_string<PinEvent>(pev), pgid);
         PortTreeItem* ptiPin = nullptr;
@@ -565,7 +567,7 @@ namespace hal
         auto tgtgroup = mModule->get_pin_group_by_id(static_cast<PortTreeItem*>(onDroppedGroup)->id());
 
         ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins);
-        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         if (act) act->exec();
 
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
@@ -579,14 +581,14 @@ namespace hal
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
         ActionPingroup* act = new ActionPingroup(PinActionType::GroupMoveToRow,droppedGroup->id(),"",desiredIdx);
-        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         act->exec();
     }
 
     void ModulePinsTreeModel::dndPinOnGroup(PortTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
     {
         ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignToGroup,droppedPin->id(),"",static_cast<PortTreeItem*>(onDroppedGroup)->id());
-        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         act->exec();
     }
 
@@ -607,7 +609,7 @@ namespace hal
             act = ActionPingroup::addPinToExistingGroup(mModule,static_cast<PortTreeItem*>(onDroppedParent)->id(),droppedPin->id(),desiredIdx);
             if (!act) return;
         }
-        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         act->exec();
     }
 

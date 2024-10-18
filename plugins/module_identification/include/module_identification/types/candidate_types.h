@@ -46,7 +46,10 @@ namespace hal
         enum class CandidateType
         {
             /** @brief Addition operation. */
-            adder = 0,
+            addition = 0,
+
+            /** @brief Addition operation with a constant offset. */
+            addition_offset,
 
             /** @brief Subtraction operation. */
             subtraction,
@@ -62,6 +65,9 @@ namespace hal
 
             /** @brief Constant multiplication operation. */
             constant_multiplication,
+
+            /** @brief Constant multiplication operation with a constant offset. */
+            constant_multiplication_offset,
 
             /** @brief Equality comparison. */
             equal,
@@ -96,11 +102,13 @@ namespace hal
          * The purpose of disableing some types for checking is for perfomance reasons.
          */
         const std::vector<CandidateType> all_checkable_candidate_types = {
-            CandidateType::adder,
+            CandidateType::addition,
+            CandidateType::addition_offset,
             CandidateType::counter,
             CandidateType::absolute,
 
             CandidateType::constant_multiplication,
+            CandidateType::constant_multiplication_offset,
 
             CandidateType::equal,
             CandidateType::less_equal,
@@ -117,11 +125,13 @@ namespace hal
             {CandidateType::counter, 1},
             {CandidateType::absolute, 1},
             {CandidateType::constant_multiplication, 1},
+            {CandidateType::constant_multiplication_offset, 1},
 
             {CandidateType::equal, 2},
             {CandidateType::less_equal, 2},
 
-            {CandidateType::adder, 3},
+            {CandidateType::addition, 3},
+            {CandidateType::addition_offset, 3},
         };
     }    // namespace module_identification
 }    // namespace hal

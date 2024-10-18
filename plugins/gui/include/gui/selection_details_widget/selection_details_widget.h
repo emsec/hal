@@ -239,30 +239,6 @@ namespace hal
          */
         void triggerHighlight(QVector<const ModuleItem*> highlight);
 
-        /**
-         * Q_SIGNAL that is emitted when a gate-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param gateId - The id of the clicked gate item.
-         */
-        void focusGateClicked(u32 gateId);
-
-        /**
-         * Q_SIGNAL that is emitted when a net-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param netId - The id of the clicked net item.
-         */
-        void focusNetClicked(u32 netId);
-
-        /**
-         * Q_SIGNAL that is emitted when a module-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param moduleId - The id of the clicked module item.
-         */
-        void focusModuleClicked(u32 moduleId);
-
     public Q_SLOTS:
 
         /**
@@ -303,23 +279,9 @@ namespace hal
         void selectionToGrouping();
 
         /**
-         * Checks all modules if the current selection can be added to that specific module. Thereafter it
-         * creates a context menu with all valid modules as options as well as a "New module..." option.
-         */
-        void selectionToModuleMenu();
-
-        /**
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
-
-        /**
-         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
-         * type of the clicked item.
-         *
-         * @param sti - The clicked item in the selection-treeview.
-         */
-        void handleTreeViewItemFocusClicked(const ModuleItem* sti);
 
     private:
 
@@ -330,12 +292,6 @@ namespace hal
          * @param sti - The item that is to be displayed.
          */
         void singleSelectionInternal(const ModuleItem* sti);
-
-        /**
-         * Adds the current selection to a module selected by id (=actionCode if positive).
-         * Create new module an pops up new module dialog if actionCode is negative.
-         */
-        void selectionToModuleAction(int actionCode);
 
         void showNoSelection();
 

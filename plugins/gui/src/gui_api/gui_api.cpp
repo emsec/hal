@@ -920,13 +920,9 @@ namespace hal
 
     GridPlacement* GuiApiClasses::View::getGridPlacement(int viewId)
     {
-        GraphContext* context = gGraphContextManager->getContextById(viewId);
+        const GraphContext* context = gGraphContextManager->getContextById(viewId);
         if (context == nullptr) return new GridPlacement();
-        GridPlacement* retval = new GridPlacement();
-        QMap<Node, QPoint> contextNodeMap = context->getLayouter()->nodeToPositionMap();
-        for (auto it = contextNodeMap.begin(); it != contextNodeMap.end(); it++)
-            retval->insert(it.key(), it.value());
-        return retval;
+        return context->getLayouter()->gridPlacementFactory();
     }
 
     bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)

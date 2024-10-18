@@ -634,11 +634,8 @@ namespace hal
 
         py_dataflow_result.def(
             "create_modules",
-            [](const dataflow::Result& self,
-               const std::map<const GateType*, std::string>& module_suffixes                   = {},
-               const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes = {},
-               const std::unordered_set<u32>& group_ids                                        = {}) -> std::optional<std::unordered_map<u32, Module*>> {
-                auto res = self.create_modules(module_suffixes, pin_prefixes, group_ids);
+            [](const dataflow::Result& self, const std::unordered_set<u32>& group_ids = {}) -> std::optional<std::unordered_map<u32, Module*>> {
+                auto res = self.create_modules(group_ids);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -649,15 +646,11 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("module_suffixes") = std::map<const GateType*, std::string>(),
-            py::arg("pin_prefixes")    = std::map<std::pair<PinDirection, std::string>, std::string>(),
-            py::arg("group_ids")       = std::unordered_set<u32>(),
+            py::arg("group_ids") = std::unordered_set<u32>(),
             R"(
                 Create modules for the dataflow analysis result.
 
-                :param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to ``"module"`` for mixed and unspecified gate types.
-                :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
-                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :param set[int] group_ids: The group IDs to consider. If an empty set is provided, all groups will be considered. Defaults to an empty set.
                 :returns: A map from group IDs to Modules on success, ``None`` otherwise.
                 :rtype: dict[int,hal_py.Module] or None
             )");
@@ -665,9 +658,9 @@ namespace hal
         py_dataflow_result.def(
             "create_modules",
             [](const dataflow::Result& self,
-               const std::map<GateTypeProperty, std::string>& module_suffixes,
-               const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes = {},
-               const std::unordered_set<u32>& group_ids                                        = {}) -> std::optional<std::unordered_map<u32, Module*>> {
+               const std::map<const GateType*, std::string>& module_suffixes,
+               const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
+               const std::unordered_set<u32>& group_ids) -> std::optional<std::unordered_map<u32, Module*>> {
                 auto res = self.create_modules(module_suffixes, pin_prefixes, group_ids);
                 if (res.is_ok())
                 {
@@ -680,14 +673,44 @@ namespace hal
                 }
             },
             py::arg("module_suffixes"),
-            py::arg("pin_prefixes") = std::map<std::pair<PinDirection, std::string>, std::string>(),
-            py::arg("group_ids")    = std::unordered_set<u32>(),
+            py::arg("pin_prefixes"),
+            py::arg("group_ids"),
+            R"(
+                Create modules for the dataflow analysis result.
+
+                :param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to ``"module"`` for mixed and unspecified gate types.
+                :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered.
+                :returns: A map from group IDs to Modules on success, ``None`` otherwise.
+                :rtype: dict[int,hal_py.Module] or None
+            )");
+
+        py_dataflow_result.def(
+            "create_modules",
+            [](const dataflow::Result& self,
+               const std::map<GateTypeProperty, std::string>& module_suffixes,
+               const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
+               const std::unordered_set<u32>& group_ids) -> std::optional<std::unordered_map<u32, Module*>> {
+                auto res = self.create_modules(module_suffixes, pin_prefixes, group_ids);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating modules:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("module_suffixes"),
+            py::arg("pin_prefixes"),
+            py::arg("group_ids"),
             R"(
                 Create modules for the dataflow analysis result.
 
                 :param dict[hal_py.GateTypeProperty,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to ``"module"`` for mixed and unspecified gate types.
-                :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
-                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered.
                 :returns: A map from group IDs to Modules on success, ``None`` otherwise.
                 :rtype: dict[int,hal_py.Module] or None
             )");

@@ -1,9 +1,9 @@
 #include "gui/selection_details_widget/net_details_widget/net_endpoint_table.h"
 
 #include "gui/gui_globals.h"
-#include "gui/python/py_code_provider.h"
+#include "gui/module_context_menu/module_context_menu.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/selection_details_widget/net_details_widget/endpoint_table_model.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "hal_core/netlist/gate.h"
 
@@ -77,47 +77,23 @@ namespace hal
 
         QMenu menu;
 
-        menu.addAction("Gate name to clipboard", [gate](){
-            QApplication::clipboard()->setText(QString::fromStdString(gate->get_name()));
-        });
-
-        menu.addAction("Gate ID to clipboard", [gateID](){
-            QApplication::clipboard()->setText(QString::number(gateID));
-        });
-
-        menu.addAction("Gate type name to clipboard", [gate](){
-            QApplication::clipboard()->setText(QString::fromStdString(gate->get_type()->get_name()));
-        });
-
         menu.addAction("Gate pin name to clipboard", [pin](){
             QApplication::clipboard()->setText(pin);
         });
 
-        menu.addSeparator();
-        if (!gSelectionRelay->selectedGates().contains(gateID))
-        {
-            menu.addAction("Add gate to selection", [gateID,this](){
-                gSelectionRelay->addGate(gateID);
-                gSelectionRelay->relaySelectionChanged(this);
-            });
-        }
-        menu.addAction("Isolate gate in new view", [gateID](){
-           Node nd(gateID,Node::Gate);
-           SelectionTreeView::isolateInNewViewAction(nd);
-        });
-        menu.addAction("Focus gate in Graph View", [gateID](){
-            gContentManager->getGraphTabWidget()->handleGateFocus(gateID);
-        });
-        menu.addSection("Python");
         QString pythonCommand ="netlist.get_gate_by_id(" + gateIDStr + ").%1(\"" + pin + "\")";
         pythonCommand = (mEndpointModel->getType() == EndpointTableModel::Type::source) ? pythonCommand.arg("get_fan_out_endpoint") : pythonCommand.arg("get_fan_in_endpoint");
 
-        menu.addAction(QIcon(":/icons/python"), "Get endpoint", [pythonCommand](){
+        menu.addAction(QIcon(":/icons/python"), "Extract endpoint as python code (copy to clipboard)", [pythonCommand](){
             QApplication::clipboard()->setText(pythonCommand);
         });
 
-        menu.move(mapToGlobal(pos));
-        menu.exec();
+        ModuleContextMenu::addGateSubmenu(&menu, gateID);
+
+        GuiPluginManager::addPluginSubmenus(&menu, gNetlist, 
+            {}, std::vector<u32>({gateID}), {});
+
+        menu.exec(this->viewport()->mapToGlobal(pos));
     }
 
     void NetEndpointTable::fitSizeToContent()

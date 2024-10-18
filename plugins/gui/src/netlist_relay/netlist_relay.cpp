@@ -3,16 +3,21 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/gui_utils/netlist.h"
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_move_node.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -90,25 +95,51 @@ namespace hal
         return mModuleColorManager;
     }
 
-    void NetlistRelay::changeModuleName(const u32 id)
+    void NetlistRelay::changeElementNameDialog(ModuleItem::TreeItemType type, u32 id)
     {
-        // NOT THREADSAFE
+        QString oldName;
+        QString prompt;
+        UserActionObject uao;
 
-        Module* m = gNetlist->get_module_by_id(id);
-        assert(m);
-
-        bool ok;
-        QString text = QInputDialog::getText(nullptr, "Rename Module", "New Name", QLineEdit::Normal, QString::fromStdString(m->get_name()), &ok);
-
-        if (ok && !text.isEmpty())
+        if (type == ModuleItem::TreeItemType::Module)
         {
-            ActionRenameObject* act = new ActionRenameObject(text);
-            act->setObject(UserActionObject(id, UserActionObjectType::Module));
+            Module* m = gNetlist->get_module_by_id(id);
+            assert(m);
+            oldName   = QString::fromStdString(m->get_name());
+            prompt    = "Change module name";
+            uao = UserActionObject(id, UserActionObjectType::Module);
+        }
+        else if (type == ModuleItem::TreeItemType::Gate)
+        {
+            Gate* g   = gNetlist->get_gate_by_id(id);
+            assert(g);
+            oldName   = QString::fromStdString(g->get_name());
+            prompt    = "Change gate name";
+            uao = UserActionObject(id, UserActionObjectType::Gate);
+        }
+        else if (type == ModuleItem::TreeItemType::Net)
+        {
+            Net* n    = gNetlist->get_net_by_id(id);
+            assert(n);
+            oldName   = QString::fromStdString(n->get_name());
+            prompt    = "Change net name";
+            uao = UserActionObject(id, UserActionObjectType::Net);
+        }
+        else return;
+
+        bool confirm;
+        QString newName =
+                QInputDialog::getText(nullptr, prompt, "New name:", QLineEdit::Normal,
+                                      oldName, &confirm);
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(uao);
             act->exec();
         }
     }
 
-    void NetlistRelay::changeModuleType(const u32 id)
+    void NetlistRelay::changeModuleTypeDialog(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -118,7 +149,7 @@ namespace hal
         bool ok;
         QString text = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
 
-        if (ok && !text.isEmpty())
+        if (ok)
         {
             ActionSetObjectType* act = new ActionSetObjectType(text);
             act->setObject(UserActionObject(id, UserActionObjectType::Module));
@@ -126,7 +157,7 @@ namespace hal
         }
     }
 
-    void NetlistRelay::changeModuleColor(const u32 id)
+    void NetlistRelay::changeModuleColorDialog(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -143,17 +174,95 @@ namespace hal
         act->exec();
     }
 
-    void NetlistRelay::addSelectionToModule(const u32 id)
+    void NetlistRelay::addToModuleDialog(const Node &node)
     {
-        // NOT THREADSAFE
-        // DECIDE HOW TO HANDLE MODULES
+        // prepare set of content, find first (reference-) node
+        Node firstNode = node;
+        QSet<u32> gatIds;
+        QSet<u32> modIds;
+        if (node.isNull())
+        {
+            for (u32 id : gSelectionRelay->selectedGatesList())
+            {
+                if (firstNode.isNull()) firstNode = Node(id,Node::Gate);
+                gatIds.insert(id);
+            }
 
-        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gSelectionRelay->selectedGates());
-        act->setObject(UserActionObject(id, UserActionObjectType::Module));
-        act->exec();
+            for (u32 id : gSelectionRelay->selectedModulesList())
+            {
+                if (firstNode.isNull()) firstNode = Node(id,Node::Module);
+                modIds.insert(id);
+            }
+        }
+        else if (node.isModule())
+            modIds.insert(node.id());
+        else
+            gatIds.insert(node.id());
+        if (firstNode.isNull()) return; // nothing to move
+
+        // find common parent, if nullptr top_level was selected => abort
+        std::unordered_set<Gate*>   gatsContent;
+        for (u32 id : gatIds)
+            gatsContent.insert(gNetlist->get_gate_by_id(id));
+
+        std::unordered_set<Module*> modsContent;
+        for (u32 id : modIds)
+            modsContent.insert(gNetlist->get_module_by_id(id));
+
+        Module* parentModule  = gui_utility::firstCommonAncestor(modsContent, gatsContent);
+        if (!parentModule) return;
+        QString parentName = QString::fromStdString(parentModule->get_name());
+
+        ModuleDialog md({},"Move to module",false,nullptr,qApp->activeWindow());
+        if (md.exec() != QDialog::Accepted) return;
+
+
+        UserActionCompound* compound = new UserActionCompound;
+        compound->setUseCreatedObject();
+
+        if (md.isNewModule())
+        {
+            bool ok;
+            QString name = QInputDialog::getText(nullptr, "",
+                                                 "New module will be created under \"" + parentName + "\"\nModule Name:",
+                                                 QLineEdit::Normal, "", &ok);
+            if (!ok || name.isEmpty()) return;
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(parentModule->get_id());
+            compound->addAction(actNewModule);
+            compound->addAction(new ActionAddItemsToObject(modIds,gatIds));
+        }
+        else
+        {
+            ActionAddItemsToObject* actAddItems = new ActionAddItemsToObject(modIds,gatIds);
+            actAddItems->setObject(UserActionObject(md.selectedId(),UserActionObjectType::Module));
+            compound->addAction(actAddItems);
+        }
+
+        // move module to position of first content node
+        GraphContext* context = gContentManager->getContextManagerWidget()->getCurrentContext();
+        if (context)
+        {
+            const NodeBox* box = context->getLayouter()->boxes().boxForNode(firstNode);
+            if (box)
+            {
+                ActionMoveNode* actMoveNode = new ActionMoveNode(context->id(),
+                                                             QPoint(box->x(),box->y()));
+                compound->addAction(actMoveNode);
+            }
+        }
+
+        compound->exec();
+
+        // update selection
+        gSelectionRelay->clear();
+        gSelectionRelay->addModule(compound->object().id());
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
+        gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
-    void NetlistRelay::addChildModule(const u32 id)
+    void NetlistRelay::addChildModuleDialog(const u32 id)
     {
         // NOT THREADSAFE
 

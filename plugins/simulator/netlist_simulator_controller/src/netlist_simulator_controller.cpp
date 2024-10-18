@@ -337,12 +337,17 @@ namespace hal
         }
 
         WaveDataGroup* wdGrp = new WaveDataGroup(mWaveDataList, QString::fromStdString(name));
-        mWaveDataList->addWavesToGroup(wdGrp->id(), waveVector);
+        if (!waveVector.isEmpty()) mWaveDataList->addWavesToGroup(wdGrp->id(), waveVector);
         return wdGrp->id();
     }
 
     u32 NetlistSimulatorController::add_waveform_group(const PinGroup<ModulePin>* pin_group)
     {
+        if (!pin_group)
+        {
+            log_warning(get_name(), "Invalid 'add_waveform_group' call with nullptr instead of module pin group");
+            return 0;
+        }
         std::vector<Net*> nets;
         for (const auto pin : pin_group->get_pins())
         {
@@ -354,6 +359,11 @@ namespace hal
 
     u32 NetlistSimulatorController::add_waveform_group(const Gate *gate, const PinGroup<GatePin>* pin_group)
     {
+        if (!gate || !pin_group)
+        {
+            log_warning(get_name(), "Invalid 'add_waveform_group' call with nullptr instead of {}", (gate ? "gate pin group" : "gate"));
+            return 0;
+        }
         std::vector<Net*> nets;
         for (const auto pin : pin_group->get_pins())
         {
@@ -378,13 +388,18 @@ namespace hal
 
     u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const PinGroup<ModulePin>* pin_group)
     {
+        if (!pin_group)
+        {
+            log_warning(get_name(), "Invalid 'add_waveform_group' call with name='{}' and nullptr instead of module pin group", name);
+            return 0;
+        }
         std::vector<Net*> nets;
         for (const auto pin : pin_group->get_pins())
         {
             nets.push_back(pin->get_net());
         }
 
-        return add_waveform_group(name, nets);
+        return add_waveform_group((name.empty() ? pin_group->get_name() : name), nets);
     }
 
     void NetlistSimulatorController::remove_waveform_group(u32 group_id)

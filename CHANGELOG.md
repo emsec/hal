@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased] 
+* added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
 * fixed `hal_py.GateLibrary.gate_types` pybind

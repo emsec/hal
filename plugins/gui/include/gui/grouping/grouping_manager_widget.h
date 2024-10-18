@@ -196,6 +196,10 @@ namespace hal
          */
         void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
 
+        void assignElementsToGroupingDialog(const QSet<u32>& modules = QSet<u32>(), const QSet<u32>& gates = QSet<u32>(), const QSet<u32>& nets = QSet<u32>());
+
+        void removeElementsFromGrouping(const QSet<u32>& modules = QSet<u32>(), const QSet<u32>& gates = QSet<u32>(), const QSet<u32>& nets = QSet<u32>());
+
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that the last entry of GroupingTableModel was deleted.

@@ -1,5 +1,7 @@
 #include "module_identification/api/result.h"
 
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
+#include "hal_core/utilities/utils.h"
 #include "module_identification/processing/post_processing.h"
 #include "module_identification/types/candidate_types.h"
 #include "module_identification/utils/utils.h"
@@ -423,15 +425,56 @@ namespace hal
 
         hal::Result<std::monostate> Result::create_modules_in_netlist()
         {
-            auto [gate_to_candidates, conflicts] = check_for_conflicting_gates(m_candidates);
+            // search for base candidates that were not verified but are a subset of another verified candidate
+            // these candidates do not need to have a own module and therefore dont have to be cloned
+            std::vector<std::pair<BaseCandidate, VerifiedCandidate>> filtered_candidates;
 
-            resolve_conflicts_by_cloning(m_netlist, conflicts, gate_to_candidates, m_candidates);
+            for (u32 i = 0; i < m_candidates.size(); i++)
+            {
+                const auto& [bi, vi] = m_candidates.at(i);
+                if (vi.is_verified())
+                {
+                    filtered_candidates.push_back(m_candidates.at(i));
+                    continue;
+                }
+
+                bool is_subset = false;
+                for (u32 j = 0; i < m_candidates.size(); j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    const auto& [bj, vj] = m_candidates.at(j);
+
+                    if (!vj.is_verified())
+                    {
+                        continue;
+                    }
+
+                    if (utils::is_subset(bi.m_gates, vj.m_gates))
+                    {
+                        is_subset = true;
+                        break;
+                    }
+                }
+
+                if (!is_subset)
+                {
+                    filtered_candidates.push_back(m_candidates.at(i));
+                }
+            }
+
+            auto [gate_to_candidates, conflicts] = check_for_conflicting_gates(filtered_candidates);
+
+            resolve_conflicts_by_cloning(m_netlist, conflicts, gate_to_candidates, filtered_candidates);
 
             std::map<std::string, u32> type_counter;
 
-            for (u32 candidate_idx = 0; candidate_idx < m_candidates.size(); candidate_idx++)
+            for (u32 candidate_idx = 0; candidate_idx < filtered_candidates.size(); candidate_idx++)
             {
-                auto& [base_candidate, selected_candidate] = m_candidates.at(candidate_idx);
+                auto& [base_candidate, selected_candidate] = filtered_candidates.at(candidate_idx);
 
                 const std::string candidate_name = selected_candidate.get_name();
 
@@ -502,6 +545,20 @@ namespace hal
                         nets_to_indices[net][name].push_back(idx);
                     }
                 }
+
+                // TODO remove debug printing
+                // for (const auto& [net, names] : nets_to_indices)
+                // {
+                //     std::cout << "Net: " << net->get_id() << " / " << net->get_name() << std::endl;
+                //     for (const auto& [name, indices] : names)
+                //     {
+                //         std::cout << "\t" << name << std::endl;
+                //         for (const auto& index : indices)
+                //         {
+                //             std::cout << "\t\t" << index << std::endl;
+                //         }
+                //     }
+                // }
 
                 std::set<Net*> visited;
                 for (const auto& [name, nets] : named_operands)
@@ -589,6 +646,29 @@ namespace hal
                         log_info("module_identification", "could not create ctrl pin group: {}", ctrl_res.get_error().get());
                     }
                 }
+
+                // This creates a more human readable form of the word level operations
+                std::string word_level_operation_hr_str = "";
+                for (const auto& [cm, bf] : selected_candidate.m_word_level_operations)
+                {
+                    u32 ctrl_val = 0;
+                    for (const auto& [net, val] : cm)
+                    {
+                        ctrl_val = (ctrl_val << 1) + ((val == BooleanFunction::ONE) ? 1 : 0);
+                    }
+
+                    const auto bf_hr_res = BooleanFunctionDecorator(bf).substitute_module_pins({mod});
+                    if (bf_hr_res.is_error())
+                    {
+                        log_warning("module_identification", "{}", bf_hr_res.get_error().get());
+                        continue;
+                    }
+                    const auto bf_hr = bf_hr_res.get().simplify_local();
+
+                    word_level_operation_hr_str += std::to_string(ctrl_val) + ": " + bf_hr.to_string() + "\n";
+                }
+
+                mod->set_data("ModuleIdentification", "OPERATIONS_HR", "String", word_level_operation_hr_str);
             }
 
             return OK({});
