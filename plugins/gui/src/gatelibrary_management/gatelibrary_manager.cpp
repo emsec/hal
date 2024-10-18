@@ -163,9 +163,7 @@ namespace hal
                 else
                 {
                     //extract gatelibrary name from path
-                    u32 startInd = fileName.lastIndexOf('/');
-                    QString name = fileName.mid(startInd+1, fileName.length()-startInd-5);
-                    mGateLibrary = new GateLibrary(std::filesystem::path(fileName.toStdString()), name.toStdString());
+                    mGateLibrary = new GateLibrary(std::filesystem::path(fileName.toStdString()), QFileInfo(fileName).baseName().toStdString());
                 }
 
                 mReadOnly = false;

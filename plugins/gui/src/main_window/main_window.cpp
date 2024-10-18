@@ -743,6 +743,7 @@ namespace hal
         QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
         openBtn->setToolTip("Open existing gate library");
         QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
+        optBox.setWindowTitle("Please select …");
         cancelBtn->setToolTip("Cancel");
 
         optBox.setText("Gate Library Manager");

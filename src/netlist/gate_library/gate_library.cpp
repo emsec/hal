@@ -25,6 +25,11 @@ namespace hal
         m_path = modified_path;
     }
 
+    void GateLibrary::set_name(const std::string &modified_name)
+    {
+        m_name = modified_name;
+    }
+
     void GateLibrary::set_gate_location_data_category(const std::string& category)
     {
         m_gate_location_data_category = category;
