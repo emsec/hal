@@ -130,13 +130,19 @@ namespace hal
 
     void GatelibraryContentWidget::handleSaveAction()
     { 
-        if (gPluginRelay->mGuiPluginTable)
-            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,QString::fromStdString(mPath.extension().string()));
-        if(gate_library_manager::save(mPath,mGateLibrary,true))
+        if(mCreationMode)
+            handleSaveAsAction();
+        else
         {
-            gFileStatusManager->gatelibSaved();
-            window()->setWindowTitle(mTitle);
+            if (gPluginRelay->mGuiPluginTable)
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,QString::fromStdString(mPath.extension().string()));
+            if(gate_library_manager::save(mPath,mGateLibrary,true))
+            {
+                gFileStatusManager->gatelibSaved();
+                window()->setWindowTitle(mTitle);
+            }
         }
+        mCreationMode = false;
     }
 
     void GatelibraryContentWidget::handleSaveAsAction()
@@ -148,13 +154,16 @@ namespace hal
 
         if (gPluginRelay->mGuiPluginTable)
             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibWriter,".hgl");
-        QString filename = QFileDialog::getSaveFileName(this, "Save as", path, "HGL *.hgl");
+
+        QString filename = "";
+        QFileDialog fd(this, "Save as", path, "HGL *.hgl");
+        fd.setDefaultSuffix(".hgl");
+        fd.setAcceptMode(QFileDialog::AcceptSave);
+        if (fd.exec()) {
+            filename = fd.selectedFiles().front();
+        }
         QRegExp rx("*.hgl");
         rx.setPatternSyntax(QRegExp::Wildcard);
-        if(!filename.isEmpty() && !rx.exactMatch(filename))
-        {
-            filename = filename + ".hgl";
-        }
         if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true))
         {
             mPath = filename.toStdString();
@@ -163,6 +172,7 @@ namespace hal
             mGateLibrary->set_path(std::filesystem::path(mPath));
         }
         std::string p = mGateLibrary->get_path().generic_string();
+        mCreationMode = false;
     }
 
     void GatelibraryContentWidget::handleUnsavedChanges()

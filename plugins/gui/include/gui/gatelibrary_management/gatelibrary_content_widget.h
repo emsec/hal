@@ -154,5 +154,6 @@ namespace hal
         GateLibrary* mGateLibrary;
         std::filesystem::path mPath;
         QString mTitle;
+        bool mCreationMode;
     };
 }

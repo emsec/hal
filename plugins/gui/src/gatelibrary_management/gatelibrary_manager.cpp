@@ -92,8 +92,8 @@ namespace hal
 
     void GateLibraryManager::handleCreateAction()
     {
-        // TODO
         mCreationMode = true; //needed for callUnsavedChangesWindow
+        mContentWidget->mCreationMode = mCreationMode;
         std::filesystem::path path;
         QFile gldpath(":/path/gate_library_definitions");
         if (gldpath.open(QIODevice::ReadOnly))
@@ -115,7 +115,7 @@ namespace hal
             if(!callUnsavedChangesWindow()) return;
             else window()->setWindowTitle(QString("GateLibrary %1").arg(QDir::home().relativeFilePath(QString::fromStdString(path.string()))));
         }
-        mGateLibrary = new GateLibrary(path, "unnamed_gate_library");
+        mGateLibrary = new GateLibrary(path, path.string());
         initialize(mGateLibrary);
         mCreationMode = false;
     }

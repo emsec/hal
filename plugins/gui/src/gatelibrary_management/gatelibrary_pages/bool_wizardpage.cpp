@@ -182,12 +182,12 @@ namespace hal
         //before mWasEdited is changed in the wizard
         //
 
-        Q_EMIT completeChanged();
         if(mWizard->mEditMode)
         {
             mWizard->mWasEdited = true;
             Q_EMIT hasChanged();
         }
+        Q_EMIT completeChanged();
     }
 
     bool BoolWizardPage::isComplete() const
