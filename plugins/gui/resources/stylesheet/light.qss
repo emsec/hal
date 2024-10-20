@@ -1461,7 +1461,7 @@ hal--GuiPluginManager
     qproperty-cliIconPath: ":/icons/cli-options";
     qproperty-cliIconStyle: "all->#202022";
     qproperty-guiIconPath: ":/icons/invoke-gui";
-    qproperty-guiIconStyle: "all->#2060C2";
+    qproperty-guiIconEnabledStyle: "all->#2060C2";
     qproperty-guiIconDisabledStyle: "all->#c0c0c0";
     qproperty-defaultTextColor: rgb(64,64,64);
     qproperty-hilightTextColor: rgb(0,0,20);

@@ -1,6 +1,7 @@
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/main_window/plugin_parameter_dialog.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
@@ -36,7 +37,7 @@ namespace hal {
 
         mGuiPluginView = new GuiPluginView(this);
         mGuiPluginTable = new GuiPluginTable(this);
-        connect(mGuiPluginTable,&GuiPluginTable::triggerInvokeGui,this,&GuiPluginManager::handleInvokeGui);
+        connect(mGuiPluginTable,&GuiPluginTable::toggleEnableGuiContribution,this,&GuiPluginManager::handleToggleGuiContribution);
         connect(mGuiPluginTable,&GuiPluginTable::showCliOptions,this,&GuiPluginManager::handleShowCliOptions);
         connect(gPluginRelay,&PluginRelay::pluginLoaded,mGuiPluginTable,&GuiPluginTable::handlePluginLoaded);
         connect(gPluginRelay,&PluginRelay::pluginUnloaded,mGuiPluginTable,&GuiPluginTable::handlePluginUnloaded);
@@ -60,7 +61,7 @@ namespace hal {
             new QLabel("Load HAL plugin and dependencies (if any)", this),
             new QLabel("Unload HAL plugin unless needed as dependency by other plugin", this),
             new QLabel("This plugin contributes CLI options. Click button for description of options.", this),
-            new QLabel("This plugin contributes its own settings menu to GUI. Click button in order to return to netlist and open menu.", this)};
+            new QLabel("Enable or disable plugin contributions to GUI context menu.", this)};
 
         for (int i=0; i<4; i++)
         {
@@ -85,6 +86,31 @@ namespace hal {
         layout->addLayout(buttonLayout);
     }
 
+    void GuiPluginManager::addPluginActions(QMenu* menu) const
+    {
+        bool hasEntries = false;
+        QMap<QString,GuiExtensionInterface*> guiExtensionMap = GuiPluginManager::getGuiExtensions();
+        for(auto it = guiExtensionMap.constBegin(); it!= guiExtensionMap.constEnd(); ++it)
+        {
+            GuiExtensionInterface* geif = it.value();
+
+            if (!geif->is_contribution_enabled())
+                continue;
+
+            std::vector<PluginParameter> plugParams = geif->get_parameter();
+            if (plugParams.empty())
+                continue;
+
+            QString label = QString::fromStdString(geif->contribution_top_label());
+            if (label.isEmpty()) label = it.key();
+            menu->addAction(label, [label,geif,menu]() { PluginParameterDialog ppd(label,geif,menu); ppd.exec(); });
+            hasEntries = true;
+        }
+
+        menu->setEnabled(hasEntries);
+    }
+
+
     void GuiPluginManager::repolish()
     {
         QStyle* s = style();
@@ -100,7 +126,7 @@ namespace hal {
             case 0: tmpIcon = gui_utility::getStyledSvgIcon(loadIconStyle(),loadIconPath());     break;
             case 1: tmpIcon = gui_utility::getStyledSvgIcon(unloadIconStyle(),unloadIconPath()); break;
             case 2: tmpIcon = gui_utility::getStyledSvgIcon(cliIconStyle(),cliIconPath());       break;
-            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconStyle(),guiIconPath());       break;
+            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconEnabledStyle(),guiIconPath());       break;
             }
             mIconLegend[i]->setPixmap(tmpIcon.pixmap(32,32));
         }
@@ -108,12 +134,13 @@ namespace hal {
 
     void GuiPluginManager::handleButtonCancel()
     {
-        Q_EMIT backToNetlist(QString());
+        Q_EMIT backToNetlist();
     }
 
-    void GuiPluginManager::handleInvokeGui(const QString &pluginName)
+    void GuiPluginManager::handleToggleGuiContribution(const QString &pluginName)
     {
-        Q_EMIT backToNetlist(pluginName);
+        GuiExtensionInterface* geif = getGuiExtensions().value(pluginName);
+        if (geif) geif->set_contribution_enabled(!geif->is_contribution_enabled());
     }
 
     void GuiPluginManager::handleShowCliOptions(const QString &pluginName, const QString &cliOptions)
@@ -158,9 +185,9 @@ namespace hal {
         return mGuiIconPath;
     }
 
-    QString GuiPluginManager::guiIconStyle() const
+    QString GuiPluginManager::guiIconEnabledStyle() const
     {
-        return mGuiIconStyle;
+        return mGuiIconEnabledStyle;
     }
 
     QString GuiPluginManager::guiIconDisabledStyle() const
@@ -218,9 +245,9 @@ namespace hal {
         mGuiIconPath = s;
     }
 
-    void GuiPluginManager::setGuiIconStyle(const QString& s)
+    void GuiPluginManager::setGuiIconEnabledStyle(const QString& s)
     {
-        mGuiIconStyle = s;
+        mGuiIconEnabledStyle = s;
     }
 
     void GuiPluginManager::setGuiIconDisabledStyle(const QString& s)
@@ -249,9 +276,16 @@ namespace hal {
                                             const std::vector<u32>& nets)
     {
         bool addedSeparator = false;
-        for(GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions())
+
+        QMap<QString,GuiExtensionInterface*> guiExtensionMap = GuiPluginManager::getGuiExtensions();
+        for(auto it = guiExtensionMap.constBegin(); it!= guiExtensionMap.constEnd(); ++it)
         {
+            GuiExtensionInterface* geif = it.value();
             geif->netlist_loaded(netlist);
+
+            if (!geif->is_contribution_enabled())
+                continue;
+
             auto contribution = geif->get_context_contribution(netlist, modules, gates, nets);
             if(contribution.size() <= 0)
                 continue;
@@ -263,7 +297,8 @@ namespace hal {
                 addedSeparator = true;
             }
 
-            QMenu *subMenu = contextMenu->addMenu("  " + QString::fromStdString(contribution[0].mTagname));
+            QString subMenuEntry = QString::fromStdString(geif->contribution_top_label());
+            QMenu *subMenu = contextMenu->addMenu("  " + (subMenuEntry.isEmpty() ? it.key() : subMenuEntry));
             for (ContextMenuContribution cmc : contribution)
             {
                 QAction *act = subMenu->addAction(QString::fromStdString(cmc.mEntry));
@@ -637,6 +672,11 @@ namespace hal {
         return QAbstractTableModel::headerData(section,orientation,role);
     }
 
+    GuiPluginEntry* GuiPluginTable::at(int irow) const
+    {
+        return mEntries.at(irow);
+    }
+
     void GuiPluginTable::handleButtonPressed(const QModelIndex& buttonIndex)
     {
         if (mWaitForRefresh) return;
@@ -649,7 +689,7 @@ namespace hal {
         case 7:
             if (gpe->mName == "hal_gui") return;
             if (gpe->isLoaded())
-                Q_EMIT triggerInvokeGui(gpe->mName);
+                Q_EMIT toggleEnableGuiContribution(gpe->mName);
             return;
         case 8:
             if (!gpe->mCliOptions.isEmpty())
@@ -888,8 +928,8 @@ namespace hal {
         mIconLoad = gui_utility::getStyledSvgIcon(gpm->loadIconStyle(),gpm->loadIconPath());
         mIconUnload = gui_utility::getStyledSvgIcon(gpm->unloadIconStyle(), gpm->unloadIconPath());
         mIconCliOptions = gui_utility::getStyledSvgIcon(gpm->cliIconStyle(), gpm->cliIconPath());
-        mIconInvokeGui = gui_utility::getStyledSvgIcon(gpm->guiIconStyle(), gpm->guiIconPath());
-        mIconDisabledGui = gui_utility::getStyledSvgIcon(gpm->guiIconDisabledStyle(), gpm->guiIconPath());
+        mIconEnableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconEnabledStyle(), gpm->guiIconPath());
+        mIconDisableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconDisabledStyle(), gpm->guiIconPath());
     }
 
     GuiPluginDelegate::~GuiPluginDelegate()
@@ -910,7 +950,11 @@ namespace hal {
         case 7:
             button.iconSize = QSize(w-4,w-4);
             if (plt->hasGuiExtension(index))
-                button.icon = (plt->isLoaded(index) && gNetlist) ? mIconInvokeGui : mIconDisabledGui;
+            {
+                QString pluginName = plt->at(index.row())->name();
+                GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(pluginName);
+                button.icon = (plt->isLoaded(index) && geif && geif->is_contribution_enabled()) ? mIconEnableGuiContribution : mIconDisableGuiContribution;
+            }
             else
                 drawIcon = false;
             break;

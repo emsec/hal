@@ -463,7 +463,7 @@ namespace hal
         /**
          * Q_SLOT to close the PluginManager menu.
          */
-        void closePluginManager(const QString& invokeGui);
+        void closePluginManager();
 
         /**
          * Q_SLOT to create a new empty netlist. Asks the user for the gate_library.
@@ -623,13 +623,15 @@ namespace hal
         Action* mActionImportProject;
 
         Action* mActionSettings;
-        Action* mActionPlugins;
+        Action* mActionPluginManager;
         Action* mActionClose;
         Action* mActionQuit;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
+        QMenu* mMenuUtilities;
+        QMenu* mMenuPlugins;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;

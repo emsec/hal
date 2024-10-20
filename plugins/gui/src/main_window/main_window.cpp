@@ -151,7 +151,7 @@ namespace hal
         mActionUndo               = new Action(this);
 
         mActionSettings           = new Action(this);
-        mActionPlugins            = new Action(this);
+        mActionPluginManager            = new Action(this);
         mActionClose              = new Action(this);
         mActionQuit               = new Action(this);
 
@@ -191,16 +191,20 @@ namespace hal
 //        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
-        mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
+        mActionPluginManager->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
 
-        mMenuFile  = new QMenu(mMenuBar);
-        mMenuEdit  = new QMenu(mMenuBar);
-        mMenuMacro = new QMenu(mMenuBar);
-        mMenuHelp  = new QMenu(mMenuBar);
+        mMenuFile      = new QMenu(mMenuBar);
+        mMenuEdit      = new QMenu(mMenuBar);
+        mMenuMacro     = new QMenu(mMenuBar);
+        mMenuUtilities = new QMenu(mMenuBar);
+        mMenuPlugins   = new QMenu(mMenuBar);
+        mMenuHelp      = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
+        mMenuBar->addAction(mMenuUtilities->menuAction());
+        mMenuBar->addAction(mMenuPlugins->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpenProject);
@@ -262,15 +266,15 @@ namespace hal
         mMenuMacro->addAction(mActionStopRecording);
         mMenuMacro->addSeparator();
         mMenuMacro->addAction(mActionPlayMacro);
+        mMenuPlugins->setDisabled(true); // enable when project open
+        mMenuUtilities->addAction(mActionPluginManager);
         mMenuHelp->addAction(mActionAbout);
-        mMenuHelp->addSeparator();
-        mMenuHelp->addAction(mActionPlugins);
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
         mLeftToolBar->addAction(mActionSaveAs);
         mLeftToolBar->addAction(mActionUndo);
-        mRightToolBar->addAction(mActionPlugins);
+        mRightToolBar->addAction(mActionPluginManager);
         mRightToolBar->addAction(mActionSettings);
 
         mActionStartRecording->setText("Start recording");
@@ -293,12 +297,14 @@ namespace hal
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
-        mActionPlugins->setText("Plugin Manager");
+        mActionPluginManager->setText("Plugin Manager");
         mActionClose->setText("Close Project");
         mActionQuit->setText("Quit");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
+        mMenuUtilities->setTitle("Utilities");
+        mMenuPlugins->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = new PythonContext(this);
@@ -336,7 +342,7 @@ namespace hal
         connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
-        connect(mActionPlugins, &Action::triggered, this, &MainWindow::openPluginManager);
+        connect(mActionPluginManager, &Action::triggered, this, &MainWindow::openPluginManager);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
@@ -669,18 +675,18 @@ namespace hal
         mStackedWidget->setCurrentWidget(mPluginManager);
     }
 
-    void MainWindow::closePluginManager(const QString &invokeGui)
+    void MainWindow::closePluginManager()
     {
-        bool isFileOpen = FileManager::get_instance()->fileOpen();
-        if (isFileOpen)
+        if (FileManager::get_instance()->fileOpen())
             mStackedWidget->setCurrentWidget(mLayoutArea);
         else
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
-        if (invokeGui.isEmpty() || !isFileOpen) return;
-        GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(invokeGui);
-        if (!geif) return;
-        PluginParameterDialog ppd(invokeGui,geif,this);
-        ppd.exec();
+
+        mMenuPlugins->clear();
+        if (FileManager::get_instance()->fileOpen())
+            mPluginManager->addPluginActions(mMenuPlugins);
+        else
+            mMenuPlugins->setDisabled(true);
     }
 
     void MainWindow::handleActionNew()
@@ -789,6 +795,8 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
+        mMenuPlugins->clear();
+        mPluginManager->addPluginActions(mMenuPlugins);
 //        mActionGateLibraryManager->setVisible(false);
     }
 
@@ -1057,6 +1065,8 @@ namespace hal
 
         gNetlistRelay->reset();
 
+        mMenuPlugins->clear();
+        mMenuPlugins->setDisabled(true);
 //        mActionGateLibraryManager->setVisible(true);
 
         return true;

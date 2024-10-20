@@ -71,6 +71,7 @@ namespace hal {
         GuiPluginEntry(const QFileInfo& info);
         GuiPluginEntry(const QSettings* settings);
         QVariant data(int icol) const;
+        QString name() const { return mName; }
         void persist(QSettings* settings) const;
         bool requestLoad() const { return mState == UserLoad; }
         bool isLoaded() const { return mState == AutoLoad || mState == UserLoad; }
@@ -88,8 +89,8 @@ namespace hal {
         friend class GuiPluginManager;
         QIcon mIconLoad;
         QIcon mIconUnload;
-        QIcon mIconInvokeGui;
-        QIcon mIconDisabledGui;
+        QIcon mIconEnableGuiContribution;
+        QIcon mIconDisableGuiContribution;
         QIcon mIconCliOptions;
         QPoint mMousePos;
         QModelIndex mMouseIndex;
@@ -128,7 +129,7 @@ namespace hal {
         void populateTable(bool refresh);
         void clearMemory();
     Q_SIGNALS:
-        void triggerInvokeGui(QString pluginName);
+        void toggleEnableGuiContribution(QString pluginName);
         void showCliOptions(QString pluginName, QString cliOptions);
     public Q_SLOTS:
         void handleButtonPressed(const QModelIndex& buttonIndex);
@@ -152,6 +153,7 @@ namespace hal {
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
         SupportedFileFormats listFacFeature(FacExtensionInterface::Feature ft) const;
+        GuiPluginEntry* at(int irow) const;
    };
 
     class GuiPluginView : public QTableView
@@ -171,7 +173,7 @@ namespace hal {
         Q_PROPERTY(QString cliIconPath READ cliIconPath WRITE setCliIconPath)
         Q_PROPERTY(QString cliIconStyle READ cliIconStyle WRITE setCliIconStyle)
         Q_PROPERTY(QString guiIconPath READ guiIconPath WRITE setGuiIconPath)
-        Q_PROPERTY(QString guiIconStyle READ guiIconStyle WRITE setGuiIconStyle)
+        Q_PROPERTY(QString guiIconEnabledStyle READ guiIconEnabledStyle WRITE setGuiIconEnabledStyle)
         Q_PROPERTY(QString guiIconDisabledStyle READ guiIconDisabledStyle WRITE setGuiIconDisabledStyle)
         Q_PROPERTY(QColor defaultTextColor READ defaultTextColor WRITE setDefaultTextColor)
         Q_PROPERTY(QColor hilightTextColor READ hilightTextColor WRITE setHilightTextColor)
@@ -187,17 +189,17 @@ namespace hal {
         QString mCliIconPath;
         QString mCliIconStyle;
         QString mGuiIconPath;
-        QString mGuiIconStyle;
+        QString mGuiIconEnabledStyle;
         QString mGuiIconDisabledStyle;
         QColor mDefaultTextColor;
         QColor mHilightTextColor;
         QColor mHilightBackgroundColor;
         QLabel* mIconLegend[4];
     Q_SIGNALS:
-        void backToNetlist(QString invokeGui);
+        void backToNetlist();
     private Q_SLOTS:
         void handleButtonCancel();
-        void handleInvokeGui(const QString& pluginName);
+        void handleToggleGuiContribution(const QString& pluginName);
         void handleShowCliOptions(const QString& pluginName, const QString& cliOptions);
     public:
         GuiPluginManager(QWidget* parent = nullptr);
@@ -215,7 +217,7 @@ namespace hal {
         QString cliIconPath() const;
         QString cliIconStyle() const;
         QString guiIconPath() const;
-        QString guiIconStyle() const;
+        QString guiIconEnabledStyle() const;
         QString guiIconDisabledStyle() const;
         QColor defaultTextColor() const;
         QColor hilightTextColor() const;
@@ -228,10 +230,12 @@ namespace hal {
         void setCliIconPath(const QString& s);
         void setCliIconStyle(const QString& s);
         void setGuiIconPath(const QString& s);
-        void setGuiIconStyle(const QString& s);
+        void setGuiIconEnabledStyle(const QString& s);
         void setGuiIconDisabledStyle(const QString& s);
         void setDefaultTextColor(QColor& c);
         void setHilightTextColor(QColor& c);
         void setHilightBackgroundColor(QColor& c);
+
+        void addPluginActions(QMenu* menu) const;
     };
 }

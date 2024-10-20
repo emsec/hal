@@ -53,13 +53,14 @@ namespace hal
 
     class GuiExtensionLogicEvaluator : public GuiExtensionInterface
     {
+        bool mSkipCompile;
 
     public:
         static bool acceptGate(const Gate* g);
         /**
          * @brief Default constructor for `GuiExtensionEvaluator`.
          */
-        GuiExtensionLogicEvaluator() = default;
+        GuiExtensionLogicEvaluator() : GuiExtensionInterface(), mSkipCompile(false) {;}
 
         /**
          * @brief Get a vector of configurable parameters.
