@@ -1,11 +1,5 @@
 var NAVTREEINDEX41 =
 {
-"structhal_1_1dataflow_1_1_configuration.html#a3ca6cecdb7810944b1eb54487d145039":[6,0,0,2,2,18],
-"structhal_1_1dataflow_1_1_configuration.html#a3d674c0d1a0ea85091213eb8f92ecd20":[6,0,0,2,2,23],
-"structhal_1_1dataflow_1_1_configuration.html#a3de3564aa64469af6c0324cdb829b0c7":[6,0,0,2,2,19],
-"structhal_1_1dataflow_1_1_configuration.html#a72cd03664db81758a9156ca683cee8db":[6,0,0,2,2,0],
-"structhal_1_1dataflow_1_1_configuration.html#a7470668e97d5cc200a2beaf25b992526":[6,0,0,2,2,4],
-"structhal_1_1dataflow_1_1_configuration.html#a7d75293b46b491f342f190ff24417279":[6,0,0,2,2,1],
 "structhal_1_1dataflow_1_1_configuration.html#a824800f9c047cae72cb8417573d32abb":[6,0,0,2,2,5],
 "structhal_1_1dataflow_1_1_configuration.html#a9011817a65762bf64b4c10b8e86e1ba6":[6,0,0,2,2,17],
 "structhal_1_1dataflow_1_1_configuration.html#aa1d4e787c4d5804d51e058f70bff2820":[6,0,0,2,2,7],
@@ -187,6 +181,10 @@ var NAVTREEINDEX41 =
 "test_2verilog__parser_8cpp.html#a67bb5c7e0fd6f58c5a06ffc3e6069822":[7,0,1,8,2,0,10],
 "test_2verilog__parser_8cpp.html#a92e0cb3a8c98c906d812269fa8f366e2":[7,0,1,8,2,0,3],
 "test_2verilog__parser_8cpp.html#a9b94e3ef8bcc389805078723c41a205a":[7,0,1,8,2,0,16],
+"classhal_1_1_module_widget.html#a00ea334bd1c48ddb251ddb035424100a":[4,0,7,1,1,13],
+"classhal_1_1_module_widget.html#a2ec0190436b659c08379ffe1525409a2":[4,0,7,1,1,1],
+"classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf":[4,0,7,1,0,3],
+"classhal_1_1_net_layout_junction_net.html#a15645b2c68fb4bf79b2d0f97070a7789":[4,0,0,2,6,4],
 "test_2verilog__parser_8cpp.html#aa9493329dd572e40a6f89fb51c8887cd":[7,0,1,8,2,0,6],
 "test_2verilog__parser_8cpp.html#ad1b32683a672cf0663c0517c21d68bd2":[7,0,1,8,2,0,13],
 "test_2verilog__parser_8cpp.html#add2193fa20ce01d58b1c404171a9f481":[7,0,1,8,2,0,14],
@@ -249,5 +247,7 @@ var NAVTREEINDEX41 =
 "toolbar_8cpp_source.html":[7,0,1,3,2,46,0],
 "toolbar_8h.html":[7,0,1,3,0,0,49,0],
 "toolbar_8h_source.html":[7,0,1,3,0,0,49,0],
-"translator_8cpp.html":[7,0,2,0,0,8]
+"translator_8cpp.html":[7,0,2,0,0,8],
+"translator_8cpp.html#a1f5025c43fbfe4675f2b8b8be739f2fa":[7,0,2,0,0,8,2],
+"translator_8cpp.html#a50d1fbb237c473754b22a8c481e3b05f":[7,0,2,0,0,8,1]
 };
