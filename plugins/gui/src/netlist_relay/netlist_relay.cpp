@@ -180,16 +180,27 @@ namespace hal
         Node firstNode = node;
         QSet<u32> gatIds;
         QSet<u32> modIds;
+
+        GraphContext* context = gContentManager->getContextManagerWidget()->getCurrentContext();
+        Q_ASSERT(context);
+
+        // exclusive module view will update automatically if module elements get moved
+        bool specialUpdateRequired = !context->getExclusiveModuleId();
+
         if (node.isNull())
         {
             for (u32 id : gSelectionRelay->selectedGatesList())
             {
+                if (specialUpdateRequired && ! context->gates().contains(id))
+                    specialUpdateRequired = false;
                 if (firstNode.isNull()) firstNode = Node(id,Node::Gate);
                 gatIds.insert(id);
             }
 
             for (u32 id : gSelectionRelay->selectedModulesList())
             {
+                if (specialUpdateRequired && ! context->modules().contains(id))
+                    specialUpdateRequired = false;
                 if (firstNode.isNull()) firstNode = Node(id,Node::Module);
                 modIds.insert(id);
             }
@@ -240,16 +251,17 @@ namespace hal
         }
 
         // move module to position of first content node
-        GraphContext* context = gContentManager->getContextManagerWidget()->getCurrentContext();
-        if (context)
+        const NodeBox* box = context->getLayouter()->boxes().boxForNode(firstNode);
+        if (box && (specialUpdateRequired || context->getExclusiveModuleId()))
         {
-            const NodeBox* box = context->getLayouter()->boxes().boxForNode(firstNode);
-            if (box)
-            {
-                ActionMoveNode* actMoveNode = new ActionMoveNode(context->id(),
-                                                             QPoint(box->x(),box->y()));
-                compound->addAction(actMoveNode);
-            }
+            ActionMoveNode* actMoveNode = new ActionMoveNode(context->id(), QPoint(box->x(),box->y()));
+            compound->addAction(actMoveNode);
+        }
+
+        if (specialUpdateRequired)
+        {
+            context->setSpecialUpdate(true);
+            context->setScheduleRemove(modIds,gatIds);
         }
 
         compound->exec();
