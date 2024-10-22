@@ -951,11 +951,11 @@ namespace hal
         {
             if (inputs)
             {
-                if (!ng.is_input) continue;
+                if (!ng.is_input()) continue;
             }
             else
             {
-                if (ng.is_input) continue;
+                if (ng.is_input()) continue;
             }
             if (ng.gate)
                 add_waveform_group(ng.gate, ng.gate_pin_group);
@@ -1023,7 +1023,7 @@ namespace hal
 
         for (SimulationInput::NetGroup ng : mSimulationInput->get_net_groups())
         {
-            if (!ng.is_input) continue;
+            if (!ng.is_input()) continue;
             InputColumnHeader ipc;
             ipc.name = ng.get_name();
             ipc.is_clock = false;

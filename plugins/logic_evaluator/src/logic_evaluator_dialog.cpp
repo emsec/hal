@@ -55,12 +55,18 @@ namespace hal {
         std::unordered_set<const Net*> inputNets =  mSimulationInput->get_input_nets();
         for (SimulationInput::NetGroup grp : mSimulationInput->get_net_groups())
         {
-            if (!grp.is_input) continue;
+            std::cerr << "INPUT " << (grp.is_input() ? "+++ " : "--- ") << grp.get_name() << " " << (int) grp.direction << std::endl;
+            if (!grp.is_input())
+            {
+                std::cerr << "continue" << std::endl;
+                continue;
+            }
             for (const Net* n : grp.get_nets())
             {
                 auto it = inputNets.find(n);
                 if (it != inputNets.end()) inputNets.erase(it);
             }
+            std::cerr << "LogicEvaluatorPingroup" << std::endl;
             LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), false, QString::fromStdString(grp.get_name()), this);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mInputs.append(lep);
@@ -80,7 +86,8 @@ namespace hal {
         std::unordered_set<const Net*> outputNets(mSimulationInput->get_output_nets().begin(),mSimulationInput->get_output_nets().end());
         for (SimulationInput::NetGroup grp : mSimulationInput->get_net_groups())
         {
-            if (grp.is_input) continue;
+            std::cerr << "OUTPUT " << (grp.is_output() ? "+++ " : "--- ") << grp.get_name() << std::endl;
+            if (!grp.is_output()) continue;
             bool isOutputGroup = true;
 
             std::vector<const Net*> temp;
