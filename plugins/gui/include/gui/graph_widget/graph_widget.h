@@ -158,6 +158,8 @@ namespace hal
 
         void focusRect(QRectF targetRect, bool applyCenterFix);
 
+        bool hasFocusedItem() const;
+
         GraphGraphicsView* mView;
         GraphContext* mContext;
 

@@ -541,6 +541,7 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handleNavigationLeftRequest()
     {
+        if (!hasFocusedItem()) return;
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
         mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
@@ -658,6 +659,7 @@ namespace hal
 
     void GraphWidget::handleNavigationRightRequest()
     {
+        if (!hasFocusedItem()) return;
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
         mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
@@ -768,8 +770,42 @@ namespace hal
         }
     }
 
+    bool GraphWidget::hasFocusedItem() const
+    {
+        u32 id = gSelectionRelay->focusId();
+        switch (gSelectionRelay->focusType())
+        {
+        case SelectionRelay::ItemType::Module:
+            if (!mContext->modules().contains(id))
+            {
+                log_warning("gui", "Cannot navigate from selected origin module ID={}, folded module not found on current view.", id);
+                return false;
+            }
+            break;
+        case SelectionRelay::ItemType::Gate:
+            if (!mContext->gates().contains(id))
+            {
+                log_warning("gui", "Cannot navigate from selected origin gate ID={}, gate not found on current view.", id);
+                return false;
+            }
+            break;
+        case SelectionRelay::ItemType::Net:
+            if (!mContext->gates().contains(id))
+            {
+                log_warning("gui", "Cannot navigate from selected origin net ID={}, net not found on current view.", id);
+                return false;
+            }
+            break;
+        default:
+            log_warning("gui", "Cannot navigate, no origin selected");
+            return false;
+        }
+        return true;
+    }
+
     void GraphWidget::handleNavigationUpRequest()
     {
+        if (!hasFocusedItem()) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
@@ -778,6 +814,7 @@ namespace hal
 
     void GraphWidget::handleNavigationDownRequest()
     {
+        if (!hasFocusedItem()) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
