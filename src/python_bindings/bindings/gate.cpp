@@ -178,7 +178,7 @@ namespace hal
             :type: list[hal_py.Module]
         )");
 
-        py_gate.def("get_modules", &Gate::get_modules, R"(
+        py_gate.def("get_modules", &Gate::get_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
             Get all modules that contain this gate, either directly or as parent of another module.
             If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
