@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate &mdash; hal_py v4.4.1-75-ga8e208ffa documentation</title>
+  <title>Gate &mdash; hal_py v4.4.1-76-g47cdf8c61 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-75-ga8e208ffa
+                v4.4.1-76-g47cdf8c61
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -758,7 +758,7 @@ If no valid physical location y-coordinate is assigned, a negative value is retu
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Gate.get_modules">
-<span class="sig-name descname"><span class="pre">get_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.Gate,</span> <span class="pre">arg0:</span> <span class="pre">Callable[[hal::Module],</span> <span class="pre">bool],</span> <span class="pre">arg1:</span> <span class="pre">bool</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List[hal::Module]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_modules" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.Gate,</span> <span class="pre">filter:</span> <span class="pre">Callable[[hal::Module],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">recursive:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List[hal::Module]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_modules" title="Permalink to this definition"></a></dt>
 <dd><p>Get all modules that contain this gate, either directly or as parent of another module.
 If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>

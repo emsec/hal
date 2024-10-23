@@ -266,7 +266,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2gate_8cpp_
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral">            :type: list[hal_py.Module]</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral">        py_gate.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, &amp;<a class="code" href="classhal_1_1_gate.html#ab40f6f6b7cbe6ada763ed36b45f9ad33">Gate::get_modules</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral">        py_gate.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, &amp;<a class="code" href="classhal_1_1_gate.html#ab40f6f6b7cbe6ada763ed36b45f9ad33">Gate::get_modules</a>, py::arg(<span class="stringliteral">&quot;filter&quot;</span>) = <span class="keyword">nullptr</span>, py::arg(<span class="stringliteral">&quot;recursive&quot;</span>) = <span class="keyword">true</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">            Get all modules that contain this gate, either directly or as parent of another module.</span></div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.</span></div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</span></div>
@@ -778,7 +778,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2gate_8cpp_
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2gate_8cpp.html">gate.cpp</a></li>
-    <li class="footer">Generated on Tue Oct 22 2024 22:01:02 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Oct 23 2024 11:48:54 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

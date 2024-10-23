@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_token_stream.html#a41a6a977f6adbbacf250be5ad1b78b83":[4,1,2,5,4],
 "classhal_1_1_token_stream.html#a505399e571df285e38c42b4b6a7ac98f":[4,1,2,5,20],
 "classhal_1_1_token_stream.html#a660cabea791d72b7980930d49e8f8ec9":[4,1,2,5,16],
 "classhal_1_1_token_stream.html#a663fd5064d81ff35e0d957858bf8ddb8":[4,1,2,5,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5":[6,0,0,3,0,27],
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a79fdf485990c5381c2650aa3e5546869":[6,0,0,3,0,25],
 "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a8f3197970954019cd49dcd6d1a1376d1":[6,0,0,3,0,5],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30":[6,0,0,3,0,4],
-"classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9641fcf8d678c37e5a015b8da133a323":[6,0,0,3,0,28]
+"classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30":[6,0,0,3,0,4]
 };
