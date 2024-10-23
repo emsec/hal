@@ -245,9 +245,11 @@ namespace hal
         }
         else
         {
+            u32 targetModuleId = md.selectedId();
             ActionAddItemsToObject* actAddItems = new ActionAddItemsToObject(modIds,gatIds);
-            actAddItems->setObject(UserActionObject(md.selectedId(),UserActionObjectType::Module));
+            actAddItems->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
             compound->addAction(actAddItems);
+            specialUpdateRequired = false;
         }
 
         // move module to position of first content node
