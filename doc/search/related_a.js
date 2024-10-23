@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['waittobeseatedlist_40801',['WaitToBeSeatedList',['../classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a',1,'hal::WaitToBeSeatedEntry']]],
-  ['waittobeseatedwaiting_40802',['WaitToBeSeatedWaiting',['../classhal_1_1_wait_to_be_seated_entry.html#a7b2586c86a9eb219c90855caa74e8130',1,'hal::WaitToBeSeatedEntry']]]
+  ['waittobeseatedlist_40806',['WaitToBeSeatedList',['../classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a',1,'hal::WaitToBeSeatedEntry']]],
+  ['waittobeseatedwaiting_40807',['WaitToBeSeatedWaiting',['../classhal_1_1_wait_to_be_seated_entry.html#a7b2586c86a9eb219c90855caa74e8130',1,'hal::WaitToBeSeatedEntry']]]
 ];
