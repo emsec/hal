@@ -55,18 +55,13 @@ namespace hal {
         std::unordered_set<const Net*> inputNets =  mSimulationInput->get_input_nets();
         for (SimulationInput::NetGroup grp : mSimulationInput->get_net_groups())
         {
-            std::cerr << "INPUT " << (grp.is_input() ? "+++ " : "--- ") << grp.get_name() << " " << (int) grp.direction << std::endl;
             if (!grp.is_input())
-            {
-                std::cerr << "continue" << std::endl;
                 continue;
-            }
             for (const Net* n : grp.get_nets())
             {
                 auto it = inputNets.find(n);
                 if (it != inputNets.end()) inputNets.erase(it);
             }
-            std::cerr << "LogicEvaluatorPingroup" << std::endl;
             LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), false, QString::fromStdString(grp.get_name()), this);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mInputs.append(lep);
@@ -86,8 +81,8 @@ namespace hal {
         std::unordered_set<const Net*> outputNets(mSimulationInput->get_output_nets().begin(),mSimulationInput->get_output_nets().end());
         for (SimulationInput::NetGroup grp : mSimulationInput->get_net_groups())
         {
-            std::cerr << "OUTPUT " << (grp.is_output() ? "+++ " : "--- ") << grp.get_name() << std::endl;
-            if (!grp.is_output()) continue;
+            if (!grp.is_output())
+                continue;
             bool isOutputGroup = true;
 
             std::vector<const Net*> temp;
@@ -294,7 +289,44 @@ namespace hal {
         // propagate by gates
         for (const Gate* g : mEvaluationOrder)
         {
-            QMap<QString,QString> referableOutputPins;
+            struct FunctionReference
+            {
+                const GatePin* gatePin;
+                QString theFunction;
+                QString ccVariable;
+                QStringList dependencies;
+                bool resolved;
+                FunctionReference(const GatePin* gp, const QString& func) : gatePin(gp), theFunction(func), resolved(false) {;}
+            };
+
+            QMap<QString,FunctionReference> referableOutputPins;
+            int unresolved = 0;
+
+            // collect all functions
+            for (const GatePin* gp : g->get_type()->get_output_pins())
+            {
+                QString pinNameOut = QString::fromStdString(gp->get_name());
+                referableOutputPins[pinNameOut] = FunctionReference(gp, QString::fromStdString(g->get_boolean_function(gp).to_string()));
+                ++unresolved;
+            }
+
+            // find dependencies
+            for (auto it = referableOutputPins.begin(); it != referableOutputPins.end(); ++it)
+            {
+                for (auto jt = referableOutputPins.begin(); jt != referableOutputPins.end(); ++jt)
+                {
+                    if (it == jt) continue; // cannot reference to itself
+                    if (it->theFunction.contains(jt.key()))
+                        it->dependencies.append(jt.key());
+                }
+            }
+
+            // resolve
+            while (unresolved)
+            {
+                for (auto it = referableOutputPins.begin(); it != referableOutputPins.end(); ++it)
+                {
+            }
 
             for (const GatePin* gp : g->get_type()->get_output_pins())
             {
@@ -316,16 +348,20 @@ namespace hal {
                     QString ccVar = QString("logic_evaluator_signals[%1]").arg(inxIn);
                     theFunction.replace(pinNameIn, ccVar);
                 }
+                std::cerr << "replace: ";
                 for (auto it = referableOutputPins.constBegin(); it != referableOutputPins.constEnd(); ++it)
                 {
                     theFunction.replace(it.key(),it.value());
+                    std::cerr << "{" << it.key().toStdString() << "} ";
                 }
+                std::cerr << "\t<" << theFunction.toStdString() << ">" << std::endl;
 
                 int inxOut = mExternalArrayIndex.value(nOut,-1);
                 if (inxOut < 0) return false;
                 codeEvalFunction += QString("  logic_evaluator_signals[%1] = %2;\n").arg(inxOut).arg(theFunction);
 
                 referableOutputPins[pinNameOut] = QString("logic_evaluator_signals[%1]").arg(inxOut);
+                std::cerr << "referable: <" << pinNameOut.toStdString() << ">" << std::endl;
             }
         }
 

@@ -68,8 +68,8 @@ namespace hal {
             NetGroup() : direction(Undefined), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
             std::vector<const Net*> get_nets() const;
             std::string get_name() const;
-            bool is_input() const { direction == InputOnly; }
-            bool is_output() const { direction == OutputOnly; }
+            bool is_input() const { return direction == InputOnly; }
+            bool is_output() const { return direction == OutputOnly; }
         };
 
     private:
