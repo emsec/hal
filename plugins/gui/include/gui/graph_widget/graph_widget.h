@@ -158,7 +158,9 @@ namespace hal
 
         void focusRect(QRectF targetRect, bool applyCenterFix);
 
-        bool hasFocusedItem() const;
+        bool hasFocusedItem(SelectionRelay::Subfocus navigateDirection) const;
+
+        bool hasGate(const Gate* g) const;
 
         GraphGraphicsView* mView;
         GraphContext* mContext;

@@ -541,7 +541,7 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handleNavigationLeftRequest()
     {
-        if (!hasFocusedItem()) return;
+        if (!hasFocusedItem(SelectionRelay::Subfocus::Left)) return;
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
         mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
@@ -659,7 +659,7 @@ namespace hal
 
     void GraphWidget::handleNavigationRightRequest()
     {
-        if (!hasFocusedItem()) return;
+        if (!hasFocusedItem(SelectionRelay::Subfocus::Right)) return;
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
         mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
@@ -770,8 +770,19 @@ namespace hal
         }
     }
 
-    bool GraphWidget::hasFocusedItem() const
+    bool GraphWidget::hasFocusedItem(SelectionRelay::Subfocus navigateDirection) const
     {
+        if (gSelectionRelay->focusType() == SelectionRelay::ItemType::None && gSelectionRelay->numberSelectedItems() == 1)
+        {
+            // focus item has not been set but since only one item is selected it is obvious what the user wants
+            if (gSelectionRelay->numberSelectedModules())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Module, gSelectionRelay->selectedModulesVector().at(0));
+            else if (gSelectionRelay->numberSelectedGates())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Gate, gSelectionRelay->selectedGatesVector().at(0));
+            else if (gSelectionRelay->numberSelectedNets())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Net, gSelectionRelay->selectedNetsVector().at(0));
+        }
+
         u32 id = gSelectionRelay->focusId();
         switch (gSelectionRelay->focusType())
         {
@@ -790,12 +801,20 @@ namespace hal
             }
             break;
         case SelectionRelay::ItemType::Net:
-            if (!mContext->gates().contains(id))
-            {
-                log_warning("gui", "Cannot navigate from selected origin net ID={}, net not found on current view.", id);
-                return false;
+            switch (navigateDirection) {
+            case SelectionRelay::Subfocus::Left:
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
+                    if (hasGate(ep->get_gate())) return true;
+                break;
+            case SelectionRelay::Subfocus::Right:
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
+                    if (hasGate(ep->get_gate())) return true;
+                break;
+            default:
+                return true;
             }
-            break;
+            log_warning("gui", "Cannot navigate from selected origin net ID={}, net not found on current view.", id);
+            return false;
         default:
             log_warning("gui", "Cannot navigate, no origin selected");
             return false;
@@ -803,9 +822,23 @@ namespace hal
         return true;
     }
 
+    bool GraphWidget::hasGate(const Gate* g) const
+    {
+        if (!g) return false;
+        if (mContext->gates().contains(g->get_id())) return true;
+        const Module* parentModule = g->get_module();
+        while (parentModule)
+        {
+            if (mContext->modules().contains(parentModule->get_id()))
+                return true;
+            parentModule = parentModule->get_parent_module();
+        }
+        return false;
+    }
+
     void GraphWidget::handleNavigationUpRequest()
     {
-        if (!hasFocusedItem()) return;
+        if (!hasFocusedItem(SelectionRelay::Subfocus::None)) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
@@ -814,7 +847,7 @@ namespace hal
 
     void GraphWidget::handleNavigationDownRequest()
     {
-        if (!hasFocusedItem()) return;
+        if (!hasFocusedItem(SelectionRelay::Subfocus::None)) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
