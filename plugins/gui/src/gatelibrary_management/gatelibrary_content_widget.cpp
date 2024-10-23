@@ -147,6 +147,7 @@ namespace hal
 
     void GatelibraryContentWidget::handleSaveAsAction()
     {
+        std::filesystem::path oldPath = mGateLibrary->get_path();
         QString path  = QDir::currentPath();
         QFile gldpath(":/path/gate_library_definitions");
         if (gldpath.open(QIODevice::ReadOnly))
@@ -162,14 +163,16 @@ namespace hal
         if (fd.exec()) {
             filename = fd.selectedFiles().front();
         }
-        QRegExp rx("*.hgl");
-        rx.setPatternSyntax(QRegExp::Wildcard);
         if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true))
         {
             mPath = filename.toStdString();
             gFileStatusManager->gatelibSaved();
             window()->setWindowTitle(filename);
             mGateLibrary->set_path(std::filesystem::path(mPath));
+            QString glName = filename.mid(filename.lastIndexOf('/')+1); //truncate path until first '/'
+            std::string gatelibName = glName.left(glName.length()-4).toStdString(); //remove file extension to get the name
+            if(mPath != oldPath)
+                mGateLibrary->set_name(gatelibName);
         }
         std::string p = mGateLibrary->get_path().generic_string();
         mCreationMode = false;
