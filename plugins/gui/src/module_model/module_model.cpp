@@ -812,8 +812,8 @@ namespace hal
     void ModuleModel::updateNetName(u32 id)
     {
         Q_ASSERT(gNetlist->get_net_by_id(id));
-        Q_ASSERT(mNetMap.contains(id));
 
+        // if net elment not in model loop will reject
         for (auto it = mNetMap.lowerBound(id); it != mNetMap.upperBound(id); ++it)
         {
             ModuleItem* item = it.value();
