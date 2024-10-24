@@ -49,6 +49,8 @@ namespace hal {
     class SimulationInput {
 
     public:
+        enum DirectionType { Undefined, InputOnly, OutputOnly, Mixed};
+
         struct Clock
         {
             const Net* clock_net;
@@ -59,13 +61,15 @@ namespace hal {
 
         struct NetGroup
         {
-            bool is_input;
+            DirectionType direction;
             const Gate* gate;
             PinGroup<ModulePin>* module_pin_group;
             PinGroup<GatePin>* gate_pin_group;
-            NetGroup() : is_input(true), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
+            NetGroup() : direction(Undefined), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
             std::vector<const Net*> get_nets() const;
             std::string get_name() const;
+            bool is_input() const { return direction == InputOnly; }
+            bool is_output() const { return direction == OutputOnly; }
         };
 
     private:
