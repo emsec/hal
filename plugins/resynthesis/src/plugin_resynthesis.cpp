@@ -26,6 +26,7 @@ namespace hal
     {
         std::set<std::string> retval;
         retval.insert("genlib_writer");
+        retval.insert("verilog_parser");
         return retval;
     }
 }    // namespace hal

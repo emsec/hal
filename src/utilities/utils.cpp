@@ -2,6 +2,7 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
 #include <dirent.h>
 #include <fstream>
 #include <random>
@@ -37,11 +38,17 @@ namespace hal
 #ifdef _WIN32
             DWORD ftyp = GetFileAttributesA(folder.c_str());
             if (ftyp == INVALID_FILE_ATTRIBUTES)
+            {
                 return false;    //something is wrong with your path!
+            }
 
             if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+            {
                 if (0 == access(folder.c_str(), R_OK))
+                {
                     return true;
+                }
+            }
 
             return false;    // this is not a directory!
 #else
@@ -65,7 +72,9 @@ namespace hal
 #ifdef _WIN32
             DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
             if (ret == 0 || ret == sizeof(buf))
+            {
                 return std::string();
+            }
             return std::filesystem::path(buf);
 #elif __APPLE__ && __MACH__
             uint32_t size = sizeof(buf);
