@@ -126,7 +126,7 @@ namespace hal {
             case 0: tmpIcon = gui_utility::getStyledSvgIcon(loadIconStyle(),loadIconPath());     break;
             case 1: tmpIcon = gui_utility::getStyledSvgIcon(unloadIconStyle(),unloadIconPath()); break;
             case 2: tmpIcon = gui_utility::getStyledSvgIcon(cliIconStyle(),cliIconPath());       break;
-            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconEnabledStyle(),guiIconPath());       break;
+            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconEnabledStyle(),guiIconEnabledPath());       break;
             }
             mIconLegend[i]->setPixmap(tmpIcon.pixmap(32,32));
         }
@@ -139,8 +139,14 @@ namespace hal {
 
     void GuiPluginManager::handleToggleGuiContribution(const QString &pluginName)
     {
+        int newState = 1;
         GuiExtensionInterface* geif = getGuiExtensions().value(pluginName);
-        if (geif) geif->set_contribution_enabled(!geif->is_contribution_enabled());
+        if (geif)
+        {
+            geif->set_contribution_enabled(!geif->is_contribution_enabled());
+            newState = geif->is_contribution_enabled() ? 3 : 2;
+        }
+        mGuiPluginTable->setGuiExtensionState(pluginName, newState);
     }
 
     void GuiPluginManager::handleShowCliOptions(const QString &pluginName, const QString &cliOptions)
@@ -180,9 +186,14 @@ namespace hal {
         return mCliIconStyle;
     }
 
-    QString GuiPluginManager::guiIconPath() const
+    QString GuiPluginManager::guiIconEnabledPath() const
     {
-        return mGuiIconPath;
+        return mGuiIconEnabledPath;
+    }
+
+    QString GuiPluginManager::guiIconDisabledPath() const
+    {
+        return mGuiIconDisabledPath;
     }
 
     QString GuiPluginManager::guiIconEnabledStyle() const
@@ -240,9 +251,14 @@ namespace hal {
         mCliIconStyle = s;
     }
 
-    void GuiPluginManager::setGuiIconPath(const QString& s)
+    void GuiPluginManager::setGuiIconEnabledPath(const QString& s)
     {
-        mGuiIconPath = s;
+        mGuiIconEnabledPath = s;
+    }
+
+    void GuiPluginManager::setGuiIconDisabledPath(const QString& s)
+    {
+        mGuiIconDisabledPath = s;
     }
 
     void GuiPluginManager::setGuiIconEnabledStyle(const QString& s)
@@ -492,7 +508,26 @@ namespace hal {
     {
         int irow = mLookup.value(pluginName,-1);
         if (irow < 0 && irow >= mEntries.size()) return;
-        mEntries.at(irow)->mState = state;
+        GuiPluginEntry* gpe = mEntries.at(irow);
+        gpe->mState = state;
+        if (state >= GuiPluginEntry::AutoLoad)
+        {
+            int newGuiExtensionState = 1;
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName.toStdString());
+            if (bpif)
+            {
+                for (AbstractExtensionInterface* aeif : bpif->get_extensions())
+                {
+                    GuiExtensionInterface* geif = dynamic_cast<GuiExtensionInterface*>(aeif);
+                    if (geif)
+                    {
+                        newGuiExtensionState = gpe->enforceGuiExtensionState(geif);
+                        break;
+                    }
+                }
+            }
+            gpe->mGuiExtensionState = newGuiExtensionState;
+        }
         Q_EMIT dataChanged(index(irow,0),index(irow,10));
     }
 
@@ -768,10 +803,18 @@ namespace hal {
         return mEntries.at(index.row())->mName == "hal_gui";
     }
 
-    bool GuiPluginTable::hasGuiExtension(const QModelIndex& index) const
+    int GuiPluginTable::guiExtensionState(const QModelIndex& index) const
     {
-        if (index.row() >= mEntries.size()) return false;
-        return mEntries.at(index.row())->mGuiExtensions;
+        if (index.row() >= mEntries.size()) return 0;
+        return mEntries.at(index.row())->mGuiExtensionState;
+    }
+
+    void GuiPluginTable::setGuiExtensionState(const QString& pluginName, int state)
+    {
+        int irow = mLookup.value(pluginName,-1);
+        if (irow < 0 && irow >= mEntries.size()) return;
+        mEntries.at(irow)->mGuiExtensionState = state;
+        persist();
     }
 
     bool GuiPluginTable::hasCliExtension(const QModelIndex& index) const
@@ -811,7 +854,7 @@ namespace hal {
           mFileModified(info.lastModified()),
           mFeature(FacExtensionInterface::FacUnknown),
           mUserInterface(false),
-          mGuiExtensions(false),
+          mGuiExtensionState(0),
           mFileFound(true)
     {;}
 
@@ -838,13 +881,32 @@ namespace hal {
             return "Other HAL plugin";
         }
         case 6: return mFeatureArguments.join(' ');
-        case 7: return mGuiExtensions;
+        case 7: return mGuiExtensionState;
         case 8: return mCliOptions;
         case 9: return isLoaded() ? "LOADED" : "-";
         case 10: return (int) mState;
         }
         return QVariant();
     }
+
+    int GuiPluginEntry::enforceGuiExtensionState(GuiExtensionInterface* geif) const
+    {
+        if (!geif) return 1;
+
+        switch (mGuiExtensionState) // enforce user setting
+        {
+        case 2:
+            geif->set_contribution_enabled(false);
+            break;
+        case 3:
+            geif->set_contribution_enabled(true);
+            break;
+        default:
+            break;
+        }
+        return (geif->is_contribution_enabled() ? 3 : 2);
+    }
+
 
     void GuiPluginEntry::persist(QSettings* settings) const
     {
@@ -857,7 +919,7 @@ namespace hal {
         settings->setValue("feature_code", (int) mFeature);
         settings->setValue("feature_args", mFeatureArguments);
         settings->setValue("user_interface", mUserInterface);
-        settings->setValue("extends_gui", mGuiExtensions);
+        settings->setValue("gui_extension_state", mGuiExtensionState);
         settings->setValue("cli_options", mCliOptions);
     }
 
@@ -873,7 +935,7 @@ namespace hal {
         mFeature = (FacExtensionInterface::Feature) settings->value("feature_code").toInt();
         mFeatureArguments = settings->value("feature_args").toStringList();
         mUserInterface    = settings->value("user_interface").toBool();
-        mGuiExtensions    = settings->value("extends_gui").toBool();
+        mGuiExtensionState  = settings->value("gui_extension_state").toInt();
         mCliOptions    = settings->value("cli_options").toString();
         mFilePath = QString::fromStdString(plugin_manager::get_plugin_path(mName.toStdString()).string());
     }
@@ -898,14 +960,21 @@ namespace hal {
                 mFeatureArguments.append(QString::fromStdString(arg));
         }
         mCliOptions.clear();
+
+        int newGuiExtensionState = 0; // not initialized
         for (AbstractExtensionInterface* aeif : bpif->get_extensions())
         {
             CliExtensionInterface* ceif = nullptr;
-            if (dynamic_cast<GuiExtensionInterface*>(aeif))
-                mGuiExtensions = true;
+            GuiExtensionInterface* geif = nullptr;
+            if (geif = dynamic_cast<GuiExtensionInterface*>(aeif))
+            {
+                mGuiExtensionState = newGuiExtensionState = enforceGuiExtensionState(geif);
+            }
             else if ((ceif=dynamic_cast<CliExtensionInterface*>(aeif)))
                 mCliOptions = QString::fromStdString(ceif->get_cli_options().get_options_string());
         }
+        if (!newGuiExtensionState) mGuiExtensionState = 1; // no GUI extension
+
         mUserInterface = (dynamic_cast<const UIPluginInterface*>(bpif) != nullptr);
         if (modified.isValid()) mFileModified = modified;
     }
@@ -928,8 +997,8 @@ namespace hal {
         mIconLoad = gui_utility::getStyledSvgIcon(gpm->loadIconStyle(),gpm->loadIconPath());
         mIconUnload = gui_utility::getStyledSvgIcon(gpm->unloadIconStyle(), gpm->unloadIconPath());
         mIconCliOptions = gui_utility::getStyledSvgIcon(gpm->cliIconStyle(), gpm->cliIconPath());
-        mIconEnableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconEnabledStyle(), gpm->guiIconPath());
-        mIconDisableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconDisabledStyle(), gpm->guiIconPath());
+        mIconEnableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconEnabledStyle(), gpm->guiIconEnabledPath());
+        mIconDisableGuiContribution = gui_utility::getStyledSvgIcon(gpm->guiIconDisabledStyle(), gpm->guiIconDisabledPath());
     }
 
     GuiPluginDelegate::~GuiPluginDelegate()
@@ -945,18 +1014,44 @@ namespace hal {
         if (!plt) return;
         QStyleOptionButton button;
         bool drawIcon = true;
+        int iconState = 0;
         switch (index.column())
         {
         case 7:
             button.iconSize = QSize(w-4,w-4);
-            if (plt->hasGuiExtension(index))
+            iconState = plt->guiExtensionState(index);
+
+            if (!iconState)
             {
                 QString pluginName = plt->at(index.row())->name();
                 GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(pluginName);
-                button.icon = (plt->isLoaded(index) && geif && geif->is_contribution_enabled()) ? mIconEnableGuiContribution : mIconDisableGuiContribution;
+                if (!plt->isLoaded(index))
+                    iconState = 0;
+                else if (!geif)
+                    iconState = 1;
+                else if (geif->is_contribution_enabled())
+                    iconState = 3;
+                else
+                    iconState = 2;
             }
-            else
+
+            switch (iconState)
+            {
+            case 0:
+            {
                 drawIcon = false;
+                break;
+            }
+            case 1:
+                drawIcon = false;
+                break;
+            case 2:
+                button.icon = mIconDisableGuiContribution;
+                break;
+            case 3:
+                button.icon = mIconEnableGuiContribution;
+                break;
+            }
             break;
         case 8:
             button.iconSize = QSize(w-4,w-4);

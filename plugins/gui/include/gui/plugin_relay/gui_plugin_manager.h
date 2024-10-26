@@ -63,7 +63,7 @@ namespace hal {
         FacExtensionInterface::Feature mFeature;
         QStringList mFeatureArguments;
         bool mUserInterface;
-        bool mGuiExtensions;
+        int mGuiExtensionState;  // 0 = not initialized   1 = no extensions   2 = disabled   3 = enabled
         QString mCliOptions;
         bool mFileFound;
 
@@ -79,6 +79,7 @@ namespace hal {
         void updateFromLoaded(const BasePluginInterface* bpif, bool isUser, const QDateTime& modified = QDateTime());
         bool isFileFound() const { return mFileFound; }
         void setFileFound(bool fnd) { mFileFound = fnd; }
+        int enforceGuiExtensionState(GuiExtensionInterface* geif) const;
     };
 
     class GuiPluginManager;
@@ -148,7 +149,8 @@ namespace hal {
         QStringList neededBy(const QString& pluginName);
         void persist();
         bool isLoaded(const QModelIndex& index) const;
-        bool hasGuiExtension(const QModelIndex& index) const;
+        int guiExtensionState(const QModelIndex& index) const;
+        void setGuiExtensionState(const QString& pluginName, int state);
         bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
@@ -172,7 +174,8 @@ namespace hal {
         Q_PROPERTY(QString unloadIconStyle READ unloadIconStyle WRITE setUnloadIconStyle)
         Q_PROPERTY(QString cliIconPath READ cliIconPath WRITE setCliIconPath)
         Q_PROPERTY(QString cliIconStyle READ cliIconStyle WRITE setCliIconStyle)
-        Q_PROPERTY(QString guiIconPath READ guiIconPath WRITE setGuiIconPath)
+        Q_PROPERTY(QString guiIconEnabledPath READ guiIconEnabledPath WRITE setGuiIconEnabledPath)
+        Q_PROPERTY(QString guiIconDisabledPath READ guiIconDisabledPath WRITE setGuiIconDisabledPath)
         Q_PROPERTY(QString guiIconEnabledStyle READ guiIconEnabledStyle WRITE setGuiIconEnabledStyle)
         Q_PROPERTY(QString guiIconDisabledStyle READ guiIconDisabledStyle WRITE setGuiIconDisabledStyle)
         Q_PROPERTY(QColor defaultTextColor READ defaultTextColor WRITE setDefaultTextColor)
@@ -188,7 +191,8 @@ namespace hal {
         QString mUnloadIconStyle;
         QString mCliIconPath;
         QString mCliIconStyle;
-        QString mGuiIconPath;
+        QString mGuiIconEnabledPath;
+        QString mGuiIconDisabledPath;
         QString mGuiIconEnabledStyle;
         QString mGuiIconDisabledStyle;
         QColor mDefaultTextColor;
@@ -216,7 +220,8 @@ namespace hal {
         QString unloadIconStyle() const;
         QString cliIconPath() const;
         QString cliIconStyle() const;
-        QString guiIconPath() const;
+        QString guiIconEnabledPath() const;
+        QString guiIconDisabledPath() const;
         QString guiIconEnabledStyle() const;
         QString guiIconDisabledStyle() const;
         QColor defaultTextColor() const;
@@ -229,7 +234,8 @@ namespace hal {
         void setUnloadIconStyle(const QString& s);
         void setCliIconPath(const QString& s);
         void setCliIconStyle(const QString& s);
-        void setGuiIconPath(const QString& s);
+        void setGuiIconEnabledPath(const QString& s);
+        void setGuiIconDisabledPath(const QString& s);
         void setGuiIconEnabledStyle(const QString& s);
         void setGuiIconDisabledStyle(const QString& s);
         void setDefaultTextColor(QColor& c);
