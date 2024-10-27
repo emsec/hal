@@ -12,6 +12,11 @@ namespace hal
     int IniSettingsPopup::last_probe_limit = -1;
     int IniSettingsPopup::last_probe_type = -1;
 
+    /**
+     * @brief Construct a new Ini Settings Popup:: Ini Settings Popup object
+     * 
+     * @param parent 
+     */
     IniSettingsPopup::IniSettingsPopup(QWidget* parent) : QDialog(parent)
     {
         // Create radio buttons
@@ -66,6 +71,10 @@ namespace hal
         setWindowTitle("Choose Settings");
     }
 
+    /**
+     * @brief Handles the event for clicking the accept button
+     * 
+     */
     void IniSettingsPopup::acceptSelection()
     {
         if (scan_chain_option->isChecked())
@@ -80,6 +89,11 @@ namespace hal
         accept();
     }
 
+    /**
+     * @brief Returns the selected probing type method 
+     * 
+     * @return int 
+     */
     int IniSettingsPopup::get_selected_probing_model()
     {
         if (scan_chain_option->isChecked())
@@ -96,11 +110,20 @@ namespace hal
         }
     }
 
+    /**
+     * @brief Returns the selected probing limit
+     * 
+     * @return int 
+     */
     int IniSettingsPopup::get_probe_limit()
     {
         return probe_limit->value();
     }
 
+    /**
+     * @brief Function that is called when clicking the right click menu entry. This function creates the popup hand handles accept event and calls the gate replacement method
+     * 
+     */
     void NetlistModifierPlugin::open_popup()
     {
         IniSettingsPopup dialog(qApp->activeWindow());

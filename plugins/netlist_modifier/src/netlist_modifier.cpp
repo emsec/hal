@@ -47,6 +47,14 @@ namespace hal
     {
     }
 
+    /**
+     * @brief This function generates the new gate type name based on the number of input and output pins
+     * 
+     * @param num_in Number of input pins to the gate
+     * @param num_out Number of output pins to the gate
+     * @param num_io Number of io pins to the gate
+     * @return std::string The newly generated gate type name
+     */
     std::string NetlistModifierPlugin::obfuscated_gate_name(int num_in, int num_out, int num_io)
     {
         std::string retval = "UNKNOWN_" + std::to_string(num_in) + "IN_" + std::to_string(num_out) + "OUT";

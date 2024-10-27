@@ -6,10 +6,22 @@
 #include <fstream>
 #include <sstream>
 
+/**
+ * @brief This file contains the methods to encrypt the original netlist and the ini file into an encrypted zip archive
+ * 
+ */
+
 namespace hal
 {
+    /**
+     * @brief This function return a random alphanumerical string with a given length
+     * 
+     * @param len The length of the generated random string
+     * @return std::string The generated random string
+     */
     std::string gen_random_string(int len)
     {
+        // list of allowed symbols
         const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         std::string random_string;
         random_string.reserve(len);
@@ -24,11 +36,25 @@ namespace hal
         return random_string;
     }
 
+    /**
+     * @brief This function generates a salted password based on a given password and a salt.
+     * 
+     * @param password The initial password
+     * @param salt The salt that should be used for the salting process
+     * @return std::string The salted password
+     */
     std::string gen_salted_password(std::string password, std::string salt)
     {
         return password + salt;
     }
 
+    /**
+     * @brief This function creates the content of the ini file given the desired settings
+     * 
+     * @param probe_type The desired probe type. Currently this value can be 0 (scan chain probing) or 1 (t probing)
+     * @param probe_limit The desired maximum number of allowed probes
+     * @return std::string The generated content of the ini file
+     */
     std::string generate_ini_content(int probe_type, int probe_limit)
     {
         std::ostringstream ini_oss;
@@ -41,11 +67,23 @@ namespace hal
         return ini_oss.str();
     }
 
+    /**
+     * @brief Function to create the encrypted zip archive with a given password and settings like probe-type
+     * 
+     * @param password The password used for the encryption
+     * @param probe_type the probe type that should be stored in the ini file
+     * @param probe_limit the probe limit that should be stored in the ini file
+     * @param salt (optional) The salt used for encryption. If a empty string is provided as the salt a random one is generated
+     * @param existing_hal_file boolean whether or not a copy of the original unaltered hal file exists or if the current netlist needs to be saved
+     * @return bool returns true on success
+     */
     bool NetlistModifierPlugin::create_encrypted_zip(std::string password, int probe_type, int probe_limit, std::string salt, bool existing_hal_file)
     {
+        // get the path to the current project directory
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
+        // generate salt if no salt is provided
         if (salt == "")
         {
             salt = gen_random_string(20);
@@ -85,6 +123,7 @@ namespace hal
             return false;
         }
 
+        // write the original netlist file to the zip archive. Use the salted password for encryption
         QFile netlist_file(QString::fromStdString(project_dir_path / "original/original.hal"));
         if (!netlist_file.open(QIODevice::ReadOnly))
         {
@@ -107,6 +146,7 @@ namespace hal
         // create tmp ini file
         std::string ini_content = generate_ini_content(probe_type, probe_limit);
 
+        // write the ini file to the zip archive. Use the salted password for encryption
         QuaZipFile ini_zip_outFile(&zip);
         if (!ini_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo("settings.ini"), salted_password.c_str()))
         {
@@ -116,13 +156,13 @@ namespace hal
         ini_zip_outFile.write(ini_content.c_str());
         ini_zip_outFile.close();
 
+        // write the used salt to the zip archive. Use the original unsalted password for enryption
         QuaZipFile salt_zip_outFile(&zip);
         if (!salt_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo("salt.encrypt"), password.c_str()))
         {
             log_error("File could not be added with encryption!");
             return false;
         }
-
         salt_zip_outFile.write(salt.c_str());
         salt_zip_outFile.close();
 
@@ -143,11 +183,21 @@ namespace hal
         return true;
     }
 
+    /**
+     * @brief This function updates an existing zip archive if just the settings of the ini got changed
+     * 
+     * @param password The password used for encrypting
+     * @param probe_type The probe type that should be stored in the ini file
+     * @param probe_limit the probe limit that should be stored in the ini file
+     * @return bool Returns true on success
+     */
     bool NetlistModifierPlugin::update_encrypted_zip(std::string password, int probe_type, int probe_limit)
     {
+        // get the path to the current project directory
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
+        // open the existing zip archive
         QuaZip zip(QString::fromStdString(project_dir_path / "original/original.zip"));
 
         if (!zip.open(QuaZip::mdUnzip))
@@ -156,6 +206,7 @@ namespace hal
             return false;
         }
 
+        // retrieve the salt from the zip archive
         zip.setCurrentFile("salt.encrypt");
         QuaZipFile zipFile(&zip);
         if (!zipFile.open(QIODevice::ReadOnly, password.c_str()))
@@ -164,11 +215,13 @@ namespace hal
             return false;
         }
 
+        // generate the salted password that was used to encrypt the other files
         QByteArray salt_buffer      = zipFile.readAll();
         std::string salt            = std::string(salt_buffer.constData(), salt_buffer.size());
         std::string salted_password = gen_salted_password(password, salt);
         zipFile.close();
 
+        // retrieve the original netlist and write it to a tmp file
         zip.setCurrentFile("original.hal");
         if (!zipFile.open(QIODevice::ReadOnly, salted_password.c_str()))
         {
@@ -210,6 +263,7 @@ namespace hal
             return false;
         }
 
+        // create the new encrypted zip archive using the new settings
         return create_encrypted_zip(password, probe_type, probe_limit, salt, true);
     }
 }    // namespace hal

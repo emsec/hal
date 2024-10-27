@@ -6,13 +6,24 @@
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/writer.h>
 
+/**
+ * @brief This file contains the functionalities to generate the modified netlist with the obfuscated gate types
+ * 
+ */
+
 namespace hal
 {
     const char* OBFUSCATED   = "_obfuscated";
     const char* GATE_LIB_TAG = "gate_library";
 
+    /**
+     * @brief This function reads the current gate lib and adds for each input/output size of the contained cells an obfuscated version.
+     * 
+     * @return bool true on success
+     */
     bool NetlistModifierPlugin::modify_gatelibrary()
     {
+        // open the current project directory
         ProjectManager* pm = ProjectManager::instance();
 
         std::filesystem::path projFilePath(pm->get_project_directory());

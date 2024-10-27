@@ -5,6 +5,11 @@
 
 #define SECRET_PASSWORD "test12345"
 
+/**
+ * @brief Header file for the netlist modifier plugin. This plugin is used by the researcher to replace some gates with gates of an unknown type
+ * 
+ */
+
 namespace hal
 {
     extern Netlist* gNetlist;

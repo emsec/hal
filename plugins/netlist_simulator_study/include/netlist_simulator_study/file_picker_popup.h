@@ -5,6 +5,11 @@
 #include <QPushButton>
 #include <QRadioButton>
 
+/**
+ * @brief Header file for the pop up used to select the simulation input file and start the simulation
+ * 
+ */
+
 namespace hal
 {
     class FilePickerPopup : public QDialog

@@ -9,12 +9,21 @@
 
 namespace hal
 {
+    /**
+     * @brief This functions replaces all the selected gates with a gate of an unknown gate type
+     * 
+     * @param probe_type The allowed probe type that should be written in the ini file
+     * @param probe_limit The allowed probe limit that should be written in the ini file
+     * @return bool true in success
+     */
     bool NetlistModifierPlugin::modify_in_place(int probe_type, int probe_limit)
     {
+        // lock the GUI so the view is not updated for every replaced gate individually but rather only once when all gates are replaced
         UIPluginInterface* mGuiPlugin = plugin_manager::get_plugin_instance<UIPluginInterface>("hal_gui");
         if (mGuiPlugin)
             mGuiPlugin->set_layout_locker(true);
 
+        // modify the gate lib
         if (!modify_gatelibrary())
         {
             if (mGuiPlugin)
@@ -23,6 +32,7 @@ namespace hal
             return false;
         }
 
+        // get all selected gates to replace them
         std::vector<Gate*> gates = GuiApi().getSelectedGates();
 
         // save original netlist if it does not contain any UNKNOWN gates
@@ -38,6 +48,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
+        // If the netlist does not contain any unknown gates then create the encrypted zip archive
         if (!contains_unknown)
         {
             if (!create_encrypted_zip(SECRET_PASSWORD, probe_type, probe_limit))
@@ -48,6 +59,7 @@ namespace hal
                 return false;
             }
         }
+        // if the netlist already contains unknown gates then just update the existing zip archive
         else
         {
             if (std::filesystem::exists(project_dir_path / "original/original.zip"))
@@ -69,6 +81,7 @@ namespace hal
             }
         }
 
+        // iterate over all selected gates and replace them one by one
         for (Gate* gate : gates)
         {
             if (!replace_gate_in_netlist(gNetlist, gate))
@@ -79,7 +92,8 @@ namespace hal
                 return false;
             }
         }
-
+        
+        // release the layout lock once finished
         if (mGuiPlugin)
             mGuiPlugin->set_layout_locker(false);
 

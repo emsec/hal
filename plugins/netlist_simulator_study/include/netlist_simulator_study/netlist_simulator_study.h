@@ -5,6 +5,11 @@
 
 #define SECRET_PASSWORD "test12345"
 
+/**
+ * @brief Header file for the netlist simulation study plugin. This plugin is used by the study participants to simulate the original unaltered netlist
+ * 
+ */
+
 namespace hal
 {
     extern Netlist* gNetlist;
@@ -21,6 +26,7 @@ namespace hal
         std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string password, std::string filename);
 
         void init_simulation(std::string input_file);
+        void init_simulation_internal(std::string input_file, std::vector<Net*> nets);
         bool simulate(std::filesystem::path sim_input, std::vector<const Net*> probes);
 
         std::unique_ptr<Netlist> m_original_netlist;
@@ -38,6 +44,8 @@ namespace hal
         std::set<std::string> get_dependencies() const override;
 
         void open_popup();
+
+        void init_simulation_from_python(std::string input_file, std::vector<Net*> nets);
     };
 
     class GuiExtensionNetlistSimulatorStudy : public GuiExtensionInterface

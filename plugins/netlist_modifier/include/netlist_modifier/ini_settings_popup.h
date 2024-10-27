@@ -5,6 +5,11 @@
 #include <QRadioButton>
 #include <QSpinBox>
 
+/**
+ * @brief Header file for the pop up used to select the options for the ini file like probing type and probe limit
+ * 
+ */
+
 namespace hal
 {
     class IniSettingsPopup : public QDialog

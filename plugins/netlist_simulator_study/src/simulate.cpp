@@ -6,8 +6,16 @@
 
 namespace hal
 {
+    /**
+     * @brief This function executed the simulation of the original unaltered netlist given the selected probes. One the nets of the probes are later visible in the waveform viewer. All the other ones are deleted
+     * 
+     * @param sim_input The input file for the simulation
+     * @param probes The selected probes
+     * @return bool true on success
+     */
     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input, std::vector<const Net*> probes)
     {
+        // test if the input file exists
         if (!std::filesystem::exists(sim_input))
         {
             log_error("netlist_simulator_study", "No valid input file!");
@@ -22,14 +30,17 @@ namespace hal
 
         std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", gen_salted_password(SECRET_PASSWORD, salt), "original.hal");
 
+        // check if the netlist exists
         if (netlist_data == "")
         {
             log_error("netlist_simulator_study", "No valid netlist file in zip!");
             return false;
         }
 
+        // create a netlist object from the content of the file
         m_original_netlist = netlist_factory::load_netlist_from_string(netlist_data, gNetlist->get_gate_library()->get_path());
 
+        // select the correct file format of the input file
         enum
         {
             VCD,
@@ -61,6 +72,7 @@ namespace hal
         m_simul_controller.get()->set_no_clock_used();
         m_simul_controller.get()->create_simulation_engine("verilator");
 
+        // import the simulation input file depending on the file format
         switch (input_file_format)
         {
             case VCD:
@@ -78,10 +90,12 @@ namespace hal
                 break;
         }
 
+        // Start the loading animation
         int simulProgress = 0;
         if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
             GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(simulProgress++, "Wait for simulation to finish...");
 
+        // start the simulation
         m_simul_controller.get()->simulate_only_probes(probes);
 
         m_simul_controller.get()->run_simulation();
@@ -102,6 +116,7 @@ namespace hal
         if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
             GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(100, "Simulation process ended.");
 
+        // once the simulation is done save all the waveforms of the probes
         if (m_simul_controller.get()->get_simulation_engine()->get_state() == SimulationEngine::Done)
         {
             log_info("netlist_simulator_study", "Simulation successful.");

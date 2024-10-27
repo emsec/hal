@@ -9,6 +9,11 @@ namespace hal
 {
     QString FilePickerPopup::last_file_input = "";
     
+    /**
+     * @brief Construct a new File Picker Popup:: File Picker Popup object
+     * 
+     * @param parent 
+     */
     FilePickerPopup::FilePickerPopup(QWidget* parent) : QDialog(parent)
     {
         openFileButton   = new QPushButton("Browse...", this);
@@ -32,6 +37,10 @@ namespace hal
         setWindowTitle("Choose sim input");
     }
 
+    /**
+     * @brief Function to open up the system file picker window
+     * 
+     */
     void FilePickerPopup::openFileDialog()
     {
         QString fileFilter = "Input Files (*.csv *.vcd *.json);;All Files (*)";
@@ -42,6 +51,10 @@ namespace hal
         }
     }
 
+    /**
+     * @brief Handles the event for clicking the accept button
+     * 
+     */
     void FilePickerPopup::acceptSelection()
     {
         if (!filePathLineEdit->text().isEmpty())
@@ -51,11 +64,20 @@ namespace hal
         }
     }
 
+    /**
+     * @brief Returns the user specified file path
+     * 
+     * @return std::string 
+     */
     std::string FilePickerPopup::get_file_path()
     {
         return filePathLineEdit->text().toStdString();
     }
 
+    /**
+     * @brief Function that is called when clicking the right click menu entry. This function creates the popup hand handles accept event and calls the simulation init function
+     * 
+     */
     void NetlistSimulatorStudyPlugin::open_popup()
     {
         FilePickerPopup dialog(qApp->activeWindow());
