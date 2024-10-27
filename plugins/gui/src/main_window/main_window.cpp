@@ -151,8 +151,7 @@ namespace hal
         mActionUndo               = new Action(this);
 
         mActionSettings           = new Action(this);
-        mActionPlugins            = new Action(this);
-        mActionClose              = new Action(this);
+        mActionPluginManager      = new Action(this);
         mActionQuit               = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
@@ -181,27 +180,28 @@ namespace hal
         setWindowIcon(gui_utility::getStyledSvgIcon(mHalIconStyle, mHalIconPath));
 
         mActionImportNetlist->setIcon(gui_utility::getStyledSvgIcon(mOpenFileIconStyle, mOpenFileIconPath));
-        mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mNeGateIconStyle, mNeGateIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
-        mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
+        mActionPluginManager->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
 
         mMenuFile      = new QMenu(mMenuBar);
         mMenuEdit      = new QMenu(mMenuBar);
         mMenuMacro     = new QMenu(mMenuBar);
         mMenuUtilities = new QMenu(mMenuBar);
+        mMenuPlugins   = new QMenu(mMenuBar);
         mMenuHelp      = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
         mMenuBar->addAction(mMenuUtilities->menuAction());
+        mMenuBar->addAction(mMenuPlugins->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mFileActions->create());
         mMenuFile->addAction(mFileActions->open());
-        mMenuFile->addAction(mActionClose);
+        mMenuFile->addAction(mFileActions->close());
         mMenuFile->addAction(mFileActions->save());
         mMenuFile->addAction(mFileActions->saveAs());
 
@@ -258,17 +258,18 @@ namespace hal
         mMenuMacro->addAction(mActionStopRecording);
         mMenuMacro->addSeparator();
         mMenuMacro->addAction(mActionPlayMacro);
+        mMenuPlugins->setDisabled(true); // enable when project open
+        mMenuUtilities->addAction(mActionPluginManager);
         mMenuUtilities->addAction(mActionGateLibraryManager);
-        mMenuUtilities->addAction(mActionPlugins);
-        mMenuHelp->addAction(mActionAbout);
+		mMenuHelp->addAction(mActionAbout);
         mLeftToolBar->addAction(mFileActions->create());
         mLeftToolBar->addAction(mFileActions->open());
         mLeftToolBar->addAction(mFileActions->save());
         mLeftToolBar->addAction(mFileActions->saveAs());
         mLeftToolBar->addAction(mActionUndo);
-        mRightToolBar->addAction(mActionPlugins);
-        mRightToolBar->addAction(mActionSettings);
+        mRightToolBar->addAction(mActionPluginManager);
         mRightToolBar->addAction(mActionGateLibraryManager);
+        mRightToolBar->addAction(mActionSettings);
 
         mActionStartRecording->setText("Start recording");
         mActionStopRecording->setText("Stop recording");
@@ -286,13 +287,13 @@ namespace hal
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
-        mActionPlugins->setText("Plugin Manager");
-        mActionClose->setText("Close Project");
+        mActionPluginManager->setText("Plugin Manager");
         mActionQuit->setText("Quit");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
         mMenuUtilities->setTitle("Utilities");
+        mMenuPlugins->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = new PythonContext(this);
@@ -311,13 +312,12 @@ namespace hal
         connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
-        connect(mActionPlugins, &Action::triggered, this, &MainWindow::openPluginManager);
+        connect(mActionPluginManager, &Action::triggered, this, &MainWindow::openPluginManager);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mGateLibraryManager, &GateLibraryManager::close, this, &MainWindow::closeGateLibraryManager);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
         connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
-        connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
@@ -370,16 +370,6 @@ namespace hal
     QString MainWindow::openFileIconStyle() const
     {
         return mOpenFileIconStyle;
-    }
-
-    QString MainWindow::closeIconPath() const
-    {
-        return mCloseIconPath;
-    }
-
-    QString MainWindow::closeIconStyle() const
-    {
-        return mCloseIconStyle;
     }
 
     QString MainWindow::quitIconPath() const
@@ -454,16 +444,6 @@ namespace hal
     void MainWindow::setOpenFileIconStyle(const QString& style)
     {
         mOpenFileIconStyle = style;
-    }
-
-    void MainWindow::setCloseIconPath(const QString& path)
-    {
-        mCloseIconPath = path;
-    }
-
-    void MainWindow::setCloseIconStyle(const QString& style)
-    {
-        mCloseIconStyle = style;
     }
 
     void MainWindow::setQuitIconPath(const QString& path)
@@ -598,20 +578,22 @@ namespace hal
                 return;
         }
         mStackedWidget->setCurrentWidget(mPluginManager);
+        mFileActions->setup(nullptr, mPluginManager);
     }
 
-    void MainWindow::closePluginManager(const QString &invokeGui)
+    void MainWindow::closePluginManager()
     {
-        bool isFileOpen = FileManager::get_instance()->fileOpen();
-        if (isFileOpen)
+        if (FileManager::get_instance()->fileOpen())
             mStackedWidget->setCurrentWidget(mLayoutArea);
         else
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
-        if (invokeGui.isEmpty() || !isFileOpen) return;
-        GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(invokeGui);
-        if (!geif) return;
-        PluginParameterDialog ppd(invokeGui,geif,this);
-        ppd.exec();
+
+        mMenuPlugins->clear();
+        if (FileManager::get_instance()->fileOpen())
+            mPluginManager->addPluginActions(mMenuPlugins);
+        else
+            mMenuPlugins->setDisabled(true);
+        mFileActions->setup();
     }
 
     void MainWindow::handleActionNew()
@@ -720,7 +702,8 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
-//        mActionGateLibraryManager->setVisible(false);
+        mMenuPlugins->clear();
+        mPluginManager->addPluginActions(mMenuPlugins);
     }
 
     void MainWindow::handleActionExport()
@@ -1022,6 +1005,8 @@ namespace hal
 
         gNetlistRelay->reset();
 
+        mMenuPlugins->clear();
+        mMenuPlugins->setDisabled(true);
 //        mActionGateLibraryManager->setVisible(true);
 
         return true;

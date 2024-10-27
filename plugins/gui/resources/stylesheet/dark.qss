@@ -1549,8 +1549,9 @@ hal--GuiPluginManager
     qproperty-unloadIconStyle: "all->#ff4040";
     qproperty-cliIconPath: ":/icons/cli-options";
     qproperty-cliIconStyle: "all->#c0c0c0";
-    qproperty-guiIconPath: ":/icons/invoke-gui";
-    qproperty-guiIconStyle: "all->#40A0FF";
+    qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
+    qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
+    qproperty-guiIconEnabledStyle: "all->#40A0FF";
     qproperty-guiIconDisabledStyle: "all->#C0C0C0";
     qproperty-defaultTextColor: rgb(192,192,192);
     qproperty-hilightTextColor: rgb(255,255,20);

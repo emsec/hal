@@ -76,55 +76,15 @@ namespace hal
 
     void GuiExtensionLogicEvaluator::set_parameter(const std::vector<PluginParameter>& params)
     {
-        bool launchPressed = false;
-        bool skipCompile   = false;
         for (const PluginParameter& pp : params)
         {
-            if (pp.get_tagname() == "exec" && pp.get_value() == "clicked")
-            {
-                launchPressed = true;
-            }
+            // will launch by execute_function after parameter are set
+            // if (pp.get_tagname() == "exec" && pp.get_value() == "clicked")
             if (pp.get_tagname() == "skip")
             {
-                skipCompile = (pp.get_value() == "true");
+                mSkipCompile = (pp.get_value() == "true");
             }
         }
-
-        if (!launchPressed)
-        {
-            return;
-        }
-
-        std::unordered_set<Gate*> gates;
-        for (Gate* g : GuiApi().getSelectedGates())
-        {
-            if (acceptGate(g))
-            {
-                gates.insert(g);
-            }
-        }
-        for (Module* m : GuiApi().getSelectedModules())
-        {
-            for (Gate* g : m->get_gates(nullptr, true))
-            {
-                if (acceptGate(g))
-                {
-                    gates.insert(g);
-                }
-            }
-        }
-
-        if (gates.empty())
-        {
-            std::vector<Gate*> emptyList;
-            LogicEvaluatorSelectGates lesg(emptyList);
-            lesg.exec();
-            return;
-        }
-
-        std::vector<Gate*> vgates(gates.begin(), gates.end());
-        LogicEvaluatorDialog* led = new LogicEvaluatorDialog(vgates, skipCompile);
-        led->show();
     }
 
     bool GuiExtensionLogicEvaluator::acceptGate(const Gate* g)
@@ -195,6 +155,7 @@ namespace hal
             std::vector<Gate*> vgates(gates.begin(), gates.end());
             LogicEvaluatorDialog* led = new LogicEvaluatorDialog(vgates, false);
             led->show();
+            led->raise();
         }
     }
 

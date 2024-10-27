@@ -11,17 +11,19 @@
 namespace hal {
 
     FileActions::FileActions(QWidget *parent)
-        : QWidget(parent), mGatelibReference(nullptr)
+        : QWidget(parent), mGatelibReference(nullptr), mGuiPluginReference(nullptr)
     {
         repolish();
         mMainWindowReference = dynamic_cast<MainWindow*>(parent);
         mActionCreate             = new Action(this);
         mActionOpen               = new Action(this);
+        mActionClose              = new Action(this);
         mActionSave               = new Action(this);
         mActionSaveAs             = new Action(this);
 
         mActionCreate->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath, mDisabledIconStyle));
         mActionOpen->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath, mDisabledIconStyle));
+        mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle, mSaveIconPath, mDisabledIconStyle));
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle, mSaveAsIconPath, mDisabledIconStyle));
 
@@ -65,38 +67,58 @@ namespace hal {
         mActionSaveAs->setEnabled(isDirty);
     }
 
-    void FileActions::setup(GateLibraryManager *glcw)
+    void FileActions::setup(GateLibraryManager *glcw, GuiPluginManager *plmgr)
     {
         mGatelibReference = glcw;
+        mGuiPluginReference = plmgr;
         mActionCreate->disconnect();
         mActionOpen->disconnect();
+        mActionClose->disconnect();
         mActionSave->disconnect();
         mActionSaveAs->disconnect();
         if (mGatelibReference)
         {
             mActionCreate->setText("New Gate Library");
-            //mActionCreate->setDisabled(true);
             mActionOpen->setText("Open Gate Library");
+            mActionClose->setText("Close Gate Lib Manager");
             mActionSave->setText("Save Gate Library");
             mActionSaveAs->setText("Save Gate Library As");
             connect(mActionCreate, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCreateAction);
             connect(mActionOpen,   &Action::triggered, mMainWindowReference, &MainWindow::handleActionGatelibraryManager);
+            connect(mActionClose, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCancelClicked);
             connect(mActionSave, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAction);
             connect(mActionSaveAs, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAsAction);
+            mActionCreate->setEnabled(true);
             mActionSave->setEnabled(gFileStatusManager->isGatelibModified());
             mActionSaveAs->setEnabled(gFileStatusManager->isGatelibModified());
+        }
+        else if (mGuiPluginReference)
+        {
+            mActionCreate->setText("");
+            mActionOpen->setText("Load HAL Plugin");
+            mActionClose->setText("Close Plugin Manager");
+            mActionSave->setText("");
+            mActionSaveAs->setText("");
+//            connect(mActionOpen,  &Action::triggered, mMainWindowReference, &MainWindow::handleActionGatelibraryManager);
+//            connect(mActionClose, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCancelClicked);
+            mActionCreate->setDisabled(true);
+            mActionSave->setDisabled(true);
+            mActionSaveAs->setDisabled(true);
         }
         else
         {
             mActionCreate->setText("New Project");
             mActionCreate->setEnabled(true);
             mActionOpen->setText("Open Project");
+            mActionClose->setText("Close Project");
             mActionSave->setText("Save HAL Project");
             mActionSaveAs->setText("Save HAL Project As");
             connect(mActionCreate, &Action::triggered, mMainWindowReference, &MainWindow::handleActionNew);
             connect(mActionOpen,   &Action::triggered, mMainWindowReference, &MainWindow::handleActionOpenProject);
+            connect(mActionClose, &Action::triggered, mMainWindowReference, &MainWindow::handleActionCloseFile);
             connect(mActionSave,   &Action::triggered, mMainWindowReference, &MainWindow::handleSaveTriggered);
             connect(mActionSaveAs, &Action::triggered, mMainWindowReference, &MainWindow::handleSaveAsTriggered);
+            mActionCreate->setEnabled(true);
             mActionSave->setEnabled(gFileStatusManager->modifiedFilesExisting());
             mActionSaveAs->setEnabled(gFileStatusManager->modifiedFilesExisting());
         }

@@ -31,6 +31,7 @@
 namespace hal {
     class MainWindow;
     class GateLibraryManager;
+    class GuiPluginManager;
     class SettingsItemKeybind;
 
     class FileActions : public QWidget
@@ -40,6 +41,8 @@ namespace hal {
         Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
         Q_PROPERTY(QString enabledIconStyle READ enabledIconStyle WRITE setEnabledIconStyle)
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString closeIconPath READ closeIconPath WRITE setCloseIconPath)
+        Q_PROPERTY(QString closeIconStyle READ closeIconStyle WRITE setCloseIconStyle)
         Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
         Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
         Q_PROPERTY(QString openProjIconPath READ openProjIconPath WRITE setOpenProjIconPath)
@@ -47,9 +50,11 @@ namespace hal {
 
         MainWindow* mMainWindowReference;
         GateLibraryManager* mGatelibReference;
+        GuiPluginManager* mGuiPluginReference;
 
         Action* mActionCreate;
         Action* mActionOpen;
+        Action* mActionClose;
         Action* mActionSave;
         Action* mActionSaveAs;
 
@@ -57,7 +62,8 @@ namespace hal {
         QString mNewFileIconPath;
         QString mOpenProjIconPath;
         QString mOpenProjIconStyle;
-
+        QString mCloseIconPath;
+        QString mCloseIconStyle;
         QString mSaveIconPath;
         QString mSaveAsIconPath;
 
@@ -116,6 +122,20 @@ namespace hal {
         QString saveAsIconPath() const { return mSaveAsIconPath; }
 
         /**
+         * Q_PROPERTY READ function for the 'Close Project'-icon path.
+         *
+         * @returns the 'Close Project'-icon path
+         */
+        QString closeIconPath() const { return mCloseIconPath; }
+
+        /**
+         * Q_PROPERTY READ function for the 'Close Project'-icon style.
+         *
+         * @returns the 'Close Project'-icon style
+         */
+        QString closeIconStyle() const { return mCloseIconStyle; }
+
+        /**
          * Q_PROPERTY READ function for the 'Enabled'-icon style.
          *
          * @returns the 'Enabled'-icon style
@@ -172,6 +192,21 @@ namespace hal {
         void setSaveAsIconPath(const QString& path) { mSaveAsIconPath = path; }
 
         /**
+         * Q_PROPERTY WRITE function for the 'Close Project'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setCloseIconPath(const QString& path) { mCloseIconPath = path; }
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Close Project'-icon style.
+         *
+         * @param style - The new style
+         */
+
+        void setCloseIconStyle(const QString& style) { mCloseIconStyle = style; }
+
+        /**
          * Q_PROPERTY WRITE function for the 'Enabled'-icon style.
          *
          * @param style - The new style
@@ -187,10 +222,11 @@ namespace hal {
 
         Action* create() const { return mActionCreate; }
         Action* open()   const { return mActionOpen; }
+        Action* close()  const { return mActionClose; }
         Action* save()   const { return mActionSave; }
         Action* saveAs() const { return mActionSaveAs; }
 
-        void setup(GateLibraryManager* glcw = nullptr);
+        void setup(GateLibraryManager* glcw = nullptr, GuiPluginManager* plmgr = nullptr);
 
         void repolish();
     };

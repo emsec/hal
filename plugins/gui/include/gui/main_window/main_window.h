@@ -69,8 +69,6 @@ namespace hal
 
         Q_PROPERTY(QString openFileIconPath READ openFileIconPath WRITE setOpenFileIconPath)
         Q_PROPERTY(QString openFileIconStyle READ openFileIconStyle WRITE setOpenFileIconStyle)
-        Q_PROPERTY(QString closeIconPath READ closeIconPath WRITE setCloseIconPath)
-        Q_PROPERTY(QString closeIconStyle READ closeIconStyle WRITE setCloseIconStyle)
         Q_PROPERTY(QString quitIconPath READ quitIconPath WRITE setQuitIconPath)
         Q_PROPERTY(QString quitIconStyle READ quitIconStyle WRITE setQuitIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
@@ -127,19 +125,6 @@ namespace hal
         * @returns the 'Open File'-icon style
         */
         QString openFileIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'Close Project'-icon path.
-         *
-         * @returns the 'Close Project'-icon path
-         */
-        QString closeIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'Close Project'-icon style.
-         *
-         * @returns the 'Close Project'-icon style
-         */
-        QString closeIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Quit HAL session'-icon path.
@@ -211,19 +196,6 @@ namespace hal
          * @param style - The new style
          */
         void setOpenFileIconStyle(const QString& style);
-
-        /**
-         * Q_PROPERTY WRITE function for the 'Close Project'-icon path.
-         *
-         * @param path - The new path
-         */
-        void setCloseIconPath(const QString& path);
-        /**
-         * Q_PROPERTY WRITE function for the 'Close Project'-icon style.
-         *
-         * @param style - The new style
-         */
-        void setCloseIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Quit HAL session'-icon path.
@@ -364,7 +336,7 @@ namespace hal
         /**
          * Q_SLOT to close the PluginManager menu.
          */
-        void closePluginManager(const QString& invokeGui);
+        void closePluginManager();
 
         /**
          * Q_SLOT to create a new empty netlist. Asks the user for the gate_library.
@@ -522,14 +494,14 @@ namespace hal
         Action* mActionImportProject;
 
         Action* mActionSettings;
-        Action* mActionPlugins;
-        Action* mActionClose;
+        Action* mActionPluginManager;
         Action* mActionQuit;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
         QMenu* mMenuUtilities;
+        QMenu* mMenuPlugins;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;
@@ -537,9 +509,6 @@ namespace hal
 
         QString mOpenFileIconPath;
         QString mOpenFileIconStyle;
-
-        QString mCloseIconPath;
-        QString mCloseIconStyle;
 
         QString mQuitIconPath;
         QString mQuitIconStyle;
