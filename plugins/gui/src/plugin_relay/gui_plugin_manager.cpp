@@ -152,12 +152,12 @@ namespace hal {
 
     void GuiPluginManager::handleToggleGuiContribution(const QString &pluginName)
     {
-        int newState = 1;
+        GuiPluginEntry::GuiExtensionState newState = GuiPluginEntry::NotAnExtension;
         GuiExtensionInterface* geif = getGuiExtensions().value(pluginName);
         if (geif)
         {
             geif->set_contribution_enabled(!geif->is_contribution_enabled());
-            newState = geif->is_contribution_enabled() ? 3 : 2;
+            newState = geif->is_contribution_enabled() ? GuiPluginEntry::Enabled : GuiPluginEntry::Disabled;
         }
         mGuiPluginTable->setGuiExtensionState(pluginName, newState);
     }
@@ -426,7 +426,7 @@ namespace hal {
                     bpif = load(pluginName, info.absoluteFilePath());
                     if (!bpif)
                     {
-                        gpe->mState = GuiPluginEntry::NotAPlugin; // however, load failed
+                        gpe->mLoadState = GuiPluginEntry::NotAPlugin; // however, load failed
                         log_warning("gui", "GuiPluginManager: loading of requested plugin '{}' failed.", pluginName.toStdString());
                     }
                     else
@@ -442,7 +442,7 @@ namespace hal {
                     log_debug("gui", "GuiPluginManager: '{}' not modified, no update required.", pluginName.toStdString());
                     // known plugin, load only when needed
                     if (gpe->isPlugin())
-                        gpe->mState = GuiPluginEntry::NotLoaded;
+                        gpe->mLoadState = GuiPluginEntry::NotLoaded;
                     continue;
                 }
 
@@ -451,14 +451,14 @@ namespace hal {
                 if (!bpif)
                 {
                     log_warning("gui", "GuiPluginManager: loading of '{}' failed, is it really a HAL plugin?", pluginName.toStdString());
-                    gpe->mState = GuiPluginEntry::NotAPlugin;
+                    gpe->mLoadState = GuiPluginEntry::NotAPlugin;
                     continue;
                 }
 
                 if (bpif->get_name().empty() || bpif->get_version().empty())
                 {
                     log_warning("gui", "GuiPluginManager: '{}' has empty name or version, plugin ignored.", pluginName.toStdString());
-                    gpe->mState = GuiPluginEntry::NotAPlugin;
+                    gpe->mLoadState = GuiPluginEntry::NotAPlugin;
                 }
                 else
                 {
@@ -485,6 +485,7 @@ namespace hal {
         auto it = pluginEntries.begin();
         while (it != pluginEntries.end())
         {
+            bool removeEntry = false;
             GuiPluginEntry* gpe = it.value();
             if (gpe->isFileFound())
             {
@@ -497,10 +498,41 @@ namespace hal {
                 {
                     mAvoid.append(gpe);
                 }
-                ++it;
+            }
+            else if (gpe->mExternalPath.isEmpty() || !gpe->requestLoad() )
+            {
+                // plugin does no longer exist or no longer required
+                removeEntry = true;
             }
             else
+            {
+                // loaded plugin as binary from user provided path
+                QFileInfo info(gpe->mExternalPath);
+                if (info.exists() && info.isReadable())
+                {
+                    mLookup.insert(gpe->mName,mEntries.size());
+                    mEntries.append(gpe);
+                    BasePluginInterface* bpif = load(gpe->mName, info.absoluteFilePath());
+                    if (!bpif)
+                    {
+                        log_warning("gui", "GuiPluginManager: loading of requested plugin '{}' failed.", gpe->mName.toStdString());
+                        removeEntry = true;
+                    }
+                    else
+                    {
+                        gpe->updateFromLoaded(bpif, true, info.lastModified());
+                        log_info("gui", "GuiPluginManager: '{}' loaded external plugin upon user request.", gpe->mName.toStdString());
+                    }
+                }
+                else
+                {
+                    removeEntry = true;
+                }
+            }
+            if (removeEntry)
                 it = pluginEntries.erase(it);
+            else
+                ++it;
         }
         persist();
     }
@@ -518,6 +550,8 @@ namespace hal {
         if (bpif)
         {
             gpe->updateFromLoaded(bpif,true);
+            gpe->mExternalPath = path;
+            gpe->mLoadState = GuiPluginEntry::UserLoad;
             persist();
         }
         else
@@ -543,15 +577,15 @@ namespace hal {
         changeState(pluginName,GuiPluginEntry::NotLoaded);
     }
 
-    void GuiPluginTable::changeState(const QString& pluginName, GuiPluginEntry::State state)
+    void GuiPluginTable::changeState(const QString& pluginName, GuiPluginEntry::LoadState state)
     {
         int irow = mLookup.value(pluginName,-1);
         if (irow < 0 || irow >= mEntries.size()) return;
         GuiPluginEntry* gpe = mEntries.at(irow);
-        gpe->mState = state;
+        gpe->mLoadState = state;
         if (state >= GuiPluginEntry::AutoLoad)
         {
-            int newGuiExtensionState = 1;
+            GuiPluginEntry::GuiExtensionState newGuiExtensionState = GuiPluginEntry::NotAnExtension;
             BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName.toStdString());
             if (bpif)
             {
@@ -780,7 +814,7 @@ namespace hal {
             {
                 success = plugin_manager::unload(gpe->mName.toStdString());
                 if (success)
-                    gpe->mState = GuiPluginEntry::NotLoaded;
+                    gpe->mLoadState = GuiPluginEntry::NotLoaded;
                 else
                     QMessageBox::warning(qApp->activeWindow(),"Unload failed",
                                          QString("Unload of plugin %1\nrefused by plugin_manager")
@@ -798,7 +832,7 @@ namespace hal {
             if (plugin_manager::load(gpe->mName.toStdString(),gpe->mFilePath.toStdString()))
             {
                 success = true;
-                gpe->mState = GuiPluginEntry::UserLoad;
+                gpe->mLoadState = GuiPluginEntry::UserLoad;
             }
             else
                 QMessageBox::warning(qApp->activeWindow(),"Load failed",
@@ -842,13 +876,13 @@ namespace hal {
         return mEntries.at(index.row())->mName == "hal_gui";
     }
 
-    int GuiPluginTable::guiExtensionState(const QModelIndex& index) const
+    GuiPluginEntry::GuiExtensionState GuiPluginTable::guiExtensionState(const QModelIndex& index) const
     {
-        if (index.row() >= mEntries.size()) return 0;
+        if (index.row() >= mEntries.size()) return GuiPluginEntry::Unknown;
         return mEntries.at(index.row())->mGuiExtensionState;
     }
 
-    void GuiPluginTable::setGuiExtensionState(const QString& pluginName, int state)
+    void GuiPluginTable::setGuiExtensionState(const QString& pluginName, GuiPluginEntry::GuiExtensionState state)
     {
         int irow = mLookup.value(pluginName,-1);
         if (irow < 0 || irow >= mEntries.size()) return;
@@ -888,12 +922,12 @@ namespace hal {
     //------------------------------------------------------------
 
     GuiPluginEntry::GuiPluginEntry(const QFileInfo& info)
-        : mState(NotAPlugin), mName(info.baseName()),
+        : mLoadState(NotAPlugin), mName(info.baseName()),
           mFilePath(info.absoluteFilePath()),
           mFileModified(info.lastModified()),
           mFeature(FacExtensionInterface::FacUnknown),
           mUserInterface(false),
-          mGuiExtensionState(0),
+          mGuiExtensionState(Unknown),
           mFileFound(true)
     {;}
 
@@ -922,34 +956,36 @@ namespace hal {
         case 6: return mFeatureArguments.join(' ');
         case 7: return mGuiExtensionState;
         case 8: return mCliOptions;
-        case 9: return isLoaded() ? "LOADED" : "-";
-        case 10: return (int) mState;
+        case 9: if (!isLoaded()) return "-";
+                else if (mExternalPath.isEmpty()) return "LOADED";
+                else return "EXTERN";
+        case 10: return (int) mLoadState;
         }
         return QVariant();
     }
 
-    int GuiPluginEntry::enforceGuiExtensionState(GuiExtensionInterface* geif) const
+    GuiPluginEntry::GuiExtensionState GuiPluginEntry::enforceGuiExtensionState(GuiExtensionInterface* geif) const
     {
-        if (!geif) return 1;
+        if (!geif) return NotAnExtension;
 
         switch (mGuiExtensionState) // enforce user setting
         {
-        case 2:
+        case Disabled:
             geif->set_contribution_enabled(false);
             break;
-        case 3:
+        case Enabled:
             geif->set_contribution_enabled(true);
             break;
         default:
             break;
         }
-        return (geif->is_contribution_enabled() ? 3 : 2);
+        return (geif->is_contribution_enabled() ? Enabled : Disabled);
     }
 
 
     void GuiPluginEntry::persist(QSettings* settings) const
     {
-        settings->setValue("state", (int) mState);
+        settings->setValue("state", (int) mLoadState);
         settings->setValue("name", mName);
         settings->setValue("version", mVersion);
         settings->setValue("description", mDescription);
@@ -958,30 +994,32 @@ namespace hal {
         settings->setValue("feature_code", (int) mFeature);
         settings->setValue("feature_args", mFeatureArguments);
         settings->setValue("user_interface", mUserInterface);
-        settings->setValue("gui_extension_state", mGuiExtensionState);
+        settings->setValue("gui_extension_state", (int) mGuiExtensionState);
         settings->setValue("cli_options", mCliOptions);
+        settings->setValue("ext_path", mExternalPath);
     }
 
     GuiPluginEntry::GuiPluginEntry(const QSettings *settings)
         : mFileFound(false)
     {
-        mState    = (State) settings->value("state").toInt();
-        mName             = settings->value("name").toString();
-        mVersion          = settings->value("version").toString();
-        mDescription      = settings->value("description").toString();
-        mFileModified     = settings->value("file_modified").toDateTime();
-        mDependencies     = settings->value("dependencies").toStringList();
+        mLoadState    = (LoadState) settings->value("state").toInt();
+        mName               = settings->value("name").toString();
+        mVersion            = settings->value("version").toString();
+        mDescription        = settings->value("description").toString();
+        mFileModified       = settings->value("file_modified").toDateTime();
+        mDependencies       = settings->value("dependencies").toStringList();
         mFeature = (FacExtensionInterface::Feature) settings->value("feature_code").toInt();
-        mFeatureArguments = settings->value("feature_args").toStringList();
-        mUserInterface    = settings->value("user_interface").toBool();
-        mGuiExtensionState  = settings->value("gui_extension_state").toInt();
-        mCliOptions    = settings->value("cli_options").toString();
+        mFeatureArguments   = settings->value("feature_args").toStringList();
+        mUserInterface      = settings->value("user_interface").toBool();
+        mGuiExtensionState = (GuiExtensionState) settings->value("gui_extension_state").toInt();
+        mCliOptions         = settings->value("cli_options").toString();
+        mExternalPath       = settings->value("ext_path").toString();
         mFilePath = QString::fromStdString(plugin_manager::get_plugin_path(mName.toStdString()).string());
     }
 
     void GuiPluginEntry::updateFromLoaded(const BasePluginInterface *bpif, bool isUser, const QDateTime& modified)
     {
-        mState   = isUser ? UserLoad : AutoLoad;
+        mLoadState   = isUser ? UserLoad : AutoLoad;
         QString desc = QString::fromStdString(bpif->get_name());
         if (desc != mName) mDescription = desc;
         if (!bpif->get_description().empty()) mDescription = QString::fromStdString(bpif->get_description());
@@ -1000,7 +1038,7 @@ namespace hal {
         }
         mCliOptions.clear();
 
-        int newGuiExtensionState = 0; // not initialized
+        GuiExtensionState newGuiExtensionState = Unknown; // not initialized
         for (AbstractExtensionInterface* aeif : bpif->get_extensions())
         {
             CliExtensionInterface* ceif = nullptr;
@@ -1012,7 +1050,7 @@ namespace hal {
             else if ((ceif=dynamic_cast<CliExtensionInterface*>(aeif)))
                 mCliOptions = QString::fromStdString(ceif->get_cli_options().get_options_string());
         }
-        if (!newGuiExtensionState) mGuiExtensionState = 1; // no GUI extension
+        if (!newGuiExtensionState) mGuiExtensionState = NotAnExtension; // no GUI extension
 
         mUserInterface = (dynamic_cast<const UIPluginInterface*>(bpif) != nullptr);
         if (modified.isValid()) mFileModified = modified;
@@ -1053,7 +1091,7 @@ namespace hal {
         if (!plt) return;
         QStyleOptionButton button;
         bool drawIcon = true;
-        int iconState = 0;
+        GuiPluginEntry::GuiExtensionState iconState = GuiPluginEntry::Unknown;
         switch (index.column())
         {
         case 7:
@@ -1065,29 +1103,29 @@ namespace hal {
                 QString pluginName = plt->at(index.row())->name();
                 GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(pluginName);
                 if (!plt->isLoaded(index))
-                    iconState = 0;
+                    iconState = GuiPluginEntry::Unknown;
                 else if (!geif)
-                    iconState = 1;
+                    iconState = GuiPluginEntry::NotAnExtension;
                 else if (geif->is_contribution_enabled())
-                    iconState = 3;
+                    iconState = GuiPluginEntry::Enabled;
                 else
-                    iconState = 2;
+                    iconState = GuiPluginEntry::Disabled;
             }
 
             switch (iconState)
             {
-            case 0:
+            case GuiPluginEntry::Unknown:
             {
                 drawIcon = false;
                 break;
             }
-            case 1:
+            case GuiPluginEntry::NotAnExtension:
                 drawIcon = false;
                 break;
-            case 2:
+            case GuiPluginEntry::Disabled:
                 button.icon = mIconDisableGuiContribution;
                 break;
-            case 3:
+            case GuiPluginEntry::Enabled:
                 button.icon = mIconEnableGuiContribution;
                 break;
             }

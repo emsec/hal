@@ -51,19 +51,19 @@ namespace hal {
     class GuiPluginEntry
     {
     public:
-        enum State { NotAPlugin, NotLoaded, AutoLoad, UserLoad };
         friend class GuiPluginTable;
-        State mState;
+        enum LoadState { NotAPlugin, NotLoaded, AutoLoad, UserLoad } mLoadState;
         QString mName;
         QString mVersion;
         QString mDescription;
         QString mFilePath;
+        QString mExternalPath;
         QDateTime mFileModified;
         QStringList mDependencies;
         FacExtensionInterface::Feature mFeature;
         QStringList mFeatureArguments;
         bool mUserInterface;
-        int mGuiExtensionState;  // 0 = not initialized   1 = no extensions   2 = disabled   3 = enabled
+        enum  GuiExtensionState { Unknown, NotAnExtension, Disabled, Enabled} mGuiExtensionState;
         QString mCliOptions;
         bool mFileFound;
 
@@ -73,13 +73,13 @@ namespace hal {
         QVariant data(int icol) const;
         QString name() const { return mName; }
         void persist(QSettings* settings) const;
-        bool requestLoad() const { return mState == UserLoad; }
-        bool isLoaded() const { return mState == AutoLoad || mState == UserLoad; }
-        bool isPlugin() const { return mState != NotAPlugin; }
+        bool requestLoad() const { return mLoadState == UserLoad; }
+        bool isLoaded() const { return mLoadState == AutoLoad || mLoadState == UserLoad; }
+        bool isPlugin() const { return mLoadState != NotAPlugin; }
         void updateFromLoaded(const BasePluginInterface* bpif, bool isUser, const QDateTime& modified = QDateTime());
         bool isFileFound() const { return mFileFound; }
         void setFileFound(bool fnd) { mFileFound = fnd; }
-        int enforceGuiExtensionState(GuiExtensionInterface* geif) const;
+        GuiExtensionState enforceGuiExtensionState(GuiExtensionInterface* geif) const;
     };
 
     class GuiPluginManager;
@@ -126,7 +126,7 @@ namespace hal {
         bool mWaitForRefresh;
         GuiPluginManager* mPluginMgr;
 
-        void changeState(const QString& pluginName, GuiPluginEntry::State state);
+        void changeState(const QString& pluginName, GuiPluginEntry::LoadState state);
         void populateTable(bool refresh);
         void clearMemory();
     Q_SIGNALS:
@@ -149,8 +149,8 @@ namespace hal {
         QStringList neededBy(const QString& pluginName);
         void persist();
         bool isLoaded(const QModelIndex& index) const;
-        int guiExtensionState(const QModelIndex& index) const;
-        void setGuiExtensionState(const QString& pluginName, int state);
+        GuiPluginEntry::GuiExtensionState guiExtensionState(const QModelIndex& index) const;
+        void setGuiExtensionState(const QString& pluginName, GuiPluginEntry::GuiExtensionState state);
         bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
