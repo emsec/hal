@@ -141,7 +141,9 @@ namespace hal {
     void GuiPluginManager::handleLoadExternalPlugin()
     {
         QString filename = QFileDialog::getOpenFileName(this, "Load HAL Plugin", ".", "Shared library files (*.so)");
-        if (plugin_manager::load(QFileInfo(filename).fileName().toStdString(), filename.toStdString()))
+        if (filename.isEmpty()) return;
+        int irowAdded = mGuiPluginTable->addExternalPlugin(filename);
+        if (plugin_manager::load(QFileInfo(filename).baseName().toStdString(), filename.toStdString()))
             std::cerr << "library file opened <" << filename.toStdString() << ">" << std::endl;
         else
             std::cerr << "failed to load library file <" << filename.toStdString() << ">" << std::endl;
@@ -503,6 +505,32 @@ namespace hal {
         persist();
     }
 
+    int GuiPluginTable::addExternalPlugin(const QString& path)
+    {
+        QFileInfo finfo(path);
+        GuiPluginEntry* gpe = new GuiPluginEntry(finfo);
+        int n = mEntries.size();
+        beginInsertRows(QModelIndex(),n,n);
+        mLookup.insert(gpe->mName,n);
+        mEntries.append(gpe);
+        endInsertRows();
+        BasePluginInterface* bpif = load(finfo.baseName(),path);
+        if (bpif)
+        {
+            gpe->updateFromLoaded(bpif,true);
+            persist();
+        }
+        else
+        {
+            beginRemoveRows(QModelIndex(),n,n);
+            gpe = mEntries.takeLast();
+            mLookup.remove(gpe->mName);
+            endRemoveRows();
+            delete gpe;
+        }
+    }
+
+
     void GuiPluginTable::handlePluginLoaded(const QString& pluginName, const QString&)
     {
         if (mWaitForRefresh) return;
@@ -518,7 +546,7 @@ namespace hal {
     void GuiPluginTable::changeState(const QString& pluginName, GuiPluginEntry::State state)
     {
         int irow = mLookup.value(pluginName,-1);
-        if (irow < 0 && irow >= mEntries.size()) return;
+        if (irow < 0 || irow >= mEntries.size()) return;
         GuiPluginEntry* gpe = mEntries.at(irow);
         gpe->mState = state;
         if (state >= GuiPluginEntry::AutoLoad)
@@ -823,7 +851,7 @@ namespace hal {
     void GuiPluginTable::setGuiExtensionState(const QString& pluginName, int state)
     {
         int irow = mLookup.value(pluginName,-1);
-        if (irow < 0 && irow >= mEntries.size()) return;
+        if (irow < 0 || irow >= mEntries.size()) return;
         mEntries.at(irow)->mGuiExtensionState = state;
         persist();
     }

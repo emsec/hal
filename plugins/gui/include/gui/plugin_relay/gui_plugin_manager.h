@@ -156,6 +156,8 @@ namespace hal {
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
         SupportedFileFormats listFacFeature(FacExtensionInterface::Feature ft) const;
         GuiPluginEntry* at(int irow) const;
+        int addExternalPlugin(const QString& path);
+        void removeEntry(int irow);
    };
 
     class GuiPluginView : public QTableView

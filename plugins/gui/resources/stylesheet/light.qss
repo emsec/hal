@@ -1283,23 +1283,8 @@ hal--MainWindow
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
 
-    qproperty-newFileIconStyle: "";
-    qproperty-newFileIconPath: ":/icons/new-file";
-
-    qproperty-openProjIconStyle: "all->#FFFFFF";
-    qproperty-openProjIconPath: ":/icons/folder";
-
     qproperty-openFileIconStyle: "all->#FFFFFF";
     qproperty-openFileIconPath: ":/icons/detach";
-
-    qproperty-saveIconStyle: "all->#FFFFFF";
-    qproperty-saveIconPath: ":/icons/folder-down";
-
-    qproperty-saveAsIconStyle: "all->#FFFFFF";
-    qproperty-saveAsIconPath: ":/icons/save-as";
-
-    qproperty-closeIconStyle: "all->#FFFFFF";
-    qproperty-closeIconPath: ":/icons/cross";
 
     qproperty-quitIconStyle: "all->#FFFFFF";
     qproperty-quitIconPath: ":/icons/switch";
@@ -1317,6 +1302,20 @@ hal--MainWindow
 
     qproperty-neGateIconStyle: "all->#FFFFFF";
     qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->#FFFFFF";
+    qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->#FFFFFF";
+    qproperty-closeIconPath: ":/icons/cross";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->#FFFFFF";
+    qproperty-disabledIconStyle: "all->#515050";
 }
 
 hal--MainWindow QMenu

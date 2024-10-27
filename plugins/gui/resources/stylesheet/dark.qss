@@ -1300,9 +1300,6 @@ hal--MainWindow
     qproperty-openFileIconStyle: "all->#AFB1B3";
     qproperty-openFileIconPath: ":/icons/detach";
 
-    qproperty-closeIconStyle: "all->#AFB1B3";
-    qproperty-closeIconPath: ":/icons/cross";
-
     qproperty-quitIconStyle: "all->#AFB1B3";
     qproperty-quitIconPath: ":/icons/switch";
 
@@ -1327,6 +1324,8 @@ hal--FileActions
     qproperty-newFileIconPath: ":/icons/new-file";
     qproperty-openProjIconStyle: "all->#3192C5";
     qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->#AFB1B3";
+    qproperty-closeIconPath: ":/icons/cross";
     qproperty-saveIconPath: ":/icons/folder-down";
     qproperty-saveAsIconPath: ":/icons/save-as";
     qproperty-enabledIconStyle: "all->#3192C5";

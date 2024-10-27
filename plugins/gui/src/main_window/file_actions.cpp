@@ -4,6 +4,7 @@
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "gui/gatelibrary_management/gatelibrary_content_widget.h"
 #include "gui/file_status_manager/file_status_manager.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/gui_globals.h"
 
 #include <QShortcut>
@@ -99,8 +100,8 @@ namespace hal {
             mActionClose->setText("Close Plugin Manager");
             mActionSave->setText("");
             mActionSaveAs->setText("");
-//            connect(mActionOpen,  &Action::triggered, mMainWindowReference, &MainWindow::handleActionGatelibraryManager);
-//            connect(mActionClose, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCancelClicked);
+            connect(mActionOpen,  &Action::triggered, mGuiPluginReference, &GuiPluginManager::handleLoadExternalPlugin);
+            connect(mActionClose, &Action::triggered, mGuiPluginReference, &GuiPluginManager::handleButtonCancel);
             mActionCreate->setDisabled(true);
             mActionSave->setDisabled(true);
             mActionSaveAs->setDisabled(true);
