@@ -720,29 +720,31 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
-        QMessageBox optBox;
-        QPushButton* newBtn = optBox.addButton("New", QMessageBox::AcceptRole);
-        newBtn->setToolTip("Create new gate library");
-        QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
-        openBtn->setToolTip("Open existing gate library");
-        QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
-        optBox.setWindowTitle("Please select …");
-        cancelBtn->setToolTip("Cancel");
-
-        optBox.setText("Gate Library Manager");
-
-        auto btn = optBox.exec();
-
-        if(optBox.clickedButton() == newBtn)
+        if(!gNetlist)
         {
-            mGateLibraryManager->handleCreateAction();
-            mStackedWidget->setCurrentWidget(mGateLibraryManager);
-            mFileActions->setup(mGateLibraryManager);
-            return;
+            QMessageBox optBox;
+            QPushButton* newBtn = optBox.addButton("New", QMessageBox::AcceptRole);
+            newBtn->setToolTip("Create new gate library");
+            QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
+            openBtn->setToolTip("Open existing gate library");
+            QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
+            optBox.setWindowTitle("Please select …");
+            cancelBtn->setToolTip("Cancel");
+
+            optBox.setText("Gate Library Manager");
+
+            auto btn = optBox.exec();
+
+            if(optBox.clickedButton() == newBtn)
+            {
+                mGateLibraryManager->handleCreateAction();
+                mStackedWidget->setCurrentWidget(mGateLibraryManager);
+                mFileActions->setup(mGateLibraryManager);
+                return;
+            }
+            else if (optBox.clickedButton() == cancelBtn)
+                return;
         }
-        else if (optBox.clickedButton() == cancelBtn)
-            return;
-        else
         if(gFileStatusManager->isGatelibModified())
         {
             if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
