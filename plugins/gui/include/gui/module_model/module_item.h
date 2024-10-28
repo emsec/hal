@@ -52,9 +52,30 @@ namespace hal
          */
         enum class TreeItemType {Module, Gate, Net};
 
+        /**
+         * Sets the data for the columns name and type. 
+         * Column 2 (type) can be only set, if this item is a module.
+         *
+         * @param data - Each entry in the list represents one column. 
+         *               The second column (id) is ignored.
+         */
         void setData(QList<QVariant> data) override;
+        /**
+         * Sets the data for a specified column. Column 2 (type) can only be set, if this item is a module.
+         *
+         * @param index - The column to set the new data. Either 0 (name) or 2(type). Other columns will be ignored.
+         * @param data - The new column data.
+         */
         void setDataAtIndex(int index, QVariant& data) override;
+        /**
+         * Unused dummy function overwritten from parent class.
+         */
         void appendData(QVariant data) override;
+        /**
+         * Get the number of currently stored column data.
+         *
+         * @return 3
+         */
         int getColumnCount() const override;
 
         /**
@@ -62,6 +83,7 @@ namespace hal
          *
          * @param id - The id of the netlist item this ModuleItem represents
          * @param type - The type of the netlist item
+         * @param model - The parent model where this item is added to.
          */
         ModuleItem(const u32 id, const TreeItemType type, ModuleModel* model);
 
