@@ -328,7 +328,7 @@ namespace hal
 
         // notify
         m_event_handler->notify(ModuleEvent::event::gate_assigned, m_netlist->m_top_module, id);
-        m_event_handler->notify(GateEvent::event::created, raw); // shouldn't those events be swapped?
+        m_event_handler->notify(GateEvent::event::created, raw);
 
         return raw;
     }
