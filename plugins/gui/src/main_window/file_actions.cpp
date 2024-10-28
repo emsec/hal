@@ -89,7 +89,8 @@ namespace hal {
             connect(mActionClose, &Action::triggered, mGatelibReference, &GateLibraryManager::handleCancelClicked);
             connect(mActionSave, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAction);
             connect(mActionSaveAs, &Action::triggered, mGatelibReference, &GateLibraryManager::handleSaveAsAction);
-            mActionCreate->setEnabled(true);
+            mActionCreate->setEnabled(!mGatelibReference->isReadOnly());
+            mActionOpen->setEnabled(!mGatelibReference->isReadOnly());
             mActionSave->setEnabled(gFileStatusManager->isGatelibModified());
             mActionSaveAs->setEnabled(gFileStatusManager->isGatelibModified());
         }
@@ -103,6 +104,7 @@ namespace hal {
             connect(mActionOpen,  &Action::triggered, mGuiPluginReference, &GuiPluginManager::handleLoadExternalPlugin);
             connect(mActionClose, &Action::triggered, mGuiPluginReference, &GuiPluginManager::handleButtonCancel);
             mActionCreate->setDisabled(true);
+            mActionOpen->setEnabled(true);
             mActionSave->setDisabled(true);
             mActionSaveAs->setDisabled(true);
         }
@@ -120,6 +122,7 @@ namespace hal {
             connect(mActionSave,   &Action::triggered, mMainWindowReference, &MainWindow::handleSaveTriggered);
             connect(mActionSaveAs, &Action::triggered, mMainWindowReference, &MainWindow::handleSaveAsTriggered);
             mActionCreate->setEnabled(true);
+            mActionOpen->setEnabled(true);
             mActionSave->setEnabled(gFileStatusManager->modifiedFilesExisting());
             mActionSaveAs->setEnabled(gFileStatusManager->modifiedFilesExisting());
         }

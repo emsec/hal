@@ -70,6 +70,8 @@ namespace hal
         void updateTabs(GateType* gateType);
         bool callUnsavedChangesWindow();
 
+        bool isReadOnly() const;
+
     public Q_SLOTS:
         /**
          * Opens the Wizard to edit or add a new gate

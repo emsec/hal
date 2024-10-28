@@ -305,6 +305,11 @@ namespace hal
         mPinTab->update(gateType);
     }
 
+    bool GateLibraryManager::isReadOnly() const
+    {
+        return mReadOnly;
+    }
+
     bool GateLibraryManager::callUnsavedChangesWindow()
     {
         QMessageBox* msgBox = new QMessageBox(this);
