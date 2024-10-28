@@ -1955,13 +1955,14 @@ namespace hal
         {
             struct indexed_identifier
             {
-                indexed_identifier(const std::string& p_identifier, const u32 p_index, const std::string& p_origin) : identifier{p_identifier}, index{p_index}, origin{p_origin}
+                indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const PinDirection& direction) : identifier{identifier}, index{index}, origin{origin}
                 {
                 }
 
                 std::string identifier;
                 u32 index;
                 std::string origin;
+                PinDirection direction;
             };
 
             // TODO when the verilog parser changes are merged into the master this will no longer be needed
@@ -2004,7 +2005,7 @@ namespace hal
             const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
             // Extracts an index from a string by taking the last integer enclosed by parentheses
-            std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin)
+            std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin, const PinDirection& direction)
             {
                 std::regex re(index_pattern);
 
@@ -2031,15 +2032,20 @@ namespace hal
                 auto identifier_name   = name;
                 identifier_name        = identifier_name.replace(name.rfind(found_match), found_match.size(), "");
 
-                return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin}};
+                return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin, direction}};
             }
 
             // annotate all found identifiers to a gate
             bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
             {
-                std::string json_identifier_str =
-                    "[" + utils::join(", ", identifiers, [](const auto& i) { return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "]"; })
-                    + "]";
+                std::string json_identifier_str = "["
+                                                  + utils::join(", ",
+                                                                identifiers,
+                                                                [](const auto& i) {
+                                                                    return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "," + '"'
+                                                                           + enum_to_string(i.direction) + '"' + "]";
+                                                                })
+                                                  + "]";
 
                 return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", json_identifier_str);
             }
@@ -2056,7 +2062,7 @@ namespace hal
                     const auto typed_net = (pin->get_direction() == PinDirection::output) ? gate->get_fan_out_net(pin) : gate->get_fan_in_net(pin);
 
                     // 1) search the net name itself
-                    const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name");
+                    const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name", pin->get_direction());
                     if (net_name_index.has_value())
                     {
                         found_identfiers.push_back(net_name_index.value());
@@ -2086,7 +2092,7 @@ namespace hal
                         {
                             const auto merged_wire_name = list[j].GetString();
 
-                            const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name");
+                            const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name", pin->get_direction());
                             if (merged_wire_name_index.has_value())
                             {
                                 found_identfiers.push_back(merged_wire_name_index.value());
@@ -2108,7 +2114,7 @@ namespace hal
 
                 // 1) Check whether the ff gate already has an index annotated in its gate name
                 const auto cleaned_gate_name = replace_hal_instance_index(ff->get_name());
-                const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name");
+                const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name", PinDirection::none);
 
                 if (gate_name_index.has_value())
                 {
@@ -2143,13 +2149,13 @@ namespace hal
 
             for (const auto& pin : nl->get_top_module()->get_pins())
             {
-                auto reconstruct = extract_index(pin->get_name(), net_index_pattern, "");
+                auto reconstruct = extract_index(pin->get_name(), net_index_pattern, "", pin->get_direction());
                 if (!reconstruct.has_value())
                 {
                     continue;
                 }
 
-                auto [pg_name, index, _] = reconstruct.value();
+                auto [pg_name, index, _origin, _direction] = reconstruct.value();
 
                 pg_name_to_indexed_pins[pg_name][index].push_back(pin);
             }
