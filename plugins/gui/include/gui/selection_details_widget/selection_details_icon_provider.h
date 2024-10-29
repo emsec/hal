@@ -56,8 +56,30 @@ namespace hal
         static bool sSettingsInitialized;
         static bool initSettings();
     public:
+        /**
+         * Returns an icon for the given styled netlist element.
+         * If the element is a module, a module icon is returned, 
+         * colored after the modules color.
+         * If the item is a gate, the gate icon corresponding to 
+         * the gates type is returned.
+         * 
+         * @param catg - The type of the netlist element, i.e. Module or Gate.
+         * @param itemId - The id of the netlist element.
+         * 
+         * @return The icon for the specified netlist element.
+         */
         const QIcon *getIcon(IconCategory catg, u32 itemId);
+
+        /**
+         * Get the singleton instance of the SettingsManager.
+         *
+         * @return The singleton instance.
+         */
         static SelectionDetailsIconProvider* instance();
+
+        /**
+         * The current icon setting. Changed by user in the settings.
+         */
         static SettingsItemDropdown* sIconSizeSetting;
     };
 }

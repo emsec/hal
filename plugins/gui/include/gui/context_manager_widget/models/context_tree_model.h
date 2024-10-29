@@ -112,8 +112,22 @@ namespace hal
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         ///@}
 
+        /**
+         * Returns the ContextTreeItem of a directory specified by an id.
+         * 
+         * @param directoryId - The id of the directory whose ContextTreeItem should be returned.
+         * 
+         * @return The ContextTreeItem for the directory specified by the id.
+         */
         BaseTreeItem* getDirectory(u32 directoryId) const;
 
+        /**
+         * Returns the ContextTreeItem of a context specified by an id.
+         * 
+         * @param contextId - The id of the context whose ContextTreeItem should be returned.
+         * 
+         * @return The ContextTreeItem for the context specified by the id.
+         */
         BaseTreeItem* getContext(u32 contextId) const;
 
         /**

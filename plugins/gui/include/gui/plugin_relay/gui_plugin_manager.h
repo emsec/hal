@@ -202,6 +202,16 @@ namespace hal {
     public:
         GuiPluginManager(QWidget* parent = nullptr);
         static QMap<QString,GuiExtensionInterface*> getGuiExtensions();
+        /**
+         * Adds context menu actions, which are provided by currently loaded plugins, 
+         * for specified set of netlist elements to a QMenu.
+         * 
+         * @param contextMenu - The QMenu to which the actions are added to.
+         * @param netlist - The netlist associated with the netlist elements.
+         * @param modules - List with ids of modules on which the actions will operate.
+         * @param gates - List with ids of gates on which the actions will operate.
+         * @param nets - List with ids of nets on which the actions will operate.
+         */
         static void addPluginSubmenus(QMenu* contextMenu, Netlist* netlist,
                                       const std::vector<u32>& modules,
                                       const std::vector<u32>& gates,
