@@ -268,6 +268,7 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">id</td><td>- The id of the netlist item this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents </td></tr>
     <tr><td class="paramname">type</td><td>- The type of the netlist item </td></tr>
+    <tr><td class="paramname">model</td><td>- The parent model where this item is added to. </td></tr>
   </table>
   </dd>
 </dl>
@@ -331,13 +332,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Appends a new column to the item.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>- The data of the new column. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Unused dummy function overwritten from parent class. </p>
 
 <p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#aae8a38ca73dedc23c82debf56de1009c">hal::BaseTreeItem</a>.</p>
 
@@ -399,7 +394,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Get the number of currently stored column data.</p>
-<dl class="section return"><dt>Returns</dt><dd>The column count. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>3 </dd></dl>
 
 <p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#adeab80a9fa281e763053bf6b5ec4d3d7">hal::BaseTreeItem</a>.</p>
 
@@ -587,10 +582,10 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets the data for all columns.</p>
+<p>Sets the data for the columns name and type. Column 2 (type) can be only set, if this item is a module.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">data</td><td>- Each entry in the list represents one column. </td></tr>
+    <tr><td class="paramname">data</td><td>- Each entry in the list represents one column. The second column (id) is ignored. </td></tr>
   </table>
   </dd>
 </dl>
@@ -636,10 +631,10 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sets the data for a specified column. The index must be within already existing boundaries (for example, add dummy data beforehand).</p>
+<p>Sets the data for a specified column. Column 2 (type) can only be set, if this item is a module.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">index</td><td>- The column to set the new data. </td></tr>
+    <tr><td class="paramname">index</td><td>- The column to set the new data. Either 0 (name) or 2(type). Other columns will be ignored. </td></tr>
     <tr><td class="paramname">data</td><td>- The new column data. </td></tr>
   </table>
   </dd>
@@ -753,7 +748,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a></li>
-    <li class="footer">Generated on Fri Oct 25 2024 07:31:23 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Oct 29 2024 15:33:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

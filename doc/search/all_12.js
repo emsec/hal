@@ -333,7 +333,7 @@ var searchData=
   ['removefirst_13004',['removeFirst',['https://doc.qt.io/qt-5/qvector.html#removeFirst',1,'QVector::removeFirst()'],['https://doc.qt.io/qt-5/qcborarray.html#removeFirst',1,'QCborArray::removeFirst()'],['https://doc.qt.io/qt-5/qlist.html#removeFirst',1,'QList::removeFirst()'],['https://doc.qt.io/qt-5/qcontiguouscache.html#removeFirst',1,'QContiguousCache::removeFirst()'],['https://doc.qt.io/qt-5/qjsonarray.html#removeFirst',1,'QJsonArray::removeFirst()'],['https://doc.qt.io/qt-5/qlinkedlist.html#removeFirst',1,'QLinkedList::removeFirst()']]],
   ['removeformat_13005',['removeFormat',['https://doc.qt.io/qt-5/qmimedata.html#removeFormat',1,'QMimeData']]],
   ['removefragment_13006',['RemoveFragment',['https://doc.qt.io/qt-5/qurl.html#UrlFormattingOption-enum',1,'QUrl']]],
-  ['removefrom_13007',['removeFrom',['../classhal_1_1_gui_api_classes_1_1_view.html#a68001bef25a50ad99228090f2c0f618e',1,'hal::GuiApiClasses::View']]],
+  ['removefrom_13007',['removeFrom',['../classhal_1_1_gui_api_classes_1_1_view.html#a64d3c874876bdb0db437bc2eceeb3ab8',1,'hal::GuiApiClasses::View']]],
   ['removefromgroup_13008',['removeFromGroup',['https://doc.qt.io/qt-5/qgraphicsitemgroup.html#removeFromGroup',1,'QGraphicsItemGroup']]],
   ['removegate_13009',['removeGate',['../classhal_1_1_module_model.html#a4bbb17f1eb8cae8afd62ad9fdae6ca65',1,'hal::ModuleModel::removeGate()'],['../classhal_1_1_selection_relay.html#a58714794da09f55a0bef7b50c980ce36',1,'hal::SelectionRelay::removeGate()']]],
   ['removegraphitem_13010',['removeGraphItem',['../classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76',1,'hal::GraphicsScene']]],
