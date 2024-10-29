@@ -43,7 +43,7 @@ namespace hal
          *
          * @param svg_data - The svg data to create the QIcon from
          */
-        explicit SvgIconEngine(const std::string& svg_data);
+        explicit SvgIconEngine(const QByteArray& dataEnabled, const QByteArray& dataDisabled);
 
         /**
          * Uses the given painter to paint the icon into the rectangle rect. Mode and state are unused.
@@ -73,6 +73,7 @@ namespace hal
         QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state) override;
 
     private:
-        QByteArray mData;
+        QByteArray mEnabledData;
+        QByteArray mDisabledData;
     };
 }

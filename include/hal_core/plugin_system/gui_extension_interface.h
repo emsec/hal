@@ -45,15 +45,14 @@ namespace hal
 
     class GuiExtensionInterface : public AbstractExtensionInterface
     {
+        bool mContributionEnabled;
+        std::string mContributionTopLabel;
     public:
-        GuiExtensionInterface()
-        {
-            ;
-        }
+        GuiExtensionInterface(const std::string& toplabel = std::string()) : mContributionEnabled(true), mContributionTopLabel(toplabel)
+        {;}
+
         virtual ~GuiExtensionInterface()
-        {
-            ;
-        }
+        {;}
 
         /**
          * Get list of configurable parameter
@@ -115,5 +114,23 @@ namespace hal
          * @param[in] nl - The netlist.
          */
         virtual void netlist_about_to_close(Netlist* nl);
+
+        /**
+         * Check whether context menu contributions are enabled for this plugin
+         * @return True if enabled, false otherwise
+         */
+        bool is_contribution_enabled() const { return mContributionEnabled; }
+
+        /**
+         * Set flag whether context menu contributions are enabled for this plugin
+         * @param[in] enabled - New value for context menu contribution flag
+         */
+        void set_contribution_enabled(bool enabled) { mContributionEnabled = enabled; }
+
+        /**
+         * Get top label for context menu contributions. If empty the plugin name will show as top label.
+         * @return The label or empty if no label different from plugin name was provided for constructor.
+         */
+        std::string contribution_top_label() const { return mContributionTopLabel; }
     };
 }    // namespace hal

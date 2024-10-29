@@ -1,9 +1,10 @@
 #include "gui/gatelibrary_management/gatelibrary_table_model.h"
 
-#include "hal_core/netlist/netlist.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
-
 #include "gui/gui_globals.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 #include <QDateTime>
 
@@ -25,38 +26,34 @@ namespace hal
     {
         Q_UNUSED(parent)
 
-        return 4;
+        return 2;
     }
 
     QVariant GatelibraryTableModel::data(const QModelIndex& index, int role) const
     {
-        if(index.row() < mEntries.size() && index.column() < 4)
+        if(index.row() < mEntries.size() && index.column() < columnCount())
         {
             if (role == Qt::DisplayRole)
             {
                 switch (index.column())
                 {
-                case 0: return mEntries[index.row()].name;
-                case 1: return mEntries[index.row()].gatecount;
-                case 2: return QString::fromStdString(mEntries[index.row()].path.string());
-                case 3: return mEntries[index.row()].timestring;
+                    case 0: return QString::fromStdString(mEntries[index.row()]->get_name());
+                    case 1: return mEntries[index.row()]->get_id();
+
                 }
             }
             else if (role == Qt::TextAlignmentRole)
             {
-                if (index.column() == 0 || index.column() == 2)
+                switch (index.column())
                 {
-                    Qt::Alignment a;
-                    a.setFlag(Qt::AlignLeft);
-                    a.setFlag(Qt::AlignVCenter);
-                    return QVariant(a);
+                case 0:
+                    return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+                case 1:
+                    return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+                default:
+                    return QVariant(Qt::AlignCenter);
                 }
-                else
-                    return Qt::AlignCenter;
             }
-            else if (role == Qt::UserRole)
-                if (index.column() == 3)
-                    return mEntries[index.row()].timevalue;
         }
 
         return QVariant();
@@ -72,9 +69,7 @@ namespace hal
             switch(section)
             {
             case 0: return "Name";
-            case 1: return "Gate Count";
-            case 2: return "Path";
-            case 3: return "Load Time";
+            case 1: return "ID";
             default: return QVariant();
             }
         }
@@ -89,86 +84,34 @@ namespace hal
         endResetModel();
     }
 
-    void GatelibraryTableModel::setup()
+
+    void GatelibraryTableModel::loadFile(const GateLibrary* g)
     {
-        QList<Entry> newEntryList;
-
-        for (GateLibrary* g : gate_library_manager::get_gate_libraries())
-        {
-            Entry newEntry;
-
-            newEntry.name = QString::fromStdString(g->get_name());
-            newEntry.gatecount = (u32)g->get_gate_types().size();
-            newEntry.path = g->get_path();
-            newEntry.timestring = QString::fromStdString("Program Start");
-            newEntry.timevalue = 0;
-
-            newEntryList.append(newEntry);
-        }
-
-        beginResetModel();
-        mEntries = newEntryList;
-        endResetModel();
-    }
-
-    QString GatelibraryTableModel::getNameFromIndex(const QModelIndex& index)
-    {
-        return mEntries[index.row()].name;
-    }
-
-    u32 GatelibraryTableModel::getGatecountFromIndex(const QModelIndex& index)
-    {
-        return mEntries[index.row()].gatecount;
-    }
-
-    void GatelibraryTableModel::loadFile(const QString& path)
-    {
-        std::filesystem::path stdPath = path.toStdString();
-        GateLibrary* g = gate_library_manager::load(stdPath, false);
 
         if (!g)
             return;
+        beginResetModel();
+        mEntries.clear();
 
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        for (auto elem : g->get_gate_types())
+        {
+            mEntries.append(elem.second);
+        }
 
-        Entry newEntry;
+        std::sort(mEntries.begin(), mEntries.end(), [](GateType* a, GateType* b)
+        {
+            return a->get_name() < b->get_name();
+        });
 
-        newEntry.name = QString::fromStdString(g->get_name());
-        newEntry.gatecount = (u32)g->get_gate_types().size();
-        newEntry.path = g->get_path();
-        newEntry.timestring = QDateTime::currentDateTime().toString();
-        newEntry.timevalue = QDateTime::currentDateTime().toMSecsSinceEpoch();
-
-        mEntries.append(newEntry);
-
-        endInsertRows();
+        endResetModel();
     }
 
-    void GatelibraryTableModel::reloadIndex(const QModelIndex& index)
+    GateType* GatelibraryTableModel::getGateTypeAtIndex(int index)
     {
-        int row = index.row();
+        if(index >= mEntries.size())
+            return nullptr;
 
-        assert(row < mEntries.size());
-
-        gate_library_manager::load(mEntries[row].path, true);
-
-        mEntries[row].timestring = QDateTime::currentDateTime().toString();
-        mEntries[row].timevalue = QDateTime::currentDateTime().toMSecsSinceEpoch();
-
-        QModelIndex changed = createIndex(row, 3, &mEntries[row]);
-        Q_EMIT dataChanged(changed, changed);
+        return mEntries[index];
     }
 
-    void GatelibraryTableModel::removeIndex(const QModelIndex& index)
-    {
-        int row = index.row();
-
-        assert(row < mEntries.size());
-
-        gate_library_manager::remove(mEntries[row].path);
-
-        beginRemoveRows(index.parent(), row, row);
-        mEntries.removeAt(row);
-        endRemoveRows();
-    }
 }

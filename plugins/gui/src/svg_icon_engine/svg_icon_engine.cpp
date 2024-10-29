@@ -5,17 +5,16 @@
 
 namespace hal
 {
-    SvgIconEngine::SvgIconEngine(const std::string& svg_data)
-    {
-        mData = QByteArray::fromStdString(svg_data);
-    }
+    SvgIconEngine::SvgIconEngine(const QByteArray &dataEnabled, const QByteArray &dataDisabled)
+        : mEnabledData(dataEnabled), mDisabledData(dataDisabled)
+    {;}
 
     void SvgIconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state)
     {
         Q_UNUSED(mode)
         Q_UNUSED(state)
 
-        QSvgRenderer renderer(mData);
+        QSvgRenderer renderer( (mode==QIcon::Disabled && !mDisabledData.isEmpty()) ? mDisabledData : mEnabledData);
         renderer.render(painter, rect);
     }
 
