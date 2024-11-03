@@ -8,7 +8,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "nlohmann_json/json.hpp"
+#include "nlohmann/json.hpp"
 #include "z3_utils/z3_utils.h"
 
 namespace hal
