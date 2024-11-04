@@ -363,6 +363,157 @@ namespace hal
         return OK(res);
     }
 
+    Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Net* net,
+                                                                                       bool successors,
+                                                                                       const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+                                                                                       bool continue_on_match,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (net == nullptr)
+        {
+            return ERR("nullptr given as net");
+        }
+
+        if (!m_netlist.is_net_in_netlist(net))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        if (!target_endpoint_filter)
+        {
+            return ERR("no target endpoint filter specified");
+        }
+
+        std::unordered_set<const Net*> visited;
+        std::vector<const Net*> stack = {net};
+        std::vector<const Net*> previous;
+        std::set<Endpoint*> res;
+        while (!stack.empty())
+        {
+            const Net* current = stack.back();
+
+            if (!previous.empty() && current == previous.back())
+            {
+                stack.pop_back();
+                previous.pop_back();
+                continue;
+            }
+
+            visited.insert(current);
+
+            bool added = false;
+            for (auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
+            {
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
+                {
+                    continue;
+                }
+
+                if (target_endpoint_filter(entry_ep))
+                {
+                    res.insert(entry_ep);
+
+                    if (!continue_on_match)
+                    {
+                        continue;
+                    }
+                }
+
+                auto* gate = entry_ep->get_gate();
+
+                for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
+                    {
+                        continue;
+                    }
+
+                    if (target_endpoint_filter(exit_ep))
+                    {
+                        res.insert(exit_ep);
+
+                        if (!continue_on_match)
+                        {
+                            continue;
+                        }
+                    }
+
+                    const Net* exit_net = exit_ep->get_net();
+
+                    if (visited.find(exit_net) == visited.end())
+                    {
+                        stack.push_back(exit_net);
+                        added = true;
+                    }
+                }
+            }
+
+            if (added)
+            {
+                previous.push_back(current);
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        return OK(res);
+    }
+
+    Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Gate* gate,
+                                                                                       bool successors,
+                                                                                       const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+                                                                                       bool continue_on_match,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        if (!target_endpoint_filter)
+        {
+            return ERR("no target endpoint filter specified");
+        }
+
+        std::set<Endpoint*> res;
+        for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        {
+            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+            {
+                continue;
+            }
+
+            if (target_endpoint_filter(exit_ep))
+            {
+                res.insert(exit_ep);
+
+                if (!continue_on_match)
+                {
+                    continue;
+                }
+            }
+
+            const auto* exit_net = exit_ep->get_net();
+            const auto next_res  = this->get_next_matching_endpoints(exit_net, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+            if (next_res.is_error())
+            {
+                return ERR(next_res.get_error());
+            }
+            auto next = next_res.get();
+            res.insert(next.begin(), next.end());
+        }
+        return OK(res);
+    }
+
     Result<std::set<Gate*>>
         NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
@@ -701,34 +852,43 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::optional<u32>> NetlistTraversalDecorator::get_shortest_path_distance(const Gate* start_gate,
-                                                                                     const Gate* end_gate,
-                                                                                     const PinDirection& direction,
-                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    namespace
     {
-        if (direction == PinDirection::output || direction == PinDirection::input)
+        Result<std::optional<u32>> get_shortest_path_distance_internal(const std::vector<Endpoint*>& start,
+                                                                       const std::function<bool(const Endpoint*)>& target_filter,
+                                                                       const PinDirection& direction,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter)
         {
-            std::unordered_set<Gate*> visited;
-            u32 distance = 0;
-
-            Gate* _start_gate          = start_gate->get_netlist()->get_gate_by_id(start_gate->get_id());
-            std::vector<Gate*> current = {_start_gate};
-            std::vector<Gate*> next;
-
-            while (true)
+            if (direction == PinDirection::output || direction == PinDirection::input)
             {
-                distance++;
+                u32 distance = 0;
 
-                for (const auto& curr_g : current)
+                // check whether start already fullfills target or exit filter
+                for (auto* start_ep : start)
                 {
-                    for (const auto& exit_ep : (direction == PinDirection::output) ? curr_g->get_fan_out_endpoints() : curr_g->get_fan_in_endpoints())
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
                     {
-                        if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, distance))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
+                    if (target_filter(start_ep))
+                    {
+                        return OK(distance);
+                    }
+                }
+
+                std::unordered_set<Endpoint*> visited;
+
+                std::vector<Endpoint*> current = start;
+                std::vector<Endpoint*> next;
+
+                while (true)
+                {
+                    distance++;
+
+                    for (const auto& exit_ep : current)
+                    {
                         for (const auto& entry_ep : (direction == PinDirection::output) ? exit_ep->get_net()->get_destinations() : exit_ep->get_net()->get_sources())
                         {
                             if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
@@ -736,78 +896,124 @@ namespace hal
                                 continue;
                             }
 
-                            const auto next_g = entry_ep->get_gate();
-
-                            if (const auto it = visited.find(next_g); it != visited.end())
-                            {
-                                continue;
-                            }
-                            visited.insert(next_g);
-
-                            if (next_g == end_gate)
+                            if (target_filter(entry_ep))
                             {
                                 return OK(distance);
                             }
 
-                            next.push_back(next_g);
+                            const auto next_g = entry_ep->get_gate();
+
+                            for (const auto& next_ep : (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints())
+                            {
+                                if (const auto it = visited.find(next_ep); it != visited.end())
+                                {
+                                    continue;
+                                }
+                                visited.insert(next_ep);
+
+                                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
+                                {
+                                    continue;
+                                }
+
+                                if (target_filter(next_ep))
+                                {
+                                    return OK(distance);
+                                }
+
+                                next.push_back(next_ep);
+                            }
                         }
                     }
+
+                    if (next.empty())
+                    {
+                        break;
+                    }
+
+                    current = next;
+                    next.clear();
                 }
 
-                if (next.empty())
-                {
-                    break;
-                }
-
-                current = next;
-                next.clear();
-            }
-
-            return OK({});
-        }
-
-        if (direction == PinDirection::inout)
-        {
-            const auto res_backward = get_shortest_path_distance(start_gate, end_gate, PinDirection::input);
-            if (res_backward.is_error())
-            {
-                return res_backward;
-            }
-
-            const auto res_forward = get_shortest_path_distance(start_gate, end_gate, PinDirection::output);
-            if (res_forward.is_error())
-            {
-                return res_forward;
-            }
-
-            const auto distance_backward = res_backward.get();
-            const auto distance_forward  = res_forward.get();
-
-            if (!distance_forward.has_value() && !distance_backward.has_value())
-            {
                 return OK({});
             }
 
-            if (!distance_backward.has_value())
+            if (direction == PinDirection::inout)
             {
+                const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_backward.is_error())
+                {
+                    return res_backward;
+                }
+
+                const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, exit_endpoint_filter, entry_endpoint_filter);
+                if (res_forward.is_error())
+                {
+                    return res_forward;
+                }
+
+                const auto distance_backward = res_backward.get();
+                const auto distance_forward  = res_forward.get();
+
+                if (!distance_forward.has_value() && !distance_backward.has_value())
+                {
+                    return OK({});
+                }
+
+                if (!distance_backward.has_value())
+                {
+                    return OK(distance_forward);
+                }
+
+                if (!distance_forward.has_value())
+                {
+                    return OK(distance_backward);
+                }
+
+                if (distance_backward.value() < distance_forward.value())
+                {
+                    return OK(distance_backward);
+                }
+
                 return OK(distance_forward);
             }
 
-            if (!distance_forward.has_value())
-            {
-                return OK(distance_backward);
-            }
+            return ERR("cannot get shortest path distance between endpoints and given target filter condition: pin direction " + enum_to_string(direction) + " is not supported");
+        }
+    }    // namespace
 
-            if (distance_backward.value() < distance_forward.value())
-            {
-                return OK(distance_backward);
-            }
-
-            return OK(distance_forward);
+    Result<std::optional<u32>> NetlistTraversalDecorator::get_shortest_path_distance(Endpoint* start,
+                                                                                     const std::function<bool(const Endpoint*)>& target_filter,
+                                                                                     const PinDirection& direction,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (start->get_pin()->get_direction() != direction)
+        {
+            return get_shortest_path_distance(start->get_gate(), target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
         }
 
-        return ERR("cannot get shortest path distance between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
-                   + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+        return get_shortest_path_distance_internal({start}, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::optional<u32>> NetlistTraversalDecorator::get_shortest_path_distance(const Gate* start,
+                                                                                     const std::function<bool(const Endpoint*)>& target_filter,
+                                                                                     const PinDirection& direction,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                     const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        const auto start_endpoints = (direction == PinDirection::output) ? start->get_fan_out_endpoints() : start->get_fan_in_endpoints();
+
+        return get_shortest_path_distance_internal(start_endpoints, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::optional<u32>> NetlistTraversalDecorator::get_shortest_path_distance(const Gate* start_gate,
+                                                                                     const Gate* end_gate,
+                                                                                     const PinDirection& direction,
+                                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        return get_shortest_path_distance(start_gate, [end_gate](const auto* ep) { return ep->get_gate() == end_gate; }, direction, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::optional<std::vector<Gate*>>> NetlistTraversalDecorator::get_shortest_path(const Gate* start_gate,
@@ -943,157 +1149,6 @@ namespace hal
 
         return ERR("cannot get shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
                    + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
-    }
-
-    Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Net* net,
-                                                                                       bool successors,
-                                                                                       const std::function<bool(const Endpoint*)>& target_endpoint_filter,
-                                                                                       bool continue_on_match,
-                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
-                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
-    {
-        if (net == nullptr)
-        {
-            return ERR("nullptr given as net");
-        }
-
-        if (!m_netlist.is_net_in_netlist(net))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        if (!target_endpoint_filter)
-        {
-            return ERR("no target endpoint filter specified");
-        }
-
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Endpoint*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
-                {
-                    continue;
-                }
-
-                if (target_endpoint_filter(entry_ep))
-                {
-                    res.insert(entry_ep);
-
-                    if (!continue_on_match)
-                    {
-                        continue;
-                    }
-                }
-
-                auto* gate = entry_ep->get_gate();
-
-                for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                {
-                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
-                    {
-                        continue;
-                    }
-
-                    if (target_endpoint_filter(exit_ep))
-                    {
-                        res.insert(exit_ep);
-
-                        if (!continue_on_match)
-                        {
-                            continue;
-                        }
-                    }
-
-                    const Net* exit_net = exit_ep->get_net();
-
-                    if (visited.find(exit_net) == visited.end())
-                    {
-                        stack.push_back(exit_net);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
-    }
-
-    Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Gate* gate,
-                                                                                       bool successors,
-                                                                                       const std::function<bool(const Endpoint*)>& target_endpoint_filter,
-                                                                                       bool continue_on_match,
-                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
-                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
-    {
-        if (gate == nullptr)
-        {
-            return ERR("nullptr given as gate");
-        }
-
-        if (!m_netlist.is_gate_in_netlist(gate))
-        {
-            return ERR("net does not belong to netlist");
-        }
-
-        if (!target_endpoint_filter)
-        {
-            return ERR("no target endpoint filter specified");
-        }
-
-        std::set<Endpoint*> res;
-        for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-        {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
-            {
-                continue;
-            }
-
-            if (target_endpoint_filter(exit_ep))
-            {
-                res.insert(exit_ep);
-
-                if (!continue_on_match)
-                {
-                    continue;
-                }
-            }
-
-            const auto* exit_net = exit_ep->get_net();
-            const auto next_res  = this->get_next_matching_endpoints(exit_net, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
-            if (next_res.is_error())
-            {
-                return ERR(next_res.get_error());
-            }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
-        }
-        return OK(res);
     }
 
 }    // namespace hal

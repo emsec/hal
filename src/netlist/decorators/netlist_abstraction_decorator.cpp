@@ -8,7 +8,6 @@
 
 namespace hal
 {
-
     NetlistAbstraction::NetlistAbstraction(const std::vector<Gate*>& gates,
                                            const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
                                            const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
@@ -224,7 +223,9 @@ namespace hal
         return m_global_output_successors.at(endpoint);
     }
 
-    Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance_internal(const std::vector<Endpoint*> start,
+    NetlistAbstractionDecorator::NetlistAbstractionDecorator(const hal::NetlistAbstraction& abstraction) : m_abstraction(abstraction) {};
+
+    Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance_internal(const std::vector<Endpoint*>& start,
                                                                                                 const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                                                                 const PinDirection& direction,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
@@ -240,7 +241,6 @@ namespace hal
                 if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
                 {
                     continue;
-                    ;
                 }
 
                 if (target_filter(start_ep, m_abstraction))
@@ -311,13 +311,13 @@ namespace hal
 
         if (direction == PinDirection::inout)
         {
-            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input);
+            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, exit_endpoint_filter, entry_endpoint_filter);
             if (res_backward.is_error())
             {
                 return res_backward;
             }
 
-            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output);
+            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, exit_endpoint_filter, entry_endpoint_filter);
             if (res_forward.is_error())
             {
                 return res_forward;
@@ -376,4 +376,280 @@ namespace hal
 
         return get_shortest_path_distance_internal(start_endpoints, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
     }
+
+    Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance(const Gate* start,
+                                                                                       const Gate* target,
+                                                                                       const PinDirection& direction,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        return get_shortest_path_distance(
+            start,
+            [target](const auto* ep, const auto& _abstraction) {
+                UNUSED(_abstraction);
+                return ep->get_gate() == target;
+            },
+            direction,
+            exit_endpoint_filter,
+            entry_endpoint_filter);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_internal(const std::vector<const Endpoint*>& start,
+                                                                                          const PinDirection& direction,
+                                                                                          const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                          bool continue_on_match,
+                                                                                          const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                          const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        std::unordered_set<const Endpoint*> visited;
+        std::vector<const Endpoint*> stack = start;
+        std::vector<const Endpoint*> previous;
+        std::set<Gate*> res;
+        while (!stack.empty())
+        {
+            const Endpoint* current = stack.back();
+
+            if (!previous.empty() && current == previous.back())
+            {
+                stack.pop_back();
+                previous.pop_back();
+                continue;
+            }
+
+            visited.insert(current);
+
+            bool added = false;
+            for (const auto* entry_ep : (direction == PinDirection::output) ? m_abstraction.get_successors(current) : m_abstraction.get_predecessors(current))
+            {
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
+                {
+                    continue;
+                }
+
+                auto* gate = entry_ep->get_gate();
+
+                if (target_gate_filter(gate))
+                {
+                    res.insert(gate);
+
+                    if (!continue_on_match)
+                    {
+                        continue;
+                    }
+                }
+
+                for (const auto* exit_ep : (direction == PinDirection::output) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
+                    {
+                        continue;
+                    }
+
+                    if (visited.find(exit_ep) == visited.end())
+                    {
+                        stack.push_back(exit_ep);
+                        added = true;
+                    }
+                }
+            }
+
+            if (added)
+            {
+                previous.push_back(current);
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates(const Endpoint* endpoint,
+                                                                                 const PinDirection& direction,
+                                                                                 const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                 bool continue_on_match,
+                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (endpoint == nullptr)
+        {
+            return ERR("nullptr given as endpoint");
+        }
+
+        if (!target_gate_filter)
+        {
+            return ERR("no target gate filter specified");
+        }
+
+        if (endpoint->get_pin()->get_direction() != direction)
+        {
+            return get_next_matching_gates(endpoint->get_gate(), direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+        }
+
+        return get_next_matching_gates_internal({endpoint}, direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates(const Gate* gate,
+                                                                                 const PinDirection& direction,
+                                                                                 const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                 bool continue_on_match,
+                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!target_gate_filter)
+        {
+            return ERR("no target gate filter specified");
+        }
+
+        std::vector<const Endpoint*> start;
+        for (const auto* exit_ep : (direction == PinDirection::output) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        {
+            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+            {
+                continue;
+            }
+
+            start.push_back(exit_ep);
+        }
+
+        return get_next_matching_gates_internal(start, direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until_internal(const std::vector<const Endpoint*>& start,
+                                                                                                const PinDirection& direction,
+                                                                                                const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                                bool continue_on_mismatch,
+                                                                                                const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                                const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        std::unordered_set<const Endpoint*> visited;
+        std::vector<const Endpoint*> stack = start;
+        std::vector<const Endpoint*> previous;
+        std::set<Gate*> res;
+        while (!stack.empty())
+        {
+            const Endpoint* current = stack.back();
+
+            if (!previous.empty() && current == previous.back())
+            {
+                stack.pop_back();
+                previous.pop_back();
+                continue;
+            }
+
+            visited.insert(current);
+
+            bool added = false;
+            for (const auto* entry_ep : (direction == PinDirection::output) ? m_abstraction.get_successors(current) : m_abstraction.get_predecessors(current))
+            {
+                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
+                {
+                    continue;
+                }
+
+                auto* g = entry_ep->get_gate();
+
+                if (target_gate_filter(g))
+                {
+                    res.insert(g);
+                }
+                else
+                {
+                    if (!continue_on_mismatch)
+                    {
+                        continue;
+                    }
+                }
+
+                for (const auto* exit_ep : (direction == PinDirection::output) ? g->get_fan_out_endpoints() : g->get_fan_in_endpoints())
+                {
+                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
+                    {
+                        continue;
+                    }
+
+                    if (visited.find(exit_ep) == visited.end())
+                    {
+                        stack.push_back(exit_ep);
+                        added = true;
+                    }
+                }
+            }
+
+            if (added)
+            {
+                previous.push_back(current);
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        return OK(res);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until(const Endpoint* endpoint,
+                                                                                       const PinDirection& direction,
+                                                                                       const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                       bool continue_on_mismatch,
+                                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (endpoint == nullptr)
+        {
+            return ERR("nullptr given as endpoint");
+        }
+
+        if (!target_gate_filter)
+        {
+            return ERR("no target gate filter specified");
+        }
+
+        if (endpoint->get_pin()->get_direction() != direction)
+        {
+            return get_next_matching_gates_until(endpoint->get_gate(), direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+        }
+
+        return get_next_matching_gates_until_internal({endpoint}, direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
+    Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until(const Gate* gate,
+                                                                                       const PinDirection& direction,
+                                                                                       const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                       bool continue_on_mismatch,
+                                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!target_gate_filter)
+        {
+            return ERR("no target gate filter specified");
+        }
+
+        std::vector<const Endpoint*> start;
+        for (const auto* exit_ep : (direction == PinDirection::output) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        {
+            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+            {
+                continue;
+            }
+
+            start.push_back(exit_ep);
+        }
+
+        return get_next_matching_gates_internal(start, direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
 }    // namespace hal
