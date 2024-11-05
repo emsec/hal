@@ -50,11 +50,15 @@ namespace hal
         /**
          * @brief Constructs a `NetlistAbstraction` from a set of gates.
          *
+         * @param[in] netlist - The netlist to abstract.
          * @param[in] gates - The gates to include in the abstraction.
+         * @param[in] include_all_netlist_gates - If this flag is set, for all gates in the netlist, edges are created to the nearest gates that are part of the abstraction, otherwise this is only done for gates part of the abstraction.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          */
-        NetlistAbstraction(const std::vector<Gate*>& gates,
+        NetlistAbstraction(const Netlist* netlist,
+                           const std::vector<Gate*>& gates,
+                           const bool include_all_netlist_gates                                                       = false,
                            const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                            const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
 
@@ -244,7 +248,7 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates(const Endpoint* endpoint,
+        Result<std::set<Gate*>> get_next_matching_gates(Endpoint* endpoint,
                                                         const PinDirection& direction,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
                                                         bool continue_on_match                                                                     = false,
@@ -286,7 +290,7 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates_until(const Endpoint* endpoint,
+        Result<std::set<Gate*>> get_next_matching_gates_until(Endpoint* endpoint,
                                                               const PinDirection& direction,
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
                                                               bool continue_on_mismatch                                                                  = false,
@@ -342,7 +346,7 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates_internal(const std::vector<const Endpoint*>& start,
+        Result<std::set<Gate*>> get_next_matching_gates_internal(const std::vector<Endpoint*>& start,
                                                                  const PinDirection& direction,
                                                                  const std::function<bool(const Gate*)>& target_gate_filter,
                                                                  bool continue_on_match,
@@ -360,7 +364,7 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates_until_internal(const std::vector<const Endpoint*>& start,
+        Result<std::set<Gate*>> get_next_matching_gates_until_internal(const std::vector<Endpoint*>& start,
                                                                        const PinDirection& direction,
                                                                        const std::function<bool(const Gate*)>& target_gate_filter,
                                                                        bool continue_on_mismatch                                                                  = false,

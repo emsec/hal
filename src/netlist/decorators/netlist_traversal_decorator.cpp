@@ -363,6 +363,132 @@ namespace hal
         return OK(res);
     }
 
+    namespace
+    {
+        Result<std::set<Endpoint*>> get_next_matching_endpoints_internal(const std::vector<Endpoint*>& start,
+                                                                         bool successors,
+                                                                         const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+                                                                         bool continue_on_match,
+                                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
+        {
+            std::set<Endpoint*> res;
+            u32 distance = 0;
+
+            std::unordered_set<Endpoint*> visited;
+
+            std::vector<Endpoint*> current;
+            std::vector<Endpoint*> next;
+
+            // check whether start already fullfills target or exit filter
+            for (auto* start_ep : start)
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
+                {
+                    continue;
+                }
+
+                if (target_endpoint_filter(start_ep))
+                {
+                    res.insert(start_ep);
+
+                    if (continue_on_match)
+                    {
+                        current.push_back(start_ep);
+                    }
+                }
+                else
+                {
+                    current.push_back(start_ep);
+                }
+            }
+
+            while (true)
+            {
+                distance++;
+
+                for (const auto& exit_ep : current)
+                {
+                    for (const auto& entry_ep : successors ? exit_ep->get_net()->get_destinations() : exit_ep->get_net()->get_sources())
+                    {
+                        if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
+                        {
+                            continue;
+                        }
+
+                        if (target_endpoint_filter(entry_ep))
+                        {
+                            res.insert(entry_ep);
+
+                            if (!continue_on_match)
+                            {
+                                continue;
+                            }
+                        }
+
+                        const auto next_g = entry_ep->get_gate();
+
+                        for (const auto& next_ep : successors ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints())
+                        {
+                            if (const auto it = visited.find(next_ep); it != visited.end())
+                            {
+                                continue;
+                            }
+                            visited.insert(next_ep);
+
+                            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
+                            {
+                                continue;
+                            }
+
+                            if (target_endpoint_filter(next_ep))
+                            {
+                                res.insert(next_ep);
+
+                                if (!continue_on_match)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            next.push_back(next_ep);
+                        }
+                    }
+                }
+
+                if (next.empty())
+                {
+                    break;
+                }
+
+                current = next;
+                next.clear();
+            }
+
+            return OK(res);
+        }
+    }    // namespace
+
+    Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(Endpoint* endpoint,
+                                                                                       bool successors,
+                                                                                       const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+                                                                                       bool continue_on_match,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (endpoint == nullptr)
+        {
+            return ERR("nullptr given as net");
+        }
+
+        if (!target_endpoint_filter)
+        {
+            return ERR("no target endpoint filter specified");
+        }
+
+        return get_next_matching_endpoints_internal({endpoint}, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+    }
+
     Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Net* net,
                                                                                        bool successors,
                                                                                        const std::function<bool(const Endpoint*)>& target_endpoint_filter,
@@ -385,81 +511,8 @@ namespace hal
             return ERR("no target endpoint filter specified");
         }
 
-        std::unordered_set<const Net*> visited;
-        std::vector<const Net*> stack = {net};
-        std::vector<const Net*> previous;
-        std::set<Endpoint*> res;
-        while (!stack.empty())
-        {
-            const Net* current = stack.back();
-
-            if (!previous.empty() && current == previous.back())
-            {
-                stack.pop_back();
-                previous.pop_back();
-                continue;
-            }
-
-            visited.insert(current);
-
-            bool added = false;
-            for (auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
-            {
-                if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
-                {
-                    continue;
-                }
-
-                if (target_endpoint_filter(entry_ep))
-                {
-                    res.insert(entry_ep);
-
-                    if (!continue_on_match)
-                    {
-                        continue;
-                    }
-                }
-
-                auto* gate = entry_ep->get_gate();
-
-                for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-                {
-                    if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
-                    {
-                        continue;
-                    }
-
-                    if (target_endpoint_filter(exit_ep))
-                    {
-                        res.insert(exit_ep);
-
-                        if (!continue_on_match)
-                        {
-                            continue;
-                        }
-                    }
-
-                    const Net* exit_net = exit_ep->get_net();
-
-                    if (visited.find(exit_net) == visited.end())
-                    {
-                        stack.push_back(exit_net);
-                        added = true;
-                    }
-                }
-            }
-
-            if (added)
-            {
-                previous.push_back(current);
-            }
-            else
-            {
-                stack.pop_back();
-            }
-        }
-
-        return OK(res);
+        return get_next_matching_endpoints_internal(
+            successors ? net->get_destinations() : net->get_sources(), successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Endpoint*>> NetlistTraversalDecorator::get_next_matching_endpoints(const Gate* gate,
@@ -484,34 +537,8 @@ namespace hal
             return ERR("no target endpoint filter specified");
         }
 
-        std::set<Endpoint*> res;
-        for (auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
-        {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
-            {
-                continue;
-            }
-
-            if (target_endpoint_filter(exit_ep))
-            {
-                res.insert(exit_ep);
-
-                if (!continue_on_match)
-                {
-                    continue;
-                }
-            }
-
-            const auto* exit_net = exit_ep->get_net();
-            const auto next_res  = this->get_next_matching_endpoints(exit_net, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
-            if (next_res.is_error())
-            {
-                return ERR(next_res.get_error());
-            }
-            auto next = next_res.get();
-            res.insert(next.begin(), next.end());
-        }
-        return OK(res);
+        return get_next_matching_endpoints_internal(
+            successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints(), successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>>

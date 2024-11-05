@@ -251,6 +251,135 @@ namespace hal
             :rtype: set[hal_py.Gate] or None
         )");
 
+        // Binding for get_next_matching_endpoints starting from Endpoint*
+        py_netlist_traversal_decorator.def(
+            "get_next_matching_endpoints",
+            [](NetlistTraversalDecorator& self,
+               Endpoint* endpoint,
+               bool successors,
+               const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+               bool continue_on_match                                                                     = false,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Endpoint*>> {
+                auto res = self.get_next_matching_endpoints(endpoint, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next endpoints:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("endpoint"),
+            py::arg("successors"),
+            py::arg("target_endpoint_filter"),
+            py::arg("continue_on_match")     = false,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Starting from the given endpoint, traverse the netlist and return only the successor/predecessor endpoints for which the ``target_endpoint_filter`` evaluates to ``True``.
+            Traverse over endpoints that do not meet the ``target_endpoint_filter`` condition.
+            Stop traversal if (1) ``continue_on_match`` is ``False`` and the ``target_endpoint_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current endpoint during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next endpoint during traversal).
+            Both the ``entry_endpoint_filter`` and the ``exit_endpoint_filter`` may be omitted.
+
+            :param hal_py.Endpoint endpoint: Start endpoint.
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param callable target_endpoint_filter: Filter condition that must be met for the target endpoints.
+            :param bool continue_on_match: Set ``True`` to continue even if ``target_endpoint_filter`` evaluated to ``True``, ``False`` otherwise. Defaults to ``False``.
+            :param callable exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+            :param callable entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+            :returns: The next endpoints fulfilling the target endpoint filter condition on success, ``None`` otherwise.
+            :rtype: set[hal_py.Endpoint] or None
+        )");
+
+        // Binding for get_next_matching_endpoints starting from Net*
+        py_netlist_traversal_decorator.def(
+            "get_next_matching_endpoints",
+            [](NetlistTraversalDecorator& self,
+               const Net* net,
+               bool successors,
+               const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+               bool continue_on_match                                                                     = false,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Endpoint*>> {
+                auto res = self.get_next_matching_endpoints(net, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next endpoints:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("net"),
+            py::arg("successors"),
+            py::arg("target_endpoint_filter"),
+            py::arg("continue_on_match")     = false,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Starting from the given net, traverse the netlist and return only the successor/predecessor endpoints for which the ``target_endpoint_filter`` evaluates to ``True``.
+            Traverse over endpoints that do not meet the ``target_endpoint_filter`` condition.
+            Stop traversal if (1) ``continue_on_match`` is ``False`` and the ``target_endpoint_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current endpoint during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next endpoint during traversal).
+            Both the ``entry_endpoint_filter`` and the ``exit_endpoint_filter`` may be omitted.
+
+            :param hal_py.Net net: Start net.
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param callable target_endpoint_filter: Filter condition that must be met for the target endpoints.
+            :param bool continue_on_match: Set ``True`` to continue even if ``target_endpoint_filter`` evaluated to ``True``, ``False`` otherwise. Defaults to ``False``.
+            :param callable exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+            :param callable entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+            :returns: The next endpoints fulfilling the target endpoint filter condition on success, ``None`` otherwise.
+            :rtype: set[hal_py.Endpoint] or None
+        )");
+
+        // Binding for get_next_matching_endpoints starting from Gate*
+        py_netlist_traversal_decorator.def(
+            "get_next_matching_endpoints",
+            [](NetlistTraversalDecorator& self,
+               const Gate* gate,
+               bool successors,
+               const std::function<bool(const Endpoint*)>& target_endpoint_filter,
+               bool continue_on_match                                                                     = false,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Endpoint*>> {
+                auto res = self.get_next_matching_endpoints(gate, successors, target_endpoint_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next endpoints:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            py::arg("successors"),
+            py::arg("target_endpoint_filter"),
+            py::arg("continue_on_match")     = false,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Starting from the given gate, traverse the netlist and return only the successor/predecessor endpoints for which the ``target_endpoint_filter`` evaluates to ``True``.
+            Traverse over endpoints that do not meet the ``target_endpoint_filter`` condition.
+            Stop traversal if (1) ``continue_on_match`` is ``False`` and the ``target_endpoint_filter`` evaluates to ``True``, (2) the ``exit_endpoint_filter`` evaluates to ``False`` on a fan-in/out endpoint (i.e., when exiting the current endpoint during traversal), or (3) the ``entry_endpoint_filter`` evaluates to ``False`` on a successor/predecessor endpoint (i.e., when entering the next endpoint during traversal).
+            Both the ``entry_endpoint_filter`` and the ``exit_endpoint_filter`` may be omitted.
+
+            :param hal_py.Gate gate: Start gate.
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param callable target_endpoint_filter: Filter condition that must be met for the target endpoints.
+            :param bool continue_on_match: Set ``True`` to continue even if ``target_endpoint_filter`` evaluated to ``True``, ``False`` otherwise. Defaults to ``False``.
+            :param callable exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+            :param callable entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+            :returns: The next endpoints fulfilling the target endpoint filter condition on success, ``None`` otherwise.
+            :rtype: set[hal_py.Endpoint] or None
+        )");
+
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
             [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
@@ -394,6 +523,83 @@ namespace hal
             :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
             :returns: The next combinational gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path_distance",
+            [](NetlistTraversalDecorator& self,
+               Endpoint* start,
+               const std::function<bool(const Endpoint*)>& target_filter,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<u32> {
+                auto res = self.get_shortest_path_distance(start, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting shortest path distance:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("start"),
+            py::arg("target_filter"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Find the length of the shortest path connecting the start endpoint to a target matching the given filter.
+            If there is no such path, ``None`` is returned.
+            Computing only the shortest distance is faster than computing the actual path, as it does not keep track of the path to each gate.
+
+            :param hal_py.Endpoint start: The starting endpoint.
+            :param callable target_filter: A filter function to determine the target endpoints.
+            :param hal_py.PinDirection direction: The direction to search in (``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout``).
+            :param callable exit_endpoint_filter: Filter condition to stop traversal on a fan-in/out endpoint.
+            :param callable entry_endpoint_filter: Filter condition to stop traversal on a successor/predecessor endpoint.
+            :returns: The shortest distance between the start and target endpoints on success, ``None`` otherwise.
+            :rtype: int or None
+        )");
+
+        // Binding for get_shortest_path_distance starting from Gate* with target_filter
+        py_netlist_traversal_decorator.def(
+            "get_shortest_path_distance",
+            [](NetlistTraversalDecorator& self,
+               const Gate* start,
+               const std::function<bool(const Endpoint*)>& target_filter,
+               const PinDirection& direction,
+               const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter = nullptr) -> std::optional<u32> {
+                auto res = self.get_shortest_path_distance(start, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting shortest path distance:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("start"),
+            py::arg("target_filter"),
+            py::arg("direction"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Find the length of the shortest path connecting the start gate to a target matching the given filter.
+            If there is no such path, ``None`` is returned.
+            Computing only the shortest distance is faster than computing the actual path, as it does not keep track of the path to each gate.
+
+            :param hal_py.Gate start: The starting gate.
+            :param callable target_filter: A filter function to determine the target endpoints.
+            :param hal_py.PinDirection direction: The direction to search in (``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout``).
+            :param callable exit_endpoint_filter: Filter condition to stop traversal on a fan-in/out endpoint.
+            :param callable entry_endpoint_filter: Filter condition to stop traversal on a successor/predecessor endpoint.
+            :returns: The shortest distance between the start gate and target endpoints on success, ``None`` otherwise.
+            :rtype: int or None
         )");
 
         py_netlist_traversal_decorator.def(

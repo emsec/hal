@@ -527,6 +527,18 @@ namespace hal
         }
 
         /**
+         * Turn a given iterable collection into a unordered_set.
+         *
+         * @param[in] container - The input collection.
+         * @returns The unordered_set containing all items copied from the collection.
+         */
+        template<typename T, template<typename, typename...> class Container, typename... Args>
+        CORE_API inline std::unordered_set<T> to_unordered_set(const Container<T, Args...>& container)
+        {
+            return std::unordered_set<T>(container.begin(), container.end());
+        }
+
+        /**
          * Check whether one container is a subset of another container.
          * The function checks whether all elements of the subset container are contained in the superset container.
          *
