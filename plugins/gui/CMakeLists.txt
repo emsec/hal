@@ -115,7 +115,9 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
     target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg QuaZip::QuaZip)
-
+    add_dependencies(gui update_internal_gate_library_definitions)
+    get_property(GLDIR GLOBAL PROPERTY GATE_LIBS_DEFINITIONS)
+    file(WRITE "${RSRCROOT}/path/gate_library_definitions.txt" "${GLDIR}")
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
 
     install(TARGETS gui

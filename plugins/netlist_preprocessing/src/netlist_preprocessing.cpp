@@ -11,7 +11,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/token_stream.h"
-#include "nlohmann_json/json.hpp"
+#include "nlohmann/json.hpp"
 #include "rapidjson/document.h"
 #include "resynthesis/resynthesis.h"
 #include "z3_utils/netlist_comparison.h"

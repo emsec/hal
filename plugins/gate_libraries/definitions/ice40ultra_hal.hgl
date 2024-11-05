@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 4,
     "library": "ICE40ULTRA_WITH_HAL_TYPES",
     "gate_locations": {
         "data_category": "generic",
@@ -20,6 +20,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -34,6 +35,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -58,6 +60,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -72,6 +75,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -94,8 +98,9 @@
                     "name": "A",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -108,8 +113,9 @@
                     "name": "B",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -122,8 +128,9 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -148,6 +155,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -162,6 +170,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -176,6 +185,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -190,6 +200,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -214,6 +225,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -228,6 +240,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -242,6 +255,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -256,6 +270,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -270,6 +285,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -294,6 +310,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -308,6 +325,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -322,6 +340,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -346,6 +365,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -360,6 +380,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -374,6 +395,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -388,6 +410,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -412,6 +435,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -426,6 +450,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -440,6 +465,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -454,6 +480,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -468,6 +495,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -492,6 +520,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -506,6 +535,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -520,6 +550,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -544,6 +575,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -558,6 +590,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -572,6 +605,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -586,6 +620,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -610,6 +645,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -624,6 +660,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -638,6 +675,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -652,6 +690,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -666,6 +705,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -690,6 +730,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -704,6 +745,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -718,6 +760,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -742,6 +785,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -756,6 +800,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -770,6 +815,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -784,6 +830,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -808,6 +855,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -822,6 +870,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -836,6 +885,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -850,6 +900,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -864,6 +915,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -888,6 +940,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -902,6 +955,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -916,6 +970,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -940,6 +995,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -954,6 +1010,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -968,6 +1025,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -982,6 +1040,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1006,6 +1065,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1020,6 +1080,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1034,6 +1095,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -1048,6 +1110,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -1062,6 +1125,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1086,6 +1150,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1100,6 +1165,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1114,6 +1180,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1138,6 +1205,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1152,6 +1220,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1166,6 +1235,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -1180,6 +1250,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1204,6 +1275,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1218,6 +1290,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1232,6 +1305,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -1246,6 +1320,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -1260,6 +1335,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1284,6 +1360,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1298,6 +1375,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1312,6 +1390,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -1326,6 +1405,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1350,6 +1430,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1364,6 +1445,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1378,6 +1460,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -1392,6 +1475,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S1",
@@ -1406,6 +1490,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S2",
@@ -1420,6 +1505,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1444,6 +1530,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -1458,6 +1545,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -1472,6 +1560,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -1486,6 +1575,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -1500,6 +1590,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S1",
@@ -1514,6 +1605,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S2",
@@ -1528,6 +1620,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -1541,7 +1634,10 @@
         },
         {
             "name": "HAL_MUX5",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1549,7 +1645,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1557,7 +1660,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1565,7 +1675,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1573,7 +1690,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1581,7 +1705,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1589,7 +1720,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1597,7 +1735,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1605,7 +1750,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1613,13 +1765,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | (S1 & (S2 & ((! S3) & E)))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX6",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1627,7 +1790,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1635,7 +1805,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1643,7 +1820,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1651,7 +1835,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1659,7 +1850,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -1667,7 +1865,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1675,7 +1880,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1683,7 +1895,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1691,7 +1910,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1699,13 +1925,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | (S1 & ((! S2) & (S3 & F))))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX7",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1713,7 +1950,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1721,7 +1965,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1729,7 +1980,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1737,7 +1995,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1745,7 +2010,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -1753,7 +2025,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "G",
@@ -1761,7 +2040,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "G",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1769,7 +2055,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1777,7 +2070,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1785,7 +2085,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1793,13 +2100,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | ((S1 & ((! S2) & (S3 & F))) | ((! S1) & (S2 & (S3 & G)))))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX8",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1807,7 +2125,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1815,7 +2140,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1823,7 +2155,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1831,7 +2170,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1839,7 +2185,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -1847,7 +2200,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "G",
@@ -1855,7 +2215,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "G",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "H",
@@ -1863,7 +2230,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "H", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "H",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1871,7 +2245,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1879,7 +2260,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1887,7 +2275,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1895,7 +2290,15 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G) | (S1 & S2 & S3 & H))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | ((S1 & ((! S2) & (S3 & F))) | (((! S1) & (S2 & (S3 & G))) | (S1 & (S2 & (S3 & H))))))))))"
+                        }
+                    ]
                 }
             ]
         },
@@ -1912,6 +2315,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CI",
@@ -1926,6 +2330,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I0",
@@ -1940,6 +2345,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I1",
@@ -1954,6 +2360,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CO",
@@ -1986,6 +2393,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2000,6 +2408,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2014,6 +2423,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2046,6 +2456,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2060,6 +2471,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2074,6 +2486,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2088,6 +2501,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2120,6 +2534,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2134,6 +2549,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -2148,6 +2564,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2162,6 +2579,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2195,6 +2613,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2209,6 +2628,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -2223,6 +2643,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2237,6 +2658,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2269,6 +2691,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2283,6 +2706,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -2297,6 +2721,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2311,6 +2736,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2344,6 +2770,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2358,6 +2785,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -2372,6 +2800,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2386,6 +2815,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2418,6 +2848,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2432,6 +2863,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2446,6 +2878,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -2460,6 +2893,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2474,6 +2908,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2507,6 +2942,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2521,6 +2957,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -2535,6 +2972,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2549,6 +2987,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2563,6 +3002,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2595,6 +3035,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2609,6 +3050,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -2623,6 +3065,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2637,6 +3080,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2651,6 +3095,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2684,6 +3129,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2698,6 +3144,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -2712,6 +3159,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2726,6 +3174,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2740,6 +3189,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2772,6 +3222,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2786,6 +3237,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2800,6 +3252,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2832,6 +3285,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2846,6 +3300,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -2860,6 +3315,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2874,6 +3330,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2906,6 +3363,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2920,6 +3378,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -2934,6 +3393,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -2948,6 +3408,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -2981,6 +3442,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -2995,6 +3457,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -3009,6 +3472,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3023,6 +3487,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3055,6 +3520,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3069,6 +3535,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -3083,6 +3550,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3097,6 +3565,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3130,6 +3599,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3144,6 +3614,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -3158,6 +3629,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3172,6 +3644,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3204,6 +3677,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3218,6 +3692,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -3232,6 +3707,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3246,6 +3722,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3279,6 +3756,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3293,6 +3771,7 @@
                     "type": "reset",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "R",
@@ -3307,6 +3786,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -3321,6 +3801,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3335,6 +3816,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3367,6 +3849,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3381,6 +3864,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -3395,6 +3879,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -3409,6 +3894,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3423,6 +3909,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3456,6 +3943,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -3470,6 +3958,7 @@
                     "type": "set",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -3484,6 +3973,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "E",
@@ -3498,6 +3988,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -3512,6 +4003,7 @@
                     "type": "state",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Q",
@@ -3541,6 +4033,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I0",
@@ -3555,6 +4048,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I1",
@@ -3569,6 +4063,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I2",
@@ -3583,6 +4078,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I3",
@@ -3597,6 +4093,7 @@
                     "type": "lut",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -3620,6 +4117,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WE",
@@ -3634,6 +4132,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLK",
@@ -3648,6 +4147,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLKE",
@@ -3662,6 +4162,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RE",
@@ -3676,6 +4177,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLKE",
@@ -3690,6 +4192,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLK",
@@ -3704,6 +4207,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 10,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WADDR(10)",
@@ -3768,6 +4272,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 10,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RADDR(10)",
@@ -3832,6 +4337,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MASK(15)",
@@ -3921,6 +4427,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WDATA(15)",
@@ -4010,6 +4517,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RDATA(15)",
@@ -4108,6 +4616,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WREN",
@@ -4122,6 +4631,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLOCK",
@@ -4136,6 +4646,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CHIPSELECT",
@@ -4150,6 +4661,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "STANDBY",
@@ -4164,6 +4676,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SLEEP",
@@ -4178,6 +4691,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "POWEROFF",
@@ -4192,6 +4706,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 13,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ADDRESS(13)",
@@ -4271,6 +4786,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 3,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MASKWREN(3)",
@@ -4300,6 +4816,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "DATAIN(15)",
@@ -4389,6 +4906,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "DATAOUT(15)",
@@ -4541,6 +5059,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WE",
@@ -4555,6 +5074,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLK",
@@ -4569,6 +5089,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLKE",
@@ -4583,6 +5104,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RE",
@@ -4597,6 +5119,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLKE",
@@ -4611,6 +5134,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLK",
@@ -4625,6 +5149,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 7,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WADDR(7)",
@@ -4674,6 +5199,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 7,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RADDR(7)",
@@ -4723,6 +5249,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MASK(15)",
@@ -4812,6 +5339,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WDATA(15)",
@@ -4901,6 +5429,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RDATA(15)",
@@ -5053,6 +5582,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WE",
@@ -5067,6 +5597,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLK",
@@ -5081,6 +5612,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLKE",
@@ -5095,6 +5627,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RE",
@@ -5109,6 +5642,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLKE",
@@ -5123,6 +5657,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLK",
@@ -5137,6 +5672,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 8,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WADDR(8)",
@@ -5191,6 +5727,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 8,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RADDR(8)",
@@ -5245,6 +5782,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 7,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WDATA(7)",
@@ -5294,6 +5832,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 7,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RDATA(7)",
@@ -5390,6 +5929,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WE",
@@ -5404,6 +5944,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLK",
@@ -5418,6 +5959,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLKE",
@@ -5432,6 +5974,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RE",
@@ -5446,6 +5989,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLKE",
@@ -5460,6 +6004,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLK",
@@ -5474,6 +6019,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 9,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WADDR(9)",
@@ -5533,6 +6079,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 9,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RADDR(9)",
@@ -5592,6 +6139,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 3,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WDATA(3)",
@@ -5621,6 +6169,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 3,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RDATA(3)",
@@ -5697,6 +6246,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WE",
@@ -5711,6 +6261,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLK",
@@ -5725,6 +6276,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WCLKE",
@@ -5739,6 +6291,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RE",
@@ -5753,6 +6306,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLKE",
@@ -5767,6 +6321,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RCLK",
@@ -5781,6 +6336,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 10,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WADDR(10)",
@@ -5845,6 +6401,7 @@
                     "type": "address",
                     "ascending": false,
                     "start_index": 10,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RADDR(10)",
@@ -5909,6 +6466,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 1,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "WDATA(1)",
@@ -5928,6 +6486,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 1,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "RDATA(1)",
@@ -5955,6 +6514,7 @@
                     "type": "io_pad",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "PACKAGE_PIN",
@@ -5969,6 +6529,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "LATCH_INPUT_VALUE",
@@ -5983,6 +6544,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLOCK_ENABLE",
@@ -5997,6 +6559,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "INPUT_CLK",
@@ -6011,6 +6574,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OUTPUT_CLK",
@@ -6025,6 +6589,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OUTPUT_ENABLE",
@@ -6039,6 +6604,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_OUT_0",
@@ -6053,6 +6619,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_OUT_1",
@@ -6067,6 +6634,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_IN_0",
@@ -6081,6 +6649,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_IN_1",
@@ -6103,6 +6672,7 @@
                     "type": "io_pad",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "PACKAGE_PIN",
@@ -6117,6 +6687,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "LATCH_INPUT_VALUE",
@@ -6131,6 +6702,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLOCK_ENABLE",
@@ -6145,6 +6717,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "INPUT_CLK",
@@ -6159,6 +6732,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OUTPUT_CLK",
@@ -6173,6 +6747,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OUTPUT_ENABLE",
@@ -6187,6 +6762,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_OUT_0",
@@ -6201,6 +6777,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_OUT_1",
@@ -6215,6 +6792,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_IN_0",
@@ -6229,6 +6807,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D_IN_1",
@@ -6243,6 +6822,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "GLOBAL_BUFFER_OUTPUT",
@@ -6266,6 +6846,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "USER_SIGNAL_TO_GLOBAL_BUFFER",
@@ -6280,6 +6861,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "GLOBAL_BUFFER_OUTPUT",
@@ -6303,6 +6885,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKHFEN",
@@ -6317,6 +6900,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKHFPU",
@@ -6331,6 +6915,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKHF",
@@ -6353,6 +6938,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKLFEN",
@@ -6367,6 +6953,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKLFPU",
@@ -6381,6 +6968,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLKLF",
@@ -6404,6 +6992,7 @@
                     "type": "clock",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CLK",
@@ -6418,6 +7007,7 @@
                     "type": "enable",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CE",
@@ -6432,6 +7022,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "IRSTTOP",
@@ -6446,6 +7037,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "IRSTBOT",
@@ -6460,6 +7052,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ORSTTOP",
@@ -6474,6 +7067,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ORSTBOT",
@@ -6488,6 +7082,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "AHOLD",
@@ -6502,6 +7097,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "BHOLD",
@@ -6516,6 +7112,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CHOLD",
@@ -6530,6 +7127,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "DHOLD",
@@ -6544,6 +7142,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OHOLDTOP",
@@ -6558,6 +7157,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OHOLDBOT",
@@ -6572,6 +7172,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OLOADTOP",
@@ -6586,6 +7187,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "OLOADBOT",
@@ -6600,6 +7202,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ADDSUBTOP",
@@ -6614,6 +7217,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ADDSUBBOT",
@@ -6628,6 +7232,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CO",
@@ -6642,6 +7247,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "CI",
@@ -6656,6 +7262,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ACCUMCI",
@@ -6670,6 +7277,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "ACCUMCO",
@@ -6684,6 +7292,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SIGNEXTIN",
@@ -6698,6 +7307,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SIGNEXTOUT",
@@ -6712,6 +7322,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A(15)",
@@ -6801,6 +7412,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B(15)",
@@ -6890,6 +7502,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C(15)",
@@ -6979,6 +7592,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 15,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D(15)",
@@ -7068,6 +7682,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 31,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O(31)",
@@ -7245,6 +7860,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBCLKI",
@@ -7259,6 +7875,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBRWI",
@@ -7273,6 +7890,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBSTBI",
@@ -7287,6 +7905,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI0",
@@ -7301,6 +7920,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI1",
@@ -7315,6 +7935,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI2",
@@ -7329,6 +7950,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI3",
@@ -7343,6 +7965,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI4",
@@ -7357,6 +7980,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI5",
@@ -7371,6 +7995,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI6",
@@ -7385,6 +8010,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI7",
@@ -7399,6 +8025,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI0",
@@ -7413,6 +8040,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI1",
@@ -7427,6 +8055,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI2",
@@ -7441,6 +8070,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI3",
@@ -7455,6 +8085,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI4",
@@ -7469,6 +8100,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI5",
@@ -7483,6 +8115,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI6",
@@ -7497,6 +8130,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI7",
@@ -7511,6 +8145,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO0",
@@ -7525,6 +8160,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO1",
@@ -7539,6 +8175,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO2",
@@ -7553,6 +8190,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO3",
@@ -7567,6 +8205,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO4",
@@ -7581,6 +8220,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO5",
@@ -7595,6 +8235,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO6",
@@ -7609,6 +8250,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO7",
@@ -7623,6 +8265,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBACKO",
@@ -7637,6 +8280,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I2CIRQ",
@@ -7651,6 +8295,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "I2CWKUP",
@@ -7665,6 +8310,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCLI",
@@ -7679,6 +8325,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCLO",
@@ -7693,6 +8340,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCLOE",
@@ -7707,6 +8355,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SDAI",
@@ -7721,6 +8370,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SDAO",
@@ -7735,6 +8385,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SDAOE",
@@ -7758,6 +8409,7 @@
                     "type": "ground",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Y",
@@ -7782,6 +8434,7 @@
                     "type": "power",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "Y",
@@ -7805,6 +8458,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBCLKI",
@@ -7819,6 +8473,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBRWI",
@@ -7833,6 +8488,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBSTBI",
@@ -7847,6 +8503,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI0",
@@ -7861,6 +8518,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI1",
@@ -7875,6 +8533,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI2",
@@ -7889,6 +8548,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI3",
@@ -7903,6 +8563,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI4",
@@ -7917,6 +8578,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI5",
@@ -7931,6 +8593,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI6",
@@ -7945,6 +8608,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBADRI7",
@@ -7959,6 +8623,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI0",
@@ -7973,6 +8638,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI1",
@@ -7987,6 +8653,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI2",
@@ -8001,6 +8668,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI3",
@@ -8015,6 +8683,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI4",
@@ -8029,6 +8698,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI5",
@@ -8043,6 +8713,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI6",
@@ -8057,6 +8728,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATI7",
@@ -8071,6 +8743,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO0",
@@ -8085,6 +8758,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO1",
@@ -8099,6 +8773,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO2",
@@ -8113,6 +8788,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO3",
@@ -8127,6 +8803,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO4",
@@ -8141,6 +8818,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO5",
@@ -8155,6 +8833,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO6",
@@ -8169,6 +8848,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBDATO7",
@@ -8183,6 +8863,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SBACKO",
@@ -8197,6 +8878,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SPIIRQ",
@@ -8211,6 +8893,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SPIWKUP",
@@ -8225,6 +8908,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MI",
@@ -8239,6 +8923,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SO",
@@ -8253,6 +8938,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SOE",
@@ -8267,6 +8953,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SI",
@@ -8281,6 +8968,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MO",
@@ -8295,6 +8983,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MOE",
@@ -8309,6 +8998,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCKI",
@@ -8323,6 +9013,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCKO",
@@ -8337,6 +9028,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCKOE",
@@ -8351,6 +9043,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "SCSNI",
@@ -8365,6 +9058,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNO0",
@@ -8379,6 +9073,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNO1",
@@ -8393,6 +9088,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNO2",
@@ -8407,6 +9103,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNO3",
@@ -8421,6 +9118,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNOE0",
@@ -8435,6 +9133,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNOE1",
@@ -8449,6 +9148,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNOE2",
@@ -8463,6 +9163,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "MCSNOE3",

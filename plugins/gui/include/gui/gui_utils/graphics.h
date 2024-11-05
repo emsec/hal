@@ -37,13 +37,7 @@ namespace hal
      */
     namespace gui_utility
     {
-        /**
-         * Opens and reads a file and returns its content (Must not even be a svg file).
-         *
-         * @param svg_path - The path to the file to read.
-         * @return The file's content.
-         */
-        extern QString getSvgData(const QString& svg_path);
+        extern bool applyColorStyle(QString& svg_data, const QString& color_style);
 
         /**
          * Replaces a color within given svg data to a new specified color.
@@ -63,14 +57,6 @@ namespace hal
         extern void changeAllSvgColors(QString& svg_data, const QColor& to);
 
         /**
-         * Converts given svg data to a QIcon.
-         *
-         * @param svg_data - The svg data as a string (e.g. read from a file)
-         * @return  The resulting QIcon.
-         */
-        extern QIcon getIconFromSvgData(const QString& svg_data);
-
-        /**
          * Reads svg data from a file and styles it (replacing colors) according to a format string.
          * When no styling is necessary, an empty string can be passed.
          * The result is then converted into an icon and returned.
@@ -79,6 +65,6 @@ namespace hal
          * @param svg_path - The path to the svg file.
          * @return The (perhabs styled) icon.
          */
-        extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
+        extern QIcon getStyledSvgIcon(const QString& from_to_colors_enabled, const QString& svg_path, QString from_to_colors_disabled = QString());
     }
 }

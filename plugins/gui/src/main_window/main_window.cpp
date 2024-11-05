@@ -8,12 +8,12 @@
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
-#include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
+#include "gui/main_window/file_actions.h"
 #include "gui/main_window/plugin_parameter_dialog.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_editor.h"
@@ -44,7 +44,6 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFileDialog>
-#include <QFuture>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -52,6 +51,7 @@
 #include <QShortcut>
 #include <QStringList>
 #include <QtConcurrent>
+
 
 namespace hal
 {
@@ -61,6 +61,7 @@ namespace hal
 
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent)
     {
+        mFileActions = new FileActions(this);
         ensurePolished();    // ADD REPOLISH METHOD
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &MainWindow::handleFileOpened);
         connect(FileManager::get_instance(), &FileManager::projectOpened, this, &MainWindow::handleProjectOpened);
@@ -131,18 +132,17 @@ namespace hal
 
         mWelcomeScreen = new WelcomeScreen();
         mStackedWidget->addWidget(mWelcomeScreen);
+        mGateLibraryManager = new GateLibraryManager(this);
+        mStackedWidget->addWidget(mGateLibraryManager);
+
         mStackedWidget->setCurrentWidget(mWelcomeScreen);
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        mActionNew                = new Action(this);
-        mActionOpenProject        = new Action(this);
         mActionImportNetlist      = new Action(this);
-        mActionSave               = new Action(this);
-        mActionSaveAs             = new Action(this);
         mActionExportProject      = new Action(this);
         mActionImportProject      = new Action(this);
-//        mActionGateLibraryManager = new Action(this);
+        mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
         mActionStartRecording     = new Action(this);
@@ -151,8 +151,7 @@ namespace hal
         mActionUndo               = new Action(this);
 
         mActionSettings           = new Action(this);
-        mActionPlugins            = new Action(this);
-        mActionClose              = new Action(this);
+        mActionPluginManager      = new Action(this);
         mActionQuit               = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
@@ -180,34 +179,31 @@ namespace hal
 
         setWindowIcon(gui_utility::getStyledSvgIcon(mHalIconStyle, mHalIconPath));
 
-        mActionNew->setIcon(gui_utility::getStyledSvgIcon(mNewFileIconStyle, mNewFileIconPath));
-        mActionOpenProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
         mActionImportNetlist->setIcon(gui_utility::getStyledSvgIcon(mOpenFileIconStyle, mOpenFileIconPath));
-        mActionImportProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
-        mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
-        mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
-        mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-//        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mNeGateIconStyle, mNeGateIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
-        mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
+        mActionPluginManager->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
 
-        mMenuFile  = new QMenu(mMenuBar);
-        mMenuEdit  = new QMenu(mMenuBar);
-        mMenuMacro = new QMenu(mMenuBar);
-        mMenuHelp  = new QMenu(mMenuBar);
+        mMenuFile      = new QMenu(mMenuBar);
+        mMenuEdit      = new QMenu(mMenuBar);
+        mMenuMacro     = new QMenu(mMenuBar);
+        mMenuUtilities = new QMenu(mMenuBar);
+        mMenuPlugins   = new QMenu(mMenuBar);
+        mMenuHelp      = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
+        mMenuBar->addAction(mMenuUtilities->menuAction());
+        mMenuBar->addAction(mMenuPlugins->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
-        mMenuFile->addAction(mActionNew);
-        mMenuFile->addAction(mActionOpenProject);
-        mMenuFile->addAction(mActionClose);
-        mMenuFile->addAction(mActionSave);
-        mMenuFile->addAction(mActionSaveAs);
-//        mMenuFile->addAction(mActionGateLibraryManager);
+        mMenuFile->addAction(mFileActions->create());
+        mMenuFile->addAction(mFileActions->open());
+        mMenuFile->addAction(mFileActions->close());
+        mMenuFile->addAction(mFileActions->save());
+        mMenuFile->addAction(mFileActions->saveAs());
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -262,15 +258,17 @@ namespace hal
         mMenuMacro->addAction(mActionStopRecording);
         mMenuMacro->addSeparator();
         mMenuMacro->addAction(mActionPlayMacro);
-        mMenuHelp->addAction(mActionAbout);
-        mMenuHelp->addSeparator();
-        mMenuHelp->addAction(mActionPlugins);
-        mLeftToolBar->addAction(mActionNew);
-        mLeftToolBar->addAction(mActionOpenProject);
-        mLeftToolBar->addAction(mActionSave);
-        mLeftToolBar->addAction(mActionSaveAs);
+        mMenuPlugins->setDisabled(true); // enable when project open
+        mMenuUtilities->addAction(mActionPluginManager);
+        mMenuUtilities->addAction(mActionGateLibraryManager);
+		mMenuHelp->addAction(mActionAbout);
+        mLeftToolBar->addAction(mFileActions->create());
+        mLeftToolBar->addAction(mFileActions->open());
+        mLeftToolBar->addAction(mFileActions->save());
+        mLeftToolBar->addAction(mFileActions->saveAs());
         mLeftToolBar->addAction(mActionUndo);
-        mRightToolBar->addAction(mActionPlugins);
+        mRightToolBar->addAction(mActionPluginManager);
+        mRightToolBar->addAction(mActionGateLibraryManager);
         mRightToolBar->addAction(mActionSettings);
 
         mActionStartRecording->setText("Start recording");
@@ -282,23 +280,20 @@ namespace hal
         mActionPlayMacro->setEnabled(true);
 
         setWindowTitle("HAL");
-        mActionNew->setText("New Project");
-        mActionOpenProject->setText("Open Project");
-        mActionSave->setText("Save");
-        mActionSaveAs->setText("Save As");
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
-//        mActionGateLibraryManager->setText("Gate Library Manager");
+        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
-        mActionPlugins->setText("Plugin Manager");
-        mActionClose->setText("Close Project");
+        mActionPluginManager->setText("Plugin Manager");
         mActionQuit->setText("Quit");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
+        mMenuUtilities->setTitle("Utilities");
+        mMenuPlugins->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = new PythonContext(this);
@@ -306,44 +301,23 @@ namespace hal
         gContentManager = new ContentManager(this);
         gCommentManager = new CommentManager(this);
 
-        mSettingCreateFile = new SettingsItemKeybind(
-            "HAL Shortcut 'Create Empty Netlist'", "keybinds/project_create_file", QKeySequence("Ctrl+N"), "Keybindings:Global", "Keybind for creating a new and empty netlist in HAL.");
-
-        mSettingOpenFile = new SettingsItemKeybind("HAL Shortcut 'Open File'", "keybinds/project_open_file", QKeySequence("Ctrl+O"), "Keybindings:Global", "Keybind for opening a new File in HAL.");
-
-        mSettingSaveFile =
-            new SettingsItemKeybind("HAL Shortcut 'Save File'", "keybinds/project_save_file", QKeySequence("Ctrl+S"), "Keybindings:Global", "Keybind for saving the currently opened file.");
-
         mSettingUndoLast = new SettingsItemKeybind("Undo Last Action", "keybinds/action_undo", QKeySequence("Ctrl+Z"), "Keybindings:Global", "Keybind for having last user interaction undone.");
 
-        QShortcut* shortCutNewFile  = new QShortcut(mSettingCreateFile->value().toString(), this);
-        QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
-        QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
         QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
 
-        connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
-        connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
-        connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortCutSaveFile, &QShortcut::setKey);
         connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
 
-        connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
-        connect(shortCutOpenFile, &QShortcut::activated, mActionOpenProject, &QAction::trigger);
-        connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
         connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
 
-        connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
-        connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);
         connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
         connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
-        connect(mActionPlugins, &Action::triggered, this, &MainWindow::openPluginManager);
+        connect(mActionPluginManager, &Action::triggered, this, &MainWindow::openPluginManager);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
-        connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
-        connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
+        connect(mGateLibraryManager, &GateLibraryManager::close, this, &MainWindow::closeGateLibraryManager);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
-//        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
-        connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
+        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
@@ -388,26 +362,6 @@ namespace hal
         return mHalIconStyle;
     }
 
-    QString MainWindow::newFileIconPath() const
-    {
-        return mNewFileIconPath;
-    }
-
-    QString MainWindow::newFileIconStyle() const
-    {
-        return mNewFileIconStyle;
-    }
-
-    QString MainWindow::openProjIconPath() const
-    {
-        return mOpenProjIconPath;
-    }
-
-    QString MainWindow::openProjIconStyle() const
-    {
-        return mOpenProjIconStyle;
-    }
-
     QString MainWindow::openFileIconPath() const
     {
         return mOpenFileIconPath;
@@ -416,36 +370,6 @@ namespace hal
     QString MainWindow::openFileIconStyle() const
     {
         return mOpenFileIconStyle;
-    }
-
-    QString MainWindow::saveIconPath() const
-    {
-        return mSaveIconPath;
-    }
-
-    QString MainWindow::saveIconStyle() const
-    {
-        return mSaveIconStyle;
-    }
-
-    QString MainWindow::saveAsIconPath() const
-    {
-        return mSaveAsIconPath;
-    }
-
-    QString MainWindow::saveAsIconStyle() const
-    {
-        return mSaveAsIconStyle;
-    }
-
-    QString MainWindow::closeIconPath() const
-    {
-        return mCloseIconPath;
-    }
-
-    QString MainWindow::closeIconStyle() const
-    {
-        return mCloseIconStyle;
     }
 
     QString MainWindow::quitIconPath() const
@@ -488,6 +412,20 @@ namespace hal
         return mUndoIconStyle;
     }
 
+    QString MainWindow::neGateIconPath() const
+    {
+        return mNeGateIconPath;
+    }
+    QString MainWindow::neGateIconStyle() const
+    {
+        return mNeGateIconStyle;
+    }
+
+    QString MainWindow::disabledIconStyle() const
+    {
+        return mDisabledIconStyle;
+    }
+
     void MainWindow::setHalIconPath(const QString& path)
     {
         mHalIconPath = path;
@@ -498,16 +436,6 @@ namespace hal
         mHalIconStyle = style;
     }
 
-    void MainWindow::setNewFileIconPath(const QString& path)
-    {
-        mNewFileIconPath = path;
-    }
-
-    void MainWindow::setNewFileIconStyle(const QString& style)
-    {
-        mNewFileIconStyle = style;
-    }
-
     void MainWindow::setOpenFileIconPath(const QString& path)
     {
         mOpenFileIconPath = path;
@@ -516,46 +444,6 @@ namespace hal
     void MainWindow::setOpenFileIconStyle(const QString& style)
     {
         mOpenFileIconStyle = style;
-    }
-
-    void MainWindow::setOpenProjIconPath(const QString& path)
-    {
-        mOpenProjIconPath = path;
-    }
-
-    void MainWindow::setOpenProjIconStyle(const QString& style)
-    {
-        mOpenProjIconStyle = style;
-    }
-
-    void MainWindow::setSaveIconPath(const QString& path)
-    {
-        mSaveIconPath = path;
-    }
-
-    void MainWindow::setSaveIconStyle(const QString& style)
-    {
-        mSaveIconStyle = style;
-    }
-
-    void MainWindow::setSaveAsIconPath(const QString& path)
-    {
-        mSaveAsIconPath = path;
-    }
-
-    void MainWindow::setSaveAsIconStyle(const QString& style)
-    {
-        mSaveAsIconStyle = style;
-    }
-
-    void MainWindow::setCloseIconPath(const QString& path)
-    {
-        mCloseIconPath = path;
-    }
-
-    void MainWindow::setCloseIconStyle(const QString& style)
-    {
-        mCloseIconStyle = style;
     }
 
     void MainWindow::setQuitIconPath(const QString& path)
@@ -598,9 +486,13 @@ namespace hal
         mUndoIconStyle = style;
     }
 
-    QString MainWindow::disabledIconStyle() const
+    void MainWindow::setNeGateIconPath(const QString& path)
     {
-        return mDisabledIconStyle;
+        mNeGateIconPath = path;
+    }
+    void MainWindow::setNeGateIconStyle(const QString& style)
+    {
+        mNeGateIconStyle = style;
     }
 
     void MainWindow::setDisabledIconStyle(const QString& style)
@@ -638,8 +530,12 @@ namespace hal
 
     void MainWindow::openSettings()
     {
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
         if (mStackedWidget->currentWidget() == mSettings)
-            return; //nothing todo, already open
+            return; //nothing todo, already fetchGateLibrary
 
         mSettings->activate();
         mStackedWidget->setCurrentWidget(mSettings);
@@ -655,11 +551,26 @@ namespace hal
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
     }
 
+    void MainWindow::closeGateLibraryManager()
+    {
+        bool isFileOpen = FileManager::get_instance()->fileOpen();
+        if(isFileOpen)
+            mStackedWidget->setCurrentWidget(mLayoutArea);
+        else
+            mStackedWidget->setCurrentWidget(mWelcomeScreen);
+        mFileActions->setup();
+    }
+
     void MainWindow::openPluginManager()
     {
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
+
         mPluginManager->repolish();
         if (mStackedWidget->currentWidget() == mPluginManager)
-            return; //nothing todo, already open
+            return; //nothing todo, already fetchGateLibrary
 
         if (mStackedWidget->currentWidget() == mSettings)
         {
@@ -667,20 +578,22 @@ namespace hal
                 return;
         }
         mStackedWidget->setCurrentWidget(mPluginManager);
+        mFileActions->setup(nullptr, mPluginManager);
     }
 
-    void MainWindow::closePluginManager(const QString &invokeGui)
+    void MainWindow::closePluginManager()
     {
-        bool isFileOpen = FileManager::get_instance()->fileOpen();
-        if (isFileOpen)
+        if (FileManager::get_instance()->fileOpen())
             mStackedWidget->setCurrentWidget(mLayoutArea);
         else
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
-        if (invokeGui.isEmpty() || !isFileOpen) return;
-        GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(invokeGui);
-        if (!geif) return;
-        PluginParameterDialog ppd(invokeGui,geif,this);
-        ppd.exec();
+
+        mMenuPlugins->clear();
+        if (FileManager::get_instance()->fileOpen())
+            mPluginManager->addPluginActions(mMenuPlugins);
+        else
+            mMenuPlugins->setDisabled(true);
+        mFileActions->setup();
     }
 
     void MainWindow::handleActionNew()
@@ -789,7 +702,8 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
-//        mActionGateLibraryManager->setVisible(false);
+        mMenuPlugins->clear();
+        mPluginManager->addPluginActions(mMenuPlugins);
     }
 
     void MainWindow::handleActionExport()
@@ -806,8 +720,40 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
-        GatelibraryManagementDialog dialog;
-        dialog.exec();
+        if(!gNetlist)
+        {
+            QMessageBox optBox;
+            QPushButton* newBtn = optBox.addButton("New", QMessageBox::AcceptRole);
+            newBtn->setToolTip("Create new gate library");
+            QPushButton* openBtn = optBox.addButton(QMessageBox::Open);
+            openBtn->setToolTip("Open existing gate library");
+            QPushButton* cancelBtn = optBox.addButton(QMessageBox::Cancel);
+            optBox.setWindowTitle("Please select …");
+            cancelBtn->setToolTip("Cancel");
+
+            optBox.setText("Gate Library Manager");
+
+            auto btn = optBox.exec();
+
+            if(optBox.clickedButton() == newBtn)
+            {
+                mGateLibraryManager->handleCreateAction();
+                mStackedWidget->setCurrentWidget(mGateLibraryManager);
+                mFileActions->setup(mGateLibraryManager);
+                return;
+            }
+            else if (optBox.clickedButton() == cancelBtn)
+                return;
+        }
+        if(gFileStatusManager->isGatelibModified())
+        {
+            if(!mGateLibraryManager->callUnsavedChangesWindow()) return;
+        }
+        if(mGateLibraryManager->initialize())
+        {
+            mStackedWidget->setCurrentWidget(mGateLibraryManager);
+            mFileActions->setup(mGateLibraryManager);
+        }
     }
 
     void MainWindow::handleImportProjectTriggered()
@@ -825,7 +771,7 @@ namespace hal
                 QMessageBox::warning(this,
                                      "Import Project Failed",
                                      "Failed to extract a HAL project from selected archive file.\n"
-                                     "You might want to uncompress the archive manually and try to open the project.");
+                                     "You might want to uncompress the archive manually and try to fetchGateLibrary the project.");
         }
     }
 
@@ -983,7 +929,7 @@ namespace hal
 
     void MainWindow::closeEvent(QCloseEvent* event)
     {
-        if (FileManager::get_instance()->fileOpen())
+        if (gFileStatusManager->isGatelibModified() || FileManager::get_instance()->fileOpen())
         {
             if (tryToCloseFile())
                 event->accept();
@@ -1000,7 +946,7 @@ namespace hal
 
     bool MainWindow::tryToCloseFile()
     {
-        if (gFileStatusManager->modifiedFilesExisting())
+        if (gFileStatusManager->modifiedFilesExisting() || gFileStatusManager->isGatelibModified())
         {
             QMessageBox msgBox(this);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
@@ -1011,8 +957,11 @@ namespace hal
 
             msgBox.setText("There are unsaved modifications.");
             QString detailed_text = "The following modifications have not been saved yet:\n";
+            if (gFileStatusManager->isGatelibModified())
+                detailed_text.append("   -> modified Gate Library\n");
             for (const auto& s : gFileStatusManager->getUnsavedChangeDescriptors())
                 detailed_text.append("   ->  " + s + "\n");
+
             msgBox.setDetailedText(detailed_text);
 
             for (const auto& button : msgBox.buttons())
@@ -1052,11 +1001,14 @@ namespace hal
 
         FileManager::get_instance()->closeFile();
         setWindowTitle("HAL");
+        gFileStatusManager->netlistClosed(); // disable save actions
 
         mStackedWidget->setCurrentWidget(mWelcomeScreen);
 
         gNetlistRelay->reset();
 
+        mMenuPlugins->clear();
+        mMenuPlugins->setDisabled(true);
 //        mActionGateLibraryManager->setVisible(true);
 
         return true;
@@ -1076,5 +1028,6 @@ namespace hal
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
+
 
 }    // namespace hal

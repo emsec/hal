@@ -25,6 +25,11 @@ namespace hal
         m_path = modified_path;
     }
 
+    void GateLibrary::set_name(const std::string &modified_name)
+    {
+        m_name = modified_name;
+    }
+
     void GateLibrary::set_gate_location_data_category(const std::string& category)
     {
         m_gate_location_data_category = category;
@@ -206,5 +211,18 @@ namespace hal
     u32 GateLibrary::get_unique_gate_type_id()
     {
         return m_next_gate_type_id++;
+    }
+
+    void GateLibrary::remove_gate_type(const std::string& name)
+    {
+        if (m_gate_type_map.find(name) == m_gate_type_map.end())
+        {
+            log_error("gate_library", "could not remove gate type with name '{}' as a gate type with this name does not exist within gate library '{}'.", name, m_name);
+        }
+        else
+        {
+            auto it = m_gate_type_map.find(name);
+            m_gate_type_map.erase(it);
+        }
     }
 }    // namespace hal

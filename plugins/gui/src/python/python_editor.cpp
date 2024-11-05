@@ -1289,8 +1289,8 @@ namespace hal
                 snapshot_file_name += original_file_name.fileName();
             }
             //if the filename ends with .py because it is loaded from (or saved to) a file, insert the tabindex before the file extension, otherwise append the index and extension
-            snapshot_file_name.endsWith(".py") ? snapshot_file_name.insert(snapshot_file_name.length() - 3, "__(" + QString::number(index) + ")__")
-                                               : snapshot_file_name += "__(" + QString::number(index) + ")__.py";
+
+            snapshot_file_name = QFileInfo(snapshot_file_name).fileName() + QString("__(%1)__.py").arg(index);
 
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
 

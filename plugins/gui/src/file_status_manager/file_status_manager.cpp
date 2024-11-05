@@ -7,7 +7,7 @@ namespace hal
 {
     FileStatusManager::FileStatusManager(QObject* parent) : QObject(parent),
         mModifiedFilesUuid(QSet<QUuid>()), mModifiedFilesDescriptors(QMap<QUuid, QString>()),
-        mNetlistModified(false)
+        mNetlistModified(false), mGatelibModified(false)
     {;}
 
     FileStatusManager::~FileStatusManager()
@@ -15,14 +15,20 @@ namespace hal
 
     void FileStatusManager::fileChanged(const QUuid uuid, const QString& descriptor)
     {
+        bool before = modifiedFilesExisting();
         mModifiedFilesUuid.insert(uuid);
         mModifiedFilesDescriptors.insert(uuid, descriptor);
+        if (before != modifiedFilesExisting())
+            Q_EMIT status_changed(false, true);
     }
 
     void FileStatusManager::fileSaved(const QUuid uuid)
     {
+        bool before = modifiedFilesExisting();
         mModifiedFilesUuid.remove(uuid);
         mModifiedFilesDescriptors.remove(uuid);
+        if (before != modifiedFilesExisting())
+            Q_EMIT status_changed(false, false);
     }
 
     bool FileStatusManager::modifiedFilesExisting() const
@@ -33,21 +39,45 @@ namespace hal
         return !mModifiedFilesUuid.empty() || mNetlistModified;
     }
 
-    void FileStatusManager::flushUnsavedChanges()
-    {
-        mModifiedFilesUuid.clear();
-        mModifiedFilesDescriptors.clear();
-        netlistSaved();
-    }
-
     void FileStatusManager::netlistChanged()
     {
+        bool before = modifiedFilesExisting();
         mNetlistModified = true;
+        if (before != modifiedFilesExisting())
+            Q_EMIT status_changed(false, true);
     }
 
     void FileStatusManager::netlistSaved()
     {
+        bool before = modifiedFilesExisting();
         mNetlistModified = false;
+        if (before != modifiedFilesExisting())
+            Q_EMIT status_changed(false, false);
+    }
+
+    void FileStatusManager::netlistClosed()
+    {
+        mNetlistModified = false;
+        mModifiedFilesUuid.clear();
+        mModifiedFilesDescriptors.clear();
+        Q_EMIT status_changed(false, false);
+    }
+
+    void FileStatusManager::gatelibChanged()
+    {
+        mGatelibModified = true;
+        Q_EMIT status_changed(true, true);
+    }
+
+    void FileStatusManager::gatelibSaved()
+    {
+        mGatelibModified = false;
+        Q_EMIT status_changed(true, false);
+    }
+
+    bool FileStatusManager::isGatelibModified() const
+    {
+        return mGatelibModified;
     }
 
     QList<QString> FileStatusManager::getUnsavedChangeDescriptors() const

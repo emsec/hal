@@ -196,8 +196,22 @@ namespace hal
          */
         void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
 
+        /**
+         * Opens a GroupingDialog where the user can select a grouping to add/move the specified netlist elements to.
+         * 
+         * @param modules - QSet of ids of modules to be moved to a grouping.
+         * @param gates - QSet of ids of gates to be moved to a grouping.
+         * @param nets - QSet of ids of nets to be moved to a grouping.
+         */
         void assignElementsToGroupingDialog(const QSet<u32>& modules = QSet<u32>(), const QSet<u32>& gates = QSet<u32>(), const QSet<u32>& nets = QSet<u32>());
 
+        /**
+         * Removes the specified netlist elements from their grouping.
+         * 
+         * @param modules - QSet of ids of modules to be removed from their groupings.
+         * @param gates - QSet of ids of gates to be removed from their groupings.
+         * @param nets - QSet of ids of nets to be removed from their groupings.
+         */
         void removeElementsFromGrouping(const QSet<u32>& modules = QSet<u32>(), const QSet<u32>& gates = QSet<u32>(), const QSet<u32>& nets = QSet<u32>());
 
     public Q_SLOTS:
@@ -314,6 +328,13 @@ namespace hal
          */
         void handleDoubleClicked(const QModelIndex& index);
 
+        /**
+         * Q_SLOT to handle focusChanged signal. Enables or disabled the delete shortcut depending on
+         * if this widget is in focus.
+         *
+         * @param oldWidget - The last selected widget. Is ignored.
+         * @param newWidget - The newly selected widget.
+         */
         void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
 
     private:

@@ -13,6 +13,9 @@
         <file alias="SourceCodePro-Black">fonts/Source Code Pro/SourceCodePro-Black.ttf</file>
         <file alias="DroidSansMono">fonts/Droid Sans Mono/DroidSansMono.ttf</file>
     </qresource>
+    <qresource prefix="/path">
+        <file alias="gate_library_definitions">path/gate_library_definitions.txt</file>
+    </qresource>
     <qresource prefix="/style">
         <file alias="dark">stylesheet/dark.qss</file>
         <file alias="light">stylesheet/light.qss</file>
@@ -27,7 +30,9 @@
         <file alias="search">icons/0135-search.svg</file>
         <file alias="switch">icons/0183-switch.svg</file>
         <file alias="arrow-up">icons/0307-arrow-up.svg</file>
+        <file alias="arrow-right">icons/0309-arrow-right.svg</file>
         <file alias="arrow-down">icons/0311-arrow-down.svg</file>
+        <file alias="arrow-left">icons/0313-arrow-left.svg</file>
         <file alias="hal">icons/HAL9000.svg</file>
         <file alias="hal9000">icons/HAL9000.png</file>
         <file alias="fire">icons/0170-fire.svg</file>
@@ -102,7 +107,8 @@
         <file alias="attention">icons/attention.png</file> 
         <file alias="insert-plugin">icons/0501-insert-plugin.svg</file>
         <file alias="cli-options">icons/0502-cli-options.svg</file>
-        <file alias="invoke-gui">icons/0503-invoke-gui.svg</file>
+        <file alias="enable-gui-contributions">icons/context-menu.svg</file>
+        <file alias="disable-gui-contributions">icons/no-context-menu.svg</file>
 	<file alias="tree-collapsed">icons/tree-collapsed.svg</file>
         <file alias="view-ctx">icons/view-ctx.svg</file>
         <file alias="view-dir">icons/view-dir.svg</file>

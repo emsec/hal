@@ -4,7 +4,7 @@
 #include "module_identification/candidates/base_candidate.h"
 #include "module_identification/candidates/functional_candidate.h"
 #include "module_identification/types/candidate_types.h"
-#include "nlohmann_json/json.hpp"
+#include "nlohmann/json.hpp"
 
 #include <map>
 #include <mutex>

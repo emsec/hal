@@ -214,11 +214,21 @@ set_target_properties(subprocess::subprocess PROPERTIES
 # ###############################
 # ####   nlohmann_json
 # ###############################
-message(STATUS "using nlohmann_json from deps")
-add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
-set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/nlohmann_json"
-)
+if(USE_VENDORED_NLOHMANN_JSON)
+    message(STATUS "using nlohmann_json from deps")
+    add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
+    set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/nlohmann_json"
+    )
+else()
+    find_package(nlohmann_json REQUIRED)
+    if(nlohmann_json_FOUND)
+        get_target_property(NLOHMANN_JSON_HEADERS_DIR nlohmann_json::nlohmann_json INTERFACE_INCLUDE_DIRECTORIES)
+        message(STATUS "Using system's nlohmann_json headers at ${NLOHMANN_JSON_HEADERS_DIR}")
+    else()
+        message(FATAL_ERROR "nlohmann_json was not found and USE_VENDORED_NLOHMANN_JSON is OFF")
+    endif()
+endif()
 
 # ###############################
 # ####   Graphviz

@@ -51,19 +51,19 @@ namespace hal {
     class GuiPluginEntry
     {
     public:
-        enum State { NotAPlugin, NotLoaded, AutoLoad, UserLoad };
         friend class GuiPluginTable;
-        State mState;
+        enum LoadState { NotAPlugin, NotLoaded, AutoLoad, UserLoad } mLoadState;
         QString mName;
         QString mVersion;
         QString mDescription;
         QString mFilePath;
+        QString mExternalPath;
         QDateTime mFileModified;
         QStringList mDependencies;
         FacExtensionInterface::Feature mFeature;
         QStringList mFeatureArguments;
         bool mUserInterface;
-        bool mGuiExtensions;
+        enum  GuiExtensionState { Unknown, NotAnExtension, Disabled, Enabled} mGuiExtensionState;
         QString mCliOptions;
         bool mFileFound;
 
@@ -71,13 +71,15 @@ namespace hal {
         GuiPluginEntry(const QFileInfo& info);
         GuiPluginEntry(const QSettings* settings);
         QVariant data(int icol) const;
+        QString name() const { return mName; }
         void persist(QSettings* settings) const;
-        bool requestLoad() const { return mState == UserLoad; }
-        bool isLoaded() const { return mState == AutoLoad || mState == UserLoad; }
-        bool isPlugin() const { return mState != NotAPlugin; }
+        bool requestLoad() const { return mLoadState == UserLoad; }
+        bool isLoaded() const { return mLoadState == AutoLoad || mLoadState == UserLoad; }
+        bool isPlugin() const { return mLoadState != NotAPlugin; }
         void updateFromLoaded(const BasePluginInterface* bpif, bool isUser, const QDateTime& modified = QDateTime());
         bool isFileFound() const { return mFileFound; }
         void setFileFound(bool fnd) { mFileFound = fnd; }
+        GuiExtensionState enforceGuiExtensionState(GuiExtensionInterface* geif) const;
     };
 
     class GuiPluginManager;
@@ -88,8 +90,8 @@ namespace hal {
         friend class GuiPluginManager;
         QIcon mIconLoad;
         QIcon mIconUnload;
-        QIcon mIconInvokeGui;
-        QIcon mIconDisabledGui;
+        QIcon mIconEnableGuiContribution;
+        QIcon mIconDisableGuiContribution;
         QIcon mIconCliOptions;
         QPoint mMousePos;
         QModelIndex mMouseIndex;
@@ -124,11 +126,11 @@ namespace hal {
         bool mWaitForRefresh;
         GuiPluginManager* mPluginMgr;
 
-        void changeState(const QString& pluginName, GuiPluginEntry::State state);
+        void changeState(const QString& pluginName, GuiPluginEntry::LoadState state);
         void populateTable(bool refresh);
         void clearMemory();
     Q_SIGNALS:
-        void triggerInvokeGui(QString pluginName);
+        void toggleEnableGuiContribution(QString pluginName);
         void showCliOptions(QString pluginName, QString cliOptions);
     public Q_SLOTS:
         void handleButtonPressed(const QModelIndex& buttonIndex);
@@ -147,11 +149,15 @@ namespace hal {
         QStringList neededBy(const QString& pluginName);
         void persist();
         bool isLoaded(const QModelIndex& index) const;
-        bool hasGuiExtension(const QModelIndex& index) const;
+        GuiPluginEntry::GuiExtensionState guiExtensionState(const QModelIndex& index) const;
+        void setGuiExtensionState(const QString& pluginName, GuiPluginEntry::GuiExtensionState state);
         bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
         SupportedFileFormats listFacFeature(FacExtensionInterface::Feature ft) const;
+        GuiPluginEntry* at(int irow) const;
+        int addExternalPlugin(const QString& path);
+        void removeEntry(int irow);
    };
 
     class GuiPluginView : public QTableView
@@ -170,8 +176,9 @@ namespace hal {
         Q_PROPERTY(QString unloadIconStyle READ unloadIconStyle WRITE setUnloadIconStyle)
         Q_PROPERTY(QString cliIconPath READ cliIconPath WRITE setCliIconPath)
         Q_PROPERTY(QString cliIconStyle READ cliIconStyle WRITE setCliIconStyle)
-        Q_PROPERTY(QString guiIconPath READ guiIconPath WRITE setGuiIconPath)
-        Q_PROPERTY(QString guiIconStyle READ guiIconStyle WRITE setGuiIconStyle)
+        Q_PROPERTY(QString guiIconEnabledPath READ guiIconEnabledPath WRITE setGuiIconEnabledPath)
+        Q_PROPERTY(QString guiIconDisabledPath READ guiIconDisabledPath WRITE setGuiIconDisabledPath)
+        Q_PROPERTY(QString guiIconEnabledStyle READ guiIconEnabledStyle WRITE setGuiIconEnabledStyle)
         Q_PROPERTY(QString guiIconDisabledStyle READ guiIconDisabledStyle WRITE setGuiIconDisabledStyle)
         Q_PROPERTY(QColor defaultTextColor READ defaultTextColor WRITE setDefaultTextColor)
         Q_PROPERTY(QColor hilightTextColor READ hilightTextColor WRITE setHilightTextColor)
@@ -186,22 +193,35 @@ namespace hal {
         QString mUnloadIconStyle;
         QString mCliIconPath;
         QString mCliIconStyle;
-        QString mGuiIconPath;
-        QString mGuiIconStyle;
+        QString mGuiIconEnabledPath;
+        QString mGuiIconDisabledPath;
+        QString mGuiIconEnabledStyle;
         QString mGuiIconDisabledStyle;
         QColor mDefaultTextColor;
         QColor mHilightTextColor;
         QColor mHilightBackgroundColor;
         QLabel* mIconLegend[4];
     Q_SIGNALS:
-        void backToNetlist(QString invokeGui);
+        void backToNetlist();
     private Q_SLOTS:
-        void handleButtonCancel();
-        void handleInvokeGui(const QString& pluginName);
+        void handleToggleGuiContribution(const QString& pluginName);
         void handleShowCliOptions(const QString& pluginName, const QString& cliOptions);
+    public Q_SLOTS:
+        void handleButtonCancel();
+        void handleLoadExternalPlugin();
     public:
         GuiPluginManager(QWidget* parent = nullptr);
         static QMap<QString,GuiExtensionInterface*> getGuiExtensions();
+        /**
+         * Adds context menu actions, which are provided by currently loaded plugins, 
+         * for specified set of netlist elements to a QMenu.
+         * 
+         * @param contextMenu - The QMenu to which the actions are added to.
+         * @param netlist - The netlist associated with the netlist elements.
+         * @param modules - List with ids of modules on which the actions will operate.
+         * @param gates - List with ids of gates on which the actions will operate.
+         * @param nets - List with ids of nets on which the actions will operate.
+         */
         static void addPluginSubmenus(QMenu* contextMenu, Netlist* netlist,
                                       const std::vector<u32>& modules,
                                       const std::vector<u32>& gates,
@@ -214,8 +234,9 @@ namespace hal {
         QString unloadIconStyle() const;
         QString cliIconPath() const;
         QString cliIconStyle() const;
-        QString guiIconPath() const;
-        QString guiIconStyle() const;
+        QString guiIconEnabledPath() const;
+        QString guiIconDisabledPath() const;
+        QString guiIconEnabledStyle() const;
         QString guiIconDisabledStyle() const;
         QColor defaultTextColor() const;
         QColor hilightTextColor() const;
@@ -227,11 +248,14 @@ namespace hal {
         void setUnloadIconStyle(const QString& s);
         void setCliIconPath(const QString& s);
         void setCliIconStyle(const QString& s);
-        void setGuiIconPath(const QString& s);
-        void setGuiIconStyle(const QString& s);
+        void setGuiIconEnabledPath(const QString& s);
+        void setGuiIconDisabledPath(const QString& s);
+        void setGuiIconEnabledStyle(const QString& s);
         void setGuiIconDisabledStyle(const QString& s);
         void setDefaultTextColor(QColor& c);
         void setHilightTextColor(QColor& c);
         void setHilightBackgroundColor(QColor& c);
+
+        void addPluginActions(QMenu* menu) const;
     };
 }

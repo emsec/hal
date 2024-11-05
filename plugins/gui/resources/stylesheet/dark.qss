@@ -25,7 +25,7 @@ QPushButton
     padding-bottom : 4px;
     padding-left   : 14px;
     padding-right  : 14px;
-    min-width      : 50px;
+    /* min-width      : 50px; */
 }
 
 QMenuBar
@@ -886,6 +886,28 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibraryLabel
+{
+    background : black;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+
 hal--GateLibrarySelection
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -901,6 +923,60 @@ hal--GateLibrarySelection QLabel#warningMsg
 {
     color: yellow;
 }
+
+hal--GatelibraryContentWidget
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-addTypeIconPath:      ":/icons/plus";
+    qproperty-editTypeIconPath:     ":/icons/pen";
+    qproperty-searchIconPath:       ":/icons/search";
+    qproperty-searchIconStyle:       "all->#e8e8e8";
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-deleteIconStyle:       "all->#e8e8e8";
+    qproperty-deleteIconPath:        ":/icons/trashcan";
+}
+
+hal--GeneralInfoWizardPage
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-leftArrowIconPath:    ":/icons/arrow-left";
+    qproperty-rightArrowIconPath:   ":/icons/arrow-right";
+}
+
+hal--GeneralInfoWizardPage #labProperties
+{
+    border-width : 2px 2px 0px 2px;
+    border-style : solid;
+    border-color : #515050;
+    margin-top   : 40px;
+    margin-bottom:  0px;
+}
+
+hal--GeneralInfoWizardPage #arrowButton
+{
+    min-width  : 12px;
+    max-width  : 12px;
+}
+
+hal--PinTreeView::item:focus
+{
+    background : rgba(10,20,80,0.6);
+    selection-background-color : rgba(10,20,80,0.6);
+}
+
+/*
+hal--PinTreeView
+{
+    background : gray;
+}
+
+hal--PinTreeView::item:selected
+{
+    background : red;
+}
+*/
 
 hal--ImportNetlistDialog
 {
@@ -1221,23 +1297,8 @@ hal--MainWindow
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
 
-    qproperty-newFileIconStyle: "";
-    qproperty-newFileIconPath: ":/icons/new-file";
-
-    qproperty-openProjIconStyle: "all->#3192C5";
-    qproperty-openProjIconPath: ":/icons/folder";
-
     qproperty-openFileIconStyle: "all->#AFB1B3";
     qproperty-openFileIconPath: ":/icons/detach";
-
-    qproperty-saveIconStyle: "all->#3192C5";
-    qproperty-saveIconPath: ":/icons/folder-down";
-
-    qproperty-saveAsIconStyle: "all->#3192C5";
-    qproperty-saveAsIconPath: ":/icons/save-as";
-
-    qproperty-closeIconStyle: "all->#AFB1B3";
-    qproperty-closeIconPath: ":/icons/cross";
 
     qproperty-quitIconStyle: "all->#AFB1B3";
     qproperty-quitIconPath: ":/icons/switch";
@@ -1251,6 +1312,23 @@ hal--MainWindow
     qproperty-undoIconStyle: "all->#e8e8e8";
     qproperty-undoIconPath: ":/icons/undo2";
 
+    qproperty-disabledIconStyle: "all->#515050";
+
+    qproperty-neGateIconStyle: "all->#AFB1B3";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->#3192C5";
+    qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->#AFB1B3";
+    qproperty-closeIconPath: ":/icons/cross";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->#3192C5";
     qproperty-disabledIconStyle: "all->#515050";
 }
 
@@ -1440,6 +1518,28 @@ hal--GatelibraryManagementDialog QHeaderView::section
 background: rgb(35, 35, 35);
 }
 
+hal--BooleanFunctionEdit
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: #802010;
+    color     : #F0E0C0;
+}
+
 hal--GuiPluginManager
 {
     qproperty-loadIconPath : ":/icons/insert-plugin";
@@ -1448,8 +1548,9 @@ hal--GuiPluginManager
     qproperty-unloadIconStyle: "all->#ff4040";
     qproperty-cliIconPath: ":/icons/cli-options";
     qproperty-cliIconStyle: "all->#c0c0c0";
-    qproperty-guiIconPath: ":/icons/invoke-gui";
-    qproperty-guiIconStyle: "all->#40A0FF";
+    qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
+    qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
+    qproperty-guiIconEnabledStyle: "all->#40A0FF";
     qproperty-guiIconDisabledStyle: "all->#C0C0C0";
     qproperty-defaultTextColor: rgb(192,192,192);
     qproperty-hilightTextColor: rgb(255,255,20);
