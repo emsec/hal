@@ -27,6 +27,8 @@
 !liberty_parser/**/*
 !logic_evaluator*
 !logic_evaluator/**/*
+!machine_learning*
+!machine_learning/**/*
 !module_identification*
 !module_identification/**/*
 !netlist_preprocessing*
