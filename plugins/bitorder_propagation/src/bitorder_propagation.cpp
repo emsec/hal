@@ -6,7 +6,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 #include "hal_core/netlist/pins/module_pin.h"
-#include "nlohmann_json/json.hpp"
+#include "nlohmann/json.hpp"
 
 #include <deque>
 #include <fstream>
