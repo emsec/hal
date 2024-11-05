@@ -3,7 +3,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "nlohmann_json/json.hpp"
+#include "nlohmann/json.hpp"
 
 #include <stdlib.h>
 

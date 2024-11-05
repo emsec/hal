@@ -444,4 +444,5 @@ namespace hal
             :returns: A set of gates fulfilling the `target_gate_filter` condition.
             :rtype: set[hal_py.Gate]
         )");
-    }    // namespace hal
+    }
+}    // namespace hal
