@@ -235,6 +235,50 @@ namespace hal
             {
 #ifdef BITWUZLA_LIBRARY
 
+                bitwuzla::Options options;
+                bitwuzla::TermManager tm;
+
+                if (config.generate_model)
+                {
+                    // return ERR("currently unable to generate models for bitwuzla");
+                    options.set(bitwuzla::Option::PRODUCE_MODELS, true);
+                }
+
+                std::stringbuf result_string;
+                std::ostream output_stream(&result_string);
+
+                bitwuzla::parser::Parser parser(tm, options, "smt2", &output_stream);
+                parser.parse(input, false, false);
+
+                std::string output(result_string.str());
+                // std::cout << "output" << std::endl;
+                // std::cout << output << std::endl;
+
+                return OK({false, output});
+
+                /*
+                const auto btwzla = parser.bitwuzla();
+                const auto result = btwzla->check_sat();
+
+                if (result == bitwuzla::Result::SAT)
+                {
+                    return OK({false, "sat"});
+                }
+
+                if (result == bitwuzla::Result::UNSAT)
+                {
+                    return OK({false, "unsat"});
+                }
+
+                if (result == bitwuzla::Result::UNKNOWN)
+                {
+                    return OK({true, "unknown"});
+                }
+
+                return ERR("unhandled result type");
+                */
+
+                /*
                 // First, create a Bitwuzla options instance.
                 bitwuzla::Options options;
                 // We will parse example file `smt2/quickstart.smt2`.
@@ -264,13 +308,16 @@ namespace hal
                 {
                     return ERR("failed to parse input file: " + err_msg);
                 }
+                
 
                 fclose(in_stream);
 
                 std::string output(result_string.str());
                 // std::cout << "output" << std::endl;
                 // std::cout << output << std::endl;
+                
                 return OK({false, output});
+                */
 #else
                 return ERR("Bitwuzla Library not linked!");
 #endif
