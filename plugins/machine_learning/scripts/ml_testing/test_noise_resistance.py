@@ -1,7 +1,7 @@
 import torch
 
-samples = 128
-noise_dimension = 1024
+samples = 256
+noise_dimension = 128
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -54,7 +54,7 @@ class NN(torch.nn.Module):
 model = NN().to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     
-for epoch in range(10000):
+for epoch in range(1000):
     optimizer.zero_grad()
 
     out = model(x.float())

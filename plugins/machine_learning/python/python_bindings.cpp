@@ -30,7 +30,6 @@ namespace hal
         py::module py_gate_feature      = m.def_submodule("gate_feature");
         py::module py_gate_pair_feature = m.def_submodule("gate_pair_feature");
         py::module py_gate_pair_label   = m.def_submodule("gate_pair_label");
-        py::module py_graph             = m.def_submodule("graph");
 
         py::class_<MachineLearningPlugin, RawPtrWrapper<MachineLearningPlugin>, BasePluginInterface> py_machine_learning_plugin(
             m, "MachineLearningPlugin", R"(Provides machine learning functionality as a plugin within the HAL framework.)");
@@ -104,12 +103,12 @@ namespace hal
         )");
 
         // Bindings for construct_netlist_graph
-        py_graph.def("construct_netlist_graph",
-                     &machine_learning::graph::construct_netlist_graph,
-                     py::arg("netlist"),
-                     py::arg("gates"),
-                     py::arg("direction"),
-                     R"(
+        m.def("construct_netlist_graph",
+              &machine_learning::graph::construct_netlist_graph,
+              py::arg("netlist"),
+              py::arg("gates"),
+              py::arg("direction"),
+              R"(
             Constructs a netlist graph from the given netlist and gates.
 
             :param hal_py.Netlist netlist: The netlist.
@@ -120,13 +119,13 @@ namespace hal
         )");
 
         // Bindings for annotate_netlist_graph
-        py_graph.def("annotate_netlist_graph",
-                     &machine_learning::graph::annotate_netlist_graph,
-                     py::arg("netlist"),
-                     py::arg("gates"),
-                     py::arg("netlist_graph"),
-                     py::arg("node_features"),
-                     R"(
+        m.def("annotate_netlist_graph",
+              &machine_learning::graph::annotate_netlist_graph,
+              py::arg("netlist"),
+              py::arg("gates"),
+              py::arg("netlist_graph"),
+              py::arg("node_features"),
+              R"(
             Annotates the netlist graph with the given node features.
 
             :param hal_py.Netlist netlist: The netlist.
