@@ -86,17 +86,17 @@ namespace hal
             .export_values();
 
         // Bindings for NetlistGraph
-        py::class_<machine_learning::graph::NetlistGraph> py_netlist_graph(py_graph, "NetlistGraph", R"(
+        py::class_<machine_learning::NetlistGraph> py_netlist_graph(m, "NetlistGraph", R"(
             Represents a graph of the netlist.
         )");
 
-        py_netlist_graph.def_readwrite("edge_list", &machine_learning::graph::NetlistGraph::edge_list, R"(
+        py_netlist_graph.def_readwrite("edge_list", &machine_learning::NetlistGraph::edge_list, R"(
             Edge list of the graph as a tuple of source and target node indices.
 
             :type: tuple[list[int], list[int]]
         )");
 
-        py_netlist_graph.def_readwrite("direction", &machine_learning::graph::NetlistGraph::direction, R"(
+        py_netlist_graph.def_readwrite("direction", &machine_learning::NetlistGraph::direction, R"(
             Direction of the graph.
 
             :type: hal_py.machine_learning.GraphDirection
@@ -104,7 +104,7 @@ namespace hal
 
         // Bindings for construct_netlist_graph
         m.def("construct_netlist_graph",
-              &machine_learning::graph::construct_netlist_graph,
+              &machine_learning::construct_netlist_graph,
               py::arg("netlist"),
               py::arg("gates"),
               py::arg("direction"),
@@ -120,7 +120,7 @@ namespace hal
 
         // Bindings for annotate_netlist_graph
         m.def("annotate_netlist_graph",
-              &machine_learning::graph::annotate_netlist_graph,
+              &machine_learning::annotate_netlist_graph,
               py::arg("netlist"),
               py::arg("gates"),
               py::arg("netlist_graph"),
