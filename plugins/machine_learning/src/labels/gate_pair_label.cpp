@@ -130,7 +130,7 @@ namespace hal
                     if (mbi.gate_to_words.find(g) == mbi.gate_to_words.end())
                     {
                         // gate is only in a group with itself
-                        pairs.push_back({g, g});
+                        // pairs.push_back({g, g});
                         pos_gates.insert(g);
                     }
                     else
@@ -141,6 +141,11 @@ namespace hal
                             const auto& gates = mbi.word_to_gates.at(name_direction);
                             for (const auto g_i : gates)
                             {
+                                if (g == g_i)
+                                {
+                                    continue;
+                                }
+
                                 pairs.push_back({g, g_i});
                                 pos_gates.insert(g);
                             }

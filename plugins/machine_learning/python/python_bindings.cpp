@@ -609,151 +609,276 @@ namespace hal
                 )");
 
         // machine_learning::labels::gate_pair_label
-        py::class_<hal::machine_learning::gate_pair_label::MultiBitInformation> py_multi_bit_information(py_gate_pair_label, "MultiBitInformation", R"(
-            Holds information about multi-bit labels, mapping word pairs to gates and gates to word pairs.
-        )");
+        // MultiBitInformation
+        py::class_<hal::machine_learning::gate_pair_label::MultiBitInformation> py_multi_bit_information(
+            py_gate_pair_label, "MultiBitInformation", R"(
+                Holds mappings between word labels and gates, and gates and word labels.
+
+                This struct provides a bi-directional mapping between specific word pairs and their corresponding gates,
+                as well as between gates and associated word pairs.
+            )");
 
         py_multi_bit_information.def_readwrite("word_to_gates", &hal::machine_learning::gate_pair_label::MultiBitInformation::word_to_gates, R"(
-            Maps word pairs to lists of gates.
+            Maps word pairs to corresponding gates.
 
             :type: dict[tuple[str, str], list[hal_py.Gate]]
         )");
 
         py_multi_bit_information.def_readwrite("gate_to_words", &hal::machine_learning::gate_pair_label::MultiBitInformation::gate_to_words, R"(
-            Maps gates to lists of word pairs.
+            Maps gates to associated word pairs.
 
             :type: dict[hal_py.Gate, list[tuple[str, str]]]
         )");
 
-        py::class_<hal::machine_learning::gate_pair_label::LabelContext> py_label_context(py_gate_pair_label, "LabelContext", R"(
-            Provides context for labeling gates within a netlist.
-        )");
+        // LabelContext
+        py::class_<hal::machine_learning::gate_pair_label::LabelContext> py_label_context(
+            py_gate_pair_label, "LabelContext", R"(
+                Provides context for gate-pair labeling within a netlist.
 
-        py_label_context.def(py::init<const hal::Netlist*, const std::vector<hal::Gate*>&>(), py::arg("netlist"), py::arg("gates"), R"(
-            Initialize a LabelContext with a netlist and a set of gates.
+                This struct is initialized with a reference to the netlist and the gates involved in the labeling.
+                It also provides access to multi-bit information for use in labeling calculations.
+            )");
 
-            :param hal_py.Netlist netlist: The netlist for analysis.
-            :param list[hal_py.Gate] gates: The gates for labeling.
-        )");
+        py_label_context.def(
+            py::init<const Netlist*, const std::vector<Gate*>&>(),
+            py::arg("netlist"),
+            py::arg("gates"),
+            R"(
+                Constructs a `LabelContext` with the specified netlist and gates.
 
-        py_label_context.def("get_multi_bit_information", &hal::machine_learning::gate_pair_label::LabelContext::get_multi_bit_information, R"(
-            Retrieve multi-bit information for the current context.
+                :param hal_py.Netlist netlist: The netlist to which the gates belong.
+                :param list[hal_py.Gate] gates: The gates to be labeled.
+            )");
 
-            :returns: Multi-bit information.
-            :rtype: gate_pair_label.MultiBitInformation
-        )");
+        py_label_context.def(
+            "get_multi_bit_information",
+            &hal::machine_learning::gate_pair_label::LabelContext::get_multi_bit_information,
+            R"(
+                Retrieves the multi-bit information, initializing it if not already done.
+
+                :returns: The MultiBitInformation object.
+                :rtype: hal_py.machine_learning.gate_pair_label.MultiBitInformation
+            )");
 
         py_label_context.def_readonly("nl", &hal::machine_learning::gate_pair_label::LabelContext::nl, R"(
-            The netlist associated with the LabelContext.
+            The netlist to which the gates belong.
 
             :type: hal_py.Netlist
         )");
 
         py_label_context.def_readonly("gates", &hal::machine_learning::gate_pair_label::LabelContext::gates, R"(
-            The gates within the context.
+            The gates that are part of this labeling context.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_label_context.def_readonly("mbi", &hal::machine_learning::gate_pair_label::LabelContext::mbi, R"(
-            Multi-bit information if available.
+        py_label_context.def_readwrite("mbi", &hal::machine_learning::gate_pair_label::LabelContext::mbi, R"(
+            Optional storage for multi-bit information, initialized on demand.
 
-            :type: Optional[gate_pair_label.MultiBitInformation]
+            :type: Optional[hal_py.machine_learning.gate_pair_label.MultiBitInformation]
         )");
 
-        py::class_<hal::machine_learning::gate_pair_label::GatePairLabel, std::shared_ptr<hal::machine_learning::gate_pair_label::GatePairLabel>> py_gate_pair_label_class(
+        // GatePairLabel
+        py::class_<hal::machine_learning::gate_pair_label::GatePairLabel> py_gatepairlabel(
             py_gate_pair_label, "GatePairLabel", R"(
-            Base class for gate-pair labeling implementations.
+                Base class for calculating gate pairs and labels for machine learning models.
+
+                This abstract class provides methods for calculating gate pairs and labels based on various criteria.
+            )");
+
+        py_gatepairlabel.def(
+            "calculate_gate_pairs",
+            &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_gate_pairs,
+            py::arg("lc"),
+            py::arg("nl"),
+            py::arg("gates"),
+            R"(
+                Calculate gate pairs based on the provided labeling context and netlist.
+
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to be paired.
+                :returns: A list of gate pairs.
+                :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
+            )");
+
+        py_gatepairlabel.def(
+            "calculate_label",
+            &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_label,
+            py::arg("lc"),
+            py::arg("g_a"),
+            py::arg("g_b"),
+            R"(
+                Calculate labels for a given gate pair.
+
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Gate g_a: The first gate in the pair.
+                :param hal_py.Gate g_b: The second gate in the pair.
+                :returns: A list of labels.
+                :rtype: list[int]
+            )");
+
+        py_gatepairlabel.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&, const std::vector<std::pair<Gate*, Gate*>>&>(&hal::machine_learning::gate_pair_label::GatePairLabel::calculate_labels, py::const_),
+            py::arg("lc"),
+            py::arg("gate_pairs"),
+            R"(
+                Calculate labels for multiple gate pairs.
+
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
+                :returns: A list of label vectors for each pair.
+                :rtype: list[list[int]]
+            )");
+
+        py_gatepairlabel.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&>(&hal::machine_learning::gate_pair_label::GatePairLabel::calculate_labels, py::const_),
+            py::arg("lc"),
+            R"(
+                Calculate both gate pairs and their labels within the labeling context.
+
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :returns: A pair containing gate pairs and corresponding labels.
+                :rtype: tuple[list[tuple[hal_py.Gate, hal_py.Gate]], list[list[int]]]
+            )");
+
+        // SharedSignalGroup
+        py::class_<hal::machine_learning::gate_pair_label::SharedSignalGroup, hal::machine_learning::gate_pair_label::GatePairLabel> py_sharedsignalgroup(
+            py_gate_pair_label, "SharedSignalGroup", R"(
+                Labels gate pairs based on shared signal groups.
+            )");
+
+        py_sharedsignalgroup.def(py::init<>(), R"(
+            Default constructor.
         )");
 
-        // py_gate_pair_label_class.def("calculate_gate_pairs", &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_gate_pairs, py::arg("lc"), py::arg("netlist"), py::arg("gates"), R"(
-        //     Calculate gate pairs based on the provided label context, netlist, and gates.
+        py_sharedsignalgroup.def(
+            "calculate_gate_pairs",
+            &hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_gate_pairs,
+            py::arg("lc"),
+            py::arg("nl"),
+            py::arg("gates"),
+            R"(
+                Calculate gate pairs based on the provided labeling context and netlist.
 
-        //     :param gate_pair_label.LabelContext lc: The labeling context.
-        //     :param hal_py.Netlist netlist: The netlist.
-        //     :param list[hal_py.Gate] gates: The gates to analyze.
-        //     :returns: List of gate pairs.
-        //     :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
-        // )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to be paired.
+                :returns: A list of gate pairs.
+                :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
+            )");
 
-        // py_gate_pair_label_class.def("calculate_label", &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_label, py::arg("lc"), py::arg("g_a"), py::arg("g_b"), R"(
-        //     Calculate the label for a given pair of gates.
+        py_sharedsignalgroup.def(
+            "calculate_label",
+            &hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_label,
+            py::arg("lc"),
+            py::arg("g_a"),
+            py::arg("g_b"),
+            R"(
+                Calculate labels for a given gate pair.
 
-        //     :param gate_pair_label.LabelContext lc: The labeling context.
-        //     :param hal_py.Gate g_a: The first gate.
-        //     :param hal_py.Gate g_b: The second gate.
-        //     :returns: List of labels.
-        //     :rtype: list[int]
-        // )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Gate g_a: The first gate in the pair.
+                :param hal_py.Gate g_b: The second gate in the pair.
+                :returns: A vector of labels.
+                :rtype: list[int]
+            )");
 
-        // py_gate_pair_label_class.def("calculate_labels", &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_labels, py::arg("lc"), py::arg("gate_pairs"), R"(
-        //     Calculate labels for a set of gate pairs.
+        py_sharedsignalgroup.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&, const std::vector<std::pair<Gate*, Gate*>>&>(&hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_labels, py::const_),
+            py::arg("lc"),
+            py::arg("gate_pairs"),
+            R"(
+                Calculate labels for multiple gate pairs.
 
-        //     :param gate_pair_label.LabelContext lc: The labeling context.
-        //     :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs.
-        //     :returns: List of labels for each gate pair.
-        //     :rtype: list[list[int]]
-        // )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
+                :returns: A vector of label vectors for each pair.
+                :rtype: list[list[int]]
+            )");
 
-        // py_gate_pair_label_class.def("calculate_labels", &hal::machine_learning::gate_pair_label::GatePairLabel::calculate_labels, py::arg("lc"), R"(
-        //     Calculate labels for all gate pairs in the context.
+        py_sharedsignalgroup.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&>(&hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_labels, py::const_),
+            py::arg("lc"),
+            R"(
+                Calculate both gate pairs and their labels within the labeling context.
 
-        //     :param gate_pair_label.LabelContext lc: The labeling context.
-        //     :returns: Tuple of gate pairs and corresponding labels.
-        //     :rtype: tuple[list[tuple[hal_py.Gate, hal_py.Gate]], list[list[int]]]
-        // )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :returns: A pair containing gate pairs and corresponding labels.
+                :rtype: tuple[list[tuple[hal_py.Gate, hal_py.Gate]], list[list[int]]]
+            )");
 
-        py::class_<hal::machine_learning::gate_pair_label::SharedSignalGroup,
-                   hal::machine_learning::gate_pair_label::GatePairLabel,
-                   std::shared_ptr<hal::machine_learning::gate_pair_label::SharedSignalGroup>>
-            py_shared_signal_group(py_gate_pair_label, "SharedSignalGroup", R"(
-            Labeling strategy based on shared signals between gate pairs.
+        // SharedConnection
+        py::class_<hal::machine_learning::gate_pair_label::SharedConnection, hal::machine_learning::gate_pair_label::GatePairLabel> py_sharedconnection(
+            py_gate_pair_label, "SharedConnection", R"(
+                Labels gate pairs based on shared connections.
+            )");
+
+        py_sharedconnection.def(py::init<>(), R"(
+            Default constructor.
         )");
 
-        py_shared_signal_group.def(py::init<>(), R"(
-            Constructs a SharedSignalGroup labeling strategy.
-        )");
+        py_sharedconnection.def(
+            "calculate_gate_pairs",
+            &hal::machine_learning::gate_pair_label::SharedConnection::calculate_gate_pairs,
+            py::arg("lc"),
+            py::arg("nl"),
+            py::arg("gates"),
+            R"(
+                Calculate gate pairs based on the provided labeling context and netlist.
 
-        py_shared_signal_group.def("calculate_gate_pairs", &hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_gate_pairs, py::arg("lc"), py::arg("netlist"), py::arg("gates"), R"(
-            Calculate gate pairs based on shared signals.
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to be paired.
+                :returns: A list of gate pairs.
+                :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
+            )");
 
-            :param gate_pair_label.LabelContext lc: The labeling context.
-            :param hal_py.Netlist netlist: The netlist.
-            :param list[hal_py.Gate] gates: The gates to analyze.
-            :returns: List of gate pairs.
-            :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
-        )");
+        py_sharedconnection.def(
+            "calculate_label",
+            &hal::machine_learning::gate_pair_label::SharedConnection::calculate_label,
+            py::arg("lc"),
+            py::arg("g_a"),
+            py::arg("g_b"),
+            R"(
+                Calculate labels for a given gate pair.
 
-        py_shared_signal_group.def("calculate_label", &hal::machine_learning::gate_pair_label::SharedSignalGroup::calculate_label, py::arg("lc"), py::arg("g_a"), py::arg("g_b"), R"(
-            Calculate the label for a given pair of gates based on shared signals.
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param hal_py.Gate g_a: The first gate in the pair.
+                :param hal_py.Gate g_b: The second gate in the pair.
+                :returns: A vector of labels.
+                :rtype: list[int]
+            )");
 
-            :param gate_pair_label.LabelContext lc: The labeling context.
-            :param hal_py.Gate g_a: The first gate.
-            :param hal_py.Gate g_b: The second gate.
-            :returns: List of labels.
-            :rtype: list[int]
-        )");
+        py_sharedconnection.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&, const std::vector<std::pair<Gate*, Gate*>>&>(&hal::machine_learning::gate_pair_label::SharedConnection::calculate_labels, py::const_),
+            py::arg("lc"),
+            py::arg("gate_pairs"),
+            R"(
+                Calculate labels for multiple gate pairs.
 
-        py::class_<hal::machine_learning::gate_pair_label::SharedConnection,
-                   hal::machine_learning::gate_pair_label::GatePairLabel,
-                   std::shared_ptr<hal::machine_learning::gate_pair_label::SharedConnection>>
-            py_shared_connection(py_gate_pair_label, "SharedConnection", R"(
-            Labeling strategy based on shared connections between gate pairs.
-        )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
+                :returns: A vector of label vectors for each pair.
+                :rtype: list[list[int]]
+            )");
 
-        py_shared_connection.def(py::init<>(), R"(
-            Constructs a SharedConnection labeling strategy.
-        )");
+        py_sharedconnection.def(
+            "calculate_labels",
+            py::overload_cast<hal::machine_learning::gate_pair_label::LabelContext&>(&hal::machine_learning::gate_pair_label::SharedConnection::calculate_labels, py::const_),
+            py::arg("lc"),
+            R"(
+                Calculate both gate pairs and their labels within the labeling context.
 
-        py_shared_connection.def("calculate_gate_pairs", &hal::machine_learning::gate_pair_label::SharedConnection::calculate_gate_pairs, py::arg("lc"), py::arg("netlist"), py::arg("gates"), R"(
-            Calculate gate pairs based on shared connections.
-
-            :param gate_pair_label.LabelContext lc: The labeling context.
-            :param hal_py.Netlist netlist: The netlist.
-            :param list[hal_py.Gate] gates: The gates to analyze.
-            :returns: List of gate pairs.
-            :rtype: list[tuple[hal_py.Gate, hal_py.Gate]]
-        )");
+                :param hal_py.machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+                :returns: A pair containing gate pairs and corresponding labels.
+                :rtype: tuple[list[tuple[hal_py.Gate, hal_py.Gate]], list[list[int]]]
+            )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

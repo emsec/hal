@@ -1955,7 +1955,7 @@ namespace hal
         {
             struct indexed_identifier
             {
-                indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const PinDirection& direction) : identifier{identifier}, index{index}, origin{origin}
+                indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const PinDirection& direction) : identifier{identifier}, index{index}, origin{origin}, direction{direction}
                 {
                 }
 
@@ -2059,7 +2059,17 @@ namespace hal
 
                 for (const auto& pin : typed_pins)
                 {
+                    if (pin->get_direction() != PinDirection::output && pin->get_direction() != PinDirection::input)
+                    {
+                        continue;
+                    }
+
                     const auto typed_net = (pin->get_direction() == PinDirection::output) ? gate->get_fan_out_net(pin) : gate->get_fan_in_net(pin);
+
+                    if (typed_net == nullptr)
+                    {
+                        continue;
+                    }
 
                     // 1) search the net name itself
                     const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name", pin->get_direction());
