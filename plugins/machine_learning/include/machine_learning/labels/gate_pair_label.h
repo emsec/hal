@@ -17,6 +17,7 @@ namespace hal
     /* Forward declarations */
     class Gate;
     class Netlist;
+    enum class PinDirection : int;
 
     namespace machine_learning
     {
@@ -34,12 +35,12 @@ namespace hal
                 /**
                  * @brief Maps word pairs to corresponding gates.
                  */
-                std::map<const std::pair<const std::string, const std::string>, std::vector<const Gate*>> word_to_gates;
+                std::map<std::tuple<std::string, PinDirection, std::string>, std::vector<Gate*>> word_to_gates;
 
                 /**
                  * @brief Maps gates to associated word pairs.
                  */
-                std::map<const Gate*, std::vector<std::pair<const std::string, const std::string>>> gate_to_words;
+                std::map<const Gate*, std::vector<std::tuple<std::string, PinDirection, std::string>>> gate_to_words;
             };
 
             /**

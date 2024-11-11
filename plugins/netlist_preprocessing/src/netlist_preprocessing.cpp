@@ -11,10 +11,9 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/token_stream.h"
-#include "nlohmann/json.hpp"
-#include "rapidjson/document.h"
 #include "resynthesis/resynthesis.h"
 #include "z3_utils/netlist_comparison.h"
+#include "z3_utils/subgraph_function_generation.h"
 
 #include <fstream>
 #include <queue>
@@ -924,6 +923,10 @@ namespace hal
             }
 
             std::vector<std::vector<Net*>> equality_classes;
+            z3::context ctx;
+
+            std::map<u32, z3::expr> net_cache;
+            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
 
             for (const auto& [_fingerprint, nets] : fingerprint_to_nets)
             {
@@ -951,14 +954,36 @@ namespace hal
 
                     for (const auto& m : current_candidate_nets)
                     {
-                        auto comp_res = z3_utils::compare_nets(nl, nl, n, m);
-                        if (comp_res.is_error())
+
+                        const auto bf_n = z3_utils::get_subgraph_z3_function(all_comb_gates_vec, n, ctx, net_cache, gate_cache);
+                        const auto bf_m = z3_utils::get_subgraph_z3_function(all_comb_gates_vec, m, ctx, net_cache, gate_cache);
+
+                        if (bf_n.is_error())
                         {
-                            return ERR_APPEND(comp_res.get_error(),
-                                              "Unable to remove redundant logic trees: failed to compare net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + " with net "
-                                                  + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                            return ERR_APPEND(bf_n.get_error(),
+                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
                         }
-                        const auto are_equal = comp_res.get();
+                        
+                        if (bf_m.is_error())
+                        {
+                            return ERR_APPEND(bf_m.get_error(),
+                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                        }
+
+                        z3::solver s(ctx);
+                        s.add(bf_n.get() != bf_m.get());
+                        const auto res = s.check();
+
+                        const bool are_equal = (res == z3::unsat);
+
+                        // auto comp_res = z3_utils::compare_nets(nl, nl, n, m);
+                        // if (comp_res.is_error())
+                        // {
+                        //     return ERR_APPEND(comp_res.get_error(),
+                        //                       "Unable to remove redundant logic trees: failed to compare net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + " with net "
+                        //                           + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                        // }
+                        // const auto are_equal = comp_res.get();
 
                         if (are_equal)
                         {
@@ -1951,20 +1976,41 @@ namespace hal
             return OK(num_inits);
         }
 
+        indexed_identifier::indexed_identifier()
+        {
+        }
+
+        indexed_identifier::indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance) : identifier{identifier}, index{index}, origin{origin}, pin{pin}, direction{direction}, distance{distance}
+        {
+        }
+
+        // Overload < operator for strict weak ordering
+        bool indexed_identifier::operator<(const indexed_identifier& other) const
+        {
+            return std::tie(identifier, index, origin, pin, direction, distance) <
+                std::tie(other.identifier, other.index, other.origin, other.pin, other.direction, other.distance);
+        }
+
+        // Serialization function for indexed_identifier as a list of values
+        void to_json(nlohmann::json& j, const indexed_identifier& id)
+        {
+            j = nlohmann::json{ id.identifier, id.index, id.origin, id.pin, enum_to_string(id.direction), id.distance };
+        }
+
+        // Deserialization function for indexed_identifier from a list of values
+        void from_json(const nlohmann::json& j, indexed_identifier& id)
+        {
+            j.at(0).get_to(id.identifier);
+            j.at(1).get_to(id.index);
+            j.at(2).get_to(id.origin);
+            j.at(3).get_to(id.pin);
+            const std::string direction_string = j.at(4).get<const std::string>();
+            id.direction = enum_from_string<PinDirection>(direction_string);
+            j.at(5).get_to(id.distance);
+        }
+
         namespace
         {
-            struct indexed_identifier
-            {
-                indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const PinDirection& direction) : identifier{identifier}, index{index}, origin{origin}, direction{direction}
-                {
-                }
-
-                std::string identifier;
-                u32 index;
-                std::string origin;
-                PinDirection direction;
-            };
-
             // TODO when the verilog parser changes are merged into the master this will no longer be needed
             const std::string hal_instance_index_pattern         = "__\\[(\\d+)\\]__";
             const std::string hal_instance_index_pattern_reverse = "<HAL>(\\d+)<HAL>";
@@ -2005,7 +2051,7 @@ namespace hal
             const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
             // Extracts an index from a string by taking the last integer enclosed by parentheses
-            std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin, const PinDirection& direction)
+            std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance)
             {
                 std::regex re(index_pattern);
 
@@ -2032,22 +2078,14 @@ namespace hal
                 auto identifier_name   = name;
                 identifier_name        = identifier_name.replace(name.rfind(found_match), found_match.size(), "");
 
-                return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin, direction}};
+                return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin, pin, direction, distance}};
             }
 
             // annotate all found identifiers to a gate
             bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
             {
-                std::string json_identifier_str = "["
-                                                  + utils::join(", ",
-                                                                identifiers,
-                                                                [](const auto& i) {
-                                                                    return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "," + '"'
-                                                                           + enum_to_string(i.direction) + '"' + "]";
-                                                                })
-                                                  + "]";
-
-                return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", json_identifier_str);
+                nlohmann::json j = identifiers;  // Convert the vector to JSON
+                return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", j.dump());
             }
 
             // search for a net that connects to the gate at a pin of a specific type and tries to reconstruct an indexed identifier from its name or form a name of its merged wires
@@ -2071,43 +2109,46 @@ namespace hal
                         continue;
                     }
 
-                    // 1) search the net name itself
-                    const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name", pin->get_direction());
+                    std::vector<std::vector<std::string>> merged_nets;
+                    
+                    // 1) search all the names of the wires that where merged into this net
+                    if (typed_net->has_data("parser_annotation", "merged_nets"))
+                    {
+                        const auto all_merged_nets_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_nets"));
+
+                        if (all_merged_nets_str.empty())
+                        {
+                            nlohmann::json merged_nets_json = nlohmann::json::parse(all_merged_nets_str);
+                            merged_nets = merged_nets_json.get<std::vector<std::vector<std::string>>>();
+
+                            // the order of the merged nets starts with nets closest to the destination of the net (which is connected to an input pin)
+                            if (pin->get_direction() == PinDirection::output)
+                            {
+                                std::reverse(merged_nets.begin(), merged_nets.end());
+                            }
+
+                            for (u32 i = 0; i < merged_nets.size(); i++)
+                            {
+                                for (u32 j = 0; j < merged_nets.at(i).size(); j++)
+                                {
+                                    const auto merged_wire_name = merged_nets.at(i).at(j);
+
+                                    const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name", pin->get_name(), pin->get_direction(), i + 1);
+                                    if (merged_wire_name_index.has_value())
+                                    {
+                                        found_identfiers.push_back(merged_wire_name_index.value());
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // 2) search the net name itself
+                    const u32 distance = (pin->get_direction() == PinDirection::output) ? merged_nets.size() + 1 : 0;
+                    const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name", pin->get_name(), pin->get_direction(), distance);
                     if (net_name_index.has_value())
                     {
                         found_identfiers.push_back(net_name_index.value());
-                    }
-
-                    // 2) search all the names of the wires that where merged into this net
-                    if (!typed_net->has_data("parser_annotation", "merged_nets"))
-                    {
-                        continue;
-                    }
-
-                    const auto all_merged_nets_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_nets"));
-
-                    if (all_merged_nets_str.empty())
-                    {
-                        continue;
-                    }
-
-                    // parse json list of merged net names
-                    rapidjson::Document doc;
-                    doc.Parse(all_merged_nets_str.c_str());
-
-                    for (u32 i = 0; i < doc.GetArray().Size(); i++)
-                    {
-                        const auto list = doc[i].GetArray();
-                        for (u32 j = 0; j < list.Size(); j++)
-                        {
-                            const auto merged_wire_name = list[j].GetString();
-
-                            const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name", pin->get_direction());
-                            if (merged_wire_name_index.has_value())
-                            {
-                                found_identfiers.push_back(merged_wire_name_index.value());
-                            }
-                        }
                     }
                 }
 
@@ -2124,7 +2165,7 @@ namespace hal
 
                 // 1) Check whether the ff gate already has an index annotated in its gate name
                 const auto cleaned_gate_name = replace_hal_instance_index(ff->get_name());
-                const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name", PinDirection::none);
+                const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name", "", PinDirection::none, 0);
 
                 if (gate_name_index.has_value())
                 {
@@ -2159,13 +2200,13 @@ namespace hal
 
             for (const auto& pin : nl->get_top_module()->get_pins())
             {
-                auto reconstruct = extract_index(pin->get_name(), net_index_pattern, "", pin->get_direction());
+                auto reconstruct = extract_index(pin->get_name(), net_index_pattern, "pin_name", pin->get_name(), pin->get_direction(), 0);
                 if (!reconstruct.has_value())
                 {
                     continue;
                 }
 
-                auto [pg_name, index, _origin, _direction] = reconstruct.value();
+                auto [pg_name, index, _origin, _pin, _direction, _distance] = reconstruct.value();
 
                 pg_name_to_indexed_pins[pg_name][index].push_back(pin);
             }

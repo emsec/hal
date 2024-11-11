@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
+#include "nlohmann/json.hpp"
 
 #include <map>
 #include <vector>
@@ -39,6 +40,8 @@ namespace hal
     class GateLibrary;
     class Module;
     class Net;
+
+    enum class PinDirection;
 
     namespace netlist_preprocessing
     {
@@ -151,6 +154,46 @@ namespace hal
          * @return OK() and the number of simplified INIT strings on success, an error otherwise.
          */
         Result<u32> simplify_lut_inits(Netlist* nl);
+
+
+        /**
+         * Represents an identifier with an associated index and additional metadata, used for reconstructing and annotating names and indices
+         * for flip flops in synthesized netlists based on input and output net names as well as gate names.
+         * 
+         * This struct is designed specifically for use with synthesized netlists. By analyzing net and gate names, we attempt to reconstruct a  
+         * multi bit word and index for each flip flop.
+         * 
+         * The reconstructed identifiers, stored as `indexed_identifier` instances, are added to the gate data container in the netlist.
+         * 
+         * Members:
+         * - identifier: The reconstructed name of the flip flop.
+         * - index: The index number associated with the identifier, if part of a multi-bit signal.
+         * - origin: The original source or scope of the identifier.
+         * - pin: The specific pin associated with the identifier.
+         * - direction: The direction of the pin (e.g., INPUT, OUTPUT, INOUT).
+         * - distance: The distance or offset, representing additional structural information.
+         */
+        struct indexed_identifier
+        {
+            indexed_identifier();
+            indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance);
+
+            std::string identifier; /**< The reconstructed name of the multi-bit words. */
+            u32 index;              /**< The index associated with the identifier, used for multi-bit signals. */
+            std::string origin;     /**< The origin or source of the identifier within the netlist (either "gate_name" or "net_name"). */
+            std::string pin;        /**< The pin name associated with this identifier. */
+            PinDirection direction; /**< Direction of the pin. */
+            u32 distance;           /**< Distance to merged net which name this index was derived from. */
+
+             // Overload < operator for strict weak ordering
+            bool operator<(const indexed_identifier& other) const;
+        };
+
+        // Serialization function for indexed_identifier as a list of values
+        void to_json(nlohmann::json& j, const indexed_identifier& id);
+
+        // Deserialization function for indexed_identifier from a list of values
+        void from_json(const nlohmann::json& j, indexed_identifier& id);
 
         /**
          * Tries to reconstruct a name and index for each flip flop that was part of a multi-bit wire in the verilog code.

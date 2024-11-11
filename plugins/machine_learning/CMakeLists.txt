@@ -9,6 +9,6 @@ if(PL_MACHINE_LEARNING OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${MACHINE_LEARNING_INC}
                    SOURCES ${MACHINE_LEARNING_SRC} ${MACHINE_LEARNING_PYTHON_SRC}
-                   LINK_LIBRARIES nlohmann_json::nlohmann_json
+                   LINK_LIBRARIES nlohmann_json::nlohmann_json netlist_preprocessing
                    )
 endif()

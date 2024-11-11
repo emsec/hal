@@ -490,6 +490,7 @@ namespace hal
                     }
                 }
             }
+
             for (const auto& gate_b : seq_gates_b)
             {
                 gate_name_to_gate_b[gate_b->get_name()] = gate_b;
@@ -516,6 +517,7 @@ namespace hal
                     return OK(false);
                 }
             }
+            
             for (const auto& [gate_b_name, gate_b] : gate_name_to_gate_b)
             {
                 if (const auto gate_a_it = gate_name_to_gate_a.find(gate_b_name); gate_a_it == gate_name_to_gate_a.end())
@@ -548,13 +550,37 @@ namespace hal
             const auto out_pins_a = netlist_a->get_top_module()->get_output_pin_names();
             const auto out_pins_b = netlist_b->get_top_module()->get_output_pin_names();
 
-            auto all_out_pins = out_pins_a;
-            all_out_pins.insert(all_out_pins.end(), out_pins_b.begin(), out_pins_b.end());
+            std::set<std::string> all_out_pins = utils::to_set(out_pins_a);
+            all_out_pins.insert(out_pins_b.begin(), out_pins_b.end());
+
+            // TODO remove debug print
+            // std::cout << "PINS A: " << std::endl;
+            // for (const auto& o : out_pins_a)
+            // {
+            //     std::cout << "\t" << o << std::endl;
+            // }
+            // std::cout << "PINS B: " << std::endl;
+            // for (const auto& o : out_pins_b)
+            // {
+            //     std::cout << "\t" << o << std::endl;
+            // }
+
 
             for (const auto& pin : all_out_pins)
             {
-                auto it_a = std::find(out_pins_a.begin(), out_pins_a.end(), pin);
-                if (it_a == out_pins_a.end())
+                const auto pin_a = netlist_a->get_top_module()->get_pin_by_name(pin);
+                if (pin_a == nullptr)
+                {
+                    log_warning("z3_utils",
+                                "netlist a with ID {} and netlist b with ID {} might not be equal: netlist b has output pin {} that does not exist in netlist a!",
+                                netlist_a->get_id(),
+                                netlist_b->get_id(),
+                                pin);
+                    continue;
+                }
+
+                const auto pin_b = netlist_b->get_top_module()->get_pin_by_name(pin);
+                if (pin_b == nullptr)
                 {
                     log_warning("z3_utils",
                                 "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
@@ -564,19 +590,9 @@ namespace hal
                     continue;
                 }
 
-                auto it_b = std::find(out_pins_b.begin(), out_pins_b.end(), pin);
-                if (it_b == out_pins_b.end())
-                {
-                    log_warning("z3_utils",
-                                "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
-                                netlist_a->get_id(),
-                                netlist_b->get_id(),
-                                pin);
-                    continue;
-                }
+                Net* net_a = pin_a->get_net();
+                Net* net_b = pin_b->get_net();
 
-                Net* net_a = netlist_a->get_top_module()->get_pin_by_name(pin)->get_net();
-                Net* net_b = netlist_b->get_top_module()->get_pin_by_name(pin)->get_net();
 
                 to_compare.insert({net_a, net_b});
             }

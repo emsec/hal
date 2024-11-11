@@ -24,6 +24,6 @@ namespace hal
 
     std::set<std::string> MachineLearningPlugin::get_dependencies() const
     {
-        return {};
+        return {"netlist_preprocessing"};
     }
 }    // namespace hal

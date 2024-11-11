@@ -28,11 +28,14 @@
 #include "hal_core/utilities/result.h"
 #include "z3++.h"
 
+#include <map>
 #include <vector>
 
 namespace hal
 {
+    class BooleanFunction;
     class Gate;
+    class GatePin;
     class Net;
 
     namespace z3_utils
@@ -47,6 +50,19 @@ namespace hal
          * @return The the z3 expression representation of combined Boolean function of the subgraph on success, an error otherwise.
          */
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx);
+
+
+        /**
+         * @brief Get the z3 expression representation of a combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * 
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @return The the z3 expression representation of combined Boolean function of the subgraph on success, an error otherwise.
+         */
+        Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx,  std::map<u32, z3::expr>& net_cache,
+            std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
 
         /**
          * @brief  Get the z3 expression representations of combined Boolean functions of a subgraph of combinational gates starting at the sources of the provided subgraph output nets.
