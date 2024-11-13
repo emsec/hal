@@ -2116,7 +2116,7 @@ namespace hal
                     {
                         const auto all_merged_nets_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_nets"));
 
-                        if (all_merged_nets_str.empty())
+                        if (!all_merged_nets_str.empty())
                         {
                             nlohmann::json merged_nets_json = nlohmann::json::parse(all_merged_nets_str);
                             merged_nets = merged_nets_json.get<std::vector<std::vector<std::string>>>();

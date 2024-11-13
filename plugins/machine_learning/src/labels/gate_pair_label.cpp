@@ -38,10 +38,10 @@ namespace hal
                         std::vector<netlist_preprocessing::indexed_identifier> index_information = j.get<std::vector<netlist_preprocessing::indexed_identifier>>();
 
                         // TODO remove
-                        if (!index_information.empty())
-                        {
-                            std::cout << "For gate " << g->get_id() << " found " <<index_information.front().identifier << " - " << index_information.front().index << " - " << index_information.front().distance << std::endl;
-                        }
+                        // if (!index_information.empty())
+                        // {
+                        //     std::cout << "For gate " << g->get_id() << " found " <<index_information.front().identifier << " - " << index_information.front().index << " - " << index_information.front().distance << std::endl;
+                        // }
 
                         // for each pin, only consider the index information with the least distance
                         std::map<std::string, u32> pin_to_min_distance;
@@ -184,6 +184,90 @@ namespace hal
 
                     return mbi;
                 }
+            
+                bool are_gates_considered_a_pair(const MultiBitInformation& mbi, const Gate* g_a, const Gate* g_b) 
+                {
+                    const auto it_a = mbi.gate_to_words.find(g_a);
+                    if (it_a == mbi.gate_to_words.end())
+                    {
+                        return false;
+                    }
+
+                    const auto it_b = mbi.gate_to_words.find(g_b);
+                    if (it_b == mbi.gate_to_words.end())
+                    {
+                        return false;
+                    } 
+
+                    const auto& words_a = it_a->second;
+                    const auto& words_b = it_b->second;
+
+                    // // only consider the smallest words a gate is part of
+                    // std::set<u32> sizes_a;
+                    // std::set<u32> sizes_b;
+
+                    // for (const auto& w_a : words_a)
+                    // {
+                    //     sizes_a.insert(mbi.word_to_gates.at(w_a).size());
+                    // }
+
+                    // for (const auto& w_b : words_b)
+                    // {
+                    //     sizes_b.insert(mbi.word_to_gates.at(w_b).size());
+                    // }
+
+                    // std::vector<std::pair<std::string, PinDirection>> filtered_words_a;
+                    // std::vector<std::pair<std::string, PinDirection>> filtered_words_b;
+
+                    // for (const auto& w_a : words_a)
+                    // {
+                    //     if (mbi.word_to_gates.at(w_a).size() == *(sizes_a.begin()))
+                    //     {
+                    //         filtered_words_a.push_back(w_a);
+                    //     }
+                    // }
+
+                    // for (const auto& w_b : words_b)
+                    // {
+                    //     if (mbi.word_to_gates.at(w_b).size() == *(sizes_b.begin()))
+                    //     {
+                    //         filtered_words_b.push_back(w_b);
+                    //     }
+                    // }
+
+                    // Alternative: Only consider two gates as a pair if they share all annotated index words
+                    std::set<std::pair<std::string, PinDirection>> filtered_words_a;
+                    std::set<std::pair<std::string, PinDirection>> filtered_words_b;
+
+                    for (const auto& w_a : words_a)
+                    {
+                        filtered_words_a.insert({std::get<0>(w_a), std::get<1>(w_a)});
+                    }
+
+                    for (const auto& w_b : words_b)
+                    {
+                        filtered_words_b.insert({std::get<0>(w_b), std::get<1>(w_b)});
+                    }
+
+                    // if (filtered_words_a == filtered_words_b)
+                    // {
+                    //     return true;
+                    // }
+
+
+                    for (const auto& wa : filtered_words_a)
+                    {
+                        for (const auto& wb : filtered_words_b)
+                        {
+                            if (wa == wb)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
             }    // namespace
 
             const MultiBitInformation& LabelContext::get_multi_bit_information()
@@ -225,8 +309,11 @@ namespace hal
                                     continue;
                                 }
 
-                                pairs.push_back({g, g_i});
-                                pos_gates.insert(g_i);
+                                if (are_gates_considered_a_pair(mbi, g, g_i))
+                                {
+                                    pairs.push_back({g, g_i});
+                                    pos_gates.insert(g_i);
+                                }
                             }
                         }
                     }
@@ -241,7 +328,7 @@ namespace hal
                     for (u32 i = 0; i < neg_count; i++)
                     {
                         const u32 start = std::rand() % gates.size();
-                        for (u32 idx = start; idx < start + gates.size(); idx = (idx + 1) % gates.size())
+                        for (u32 idx = start; idx < start + gates.size(); idx++)
                         {
                             const auto g_i = gates.at(idx % gates.size());
                             if (pos_gates.find(g_i) == pos_gates.end() && chosen_gates.find(g_i) == chosen_gates.end())
@@ -261,63 +348,9 @@ namespace hal
             {
                 const auto& mbi     = lc.get_multi_bit_information();
 
-                const auto it_a = mbi.gate_to_words.find(g_a);
-                if (it_a == mbi.gate_to_words.end())
+                if (are_gates_considered_a_pair(lc.get_multi_bit_information(), g_a, g_b))
                 {
-                    return {0};
-                }
-
-                const auto it_b = mbi.gate_to_words.find(g_b);
-                if (it_b == mbi.gate_to_words.end())
-                {
-                    return {0};
-                } 
-
-                const auto& words_a = it_a->second;
-                const auto& words_b = it_b->second;
-
-                // // only consider the smallest words a gate is part of
-                // std::set<u32> sizes_a;
-                // std::set<u32> sizes_b;
-
-                // for (const auto& w_a : words_a)
-                // {
-                //     sizes_a.insert(mbi.word_to_gates.at(w_a).size());
-                // }
-
-                // for (const auto& w_b : words_b)
-                // {
-                //     sizes_b.insert(mbi.word_to_gates.at(w_b).size());
-                // }
-
-                // std::vector<std::pair<std::string, PinDirection>> filtered_words_a;
-                // std::vector<std::pair<std::string, PinDirection>> filtered_words_b;
-
-                // for (const auto& w_a : words_a)
-                // {
-                //     if (mbi.word_to_gates.at(w_a).size() == *(sizes_a.begin()))
-                //     {
-                //         filtered_words_a.push_back(w_a);
-                //     }
-                // }
-
-                // for (const auto& w_b : words_b)
-                // {
-                //     if (mbi.word_to_gates.at(w_b).size() == *(sizes_b.begin()))
-                //     {
-                //         filtered_words_b.push_back(w_b);
-                //     }
-                // }
-
-                for (const auto& wa : words_a)
-                {
-                    for (const auto& wb : words_b)
-                    {
-                        if (wa == wb)
-                        {
-                            return {1};
-                        }
-                    }
+                    return {1};
                 }
 
                 return {0};
