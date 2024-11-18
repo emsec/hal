@@ -1,10 +1,9 @@
-#include "machine_learning/labels/gate_pair_label.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "nlohmann/json.hpp"
+#include "machine_learning/labels/gate_pair_label.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
+#include "nlohmann/json.hpp"
 
 #include <stdlib.h>
 
@@ -57,7 +56,6 @@ namespace hal
                             }
                         }
 
-
                         for (const auto& [name, index, _origin, pin, direction, distance] : index_information)
                         {
                             if (pin_to_min_distance.at(pin) == distance)
@@ -94,7 +92,8 @@ namespace hal
                         if (indices.size() != word.size())
                         {
                             // TODO return result
-                            log_error("machine_learning", "Found index double in word {}-{} - !", std::get<0>(name_direction), enum_to_string(std::get<1>(name_direction)), std::get<2>(name_direction));
+                            log_error(
+                                "machine_learning", "Found index double in word {}-{} - !", std::get<0>(name_direction), enum_to_string(std::get<1>(name_direction)), std::get<2>(name_direction));
 
                             // TODO remove
                             std::cout << "Insane Word: " << std::endl;
@@ -116,7 +115,8 @@ namespace hal
                             continue;
                         }
 
-                        std::cout << "Word [" << word.size() << "] " << std::get<0>(name_direction) << " - " << std::get<1>(name_direction) <<  " - " << std::get<2>(name_direction) << " : " << std::endl;
+                        std::cout << "Word [" << word.size() << "] " << std::get<0>(name_direction) << " - " << std::get<1>(name_direction) << " - " << std::get<2>(name_direction) << " : "
+                                  << std::endl;
                         for (const auto& [index, gate] : word)
                         {
                             std::cout << index << ": " << gate->get_id() << std::endl;
@@ -184,8 +184,8 @@ namespace hal
 
                     return mbi;
                 }
-            
-                bool are_gates_considered_a_pair(const MultiBitInformation& mbi, const Gate* g_a, const Gate* g_b) 
+
+                bool are_gates_considered_a_pair(const MultiBitInformation& mbi, const Gate* g_a, const Gate* g_b)
                 {
                     const auto it_a = mbi.gate_to_words.find(g_a);
                     if (it_a == mbi.gate_to_words.end())
@@ -197,7 +197,7 @@ namespace hal
                     if (it_b == mbi.gate_to_words.end())
                     {
                         return false;
-                    } 
+                    }
 
                     const auto& words_a = it_a->second;
                     const auto& words_b = it_b->second;
@@ -254,7 +254,6 @@ namespace hal
                     //     return true;
                     // }
 
-
                     for (const auto& wa : filtered_words_a)
                     {
                         for (const auto& wb : filtered_words_b)
@@ -280,7 +279,7 @@ namespace hal
                 return mbi.value();
             }
 
-            std::vector<std::pair<const Gate*, const Gate*>> SharedSignalGroup::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
+            Result<std::vector<std::pair<const Gate*, const Gate*>>> SharedSignalGroup::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
             {
                 const auto& mbi = lc.get_multi_bit_information();
 
@@ -322,7 +321,8 @@ namespace hal
                     const u64 pos_count = pos_gates.size();
                     const u64 neg_count = std::min(gates.size() - pos_count, pos_count);
 
-                    std::cout << "Gate ID: " << g->get_id() << "   " <<  pos_count << " vs. " << neg_count << std::endl;
+                    // TODO remove debug print
+                    // std::cout << "Gate ID: " << g->get_id() << "   " <<  pos_count << " vs. " << neg_count << std::endl;
 
                     std::set<Gate*> chosen_gates;
                     for (u32 i = 0; i < neg_count; i++)
@@ -341,34 +341,42 @@ namespace hal
                     }
                 }
 
-                return pairs;
+                return OK(pairs);
             };
 
-            std::vector<u32> SharedSignalGroup::calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SharedSignalGroup::calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const
             {
-                const auto& mbi     = lc.get_multi_bit_information();
+                const auto& mbi = lc.get_multi_bit_information();
 
                 if (are_gates_considered_a_pair(lc.get_multi_bit_information(), g_a, g_b))
                 {
-                    return {1};
+                    return OK({1});
                 }
 
-                return {0};
+                return OK({0});
             };
 
-            std::vector<std::vector<u32>> SharedSignalGroup::calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const
+            Result<std::vector<std::vector<u32>>> SharedSignalGroup::calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const
             {
                 std::vector<std::vector<u32>> labels;
 
-                for (const auto& p : gate_pairs)
+                for (const auto& gp : gate_pairs)
                 {
-                    labels.push_back(calculate_label(lc, p.first, p.second));
+                    const auto new_label = calculate_label(lc, gp.first, gp.second);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(),
+                                          "Cannot caluclate label for gate pair " + gp.first->get_name() + " with ID " + std::to_string(gp.first->get_id()) + " and " + gp.second->get_name()
+                                              + " with ID " + std::to_string(gp.second->get_id()));
+                    }
+
+                    labels.push_back(new_label.get());
                 }
 
-                return labels;
+                return OK(labels);
             }
 
-            std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>> SharedSignalGroup::calculate_labels(LabelContext& lc) const
+            Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> SharedSignalGroup::calculate_labels(LabelContext& lc) const
             {
                 const auto& mbi = lc.get_multi_bit_information();
 
@@ -427,7 +435,7 @@ namespace hal
                     }
                 }
 
-                return {pairs, labels};
+                return OK({pairs, labels});
             };
 
             namespace
@@ -449,7 +457,7 @@ namespace hal
                 }
             }    // namespace
 
-            std::vector<std::pair<const Gate*, const Gate*>> SharedConnection::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
+            Result<std::vector<std::pair<const Gate*, const Gate*>>> SharedConnection::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
             {
                 std::vector<std::pair<const Gate*, const Gate*>> pairs;
 
@@ -485,34 +493,42 @@ namespace hal
                     }
                 }
 
-                return pairs;
+                return OK(pairs);
             };
 
-            std::vector<u32> SharedConnection::calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SharedConnection::calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const
             {
                 const auto all_connected = get_all_connected_gates(g_a);
 
                 if (all_connected.find(g_b) == all_connected.end())
                 {
-                    return {0};
+                    return OK({0});
                 }
 
-                return {1};
+                return OK({1});
             };
 
-            std::vector<std::vector<u32>> SharedConnection::calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const
+            Result<std::vector<std::vector<u32>>> SharedConnection::calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const
             {
                 std::vector<std::vector<u32>> labels;
 
-                for (const auto& p : gate_pairs)
+                for (const auto& gp : gate_pairs)
                 {
-                    labels.push_back(calculate_label(lc, p.first, p.second));
+                    const auto new_label = calculate_label(lc, gp.first, gp.second);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(),
+                                          "Cannot caluclate label for gate pair " + gp.first->get_name() + " with ID " + std::to_string(gp.first->get_id()) + " and " + gp.second->get_name()
+                                              + " with ID " + std::to_string(gp.second->get_id()));
+                    }
+
+                    labels.push_back(new_label.get());
                 }
 
-                return labels;
+                return OK(labels);
             }
 
-            std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>> SharedConnection::calculate_labels(LabelContext& lc) const
+            Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> SharedConnection::calculate_labels(LabelContext& lc) const
             {
                 std::vector<std::pair<const Gate*, const Gate*>> pairs;
                 std::vector<std::vector<u32>> labels;
@@ -552,7 +568,7 @@ namespace hal
                     }
                 }
 
-                return {pairs, labels};
+                return OK({pairs, labels});
             };
         }    // namespace gate_pair_label
     }    // namespace machine_learning

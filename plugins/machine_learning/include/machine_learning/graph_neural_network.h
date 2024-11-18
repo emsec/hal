@@ -6,6 +6,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 #include "machine_learning/types.h"
 
 #include <vector>
@@ -59,7 +60,7 @@ namespace hal
          * @param[in] dir - The direction of the graph.
          * @returns A `NetlistGraph` representing the sequential connections within the netlist.
          */
-        NetlistGraph construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir);
+        Result<NetlistGraph> construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir);
 
         /**
          * @brief Annotates a netlist graph with features for machine learning tasks.

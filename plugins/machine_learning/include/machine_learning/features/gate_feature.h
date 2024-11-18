@@ -19,9 +19,9 @@ namespace hal
             {
             public:
                 FeatureContext() = delete;
-                FeatureContext(const Netlist* netlist) : nl(netlist) {};
+                FeatureContext(const Netlist* netlist) : nl(netlist){};
 
-                const NetlistAbstraction& get_sequential_abstraction();
+                const Result<NetlistAbstraction*> get_sequential_abstraction();
                 const std::vector<GateTypeProperty>& get_possible_gate_type_properties();
 
                 const Netlist* nl;
@@ -34,26 +34,26 @@ namespace hal
             class GateFeature
             {
             public:
-                virtual std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const = 0;
-                virtual std::string get_name() const                                                = 0;
+                virtual Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const = 0;
+                virtual std::string to_string() const                                                       = 0;
             };
 
             class ConnectedGlobalIOs : public GateFeature
             {
             public:
-                ConnectedGlobalIOs() {};
+                ConnectedGlobalIOs(){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
             };
 
             class DistanceGlobalIO : public GateFeature
             {
             public:
-                DistanceGlobalIO(const PinDirection& direction) : m_direction(direction) {};
+                DistanceGlobalIO(const PinDirection& direction) : m_direction(direction){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
 
             private:
                 const PinDirection m_direction;
@@ -62,10 +62,10 @@ namespace hal
             class SequentialDistanceGlobalIO : public GateFeature
             {
             public:
-                SequentialDistanceGlobalIO(const PinDirection& direction) : m_direction(direction) {};
+                SequentialDistanceGlobalIO(const PinDirection& direction) : m_direction(direction){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
 
             private:
                 const PinDirection m_direction;
@@ -74,28 +74,28 @@ namespace hal
             class IODegrees : public GateFeature
             {
             public:
-                IODegrees() {};
+                IODegrees(){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
             };
 
             class GateTypeOneHot : public GateFeature
             {
             public:
-                GateTypeOneHot() {};
+                GateTypeOneHot(){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
             };
 
             class NeighboringGateTypes : public GateFeature
             {
             public:
-                NeighboringGateTypes(const u32 depth, const PinDirection& direction) : m_depth(depth), m_direction(direction) {};
+                NeighboringGateTypes(const u32 depth, const PinDirection& direction) : m_depth(depth), m_direction(direction){};
 
-                std::vector<u32> calculate_feature(FeatureContext& fc, const Gate* g) const override;
-                std::string get_name() const override;
+                Result<std::vector<u32>> calculate_feature(FeatureContext& fc, const Gate* g) const override;
+                std::string to_string() const override;
 
             private:
                 const u32 m_depth;
@@ -113,11 +113,11 @@ namespace hal
             // distance to nearest shift register
             // distance to nearest bus register
 
-            std::vector<u32> build_feature_vec(const std::vector<const GateFeature*>& features, const Gate* g);
-            std::vector<u32> build_feature_vec(FeatureContext& fc, const std::vector<const GateFeature*>& features, const Gate* g);
+            Result<std::vector<u32>> build_feature_vec(const std::vector<const GateFeature*>& features, const Gate* g);
+            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GateFeature*>& features, const Gate* g);
 
-            std::vector<std::vector<u32>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
-            std::vector<std::vector<u32>> build_feature_vecs(FeatureContext& fc, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(FeatureContext& fc, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
         }    // namespace gate_feature
     }    // namespace machine_learning
 }    // namespace hal

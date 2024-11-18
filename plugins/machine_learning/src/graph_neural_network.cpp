@@ -1,11 +1,10 @@
-#include "machine_learning/graph_neural_network.h"
-
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/utils.h"
 #include "machine_learning/features/gate_feature.h"
+#include "machine_learning/graph_neural_network.h"
 
 #include <vector>
 
@@ -65,7 +64,7 @@ namespace hal
             return {{sources, destinations}, dir};
         }
 
-        NetlistGraph construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
+        Result<NetlistGraph> construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
         {
             std::unordered_map<const Gate*, u32> gate_to_idx;
             // init gate to index mapping
@@ -74,8 +73,7 @@ namespace hal
                 const Gate* g = gates.at(g_idx);
                 if (!g->get_type()->has_property(GateTypeProperty::sequential))
                 {
-                    log_error("machine_learning", "got not sequnetial gate in gate vector for sequential netlist graph");
-                    return {};
+                    return ERR("cannot construct sequential netlist graph: gates contain non sequential gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
                 }
 
                 gate_to_idx.insert({g, g_idx});
@@ -89,7 +87,12 @@ namespace hal
                 return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
             };
 
-            const auto sequential_abstraction = NetlistAbstraction(nl, gates, true, endpoint_filter, endpoint_filter);
+            const auto sequential_abstraction_res = NetlistAbstraction::create(nl, gates, true, endpoint_filter, endpoint_filter);
+            if (sequential_abstraction_res.is_error())
+            {
+                return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
+            }
+            const auto sequential_abstraction = sequential_abstraction_res.get();
 
             // edge list
             std::vector<u32> sources;
@@ -100,7 +103,13 @@ namespace hal
                 const u32 g_idx = gate_to_idx.at(g);
                 if (dir == GraphDirection::directed_backward)
                 {
-                    for (const auto& pre : sequential_abstraction.get_unique_predecessors(g))
+                    const auto unique_predecessors = sequential_abstraction.get_unique_predecessors(g);
+                    if (unique_predecessors.is_error())
+                    {
+                        return ERR_APPEND(unique_predecessors.get_error(),
+                                          "cannot construct sequential netlist graph: failed to find unique predecessors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+                    for (const auto& pre : unique_predecessors.get())
                     {
                         sources.push_back(gate_to_idx.at(pre));
                         destinations.push_back(g_idx);
@@ -109,7 +118,13 @@ namespace hal
 
                 if (dir == GraphDirection::directed_forward)
                 {
-                    for (const auto& suc : sequential_abstraction.get_unique_successors(g))
+                    const auto unique_successors = sequential_abstraction.get_unique_successors(g);
+                    if (unique_successors.is_error())
+                    {
+                        return ERR_APPEND(unique_successors.get_error(),
+                                          "cannot construct sequential netlist graph: failed to find unique successors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+                    for (const auto& suc : unique_successors.get())
                     {
                         sources.push_back(g_idx);
                         destinations.push_back(gate_to_idx.at(suc));
@@ -118,7 +133,13 @@ namespace hal
 
                 if (dir == GraphDirection::bidirectional)
                 {
-                    for (const auto& suc : sequential_abstraction.get_unique_successors(g))
+                    const auto unique_successors = sequential_abstraction.get_unique_successors(g);
+                    if (unique_successors.is_error())
+                    {
+                        return ERR_APPEND(unique_successors.get_error(),
+                                          "cannot construct sequential netlist graph: failed to find unique successors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+                    for (const auto& suc : unique_successors.get())
                     {
                         sources.push_back(g_idx);
                         destinations.push_back(gate_to_idx.at(suc));
@@ -129,7 +150,7 @@ namespace hal
                 }
             }
 
-            return {{sources, destinations}, dir};
+            return OK({{sources, destinations}, dir});
         }
 
         void annotate_netlist_graph(Netlist* nl, const std::vector<Gate*>& gates, const NetlistGraph& nlg, const std::vector<std::vector<u32>>& node_features)

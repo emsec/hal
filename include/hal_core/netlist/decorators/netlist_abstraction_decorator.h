@@ -48,7 +48,7 @@ namespace hal
     {
     public:
         /**
-         * @brief Constructs a `NetlistAbstraction` from a set of gates.
+         * @brief Creates a `NetlistAbstraction` from a set of gates.
          *
          * @param[in] netlist - The netlist to abstract.
          * @param[in] gates - The gates to include in the abstraction.
@@ -56,11 +56,11 @@ namespace hal
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          */
-        NetlistAbstraction(const Netlist* netlist,
-                           const std::vector<Gate*>& gates,
-                           const bool include_all_netlist_gates                                                       = false,
-                           const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                           const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
+        static Result<NetlistAbstraction> create(const Netlist* netlist,
+                                                 const std::vector<Gate*>& gates,
+                                                 const bool include_all_netlist_gates                                                       = false,
+                                                 const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                 const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
 
         /**
          * @brief Gets the predecessors of a gate within the abstraction.
@@ -68,7 +68,7 @@ namespace hal
          * @param[in] gate - The gate to get predecessors for.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<Endpoint*> get_predecessors(const Gate* gate) const;
+        Result<std::vector<Endpoint*>> get_predecessors(const Gate* gate) const;
 
         /**
          * @brief Gets the predecessors of an endpoint within the abstraction.
@@ -76,7 +76,7 @@ namespace hal
          * @param[in] endpoint - The endpoint to get predecessors for.
          * @returns A vector of predecessor endpoints.
          */
-        std::vector<Endpoint*> get_predecessors(const Endpoint* endpoint) const;
+        Result<std::vector<Endpoint*>> get_predecessors(const Endpoint* endpoint) const;
 
         /**
          * @brief Gets the unique predecessor gates of a gate within the abstraction.
@@ -84,7 +84,7 @@ namespace hal
          * @param[in] gate - The gate to get unique predecessors for.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<Gate*> get_unique_predecessors(const Gate* gate) const;
+        Result<std::vector<Gate*>> get_unique_predecessors(const Gate* gate) const;
 
         /**
          * @brief Gets the unique predecessor gates of an endpoint within the abstraction.
@@ -92,7 +92,7 @@ namespace hal
          * @param[in] endpoint - The endpoint to get unique predecessors for.
          * @returns A vector of unique predecessor gates.
          */
-        std::vector<Gate*> get_unique_predecessors(const Endpoint* endpoint) const;
+        Result<std::vector<Gate*>> get_unique_predecessors(const Endpoint* endpoint) const;
 
         /**
          * @brief Gets the successors of a gate within the abstraction.
@@ -100,7 +100,7 @@ namespace hal
          * @param[in] gate - The gate to get successors for.
          * @returns A vector of successor endpoints.
          */
-        std::vector<Endpoint*> get_successors(const Gate* gate) const;
+        Result<std::vector<Endpoint*>> get_successors(const Gate* gate) const;
 
         /**
          * @brief Gets the successors of an endpoint within the abstraction.
@@ -108,7 +108,7 @@ namespace hal
          * @param[in] endpoint - The endpoint to get successors for.
          * @returns A vector of successor endpoints.
          */
-        std::vector<Endpoint*> get_successors(const Endpoint* endpoint) const;
+        Result<std::vector<Endpoint*>> get_successors(const Endpoint* endpoint) const;
 
         /**
          * @brief Gets the unique successor gates of a gate within the abstraction.
@@ -116,7 +116,7 @@ namespace hal
          * @param[in] gate - The gate to get unique successors for.
          * @returns A vector of unique successor gates.
          */
-        std::vector<Gate*> get_unique_successors(const Gate* gate) const;
+        Result<std::vector<Gate*>> get_unique_successors(const Gate* gate) const;
 
         /**
          * @brief Gets the unique successor gates of an endpoint within the abstraction.
@@ -124,7 +124,7 @@ namespace hal
          * @param[in] endpoint - The endpoint to get unique successors for.
          * @returns A vector of unique successor gates.
          */
-        std::vector<Gate*> get_unique_successors(const Endpoint* endpoint) const;
+        Result<std::vector<Gate*>> get_unique_successors(const Endpoint* endpoint) const;
 
         /**
          * @brief Gets the global input nets that are predecessors of an endpoint.
@@ -132,7 +132,7 @@ namespace hal
          * @param[in] endpoint - The endpoint to get global input predecessors for.
          * @returns A vector of global input nets.
          */
-        std::vector<Net*> get_global_input_predecessors(const Endpoint* endpoint) const;
+        Result<std::vector<Net*>> get_global_input_predecessors(const Endpoint* endpoint) const;
 
         /**
          * @brief Gets the global output nets that are successors of an endpoint.
@@ -140,9 +140,11 @@ namespace hal
          * @param[in] endpoint - The endpoint to get global output successors for.
          * @returns A vector of global output nets.
          */
-        std::vector<Net*> get_global_output_successors(const Endpoint* endpoint) const;
+        Result<std::vector<Net*>> get_global_output_successors(const Endpoint* endpoint) const;
 
     private:
+        NetlistAbstraction() = default;
+
         /**
          * @brief Maps endpoints to their successor endpoints within the abstraction.
          */
@@ -188,6 +190,7 @@ namespace hal
          * @param[in] start - The starting endpoint.
          * @param[in] target_filter - A filter function to determine the target endpoints.
          * @param[in] direction - The direction to search in (`PinDirection::input`, `PinDirection::output`, or `PinDirection::inout`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and an optional unsigned integer representing the shortest distance on success, an error otherwise.
@@ -195,6 +198,7 @@ namespace hal
         Result<std::optional<u32>> get_shortest_path_distance(Endpoint* start,
                                                               const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                               const PinDirection& direction,
+                                                              const bool directed                                                                        = true,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -206,6 +210,7 @@ namespace hal
          * @param[in] start - The starting gate.
          * @param[in] target_filter - A filter function to determine the target endpoints.
          * @param[in] direction - The direction to search in (`PinDirection::input`, `PinDirection::output`, or `PinDirection::inout`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and an optional unsigned integer representing the shortest distance on success, an error otherwise.
@@ -213,6 +218,7 @@ namespace hal
         Result<std::optional<u32>> get_shortest_path_distance(const Gate* start,
                                                               const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                               const PinDirection& direction,
+                                                              const bool directed                                                                        = true,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -224,6 +230,7 @@ namespace hal
          * @param[in] start - The starting gate.
          * @param[in] target_gate - The target gate.
          * @param[in] direction - The direction to search in (`PinDirection::input`, `PinDirection::output`, or `PinDirection::inout`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and an optional unsigned integer representing the shortest distance on success, an error otherwise.
@@ -231,6 +238,7 @@ namespace hal
         Result<std::optional<u32>> get_shortest_path_distance(const Gate* start,
                                                               const Gate* target_gate,
                                                               const PinDirection& direction,
+                                                              const bool directed                                                                        = true,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -241,16 +249,18 @@ namespace hal
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] endpoint - The starting endpoint.
-         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluates to `true`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates(Endpoint* endpoint,
-                                                        const PinDirection& direction,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
+                                                        const PinDirection& direction,
+                                                        const bool directed                                                                        = true,
                                                         bool continue_on_match                                                                     = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
@@ -262,16 +272,18 @@ namespace hal
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] gate - The starting gate.
-         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluates to `true`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates(const Gate* gate,
-                                                        const PinDirection& direction,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
+                                                        const PinDirection& direction,
+                                                        const bool directed                                                                        = true,
                                                         bool continue_on_match                                                                     = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
@@ -283,16 +295,18 @@ namespace hal
          * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] endpoint - The starting endpoint.
-         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_mismatch - Set `true` to continue even if `target_gate_filter` evaluates to `false`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(Endpoint* endpoint,
-                                                              const PinDirection& direction,
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
+                                                              const PinDirection& direction,
+                                                              const bool directed                                                                        = true,
                                                               bool continue_on_mismatch                                                                  = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
@@ -304,16 +318,18 @@ namespace hal
          * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] gate - The starting gate.
-         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_mismatch - Set `true` to continue even if `target_gate_filter` evaluates to `false`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(const Gate* gate,
-                                                              const PinDirection& direction,
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
+                                                              const PinDirection& direction,
+                                                              const bool directed                                                                        = true,
                                                               bool continue_on_mismatch                                                                  = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
@@ -325,6 +341,7 @@ namespace hal
          * @param[in] start - The starting endpoints.
          * @param[in] target_filter - A filter function to determine the target endpoints.
          * @param[in] direction - The direction to search in.
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and an optional unsigned integer representing the shortest distance on success, an error otherwise.
@@ -332,6 +349,7 @@ namespace hal
         Result<std::optional<u32>> get_shortest_path_distance_internal(const std::vector<Endpoint*>& start,
                                                                        const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                                        const PinDirection& direction,
+                                                                       const bool directed                                                                  = true,
                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -339,34 +357,38 @@ namespace hal
          * @brief Internal method to traverse the netlist abstraction and return matching gates based on the provided filters.
          *
          * @param[in] start - The starting endpoints.
-         * @param[in] direction - The direction to search in.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in.
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_match - Determines whether to continue traversal after a match.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_internal(const std::vector<Endpoint*>& start,
-                                                                 const PinDirection& direction,
                                                                  const std::function<bool(const Gate*)>& target_gate_filter,
-                                                                 bool continue_on_match,
-                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const;
+                                                                 const PinDirection& direction,
+                                                                 const bool directed                                                                  = true,
+                                                                 bool continue_on_match                                                               = false,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * @brief Internal method to traverse the netlist abstraction and return matching gates until certain conditions are met.
          *
          * @param[in] start - The starting endpoints.
-         * @param[in] direction - The direction to search in.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in.
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
          * @param[in] continue_on_mismatch - Determines whether to continue traversal after a mismatch.
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until_internal(const std::vector<Endpoint*>& start,
-                                                                       const PinDirection& direction,
                                                                        const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                       const PinDirection& direction,
+                                                                       const bool directed                                                                        = true,
                                                                        bool continue_on_mismatch                                                                  = false,
                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;

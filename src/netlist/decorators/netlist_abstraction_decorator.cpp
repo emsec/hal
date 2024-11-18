@@ -1,23 +1,24 @@
 
 
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
-
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
 namespace hal
 {
-    NetlistAbstraction::NetlistAbstraction(const Netlist* netlist,
-                                           const std::vector<Gate*>& gates,
-                                           const bool include_all_netlist_gates,
-                                           const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
-                                           const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
+    Result<NetlistAbstraction> NetlistAbstraction::create(const Netlist* netlist,
+                                                          const std::vector<Gate*>& gates,
+                                                          const bool include_all_netlist_gates,
+                                                          const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                          const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
     {
         const auto nl_trav_dec = NetlistTraversalDecorator(*netlist);
 
         // transform gates into set to check fast if a gate is part of abstraction
         const auto gates_set = utils::to_unordered_set(gates);
+
+        auto new_abstraction = NetlistAbstraction();
 
         for (const Gate* gate : include_all_netlist_gates ? netlist->get_gates() : gates)
         {
@@ -27,7 +28,7 @@ namespace hal
             // gather all successors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())
             {
-                m_successors.insert({ep_out, {}});
+                new_abstraction.m_successors.insert({ep_out, {}});
                 const auto successors = nl_trav_dec.get_next_matching_endpoints(
                     ep_out,
                     true,
@@ -38,104 +39,120 @@ namespace hal
 
                 if (successors.is_error())
                 {
-                    log_error("NetlistAbstractionDecorator", "cannot create netlist abstraction: {}", successors.get_error().get());
+                    return ERR_APPEND(successors.get_error(),
+                                      "cannot build netlist abstraction: failed to gather succesor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
                 }
 
                 for (Endpoint* ep : successors.get())
                 {
-                    m_successors.at(ep_out).push_back(ep);
+                    new_abstraction.m_successors.at(ep_out).push_back(ep);
                 }
             }
 
             // gather all global output succesors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())
             {
-                m_global_output_successors.insert({ep_out, {}});
+                new_abstraction.m_global_output_successors.insert({ep_out, {}});
 
                 const auto destinations = nl_trav_dec.get_next_matching_endpoints(
                     ep_out, true, [](const auto& ep) { return ep->is_source_pin() && ep->get_net()->is_global_output_net(); }, false, exit_endpoint_filter, entry_endpoint_filter);
 
                 if (destinations.is_error())
                 {
-                    log_error("NetlistAbstractionDecorator", "cannot create netlist abstraction: {}", destinations.get_error().get());
+                    return ERR_APPEND(destinations.get_error(),
+                                      "cannot build netlist abstraction: failed to gather global succesor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
                 }
 
                 for (const auto* ep : destinations.get())
                 {
-                    m_global_output_successors.at(ep_out).push_back({ep->get_net()});
+                    new_abstraction.m_global_output_successors.at(ep_out).push_back({ep->get_net()});
                 }
             }
 
             // gather all predecessors
             for (Endpoint* ep_in : gate->get_fan_in_endpoints())
             {
-                m_predecessors.insert({ep_in, {}});
+                new_abstraction.m_predecessors.insert({ep_in, {}});
 
                 const auto predecessors =
                     nl_trav_dec.get_next_matching_endpoints(ep_in, false, [gates_set](const auto& ep) { return ep->is_source_pin() && gates_set.find(ep->get_gate()) != gates_set.end(); });
 
                 if (predecessors.is_error())
                 {
-                    log_error("NetlistAbstractionDecorator", "cannot create netlist abstraction: {}", predecessors.get_error().get());
+                    return ERR_APPEND(predecessors.get_error(),
+                                      "cannot build netlist abstraction: failed to gather predecessor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
                 }
 
                 for (Endpoint* ep : predecessors.get())
                 {
-                    m_predecessors.at(ep_in).push_back(ep);
+                    new_abstraction.m_predecessors.at(ep_in).push_back(ep);
                 }
             }
 
             // gather all global input predecessors
             for (Endpoint* ep_in : gate->get_fan_in_endpoints())
             {
-                m_global_input_predecessors.insert({ep_in, {}});
+                new_abstraction.m_global_input_predecessors.insert({ep_in, {}});
 
                 const auto predecessors = nl_trav_dec.get_next_matching_endpoints(ep_in, false, [](const auto& ep) { return ep->is_destination_pin() && ep->get_net()->is_global_input_net(); });
 
                 if (predecessors.is_error())
                 {
-                    log_error("NetlistAbstractionDecorator", "cannot create netlist abstraction: {}", predecessors.get_error().get());
+                    return ERR_APPEND(predecessors.get_error(),
+                                      "cannot build netlist abstraction: failed to gather global predecessor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
                 }
 
                 for (const auto* ep : predecessors.get())
                 {
-                    m_global_input_predecessors.at(ep_in).push_back({ep->get_net()});
+                    new_abstraction.m_global_input_predecessors.at(ep_in).push_back({ep->get_net()});
                 }
             }
         }
 
-        return;
+        return OK(new_abstraction);
     }
 
-    std::vector<Endpoint*> NetlistAbstraction::get_predecessors(const Gate* gate) const
+    Result<std::vector<Endpoint*>> NetlistAbstraction::get_predecessors(const Gate* gate) const
     {
         std::vector<Endpoint*> predecessors;
         for (auto* ep : gate->get_fan_out_endpoints())
         {
             const auto new_predecessors = get_predecessors(ep);
-            predecessors.insert(predecessors.end(), new_predecessors.begin(), new_predecessors.end());
+            if (new_predecessors.is_error())
+            {
+                return ERR_APPEND(new_predecessors.get_error(), "failed to get predecessors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            predecessors.insert(predecessors.end(), new_predecessors.get().begin(), new_predecessors.get().end());
         }
 
-        return predecessors;
+        return OK(predecessors);
     }
 
-    std::vector<Endpoint*> NetlistAbstraction::get_predecessors(const Endpoint* endpoint) const
+    Result<std::vector<Endpoint*>> NetlistAbstraction::get_predecessors(const Endpoint* endpoint) const
     {
         const auto it = m_predecessors.find(endpoint);
         if (it == m_predecessors.end())
         {
-            log_error("netlist_abstraction_decorator", "Endpoint does not have any predecessor edges in the abstraction!");
-            return {};
+            return ERR("Found no predecessors for endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id()) + " and at pin "
+                       + endpoint->get_pin()->get_name() + " in netlist abstraction");
         }
-        return it->second;
+        return OK(it->second);
     }
 
-    std::vector<Gate*> NetlistAbstraction::get_unique_predecessors(const Gate* gate) const
+    Result<std::vector<Gate*>> NetlistAbstraction::get_unique_predecessors(const Gate* gate) const
     {
         std::vector<Gate*> predecessors;
         for (auto* ep : gate->get_fan_out_endpoints())
         {
-            for (const auto* pred_ep : get_predecessors(ep))
+            const auto new_predecessors = get_predecessors(ep);
+            if (new_predecessors.is_error())
+            {
+                return ERR_APPEND(new_predecessors.get_error(),
+                                  "failed to get unique predecessors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            for (const auto* pred_ep : new_predecessors.get())
             {
                 predecessors.push_back(pred_ep->get_gate());
             }
@@ -144,13 +161,21 @@ namespace hal
         std::sort(predecessors.begin(), predecessors.end());
         predecessors.erase(std::unique(predecessors.begin(), predecessors.end()), predecessors.end());
 
-        return predecessors;
+        return OK(predecessors);
     }
 
-    std::vector<Gate*> NetlistAbstraction::get_unique_predecessors(const Endpoint* endpoint) const
+    Result<std::vector<Gate*>> NetlistAbstraction::get_unique_predecessors(const Endpoint* endpoint) const
     {
         std::vector<Gate*> predecessors;
-        for (const auto* pred_ep : get_predecessors(endpoint))
+        const auto new_predecessors = get_predecessors(endpoint);
+        if (new_predecessors.is_error())
+        {
+            return ERR_APPEND(new_predecessors.get_error(),
+                              "failed to get unique predecessors of endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id())
+                                  + " and at pin " + endpoint->get_pin()->get_name() + " in netlist abstraction");
+        }
+
+        for (const auto* pred_ep : new_predecessors.get())
         {
             predecessors.push_back(pred_ep->get_gate());
         }
@@ -158,38 +183,49 @@ namespace hal
         std::sort(predecessors.begin(), predecessors.end());
         predecessors.erase(std::unique(predecessors.begin(), predecessors.end()), predecessors.end());
 
-        return predecessors;
+        return OK(predecessors);
     }
 
-    std::vector<Endpoint*> NetlistAbstraction::get_successors(const Gate* gate) const
+    Result<std::vector<Endpoint*>> NetlistAbstraction::get_successors(const Gate* gate) const
     {
         std::vector<Endpoint*> successors;
         for (auto* ep : gate->get_fan_in_endpoints())
         {
-            const auto new_successors = get_successors(ep);
-            successors.insert(successors.end(), new_successors.begin(), new_successors.end());
+            const auto new_successors = get_predecessors(ep);
+            if (new_successors.is_error())
+            {
+                return ERR_APPEND(new_successors.get_error(), "failed to get successors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            successors.insert(successors.end(), new_successors.get().begin(), new_successors.get().end());
         }
 
-        return successors;
+        return OK(successors);
     }
 
-    std::vector<Endpoint*> NetlistAbstraction::get_successors(const Endpoint* endpoint) const
+    Result<std::vector<Endpoint*>> NetlistAbstraction::get_successors(const Endpoint* endpoint) const
     {
         const auto it = m_successors.find(endpoint);
         if (it == m_successors.end())
         {
-            log_error("netlist_abstraction_decorator", "Endpoint does not have any successor edges in the abstraction!");
-            return {};
+            return ERR("Found no successors for endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id()) + " and at pin "
+                       + endpoint->get_pin()->get_name() + " in netlist abstraction");
         }
-        return it->second;
+        return OK(it->second);
     }
 
-    std::vector<Gate*> NetlistAbstraction::get_unique_successors(const Gate* gate) const
+    Result<std::vector<Gate*>> NetlistAbstraction::get_unique_successors(const Gate* gate) const
     {
         std::vector<Gate*> successors;
         for (auto* ep : gate->get_fan_in_endpoints())
         {
-            for (const auto* succ_ep : get_successors(ep))
+            const auto new_successors = get_successors(ep);
+            if (new_successors.is_error())
+            {
+                return ERR_APPEND(new_successors.get_error(), "failed to get unique successors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            for (const auto* succ_ep : new_successors.get())
             {
                 successors.push_back(succ_ep->get_gate());
             }
@@ -198,13 +234,21 @@ namespace hal
         std::sort(successors.begin(), successors.end());
         successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
 
-        return successors;
+        return OK(successors);
     }
 
-    std::vector<Gate*> NetlistAbstraction::get_unique_successors(const Endpoint* endpoint) const
+    Result<std::vector<Gate*>> NetlistAbstraction::get_unique_successors(const Endpoint* endpoint) const
     {
         std::vector<Gate*> successors;
-        for (const auto* succ_ep : get_successors(endpoint))
+        const auto new_successors = get_successors(endpoint);
+        if (new_successors.is_error())
+        {
+            return ERR_APPEND(new_successors.get_error(),
+                              "failed to get unique successors of endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id()) + " and at pin "
+                                  + endpoint->get_pin()->get_name() + " in netlist abstraction");
+        }
+
+        for (const auto* succ_ep : new_successors.get())
         {
             successors.push_back(succ_ep->get_gate());
         }
@@ -212,36 +256,38 @@ namespace hal
         std::sort(successors.begin(), successors.end());
         successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
 
-        return successors;
+        return OK(successors);
     }
 
-    std::vector<Net*> NetlistAbstraction::get_global_input_predecessors(const Endpoint* endpoint) const
+    Result<std::vector<Net*>> NetlistAbstraction::get_global_input_predecessors(const Endpoint* endpoint) const
     {
         const auto it = m_global_input_predecessors.find(endpoint);
         if (it == m_global_input_predecessors.end())
         {
-            log_error("netlist_abstraction_decorator", "Endpoint does not have any global input predecessor edges in the abstraction!");
-            return {};
+            return ERR("found no global input predecessors of endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id()) + " and at pin "
+                       + endpoint->get_pin()->get_name() + " in netlist abstraction");
         }
-        return it->second;
+
+        return OK(it->second);
     }
 
-    std::vector<Net*> NetlistAbstraction::get_global_output_successors(const Endpoint* endpoint) const
+    Result<std::vector<Net*>> NetlistAbstraction::get_global_output_successors(const Endpoint* endpoint) const
     {
         const auto it = m_global_output_successors.find(endpoint);
         if (it == m_global_output_successors.end())
         {
-            log_error("netlist_abstraction_decorator", "Endpoint does not have any global output successor edges in the abstraction!");
-            return {};
+            return ERR("found no global output successors of endpoint at gate " + endpoint->get_gate()->get_name() + " with ID " + std::to_string(endpoint->get_gate()->get_id()) + " and at pin "
+                       + endpoint->get_pin()->get_name() + " in netlist abstraction");
         }
-        return it->second;
+        return OK(it->second);
     }
 
-    NetlistAbstractionDecorator::NetlistAbstractionDecorator(const hal::NetlistAbstraction& abstraction) : m_abstraction(abstraction) {};
+    NetlistAbstractionDecorator::NetlistAbstractionDecorator(const hal::NetlistAbstraction& abstraction) : m_abstraction(abstraction){};
 
     Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance_internal(const std::vector<Endpoint*>& start,
                                                                                                 const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                                                                 const PinDirection& direction,
+                                                                                                const bool directed,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
@@ -264,10 +310,11 @@ namespace hal
 
                 if (target_filter(start_ep, m_abstraction))
                 {
-                    return OK(distance);
+                    return OK(std::optional<u32>(distance));
                 }
 
                 current.push_back(start_ep);
+                visited.insert(start_ep);
             }
 
             while (true)
@@ -276,7 +323,20 @@ namespace hal
 
                 for (const auto& exit_ep : current)
                 {
-                    for (const auto& entry_ep : (direction == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep))
+                    // currently only works for input and output pins
+                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
+                    {
+                        return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                                   + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                    }
+
+                    const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
+                    if (entry_eps.is_error())
+                    {
+                        return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
+                    }
+
+                    for (const auto& entry_ep : entry_eps.get())
                     {
                         if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
                         {
@@ -290,7 +350,18 @@ namespace hal
 
                         const auto next_g = entry_ep->get_gate();
 
-                        for (const auto& next_ep : (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints())
+                        std::vector<Endpoint*> next_eps;
+                        if (directed)
+                        {
+                            next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
+                        }
+                        else
+                        {
+                            next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
+                            next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
+                        }
+
+                        for (const auto& next_ep : next_eps)
                         {
                             if (const auto it = visited.find(next_ep); it != visited.end())
                             {
@@ -322,18 +393,18 @@ namespace hal
                 next.clear();
             }
 
-            return OK({});
+            return OK(std::nullopt);
         }
 
         if (direction == PinDirection::inout)
         {
-            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, exit_endpoint_filter, entry_endpoint_filter);
+            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, true, exit_endpoint_filter, entry_endpoint_filter);
             if (res_backward.is_error())
             {
                 return res_backward;
             }
 
-            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, exit_endpoint_filter, entry_endpoint_filter);
+            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, true, exit_endpoint_filter, entry_endpoint_filter);
             if (res_forward.is_error())
             {
                 return res_forward;
@@ -371,31 +442,34 @@ namespace hal
     Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance(Endpoint* start,
                                                                                        const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                                                        const PinDirection& direction,
+                                                                                       const bool directed,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         if (start->get_pin()->get_direction() != direction)
         {
-            return get_shortest_path_distance(start->get_gate(), target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+            return get_shortest_path_distance(start->get_gate(), target_filter, direction, directed, exit_endpoint_filter, entry_endpoint_filter);
         }
 
-        return get_shortest_path_distance_internal({start}, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+        return get_shortest_path_distance_internal({start}, target_filter, direction, true, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance(const Gate* start,
                                                                                        const std::function<bool(const Endpoint*, const NetlistAbstraction&)>& target_filter,
                                                                                        const PinDirection& direction,
+                                                                                       const bool directed,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         const auto start_endpoints = (direction == PinDirection::output) ? start->get_fan_out_endpoints() : start->get_fan_in_endpoints();
 
-        return get_shortest_path_distance_internal(start_endpoints, target_filter, direction, exit_endpoint_filter, entry_endpoint_filter);
+        return get_shortest_path_distance_internal(start_endpoints, target_filter, direction, directed, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::optional<u32>> NetlistAbstractionDecorator::get_shortest_path_distance(const Gate* start,
                                                                                        const Gate* target,
                                                                                        const PinDirection& direction,
+                                                                                       const bool directed,
                                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
     {
@@ -406,13 +480,15 @@ namespace hal
                 return ep->get_gate() == target;
             },
             direction,
+            directed,
             exit_endpoint_filter,
             entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_internal(const std::vector<Endpoint*>& start,
-                                                                                          const PinDirection& direction,
                                                                                           const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                          const PinDirection& direction,
+                                                                                          const bool directed,
                                                                                           bool continue_on_match,
                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -434,6 +510,7 @@ namespace hal
             }
 
             current.push_back(start_ep);
+            visited.insert(start_ep);
         }
 
         while (true)
@@ -442,7 +519,20 @@ namespace hal
 
             for (const auto& exit_ep : current)
             {
-                for (const auto& entry_ep : (direction == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep))
+                // currently only works for input and output pins
+                if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
+                {
+                    return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                               + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                }
+
+                const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
+                if (entry_eps.is_error())
+                {
+                    return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
+                }
+
+                for (const auto& entry_ep : entry_eps.get())
                 {
                     if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
                     {
@@ -461,7 +551,18 @@ namespace hal
                         }
                     }
 
-                    for (const auto& next_ep : (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints())
+                    std::vector<Endpoint*> next_eps;
+                    if (directed)
+                    {
+                        next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
+                    }
+                    else
+                    {
+                        next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
+                        next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
+                    }
+
+                    for (const auto& next_ep : next_eps)
                     {
                         if (const auto it = visited.find(next_ep); it != visited.end())
                         {
@@ -492,8 +593,9 @@ namespace hal
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates(Endpoint* endpoint,
-                                                                                 const PinDirection& direction,
                                                                                  const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                 const PinDirection& direction,
+                                                                                 const bool directed,
                                                                                  bool continue_on_match,
                                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -510,15 +612,16 @@ namespace hal
 
         if (endpoint->get_pin()->get_direction() != direction)
         {
-            return get_next_matching_gates(endpoint->get_gate(), direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+            return get_next_matching_gates(endpoint->get_gate(), target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
         }
 
-        return get_next_matching_gates_internal({endpoint}, direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+        return get_next_matching_gates_internal({endpoint}, target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates(const Gate* gate,
-                                                                                 const PinDirection& direction,
                                                                                  const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                 const PinDirection& direction,
+                                                                                 const bool directed,
                                                                                  bool continue_on_match,
                                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -544,12 +647,13 @@ namespace hal
             start.push_back(exit_ep);
         }
 
-        return get_next_matching_gates_internal(start, direction, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+        return get_next_matching_gates_internal(start, target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until_internal(const std::vector<Endpoint*>& start,
-                                                                                                const PinDirection& direction,
                                                                                                 const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                                const PinDirection& direction,
+                                                                                                const bool directed,
                                                                                                 bool continue_on_mismatch,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -571,6 +675,7 @@ namespace hal
             }
 
             current.push_back(start_ep);
+            visited.insert(start_ep);
         }
 
         while (true)
@@ -579,7 +684,20 @@ namespace hal
 
             for (const auto& exit_ep : current)
             {
-                for (const auto& entry_ep : (direction == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep))
+                // currently only works for input and output pins
+                if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
+                {
+                    return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                               + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                }
+
+                const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
+                if (entry_eps.is_error())
+                {
+                    return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
+                }
+
+                for (const auto& entry_ep : entry_eps.get())
                 {
                     if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
                     {
@@ -598,7 +716,18 @@ namespace hal
                         }
                     }
 
-                    for (const auto& next_ep : (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints())
+                    std::vector<Endpoint*> next_eps;
+                    if (directed)
+                    {
+                        next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
+                    }
+                    else
+                    {
+                        next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
+                        next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
+                    }
+
+                    for (const auto& next_ep : next_eps)
                     {
                         if (const auto it = visited.find(next_ep); it != visited.end())
                         {
@@ -629,8 +758,9 @@ namespace hal
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until(Endpoint* endpoint,
-                                                                                       const PinDirection& direction,
                                                                                        const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                       const PinDirection& direction,
+                                                                                       const bool directed,
                                                                                        bool continue_on_mismatch,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -647,15 +777,16 @@ namespace hal
 
         if (endpoint->get_pin()->get_direction() != direction)
         {
-            return get_next_matching_gates_until(endpoint->get_gate(), direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+            return get_next_matching_gates_until(endpoint->get_gate(), target_gate_filter, direction, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
         }
 
-        return get_next_matching_gates_until_internal({endpoint}, direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+        return get_next_matching_gates_until_internal({endpoint}, target_gate_filter, direction, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until(const Gate* gate,
-                                                                                       const PinDirection& direction,
                                                                                        const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                                       const PinDirection& direction,
+                                                                                       const bool directed,
                                                                                        bool continue_on_mismatch,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
@@ -681,7 +812,7 @@ namespace hal
             start.push_back(exit_ep);
         }
 
-        return get_next_matching_gates_internal(start, direction, target_gate_filter, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+        return get_next_matching_gates_internal(start, target_gate_filter, direction, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
     }
 
 }    // namespace hal

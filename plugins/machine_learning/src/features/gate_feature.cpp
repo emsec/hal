@@ -1,11 +1,10 @@
-#include "machine_learning/features/gate_feature.h"
-
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
+#include "machine_learning/features/gate_feature.h"
 
 #include <vector>
 
@@ -17,7 +16,7 @@ namespace hal
     {
         namespace gate_feature
         {
-            const NetlistAbstraction& FeatureContext::get_sequential_abstraction()
+            const Result<NetlistAbstraction*> FeatureContext::get_sequential_abstraction()
             {
                 if (!m_seqential_abstraction.has_value())
                 {
@@ -31,13 +30,19 @@ namespace hal
                         return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
                     };
 
-                    m_seqential_abstraction = NetlistAbstraction(nl, seq_gates, true, endpoint_filter, endpoint_filter);
+                    const auto sequential_abstraction_res = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
+                    if (sequential_abstraction_res.is_error())
+                    {
+                        return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
+                    }
+
+                    m_seqential_abstraction = sequential_abstraction_res.get();
 
                     // TODO remove debug print
-                    std::cout << "Built abstraction" << std::endl;
+                    // std::cout << "Built abstraction" << std::endl;
                 }
 
-                return m_seqential_abstraction.value();
+                return OK(&m_seqential_abstraction.value());
             }
 
             const std::vector<GateTypeProperty>& FeatureContext::get_possible_gate_type_properties()
@@ -66,7 +71,7 @@ namespace hal
                 return m_possible_gate_type_properties.value();
             }
 
-            std::vector<u32> ConnectedGlobalIOs::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> ConnectedGlobalIOs::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 UNUSED(fc);
 
@@ -89,15 +94,15 @@ namespace hal
                     }
                 }
 
-                return {connected_global_inputs, connected_global_outputs};
+                return OK({connected_global_inputs, connected_global_outputs});
             }
 
-            std::string ConnectedGlobalIOs::get_name() const
+            std::string ConnectedGlobalIOs::to_string() const
             {
                 return "ConnectedGlobalIOs";
             }
 
-            std::vector<u32> DistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> DistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 // necessary workaround to please compiler
                 const auto& direction = m_direction;
@@ -106,67 +111,83 @@ namespace hal
 
                 if (distance.is_error())
                 {
-                    log_error("machine_learning", "{}", distance.get_error().get());
+                    return ERR_APPEND(distance.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
                 }
 
                 if (!distance.get().has_value())
                 {
-                    return {MAX_DISTANCE};
+                    return OK({MAX_DISTANCE});
                 }
 
-                return {std::min(distance.get().value(), u32(MAX_DISTANCE))};
+                return OK({std::min(distance.get().value(), u32(MAX_DISTANCE))});
             }
 
-            std::string DistanceGlobalIO::get_name() const
+            std::string DistanceGlobalIO::to_string() const
             {
                 return "DistanceGlobalIO";
             }
 
-            std::vector<u32> SequentialDistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> SequentialDistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 // necessary workaround to please compiler
-                const auto& direction = m_direction;
-                const auto distance   = NetlistAbstractionDecorator(fc.get_sequential_abstraction())
+                const auto& direction                                = m_direction;
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_sequential_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get sequential netlist abstraction");
+                }
+
+                const auto distance = NetlistAbstractionDecorator(*nl_abstr.get())
                                           .get_shortest_path_distance(
                                               g,
                                               [direction](const auto* ep, const auto& nla) {
+                                                  if (!((direction == PinDirection::output) ? ep->is_source_pin() : ep->is_destination_pin()))
+                                                  {
+                                                      return false;
+                                                  }
+
                                                   const auto global_io_connections = (direction == PinDirection::output) ? nla.get_global_output_successors(ep) : nla.get_global_input_predecessors(ep);
-                                                  return !global_io_connections.empty();
+                                                  if (global_io_connections.is_error())
+                                                  {
+                                                      log_error("machine_learning", "{}", global_io_connections.get_error().get());
+                                                      return false;
+                                                  }
+                                                  return !global_io_connections.get().empty();
                                               },
                                               m_direction);
 
                 if (distance.is_error())
                 {
-                    log_error("machine_learning", "{}", distance.get_error().get());
+                    return ERR_APPEND(distance.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
                 }
 
                 if (!distance.get().has_value())
                 {
-                    return {MAX_DISTANCE};
+                    return OK({MAX_DISTANCE});
                 }
 
-                return {std::min(distance.get().value(), u32(MAX_DISTANCE))};
+                return OK({std::min(distance.get().value(), u32(MAX_DISTANCE))});
             }
 
-            std::string SequentialDistanceGlobalIO::get_name() const
+            std::string SequentialDistanceGlobalIO::to_string() const
             {
                 return "SequentialDistanceGlobalIO";
             }
 
-            std::vector<u32> IODegrees::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> IODegrees::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 u32 input_io_degree  = g->get_fan_in_nets().size();
                 u32 output_io_degree = g->get_fan_out_nets().size();
 
-                return {input_io_degree, output_io_degree};
+                return OK({input_io_degree, output_io_degree});
             }
 
-            std::string IODegrees::get_name() const
+            std::string IODegrees::to_string() const
             {
                 return "IODegrees";
             }
 
-            std::vector<u32> GateTypeOneHot::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> GateTypeOneHot::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 const auto& all_properties = fc.get_possible_gate_type_properties();
 
@@ -185,15 +206,15 @@ namespace hal
                     feature.at(index) += 1;
                 }
 
-                return feature;
+                return OK(feature);
             }
 
-            std::string GateTypeOneHot::get_name() const
+            std::string GateTypeOneHot::to_string() const
             {
                 return "GateTypeOneHot";
             }
 
-            std::vector<u32> NeighboringGateTypes::calculate_feature(FeatureContext& fc, const Gate* g) const
+            Result<std::vector<u32>> NeighboringGateTypes::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 const auto& all_properties = fc.get_possible_gate_type_properties();
 
@@ -219,7 +240,7 @@ namespace hal
 
                     if (in_gates.is_error())
                     {
-                        log_error("machine_learining", "cannot build NeighboringGateTypes feature: {}", in_gates.get_error().get());
+                        return ERR_APPEND(in_gates.get_error(), "cannot calculate feature " + to_string());
                     }
 
                     neighborhood.insert(in_gates.get().begin(), in_gates.get().end());
@@ -240,7 +261,7 @@ namespace hal
 
                     if (in_gates.is_error())
                     {
-                        log_error("machine_learining", "cannot build NeighboringGateTypes feature: {}", in_gates.get_error().get());
+                        return ERR_APPEND(in_gates.get_error(), "cannot calculate feature " + to_string());
                     }
 
                     neighborhood.insert(in_gates.get().begin(), in_gates.get().end());
@@ -255,54 +276,69 @@ namespace hal
                     }
                 }
 
-                return feature;
+                return OK(feature);
             }
 
-            std::string NeighboringGateTypes::get_name() const
+            std::string NeighboringGateTypes::to_string() const
             {
                 return "NeighboringGateTypes";
             }
 
-            std::vector<u32> build_feature_vec(const std::vector<const GateFeature*>& features, const Gate* g)
+            Result<std::vector<u32>> build_feature_vec(const std::vector<const GateFeature*>& features, const Gate* g)
             {
                 FeatureContext fc(g->get_netlist());
                 return build_feature_vec(features, g);
             }
 
-            std::vector<u32> build_feature_vec(FeatureContext& fc, const std::vector<const GateFeature*>& features, const Gate* g)
+            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GateFeature*>& features, const Gate* g)
             {
                 std::vector<u32> feature_vec;
 
                 for (const auto& gf : features)
                 {
+                    // TODO remove debug print
+                    // std::cout << "Calculating feature: " << gf->to_string() << std::endl;
+
                     const auto new_features = gf->calculate_feature(fc, g);
-                    feature_vec.insert(feature_vec.end(), new_features.begin(), new_features.end());
+                    if (new_features.is_error())
+                    {
+                        return ERR_APPEND(new_features.get_error(),
+                                          "cannot build feature vector for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failde to calculate feature " + gf->to_string());
+                    }
+
+                    feature_vec.insert(feature_vec.end(), new_features.get().begin(), new_features.get().end());
                 }
 
-                return feature_vec;
+                return OK(feature_vec);
             }
 
-            std::vector<std::vector<u32>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
             {
                 if (gates.empty())
                 {
-                    return {};
+                    return OK({});
                 }
 
                 FeatureContext fc(gates.front()->get_netlist());
                 return build_feature_vecs(features, gates);
             }
 
-            std::vector<std::vector<u32>> build_feature_vecs(FeatureContext& fc, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(FeatureContext& fc, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
             {
                 std::vector<std::vector<u32>> feature_vecs;
 
                 for (const auto& g : gates)
                 {
-                    feature_vecs.push_back(build_feature_vec(fc, features, g));
+                    const auto feature_vec = build_feature_vec(fc, features, g);
+                    if (feature_vec.is_error())
+                    {
+                        return ERR_APPEND(feature_vec.get_error(), "cannot build feature vecs: failed to build feature vector for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+
+                    feature_vecs.push_back(feature_vec.get());
                 }
 
-                return feature_vecs;
+                return OK(feature_vecs);
             }
         }    // namespace gate_feature
     }    // namespace machine_learning
