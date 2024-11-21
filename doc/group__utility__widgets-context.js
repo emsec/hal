@@ -92,5 +92,10 @@ var group__utility__widgets_context =
       [ "removeContext", "classhal_1_1_context_tree_model.html#ab7e44e659fe086adeb8be1940fecec5b", null ],
       [ "removeDirectory", "classhal_1_1_context_tree_model.html#a0bf633be208073564978e853e98c4ad9", null ],
       [ "setCurrentDirectory", "classhal_1_1_context_tree_model.html#a1db5edd4683bc934d502c4ae052fb237", null ]
+    ] ],
+    [ "PinProxyModel", "classhal_1_1_pin_proxy_model.html", [
+      [ "PinProxyModel", "classhal_1_1_pin_proxy_model.html#a551621c855b8138373162b0ef040f607", null ],
+      [ "filterAcceptsRow", "classhal_1_1_pin_proxy_model.html#abdb2468083ebebd5838e18defae9b089", null ],
+      [ "startSearch", "classhal_1_1_pin_proxy_model.html#ad9ca29d78b0b47e520d1b31d770d69c7", null ]
     ] ]
 ];

@@ -115,8 +115,8 @@ Collaboration diagram for hal::SvgIconEngine:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a61be45b54af219d98b0d91031fbd9924"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_svg_icon_engine.html#a61be45b54af219d98b0d91031fbd9924">SvgIconEngine</a> (const std::string &amp;svg_data)</td></tr>
-<tr class="separator:a61be45b54af219d98b0d91031fbd9924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa72c3a50717c6f2bde3d4e8cf654dcba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_svg_icon_engine.html#aa72c3a50717c6f2bde3d4e8cf654dcba">SvgIconEngine</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;dataEnabled, const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;dataDisabled)</td></tr>
+<tr class="separator:aa72c3a50717c6f2bde3d4e8cf654dcba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37b5d648025d96b9062c0111d314d3ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_svg_icon_engine.html#a37b5d648025d96b9062c0111d314d3ca">paint</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, const <a class="elRef" href="https://doc.qt.io/qt-5/qrect.html">QRect</a> &amp;rect, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#Mode-enum">QIcon::Mode</a> mode, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#State-enum">QIcon::State</a> state) override</td></tr>
 <tr class="separator:a37b5d648025d96b9062c0111d314d3ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd4b613e17977a97c0e6e2523ff4c717"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qiconengine.html">QIconEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_svg_icon_engine.html#abd4b613e17977a97c0e6e2523ff4c717">clone</a> () const override</td></tr>
@@ -172,8 +172,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="svg__icon__engine_8h_source.html#l00038">38</a> of file <a class="el" href="svg__icon__engine_8h_source.html">svg_icon_engine.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a61be45b54af219d98b0d91031fbd9924"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61be45b54af219d98b0d91031fbd9924">&#9670;&nbsp;</a></span>SvgIconEngine()</h2>
+<a id="aa72c3a50717c6f2bde3d4e8cf654dcba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa72c3a50717c6f2bde3d4e8cf654dcba">&#9670;&nbsp;</a></span>SvgIconEngine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,9 +184,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">hal::SvgIconEngine::SvgIconEngine </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>svg_data</em></td><td>)</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;&#160;</td>
+          <td class="paramname"><em>dataEnabled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &amp;&#160;</td>
+          <td class="paramname"><em>dataDisabled</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -205,9 +215,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00008">8</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html#fromStdString">QByteArray::fromStdString()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="svg__icon__engine_8cpp_source.html#l00022">clone()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="svg__icon__engine_8cpp_source.html#l00021">clone()</a>.</p>
 
 </div>
 </div>
@@ -239,7 +247,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qiconengine.html#clone">QIconEngine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00022">22</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00021">21</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="svg__icon__engine_8cpp_source.html#l00008">SvgIconEngine()</a>.</p>
 
@@ -303,11 +311,11 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qiconengine.html#paint">QIconEngine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00013">13</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00012">12</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#Mode-enum">QIcon::Disabled</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html#isEmpty">QByteArray::isEmpty()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="svg__icon__engine_8cpp_source.html#l00027">pixmap()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="svg__icon__engine_8cpp_source.html#l00026">pixmap()</a>.</p>
 
 </div>
 </div>
@@ -363,9 +371,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qiconengine.html#pixmap">QIconEngine</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00027">27</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="svg__icon__engine_8cpp_source.html#l00026">26</a> of file <a class="el" href="svg__icon__engine_8cpp_source.html">svg_icon_engine.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qimage.html#fill">QImage::fill()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qimage.html#Format-enum">QImage::Format_ARGB32</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpixmap.html#fromImage">QPixmap::fromImage()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ImageConversionFlag-enum">Qt::NoFormatConversion</a>, <a class="el" href="svg__icon__engine_8cpp_source.html#l00013">paint()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qimage.html#fill">QImage::fill()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qimage.html#Format-enum">QImage::Format_ARGB32</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpixmap.html#fromImage">QPixmap::fromImage()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ImageConversionFlag-enum">Qt::NoFormatConversion</a>, <a class="el" href="svg__icon__engine_8cpp_source.html#l00012">paint()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
 </div>
 </div>
@@ -379,7 +387,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_svg_icon_engine.html">SvgIconEngine</a></li>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:20 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:54 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

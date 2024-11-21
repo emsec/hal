@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['drawnetthread_40779',['DrawNetThread',['../classhal_1_1_graph_layouter.html#a79fa9762f7855b7b935b2b7ed1ef0cc7',1,'hal::GraphLayouter']]]
+  ['boolwizardpage_41200',['BoolWizardPage',['../classhal_1_1_state_wizard_page.html#a64eb1cb5f00dc8d106cb5952328d476c',1,'hal::StateWizardPage::BoolWizardPage()'],['../classhal_1_1_gate_library_wizard.html#a64eb1cb5f00dc8d106cb5952328d476c',1,'hal::GateLibraryWizard::BoolWizardPage()']]]
 ];

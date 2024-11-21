@@ -1,9 +1,10 @@
 <map id="hal::BaseTreeModel" name="hal::BaseTreeModel">
-<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="341,755,497,1111"/>
+<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="450,755,606,1111"/>
 <area shape="rect" id="node4" href="$classhal_1_1_context_tree_model.html" title="Base model for the ContextManagerWidget to manage GraphContexts." alt="" coords="5,1181,173,1361"/>
 <area shape="rect" id="node5" href="$classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="197,1173,424,1368"/>
 <area shape="rect" id="node6" href="$classhal_1_1_module_model.html" title="A model for displaying multiple netlist elements." alt="" coords="448,1173,608,1368"/>
 <area shape="rect" id="node7" href="$classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="632,1159,861,1383"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="323,395,515,707"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="335,5,502,347"/>
+<area shape="rect" id="node8" href="$classhal_1_1_pin_model.html" title=" " alt="" coords="886,1195,1005,1346"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="432,395,624,707"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="445,5,611,347"/>
 </map>

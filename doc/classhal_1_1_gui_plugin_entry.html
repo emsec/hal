@@ -99,7 +99,7 @@ Collaboration diagram for hal::GuiPluginEntry:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gui_plugin_entry__coll__graph.png" border="0" usemap="#ahal_1_1_gui_plugin_entry_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_gui_plugin_entry_coll__map" id="ahal_1_1_gui_plugin_entry_coll__map">
-<area shape="rect" title=" " alt="" coords="204,756,351,965"/>
+<area shape="rect" title=" " alt="" coords="192,771,363,980"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qdatetime.html" title=" " alt="" coords="5,352,184,605"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qstring.html" title=" " alt="" coords="208,323,347,635"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qstringlist.html" title=" " alt="" coords="371,396,581,561"/>
@@ -109,12 +109,18 @@ Collaboration diagram for hal::GuiPluginEntry:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a2c578f9e4226e51d40aa8f83e4a36e4d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4d">State</a> { <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4da9626dfbab1cfc460f220aad4926687fa">NotAPlugin</a>
-, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4daf8f0e01cd0b6e2401b632fdef4c5c7aa">NotLoaded</a>
-, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4da34eb1226953c0a5bf00a7d75ed0aa656">AutoLoad</a>
-, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4daab98a232c8fa50230262ba7aebad0cb5">UserLoad</a>
+<tr class="memitem:a08607a3639dbbb6a8aa3ace2a4ed0aa3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3">LoadState</a> { <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3a9626dfbab1cfc460f220aad4926687fa">NotAPlugin</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3af8f0e01cd0b6e2401b632fdef4c5c7aa">NotLoaded</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3a34eb1226953c0a5bf00a7d75ed0aa656">AutoLoad</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3aab98a232c8fa50230262ba7aebad0cb5">UserLoad</a>
  }</td></tr>
-<tr class="separator:a2c578f9e4226e51d40aa8f83e4a36e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a08607a3639dbbb6a8aa3ace2a4ed0aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae865e9624e14ac4d8fbdbb93a4298766"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">GuiExtensionState</a> { <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766af6009f4b8d7a420fe594f0580c20445a">Unknown</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766ab95a7b3cb1165a276d334f1674c78e63">NotAnExtension</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766a97c1bff86ed9e464a9c0db270bc6765d">Disabled</a>
+, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766a33f4dceed2eb45fcc8f24905559682ab">Enabled</a>
+ }</td></tr>
+<tr class="separator:ae865e9624e14ac4d8fbdbb93a4298766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -124,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a18a9537f4dede9ecf839babcf562c730"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae5bcf099f0bd7801f61b3ed5a746e57"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#aae5bcf099f0bd7801f61b3ed5a746e57">data</a> (int icol) const</td></tr>
 <tr class="separator:aae5bcf099f0bd7801f61b3ed5a746e57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b914daed606c648c259c83c82a0fa97"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a2b914daed606c648c259c83c82a0fa97">name</a> () const</td></tr>
+<tr class="separator:a2b914daed606c648c259c83c82a0fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fd4771323018007a976888c65f5345f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a0fd4771323018007a976888c65f5345f">persist</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html">QSettings</a> *settings) const</td></tr>
 <tr class="separator:a0fd4771323018007a976888c65f5345f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee395c4ed62bddd065132832d3178f00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#aee395c4ed62bddd065132832d3178f00">requestLoad</a> () const</td></tr>
@@ -138,11 +146,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1f362dc94e46c36d197ec14bd5f08176"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c7557d8c4d71effbad4e5fffa349d64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a4c7557d8c4d71effbad4e5fffa349d64">setFileFound</a> (bool fnd)</td></tr>
 <tr class="separator:a4c7557d8c4d71effbad4e5fffa349d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0091bd6401bb62e15a4e8e0bdd050df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">GuiExtensionState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ab0091bd6401bb62e15a4e8e0bdd050df">enforceGuiExtensionState</a> (<a class="el" href="classhal_1_1_gui_extension_interface.html">GuiExtensionInterface</a> *geif) const</td></tr>
+<tr class="separator:ab0091bd6401bb62e15a4e8e0bdd050df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2f9ffcb0fde20e5d45bada44b1566f41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4d">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a2f9ffcb0fde20e5d45bada44b1566f41">mState</a></td></tr>
-<tr class="separator:a2f9ffcb0fde20e5d45bada44b1566f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16651b004fb32a034a6d0101bf206bd"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3">hal::GuiPluginEntry::LoadState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a></td></tr>
+<tr class="separator:ac16651b004fb32a034a6d0101bf206bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42f0e07fab06f9cea2d8ec3cf29e8c2d"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a42f0e07fab06f9cea2d8ec3cf29e8c2d">mName</a></td></tr>
 <tr class="separator:a42f0e07fab06f9cea2d8ec3cf29e8c2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3c4f0f7ef54d25bc5aa991d2654c058"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ad3c4f0f7ef54d25bc5aa991d2654c058">mVersion</a></td></tr>
@@ -151,6 +161,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a9d44e03286cae4fd5fc4c5a67a5b0a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae705b7c23a85f3d7710a4d5c9cc67133"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ae705b7c23a85f3d7710a4d5c9cc67133">mFilePath</a></td></tr>
 <tr class="separator:ae705b7c23a85f3d7710a4d5c9cc67133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a356006c41875bdd7ac10df7dec74ca05"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a356006c41875bdd7ac10df7dec74ca05">mExternalPath</a></td></tr>
+<tr class="separator:a356006c41875bdd7ac10df7dec74ca05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cc92b940e252c184eb58252519e13a3"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a1cc92b940e252c184eb58252519e13a3">mFileModified</a></td></tr>
 <tr class="separator:a1cc92b940e252c184eb58252519e13a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31b640d09740c51548fbe13b21126864"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a31b640d09740c51548fbe13b21126864">mDependencies</a></td></tr>
@@ -161,8 +173,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a11887a34c77d04f619dd37e3e16f0113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae88c17c2f50f841d1618b3f1a4036a6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ae88c17c2f50f841d1618b3f1a4036a6c">mUserInterface</a></td></tr>
 <tr class="separator:ae88c17c2f50f841d1618b3f1a4036a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a951a7069d5ce0f33de9f83ce6f44fca4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a951a7069d5ce0f33de9f83ce6f44fca4">mGuiExtensions</a></td></tr>
-<tr class="separator:a951a7069d5ce0f33de9f83ce6f44fca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac79826bb409fcbf94f1bed97bb05d112"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">hal::GuiPluginEntry::GuiExtensionState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a></td></tr>
+<tr class="separator:ac79826bb409fcbf94f1bed97bb05d112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a206b546721a9e020d499a52b85adb083"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a206b546721a9e020d499a52b85adb083">mCliOptions</a></td></tr>
 <tr class="separator:a206b546721a9e020d499a52b85adb083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5822ecac3b6720c8d379c5a436abe18b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a5822ecac3b6720c8d379c5a436abe18b">mFileFound</a></td></tr>
@@ -177,25 +189,47 @@ Friends</h2></td></tr>
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00051">51</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a2c578f9e4226e51d40aa8f83e4a36e4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c578f9e4226e51d40aa8f83e4a36e4d">&#9670;&nbsp;</a></span>State</h2>
+<a id="ae865e9624e14ac4d8fbdbb93a4298766"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae865e9624e14ac4d8fbdbb93a4298766">&#9670;&nbsp;</a></span>GuiExtensionState</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4d">hal::GuiPluginEntry::State</a></td>
+          <td class="memname">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">hal::GuiPluginEntry::GuiExtensionState</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2c578f9e4226e51d40aa8f83e4a36e4da9626dfbab1cfc460f220aad4926687fa"></a>NotAPlugin&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a2c578f9e4226e51d40aa8f83e4a36e4daf8f0e01cd0b6e2401b632fdef4c5c7aa"></a>NotLoaded&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a2c578f9e4226e51d40aa8f83e4a36e4da34eb1226953c0a5bf00a7d75ed0aa656"></a>AutoLoad&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a2c578f9e4226e51d40aa8f83e4a36e4daab98a232c8fa50230262ba7aebad0cb5"></a>UserLoad&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae865e9624e14ac4d8fbdbb93a4298766af6009f4b8d7a420fe594f0580c20445a"></a>Unknown&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae865e9624e14ac4d8fbdbb93a4298766ab95a7b3cb1165a276d334f1674c78e63"></a>NotAnExtension&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae865e9624e14ac4d8fbdbb93a4298766a97c1bff86ed9e464a9c0db270bc6765d"></a>Disabled&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae865e9624e14ac4d8fbdbb93a4298766a33f4dceed2eb45fcc8f24905559682ab"></a>Enabled&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00054">54</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00066">66</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+
+</div>
+</div>
+<a id="a08607a3639dbbb6a8aa3ace2a4ed0aa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08607a3639dbbb6a8aa3ace2a4ed0aa3">&#9670;&nbsp;</a></span>LoadState</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3">hal::GuiPluginEntry::LoadState</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a08607a3639dbbb6a8aa3ace2a4ed0aa3a9626dfbab1cfc460f220aad4926687fa"></a>NotAPlugin&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a08607a3639dbbb6a8aa3ace2a4ed0aa3af8f0e01cd0b6e2401b632fdef4c5c7aa"></a>NotLoaded&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a08607a3639dbbb6a8aa3ace2a4ed0aa3a34eb1226953c0a5bf00a7d75ed0aa656"></a>AutoLoad&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a08607a3639dbbb6a8aa3ace2a4ed0aa3aab98a232c8fa50230262ba7aebad0cb5"></a>UserLoad&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00055">55</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
 </div>
 </div>
@@ -216,7 +250,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00768">768</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00924">924</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -236,9 +270,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">824</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">1002</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00092">hal::plugin_manager::get_plugin_path()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00060">mFilePath</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">mGuiExtensions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mVersion</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toBool">QVariant::toBool()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toDateTime">QVariant::toDateTime()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">QVariant::toInt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toStringList">QVariant::toStringList()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#value">QSettings::value()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00092">hal::plugin_manager::get_plugin_path()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00060">mExternalPath</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mFilePath</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mVersion</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toBool">QVariant::toBool()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toDateTime">QVariant::toDateTime()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">QVariant::toInt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toStringList">QVariant::toStringList()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#value">QSettings::value()</a>.</p>
 
 </div>
 </div>
@@ -259,9 +293,33 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">778</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">934</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistWriter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00076">isLoaded()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringlist.html#join">QStringList::join()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00060">mFilePath</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">mGuiExtensions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>.</p>
+<p class="reference">References <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistWriter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">QFileInfo::fileName()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00077">isLoaded()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringlist.html#join">QStringList::join()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00060">mExternalPath</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mFilePath</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>.</p>
+
+</div>
+</div>
+<a id="ab0091bd6401bb62e15a4e8e0bdd050df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0091bd6401bb62e15a4e8e0bdd050df">&#9670;&nbsp;</a></span>enforceGuiExtensionState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">GuiPluginEntry::GuiExtensionState</a> hal::GuiPluginEntry::enforceGuiExtensionState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_gui_extension_interface.html">GuiExtensionInterface</a> *&#160;</td>
+          <td class="paramname"><em>geif</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00967">967</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00066">Disabled</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">Enabled</a>, <a class="el" href="gui__extension__interface_8h_source.html#l00122">hal::GuiExtensionInterface::is_contribution_enabled()</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">NotAnExtension</a>, and <a class="el" href="gui__extension__interface_8h_source.html#l00128">hal::GuiExtensionInterface::set_contribution_enabled()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -288,7 +346,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00079">79</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00080">80</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00068">mFileFound</a>.</p>
 
@@ -317,11 +375,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00076">76</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00077">77</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00054">AutoLoad</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00054">UserLoad</a>.</p>
+<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00055">AutoLoad</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00055">UserLoad</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00640">hal::GuiPluginTable::handleButtonPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00788">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00905">hal::GuiPluginTable::neededBy()</a>.</p>
 
 </div>
 </div>
@@ -348,9 +406,40 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00077">77</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00078">78</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00054">NotAPlugin</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00055">NotAPlugin</a>.</p>
+
+</div>
+</div>
+<a id="a2b914daed606c648c259c83c82a0fa97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b914daed606c648c259c83c82a0fa97">&#9670;&nbsp;</a></span>name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::GuiPluginEntry::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00074">74</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+
+<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mName</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l01087">hal::GuiPluginDelegate::paint()</a>.</p>
 
 </div>
 </div>
@@ -370,9 +459,11 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">809</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">986</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">mGuiExtensions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mVersion</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">QSettings::setValue()</a>.</p>
+<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00060">mExternalPath</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mVersion</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsettings.html#setValue">QSettings::setValue()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00701">hal::GuiPluginTable::persist()</a>.</p>
 
 </div>
 </div>
@@ -399,9 +490,9 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00075">75</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00076">76</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00054">UserLoad</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00055">UserLoad</a>.</p>
 
 </div>
 </div>
@@ -429,7 +520,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00080">80</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00081">81</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gui__plugin__manager_8h_source.html#l00068">mFileFound</a>.</p>
 
@@ -467,9 +558,11 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">841</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">1020</a> of file <a class="el" href="gui__plugin__manager_8cpp_source.html">gui_plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00054">AutoLoad</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#clear">QString::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#clear">QList::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">hal::CliExtensionInterface::get_cli_options()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00024">hal::BasePluginInterface::get_dependencies()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00019">hal::BasePluginInterface::get_description()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00037">hal::BasePluginInterface::get_extensions()</a>, <a class="el" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">hal::BasePluginInterface::get_name()</a>, <a class="el" href="program__options_8cpp_source.html#l00265">hal::ProgramOptions::get_options_string()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00133">hal::plugin_manager::get_plugin_features()</a>, <a class="el" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">hal::BasePluginInterface::get_version()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#isValid">QDateTime::isValid()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00059">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">mGuiExtensions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mVersion</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00054">UserLoad</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00055">AutoLoad</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#clear">QList::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#clear">QString::clear()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00967">enforceGuiExtensionState()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">hal::CliExtensionInterface::get_cli_options()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00024">hal::BasePluginInterface::get_dependencies()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00019">hal::BasePluginInterface::get_description()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00037">hal::BasePluginInterface::get_extensions()</a>, <a class="el" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">hal::BasePluginInterface::get_name()</a>, <a class="el" href="program__options_8cpp_source.html#l00265">hal::ProgramOptions::get_options_string()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00133">hal::plugin_manager::get_plugin_features()</a>, <a class="el" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">hal::BasePluginInterface::get_version()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#isValid">QDateTime::isValid()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00067">mCliOptions</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00062">mDependencies</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00058">mDescription</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00063">mFeature</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00064">mFeatureArguments</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00061">mFileModified</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac79826bb409fcbf94f1bed97bb05d112">mGuiExtensionState</a>, <a class="el" href="classhal_1_1_gui_plugin_entry.html#ac16651b004fb32a034a6d0101bf206bd">mLoadState</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00056">mName</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00065">mUserInterface</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00057">mVersion</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">NotAnExtension</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00066">Unknown</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00055">UserLoad</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00540">hal::GuiPluginTable::addExternalPlugin()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>.</p>
 
 </div>
 </div>
@@ -494,7 +587,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00055">55</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00054">54</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
 </div>
 </div>
@@ -513,7 +606,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00067">67</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00640">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00788">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -531,7 +624,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00062">62</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00905">hal::GuiPluginTable::neededBy()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -547,9 +640,27 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00059">59</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00058">58</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00607">hal::GuiPluginTable::listFacFeature()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
+
+</div>
+</div>
+<a id="a356006c41875bdd7ac10df7dec74ca05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a356006c41875bdd7ac10df7dec74ca05">&#9670;&nbsp;</a></span>mExternalPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::GuiPluginEntry::mExternalPath</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00060">60</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00540">hal::GuiPluginTable::addExternalPlugin()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>.</p>
 
 </div>
 </div>
@@ -567,7 +678,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00063">63</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00607">hal::GuiPluginTable::listFacFeature()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -585,7 +696,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00064">64</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00607">hal::GuiPluginTable::listFacFeature()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -603,7 +714,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00068">68</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8h_source.html#l00079">isFileFound()</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00080">setFileFound()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8h_source.html#l00080">isFileFound()</a>, and <a class="el" href="gui__plugin__manager_8h_source.html#l00081">setFileFound()</a>.</p>
 
 </div>
 </div>
@@ -621,7 +732,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00061">61</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -637,27 +748,41 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00060">60</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00059">59</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00640">hal::GuiPluginTable::handleButtonPressed()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00788">hal::GuiPluginTable::handleButtonPressed()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>.</p>
 
 </div>
 </div>
-<a id="a951a7069d5ce0f33de9f83ce6f44fca4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a951a7069d5ce0f33de9f83ce6f44fca4">&#9670;&nbsp;</a></span>mGuiExtensions</h2>
+<a id="ac79826bb409fcbf94f1bed97bb05d112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac79826bb409fcbf94f1bed97bb05d112">&#9670;&nbsp;</a></span>mGuiExtensionState</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool hal::GuiPluginEntry::mGuiExtensions</td>
+          <td class="memname">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766">hal::GuiPluginEntry::GuiExtensionState</a> hal::GuiPluginEntry::mGuiExtensionState</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00066">66</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00967">enforceGuiExtensionState()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+</div>
+</div>
+<a id="ac16651b004fb32a034a6d0101bf206bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac16651b004fb32a034a6d0101bf206bd">&#9670;&nbsp;</a></span>mLoadState</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3">hal::GuiPluginEntry::LoadState</a> hal::GuiPluginEntry::mLoadState</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00540">hal::GuiPluginTable::addExternalPlugin()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00788">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00077">isLoaded()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00078">isPlugin()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00076">requestLoad()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -673,27 +798,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00057">57</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00640">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
-
-</div>
-</div>
-<a id="a2f9ffcb0fde20e5d45bada44b1566f41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f9ffcb0fde20e5d45bada44b1566f41">&#9670;&nbsp;</a></span>mState</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4d">State</a> hal::GuiPluginEntry::mState</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00056">56</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00640">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00076">isLoaded()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00077">isPlugin()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00075">requestLoad()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00540">hal::GuiPluginTable::addExternalPlugin()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00788">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00666">hal::GuiPluginTable::loadFeature()</a>, <a class="el" href="gui__plugin__manager_8h_source.html#l00074">name()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00905">hal::GuiPluginTable::neededBy()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -711,7 +818,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00065">65</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00778">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00934">data()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -727,9 +834,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00058">58</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__plugin__manager_8h_source.html#l00057">57</a> of file <a class="el" href="gui__plugin__manager_8h_source.html">gui_plugin_manager.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00824">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00809">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00841">updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l01002">GuiPluginEntry()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00986">persist()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01020">updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -743,7 +850,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_plugin_entry.html">GuiPluginEntry</a></li>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:53 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pin_5fevent_5forder_40801',['pin_event_order',['../classhal_1_1_pin_changed_event.html#a5ba03375a633d3893cf9856de503c4b0',1,'hal::PinChangedEvent']]],
-  ['pinchangedeventscope_40802',['PinChangedEventScope',['../classhal_1_1_pin_changed_event.html#a7431cf1b3339cf868cceb7b9b865f8d8',1,'hal::PinChangedEvent']]],
-  ['projectmanager_40803',['ProjectManager',['../classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7',1,'hal::ProjectDirectory']]]
+  ['module_41223',['Module',['../classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d',1,'hal::NetlistInternalManager']]],
+  ['moduleitem_41224',['ModuleItem',['../classhal_1_1_module_model.html#ada0de3bfd2de607363f73e8c2e3b3bdf',1,'hal::ModuleModel']]]
 ];

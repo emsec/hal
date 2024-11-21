@@ -99,16 +99,17 @@ Inheritance diagram for hal::SearchProxyModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_search_proxy_model__inherit__graph.png" border="0" usemap="#ahal_1_1_search_proxy_model_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_search_proxy_model_inherit__map" id="ahal_1_1_search_proxy_model_inherit__map">
-<area shape="rect" title=" " alt="" coords="637,564,814,729"/>
+<area shape="rect" title=" " alt="" coords="739,564,917,729"/>
 <area shape="rect" href="classhal_1_1_context_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="5,785,184,965"/>
 <area shape="rect" href="classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="209,799,383,950"/>
 <area shape="rect" href="classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="408,799,608,950"/>
 <area shape="rect" href="classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="632,799,819,950"/>
 <area shape="rect" href="classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="843,777,1021,972"/>
 <area shape="rect" href="classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1045,799,1219,950"/>
-<area shape="rect" href="classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1243,792,1458,957"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="623,219,827,516"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="626,5,825,171"/>
+<area shape="rect" href="classhal_1_1_pin_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="1243,821,1399,928"/>
+<area shape="rect" href="classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1423,792,1638,957"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="726,219,930,516"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="729,5,927,171"/>
 </map>
 </div>
 <div class="dynheader">
@@ -765,7 +766,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#empty">QList::empty()</a>, <a class="el" href="searchoptions_8cpp_source.html#l00094">hal::SearchOptions::getColumns()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00016">isMatching()</a>, <a class="el" href="search__proxy__model_8h_source.html#l00080">mSearchOptions</a>, <a class="el" href="search__proxy__model_8h_source.html#l00081">mSearchString</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00047">checkRowRecursion()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00080">hal::ModuleProxyModel::checkRowRecursion()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00167">hal::GateSelectProxy::filterAcceptsRow()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00205">hal::ModuleSelectProxy::filterAcceptsRow()</a>, and <a class="el" href="grouping__proxy__model_8cpp_source.html#l00016">hal::GroupingProxyModel::filterAcceptsRow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00047">checkRowRecursion()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00080">hal::ModuleProxyModel::checkRowRecursion()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00167">hal::GateSelectProxy::filterAcceptsRow()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00205">hal::ModuleSelectProxy::filterAcceptsRow()</a>, <a class="el" href="pin__proxy__model_8cpp_source.html#l00014">hal::PinProxyModel::filterAcceptsRow()</a>, and <a class="el" href="grouping__proxy__model_8cpp_source.html#l00016">hal::GroupingProxyModel::filterAcceptsRow()</a>.</p>
 
 </div>
 </div>
@@ -957,6 +958,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="search__proxy__model_8h_source.html#l00080">mSearchOptions</a>, and <a class="el" href="search__proxy__model_8h_source.html#l00081">mSearchString</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="gatelibrary__content__widget_8cpp_source.html#l00017">hal::GatelibraryContentWidget::GatelibraryContentWidget()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -982,7 +985,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="search__proxy__model_8h_source.html#l00080">80</a> of file <a class="el" href="search__proxy__model_8h_source.html">search_proxy_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00062">checkRow()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00016">isMatching()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00005">SearchProxyModel()</a>, <a class="el" href="gatelibrary__proxy__model_8cpp_source.html#l00065">hal::GatelibraryProxyModel::startSearch()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00160">hal::GateSelectProxy::startSearch()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00053">hal::ContextProxyModel::startSearch()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00053">hal::GroupingProxyModel::startSearch()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00198">hal::ModuleSelectProxy::startSearch()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00074">hal::ModuleProxyModel::startSearch()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00072">hal::SelectionTreeProxyModel::startSearch()</a>, and <a class="el" href="search__proxy__model_8cpp_source.html#l00010">startSearch()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00062">checkRow()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00016">isMatching()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00005">SearchProxyModel()</a>, <a class="el" href="gatelibrary__proxy__model_8cpp_source.html#l00065">hal::GatelibraryProxyModel::startSearch()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00160">hal::GateSelectProxy::startSearch()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00053">hal::ContextProxyModel::startSearch()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00053">hal::GroupingProxyModel::startSearch()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00198">hal::ModuleSelectProxy::startSearch()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00074">hal::ModuleProxyModel::startSearch()</a>, <a class="el" href="pin__proxy__model_8cpp_source.html#l00020">hal::PinProxyModel::startSearch()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00072">hal::SelectionTreeProxyModel::startSearch()</a>, and <a class="el" href="search__proxy__model_8cpp_source.html#l00010">startSearch()</a>.</p>
 
 </div>
 </div>
@@ -1008,7 +1011,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="search__proxy__model_8h_source.html#l00081">81</a> of file <a class="el" href="search__proxy__model_8h_source.html">search_proxy_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00062">checkRow()</a>, <a class="el" href="gatelibrary__proxy__model_8cpp_source.html#l00065">hal::GatelibraryProxyModel::startSearch()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00160">hal::GateSelectProxy::startSearch()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00053">hal::ContextProxyModel::startSearch()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00053">hal::GroupingProxyModel::startSearch()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00198">hal::ModuleSelectProxy::startSearch()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00074">hal::ModuleProxyModel::startSearch()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00072">hal::SelectionTreeProxyModel::startSearch()</a>, and <a class="el" href="search__proxy__model_8cpp_source.html#l00010">startSearch()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00062">checkRow()</a>, <a class="el" href="gatelibrary__proxy__model_8cpp_source.html#l00065">hal::GatelibraryProxyModel::startSearch()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00160">hal::GateSelectProxy::startSearch()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00053">hal::ContextProxyModel::startSearch()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00053">hal::GroupingProxyModel::startSearch()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00198">hal::ModuleSelectProxy::startSearch()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00074">hal::ModuleProxyModel::startSearch()</a>, <a class="el" href="pin__proxy__model_8cpp_source.html#l00020">hal::PinProxyModel::startSearch()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00072">hal::SelectionTreeProxyModel::startSearch()</a>, and <a class="el" href="search__proxy__model_8cpp_source.html#l00010">startSearch()</a>.</p>
 
 </div>
 </div>
@@ -1022,7 +1025,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_search_proxy_model.html">SearchProxyModel</a></li>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:53 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

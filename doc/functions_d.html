@@ -105,6 +105,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a821ca8f75c125f04d30b8e46e6b0bb07">hal::GroupingTableModel</a>
 , <a class="el" href="classhal_1_1_gui_plugin_entry.html#aae5bcf099f0bd7801f61b3ed5a746e57">hal::GuiPluginEntry</a>
 , <a class="el" href="classhal_1_1_gui_plugin_table.html#a0f9ce6bec0f82edc49d3e56cbb5ea488">hal::GuiPluginTable</a>
+, <a class="el" href="classhal_1_1_list_property_model.html#aec81b30ed7ddebbed6b1d6ec7df3ce69">hal::ListPropertyModel</a>
 , <a class="el" href="classhal_1_1_l_u_t_table_model.html#a576451c400569bff88beba95520eb321">hal::LUTTableModel</a>
 , <a class="el" href="classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_select_entry.html#a48b6fbeea6eea03d4319cc7a8682384c">hal::ModuleSelectEntry</a>
@@ -119,6 +120,9 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 </li>
 <li>DataflowPlugin()
 : <a class="el" href="classhal_1_1_dataflow_plugin.html#a2127144b4da9aab5502f28c42a89a12e">hal::DataflowPlugin</a>
+</li>
+<li>dataGroup
+: <a class="el" href="structhal_1_1_r_a_m_port_wizard_page_1_1_r_a_m_port.html#a85a675ddaaa518ff1608a4b65661adca">hal::RAMPortWizardPage::RAMPort</a>
 </li>
 <li>DataInFunc
 : <a class="el" href="classhal_1_1_latch_component_entry.html#afd72ddde2e8165ad4346b4c8a10a9927a80c671f1c68211cfad99099e15c5e7c0">hal::LatchComponentEntry</a>
@@ -229,8 +233,8 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>deleteCommentIconPath
 : <a class="el" href="classhal_1_1_comment_item.html#a8f00e40b42ae2b84853106844a749712">hal::CommentItem</a>
 </li>
-<li>deleteCommentIconStyle
-: <a class="el" href="classhal_1_1_comment_item.html#ab492bee784852760f424f2f436af5e5a">hal::CommentItem</a>
+<li>deleteCommentIconStyle()
+: <a class="el" href="classhal_1_1_comment_item.html#a0dca779ab8a114b597b309cf51045d34">hal::CommentItem</a>
 </li>
 <li>deleteContent()
 : <a class="el" href="classhal_1_1_content_manager.html#a3f44df886385f5fa85dd5ea929d7e18d">hal::ContentManager</a>
@@ -249,11 +253,13 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 </li>
 <li>deleteIconPath
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a6ca3b122b7eeb780f2e022356d0ebdb6">hal::ContextManagerWidget</a>
-, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a65f7b9e770a175b2abb63f81615d611f">hal::GroupingManagerWidget</a>
-, <a class="el" href="classhal_1_1_module_widget.html#aa696cbc13556d63a3197cd5394547767">hal::ModuleWidget</a>
+, <a class="el" href="classhal_1_1_gatelibrary_content_widget.html#a1f34fcd09006632d2a479060bbede8cc">hal::GatelibraryContentWidget</a>
+, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a278fc2e3f0066818e4c90fec69f67660">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_module_widget.html#ab8485ba21fe9b88792aa9b3b83c47daf">hal::ModuleWidget</a>
 </li>
 <li>deleteIconStyle
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a66d5dcc3804bd97be4c639563be5344a">hal::ContextManagerWidget</a>
+, <a class="el" href="classhal_1_1_gatelibrary_content_widget.html#a79e53a755fa486224f01c29cd1f2be27">hal::GatelibraryContentWidget</a>
 , <a class="el" href="classhal_1_1_grouping_manager_widget.html#ad5946591c2622561936395bf59ec55a0">hal::GroupingManagerWidget</a>
 </li>
 <li>deleteModule()
@@ -288,7 +294,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gui_api.html#ae9f9de972b1fdd023cc81db4fb4b600d">hal::GuiApi</a>
 </li>
 <li>deselectModule()
-: <a class="el" href="classhal_1_1_gui_api.html#abab2f1908a7c6075cd09dc05c4b78cc6">hal::GuiApi</a>
+: <a class="el" href="classhal_1_1_gui_api.html#a94e11bfce39bc334e0303f7bd96e1a15">hal::GuiApi</a>
 </li>
 <li>deselectNet()
 : <a class="el" href="classhal_1_1_gui_api.html#a00dc8f04eb60ac3de9b882647246e2e7">hal::GuiApi</a>
@@ -372,9 +378,15 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <li>dirty
 : <a class="el" href="classhal_1_1_settings_widget.html#a998bbd517886a37aa7b85dc803c8bf3e">hal::SettingsWidget</a>
 </li>
+<li>Disabled
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#ae865e9624e14ac4d8fbdbb93a4298766a97c1bff86ed9e464a9c0db270bc6765d">hal::GuiPluginEntry</a>
+</li>
 <li>disabledIconStyle
 : <a class="el" href="classhal_1_1_context_manager_widget.html#a8ccb134ea0b8dfe8e06ab0c5b19232ee">hal::ContextManagerWidget</a>
-, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7203b6ebf6ddb801ac9d2ca038698751">hal::GroupingManagerWidget</a>
+, <a class="el" href="classhal_1_1_file_actions.html#ab7a53f41741818743328e3db7b3156e1">hal::FileActions</a>
+, <a class="el" href="classhal_1_1_gatelibrary_content_widget.html#a8ee90c2a4c854f51a97c76c0e3c7aab9">hal::GatelibraryContentWidget</a>
+, <a class="el" href="classhal_1_1_general_info_wizard_page.html#afc5ce7ae95a1b875aee195fc518a6a80">hal::GeneralInfoWizardPage</a>
+, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a59ec9fc2e432bfcfd4475b81a3e2c10d">hal::GroupingManagerWidget</a>
 , <a class="el" href="classhal_1_1_main_window.html#a7a31c22c730a78c769fdbff03f118764">hal::MainWindow</a>
 , <a class="el" href="classhal_1_1_module_widget.html#a573645c543b3ccc8124c53fed364617f">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#affc9e3c3c2ceff320f24c91da73e4291">hal::PythonEditor</a>
@@ -516,7 +528,7 @@ $(document).ready(function(){initNavTree('functions_d.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:21 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:55 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

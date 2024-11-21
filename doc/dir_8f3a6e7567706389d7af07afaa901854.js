@@ -36,6 +36,7 @@ var dir_8f3a6e7567706389d7af07afaa901854 =
     [ "module_widget", "dir_9931ff14da9bf21a4a9836e435fa5a59.html", "dir_9931ff14da9bf21a4a9836e435fa5a59" ],
     [ "netlist_relay", "dir_847ce917bc45a665fb2be132b5a08e5d.html", "dir_847ce917bc45a665fb2be132b5a08e5d" ],
     [ "overlay", "dir_1c9b88aaa7e03862471afceea6cd4425.html", "dir_1c9b88aaa7e03862471afceea6cd4425" ],
+    [ "pin_model", "dir_cc084399944ddfdcb6c8ae11fffe86a7.html", "dir_cc084399944ddfdcb6c8ae11fffe86a7" ],
     [ "plugin_relay", "dir_dae99150d71d3c2700aeaa72401f9109.html", "dir_dae99150d71d3c2700aeaa72401f9109" ],
     [ "python", "dir_609dd161604b7aa86c7b630207f12412.html", "dir_609dd161604b7aa86c7b630207f12412" ],
     [ "searchbar", "dir_7cfc8fdb933309cf5774d72e17bef116.html", "dir_7cfc8fdb933309cf5774d72e17bef116" ],

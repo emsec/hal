@@ -51,6 +51,7 @@ var hierarchy =
     [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
       [ "hal::ContextTreeItem", "classhal_1_1_context_tree_item.html", null ],
       [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
+      [ "hal::PinItem", "classhal_1_1_pin_item.html", null ],
       [ "hal::PinTreeItem", "classhal_1_1_pin_tree_item.html", null ],
       [ "hal::PortTreeItem", "classhal_1_1_port_tree_item.html", null ],
       [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
@@ -156,6 +157,7 @@ var hierarchy =
     [ "hal::LayoutLocker", "classhal_1_1_layout_locker.html", null ],
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
+    [ "hal::ListPropertyModel::ListPropertyEntry", "structhal_1_1_list_property_model_1_1_list_property_entry.html", null ],
     [ "hal::LogManager::log_sink", "structhal_1_1_log_manager_1_1log__sink.html", null ],
     [ "hal::LoggerSettings", "structhal_1_1_logger_settings.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
@@ -305,13 +307,15 @@ var hierarchy =
           [ "hal::GuiPluginDelegate", "classhal_1_1_gui_plugin_delegate.html", null ]
         ] ],
         [ "QStyledItemDelegate", "https://doc.qt.io/qt-5/qstyleditemdelegate.html", [
-          [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ]
+          [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ],
+          [ "hal::PinDelegate", "classhal_1_1_pin_delegate.html", null ]
         ] ]
       ] ],
       [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
             [ "hal::FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html", null ],
+            [ "hal::ListPropertyProxy", "classhal_1_1_list_property_proxy.html", null ],
             [ "hal::SearchProxyModel", "classhal_1_1_search_proxy_model.html", [
               [ "hal::ContextProxyModel", "classhal_1_1_context_proxy_model.html", null ],
               [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
@@ -319,6 +323,7 @@ var hierarchy =
               [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
               [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
               [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
+              [ "hal::PinProxyModel", "classhal_1_1_pin_proxy_model.html", null ],
               [ "hal::SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", null ]
             ] ]
           ] ]
@@ -335,6 +340,7 @@ var hierarchy =
           [ "hal::GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", null ],
           [ "hal::GuiPluginTable", "classhal_1_1_gui_plugin_table.html", null ],
           [ "hal::LUTTableModel", "classhal_1_1_l_u_t_table_model.html", null ],
+          [ "hal::ListPropertyModel", "classhal_1_1_list_property_model.html", null ],
           [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
           [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ]
         ] ],
@@ -342,7 +348,8 @@ var hierarchy =
           [ "hal::ContextTreeModel", "classhal_1_1_context_tree_model.html", null ],
           [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
           [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
-          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ]
+          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ],
+          [ "hal::PinModel", "classhal_1_1_pin_model.html", null ]
         ] ]
       ] ],
       [ "QAction", "https://doc.qt.io/qt-5/qaction.html", [
@@ -390,6 +397,9 @@ var hierarchy =
             [ "hal::ExportProjectDialog", "classhal_1_1_export_project_dialog.html", null ],
             [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
           ] ],
+          [ "QWizard", "https://doc.qt.io/qt-5/qwizard.html", [
+            [ "hal::GateLibraryWizard", "classhal_1_1_gate_library_wizard.html", null ]
+          ] ],
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
           [ "hal::ComboboxDialog", "classhal_1_1_combobox_dialog.html", [
             [ "hal::PingroupSelectorDialog", "classhal_1_1_pingroup_selector_dialog.html", null ]
@@ -397,7 +407,6 @@ var hierarchy =
           [ "hal::CommentColorPicker", "classhal_1_1_comment_color_picker.html", null ],
           [ "hal::CommentDialog", "classhal_1_1_comment_dialog.html", null ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
-          [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
           [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
           [ "hal::ImportProjectDialog", "classhal_1_1_import_project_dialog.html", null ],
@@ -441,10 +450,12 @@ var hierarchy =
                 [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
                 [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ],
                 [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
+                [ "hal::PinTreeView", "classhal_1_1_pin_tree_view.html", null ],
                 [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ]
               ] ]
             ] ],
             [ "QGraphicsView", "https://doc.qt.io/qt-5/qgraphicsview.html", [
+              [ "hal::GatelibraryGraphicsView", "classhal_1_1_gatelibrary_graphics_view.html", null ],
               [ "hal::GraphGraphicsView", "classhal_1_1_graph_graphics_view.html", null ]
             ] ],
             [ "QPlainTextEdit", "https://doc.qt.io/qt-5/qplaintextedit.html", [
@@ -461,6 +472,7 @@ var hierarchy =
             ] ]
           ] ],
           [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
+            [ "hal::GateLibraryLabel", "classhal_1_1_gate_library_label.html", null ],
             [ "hal::LabelButton", "classhal_1_1_label_button.html", null ],
             [ "hal::SearchableLabel", "classhal_1_1_searchable_label.html", null ]
           ] ],
@@ -477,7 +489,21 @@ var hierarchy =
           [ "hal::ExpandingListItem", "classhal_1_1_expanding_list_item.html", null ],
           [ "hal::FileModifiedBar", "classhal_1_1_file_modified_bar.html", null ],
           [ "hal::FileSelectWidget", "classhal_1_1_file_select_widget.html", null ],
+          [ "hal::GateLibraryManager", "classhal_1_1_gate_library_manager.html", null ],
           [ "hal::GateLibrarySelection", "classhal_1_1_gate_library_selection.html", null ],
+          [ "hal::GatelibraryComponentFrame", "classhal_1_1_gatelibrary_component_frame.html", [
+            [ "hal::GateLibraryFrameLatch", "classhal_1_1_gate_library_frame_latch.html", null ],
+            [ "hal::GateLibraryFrameRAM", "classhal_1_1_gate_library_frame_r_a_m.html", null ],
+            [ "hal::GateLibraryFrameRAMPort", "classhal_1_1_gate_library_frame_r_a_m_port.html", null ],
+            [ "hal::GatelibraryFrameBoolean", "classhal_1_1_gatelibrary_frame_boolean.html", null ],
+            [ "hal::GatelibraryFrameFF", "classhal_1_1_gatelibrary_frame_f_f.html", null ],
+            [ "hal::GatelibraryFrameGeneral", "classhal_1_1_gatelibrary_frame_general.html", null ],
+            [ "hal::GatelibraryFrameInit", "classhal_1_1_gatelibrary_frame_init.html", null ],
+            [ "hal::GatelibraryFrameLut", "classhal_1_1_gatelibrary_frame_lut.html", null ],
+            [ "hal::GatelibraryFrameState", "classhal_1_1_gatelibrary_frame_state.html", null ],
+            [ "hal::GatelibraryLutInit", "classhal_1_1_gatelibrary_lut_init.html", null ]
+          ] ],
+          [ "hal::GatelibraryContentWidget", "classhal_1_1_gatelibrary_content_widget.html", null ],
           [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
           [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
           [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
@@ -504,6 +530,9 @@ var hierarchy =
         [ "QKeySequenceEdit", "https://doc.qt.io/qt-5/qkeysequenceedit.html", [
           [ "hal::KeybindEdit", "classhal_1_1_keybind_edit.html", null ]
         ] ],
+        [ "QLineEdit", "https://doc.qt.io/qt-5/qlineedit.html", [
+          [ "hal::BooleanFunctionEdit", "classhal_1_1_boolean_function_edit.html", null ]
+        ] ],
         [ "QTabWidget", "https://doc.qt.io/qt-5/qtabwidget.html", [
           [ "hal::DetailsTabWidget", "classhal_1_1_details_tab_widget.html", [
             [ "hal::GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html", null ],
@@ -514,12 +543,30 @@ var hierarchy =
         [ "QToolBar", "https://doc.qt.io/qt-5/qtoolbar.html", [
           [ "hal::Toolbar", "classhal_1_1_toolbar.html", null ]
         ] ],
+        [ "QWizardPage", "https://doc.qt.io/qt-5/qwizardpage.html", [
+          [ "hal::BoolWizardPage", "classhal_1_1_bool_wizard_page.html", null ],
+          [ "hal::FlipFlopWizardPage", "classhal_1_1_flip_flop_wizard_page.html", null ],
+          [ "hal::GeneralInfoWizardPage", "classhal_1_1_general_info_wizard_page.html", null ],
+          [ "hal::InitWizardPage", "classhal_1_1_init_wizard_page.html", null ],
+          [ "hal::LUTWizardPage", "classhal_1_1_l_u_t_wizard_page.html", null ],
+          [ "hal::LatchWizardPage", "classhal_1_1_latch_wizard_page.html", null ],
+          [ "hal::PinsWizardPage", "classhal_1_1_pins_wizard_page.html", null ],
+          [ "hal::RAMPortWizardPage", "classhal_1_1_r_a_m_port_wizard_page.html", null ],
+          [ "hal::RAMWizardPage", "classhal_1_1_r_a_m_wizard_page.html", null ],
+          [ "hal::StateWizardPage", "classhal_1_1_state_wizard_page.html", null ]
+        ] ],
         [ "hal::BusyAnimation", "classhal_1_1_busy_animation.html", null ],
         [ "hal::CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", null ],
         [ "hal::CommentWidget", "classhal_1_1_comment_widget.html", null ],
         [ "hal::ContentFrame", "classhal_1_1_content_frame.html", null ],
         [ "hal::ContentLayoutArea", "classhal_1_1_content_layout_area.html", null ],
         [ "hal::DetailsFrameWidget", "classhal_1_1_details_frame_widget.html", null ],
+        [ "hal::FileActions", "classhal_1_1_file_actions.html", null ],
+        [ "hal::GateLibraryTabInterface", "classhal_1_1_gate_library_tab_interface.html", [
+          [ "hal::GateLibraryTabGeneral", "classhal_1_1_gate_library_tab_general.html", null ],
+          [ "hal::GateLibraryTabPin", "classhal_1_1_gate_library_tab_pin.html", null ],
+          [ "hal::GateLibraryTabTruthTable", "classhal_1_1_gate_library_tab_truth_table.html", null ]
+        ] ],
         [ "hal::GraphNavigationWidget", "classhal_1_1_graph_navigation_widget.html", null ],
         [ "hal::GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html", null ],
         [ "hal::GuiPluginManager", "classhal_1_1_gui_plugin_manager.html", null ],
@@ -608,6 +655,7 @@ var hierarchy =
     [ "QVector< NodeBox * >", "https://doc.qt.io/qt-5/qvector.html", [
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
+    [ "hal::RAMPortWizardPage::RAMPort", "structhal_1_1_r_a_m_port_wizard_page_1_1_r_a_m_port.html", null ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],

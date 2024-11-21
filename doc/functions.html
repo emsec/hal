@@ -111,6 +111,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </li>
 <li>accept()
 : <a class="el" href="classhal_1_1_gate_dialog.html#a859dbfff70d0e5c2edadd7237420495d">hal::GateDialog</a>
+, <a class="el" href="classhal_1_1_gate_library_wizard.html#acbd3bab5adbac584ed8d16c3e06d7866">hal::GateLibraryWizard</a>
 , <a class="el" href="classhal_1_1_grouping_dialog.html#a1ff2fca06615e414f8b0391c844cd5a0">hal::GroupingDialog</a>
 , <a class="el" href="classhal_1_1_module_dialog.html#ac027f6732cb87c237d51f55da5dbea3c">hal::ModuleDialog</a>
 , <a class="el" href="classhal_1_1_plugin_parameter_dialog.html#a2751ee1072ad1b4eb22fb44bf3244e7a">hal::PluginParameterDialog</a>
@@ -223,7 +224,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classhal_1_1_action_unfold_module_factory.html#a6070289b807e2add86925c4778136cb6">hal::ActionUnfoldModuleFactory</a>
 </li>
 <li>activate()
-: <a class="el" href="classhal_1_1_main_settings_widget.html#a862a01a42c01ca778baa18f7bf0cdf29">hal::MainSettingsWidget</a>
+: <a class="el" href="classhal_1_1_gatelibrary_content_widget.html#abf61f5b2b4594374f89d7aaa3a2b0a42">hal::GatelibraryContentWidget</a>
+, <a class="el" href="classhal_1_1_main_settings_widget.html#a862a01a42c01ca778baa18f7bf0cdf29">hal::MainSettingsWidget</a>
 </li>
 <li>activate_all_channels()
 : <a class="el" href="classhal_1_1_log_manager.html#a8f6283f60bea0a12479347f443a65430">hal::LogManager</a>
@@ -273,7 +275,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classhal_1_1_log_manager.html#a1af82acd668588c8a9e31ae61e166ce2">hal::LogManager</a>
 </li>
 <li>add_destination()
-: <a class="el" href="classhal_1_1_net.html#a44f977ce8d85bff88c5972cbdaa6cb82">hal::Net</a>
+: <a class="el" href="classhal_1_1_net.html#a10bc7c36d93e2de9faf274c4a694529f">hal::Net</a>
 </li>
 <li>add_edges()
 : <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30">hal::graph_algorithm::NetlistGraph</a>
@@ -332,6 +334,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </li>
 <li>addExecutedAction()
 : <a class="el" href="classhal_1_1_user_action_manager.html#a0688dc0fa9585f5b75eed11e536ed6b3">hal::UserActionManager</a>
+</li>
+<li>addExternalPlugin()
+: <a class="el" href="classhal_1_1_gui_plugin_table.html#a616a31854bcddac2fcb267106f40fa2e">hal::GuiPluginTable</a>
 </li>
 <li>addExternalWidget()
 : <a class="el" href="classhal_1_1_content_manager.html#ac38f08c621d5c92dfaea2d6ce69370bf">hal::ContentManager</a>
@@ -408,11 +413,17 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>addPinToNewGroup()
 : <a class="el" href="classhal_1_1_action_pingroup.html#a17eb6b8c5db40c57d619aa7be65649ef">hal::ActionPingroup</a>
 </li>
+<li>addPluginActions()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a1dd0513044a7156316b376ff5e5aab71">hal::GuiPluginManager</a>
+</li>
 <li>addPluginSubmenus()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a4e7e45962418d5a6dbcb8282d076e339">hal::GuiPluginManager</a>
 </li>
 <li>addRecursively()
 : <a class="el" href="classhal_1_1_module_model.html#a1e5a1a1dbd4f163ee61617861110d9c2">hal::ModuleModel</a>
+</li>
+<li>addressGroup
+: <a class="el" href="structhal_1_1_r_a_m_port_wizard_page_1_1_r_a_m_port.html#a9673133e13f2ac4b2844254fbc037c1c">hal::RAMPortWizardPage::RAMPort</a>
 </li>
 <li>addSpacer()
 : <a class="el" href="classhal_1_1_toolbar.html#aa6c31190221a870e24a222ab323a10dd">hal::Toolbar</a>
@@ -445,6 +456,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </li>
 <li>AddToModuleReceiver()
 : <a class="el" href="classhal_1_1_add_to_module_receiver.html#af5fd7147bf5e6143e59ca8d2e618ecf6">hal::AddToModuleReceiver</a>
+</li>
+<li>addTypeIconPath
+: <a class="el" href="classhal_1_1_gatelibrary_content_widget.html#a76812656017053cde40f992e22a540a2">hal::GatelibraryContentWidget</a>
 </li>
 <li>addValidator()
 : <a class="el" href="classhal_1_1_input_dialog.html#a3594898589f47aecddcc8651d381061a">hal::InputDialog</a>
@@ -497,6 +511,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classhal_1_1_base_tree_item.html#aae8a38ca73dedc23c82debf56de1009c">hal::BaseTreeItem</a>
 , <a class="el" href="classhal_1_1_context_tree_item.html#a79266b7a9c6c3cb987ddc3e7081dd4d8">hal::ContextTreeItem</a>
 , <a class="el" href="classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881">hal::ModuleItem</a>
+, <a class="el" href="classhal_1_1_pin_item.html#a9c2ff47278e6d38d5e3b1cd3402959ba">hal::PinItem</a>
 , <a class="el" href="classhal_1_1_pin_tree_item.html#abab6bc0fb9a8746bab846ab49f4d1574">hal::PinTreeItem</a>
 , <a class="el" href="classhal_1_1_port_tree_item.html#a2c1c1d58ed43c17ebf6931dfc04899ea">hal::PortTreeItem</a>
 , <a class="el" href="classhal_1_1_root_tree_item.html#a88e9575183c4ffdf6bf7ca0c91624c14">hal::RootTreeItem</a>
@@ -594,10 +609,11 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classhal_1_1_latch_component_entry.html#afd72ddde2e8165ad4346b4c8a10a9927a4504e0bc5c59f3161c6c0d1253d5e92e">hal::LatchComponentEntry</a>
 </li>
 <li>at()
-: <a class="el" href="classhal_1_1_token_stream.html#a41a6a977f6adbbacf250be5ad1b78b83">hal::TokenStream&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_gui_plugin_table.html#a7731e44eefb64109b96f2606848a9d21">hal::GuiPluginTable</a>
+, <a class="el" href="classhal_1_1_token_stream.html#a41a6a977f6adbbacf250be5ad1b78b83">hal::TokenStream&lt; T &gt;</a>
 </li>
 <li>AutoLoad
-: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4da34eb1226953c0a5bf00a7d75ed0aa656">hal::GuiPluginEntry</a>
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a08607a3639dbbb6a8aa3ace2a4ed0aa3a34eb1226953c0a5bf00a7d75ed0aa656">hal::GuiPluginEntry</a>
 </li>
 <li>autosave()
 : <a class="el" href="classhal_1_1_file_manager.html#aa3e2d0ac5986fe0b8921745151df9deb">hal::FileManager</a>
@@ -614,7 +630,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:21 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:55 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

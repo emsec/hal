@@ -4,6 +4,9 @@ var dir_0a12066b2078697757e25e9f28d5f2f1 =
     [ "color_selection.h", "color__selection_8h.html", [
       [ "ColorSelection", "classhal_1_1_color_selection.html", "classhal_1_1_color_selection" ]
     ] ],
+    [ "file_actions.h", "file__actions_8h.html", [
+      [ "FileActions", "classhal_1_1_file_actions.html", "classhal_1_1_file_actions" ]
+    ] ],
     [ "key_value_table.h", "key__value__table_8h.html", [
       [ "KeyValueTable", "classhal_1_1_key_value_table.html", "classhal_1_1_key_value_table" ]
     ] ],

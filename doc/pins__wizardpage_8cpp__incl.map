@@ -1,0 +1,22 @@
+<map id="/home/runner/work/hal/hal/plugins/gui/src/gatelibrary_management/gatelibrary_pages/pins_wizardpage.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/gatelibrary_management/gatelibrary_pages/pins_wizardpage.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="1155,5,1345,91"/>
+<area shape="rect" id="node2" href="$pins__wizardpage_8h.html" title=" " alt="" coords="278,332,489,388"/>
+<area shape="rect" id="node11" href="$gatelibrary__wizard_8h.html" title=" " alt="" coords="1145,139,1355,180"/>
+<area shape="rect" id="node20" href="$pin__delegate_8h.html" title=" " alt="" coords="1380,146,1595,173"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1504,547,1612,574"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1204,547,1307,574"/>
+<area shape="rect" id="node5" title=" " alt="" coords="861,547,967,574"/>
+<area shape="rect" id="node6" title=" " alt="" coords="530,547,621,574"/>
+<area shape="rect" id="node7" href="$gatelibrary__tab__truth__table_8h.html" title=" " alt="" coords="264,436,479,492"/>
+<area shape="rect" id="node9" href="$gatelibrary__tab__general_8h.html" title=" " alt="" coords="29,436,239,492"/>
+<area shape="rect" id="node10" href="$gatelibrary__tab__pin_8h.html" title=" " alt="" coords="554,436,765,492"/>
+<area shape="rect" id="node8" href="$gate__type_8h.html" title=" " alt="" coords="234,540,389,581"/>
+<area shape="rect" id="node12" href="$generalinfo__wizardpage_8h.html" title=" " alt="" coords="1245,436,1466,492"/>
+<area shape="rect" id="node13" href="$flipflop__wizardpage_8h.html" title=" " alt="" coords="1565,228,1775,284"/>
+<area shape="rect" id="node14" href="$bool__wizardpage_8h.html" title=" " alt="" coords="1707,332,1918,388"/>
+<area shape="rect" id="node15" href="$latch__wizardpage_8h.html" title=" " alt="" coords="513,332,723,388"/>
+<area shape="rect" id="node16" href="$lut__wizardpage_8h.html" title=" " alt="" coords="1374,339,1633,381"/>
+<area shape="rect" id="node17" href="$init__wizardpage_8h.html" title=" " alt="" coords="1038,332,1249,388"/>
+<area shape="rect" id="node18" href="$ram__wizardpage_8h.html" title=" " alt="" coords="747,339,1014,381"/>
+<area shape="rect" id="node19" href="$ram__port__wizardpage_8h.html" title=" " alt="" coords="1942,332,2153,388"/>
+</map>

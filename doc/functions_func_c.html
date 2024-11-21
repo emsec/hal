@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>call()
 : <a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#aecfd704d440ca0ea5227eeb3d06eb43e">hal::CallbackHook&lt; R(ArgTypes...)&gt;</a>
 </li>
+<li>callUnsavedChangesWindow()
+: <a class="el" href="classhal_1_1_gate_library_manager.html#a6537a34ccbd608d2c2100f917eb6b034">hal::GateLibraryManager</a>
+</li>
 <li>canDropMimeData()
 : <a class="el" href="classhal_1_1_context_proxy_model.html#aee29e25ec781a311cf9edd93c3974a2c">hal::ContextProxyModel</a>
 , <a class="el" href="classhal_1_1_module_pins_tree_model.html#a1926fe37012467213ea62034955632d3">hal::ModulePinsTreeModel</a>
@@ -240,6 +243,8 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>close()
 : <a class="el" href="classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9">hal::ContentAnchor</a>
 , <a class="el" href="classhal_1_1_content_widget.html#aefb3ae2d63b1a1cd08c4280cec503b4d">hal::ContentWidget</a>
+, <a class="el" href="classhal_1_1_file_actions.html#a2bb74a345ef0eca5855330b1ce2d85a3">hal::FileActions</a>
+, <a class="el" href="classhal_1_1_gate_library_manager.html#ae6c481a714282f363898cb77cc00665d">hal::GateLibraryManager</a>
 , <a class="el" href="classhal_1_1_json_write_complex.html#a35dfd66d3a7a3d7bfc8e963ef726a911">hal::JsonWriteComplex</a>
 , <a class="el" href="classhal_1_1_main_settings_widget.html#abd4625abb27d18f19a03bcf0b39ca0be">hal::MainSettingsWidget</a>
 , <a class="el" href="classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6">hal::SplitterAnchor</a>
@@ -251,14 +256,17 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>closeFile()
 : <a class="el" href="classhal_1_1_file_manager.html#a73fa18829d90d912ca5bb6e927830a56">hal::FileManager</a>
 </li>
+<li>closeGateLibraryManager()
+: <a class="el" href="classhal_1_1_main_window.html#a04e3c2e080e2271b5dc099d558c99a0f">hal::MainWindow</a>
+</li>
 <li>closeIconPath()
-: <a class="el" href="classhal_1_1_main_window.html#ad3dc85c766e60084329ef31cbacf6bca">hal::MainWindow</a>
+: <a class="el" href="classhal_1_1_file_actions.html#a9a18c6bf40ac37d79d240e22e7d14fe2">hal::FileActions</a>
 </li>
 <li>closeIconStyle()
-: <a class="el" href="classhal_1_1_main_window.html#af51e54b907680f05f28707a8118c0d88">hal::MainWindow</a>
+: <a class="el" href="classhal_1_1_file_actions.html#a016de2c590c5052ea50a5527f93e256b">hal::FileActions</a>
 </li>
 <li>closePluginManager()
-: <a class="el" href="classhal_1_1_main_window.html#a5eaadd4b7a28ff7869728096deca9c22">hal::MainWindow</a>
+: <a class="el" href="classhal_1_1_main_window.html#a328059b7931181be6e375c4cabbd2f9a">hal::MainWindow</a>
 </li>
 <li>closeRequest()
 : <a class="el" href="classhal_1_1_graph_navigation_widget.html#adc6ae8b468226acef2a3b8b35d45369a">hal::GraphNavigationWidget</a>
@@ -334,6 +342,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 , <a class="el" href="classhal_1_1_groupings_of_item_model.html#a2310a798a3e546fd6723036dfc843326">hal::GroupingsOfItemModel</a>
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a1f49d3dade379d7e1c9cd8626431a468">hal::GroupingTableModel</a>
 , <a class="el" href="classhal_1_1_gui_plugin_table.html#a47311840de5b5ceb945924462f255752">hal::GuiPluginTable</a>
+, <a class="el" href="classhal_1_1_list_property_model.html#a58da734a97d48aeeb9a94008ac4c67de">hal::ListPropertyModel</a>
 , <a class="el" href="classhal_1_1_l_u_t_table_model.html#a68579216e6943600b52bbe4c9b3bd049">hal::LUTTableModel</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#a8c0d42895342693e805f89a4c7b243f7">hal::ModuleSelectModel</a>
 , <a class="el" href="classhal_1_1_module_table_model.html#a7f04b2ec68e6fb1a03c2b28e4e65d075">hal::ModuleTableModel</a>
@@ -354,7 +363,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="classhal_1_1_comment_entry.html#a4abc144a88ef10bf8352c11b7ca9ceff">hal::CommentEntry</a>
 </li>
 <li>CommentItem()
-: <a class="el" href="classhal_1_1_comment_item.html#a17b6cd85590d04547d219919036ba471">hal::CommentItem</a>
+: <a class="el" href="classhal_1_1_comment_item.html#a02702e7a16b54e234fbe7b6bb94feefc">hal::CommentItem</a>
 </li>
 <li>CommentManager()
 : <a class="el" href="classhal_1_1_comment_manager.html#a4ef9d652b20dc7357d25ab7f2f0a0df7">hal::CommentManager</a>
@@ -406,7 +415,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="classhal_1_1_graphics_scene.html#ace55003fd79d1910a836aac3e981e1db">hal::GraphicsScene</a>
 </li>
 <li>Const()
-: <a class="el" href="classhal_1_1_boolean_function.html#acf976ad78130da5eaf34eba81697bacf">hal::BooleanFunction</a>
+: <a class="el" href="classhal_1_1_boolean_function.html#a339d364059d60f517b09125eed98af38">hal::BooleanFunction</a>
 </li>
 <li>Constant()
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#a7b42cc86d0da5d2b9ea8726d8d301834">hal::BooleanFunction::Node</a>
@@ -476,11 +485,11 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>contentChanged()
 : <a class="el" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">hal::SplitterAnchor</a>
 </li>
-<li>contentFactory()
-: <a class="el" href="classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04">hal::ContentFactory</a>
-</li>
 <li>ContentFactory()
 : <a class="el" href="classhal_1_1_content_factory.html#af666e254b657c66fdfc1074295301503">hal::ContentFactory</a>
+</li>
+<li>contentFactory()
+: <a class="el" href="classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04">hal::ContentFactory</a>
 </li>
 <li>ContentFrame()
 : <a class="el" href="classhal_1_1_content_frame.html#acec9c0993ffb1fd6a9d79aefb7739486">hal::ContentFrame</a>
@@ -524,8 +533,11 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <li>contextWithNameExists()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a749e495e06bd4c0421d15c43b7179c97">hal::GraphContextManager</a>
 </li>
+<li>contribution_top_label()
+: <a class="el" href="classhal_1_1_gui_extension_interface.html#a9d94e08c41d0d85a6ff4352882e1590c">hal::GuiExtensionInterface</a>
+</li>
 <li>convert_to()
-: <a class="el" href="classhal_1_1_gate_type_component.html#a6b439c29e3e8fa2d23827a8f579f7ca3">hal::GateTypeComponent</a>
+: <a class="el" href="classhal_1_1_gate_type_component.html#a288e45d048e44e5be7b3130885462a8e">hal::GateTypeComponent</a>
 </li>
 <li>CoordinateFromData()
 : <a class="el" href="classhal_1_1_coordinate_from_data.html#aa6069a1a2cc3bf5b27e71f2558f9b645">hal::CoordinateFromData</a>
@@ -554,6 +566,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>crashDump()
 : <a class="el" href="classhal_1_1_user_action_manager.html#af5d614246698ac63b34009aa17274438">hal::UserActionManager</a>
+</li>
+<li>create()
+: <a class="el" href="classhal_1_1_file_actions.html#a3ab4cd901f3bd32aa18c3647faa35c49">hal::FileActions</a>
 </li>
 <li>create_ff_component()
 : <a class="el" href="classhal_1_1_gate_type_component.html#aa5c8039e44920ea0ab684b7f943641e4">hal::GateTypeComponent</a>
@@ -595,7 +610,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 : <a class="el" href="classhal_1_1dataflow_1_1_result.html#a5121ac9c18d84ad50095dac448e84131">hal::dataflow::Result</a>
 </li>
 <li>create_net()
-: <a class="el" href="classhal_1_1_netlist.html#a87824c2d8cf4a82835f691579c39b6a2">hal::Netlist</a>
+: <a class="el" href="classhal_1_1_netlist.html#a4735650221335f256fa7ce8d88c6f551">hal::Netlist</a>
 </li>
 <li>create_pin()
 : <a class="el" href="classhal_1_1_gate_type.html#a017e8f1a87476a7a6ef339315f9d3b17">hal::GateType</a>
@@ -625,6 +640,9 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 </li>
 <li>createChildItem()
 : <a class="el" href="classhal_1_1_module_model.html#a82bad5f14004958f18e9aa3c744c57a7">hal::ModuleModel</a>
+</li>
+<li>createEditor()
+: <a class="el" href="classhal_1_1_pin_delegate.html#a0984e5ec0964f35c253a1efcaf5ff712">hal::PinDelegate</a>
 </li>
 <li>createGroupingEvent()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a6ae8b429317f94b4192e9b90861fbcd2">hal::GroupingTableModel</a>
@@ -669,7 +687,7 @@ $(document).ready(function(){initNavTree('functions_func_c.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 29 2024 15:33:21 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Nov 21 2024 11:54:55 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

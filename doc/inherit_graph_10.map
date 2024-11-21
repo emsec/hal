@@ -1,8 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="5,107,144,133"/>
+<area shape="rect" id="node1" href="$classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="5,132,144,159"/>
 <area shape="rect" id="node2" href="$classhal_1_1_context_tree_item.html" title=" " alt="" coords="192,5,351,32"/>
 <area shape="rect" id="node3" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="207,56,335,83"/>
-<area shape="rect" id="node4" href="$classhal_1_1_pin_tree_item.html" title=" " alt="" coords="208,107,335,133"/>
-<area shape="rect" id="node5" href="$classhal_1_1_port_tree_item.html" title=" " alt="" coords="205,157,338,184"/>
-<area shape="rect" id="node6" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="203,208,340,235"/>
+<area shape="rect" id="node4" href="$classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="221,107,321,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_pin_tree_item.html" title=" " alt="" coords="208,157,335,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_port_tree_item.html" title=" " alt="" coords="205,208,338,235"/>
+<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="203,259,340,285"/>
 </map>

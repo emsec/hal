@@ -1,0 +1,9 @@
+<map id="hal::GateLibraryTabInterface" name="hal::GateLibraryTabInterface">
+<area shape="rect" id="node1" title=" " alt="" coords="209,887,416,979"/>
+<area shape="rect" id="node5" href="$classhal_1_1_gate_library_tab_general.html" title=" " alt="" coords="5,1041,204,1133"/>
+<area shape="rect" id="node6" href="$classhal_1_1_gate_library_tab_pin.html" title=" " alt="" coords="229,1027,397,1148"/>
+<area shape="rect" id="node7" href="$classhal_1_1_gate_library_tab_truth_table.html" title=" " alt="" coords="421,1034,631,1141"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="209,395,416,839"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="140,5,307,347"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpaintdevice.html" title=" " alt="" coords="331,49,476,303"/>
+</map>

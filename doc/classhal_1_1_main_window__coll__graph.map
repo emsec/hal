@@ -1,5 +1,5 @@
 <map id="hal::MainWindow" name="hal::MainWindow">
-<area shape="rect" id="node1" title="The top level widget." alt="" coords="129,1103,275,1341"/>
+<area shape="rect" id="node1" title="The top level widget." alt="" coords="126,1103,278,1341"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="175,396,381,840"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
 <area shape="rect" id="node6" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="5,543,151,693"/>

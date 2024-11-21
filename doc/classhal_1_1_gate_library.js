@@ -17,8 +17,10 @@ var classhal_1_1_gate_library =
     [ "get_vcc_gate_types", "classhal_1_1_gate_library.html#a4f3f32d464c6cc8bc93704d317e86428", null ],
     [ "mark_gnd_gate_type", "classhal_1_1_gate_library.html#a82ab1b37d4070635bc32d99e927024ae", null ],
     [ "mark_vcc_gate_type", "classhal_1_1_gate_library.html#a365e5c3131c9a1c9d753a43468aced8d", null ],
+    [ "remove_gate_type", "classhal_1_1_gate_library.html#a3da57c17da586b0570744712487f782a", null ],
     [ "replace_gate_type", "classhal_1_1_gate_library.html#a0372abbc16439f3286b44e80d7edca18", null ],
     [ "set_gate_location_data_category", "classhal_1_1_gate_library.html#a7bfa20c066532a2e405200b30f719348", null ],
     [ "set_gate_location_data_identifiers", "classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1", null ],
+    [ "set_name", "classhal_1_1_gate_library.html#a604b952da7b1a9415bed357ea8f410aa", null ],
     [ "set_path", "classhal_1_1_gate_library.html#a5a43b831cc73cde1aa6e45327cc911d6", null ]
 ];

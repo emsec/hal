@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['waittobeseatedlist_40806',['WaitToBeSeatedList',['../classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a',1,'hal::WaitToBeSeatedEntry']]],
-  ['waittobeseatedwaiting_40807',['WaitToBeSeatedWaiting',['../classhal_1_1_wait_to_be_seated_entry.html#a7b2586c86a9eb219c90855caa74e8130',1,'hal::WaitToBeSeatedEntry']]]
+  ['pin_5fevent_5forder_41229',['pin_event_order',['../classhal_1_1_pin_changed_event.html#a5ba03375a633d3893cf9856de503c4b0',1,'hal::PinChangedEvent']]],
+  ['pinchangedeventscope_41230',['PinChangedEventScope',['../classhal_1_1_pin_changed_event.html#a7431cf1b3339cf868cceb7b9b865f8d8',1,'hal::PinChangedEvent']]],
+  ['pinswizardpage_41231',['PinsWizardPage',['../classhal_1_1_gate_library_wizard.html#a55578d357d80ac5f0cda7dfed806e157',1,'hal::GateLibraryWizard']]],
+  ['projectmanager_41232',['ProjectManager',['../classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7',1,'hal::ProjectDirectory']]]
 ];
