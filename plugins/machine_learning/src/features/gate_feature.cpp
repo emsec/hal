@@ -18,7 +18,7 @@ namespace hal
         {
             const Result<NetlistAbstraction*> FeatureContext::get_sequential_abstraction()
             {
-                if (!m_seqential_abstraction.has_value())
+                if (!m_sequential_abstraction.has_value())
                 {
                     const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
 
@@ -36,13 +36,40 @@ namespace hal
                         return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
                     }
 
-                    m_seqential_abstraction = sequential_abstraction_res.get();
+                    m_sequential_abstraction = sequential_abstraction_res.get();
 
                     // TODO remove debug print
                     // std::cout << "Built abstraction" << std::endl;
                 }
 
-                return OK(&m_seqential_abstraction.value());
+                return OK(&m_sequential_abstraction.value());
+            }
+
+            const Result<NetlistAbstraction*> FeatureContext::get_original_abstraction()
+            {
+                if (!m_original_abstraction.has_value())
+                {
+                    // const std::vector<PinType> forbidden_pins = {
+                    //     PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
+
+                    // const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
+                    //     UNUSED(_d);
+                    //     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
+                    // };
+
+                    const auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
+                    if (original_abstraction_res.is_error())
+                    {
+                        return ERR_APPEND(original_abstraction_res.get_error(), "cannot get original netlist abstraction for gate feature context: failed to build abstraction.");
+                    }
+
+                    m_original_abstraction = original_abstraction_res.get();
+
+                    // TODO remove debug print
+                    // std::cout << "Built abstraction" << std::endl;
+                }
+
+                return OK(&m_original_abstraction.value());
             }
 
             const std::vector<GateTypeProperty>& FeatureContext::get_possible_gate_type_properties()
@@ -51,16 +78,17 @@ namespace hal
                 {
                     std::set<GateTypeProperty> properties;
 
-                    // for (const auto& [_name, gt] : nl->get_gate_library()->get_gate_types())
-                    // {
-                    //     properties.insert(gt->get_properties().begin(), gt->get_properties().end());
-                    // }
-
-                    for (auto& [gtp, _name] : EnumStrings<GateTypeProperty>::data)
+                    for (const auto& [_name, gt] : nl->get_gate_library()->get_gate_types())
                     {
-                        UNUSED(_name);
-                        properties.insert(gtp);
+                        const auto gt_properties = gt->get_properties();
+                        properties.insert(gt_properties.begin(), gt_properties.end());
                     }
+
+                    // for (auto& [gtp, _name] : EnumStrings<GateTypeProperty>::data)
+                    // {
+                    //     UNUSED(_name);
+                    //     properties.insert(gtp);
+                    // }
 
                     auto properties_vec = utils::to_vector(properties);
                     // sort alphabetically
@@ -105,9 +133,41 @@ namespace hal
             Result<std::vector<u32>> DistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
             {
                 // necessary workaround to please compiler
-                const auto& direction = m_direction;
-                const auto distance   = NetlistTraversalDecorator(*fc.nl).get_shortest_path_distance(
-                    g, [direction](const auto* ep) { return (direction == PinDirection::output) ? ep->get_net()->is_global_output_net() : ep->get_net()->is_global_input_net(); }, m_direction);
+                const auto& direction                                = m_direction;
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get original netlist abstraction");
+                }
+
+                // necessary workaround to please compiler
+                const auto& forbidden_pin_types = m_forbidden_pin_types;
+                const auto endpoint_filter      = [forbidden_pin_types](const auto* ep, const auto& _d) {
+                    UNUSED(_d);
+                    return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
+                };
+
+                const auto distance = NetlistAbstractionDecorator(*nl_abstr.get())
+                                          .get_shortest_path_distance(
+                                              g,
+                                              [direction](const auto* ep, const auto& nla) {
+                                                  if (!((direction == PinDirection::output) ? ep->is_source_pin() : ep->is_destination_pin()))
+                                                  {
+                                                      return false;
+                                                  }
+
+                                                  const auto global_io_connections = (direction == PinDirection::output) ? nla.get_global_output_successors(ep) : nla.get_global_input_predecessors(ep);
+                                                  if (global_io_connections.is_error())
+                                                  {
+                                                      log_error("machine_learning", "{}", global_io_connections.get_error().get());
+                                                      return false;
+                                                  }
+                                                  return !global_io_connections.get().empty();
+                                              },
+                                              m_direction,
+                                              m_directed,
+                                              endpoint_filter,
+                                              endpoint_filter);
 
                 if (distance.is_error())
                 {
@@ -137,6 +197,13 @@ namespace hal
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get sequential netlist abstraction");
                 }
 
+                // necessary workaround to please compiler
+                const auto& forbidden_pin_types = m_forbidden_pin_types;
+                const auto endpoint_filter      = [forbidden_pin_types](const auto* ep, const auto& _d) {
+                    UNUSED(_d);
+                    return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
+                };
+
                 const auto distance = NetlistAbstractionDecorator(*nl_abstr.get())
                                           .get_shortest_path_distance(
                                               g,
@@ -154,7 +221,10 @@ namespace hal
                                                   }
                                                   return !global_io_connections.get().empty();
                                               },
-                                              m_direction);
+                                              m_direction,
+                                              m_directed,
+                                              endpoint_filter,
+                                              endpoint_filter);
 
                 if (distance.is_error())
                 {
@@ -218,56 +288,36 @@ namespace hal
             {
                 const auto& all_properties = fc.get_possible_gate_type_properties();
 
-                std::vector<u32> feature = std::vector<u32>(all_properties.size(), 0);
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get original netlist abstraction");
+                }
 
-                std::set<Gate*> neighborhood;
+                std::vector<u32> feature = std::vector<u32>(all_properties.size(), 0);
 
                 // fix to make compiler happpy
                 const auto depth = m_depth;
 
-                if (m_direction == PinDirection::input || m_direction == PinDirection::inout)
+                const auto neighborhood = NetlistAbstractionDecorator(*(nl_abstr.get()))
+                                              .get_next_matching_gates_until(
+                                                  g,
+                                                  [](const auto* g) { return true; },
+                                                  m_direction,
+                                                  m_directed,
+                                                  false,
+                                                  [depth](const auto* _ep, const auto current_depth) {
+                                                      UNUSED(_ep);
+                                                      return current_depth <= depth;
+                                                  },
+                                                  nullptr);
+
+                if (neighborhood.is_error())
                 {
-                    const auto in_gates = NetlistTraversalDecorator(*fc.nl).get_next_matching_gates_until(
-                        g,
-                        false,
-                        [](const auto* g) { return true; },
-                        true,
-                        [depth](const auto* _ep, const auto current_depth) {
-                            UNUSED(_ep);
-                            return current_depth <= depth;
-                        },
-                        nullptr);
-
-                    if (in_gates.is_error())
-                    {
-                        return ERR_APPEND(in_gates.get_error(), "cannot calculate feature " + to_string());
-                    }
-
-                    neighborhood.insert(in_gates.get().begin(), in_gates.get().end());
+                    return ERR_APPEND(neighborhood.get_error(), "cannot calculate feature " + to_string());
                 }
 
-                if (m_direction == PinDirection::output || m_direction == PinDirection::inout)
-                {
-                    const auto in_gates = NetlistTraversalDecorator(*fc.nl).get_next_matching_gates_until(
-                        g,
-                        true,
-                        [](const auto* g) { return true; },
-                        true,
-                        [depth](const auto* _ep, const auto current_depth) {
-                            UNUSED(_ep);
-                            return current_depth <= depth;
-                        },
-                        nullptr);
-
-                    if (in_gates.is_error())
-                    {
-                        return ERR_APPEND(in_gates.get_error(), "cannot calculate feature " + to_string());
-                    }
-
-                    neighborhood.insert(in_gates.get().begin(), in_gates.get().end());
-                }
-
-                for (const auto& gn : neighborhood)
+                for (const auto& gn : neighborhood.get())
                 {
                     for (const auto& gtp : gn->get_type()->get_properties())
                     {

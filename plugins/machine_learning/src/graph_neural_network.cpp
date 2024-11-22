@@ -30,7 +30,7 @@ namespace hal
             for (const auto& g : gates)
             {
                 const u32 g_idx = gate_to_idx.at(g);
-                if (dir == GraphDirection::directed_backward)
+                if (dir == GraphDirection::directed)
                 {
                     for (const auto& pre : g->get_unique_predecessors())
                     {
@@ -39,16 +39,7 @@ namespace hal
                     }
                 }
 
-                if (dir == GraphDirection::directed_forward)
-                {
-                    for (const auto& suc : g->get_unique_successors())
-                    {
-                        sources.push_back(g_idx);
-                        destinations.push_back(gate_to_idx.at(suc));
-                    }
-                }
-
-                if (dir == GraphDirection::bidirectional)
+                if (dir == GraphDirection::undirected)
                 {
                     for (const auto& suc : g->get_unique_successors())
                     {
@@ -101,7 +92,7 @@ namespace hal
             for (const auto& g : gates)
             {
                 const u32 g_idx = gate_to_idx.at(g);
-                if (dir == GraphDirection::directed_backward)
+                if (dir == GraphDirection::directed)
                 {
                     const auto unique_predecessors = sequential_abstraction.get_unique_predecessors(g);
                     if (unique_predecessors.is_error())
@@ -116,22 +107,7 @@ namespace hal
                     }
                 }
 
-                if (dir == GraphDirection::directed_forward)
-                {
-                    const auto unique_successors = sequential_abstraction.get_unique_successors(g);
-                    if (unique_successors.is_error())
-                    {
-                        return ERR_APPEND(unique_successors.get_error(),
-                                          "cannot construct sequential netlist graph: failed to find unique successors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                    }
-                    for (const auto& suc : unique_successors.get())
-                    {
-                        sources.push_back(g_idx);
-                        destinations.push_back(gate_to_idx.at(suc));
-                    }
-                }
-
-                if (dir == GraphDirection::bidirectional)
+                if (dir == GraphDirection::undirected)
                 {
                     const auto unique_successors = sequential_abstraction.get_unique_successors(g);
                     if (unique_successors.is_error())

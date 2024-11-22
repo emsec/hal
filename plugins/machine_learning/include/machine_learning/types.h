@@ -14,9 +14,8 @@ namespace hal
     {
         enum GraphDirection
         {
-            directed_forward,
-            directed_backward,
-            bidirectional,
+            undirected,
+            directed,
         };
     }    // namespace machine_learning
 }    // namespace hal

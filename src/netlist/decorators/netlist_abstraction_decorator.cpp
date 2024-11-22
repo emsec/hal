@@ -324,7 +324,7 @@ namespace hal
                 for (const auto& exit_ep : current)
                 {
                     // currently only works for input and output pins
-                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
+                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::input)
                     {
                         return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
                                    + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
@@ -398,13 +398,13 @@ namespace hal
 
         if (direction == PinDirection::inout)
         {
-            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, true, exit_endpoint_filter, entry_endpoint_filter);
+            const auto res_backward = get_shortest_path_distance_internal(start, target_filter, PinDirection::input, directed, exit_endpoint_filter, entry_endpoint_filter);
             if (res_backward.is_error())
             {
                 return res_backward;
             }
 
-            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, true, exit_endpoint_filter, entry_endpoint_filter);
+            const auto res_forward = get_shortest_path_distance_internal(start, target_filter, PinDirection::output, directed, exit_endpoint_filter, entry_endpoint_filter);
             if (res_forward.is_error())
             {
                 return res_forward;
@@ -461,7 +461,32 @@ namespace hal
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                        const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
-        const auto start_endpoints = (direction == PinDirection::output) ? start->get_fan_out_endpoints() : start->get_fan_in_endpoints();
+        std::vector<Endpoint*> start_endpoints;
+        if (direction == PinDirection::output || direction == PinDirection::inout)
+        {
+            for (auto* exit_ep : start->get_fan_out_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
+
+                start_endpoints.push_back(exit_ep);
+            }
+        }
+
+        if (direction == PinDirection::input || direction == PinDirection::inout)
+        {
+            for (auto* exit_ep : start->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
+
+                start_endpoints.push_back(exit_ep);
+            }
+        }
 
         return get_shortest_path_distance_internal(start_endpoints, target_filter, direction, directed, exit_endpoint_filter, entry_endpoint_filter);
     }
@@ -493,103 +518,131 @@ namespace hal
                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                           const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
-        std::set<Gate*> res;
-        u32 distance = 0;
-
-        std::unordered_set<Endpoint*> visited;
-
-        std::vector<Endpoint*> current;
-        std::vector<Endpoint*> next;
-
-        // check whether start already fullfills target or exit filter
-        for (auto* start_ep : start)
+        if (direction == PinDirection::output || direction == PinDirection::input)
         {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
+            std::set<Gate*> res;
+            u32 distance = 0;
+
+            std::unordered_set<Endpoint*> visited;
+
+            std::vector<Endpoint*> current;
+            std::vector<Endpoint*> next;
+
+            // check whether start already fullfills target or exit filter
+            for (auto* start_ep : start)
             {
-                continue;
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
+                {
+                    continue;
+                }
+
+                current.push_back(start_ep);
+                visited.insert(start_ep);
             }
 
-            current.push_back(start_ep);
-            visited.insert(start_ep);
+            while (true)
+            {
+                distance++;
+
+                for (const auto& exit_ep : current)
+                {
+                    // currently only works for input and output pins
+                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::input)
+                    {
+                        return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                                   + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                    }
+
+                    const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
+                    if (entry_eps.is_error())
+                    {
+                        return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
+                    }
+
+                    for (const auto& entry_ep : entry_eps.get())
+                    {
+                        if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
+                        {
+                            continue;
+                        }
+
+                        const auto next_g = entry_ep->get_gate();
+
+                        if (target_gate_filter(next_g))
+                        {
+                            res.insert(next_g);
+
+                            if (!continue_on_match)
+                            {
+                                continue;
+                            }
+                        }
+
+                        std::vector<Endpoint*> next_eps;
+                        if (directed)
+                        {
+                            next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
+                        }
+                        else
+                        {
+                            next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
+                            next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
+                        }
+
+                        for (const auto& next_ep : next_eps)
+                        {
+                            if (const auto it = visited.find(next_ep); it != visited.end())
+                            {
+                                continue;
+                            }
+                            visited.insert(next_ep);
+
+                            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
+                            {
+                                continue;
+                            }
+
+                            next.push_back(next_ep);
+                        }
+                    }
+                }
+
+                if (next.empty())
+                {
+                    break;
+                }
+
+                current = next;
+                next.clear();
+            }
+
+            return OK(res);
         }
 
-        while (true)
+        if (direction == PinDirection::inout)
         {
-            distance++;
-
-            for (const auto& exit_ep : current)
+            const auto res_backward = get_next_matching_gates_internal(start, target_gate_filter, PinDirection::input, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_backward.is_error())
             {
-                // currently only works for input and output pins
-                if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
-                {
-                    return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
-                               + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
-                }
-
-                const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
-                if (entry_eps.is_error())
-                {
-                    return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
-                }
-
-                for (const auto& entry_ep : entry_eps.get())
-                {
-                    if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
-                    {
-                        continue;
-                    }
-
-                    const auto next_g = entry_ep->get_gate();
-
-                    if (target_gate_filter(next_g))
-                    {
-                        res.insert(next_g);
-
-                        if (!continue_on_match)
-                        {
-                            continue;
-                        }
-                    }
-
-                    std::vector<Endpoint*> next_eps;
-                    if (directed)
-                    {
-                        next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
-                    }
-                    else
-                    {
-                        next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
-                        next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
-                    }
-
-                    for (const auto& next_ep : next_eps)
-                    {
-                        if (const auto it = visited.find(next_ep); it != visited.end())
-                        {
-                            continue;
-                        }
-                        visited.insert(next_ep);
-
-                        if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
-                        {
-                            continue;
-                        }
-
-                        next.push_back(next_ep);
-                    }
-                }
+                return res_backward;
             }
 
-            if (next.empty())
+            const auto res_forward = get_next_matching_gates_internal(start, target_gate_filter, PinDirection::output, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_forward.is_error())
             {
-                break;
+                return res_forward;
             }
 
-            current = next;
-            next.clear();
+            const auto matching_gates_backward = res_backward.get();
+            const auto matching_gates_forward  = res_forward.get();
+
+            std::set<Gate*> matching_gates = matching_gates_backward;
+            matching_gates.insert(matching_gates_forward.begin(), matching_gates_forward.end());
+
+            return OK(matching_gates);
         }
 
-        return OK(res);
+        return ERR("cannot get next matching gates until: pin direction " + enum_to_string(direction) + " is not supported");
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates(Endpoint* endpoint,
@@ -637,14 +690,30 @@ namespace hal
         }
 
         std::vector<Endpoint*> start;
-        for (auto* exit_ep : (direction == PinDirection::output) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        if (direction == PinDirection::output || direction == PinDirection::inout)
         {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+            for (auto* exit_ep : gate->get_fan_out_endpoints())
             {
-                continue;
-            }
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
 
-            start.push_back(exit_ep);
+                start.push_back(exit_ep);
+            }
+        }
+
+        if (direction == PinDirection::input || direction == PinDirection::inout)
+        {
+            for (auto* exit_ep : gate->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
+
+                start.push_back(exit_ep);
+            }
         }
 
         return get_next_matching_gates_internal(start, target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
@@ -658,103 +727,133 @@ namespace hal
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
                                                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
-        std::set<Gate*> res;
-        u32 distance = 0;
-
-        std::unordered_set<Endpoint*> visited;
-
-        std::vector<Endpoint*> current;
-        std::vector<Endpoint*> next;
-
-        // check whether start already fullfills target or exit filter
-        for (auto* start_ep : start)
+        if (direction == PinDirection::output || direction == PinDirection::input)
         {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
+            std::set<Gate*> res;
+            u32 distance = 0;
+
+            std::unordered_set<Endpoint*> visited;
+
+            std::vector<Endpoint*> current;
+            std::vector<Endpoint*> next;
+
+            // check whether start already fullfills target or exit filter
+            for (auto* start_ep : start)
             {
-                continue;
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(start_ep, distance))
+                {
+                    continue;
+                }
+
+                current.push_back(start_ep);
+                visited.insert(start_ep);
             }
 
-            current.push_back(start_ep);
-            visited.insert(start_ep);
+            while (true)
+            {
+                distance++;
+
+                for (const auto& exit_ep : current)
+                {
+                    // currently only works for input and output pins
+                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::input)
+                    {
+                        return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                                   + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                    }
+
+                    const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
+                    if (entry_eps.is_error())
+                    {
+                        return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
+                    }
+
+                    for (const auto& entry_ep : entry_eps.get())
+                    {
+                        if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
+                        {
+                            continue;
+                        }
+
+                        const auto next_g = entry_ep->get_gate();
+
+                        if (!target_gate_filter(next_g))
+                        {
+                            res.insert(next_g);
+
+                            if (!continue_on_mismatch)
+                            {
+                                continue;
+                            }
+                        }
+
+                        std::vector<Endpoint*> next_eps;
+                        if (directed)
+                        {
+                            next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
+                        }
+                        else
+                        {
+                            next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
+                            next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
+                        }
+
+                        for (const auto& next_ep : next_eps)
+                        {
+                            if (const auto it = visited.find(next_ep); it != visited.end())
+                            {
+                                continue;
+                            }
+                            visited.insert(next_ep);
+
+                            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
+                            {
+                                continue;
+                            }
+
+                            next.push_back(next_ep);
+                        }
+                    }
+                }
+
+                if (next.empty())
+                {
+                    break;
+                }
+
+                current = next;
+                next.clear();
+            }
+
+            return OK(res);
         }
 
-        while (true)
+        if (direction == PinDirection::inout)
         {
-            distance++;
-
-            for (const auto& exit_ep : current)
+            const auto res_backward =
+                get_next_matching_gates_until_internal(start, target_gate_filter, PinDirection::input, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_backward.is_error())
             {
-                // currently only works for input and output pins
-                if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::output)
-                {
-                    return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
-                               + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
-                }
-
-                const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
-                if (entry_eps.is_error())
-                {
-                    return ERR_APPEND(entry_eps.get_error(), "cannot get shortest path distance starting from endpoints");
-                }
-
-                for (const auto& entry_ep : entry_eps.get())
-                {
-                    if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, distance))
-                    {
-                        continue;
-                    }
-
-                    const auto next_g = entry_ep->get_gate();
-
-                    if (!target_gate_filter(next_g))
-                    {
-                        res.insert(next_g);
-
-                        if (!continue_on_mismatch)
-                        {
-                            continue;
-                        }
-                    }
-
-                    std::vector<Endpoint*> next_eps;
-                    if (directed)
-                    {
-                        next_eps = (direction == PinDirection::output) ? next_g->get_fan_out_endpoints() : next_g->get_fan_in_endpoints();
-                    }
-                    else
-                    {
-                        next_eps.insert(next_eps.end(), next_g->get_fan_out_endpoints().begin(), next_g->get_fan_out_endpoints().end());
-                        next_eps.insert(next_eps.end(), next_g->get_fan_in_endpoints().begin(), next_g->get_fan_in_endpoints().end());
-                    }
-
-                    for (const auto& next_ep : next_eps)
-                    {
-                        if (const auto it = visited.find(next_ep); it != visited.end())
-                        {
-                            continue;
-                        }
-                        visited.insert(next_ep);
-
-                        if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(next_ep, distance))
-                        {
-                            continue;
-                        }
-
-                        next.push_back(next_ep);
-                    }
-                }
+                return res_backward;
             }
 
-            if (next.empty())
+            const auto res_forward =
+                get_next_matching_gates_until_internal(start, target_gate_filter, PinDirection::output, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);
+            if (res_forward.is_error())
             {
-                break;
+                return res_forward;
             }
 
-            current = next;
-            next.clear();
+            const auto matching_gates_backward = res_backward.get();
+            const auto matching_gates_forward  = res_forward.get();
+
+            std::set<Gate*> matching_gates = matching_gates_backward;
+            matching_gates.insert(matching_gates_forward.begin(), matching_gates_forward.end());
+
+            return OK(matching_gates);
         }
 
-        return OK(res);
+        return ERR("cannot get next matching gates until: pin direction " + enum_to_string(direction) + " is not supported");
     }
 
     Result<std::set<Gate*>> NetlistAbstractionDecorator::get_next_matching_gates_until(Endpoint* endpoint,
@@ -802,14 +901,30 @@ namespace hal
         }
 
         std::vector<Endpoint*> start;
-        for (auto* exit_ep : (direction == PinDirection::output) ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+        if (direction == PinDirection::output || direction == PinDirection::inout)
         {
-            if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+            for (auto* exit_ep : gate->get_fan_out_endpoints())
             {
-                continue;
-            }
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
 
-            start.push_back(exit_ep);
+                start.push_back(exit_ep);
+            }
+        }
+
+        if (direction == PinDirection::input || direction == PinDirection::inout)
+        {
+            for (auto* exit_ep : gate->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))
+                {
+                    continue;
+                }
+
+                start.push_back(exit_ep);
+            }
         }
 
         return get_next_matching_gates_internal(start, target_gate_filter, direction, directed, continue_on_mismatch, exit_endpoint_filter, entry_endpoint_filter);

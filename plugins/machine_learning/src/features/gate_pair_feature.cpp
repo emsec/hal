@@ -39,6 +39,33 @@ namespace hal
                 return OK(&(m_seqential_abstraction.value()));
             }
 
+            const Result<NetlistAbstraction*> FeatureContext::get_original_abstraction()
+            {
+                if (!m_original_abstraction.has_value())
+                {
+                    // const std::vector<PinType> forbidden_pins = {
+                    //     PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
+
+                    // const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
+                    //     UNUSED(_d);
+                    //     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
+                    // };
+
+                    const auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
+                    if (original_abstraction_res.is_error())
+                    {
+                        return ERR_APPEND(original_abstraction_res.get_error(), "cannot get original netlist abstraction for gate feature context: failed to build abstraction.");
+                    }
+
+                    m_original_abstraction = original_abstraction_res.get();
+
+                    // TODO remove debug print
+                    // std::cout << "Built abstraction" << std::endl;
+                }
+
+                return OK(&m_original_abstraction.value());
+            }
+
             Result<std::vector<u32>> LogicalDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
@@ -46,7 +73,20 @@ namespace hal
                     return OK({0});
                 }
 
-                const auto res = NetlistTraversalDecorator(*fc.nl).get_shortest_path_distance(g_a, g_b, m_direction);
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": : failed to get original netlist abstraction");
+                }
+
+                // necessary workaround to please compiler
+                const auto& forbidden_pin_types = m_forbidden_pin_types;
+                const auto endpoint_filter      = [forbidden_pin_types](const auto* ep, const auto& _d) {
+                    UNUSED(_d);
+                    return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
+                };
+
+                const auto res = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
                 if (res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
@@ -86,7 +126,14 @@ namespace hal
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": : failed to get sequential netlist abstraction");
                 }
 
-                const auto res = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction);
+                // necessary workaround to please compiler
+                const auto& forbidden_pin_types = m_forbidden_pin_types;
+                const auto endpoint_filter      = [forbidden_pin_types](const auto* ep, const auto& _d) {
+                    UNUSED(_d);
+                    return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
+                };
+
+                const auto res = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
                 if (res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
@@ -163,100 +210,100 @@ namespace hal
 
             Result<std::vector<u32>> SharedSequentialNeighbors::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
             {
-                // TODO add caching
-                std::unordered_map<const Net*, std::set<Gate*>>* cache;
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_sequential_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get sequential netlist abstraction");
+                }
 
-                const auto get_n_next_sequential_gates = [&fc, &cache](const Gate* g, const bool direction, const u32 depth) -> Result<std::set<Gate*>> {
-                    std::set<Gate*> total_neighbors;
+                // fix to make compiler happpy
+                const auto depth               = m_depth;
+                const auto forbidden_pin_types = m_forbidden_pin_types;
+                const auto starting_pin_types  = m_starting_pin_types;
 
-                    std::vector<const Gate*> current_neighbors = {g};
-                    std::vector<const Gate*> next_neighbors;
-
-                    for (u32 i = 0; i < depth; i++)
+                const auto endpoint_filter_a = [g_a, forbidden_pin_types, starting_pin_types, depth](const auto* ep, const auto& d) {
+                    if (d > depth)
                     {
-                        u32 prev_size = total_neighbors.size();
-
-                        for (const auto& g : current_neighbors)
-                        {
-                            const auto& res = NetlistTraversalDecorator(*fc.nl).get_next_sequential_gates(g, direction);
-                            if (res.is_error())
-                            {
-                                return res;
-                                // return ERR_APPEND(res.get_error(), "cannot caluclate feature " + to_string() + ": failed to get next sequential gates.");
-                            }
-                            total_neighbors.insert(res.get().begin(), res.get().end());
-                            next_neighbors.insert(next_neighbors.end(), res.get().begin(), res.get().end());
-                        }
-
-                        if (prev_size == total_neighbors.size())
-                        {
-                            break;
-                        }
-
-                        current_neighbors = next_neighbors;
-                        next_neighbors.clear();
+                        return false;
                     }
 
-                    return OK(total_neighbors);
+                    // do not filter out the pins with starting pin types at the start gate
+                    // this for example allows us to investigate the neighborhood infront of the reset signal, while still forbidding reset pins for the propagation
+                    if (ep->get_gate() == g_a && !starting_pin_types.empty())
+                    {
+                        if (std::find(starting_pin_types.begin(), starting_pin_types.end(), ep->get_pin()->get_type()) != starting_pin_types.end())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) != forbidden_pin_types.end())
+                    {
+                        return false;
+                    }
+
+                    return true;
                 };
+
+                const auto endpoint_filter_b = [g_b, forbidden_pin_types, starting_pin_types, depth](const auto* ep, const auto& d) {
+                    if (d > depth)
+                    {
+                        return false;
+                    }
+
+                    // do not filter out the pins with starting pin types at the start gate
+                    // this for example allows us to investigate the neighborhood infront of the reset signal, while still forbidding reset pins for the propagation
+                    if (ep->get_gate() == g_b && !starting_pin_types.empty())
+                    {
+                        if (std::find(starting_pin_types.begin(), starting_pin_types.end(), ep->get_pin()->get_type()) != starting_pin_types.end())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) != forbidden_pin_types.end())
+                    {
+                        return false;
+                    }
+
+                    return true;
+                };
+
+                const auto neighborhood_a = NetlistAbstractionDecorator(*(nl_abstr.get()))
+                                                .get_next_matching_gates_until(g_a, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_a, endpoint_filter_a);
+
+                const auto neighborhood_b = NetlistAbstractionDecorator(*(nl_abstr.get()))
+                                                .get_next_matching_gates_until(g_b, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_b, endpoint_filter_b);
+
+                if (neighborhood_a.is_error())
+                {
+                    return ERR_APPEND(neighborhood_a.get_error(), "cannot calculate feature " + to_string());
+                }
+
+                if (neighborhood_b.is_error())
+                {
+                    return ERR_APPEND(neighborhood_b.get_error(), "cannot calculate feature " + to_string());
+                }
 
                 std::set<const Gate*> neighbors_a = g_a->get_type()->has_property(GateTypeProperty::sequential) ? std::set<const Gate*>{g_a} : std::set<const Gate*>{};
                 std::set<const Gate*> neighbors_b = g_b->get_type()->has_property(GateTypeProperty::sequential) ? std::set<const Gate*>{g_b} : std::set<const Gate*>{};
 
-                if (m_direction == PinDirection::output)
+                for (const auto g_n : neighborhood_a.get())
                 {
-                    const auto res_a = get_n_next_sequential_gates(g_a, true, m_depth);
-                    if (res_a.is_error())
-                    {
-                        return ERR_APPEND(res_a.get_error(), "cannot calculate feature " + to_string() + ": failed to get next sequnetial gates.");
-                    }
-
-                    for (const auto g_n : res_a.get())
-                    {
-                        neighbors_a.insert(g_n);
-                    }
-
-                    const auto res_b = get_n_next_sequential_gates(g_b, true, m_depth);
-                    if (res_b.is_error())
-                    {
-                        return ERR_APPEND(res_b.get_error(), "cannot calculate feature " + to_string() + ": failed to get next sequnetial gates.");
-                    }
-
-                    for (const auto g_n : res_b.get())
-                    {
-                        neighbors_b.insert(g_n);
-                    }
+                    neighbors_a.insert(g_n);
                 }
 
-                if (m_direction == PinDirection::input)
+                for (const auto g_n : neighborhood_b.get())
                 {
-                    const auto res_a = get_n_next_sequential_gates(g_a, false, m_depth);
-                    if (res_a.is_error())
-                    {
-                        return ERR_APPEND(res_a.get_error(), "cannot calculate feature " + to_string() + ": failed to get next sequnetial gates.");
-                    }
-
-                    for (const auto g_n : res_a.get())
-                    {
-                        neighbors_a.insert(g_n);
-                    }
-
-                    const auto res_b = get_n_next_sequential_gates(g_b, false, m_depth);
-                    if (res_b.is_error())
-                    {
-                        return ERR_APPEND(res_b.get_error(), "cannot calculate feature " + to_string() + ": failed to get next sequnetial gates.");
-                    }
-
-                    for (const auto g_n : res_b.get())
-                    {
-                        neighbors_b.insert(g_n);
-                    }
-                }
-
-                if (m_direction == PinDirection::inout)
-                {
-                    // NOTE this is either trivial by just combining both directions or more complex by building a real undirected graph (predecessors of a successor would also be neighbors eventhough the direction siwtches)
-                    return ERR("cannot calculate feature " + to_string() + ": NOT IMPLEMENTED REACHED.");
+                    neighbors_b.insert(g_n);
                 }
 
                 std::set<const Gate*> shared;
@@ -272,54 +319,100 @@ namespace hal
 
             Result<std::vector<u32>> SharedNeighbors::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
             {
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                if (nl_abstr.is_error())
+                {
+                    return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get original netlist abstraction");
+                }
+
+                // fix to make compiler happpy
+                const auto depth               = m_depth;
+                const auto forbidden_pin_types = m_forbidden_pin_types;
+                const auto starting_pin_types  = m_starting_pin_types;
+
+                const auto endpoint_filter_a = [g_a, forbidden_pin_types, starting_pin_types, depth](const auto* ep, const auto& d) {
+                    if (d > depth)
+                    {
+                        return false;
+                    }
+
+                    // do not filter out the pins with starting pin types at the start gate
+                    // this for example allows us to investigate the neighborhood infront of the reset signal, while still forbidding reset pins for the propagation
+                    if (ep->get_gate() == g_a && !starting_pin_types.empty())
+                    {
+                        if (std::find(starting_pin_types.begin(), starting_pin_types.end(), ep->get_pin()->get_type()) != starting_pin_types.end())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) != forbidden_pin_types.end())
+                    {
+                        return false;
+                    }
+
+                    return true;
+                };
+
+                const auto endpoint_filter_b = [g_b, forbidden_pin_types, starting_pin_types, depth](const auto* ep, const auto& d) {
+                    if (d > depth)
+                    {
+                        return false;
+                    }
+
+                    // do not filter out the pins with starting pin types at the start gate
+                    // this for example allows us to investigate the neighborhood infront of the reset signal, while still forbidding reset pins for the propagation
+                    if (ep->get_gate() == g_b && !starting_pin_types.empty())
+                    {
+                        if (std::find(starting_pin_types.begin(), starting_pin_types.end(), ep->get_pin()->get_type()) != starting_pin_types.end())
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) != forbidden_pin_types.end())
+                    {
+                        return false;
+                    }
+
+                    return true;
+                };
+
+                const auto neighborhood_a = NetlistAbstractionDecorator(*(nl_abstr.get()))
+                                                .get_next_matching_gates_until(g_a, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_a, endpoint_filter_a);
+
+                const auto neighborhood_b = NetlistAbstractionDecorator(*(nl_abstr.get()))
+                                                .get_next_matching_gates_until(g_b, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_b, endpoint_filter_b);
+
+                if (neighborhood_a.is_error())
+                {
+                    return ERR_APPEND(neighborhood_a.get_error(), "cannot calculate feature " + to_string());
+                }
+
+                if (neighborhood_b.is_error())
+                {
+                    return ERR_APPEND(neighborhood_b.get_error(), "cannot calculate feature " + to_string());
+                }
+
                 std::set<const Gate*> neighbors_a = {g_a};
                 std::set<const Gate*> neighbors_b = {g_b};
 
-                if (m_direction == PinDirection::output || m_direction == PinDirection::input)
+                for (const auto g_n : neighborhood_a.get())
                 {
-                    const bool search_successors = m_direction == PinDirection::output;
-
-                    auto subgraph_a_res = NetlistTraversalDecorator(*fc.nl).get_next_matching_gates_until_depth(g_a, search_successors, m_depth);
-                    auto subgraph_b_res = NetlistTraversalDecorator(*fc.nl).get_next_matching_gates_until_depth(g_b, search_successors, m_depth);
-
-                    if (subgraph_a_res.is_error())
-                    {
-                        return ERR_APPEND(subgraph_a_res.get_error(), "cannot calculate feature " + to_string() + ": failed to get next matching gates.");
-                    }
-
-                    if (subgraph_b_res.is_error())
-                    {
-                        return ERR_APPEND(subgraph_b_res.get_error(), "cannot calculate feature " + to_string() + ": failed to get next matching gates.");
-                    }
-
-                    for (const auto g_n : subgraph_a_res.get())
-                    {
-                        neighbors_a.insert(g_n);
-                    }
-
-                    for (const auto g_n : subgraph_b_res.get())
-                    {
-                        neighbors_b.insert(g_n);
-                    }
-
-                    // TODO remove debug print
-                    // std::cout << "Subgraph A: " << std::endl;
-                    // for (const auto& g_a : neighbors_a)
-                    // {
-                    //     std::cout << "\t" << g_a->get_id() << " / " << g_a->to_string() << std::endl;
-                    // }
-
-                    // std::cout << "Subgraph B: " << std::endl;
-                    // for (const auto& g_b : neighbors_b)
-                    // {
-                    //     std::cout << "\t" << g_b->get_id() << " / " << g_b->to_string() << std::endl;
-                    // }
+                    neighbors_a.insert(g_n);
                 }
 
-                if (m_direction == PinDirection::inout)
+                for (const auto g_n : neighborhood_b.get())
                 {
-                    // NOTE this is either trivial by just combining both directions or more complex by building a real undirected graph (predecessors of a successor would also be neighbors eventhough the direction switches)
-                    return ERR("cannot calculate feature " + to_string() + ": NOT IMPLEMENTED REACHED.");
+                    neighbors_b.insert(g_n);
                 }
 
                 std::set<const Gate*> shared;
