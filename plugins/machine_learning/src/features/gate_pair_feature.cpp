@@ -110,7 +110,9 @@ namespace hal
 
             std::string LogicalDistance::to_string() const
             {
-                return "LogicalDistance";
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "LogicalDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> SequentialDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
@@ -157,7 +159,9 @@ namespace hal
 
             std::string SequentialDistance::to_string() const
             {
-                return "SequentialDistance";
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "SequentialDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> PhysicalDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
@@ -314,7 +318,12 @@ namespace hal
 
             std::string SharedSequentialNeighbors::to_string() const
             {
-                return "SharedSequentialNeighbors";
+                std::string starting_pin_types_str = utils::join("_", m_starting_pin_types.begin(), m_starting_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "SharedSequentialNeighbors_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_"
+                       + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> SharedNeighbors::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
@@ -423,7 +432,12 @@ namespace hal
 
             std::string SharedNeighbors::to_string() const
             {
-                return "SharedNeighbors";
+                std::string starting_pin_types_str = utils::join("_", m_starting_pin_types.begin(), m_starting_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "SharedNeighbors_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_"
+                       + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
@@ -455,17 +469,17 @@ namespace hal
                 return OK(feature_vec);
             }
 
-            Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const std::pair<const Gate*, const Gate*>& gate_pair)
+            Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
             {
                 return build_feature_vec(features, gate_pair.first, gate_pair.second);
             }
 
-            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::pair<const Gate*, const Gate*>& gate_pair)
+            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
             {
                 return build_feature_vec(fc, features, gate_pair.first, gate_pair.second);
             }
 
-            Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<const Gate*, const Gate*>>& gate_pairs)
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
             {
                 if (gate_pairs.empty())
                 {
@@ -476,8 +490,7 @@ namespace hal
                 return build_feature_vecs(fc, features, gate_pairs);
             }
 
-            Result<std::vector<std::vector<u32>>>
-                build_feature_vecs(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<const Gate*, const Gate*>>& gate_pairs)
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
             {
                 std::vector<std::vector<u32>> feature_vecs;
 

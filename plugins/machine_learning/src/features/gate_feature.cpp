@@ -184,7 +184,9 @@ namespace hal
 
             std::string DistanceGlobalIO::to_string() const
             {
-                return "DistanceGlobalIO";
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "DistanceGlobalIO_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> SequentialDistanceGlobalIO::calculate_feature(FeatureContext& fc, const Gate* g) const
@@ -241,7 +243,9 @@ namespace hal
 
             std::string SequentialDistanceGlobalIO::to_string() const
             {
-                return "SequentialDistanceGlobalIO";
+                std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
+
+                return "SequentialDistanceGlobalIO_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
             Result<std::vector<u32>> IODegrees::calculate_feature(FeatureContext& fc, const Gate* g) const
@@ -331,7 +335,7 @@ namespace hal
 
             std::string NeighboringGateTypes::to_string() const
             {
-                return "NeighboringGateTypes";
+                return "NeighboringGateTypes_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed);
             }
 
             Result<std::vector<u32>> build_feature_vec(const std::vector<const GateFeature*>& features, const Gate* g)

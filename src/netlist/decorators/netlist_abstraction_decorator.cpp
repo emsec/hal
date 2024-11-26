@@ -115,7 +115,7 @@ namespace hal
     Result<std::vector<Endpoint*>> NetlistAbstraction::get_predecessors(const Gate* gate) const
     {
         std::vector<Endpoint*> predecessors;
-        for (auto* ep : gate->get_fan_out_endpoints())
+        for (auto* ep : gate->get_fan_in_endpoints())
         {
             const auto new_predecessors = get_predecessors(ep);
             if (new_predecessors.is_error())
@@ -143,7 +143,7 @@ namespace hal
     Result<std::vector<Gate*>> NetlistAbstraction::get_unique_predecessors(const Gate* gate) const
     {
         std::vector<Gate*> predecessors;
-        for (auto* ep : gate->get_fan_out_endpoints())
+        for (auto* ep : gate->get_fan_in_endpoints())
         {
             const auto new_predecessors = get_predecessors(ep);
             if (new_predecessors.is_error())
@@ -189,7 +189,7 @@ namespace hal
     Result<std::vector<Endpoint*>> NetlistAbstraction::get_successors(const Gate* gate) const
     {
         std::vector<Endpoint*> successors;
-        for (auto* ep : gate->get_fan_in_endpoints())
+        for (auto* ep : gate->get_fan_out_endpoints())
         {
             const auto new_successors = get_predecessors(ep);
             if (new_successors.is_error())
@@ -217,7 +217,7 @@ namespace hal
     Result<std::vector<Gate*>> NetlistAbstraction::get_unique_successors(const Gate* gate) const
     {
         std::vector<Gate*> successors;
-        for (auto* ep : gate->get_fan_in_endpoints())
+        for (auto* ep : gate->get_fan_out_endpoints())
         {
             const auto new_successors = get_successors(ep);
             if (new_successors.is_error())

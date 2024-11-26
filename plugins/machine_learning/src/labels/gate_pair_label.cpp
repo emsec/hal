@@ -185,7 +185,7 @@ namespace hal
                     return mbi;
                 }
 
-                bool are_gates_considered_a_pair(const MultiBitInformation& mbi, const Gate* g_a, const Gate* g_b)
+                bool are_gates_considered_a_pair(const MultiBitInformation& mbi, const PinDirection& direction, const Gate* g_a, const Gate* g_b)
                 {
                     const auto it_a = mbi.gate_to_words.find(g_a);
                     if (it_a == mbi.gate_to_words.end())
@@ -235,20 +235,26 @@ namespace hal
                     //     }
                     // }
 
-                    // Alternative: Only consider two gates as a pair if they share all annotated index words
                     std::set<std::pair<std::string, PinDirection>> filtered_words_a;
                     std::set<std::pair<std::string, PinDirection>> filtered_words_b;
 
                     for (const auto& w_a : words_a)
                     {
-                        filtered_words_a.insert({std::get<0>(w_a), std::get<1>(w_a)});
+                        if (direction == PinDirection::inout || std::get<1>(w_a) == direction)
+                        {
+                            filtered_words_a.insert({std::get<0>(w_a), std::get<1>(w_a)});
+                        }
                     }
 
                     for (const auto& w_b : words_b)
                     {
-                        filtered_words_b.insert({std::get<0>(w_b), std::get<1>(w_b)});
+                        if (direction == PinDirection::inout || std::get<1>(w_b) == direction)
+                        {
+                            filtered_words_b.insert({std::get<0>(w_b), std::get<1>(w_b)});
+                        }
                     }
 
+                    // Alternative: Only consider two gates as a pair if they share all annotated index words
                     // if (filtered_words_a == filtered_words_b)
                     // {
                     //     return true;
@@ -279,13 +285,13 @@ namespace hal
                 return mbi.value();
             }
 
-            Result<std::vector<std::pair<const Gate*, const Gate*>>> SharedSignalGroup::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
+            Result<std::vector<std::pair<Gate*, Gate*>>> SharedSignalGroup::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
             {
                 const auto& mbi = lc.get_multi_bit_information();
 
-                std::vector<std::pair<const Gate*, const Gate*>> pairs;
+                std::vector<std::pair<Gate*, Gate*>> pairs;
 
-                for (const auto& g : gates)
+                for (auto& g : gates)
                 {
                     // positive labels
                     std::unordered_set<const Gate*> pos_gates;
@@ -301,14 +307,14 @@ namespace hal
                         for (const auto& name_direction : mbi.gate_to_words.at(g))
                         {
                             const auto& word_gates = mbi.word_to_gates.at(name_direction);
-                            for (const auto* g_i : word_gates)
+                            for (auto* g_i : word_gates)
                             {
                                 if (g == g_i)
                                 {
                                     continue;
                                 }
 
-                                if (are_gates_considered_a_pair(mbi, g, g_i))
+                                if (are_gates_considered_a_pair(mbi, m_direction, g, g_i))
                                 {
                                     pairs.push_back({g, g_i});
                                     pos_gates.insert(g_i);
@@ -318,14 +324,15 @@ namespace hal
                     }
 
                     // negative labels (equal amount to the positive labels)
-                    const u64 pos_count = pos_gates.size();
-                    const u64 neg_count = std::min(gates.size() - pos_count, pos_count);
+                    const u64 pos_count         = pos_gates.size();
+                    const u64 desired_neg_count = std::max(m_min_pair_count, u32(m_negative_to_positive_factor * pos_count));
+                    const u64 real_neg_count    = std::min(gates.size() - pos_count, desired_neg_count);
 
                     // TODO remove debug print
-                    // std::cout << "Gate ID: " << g->get_id() << "   " <<  pos_count << " vs. " << neg_count << std::endl;
+                    // std::cout << "Gate ID: " << g->get_id() << "   " <<  pos_count << " vs. " << real_neg_count << std::endl;
 
                     std::set<Gate*> chosen_gates;
-                    for (u32 i = 0; i < neg_count; i++)
+                    for (u32 i = 0; i < real_neg_count; i++)
                     {
                         const u32 start = std::rand() % gates.size();
                         for (u32 idx = start; idx < start + gates.size(); idx++)
@@ -348,7 +355,7 @@ namespace hal
             {
                 const auto& mbi = lc.get_multi_bit_information();
 
-                if (are_gates_considered_a_pair(lc.get_multi_bit_information(), g_a, g_b))
+                if (are_gates_considered_a_pair(lc.get_multi_bit_information(), m_direction, g_a, g_b))
                 {
                     return OK({1});
                 }
@@ -376,79 +383,59 @@ namespace hal
                 return OK(labels);
             }
 
-            Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> SharedSignalGroup::calculate_labels(LabelContext& lc) const
+            Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> SharedSignalGroup::calculate_labels(const Netlist* netlist) const
             {
-                const auto& mbi = lc.get_multi_bit_information();
+                const auto gates = netlist->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                auto lc          = LabelContext(netlist, gates);
 
-                std::vector<std::pair<const Gate*, const Gate*>> pairs;
-                std::vector<std::vector<u32>> labels;
-
-                for (const auto& g : lc.nl->get_gates([](const Gate* g_i) { return g_i->get_type()->has_property(GateTypeProperty::ff); }))
+                const auto pairs = calculate_gate_pairs(lc, lc.nl, lc.gates);
+                if (pairs.is_error())
                 {
-                    // positive labels
-                    std::unordered_set<Gate*> pos_gates;
-                    if (mbi.gate_to_words.find(g) == mbi.gate_to_words.end())
-                    {
-                        // gate is only in a group with itself
-                        pairs.push_back({g, g});
-                        labels.push_back({{1}});
-                        pos_gates.insert(g);
-                    }
-                    else
-                    {
-                        // add all gates that are part of at least one other signal group as positive pair
-                        for (const auto& name_direction : mbi.gate_to_words.at(g))
-                        {
-                            const auto& gates = mbi.word_to_gates.at(name_direction);
-                            for (const auto g_i : gates)
-                            {
-                                pairs.push_back({g, g_i});
-                                labels.push_back({{1}});
-                                pos_gates.insert(g);
-                            }
-                        }
-                    }
-
-                    // negative labels (equal amount to the positive labels)
-                    const u64 pos_count = pos_gates.size();
-                    const u64 neg_count = std::min(lc.nl->get_gates().size() - pos_count, pos_count);
-
-                    // TODO remove
-                    // std::cout << "Found " << all_connected.size() << " connections for gate " << g->get_id() << ". Trying to find " << neg_count << " opposites!" << std::endl;
-
-                    std::set<Gate*> chosen_gates;
-                    for (u32 i = 0; i < neg_count; i++)
-                    {
-                        const u32 start = std::rand() % lc.nl->get_gates().size();
-                        for (u32 idx = start; idx < start + lc.nl->get_gates().size(); idx++)
-                        {
-                            const auto g_i = lc.nl->get_gates().at(idx % lc.nl->get_gates().size());
-                            if (pos_gates.find(g_i) == pos_gates.end() && chosen_gates.find(g_i) == chosen_gates.end())
-                            {
-                                pairs.push_back({g, g_i});
-                                labels.push_back({{0}});
-
-                                chosen_gates.insert(g_i);
-                                break;
-                            }
-                        }
-                    }
+                    return ERR_APPEND(pairs.get_error(), "Failed to calculate labels");
+                }
+                const auto labels = calculate_labels(lc, pairs.get());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "Failed to calculate labels");
                 }
 
-                return OK({pairs, labels});
+                return OK({pairs.get(), labels.get()});
             };
+
+            std::string SharedSignalGroup::to_string() const
+            {
+                return "SharedSignalGroup_" + enum_to_string(m_direction) + "_" + std::to_string(m_min_pair_count) + "_"
+                       + std::to_string(static_cast<int>(m_negative_to_positive_factor * 100) / 100.0)
+                             .substr(0, std::to_string(static_cast<int>(m_negative_to_positive_factor * 100) / 100.0).find('.') + 3);
+            }
 
             namespace
             {
-                std::unordered_set<const Gate*> get_all_connected_gates(const Gate* g)
+                std::unordered_set<Gate*> get_all_connected_gates(const Gate* g)
                 {
-                    std::unordered_set<const Gate*> connected;
-                    for (const auto pre : g->get_unique_predecessors())
+                    std::unordered_set<Gate*> connected;
+                    for (auto pre : g->get_unique_predecessors())
                     {
                         connected.insert(pre);
                     }
 
-                    for (const auto suc : g->get_unique_successors())
+                    for (auto suc : g->get_unique_successors())
+                    {
+                        connected.insert(suc);
+                    }
+
+                    return connected;
+                }
+
+                std::unordered_set<const Gate*> get_all_connected_gates_const(const Gate* g)
+                {
+                    std::unordered_set<const Gate*> connected;
+                    for (auto pre : g->get_unique_predecessors())
+                    {
+                        connected.insert(pre);
+                    }
+
+                    for (auto suc : g->get_unique_successors())
                     {
                         connected.insert(suc);
                     }
@@ -457,9 +444,9 @@ namespace hal
                 }
             }    // namespace
 
-            Result<std::vector<std::pair<const Gate*, const Gate*>>> SharedConnection::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
+            Result<std::vector<std::pair<Gate*, Gate*>>> SharedConnection::calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const
             {
-                std::vector<std::pair<const Gate*, const Gate*>> pairs;
+                std::vector<std::pair<Gate*, Gate*>> pairs;
 
                 for (const auto& g : gates)
                 {
@@ -498,7 +485,7 @@ namespace hal
 
             Result<std::vector<u32>> SharedConnection::calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const
             {
-                const auto all_connected = get_all_connected_gates(g_a);
+                const auto all_connected = get_all_connected_gates_const(g_a);
 
                 if (all_connected.find(g_b) == all_connected.end())
                 {
@@ -528,48 +515,30 @@ namespace hal
                 return OK(labels);
             }
 
-            Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> SharedConnection::calculate_labels(LabelContext& lc) const
+            Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> SharedConnection::calculate_labels(const Netlist* netlist) const
             {
-                std::vector<std::pair<const Gate*, const Gate*>> pairs;
-                std::vector<std::vector<u32>> labels;
+                const auto gates = netlist->get_gates();
+                auto lc          = LabelContext(netlist, gates);
 
-                for (const auto& g : lc.nl->get_gates())
+                const auto pairs = calculate_gate_pairs(lc, lc.nl, lc.gates);
+                if (pairs.is_error())
                 {
-                    // positive labels
-                    u64 pos_count            = 0;
-                    const auto all_connected = get_all_connected_gates(g);
-                    for (const auto g_c : all_connected)
-                    {
-                        pairs.push_back({g, g_c});
-                        labels.push_back({{1}});
-
-                        pos_count += 1;
-                    }
-
-                    // negative labels (equal amount to the positive labels)
-                    const u64 neg_count = std::min(lc.nl->get_gates().size() - pos_count, pos_count);
-
-                    // TODO remove
-                    // std::cout << "Found " << all_connected.size() << " connections for gate " << g->get_id() << ". Trying to find " << neg_count << " opposites!" << std::endl;
-
-                    for (u32 i = 0; i < neg_count; i++)
-                    {
-                        const u32 start = std::rand() % lc.nl->get_gates().size();
-                        for (u32 idx = start; idx < start + lc.nl->get_gates().size(); idx++)
-                        {
-                            const auto g_i = lc.nl->get_gates().at(idx % lc.nl->get_gates().size());
-                            if (all_connected.find(g_i) == all_connected.end())
-                            {
-                                pairs.push_back({g, g_i});
-                                labels.push_back({{0}});
-                                break;
-                            }
-                        }
-                    }
+                    return ERR_APPEND(pairs.get_error(), "Failed to calculate labels");
+                }
+                const auto labels = calculate_labels(lc, pairs.get());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "Failed to calculate labels");
                 }
 
-                return OK({pairs, labels});
+                return OK({pairs.get(), labels.get()});
             };
+
+            std::string SharedConnection::to_string() const
+            {
+                return "SharedConnection";
+            }
+
         }    // namespace gate_pair_label
     }    // namespace machine_learning
 }    // namespace hal

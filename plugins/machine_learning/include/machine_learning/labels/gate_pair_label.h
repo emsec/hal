@@ -103,7 +103,7 @@ namespace hal
                  * @param[in] gates - The gates to be paired.
                  * @returns A vector of gate pairs on success, an error otherwise.
                  */
-                virtual Result<std::vector<std::pair<const Gate*, const Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const = 0;
+                virtual Result<std::vector<std::pair<Gate*, Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const = 0;
 
                 /**
                  * @brief Calculate labels for a given gate pair.
@@ -127,7 +127,9 @@ namespace hal
                  * @param[in] lc - The labeling context.
                  * @returns A pair containing gate pairs and corresponding labels on success, an error otherwise.
                  */
-                virtual Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(LabelContext& lc) const = 0;
+                virtual Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(const Netlist* netlist) const = 0;
+
+                virtual std::string to_string() const = 0;
             };
 
             /**
@@ -140,12 +142,19 @@ namespace hal
                 /**
                  * @brief Default constructor.
                  */
-                SharedSignalGroup(){};
+                SharedSignalGroup(const PinDirection& direction, const u32 min_pair_count, const double negative_to_positive_factor)
+                    : m_direction(direction), m_min_pair_count(min_pair_count), m_negative_to_positive_factor(negative_to_positive_factor){};
 
-                Result<std::vector<std::pair<const Gate*, const Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const override;
+                Result<std::vector<std::pair<Gate*, Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<u32>> calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
-                Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(LabelContext& lc) const override;
+                Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(const Netlist* netlist) const override;
+                std::string to_string() const override;
+
+            private:
+                const PinDirection m_direction;
+                const u32 m_min_pair_count;
+                const double m_negative_to_positive_factor;
             };
 
             /**
@@ -160,10 +169,11 @@ namespace hal
                  */
                 SharedConnection(){};
 
-                Result<std::vector<std::pair<const Gate*, const Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const override;
+                Result<std::vector<std::pair<Gate*, Gate*>>> calculate_gate_pairs(LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<u32>> calculate_label(LabelContext& lc, const Gate* g_a, const Gate* g_b) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(LabelContext& lc, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
-                Result<std::pair<std::vector<std::pair<const Gate*, const Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(LabelContext& lc) const override;
+                Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(const Netlist* netlist) const override;
+                std::string to_string() const override;
             };
         }    // namespace gate_pair_label
     }    // namespace machine_learning

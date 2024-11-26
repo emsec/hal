@@ -59,8 +59,8 @@ namespace hal
 
             private:
                 const PinDirection m_direction;
-                const std::vector<PinType> m_forbidden_pin_types;
                 const bool m_directed;
+                const std::vector<PinType> m_forbidden_pin_types;
             };
 
             class SequentialDistanceGlobalIO : public GateFeature
@@ -74,8 +74,8 @@ namespace hal
 
             private:
                 const PinDirection m_direction;
-                const std::vector<PinType> m_forbidden_pin_types;
                 const bool m_directed;
+                const std::vector<PinType> m_forbidden_pin_types;
             };
 
             class IODegrees : public GateFeature

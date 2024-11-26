@@ -58,13 +58,19 @@ namespace hal
         Result<NetlistGraph> construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
         {
             std::unordered_map<const Gate*, u32> gate_to_idx;
+            std::vector<Gate*> sequential_gates;
+
             // init gate to index mapping
             for (u32 g_idx = 0; g_idx < gates.size(); g_idx++)
             {
-                const Gate* g = gates.at(g_idx);
-                if (!g->get_type()->has_property(GateTypeProperty::sequential))
+                Gate* g = gates.at(g_idx);
+                // if (!g->get_type()->has_property(GateTypeProperty::sequential))
+                // {
+                //     return ERR("cannot construct sequential netlist graph: gates contain non sequential gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                // }
+                if (g->get_type()->has_property(GateTypeProperty::sequential))
                 {
-                    return ERR("cannot construct sequential netlist graph: gates contain non sequential gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    sequential_gates.push_back(g);
                 }
 
                 gate_to_idx.insert({g, g_idx});
@@ -78,7 +84,7 @@ namespace hal
                 return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
             };
 
-            const auto sequential_abstraction_res = NetlistAbstraction::create(nl, gates, true, endpoint_filter, endpoint_filter);
+            const auto sequential_abstraction_res = NetlistAbstraction::create(nl, sequential_gates, false, endpoint_filter, endpoint_filter);
             if (sequential_abstraction_res.is_error())
             {
                 return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
@@ -89,7 +95,7 @@ namespace hal
             std::vector<u32> sources;
             std::vector<u32> destinations;
 
-            for (const auto& g : gates)
+            for (const auto& g : sequential_gates)
             {
                 const u32 g_idx = gate_to_idx.at(g);
                 if (dir == GraphDirection::directed)
