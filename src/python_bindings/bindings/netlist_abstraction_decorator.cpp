@@ -25,7 +25,7 @@ namespace hal
                const std::vector<Gate*>& gates,
                bool include_all_netlist_gates,
                const std::function<bool(const Endpoint*, u32)>& exit_endpoint_filter,
-               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter) -> std::optional<NetlistAbstraction> {
+               const std::function<bool(const Endpoint*, u32)>& entry_endpoint_filter) -> std::optional<std::shared_ptr<NetlistAbstraction>> {
                 auto res = NetlistAbstraction::create(netlist, gates, include_all_netlist_gates, exit_endpoint_filter, entry_endpoint_filter);
                 if (res.is_ok())
                 {

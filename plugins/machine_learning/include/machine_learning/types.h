@@ -3,6 +3,9 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 
+#include <atomic>
+#include <memory>
+#include <mutex>
 #include <optional>
 #include <vector>
 
@@ -52,10 +55,16 @@ namespace hal
             const u32 num_threads;
 
         private:
-            std::optional<NetlistAbstraction> m_sequential_abstraction;
-            std::optional<NetlistAbstraction> m_original_abstraction;
-            std::optional<std::vector<GateTypeProperty>> m_possible_gate_type_properties;
-            std::optional<MultiBitInformation> m_mbi;
+            std::shared_ptr<MultiBitInformation> m_mbi{nullptr};
+            std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};
+            std::shared_ptr<NetlistAbstraction> m_original_abstraction{nullptr};
+            std::shared_ptr<std::vector<GateTypeProperty>> m_possible_gate_type_properties{nullptr};
+
+            // Mutexes for thread-safe initialization
+            std::mutex m_mbi_mutex;
+            std::mutex m_sequential_abstraction_mutex;
+            std::mutex m_original_abstraction_mutex;
+            std::mutex m_possible_gate_type_properties_mutex;
         };
 
         enum GraphDirection

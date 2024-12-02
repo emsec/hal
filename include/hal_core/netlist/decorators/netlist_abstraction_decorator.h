@@ -47,6 +47,8 @@ namespace hal
     struct NETLIST_API NetlistAbstraction
     {
     public:
+        NetlistAbstraction(NetlistAbstraction&& other) = default;
+
         /**
          * @brief Creates a `NetlistAbstraction` from a set of gates.
          *
@@ -56,11 +58,11 @@ namespace hal
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          */
-        static Result<NetlistAbstraction> create(const Netlist* netlist,
-                                                 const std::vector<Gate*>& gates,
-                                                 const bool include_all_netlist_gates                                                       = false,
-                                                 const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                 const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
+        static Result<std::shared_ptr<NetlistAbstraction>> create(const Netlist* netlist,
+                                                                  const std::vector<Gate*>& gates,
+                                                                  const bool include_all_netlist_gates                                                       = false,
+                                                                  const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                  const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
 
         /**
          * @brief Gets the predecessors of a gate within the abstraction.

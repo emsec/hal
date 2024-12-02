@@ -10,7 +10,7 @@
 #include <vector>
 
 #define MAX_DISTANCE 255
-#define PROGRESS_BAR
+// #define PROGRESS_BAR
 
 namespace hal
 {

@@ -7,7 +7,7 @@
 #include "machine_learning/features/gate_pair_feature.h"
 
 #define MAX_DISTANCE 255
-#define PROGRESS_BAR
+// #define PROGRESS_BAR
 
 namespace hal
 {

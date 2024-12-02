@@ -272,96 +272,134 @@ namespace hal
 
         const MultiBitInformation& Context::get_multi_bit_information()
         {
-            if (!m_mbi.has_value())
+            auto mbi = std::atomic_load_explicit(&m_mbi, std::memory_order_acquire);
+            if (mbi)
             {
-                const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
-                m_mbi                = calculate_multi_bit_information(seq_gates);
+                return *mbi;
             }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_mbi_mutex);
+                mbi = std::atomic_load_explicit(&m_mbi, std::memory_order_acquire);
+                if (mbi)
+                {
+                    return *mbi;
+                }
 
-            return m_mbi.value();
+                auto new_mbi         = std::make_shared<MultiBitInformation>();
+                const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
+                *new_mbi             = calculate_multi_bit_information(seq_gates);
+
+                std::atomic_store_explicit(&m_mbi, new_mbi, std::memory_order_release);
+
+                return *new_mbi;
+            }
         }
 
         const Result<NetlistAbstraction*> Context::get_sequential_abstraction()
         {
-            if (!m_sequential_abstraction.has_value())
+            auto abstraction = std::atomic_load_explicit(&m_sequential_abstraction, std::memory_order_acquire);
+            if (abstraction)
             {
+                return OK(abstraction.get());
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_sequential_abstraction_mutex);
+                // Double-check after acquiring the lock
+                abstraction = std::atomic_load_explicit(&m_sequential_abstraction, std::memory_order_acquire);
+                if (abstraction)
+                {
+                    return OK(abstraction.get());
+                }
+
                 const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
 
-                const std::vector<PinType> forbidden_pins = {
-                    PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
+                const std::vector<PinType> forbidden_pins = {PinType::clock, PinType::ground, PinType::power};
 
-                const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
-                    UNUSED(_d);
+                const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto&) {
                     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
                 };
 
-                const auto sequential_abstraction_res = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
+                auto sequential_abstraction_res = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
                 if (sequential_abstraction_res.is_error())
                 {
-                    return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
+                    return ERR_APPEND(sequential_abstraction_res.get_error(), "Cannot get sequential netlist abstraction: failed to build abstraction.");
                 }
 
-                m_sequential_abstraction = sequential_abstraction_res.get();
+                auto new_abstraction = sequential_abstraction_res.get();
 
-                // TODO remove debug print
-                // std::cout << "Built abstraction" << std::endl;
+                std::atomic_store_explicit(&m_sequential_abstraction, new_abstraction, std::memory_order_release);
+
+                return OK(m_sequential_abstraction.get());
             }
-
-            return OK(&m_sequential_abstraction.value());
         }
 
         const Result<NetlistAbstraction*> Context::get_original_abstraction()
         {
-            if (!m_original_abstraction.has_value())
+            auto abstraction = std::atomic_load_explicit(&m_original_abstraction, std::memory_order_acquire);
+            if (abstraction)
             {
-                // const std::vector<PinType> forbidden_pins = {
-                //     PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
-
-                // const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
-                //     UNUSED(_d);
-                //     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
-                // };
-
-                const auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
-                if (original_abstraction_res.is_error())
+                return OK(abstraction.get());
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_original_abstraction_mutex);
+                // Double-check after acquiring the lock
+                abstraction = std::atomic_load_explicit(&m_original_abstraction, std::memory_order_acquire);
+                if (abstraction)
                 {
-                    return ERR_APPEND(original_abstraction_res.get_error(), "cannot get original netlist abstraction for gate feature context: failed to build abstraction.");
+                    return OK(abstraction.get());
                 }
 
-                m_original_abstraction = original_abstraction_res.get();
+                auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
+                if (original_abstraction_res.is_error())
+                {
+                    return ERR_APPEND(original_abstraction_res.get_error(), "Cannot get original netlist abstraction: failed to build abstraction.");
+                }
 
-                // TODO remove debug print
-                // std::cout << "Built abstraction" << std::endl;
+                auto new_abstraction = original_abstraction_res.get();
+
+                std::atomic_store_explicit(&m_original_abstraction, new_abstraction, std::memory_order_release);
+
+                return OK(m_original_abstraction.get());
             }
-
-            return OK(&m_original_abstraction.value());
         }
 
         const std::vector<GateTypeProperty>& Context::get_possible_gate_type_properties()
         {
-            if (!m_possible_gate_type_properties.has_value())
+            auto properties = std::atomic_load_explicit(&m_possible_gate_type_properties, std::memory_order_acquire);
+            if (properties)
             {
-                std::set<GateTypeProperty> properties;
+                return *properties;
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_possible_gate_type_properties_mutex);
+                // Double-check after acquiring the lock
+                properties = std::atomic_load_explicit(&m_possible_gate_type_properties, std::memory_order_acquire);
+                if (properties)
+                {
+                    return *properties;
+                }
+
+                std::set<GateTypeProperty> property_set;
 
                 for (const auto& [_name, gt] : nl->get_gate_library()->get_gate_types())
                 {
-                    const auto gt_properties = gt->get_properties();
-                    properties.insert(gt_properties.begin(), gt_properties.end());
+                    const auto& gt_properties = gt->get_properties();
+                    property_set.insert(gt_properties.begin(), gt_properties.end());
                 }
 
-                // for (auto& [gtp, _name] : EnumStrings<GateTypeProperty>::data)
-                // {
-                //     UNUSED(_name);
-                //     properties.insert(gtp);
-                // }
+                auto properties_vec = std::make_shared<std::vector<GateTypeProperty>>(property_set.begin(), property_set.end());
 
-                auto properties_vec = utils::to_vector(properties);
-                // sort alphabetically
-                std::sort(properties_vec.begin(), properties_vec.end(), [](const auto& a, const auto& b) { return enum_to_string(a) < enum_to_string(b); });
-                m_possible_gate_type_properties = properties_vec;
+                // Sort alphabetically
+                std::sort(properties_vec->begin(), properties_vec->end(), [](const auto& a, const auto& b) { return enum_to_string(a) < enum_to_string(b); });
+
+                std::atomic_store_explicit(&m_possible_gate_type_properties, properties_vec, std::memory_order_release);
+
+                return *properties_vec;
             }
-
-            return m_possible_gate_type_properties.value();
         }
     }    // namespace machine_learning
 }    // namespace hal

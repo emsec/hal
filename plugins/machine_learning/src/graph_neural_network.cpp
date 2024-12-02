@@ -89,7 +89,7 @@ namespace hal
             {
                 return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
             }
-            const auto sequential_abstraction = sequential_abstraction_res.get();
+            const auto& sequential_abstraction = sequential_abstraction_res.get();
 
             // edge list
             std::vector<u32> sources;
@@ -100,7 +100,7 @@ namespace hal
                 const u32 g_idx = gate_to_idx.at(g);
                 if (dir == GraphDirection::directed)
                 {
-                    const auto unique_predecessors = sequential_abstraction.get_unique_predecessors(g);
+                    const auto unique_predecessors = sequential_abstraction->get_unique_predecessors(g);
                     if (unique_predecessors.is_error())
                     {
                         return ERR_APPEND(unique_predecessors.get_error(),
@@ -115,7 +115,7 @@ namespace hal
 
                 if (dir == GraphDirection::undirected)
                 {
-                    const auto unique_successors = sequential_abstraction.get_unique_successors(g);
+                    const auto unique_successors = sequential_abstraction->get_unique_successors(g);
                     if (unique_successors.is_error())
                     {
                         return ERR_APPEND(unique_successors.get_error(),

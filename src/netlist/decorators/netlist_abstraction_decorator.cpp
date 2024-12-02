@@ -7,20 +7,25 @@
 
 namespace hal
 {
-    Result<NetlistAbstraction> NetlistAbstraction::create(const Netlist* netlist,
-                                                          const std::vector<Gate*>& gates,
-                                                          const bool include_all_netlist_gates,
-                                                          const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
-                                                          const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
+    Result<std::shared_ptr<NetlistAbstraction>> NetlistAbstraction::create(const Netlist* netlist,
+                                                                           const std::vector<Gate*>& gates,
+                                                                           const bool include_all_netlist_gates,
+                                                                           const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                           const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter)
     {
         const auto nl_trav_dec = NetlistTraversalDecorator(*netlist);
 
         // transform gates into set to check fast if a gate is part of abstraction
-        const auto gates_set = utils::to_unordered_set(gates);
-
-        auto new_abstraction = NetlistAbstraction();
-
+        const auto gates_set       = utils::to_unordered_set(gates);
         const auto& included_gates = include_all_netlist_gates ? netlist->get_gates() : gates;
+
+        auto new_abstraction                  = std::shared_ptr<NetlistAbstraction>(new NetlistAbstraction());
+        const u32 approximated_endpoint_count = included_gates.size() * 8;
+        new_abstraction->m_successors.reserve(approximated_endpoint_count);
+        new_abstraction->m_predecessors.reserve(approximated_endpoint_count);
+        new_abstraction->m_global_output_successors.reserve(approximated_endpoint_count);
+        new_abstraction->m_global_input_predecessors.reserve(approximated_endpoint_count);
+
         for (const Gate* gate : included_gates)
         {
             // TODO remove debug print
@@ -29,7 +34,7 @@ namespace hal
             // gather all successors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())
             {
-                new_abstraction.m_successors.insert({ep_out, {}});
+                new_abstraction->m_successors.insert({ep_out, {}});
                 const auto successors = nl_trav_dec.get_next_matching_endpoints(
                     ep_out,
                     true,
@@ -46,14 +51,14 @@ namespace hal
 
                 for (Endpoint* ep : successors.get())
                 {
-                    new_abstraction.m_successors.at(ep_out).push_back(ep);
+                    new_abstraction->m_successors.at(ep_out).push_back(ep);
                 }
             }
 
             // gather all global output succesors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())
             {
-                new_abstraction.m_global_output_successors.insert({ep_out, {}});
+                new_abstraction->m_global_output_successors.insert({ep_out, {}});
 
                 const auto destinations = nl_trav_dec.get_next_matching_endpoints(
                     ep_out, true, [](const auto& ep) { return ep->is_source_pin() && ep->get_net()->is_global_output_net(); }, false, exit_endpoint_filter, entry_endpoint_filter);
@@ -66,14 +71,14 @@ namespace hal
 
                 for (const auto* ep : destinations.get())
                 {
-                    new_abstraction.m_global_output_successors.at(ep_out).push_back({ep->get_net()});
+                    new_abstraction->m_global_output_successors.at(ep_out).push_back({ep->get_net()});
                 }
             }
 
             // gather all predecessors
             for (Endpoint* ep_in : gate->get_fan_in_endpoints())
             {
-                new_abstraction.m_predecessors.insert({ep_in, {}});
+                new_abstraction->m_predecessors.insert({ep_in, {}});
 
                 const auto predecessors =
                     nl_trav_dec.get_next_matching_endpoints(ep_in, false, [gates_set](const auto& ep) { return ep->is_source_pin() && gates_set.find(ep->get_gate()) != gates_set.end(); });
@@ -86,14 +91,14 @@ namespace hal
 
                 for (Endpoint* ep : predecessors.get())
                 {
-                    new_abstraction.m_predecessors.at(ep_in).push_back(ep);
+                    new_abstraction->m_predecessors.at(ep_in).push_back(ep);
                 }
             }
 
             // gather all global input predecessors
             for (Endpoint* ep_in : gate->get_fan_in_endpoints())
             {
-                new_abstraction.m_global_input_predecessors.insert({ep_in, {}});
+                new_abstraction->m_global_input_predecessors.insert({ep_in, {}});
 
                 const auto predecessors = nl_trav_dec.get_next_matching_endpoints(ep_in, false, [](const auto& ep) { return ep->is_destination_pin() && ep->get_net()->is_global_input_net(); });
 
@@ -105,7 +110,7 @@ namespace hal
 
                 for (const auto* ep : predecessors.get())
                 {
-                    new_abstraction.m_global_input_predecessors.at(ep_in).push_back({ep->get_net()});
+                    new_abstraction->m_global_input_predecessors.at(ep_in).push_back({ep->get_net()});
                 }
             }
         }
