@@ -1,5 +1,3 @@
-#include "netlist_preprocessing/netlist_preprocessing.h"
-
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
@@ -11,6 +9,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/token_stream.h"
+#include "netlist_preprocessing/netlist_preprocessing.h"
 #include "resynthesis/resynthesis.h"
 #include "z3_utils/netlist_comparison.h"
 #include "z3_utils/subgraph_function_generation.h"
@@ -683,10 +682,13 @@ namespace hal
                         {
                             loops_by_start_gate[start_ff].insert(current_gate);
                             cache.insert(current_gate);
-                            for (auto it = ++(previous_gates.begin()); it != previous_gates.end(); it++)
+                            if (!previous_gates.empty())
                             {
-                                cache.insert(*it);
-                                loops_by_start_gate[start_ff].insert(*it);
+                                for (auto it = ++(previous_gates.begin()); it != previous_gates.end(); it++)
+                                {
+                                    cache.insert(*it);
+                                    loops_by_start_gate[start_ff].insert(*it);
+                                }
                             }
                         }
                         else if (suc_gate->get_type()->has_property(GateTypeProperty::combinational))
@@ -954,7 +956,6 @@ namespace hal
 
                     for (const auto& m : current_candidate_nets)
                     {
-
                         const auto bf_n = z3_utils::get_subgraph_z3_function(all_comb_gates_vec, n, ctx, net_cache, gate_cache);
                         const auto bf_m = z3_utils::get_subgraph_z3_function(all_comb_gates_vec, m, ctx, net_cache, gate_cache);
 
@@ -963,7 +964,7 @@ namespace hal
                             return ERR_APPEND(bf_n.get_error(),
                                               "Unable to remove redundant logic trees: failed to build Boolean function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
                         }
-                        
+
                         if (bf_m.is_error())
                         {
                             return ERR_APPEND(bf_m.get_error(),
@@ -1980,21 +1981,21 @@ namespace hal
         {
         }
 
-        indexed_identifier::indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance) : identifier{identifier}, index{index}, origin{origin}, pin{pin}, direction{direction}, distance{distance}
+        indexed_identifier::indexed_identifier(const std::string& identifier, const u32 index, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance)
+            : identifier{identifier}, index{index}, origin{origin}, pin{pin}, direction{direction}, distance{distance}
         {
         }
 
         // Overload < operator for strict weak ordering
         bool indexed_identifier::operator<(const indexed_identifier& other) const
         {
-            return std::tie(identifier, index, origin, pin, direction, distance) <
-                std::tie(other.identifier, other.index, other.origin, other.pin, other.direction, other.distance);
+            return std::tie(identifier, index, origin, pin, direction, distance) < std::tie(other.identifier, other.index, other.origin, other.pin, other.direction, other.distance);
         }
 
         // Serialization function for indexed_identifier as a list of values
         void to_json(nlohmann::json& j, const indexed_identifier& id)
         {
-            j = nlohmann::json{ id.identifier, id.index, id.origin, id.pin, enum_to_string(id.direction), id.distance };
+            j = nlohmann::json{id.identifier, id.index, id.origin, id.pin, enum_to_string(id.direction), id.distance};
         }
 
         // Deserialization function for indexed_identifier from a list of values
@@ -2005,7 +2006,7 @@ namespace hal
             j.at(2).get_to(id.origin);
             j.at(3).get_to(id.pin);
             const std::string direction_string = j.at(4).get<const std::string>();
-            id.direction = enum_from_string<PinDirection>(direction_string);
+            id.direction                       = enum_from_string<PinDirection>(direction_string);
             j.at(5).get_to(id.distance);
         }
 
@@ -2051,7 +2052,8 @@ namespace hal
             const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
             // Extracts an index from a string by taking the last integer enclosed by parentheses
-            std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance)
+            std::optional<indexed_identifier>
+                extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin, const std::string& pin, const PinDirection& direction, const u32 distance)
             {
                 std::regex re(index_pattern);
 
@@ -2084,7 +2086,7 @@ namespace hal
             // annotate all found identifiers to a gate
             bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
             {
-                nlohmann::json j = identifiers;  // Convert the vector to JSON
+                nlohmann::json j = identifiers;    // Convert the vector to JSON
                 return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", j.dump());
             }
 
@@ -2110,7 +2112,7 @@ namespace hal
                     }
 
                     std::vector<std::vector<std::string>> merged_nets;
-                    
+
                     // 1) search all the names of the wires that where merged into this net
                     if (typed_net->has_data("parser_annotation", "merged_nets"))
                     {
@@ -2119,7 +2121,7 @@ namespace hal
                         if (!all_merged_nets_str.empty())
                         {
                             nlohmann::json merged_nets_json = nlohmann::json::parse(all_merged_nets_str);
-                            merged_nets = merged_nets_json.get<std::vector<std::vector<std::string>>>();
+                            merged_nets                     = merged_nets_json.get<std::vector<std::vector<std::string>>>();
 
                             // the order of the merged nets starts with nets closest to the destination of the net (which is connected to an input pin)
                             if (pin->get_direction() == PinDirection::output)
@@ -2144,7 +2146,7 @@ namespace hal
                     }
 
                     // 2) search the net name itself
-                    const u32 distance = (pin->get_direction() == PinDirection::output) ? merged_nets.size() + 1 : 0;
+                    const u32 distance        = (pin->get_direction() == PinDirection::output) ? merged_nets.size() + 1 : 0;
                     const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name", pin->get_name(), pin->get_direction(), distance);
                     if (net_name_index.has_value())
                     {

@@ -20,10 +20,11 @@ namespace hal
 
         auto new_abstraction = NetlistAbstraction();
 
-        for (const Gate* gate : include_all_netlist_gates ? netlist->get_gates() : gates)
+        const auto& included_gates = include_all_netlist_gates ? netlist->get_gates() : gates;
+        for (const Gate* gate : included_gates)
         {
             // TODO remove debug print
-            // std::cout << gate->get_id() << std::endl;
+            // std::cout << gate->get_id() << " / " << included_gates.size() << std::endl;
 
             // gather all successors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())

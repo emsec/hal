@@ -79,6 +79,111 @@ namespace hal
         )")
             .export_values();
 
+        // MultiBitInformation
+        py::class_<machine_learning::MultiBitInformation> py_multi_bit_information(m,
+                                                                                   "MultiBitInformation",
+                                                                                   R"(
+            Holds mappings between word labels and gates, and gates and word labels.
+
+            This struct provides a bi-directional mapping between specific word pairs and their corresponding gates,
+            as well as between gates and associated word pairs.
+        )");
+
+        py_multi_bit_information.def_readwrite("word_to_gates",
+                                               &machine_learning::MultiBitInformation::word_to_gates,
+                                               R"(
+            Maps word pairs to corresponding gates.
+
+            :type: dict[tuple[str, hal_py.PinDirection, str], list[hal_py.Gate]]
+        )");
+
+        py_multi_bit_information.def_readwrite("gate_to_words",
+                                               &machine_learning::MultiBitInformation::gate_to_words,
+                                               R"(
+            Maps gates to associated word pairs.
+
+            :type: dict[hal_py.Gate, list[tuple[str, hal_py.PinDirection, str]]]
+        )");
+
+        // Context class
+        py::class_<machine_learning::Context> py_machine_learning_context(m, "Context", R"(
+            This class holds the context for machine learning feature and label calculations.
+        )");
+
+        py_machine_learning_context.def(py::init<const Netlist*, const u32>(), py::arg("netlist"), py::arg("num_threads") = 1, R"(
+            Construct a Context with the given netlist.
+
+            :param hal_py.Netlist netlist: The netlist.
+            :param int : The number of threads to use for the feature generation jobs.
+        )");
+
+        py_machine_learning_context.def(
+            "get_sequential_abstraction",
+            [](machine_learning::Context& self) -> std::optional<NetlistAbstraction*> {
+                auto res = self.get_sequential_abstraction();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting sequential abstraction:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+                Get the sequential abstraction of the netlist.
+
+                :returns: The sequential NetlistAbstraction on success, None otherwise.
+                :rtype: hal_py.NetlistAbstraction or None
+            )");
+
+        py_machine_learning_context.def(
+            "get_original_abstraction",
+            [](machine_learning::Context& self) -> std::optional<NetlistAbstraction*> {
+                auto res = self.get_original_abstraction();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting original abstraction:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+                Get the original abstraction of the netlist.
+
+                :returns: The original NetlistAbstraction on success, None otherwise.
+                :rtype: hal_py.NetlistAbstraction or None
+            )");
+
+        py_machine_learning_context.def("get_possible_gate_type_properties",
+                                        &machine_learning::Context::get_possible_gate_type_properties,
+                                        R"(
+                Get the possible gate type properties.
+
+                :returns: A list of GateTypeProperties.
+                :rtype: list[hal_py.GateTypeProperty]
+            )");
+
+        py_machine_learning_context.def("get_multi_bit_information",
+                                        &machine_learning::Context::get_multi_bit_information,
+                                        py::return_value_policy::reference_internal,
+                                        R"(
+            Retrieves the multi-bit information, initializing it if not already done.
+
+            :returns: The MultiBitInformation object.
+            :rtype: machine_learning.gate_pair_label.MultiBitInformation
+        )");
+
+        py_machine_learning_context.def_readonly("nl", &machine_learning::Context::nl, R"(
+            The netlist.
+
+            :type: hal_py.Netlist
+        )");
+
         // Bindings for NetlistGraph
         py::class_<machine_learning::NetlistGraph> py_netlist_graph(m, "NetlistGraph", R"(
             Represents a graph of the netlist.
@@ -158,73 +263,6 @@ namespace hal
         )");
 
         // machine_learning::features::gate_feature
-        // FeatureContext class
-        py::class_<machine_learning::gate_feature::FeatureContext> py_gate_feature_context(py_gate_feature, "FeatureContext", R"(
-            This class holds the context for gate feature calculations.
-        )");
-
-        py_gate_feature_context.def(py::init<const Netlist*>(), py::arg("netlist"), R"(
-            Construct a FeatureContext with the given netlist.
-
-            :param hal_py.Netlist netlist: The netlist.
-        )");
-
-        py_gate_feature_context.def(
-            "get_sequential_abstraction",
-            [](machine_learning::gate_feature::FeatureContext& self) -> std::optional<NetlistAbstraction*> {
-                auto res = self.get_sequential_abstraction();
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting sequential abstraction:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            R"(
-                Get the sequential abstraction of the netlist.
-
-                :returns: The sequential NetlistAbstraction on success, None otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
-
-        py_gate_feature_context.def(
-            "get_original_abstraction",
-            [](machine_learning::gate_feature::FeatureContext& self) -> std::optional<NetlistAbstraction*> {
-                auto res = self.get_original_abstraction();
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting original abstraction:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            R"(
-                Get the original abstraction of the netlist.
-
-                :returns: The original NetlistAbstraction on success, None otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
-
-        py_gate_feature_context.def("get_possible_gate_type_properties",
-                                    &machine_learning::gate_feature::FeatureContext::get_possible_gate_type_properties,
-                                    R"(
-                Get the possible gate type properties.
-
-                :returns: A list of GateTypeProperties.
-                :rtype: list[hal_py.GateTypeProperty]
-            )");
-
-        py_gate_feature_context.def_readonly("nl", &machine_learning::gate_feature::FeatureContext::nl, R"(
-            The netlist.
-
-            :type: hal_py.Netlist
-        )");
 
         // GateFeature class
         py::class_<machine_learning::gate_feature::GateFeature> py_gate_feature_class(py_gate_feature, "GateFeature", R"(
@@ -233,8 +271,8 @@ namespace hal
 
         py_gate_feature_class.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::GateFeature& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::GateFeature& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -250,7 +288,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -276,8 +314,8 @@ namespace hal
 
         py_connected_global_ios.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::ConnectedGlobalIOs& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::ConnectedGlobalIOs& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -293,7 +331,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -327,8 +365,8 @@ namespace hal
 
         py_distance_global_io.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::DistanceGlobalIO& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::DistanceGlobalIO& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -344,7 +382,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -379,8 +417,8 @@ namespace hal
 
         py_sequential_distance_global_io.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::SequentialDistanceGlobalIO& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::SequentialDistanceGlobalIO& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -396,7 +434,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -422,8 +460,8 @@ namespace hal
 
         py_io_degrees.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::IODegrees& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::IODegrees& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -439,7 +477,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -465,8 +503,8 @@ namespace hal
 
         py_gate_type_one_hot.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::GateTypeOneHot& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::GateTypeOneHot& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -482,7 +520,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -516,8 +554,8 @@ namespace hal
 
         py_neighboring_gate_types.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::NeighboringGateTypes& self, machine_learning::gate_feature::FeatureContext& fc, const Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g);
+            [](const machine_learning::gate_feature::NeighboringGateTypes& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -533,7 +571,7 @@ namespace hal
             R"(
                 Calculate the feature for the given gate in the given feature context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext feature_context: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
                 :returns: A list of unsigned integers representing the feature on success, None otherwise.
                 :rtype: list[int] or None
@@ -576,10 +614,8 @@ namespace hal
 
         py_gate_feature.def(
             "build_feature_vec",
-            [](hal::machine_learning::gate_feature::FeatureContext& fc,
-               const std::vector<const hal::machine_learning::gate_feature::GateFeature*>& features,
-               const hal::Gate* g) -> std::optional<std::vector<u32>> {
-                auto res = hal::machine_learning::gate_feature::build_feature_vec(fc, features, g);
+            [](hal::machine_learning::Context& ctx, const std::vector<const hal::machine_learning::gate_feature::GateFeature*>& features, const hal::Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = hal::machine_learning::gate_feature::build_feature_vec(ctx, features, g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -590,13 +626,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("features"),
             py::arg("g"),
             R"(
                 Build a feature vector for a gate from multiple features within a context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext fc: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context ctx: The feature context.
                 :param list[hal_py.machine_learning.gate_feature.GateFeature] features: The list of features.
                 :param hal_py.Gate g: The gate for which to build the feature vector.
                 :returns: The feature vector if successful, None otherwise.
@@ -631,10 +667,10 @@ namespace hal
 
         py_gate_feature.def(
             "build_feature_vecs",
-            [](hal::machine_learning::gate_feature::FeatureContext& fc,
+            [](hal::machine_learning::Context& ctx,
                const std::vector<const hal::machine_learning::gate_feature::GateFeature*>& features,
                const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<u32>>> {
-                auto res = hal::machine_learning::gate_feature::build_feature_vecs(fc, features, gates);
+                auto res = hal::machine_learning::gate_feature::build_feature_vecs(ctx, features, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -645,13 +681,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("features"),
             py::arg("gates"),
             R"(
                 Build feature vectors for a list of gates from multiple features within a context.
 
-                :param hal_py.machine_learning.gate_feature.FeatureContext fc: The feature context.
+                :param hal_py.machine_learning.gate_feature.Context ctx: The feature context.
                 :param list[hal_py.machine_learning.gate_feature.GateFeature] features: The list of features.
                 :param list[hal_py.Gate] gates: The list of gates for which to build the feature vectors.
                 :returns: The feature vectors if successful, None otherwise.
@@ -659,65 +695,6 @@ namespace hal
             )");
 
         // machine_learning::features::gate_pair_feature
-        // Binding for struct FeatureContext
-        py::class_<machine_learning::gate_pair_feature::FeatureContext> py_gate_pair_feature_context(py_gate_pair_feature, "FeatureContext", R"(
-            This class provides the context for feature calculation, including the netlist and abstractions.
-        )");
-
-        py_gate_pair_feature_context.def(py::init<const Netlist*>(), py::arg("netlist"), R"(
-            Construct a new FeatureContext with the given netlist.
-
-            :param hal_py.Netlist netlist: The netlist.
-        )");
-
-        py_gate_pair_feature_context.def_readonly("nl", &machine_learning::gate_pair_feature::FeatureContext::nl, R"(
-            The netlist associated with this context.
-
-            :type: hal_py.Netlist
-        )");
-
-        py_gate_pair_feature_context.def(
-            "get_original_abstraction",
-            [](machine_learning::gate_pair_feature::FeatureContext& self) -> std::optional<NetlistAbstraction*> {
-                auto res = self.get_original_abstraction();
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error getting original abstraction:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            R"(
-                Get the original netlist abstraction.
-
-                :returns: The original netlist abstraction on success, ``None`` otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
-
-        py_gate_pair_feature_context.def(
-            "get_sequential_abstraction",
-            [](machine_learning::gate_pair_feature::FeatureContext& self) -> std::optional<NetlistAbstraction*> {
-                auto res = self.get_sequential_abstraction();
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error getting sequential abstraction:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            R"(
-                Get the sequential netlist abstraction.
-
-                :returns: The sequential netlist abstraction on success, ``None`` otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
-
         py::class_<machine_learning::gate_pair_feature::GatePairFeature, std::shared_ptr<machine_learning::gate_pair_feature::GatePairFeature>> py_gate_pair_feature_class(
             py_gate_pair_feature, "GatePairFeature", R"(
             Base class for gate pair features.
@@ -725,9 +702,8 @@ namespace hal
 
         py_gate_pair_feature_class.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::GatePairFeature& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::GatePairFeature& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -738,13 +714,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the feature vector for the given gate pair.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -777,9 +753,8 @@ namespace hal
 
         py_logical_distance.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::LogicalDistance& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::LogicalDistance& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -790,13 +765,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the logical distance between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -831,9 +806,8 @@ namespace hal
 
         py_sequential_distance.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::SequentialDistance& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::SequentialDistance& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -844,13 +818,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the sequential distance between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -875,9 +849,8 @@ namespace hal
 
         py_physical_distance.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::PhysicalDistance& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::PhysicalDistance& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -888,13 +861,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the physical distance between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -921,9 +894,8 @@ namespace hal
 
         py_shared_control_signals.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::SharedControlSignals& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::SharedControlSignals& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -934,13 +906,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the shared control signals between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -979,9 +951,8 @@ namespace hal
 
         py_shared_sequential_neighbors.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::SharedSequentialNeighbors& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::SharedSequentialNeighbors& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -992,13 +963,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the number of shared sequential neighbors between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -1035,9 +1006,8 @@ namespace hal
 
         py_shared_neighbors.def(
             "calculate_feature",
-            [](machine_learning::gate_pair_feature::SharedNeighbors& self, machine_learning::gate_pair_feature::FeatureContext& fc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_feature(fc, g_a, g_b);
+            [](machine_learning::gate_pair_feature::SharedNeighbors& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_feature(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1048,13 +1018,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
                 Calculate the number of shared neighbors between two gates.
 
-                :param gate_pair_feature.FeatureContext fc: The feature context.
+                :param gate_pair_feature.Context ctx: The feature context.
                 :param hal_py.Gate g_a: The first gate.
                 :param hal_py.Gate g_b: The second gate.
                 :returns: The feature vector on success, ``None`` otherwise.
@@ -1098,9 +1068,9 @@ namespace hal
 
         py_gate_pair_feature.def(
             "build_feature_vec",
-            [](machine_learning::gate_pair_feature::FeatureContext& fc, const std::vector<const machine_learning::gate_pair_feature::GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
+            [](machine_learning::Context& ctx, const std::vector<const machine_learning::gate_pair_feature::GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
                 -> std::optional<std::vector<u32>> {
-                auto res = machine_learning::gate_pair_feature::build_feature_vec(fc, features, g_a, g_b);
+                auto res = machine_learning::gate_pair_feature::build_feature_vec(ctx, features, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1111,14 +1081,14 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("features"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
             Build the feature vector for a pair of gates with a given feature context.
 
-            :param hal_py.machine_learning.gate_pair_feature.FeatureContext fc: The feature context.
+            :param hal_py.machine_learning.gate_pair_feature.Context ctx: The feature context.
             :param list[hal_py.machine_learning.gate_pair_feature.GatePairFeature] features: The list of features.
             :param hal_py.Gate g_a: The first gate.
             :param hal_py.Gate g_b: The second gate.
@@ -1153,10 +1123,10 @@ namespace hal
 
         py_gate_pair_feature.def(
             "build_feature_vec",
-            [](machine_learning::gate_pair_feature::FeatureContext& fc,
+            [](machine_learning::Context& ctx,
                const std::vector<const machine_learning::gate_pair_feature::GatePairFeature*>& features,
                const std::pair<Gate*, Gate*>& gate_pair) -> std::optional<std::vector<u32>> {
-                auto res = machine_learning::gate_pair_feature::build_feature_vec(fc, features, gate_pair);
+                auto res = machine_learning::gate_pair_feature::build_feature_vec(ctx, features, gate_pair);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1167,13 +1137,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("features"),
             py::arg("gate_pair"),
             R"(
             Build the feature vector for a pair of gates with a given feature context.
 
-            :param hal_py.machine_learning.gate_pair_feature.FeatureContext fc: The feature context.
+            :param hal_py.machine_learning.gate_pair_feature.Context ctx: The feature context.
             :param list[hal_py.machine_learning.gate_pair_feature.GatePairFeature] features: The list of features.
             :param tuple[hal_py.Gate, hal_py.Gate] gate_pair: The pair of gates.
             :returns: The feature vector.
@@ -1208,10 +1178,10 @@ namespace hal
 
         py_gate_pair_feature.def(
             "build_feature_vecs",
-            [](machine_learning::gate_pair_feature::FeatureContext& fc,
+            [](machine_learning::Context& ctx,
                const std::vector<const machine_learning::gate_pair_feature::GatePairFeature*>& features,
                const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) -> std::optional<std::vector<std::vector<u32>>> {
-                auto res = machine_learning::gate_pair_feature::build_feature_vecs(fc, features, gate_pairs);
+                auto res = machine_learning::gate_pair_feature::build_feature_vecs(ctx, features, gate_pairs);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1222,13 +1192,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("fc"),
+            py::arg("ctx"),
             py::arg("features"),
             py::arg("gate_pairs"),
             R"(
             Build the feature vectors for a list of gate pairs with a given feature context.
 
-            :param hal_py.machine_learning.gate_pair_feature.FeatureContext fc: The feature context.
+            :param hal_py.machine_learning.gate_pair_feature.Context ctx: The feature context.
             :param list[hal_py.machine_learning.gate_pair_feature.GatePairFeature] features: The list of features.
             :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The list of gate pairs.
             :returns: The list of feature vectors.
@@ -1236,85 +1206,6 @@ namespace hal
         )");
 
         // machine_learning::labels::gate_pair_label
-        // MultiBitInformation
-        py::class_<machine_learning::gate_pair_label::MultiBitInformation> py_multi_bit_information(py_gate_pair_label,
-                                                                                                    "MultiBitInformation",
-                                                                                                    R"(
-            Holds mappings between word labels and gates, and gates and word labels.
-
-            This struct provides a bi-directional mapping between specific word pairs and their corresponding gates,
-            as well as between gates and associated word pairs.
-        )");
-
-        py_multi_bit_information.def_readwrite("word_to_gates",
-                                               &machine_learning::gate_pair_label::MultiBitInformation::word_to_gates,
-                                               R"(
-            Maps word pairs to corresponding gates.
-
-            :type: dict[tuple[str, hal_py.PinDirection, str], list[hal_py.Gate]]
-        )");
-
-        py_multi_bit_information.def_readwrite("gate_to_words",
-                                               &machine_learning::gate_pair_label::MultiBitInformation::gate_to_words,
-                                               R"(
-            Maps gates to associated word pairs.
-
-            :type: dict[hal_py.Gate, list[tuple[str, hal_py.PinDirection, str]]]
-        )");
-
-        py::class_<machine_learning::gate_pair_label::LabelContext> py_label_context(py_gate_pair_label,
-                                                                                     "LabelContext",
-                                                                                     R"(
-            Provides context for gate-pair labeling within a netlist.
-
-            This struct is initialized with a reference to the netlist and the gates involved in the labeling.
-            It also provides access to multi-bit information for use in labeling calculations.
-        )");
-
-        py_label_context.def(py::init<const Netlist*, const std::vector<Gate*>&>(),
-                             py::arg("netlist"),
-                             py::arg("gates"),
-                             R"(
-            Constructs a LabelContext with the specified netlist and gates.
-
-            :param hal_py.Netlist netlist: The netlist to which the gates belong.
-            :param list[hal_py.Gate] gates: The gates to be labeled.
-        )");
-
-        py_label_context.def("get_multi_bit_information",
-                             &machine_learning::gate_pair_label::LabelContext::get_multi_bit_information,
-                             py::return_value_policy::reference_internal,
-                             R"(
-            Retrieves the multi-bit information, initializing it if not already done.
-
-            :returns: The MultiBitInformation object.
-            :rtype: machine_learning.gate_pair_label.MultiBitInformation
-        )");
-
-        py_label_context.def_readonly("nl",
-                                      &machine_learning::gate_pair_label::LabelContext::nl,
-                                      R"(
-            The netlist to which the gates belong.
-
-            :type: hal_py.Netlist
-        )");
-
-        py_label_context.def_readonly("gates",
-                                      &machine_learning::gate_pair_label::LabelContext::gates,
-                                      R"(
-            The gates that are part of this labeling context.
-
-            :type: list[hal_py.Gate]
-        )");
-
-        py_label_context.def_readwrite("mbi",
-                                       &machine_learning::gate_pair_label::LabelContext::mbi,
-                                       R"(
-            Optional storage for multi-bit information, initialized on demand.
-
-            :type: Optional[machine_learning.gate_pair_label.MultiBitInformation]
-        )");
-
         py::class_<machine_learning::gate_pair_label::GatePairLabel> py_gate_pair_label_class(py_gate_pair_label,
                                                                                               "GatePairLabel",
                                                                                               R"(
@@ -1325,9 +1216,9 @@ namespace hal
 
         py_gate_pair_label_class.def(
             "calculate_gate_pairs",
-            [](const machine_learning::gate_pair_label::GatePairLabel& self, machine_learning::gate_pair_label::LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates)
+            [](const machine_learning::gate_pair_label::GatePairLabel& self, machine_learning::Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates)
                 -> std::optional<std::vector<std::pair<Gate*, Gate*>>> {
-                auto res = self.calculate_gate_pairs(lc, nl, gates);
+                auto res = self.calculate_gate_pairs(ctx, nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1338,13 +1229,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("nl"),
             py::arg("gates"),
             R"(
             Calculate gate pairs based on the provided labeling context and netlist.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Netlist nl: The netlist to operate on.
             :param list[hal_py.Gate] gates: The gates to be paired.
             :returns: A list of gate pairs on success, None otherwise.
@@ -1353,8 +1244,8 @@ namespace hal
 
         py_gate_pair_label_class.def(
             "calculate_label",
-            [](const machine_learning::gate_pair_label::GatePairLabel& self, machine_learning::gate_pair_label::LabelContext& lc, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_label(lc, g_a, g_b);
+            [](const machine_learning::gate_pair_label::GatePairLabel& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1365,13 +1256,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
             Calculate labels for a given gate pair.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Gate g_a: The first gate in the pair.
             :param hal_py.Gate g_b: The second gate in the pair.
             :returns: A list of labels on success, None otherwise.
@@ -1381,9 +1272,9 @@ namespace hal
         py_gate_pair_label_class.def(
             "calculate_labels",
             [](const machine_learning::gate_pair_label::GatePairLabel& self,
-               machine_learning::gate_pair_label::LabelContext& lc,
+               machine_learning::Context& ctx,
                const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) -> std::optional<std::vector<std::vector<u32>>> {
-                auto res = self.calculate_labels(lc, gate_pairs);
+                auto res = self.calculate_labels(ctx, gate_pairs);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1394,12 +1285,12 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("gate_pairs"),
             R"(
             Calculate labels for multiple gate pairs.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
             :returns: A list of label vectors for each pair on success, None otherwise.
             :rtype: list[list[int]] or None
@@ -1407,8 +1298,9 @@ namespace hal
 
         py_gate_pair_label_class.def(
             "calculate_labels",
-            [](const machine_learning::gate_pair_label::GatePairLabel& self, const Netlist* netlist) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
-                auto res = self.calculate_labels(netlist);
+            [](const machine_learning::gate_pair_label::GatePairLabel& self,
+               machine_learning::Context& ctx) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
+                auto res = self.calculate_labels(ctx);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1419,7 +1311,7 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             R"(
             Calculate both gate pairs and their labels within the labeling context.
 
@@ -1458,9 +1350,9 @@ namespace hal
 
         py_shared_signal_group.def(
             "calculate_gate_pairs",
-            [](const machine_learning::gate_pair_label::SharedSignalGroup& self, machine_learning::gate_pair_label::LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates)
+            [](const machine_learning::gate_pair_label::SharedSignalGroup& self, machine_learning::Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates)
                 -> std::optional<std::vector<std::pair<Gate*, Gate*>>> {
-                auto res = self.calculate_gate_pairs(lc, nl, gates);
+                auto res = self.calculate_gate_pairs(ctx, nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1471,13 +1363,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("nl"),
             py::arg("gates"),
             R"(
             Calculate gate pairs based on shared signal groups.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Netlist nl: The netlist to operate on.
             :param list[hal_py.Gate] gates: The gates to be paired.
             :returns: A list of gate pairs on success, None otherwise.
@@ -1486,9 +1378,8 @@ namespace hal
 
         py_shared_signal_group.def(
             "calculate_label",
-            [](const machine_learning::gate_pair_label::SharedSignalGroup& self, machine_learning::gate_pair_label::LabelContext& lc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_label(lc, g_a, g_b);
+            [](const machine_learning::gate_pair_label::SharedSignalGroup& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1499,13 +1390,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
             Calculate labels for a given gate pair based on shared signal groups.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Gate g_a: The first gate in the pair.
             :param hal_py.Gate g_b: The second gate in the pair.
             :returns: A list of labels on success, None otherwise.
@@ -1515,9 +1406,9 @@ namespace hal
         py_shared_signal_group.def(
             "calculate_labels",
             [](const machine_learning::gate_pair_label::SharedSignalGroup& self,
-               machine_learning::gate_pair_label::LabelContext& lc,
+               machine_learning::Context& ctx,
                const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) -> std::optional<std::vector<std::vector<u32>>> {
-                auto res = self.calculate_labels(lc, gate_pairs);
+                auto res = self.calculate_labels(ctx, gate_pairs);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1528,12 +1419,12 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("gate_pairs"),
             R"(
             Calculate labels for multiple gate pairs based on shared signal groups.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
             :returns: A list of label vectors for each pair on success, None otherwise.
             :rtype: list[list[int]] or None
@@ -1542,8 +1433,8 @@ namespace hal
         py_shared_signal_group.def(
             "calculate_labels",
             [](const machine_learning::gate_pair_label::SharedSignalGroup& self,
-               const Netlist* netlist) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
-                auto res = self.calculate_labels(netlist);
+               machine_learning::Context& ctx) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
+                auto res = self.calculate_labels(ctx);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1554,7 +1445,7 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             R"(
             Calculate both gate pairs and their labels based on shared signal groups within the labeling context.
 
@@ -1585,9 +1476,9 @@ namespace hal
 
         py_shared_connection.def(
             "calculate_gate_pairs",
-            [](const machine_learning::gate_pair_label::SharedConnection& self, machine_learning::gate_pair_label::LabelContext& lc, const Netlist* nl, const std::vector<Gate*>& gates)
+            [](const machine_learning::gate_pair_label::SharedConnection& self, machine_learning::Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates)
                 -> std::optional<std::vector<std::pair<Gate*, Gate*>>> {
-                auto res = self.calculate_gate_pairs(lc, nl, gates);
+                auto res = self.calculate_gate_pairs(ctx, nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1598,13 +1489,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("nl"),
             py::arg("gates"),
             R"(
             Calculate gate pairs based on shared connections.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Netlist nl: The netlist to operate on.
             :param list[hal_py.Gate] gates: The gates to be paired.
             :returns: A list of gate pairs on success, None otherwise.
@@ -1613,9 +1504,8 @@ namespace hal
 
         py_shared_connection.def(
             "calculate_label",
-            [](const machine_learning::gate_pair_label::SharedConnection& self, machine_learning::gate_pair_label::LabelContext& lc, const Gate* g_a, const Gate* g_b)
-                -> std::optional<std::vector<u32>> {
-                auto res = self.calculate_label(lc, g_a, g_b);
+            [](const machine_learning::gate_pair_label::SharedConnection& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g_a, g_b);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1626,13 +1516,13 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("g_a"),
             py::arg("g_b"),
             R"(
             Calculate labels for a given gate pair based on shared connections.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param hal_py.Gate g_a: The first gate in the pair.
             :param hal_py.Gate g_b: The second gate in the pair.
             :returns: A list of labels on success, None otherwise.
@@ -1642,9 +1532,9 @@ namespace hal
         py_shared_connection.def(
             "calculate_labels",
             [](const machine_learning::gate_pair_label::SharedConnection& self,
-               machine_learning::gate_pair_label::LabelContext& lc,
+               machine_learning::Context& ctx,
                const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) -> std::optional<std::vector<std::vector<u32>>> {
-                auto res = self.calculate_labels(lc, gate_pairs);
+                auto res = self.calculate_labels(ctx, gate_pairs);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1655,12 +1545,12 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             py::arg("gate_pairs"),
             R"(
             Calculate labels for multiple gate pairs based on shared connections.
 
-            :param machine_learning.gate_pair_label.LabelContext lc: The labeling context.
+            :param machine_learning.Context ctx: The labeling context.
             :param list[tuple[hal_py.Gate, hal_py.Gate]] gate_pairs: The gate pairs to label.
             :returns: A list of label vectors for each pair on success, None otherwise.
             :rtype: list[list[int]] or None
@@ -1669,8 +1559,8 @@ namespace hal
         py_shared_connection.def(
             "calculate_labels",
             [](const machine_learning::gate_pair_label::SharedConnection& self,
-               const Netlist* netlist) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
-                auto res = self.calculate_labels(netlist);
+               machine_learning::Context& ctx) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
+                auto res = self.calculate_labels(ctx);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1681,7 +1571,7 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("lc"),
+            py::arg("ctx"),
             R"(
             Calculate both gate pairs and their labels based on shared connections within the labeling context.
 

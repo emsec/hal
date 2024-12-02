@@ -3,9 +3,11 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/progress_printer.h"
 #include "machine_learning/features/gate_pair_feature.h"
 
 #define MAX_DISTANCE 255
+#define PROGRESS_BAR
 
 namespace hal
 {
@@ -13,67 +15,14 @@ namespace hal
     {
         namespace gate_pair_feature
         {
-            const Result<NetlistAbstraction*> FeatureContext::get_sequential_abstraction()
-            {
-                if (!m_seqential_abstraction.has_value())
-                {
-                    const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
-
-                    const std::vector<PinType> forbidden_pins = {
-                        PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
-
-                    const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
-                        UNUSED(_d);
-                        return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
-                    };
-
-                    const auto sequential_abstraction_res = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
-                    if (sequential_abstraction_res.is_error())
-                    {
-                        return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
-                    }
-
-                    m_seqential_abstraction = sequential_abstraction_res.get();
-                }
-
-                return OK(&(m_seqential_abstraction.value()));
-            }
-
-            const Result<NetlistAbstraction*> FeatureContext::get_original_abstraction()
-            {
-                if (!m_original_abstraction.has_value())
-                {
-                    // const std::vector<PinType> forbidden_pins = {
-                    //     PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
-
-                    // const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
-                    //     UNUSED(_d);
-                    //     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
-                    // };
-
-                    const auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
-                    if (original_abstraction_res.is_error())
-                    {
-                        return ERR_APPEND(original_abstraction_res.get_error(), "cannot get original netlist abstraction for gate feature context: failed to build abstraction.");
-                    }
-
-                    m_original_abstraction = original_abstraction_res.get();
-
-                    // TODO remove debug print
-                    // std::cout << "Built abstraction" << std::endl;
-                }
-
-                return OK(&m_original_abstraction.value());
-            }
-
-            Result<std::vector<u32>> LogicalDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> LogicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
                 {
                     return OK({0});
                 }
 
-                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
                 if (nl_abstr.is_error())
                 {
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": : failed to get original netlist abstraction");
@@ -86,26 +35,51 @@ namespace hal
                     return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
                 };
 
-                const auto res = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
-                if (res.is_error())
+                const auto res_ab = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
+                if (res_ab.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
+                    return ERR_APPEND(res_ab.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
                 }
 
-                const auto shortest_path = res.get();
+                const auto shortest_path_ab = res_ab.get();
 
-                if (!shortest_path.has_value())
+                if (!shortest_path_ab.has_value())
                 {
                     return OK({MAX_DISTANCE});
                 }
 
-                if (shortest_path.value() < 1)
+                if (shortest_path_ab.value() < 1)
                 {
                     log_error("machine_learning", "Found shortest path with no components, this is unexpected!");
                 }
 
-                const u32 distance = shortest_path.value();
-                return OK({std::min(distance, u32(MAX_DISTANCE))});
+                const u32 distance_ab = shortest_path_ab.value();
+
+                if (m_direction != PinDirection::inout)
+                {
+                    const auto res_ba = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_b, g_a, m_direction, m_directed, endpoint_filter, endpoint_filter);
+                    if (res_ba.is_error())
+                    {
+                        return ERR_APPEND(res_ba.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
+                    }
+
+                    const auto shortest_path_ba = res_ba.get();
+
+                    if (!shortest_path_ba.has_value())
+                    {
+                        return OK({MAX_DISTANCE});
+                    }
+
+                    if (shortest_path_ba.value() < 1)
+                    {
+                        log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
+                    }
+
+                    const u32 distance_ba = shortest_path_ba.value();
+                    return OK({std::min(distance_ab, u32(MAX_DISTANCE)), std::min(distance_ab, u32(MAX_DISTANCE))});
+                }
+
+                return OK({std::min(distance_ab, u32(MAX_DISTANCE))});
             };
 
             std::string LogicalDistance::to_string() const
@@ -115,14 +89,14 @@ namespace hal
                 return "LogicalDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> SequentialDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SequentialDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
                 {
                     return OK({0});
                 }
 
-                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_sequential_abstraction();
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();
                 if (nl_abstr.is_error())
                 {
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": : failed to get sequential netlist abstraction");
@@ -135,26 +109,51 @@ namespace hal
                     return std::find(forbidden_pin_types.begin(), forbidden_pin_types.end(), ep->get_pin()->get_type()) == forbidden_pin_types.end();
                 };
 
-                const auto res = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
-                if (res.is_error())
+                const auto res_ab = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_a, g_b, m_direction, m_directed, endpoint_filter, endpoint_filter);
+                if (res_ab.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
+                    return ERR_APPEND(res_ab.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
                 }
 
-                const auto shortest_path = res.get();
+                const auto shortest_path_ab = res_ab.get();
 
-                if (!shortest_path.has_value())
+                if (!shortest_path_ab.has_value())
                 {
                     return OK({MAX_DISTANCE});
                 }
 
-                if (shortest_path.value() < 1)
+                if (shortest_path_ab.value() < 1)
                 {
                     log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
                 }
 
-                const u32 distance = shortest_path.value();
-                return OK({std::min(distance, u32(MAX_DISTANCE))});
+                const u32 distance_ab = shortest_path_ab.value();
+
+                if (m_direction != PinDirection::inout)
+                {
+                    const auto res_ba = NetlistAbstractionDecorator(*(nl_abstr.get())).get_shortest_path_distance(g_b, g_a, m_direction, m_directed, endpoint_filter, endpoint_filter);
+                    if (res_ba.is_error())
+                    {
+                        return ERR_APPEND(res_ba.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate shortest path distance.");
+                    }
+
+                    const auto shortest_path_ba = res_ba.get();
+
+                    if (!shortest_path_ba.has_value())
+                    {
+                        return OK({MAX_DISTANCE});
+                    }
+
+                    if (shortest_path_ba.value() < 1)
+                    {
+                        log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
+                    }
+
+                    const u32 distance_ba = shortest_path_ba.value();
+                    return OK({std::min(distance_ab, u32(MAX_DISTANCE)), std::min(distance_ab, u32(MAX_DISTANCE))});
+                }
+
+                return OK({std::min(distance_ab, u32(MAX_DISTANCE))});
             };
 
             std::string SequentialDistance::to_string() const
@@ -164,7 +163,7 @@ namespace hal
                 return "SequentialDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> PhysicalDistance::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> PhysicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 log_error("machine_learning", "Physical distance currently not implemented as gate pair feature.");
 
@@ -176,7 +175,7 @@ namespace hal
                 return "PhysicalDistance";
             }
 
-            Result<std::vector<u32>> SharedControlSignals::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SharedControlSignals::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 static const std::vector<PinType> ctrl_pin_types = {
                     PinType::clock,
@@ -212,9 +211,9 @@ namespace hal
                 return "SharedControlSignals";
             }
 
-            Result<std::vector<u32>> SharedSequentialNeighbors::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SharedSequentialNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
-                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_sequential_abstraction();
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();
                 if (nl_abstr.is_error())
                 {
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get sequential netlist abstraction");
@@ -326,9 +325,9 @@ namespace hal
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> SharedNeighbors::calculate_feature(FeatureContext& fc, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<u32>> SharedNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
-                const hal::Result<hal::NetlistAbstraction*> nl_abstr = fc.get_original_abstraction();
+                const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
                 if (nl_abstr.is_error())
                 {
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get original netlist abstraction");
@@ -442,20 +441,20 @@ namespace hal
 
             Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
             {
-                FeatureContext fc(g_a->get_netlist());
-                return build_feature_vec(fc, features, g_a, g_b);
+                Context ctx(g_a->get_netlist());
+                return build_feature_vec(ctx, features, g_a, g_b);
             }
 
-            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
+            Result<std::vector<u32>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
             {
                 std::vector<u32> feature_vec;
 
                 for (const auto& gf : features)
                 {
                     // TODO remove
-                    // std::cout << "Calculating feature " << gf->to_string() << " for g_a " << g_a->get_id() << " and g_b " << g_b->get_id() << std::endl;
+                    //std::cout << "Calculating feature " << gf->to_string() << " for g_a " << g_a->get_id() << " and g_b " << g_b->get_id() << std::endl;
 
-                    const auto new_features = gf->calculate_feature(fc, g_a, g_b);
+                    const auto new_features = gf->calculate_feature(ctx, g_a, g_b);
                     if (new_features.is_error())
                     {
                         return ERR_APPEND(new_features.get_error(),
@@ -474,9 +473,9 @@ namespace hal
                 return build_feature_vec(features, gate_pair.first, gate_pair.second);
             }
 
-            Result<std::vector<u32>> build_feature_vec(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
+            Result<std::vector<u32>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
             {
-                return build_feature_vec(fc, features, gate_pair.first, gate_pair.second);
+                return build_feature_vec(ctx, features, gate_pair.first, gate_pair.second);
             }
 
             Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
@@ -486,29 +485,87 @@ namespace hal
                     return OK({});
                 }
 
-                FeatureContext fc(gate_pairs.front().first->get_netlist());
-                return build_feature_vecs(fc, features, gate_pairs);
+                Context ctx(gate_pairs.front().first->get_netlist());
+                return build_feature_vecs(ctx, features, gate_pairs);
             }
 
-            Result<std::vector<std::vector<u32>>> build_feature_vecs(FeatureContext& fc, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
+            Result<std::vector<std::vector<u32>>> build_feature_vecs(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
             {
-                std::vector<std::vector<u32>> feature_vecs;
+                // Preallocate the feature vectors
+                std::vector<std::vector<u32>> feature_vecs(gate_pairs.size());
+                std::vector<Result<std::monostate>> thread_results(ctx.num_threads, ERR("uninitialized"));
 
-                for (const auto& gp : gate_pairs)
-                {
-                    const auto feature_vec = build_feature_vec(fc, features, gp);
-                    if (feature_vec.is_error())
+#ifdef PROGRESS_BAR
+                const auto msg = "Calculated gate pair features for " + std::to_string(gate_pairs.size()) + "/" + std::to_string(gate_pairs.size()) + " pairs";
+                auto pp        = ProgressPrinter(msg.size());
+                u32 pp_counter = 0;
+                std::mutex pp_mutex;
+#endif
+
+                // Worker function for each thread
+                auto thread_func = [&](u32 start, u32 end, u32 thread_index) {
+                    for (u32 i = start; i < end; ++i)
                     {
-                        return ERR_APPEND(feature_vec.get_error(),
-                                          "cannot build feature vecs: failed to build feature vector for gate_a " + gp.first->get_name() + " with ID " + std::to_string(gp.first->get_id())
-                                              + " and gate_b " + gp.second->get_name() + " with ID " + std::to_string(gp.second->get_id()));
+                        const auto& gp         = gate_pairs[i];
+                        const auto feature_vec = build_feature_vec(ctx, features, gp);
+                        if (feature_vec.is_error())
+                        {
+                            thread_results.at(thread_index) =
+                                ERR_APPEND(feature_vec.get_error(),
+                                           "cannot build feature vecs: failed to build feature vector for gate_a " + gp.first->get_name() + " with ID " + std::to_string(gp.first->get_id())
+                                               + " and gate_b " + gp.second->get_name() + " with ID " + std::to_string(gp.second->get_id()));
+                            return;
+                        }
+
+                        feature_vecs[i] = feature_vec.get();
+
+#ifdef PROGRESS_BAR
+                        {
+                            std::lock_guard<std::mutex> lock(pp_mutex);
+                            pp_counter++;
+                            pp.print_progress(static_cast<float>(pp_counter) / gate_pairs.size(),
+                                              "Calculated gate pair features for " + std::to_string(pp_counter) + "/" + std::to_string(gate_pairs.size()) + " pairs");
+                        }
+#endif
                     }
 
-                    feature_vecs.push_back(feature_vec.get());
+                    thread_results.at(thread_index) = OK({});
+                };
+
+                // Launch threads to process gate_pairs in parallel
+                std::vector<std::thread> threads;
+                u32 chunk_size = (gate_pairs.size() + ctx.num_threads - 1) / ctx.num_threads;
+                for (u32 t = 0; t < ctx.num_threads; ++t)
+                {
+                    u32 start = t * chunk_size;
+                    u32 end   = std::min(start + chunk_size, static_cast<u32>(gate_pairs.size()));
+                    if (start < end)
+                    {
+                        threads.emplace_back(thread_func, start, end, t);
+                    }
                 }
+
+                for (auto& thread : threads)
+                {
+                    thread.join();
+                }
+
+                // Check whether a thread encountered an error
+                for (const auto& res : thread_results)
+                {
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "Encountered error when building feature vectors");
+                    }
+                }
+
+#ifdef PROGRESS_BAR
+                pp.clear();
+#endif
 
                 return OK(feature_vecs);
             }
+
         }    // namespace gate_pair_feature
     }    // namespace machine_learning
 }    // namespace hal
