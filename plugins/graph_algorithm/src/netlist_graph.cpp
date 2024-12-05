@@ -186,8 +186,7 @@ namespace hal
             return OK(std::move(graph));
         }
 
-        Result<std::unique_ptr<NetlistGraph>>
-            NetlistGraph::from_netlist_abstraction(const NetlistAbstraction* nl_asbtr, const bool create_dummy_vertices, const std::function<bool(const Endpoint*, const Endpoint*)>& filter)
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist_abstraction(const NetlistAbstraction* nl_asbtr, const bool create_dummy_vertices)
         {
             if (!nl_asbtr)
             {

@@ -126,15 +126,12 @@ namespace hal
              * @brief Create a directed graph from a netlist abstraction. 
              * 
              * Optionally create dummy vertices at global input and output nets
-             * An optional filter can be applied to exclude undesired edges.
              * 
              * @param[in] nl_abstr - The netlist abstraction.
              * @param[in] create_dummy_vertices - Set `true` to create dummy vertices, `false` otherwise. Defaults to `false`.
-             * @param[in] filter - An optional filter that is evaluated on every edge in the netlist abstraction. Defaults to `nullptr`.
              * @returns The netlist graph on success, an error otherwise.
              */
-            static Result<std::unique_ptr<NetlistGraph>>
-                from_netlist_abstraction(const NetlistAbstraction* nl_asbtr, const bool create_dummy_vertices = false, const std::function<bool(const Endpoint*, const Endpoint*)>& filter = nullptr);
+            static Result<std::unique_ptr<NetlistGraph>> from_netlist_abstraction(const NetlistAbstraction* nl_asbtr, const bool create_dummy_vertices = false);
 
             /**
              * @brief Create a deep copy of the netlist graph.
