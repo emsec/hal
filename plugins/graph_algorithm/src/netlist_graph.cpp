@@ -1,5 +1,5 @@
 #include "graph_algorithm/netlist_graph.h"
-
+#include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -178,6 +178,104 @@ namespace hal
 
             graph->m_graph_ptr = &(graph->m_graph);
             auto err           = igraph_empty(graph->m_graph_ptr, node_counter, IGRAPH_DIRECTED);
+            if (err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            return OK(std::move(graph));
+        }
+
+        Result<std::unique_ptr<NetlistGraph>>
+            NetlistGraph::from_netlist_abstraction(const NetlistAbstraction* nl_asbtr, const bool create_dummy_vertices, const std::function<bool(const Endpoint*, const Endpoint*)>& filter)
+        {
+            if (!nl_asbtr)
+            {
+                return ERR("netlist abstraction is a nullptr");
+            }
+
+            if (nl_asbtr->get_target_gates().empty())
+            {
+                return ERR("netlist abstraction has no target gates");
+            }
+
+            auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(nl_asbtr->get_target_gates().front()->get_netlist()));
+
+            // count all edges as this number is needed to create a new graph
+            u32 edge_counter = 0;
+            for (const auto* gate : nl_asbtr->get_target_gates())
+            {
+                edge_counter += nl_asbtr->get_unique_successors(gate).get().size();
+
+                if (create_dummy_vertices)
+                {
+                    edge_counter += nl_asbtr->get_global_input_predecessors(gate).get().size();
+                    edge_counter += nl_asbtr->get_global_output_successors(gate).get().size();
+                }
+            }
+
+            // initialize edge vector
+            igraph_vector_int_t edges;
+            auto err = igraph_vector_int_init(&edges, 2 * edge_counter);
+            if (err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            // we need dummy gates for input/outputs
+            u32 node_counter = 0;
+            u32 edge_index   = 0;
+
+            for (auto* g : nl_asbtr->get_target_gates())
+            {
+                const u32 node                = node_counter++;
+                graph->m_gates_to_nodes[g]    = node;
+                graph->m_nodes_to_gates[node] = g;
+            }
+
+            std::map<Net*, u32> global_in_to_node;
+            std::map<Net*, u32> global_out_to_node;
+            for (auto* src_gate : nl_asbtr->get_target_gates())
+            {
+                for (auto* dst_gate : nl_asbtr->get_unique_successors(src_gate).get())
+                {
+                    VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
+                    VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(dst_gate);
+                }
+
+                if (create_dummy_vertices)
+                {
+                    for (auto* global_in : nl_asbtr->get_global_input_predecessors(src_gate).get())
+                    {
+                        if (global_in_to_node.find(global_in) == global_in_to_node.end())
+                        {
+                            // create dummy node for global input
+                            global_in_to_node[global_in] = node_counter++;
+                        }
+
+                        VECTOR(edges)[edge_index++] = global_in_to_node.at(global_in);
+                        VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
+                    }
+
+                    for (auto* global_out : nl_asbtr->get_global_output_successors(src_gate).get())
+                    {
+                        if (global_out_to_node.find(global_out) == global_out_to_node.end())
+                        {
+                            // create dummy node for global output
+                            global_out_to_node[global_out] = node_counter++;
+                        }
+
+                        VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
+                        VECTOR(edges)[edge_index++] = global_out_to_node.at(global_out);
+                    }
+                }
+            }
+
+            graph->m_graph_ptr = &(graph->m_graph);
+            err                = igraph_create(graph->m_graph_ptr, &edges, node_counter, IGRAPH_DIRECTED);
+
+            igraph_vector_int_destroy(&edges);
+
             if (err != IGRAPH_SUCCESS)
             {
                 return ERR(igraph_strerror(err));

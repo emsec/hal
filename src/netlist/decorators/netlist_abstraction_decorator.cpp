@@ -16,10 +16,13 @@ namespace hal
         const auto nl_trav_dec = NetlistTraversalDecorator(*netlist);
 
         // transform gates into set to check fast if a gate is part of abstraction
-        const auto gates_set       = utils::to_unordered_set(gates);
-        const auto& included_gates = include_all_netlist_gates ? netlist->get_gates() : gates;
+        const auto target_gates_set = utils::to_unordered_set(gates);
+        const auto& included_gates  = include_all_netlist_gates ? netlist->get_gates() : gates;
 
-        auto new_abstraction                  = std::shared_ptr<NetlistAbstraction>(new NetlistAbstraction());
+        auto new_abstraction            = std::shared_ptr<NetlistAbstraction>(new NetlistAbstraction());
+        new_abstraction->m_target_gates = gates;
+        // new_abstraction->m_included_gates = included_gates;
+
         const u32 approximated_endpoint_count = included_gates.size() * 8;
         new_abstraction->m_successors.reserve(approximated_endpoint_count);
         new_abstraction->m_predecessors.reserve(approximated_endpoint_count);
@@ -38,7 +41,7 @@ namespace hal
                 const auto successors = nl_trav_dec.get_next_matching_endpoints(
                     ep_out,
                     true,
-                    [gates_set](const auto& ep) { return ep->is_destination_pin() && gates_set.find(ep->get_gate()) != gates_set.end(); },
+                    [target_gates_set](const auto& ep) { return ep->is_destination_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end(); },
                     false,
                     exit_endpoint_filter,
                     entry_endpoint_filter);
@@ -80,8 +83,8 @@ namespace hal
             {
                 new_abstraction->m_predecessors.insert({ep_in, {}});
 
-                const auto predecessors =
-                    nl_trav_dec.get_next_matching_endpoints(ep_in, false, [gates_set](const auto& ep) { return ep->is_source_pin() && gates_set.find(ep->get_gate()) != gates_set.end(); });
+                const auto predecessors = nl_trav_dec.get_next_matching_endpoints(
+                    ep_in, false, [target_gates_set](const auto& ep) { return ep->is_source_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end(); });
 
                 if (predecessors.is_error())
                 {
@@ -116,6 +119,11 @@ namespace hal
         }
 
         return OK(new_abstraction);
+    }
+
+    const std::vector<Gate*>& NetlistAbstraction::get_target_gates() const
+    {
+        return m_target_gates;
     }
 
     Result<std::vector<Endpoint*>> NetlistAbstraction::get_predecessors(const Gate* gate) const
@@ -277,6 +285,30 @@ namespace hal
         return OK(it->second);
     }
 
+    Result<std::vector<Net*>> NetlistAbstraction::get_global_input_predecessors(const Gate* gate) const
+    {
+        std::vector<Net*> global_input_predecessors;
+        for (auto* ep : gate->get_fan_out_endpoints())
+        {
+            const auto new_global_input_predecessors = get_global_input_predecessors(ep);
+            if (new_global_input_predecessors.is_error())
+            {
+                return ERR_APPEND(new_global_input_predecessors.get_error(),
+                                  "failed to get global input predecessors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            for (auto* pred_net : new_global_input_predecessors.get())
+            {
+                global_input_predecessors.push_back(pred_net);
+            }
+        }
+
+        std::sort(global_input_predecessors.begin(), global_input_predecessors.end());
+        global_input_predecessors.erase(std::unique(global_input_predecessors.begin(), global_input_predecessors.end()), global_input_predecessors.end());
+
+        return OK(global_input_predecessors);
+    }
+
     Result<std::vector<Net*>> NetlistAbstraction::get_global_output_successors(const Endpoint* endpoint) const
     {
         const auto it = m_global_output_successors.find(endpoint);
@@ -286,6 +318,30 @@ namespace hal
                        + endpoint->get_pin()->get_name() + " in netlist abstraction");
         }
         return OK(it->second);
+    }
+
+    Result<std::vector<Net*>> NetlistAbstraction::get_global_output_successors(const Gate* gate) const
+    {
+        std::vector<Net*> global_output_successors;
+        for (auto* ep : gate->get_fan_out_endpoints())
+        {
+            const auto new_global_output_successors = get_global_output_successors(ep);
+            if (new_global_output_successors.is_error())
+            {
+                return ERR_APPEND(new_global_output_successors.get_error(),
+                                  "failed to get global output successors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
+            }
+
+            for (auto* succ_net : new_global_output_successors.get())
+            {
+                global_output_successors.push_back(succ_net);
+            }
+        }
+
+        std::sort(global_output_successors.begin(), global_output_successors.end());
+        global_output_successors.erase(std::unique(global_output_successors.begin(), global_output_successors.end()), global_output_successors.end());
+
+        return OK(global_output_successors);
     }
 
     NetlistAbstractionDecorator::NetlistAbstractionDecorator(const hal::NetlistAbstraction& abstraction) : m_abstraction(abstraction){};

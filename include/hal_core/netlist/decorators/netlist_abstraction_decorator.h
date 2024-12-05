@@ -64,6 +64,8 @@ namespace hal
                                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr);
 
+        const std::vector<Gate*>& get_target_gates() const;
+
         /**
          * @brief Gets the predecessors of a gate within the abstraction.
          *
@@ -137,6 +139,14 @@ namespace hal
         Result<std::vector<Net*>> get_global_input_predecessors(const Endpoint* endpoint) const;
 
         /**
+         * @brief Gets the global input nets that are predecessors of a gate.
+         *
+         * @param[in] gate - The gate to get global input predecessors for.
+         * @returns A vector of global input nets.
+         */
+        Result<std::vector<Net*>> get_global_input_predecessors(const Gate* gate) const;
+
+        /**
          * @brief Gets the global output nets that are successors of an endpoint.
          *
          * @param[in] endpoint - The endpoint to get global output successors for.
@@ -144,8 +154,19 @@ namespace hal
          */
         Result<std::vector<Net*>> get_global_output_successors(const Endpoint* endpoint) const;
 
+        /**
+         * @brief Gets the global output nets that are successors of a gate.
+         *
+         * @param[in] gate - The gate to get global output successors for.
+         * @returns A vector of global output nets.
+         */
+        Result<std::vector<Net*>> get_global_output_successors(const Gate* gate) const;
+
     private:
         NetlistAbstraction() = default;
+
+        std::vector<Gate*> m_target_gates;
+        // std::vector<Gate*> m_included_gates;
 
         /**
          * @brief Maps endpoints to their successor endpoints within the abstraction.
