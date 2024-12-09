@@ -6,9 +6,9 @@ if(PL_MACHINE_LEARNING OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE MACHINE_LEARNING_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
     hal_add_plugin(machine_learning
-                   SHARED
-                   HEADER ${MACHINE_LEARNING_INC}
-                   SOURCES ${MACHINE_LEARNING_SRC} ${MACHINE_LEARNING_PYTHON_SRC}
-                   LINK_LIBRARIES nlohmann_json::nlohmann_json netlist_preprocessing
-                   )
+        SHARED
+        HEADER ${MACHINE_LEARNING_INC}
+        SOURCES ${MACHINE_LEARNING_SRC} ${MACHINE_LEARNING_PYTHON_SRC}
+        LINK_LIBRARIES nlohmann_json::nlohmann_json netlist_preprocessing graph_algorithm
+    )
 endif()

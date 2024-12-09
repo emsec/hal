@@ -1,3 +1,4 @@
+#include "graph_algorithm/algorithms/centrality.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "machine_learning/types.h"
@@ -68,7 +69,7 @@ namespace hal
                 {
                     std::set<u32> indices;
                     std::set<Gate*> unique_gates;
-                    std::vector<Gate*> gates;
+                    std::vector<Gate*> gates_vec;
 
                     // TODO remove
                     // std::cout << "Order Word: " << std::endl;
@@ -80,7 +81,7 @@ namespace hal
                         indices.insert(index);
                         unique_gates.insert(gate);
 
-                        gates.push_back(gate);
+                        gates_vec.push_back(gate);
                     }
 
                     // sanity check
@@ -119,7 +120,7 @@ namespace hal
 
                     if (const auto it = gates_to_word.find(gates); it == gates_to_word.end())
                     {
-                        gates_to_word.insert({gates, name_direction});
+                        gates_to_word.insert({gates_vec, name_direction});
                     }
                     // NOTE could think about a priorization of shorter names or something similar
                 }
@@ -321,15 +322,15 @@ namespace hal
                     return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
                 };
 
-                auto sequential_abstraction_res = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
-                if (sequential_abstraction_res.is_error())
+                auto new_abstraction = NetlistAbstraction::create(nl, seq_gates, true, endpoint_filter, endpoint_filter);
+                if (new_abstraction.is_error())
                 {
-                    return ERR_APPEND(sequential_abstraction_res.get_error(), "Cannot get sequential netlist abstraction: failed to build abstraction.");
+                    return ERR_APPEND(new_abstraction.get_error(), "Cannot get sequential netlist abstraction: failed to build abstraction.");
                 }
 
-                auto new_abstraction = sequential_abstraction_res.get();
+                std::shared_ptr<NetlistAbstraction> shared_abstracttion(std::move(new_abstraction).get());
 
-                std::atomic_store_explicit(&m_sequential_abstraction, new_abstraction, std::memory_order_release);
+                std::atomic_store_explicit(&m_sequential_abstraction, shared_abstracttion, std::memory_order_release);
 
                 return OK(m_sequential_abstraction.get());
             }
@@ -352,17 +353,90 @@ namespace hal
                     return OK(abstraction.get());
                 }
 
-                auto original_abstraction_res = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
-                if (original_abstraction_res.is_error())
+                auto new_abstraction = NetlistAbstraction::create(nl, nl->get_gates(), true, nullptr, nullptr);
+                if (new_abstraction.is_error())
                 {
-                    return ERR_APPEND(original_abstraction_res.get_error(), "Cannot get original netlist abstraction: failed to build abstraction.");
+                    return ERR_APPEND(new_abstraction.get_error(), "Cannot get original netlist abstraction: failed to build abstraction.");
                 }
 
-                auto new_abstraction = original_abstraction_res.get();
+                std::shared_ptr<NetlistAbstraction> shared_abstracttion(std::move(new_abstraction).get());
 
-                std::atomic_store_explicit(&m_original_abstraction, new_abstraction, std::memory_order_release);
+                std::atomic_store_explicit(&m_original_abstraction, shared_abstracttion, std::memory_order_release);
 
                 return OK(m_original_abstraction.get());
+            }
+        }
+
+        const Result<graph_algorithm::NetlistGraph*> Context::get_sequential_netlist_graph()
+        {
+            auto graph = std::atomic_load_explicit(&m_sequential_netlist_graph, std::memory_order_acquire);
+            if (graph)
+            {
+                return OK(graph.get());
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_sequential_graph_mutex);
+                // Double-check after acquiring the lock
+                graph = std::atomic_load_explicit(&m_sequential_netlist_graph, std::memory_order_acquire);
+                if (graph)
+                {
+                    return OK(graph.get());
+                }
+
+                const auto sequential_abstraction = this->get_sequential_abstraction();
+                if (sequential_abstraction.is_error())
+                {
+                    return ERR_APPEND(sequential_abstraction.get_error(), "cannot get origianl netlist abstraction");
+                }
+
+                auto new_graph = graph_algorithm::NetlistGraph::from_netlist_abstraction(sequential_abstraction.get(), true);
+                if (new_graph.is_error())
+                {
+                    return ERR_APPEND(new_graph.get_error(), "cannot get sequential netlist graph: failed to build new graph");
+                }
+
+                std::shared_ptr<graph_algorithm::NetlistGraph> shared_graph(std::move(new_graph).get());
+
+                std::atomic_store_explicit(&m_sequential_netlist_graph, shared_graph, std::memory_order_release);
+
+                return OK(m_sequential_netlist_graph.get());
+            }
+        }
+
+        const Result<graph_algorithm::NetlistGraph*> Context::get_original_netlist_graph()
+        {
+            auto graph = std::atomic_load_explicit(&m_original_netlist_graph, std::memory_order_acquire);
+            if (graph)
+            {
+                return OK(graph.get());
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_original_graph_mutex);
+                // Double-check after acquiring the lock
+                graph = std::atomic_load_explicit(&m_original_netlist_graph, std::memory_order_acquire);
+                if (graph)
+                {
+                    return OK(graph.get());
+                }
+
+                const auto original_abstraction = this->get_original_abstraction();
+                if (original_abstraction.is_error())
+                {
+                    return ERR_APPEND(original_abstraction.get_error(), "cannot get origianl netlist abstraction");
+                }
+
+                auto new_graph = graph_algorithm::NetlistGraph::from_netlist_abstraction(original_abstraction.get(), true);
+                if (new_graph.is_error())
+                {
+                    return ERR_APPEND(new_graph.get_error(), "cannot get original netlist graph: failed to build new graph");
+                }
+                std::shared_ptr<graph_algorithm::NetlistGraph> shared_graph(std::move(new_graph).get());
+
+                std::atomic_store_explicit(&m_original_netlist_graph, shared_graph, std::memory_order_release);
+
+                return OK(m_original_netlist_graph.get());
             }
         }
 
@@ -401,5 +475,6 @@ namespace hal
                 return *properties_vec;
             }
         }
+
     }    // namespace machine_learning
 }    // namespace hal

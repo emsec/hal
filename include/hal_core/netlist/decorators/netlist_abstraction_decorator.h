@@ -58,7 +58,7 @@ namespace hal
          * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
          */
-        static Result<std::shared_ptr<NetlistAbstraction>> create(const Netlist* netlist,
+        static Result<std::unique_ptr<NetlistAbstraction>> create(const Netlist* netlist,
                                                                   const std::vector<Gate*>& gates,
                                                                   const bool include_all_netlist_gates                                                       = false,
                                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,

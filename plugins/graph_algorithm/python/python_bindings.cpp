@@ -1,12 +1,12 @@
 
-#include "hal_core/python_bindings/python_bindings.h"
-
+#include "graph_algorithm/algorithms/centrality.h"
 #include "graph_algorithm/algorithms/components.h"
 #include "graph_algorithm/algorithms/neighborhood.h"
 #include "graph_algorithm/algorithms/shortest_path.h"
 #include "graph_algorithm/algorithms/subgraph.h"
 #include "graph_algorithm/netlist_graph.h"
 #include "graph_algorithm/plugin_graph_algorithm.h"
+#include "hal_core/python_bindings/python_bindings.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -898,6 +898,182 @@ namespace hal
                 :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
                 :rtype: graph_algorithm.NetlistGraph or None
         )");
+
+        m.def(
+            "get_harmonic_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& gates, graph_algorithm::NetlistGraph::Direction direction, int cutoff = -1) -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_harmonic_centrality(graph, gates, direction, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing harmonic centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("gates"),
+            py::arg("direction"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the harmonic centrality for a set of gates within a given graph.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param list[hal_py.Gate] gates: The gates for which centrality is computed.
+            :param hal_py.NetlistGraph.Direction direction: The edge direction to consider.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
+
+        m.def(
+            "get_harmonic_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<uint32_t>& vertices, graph_algorithm::NetlistGraph::Direction direction, int cutoff = -1)
+                -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_harmonic_centrality(graph, vertices, direction, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing harmonic centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("vertices"),
+            py::arg("direction"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the harmonic centrality for a set of vertices within a given graph.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param list[int] vertices: The vertex IDs for which centrality is computed.
+            :param hal_py.NetlistGraph.Direction direction: The edge direction to consider.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
+
+        m.def(
+            "get_harmonic_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const igraph_vector_int_t* vertices, graph_algorithm::NetlistGraph::Direction direction, int cutoff = -1)
+                -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_harmonic_centrality(graph, vertices, direction, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing harmonic centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("vertices"),
+            py::arg("direction"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the harmonic centrality for a set of vertices within a given graph using an igraph vector.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param hal_py.igraph_vector_int_t vertices: The igraph vector of vertex IDs for which centrality is computed.
+            :param hal_py.NetlistGraph.Direction direction: The edge direction to consider.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
+
+        m.def(
+            "get_betweenness_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& gates, bool directed, int cutoff = -1) -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_betweenness_centrality(graph, gates, directed, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing betweenness centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("gates"),
+            py::arg("directed"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the betweenness centrality for a set of gates within a given graph.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param list[hal_py.Gate] gates: The gates for which centrality is computed.
+            :param bool directed: Whether the graph is directed.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
+
+        m.def(
+            "get_betweenness_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<uint32_t>& vertices, bool directed, int cutoff = -1) -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_betweenness_centrality(graph, vertices, directed, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing betweenness centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("vertices"),
+            py::arg("directed"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the betweenness centrality for a set of vertices within a given graph.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param list[int] vertices: The vertex IDs for which centrality is computed.
+            :param bool directed: Whether the graph is directed.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
+
+        m.def(
+            "get_betweenness_centrality",
+            [](const graph_algorithm::NetlistGraph* graph, const igraph_vector_int_t* vertices, bool directed, int cutoff = -1) -> std::optional<std::vector<double>> {
+                auto res = graph_algorithm::get_betweenness_centrality(graph, vertices, directed, cutoff);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error computing betweenness centrality: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("vertices"),
+            py::arg("directed"),
+            py::arg("cutoff") = -1,
+            R"(
+            Compute the betweenness centrality for a set of vertices within a given graph using an igraph vector.
+
+            :param hal_py.NetlistGraph graph: The netlist graph.
+            :param hal_py.igraph_vector_int_t vertices: The igraph vector of vertex IDs for which centrality is computed.
+            :param bool directed: Whether the graph is directed.
+            :param int cutoff: Maximum path length to consider. Defaults to -1 (no cutoff).
+            :returns: A list of centrality values on success, None otherwise.
+            :rtype: list[float] or None
+            )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

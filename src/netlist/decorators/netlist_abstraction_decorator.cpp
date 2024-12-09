@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    Result<std::shared_ptr<NetlistAbstraction>> NetlistAbstraction::create(const Netlist* netlist,
+    Result<std::unique_ptr<NetlistAbstraction>> NetlistAbstraction::create(const Netlist* netlist,
                                                                            const std::vector<Gate*>& gates,
                                                                            const bool include_all_netlist_gates,
                                                                            const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
@@ -19,7 +19,7 @@ namespace hal
         const auto target_gates_set = utils::to_unordered_set(gates);
         const auto& included_gates  = include_all_netlist_gates ? netlist->get_gates() : gates;
 
-        auto new_abstraction            = std::shared_ptr<NetlistAbstraction>(new NetlistAbstraction());
+        auto new_abstraction            = std::unique_ptr<NetlistAbstraction>(new NetlistAbstraction());
         new_abstraction->m_target_gates = gates;
         // new_abstraction->m_included_gates = included_gates;
 
@@ -118,7 +118,7 @@ namespace hal
             }
         }
 
-        return OK(new_abstraction);
+        return OK(std::move(new_abstraction));
     }
 
     const std::vector<Gate*>& NetlistAbstraction::get_target_gates() const

@@ -6,7 +6,7 @@
 #include "hal_core/utilities/progress_printer.h"
 #include "machine_learning/features/gate_pair_feature.h"
 
-#define MAX_DISTANCE 255
+#define MAX_DISTANCE FEATURE_TYPE(255)
 // #define PROGRESS_BAR
 
 namespace hal
@@ -15,11 +15,11 @@ namespace hal
     {
         namespace gate_pair_feature
         {
-            Result<std::vector<u32>> LogicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> LogicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
                 {
-                    return OK({0});
+                    return OK({FEATURE_TYPE(0)});
                 }
 
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
@@ -76,10 +76,10 @@ namespace hal
                     }
 
                     const u32 distance_ba = shortest_path_ba.value();
-                    return OK({std::min(distance_ab, u32(MAX_DISTANCE)), std::min(distance_ab, u32(MAX_DISTANCE))});
+                    return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE))), FEATURE_TYPE(std::min(distance_ba, u32(MAX_DISTANCE)))});
                 }
 
-                return OK({std::min(distance_ab, u32(MAX_DISTANCE))});
+                return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE)))});
             };
 
             std::string LogicalDistance::to_string() const
@@ -89,11 +89,11 @@ namespace hal
                 return "LogicalDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> SequentialDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> SequentialDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
                 {
-                    return OK({0});
+                    return OK({FEATURE_TYPE(0)});
                 }
 
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();
@@ -150,10 +150,10 @@ namespace hal
                     }
 
                     const u32 distance_ba = shortest_path_ba.value();
-                    return OK({std::min(distance_ab, u32(MAX_DISTANCE)), std::min(distance_ab, u32(MAX_DISTANCE))});
+                    return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE))), FEATURE_TYPE(std::min(distance_ba, u32(MAX_DISTANCE)))});
                 }
 
-                return OK({std::min(distance_ab, u32(MAX_DISTANCE))});
+                return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE)))});
             };
 
             std::string SequentialDistance::to_string() const
@@ -163,8 +163,11 @@ namespace hal
                 return "SequentialDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> PhysicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> PhysicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
+                UNUSED(ctx);
+                UNUSED(g_a);
+                UNUSED(g_b);
                 log_error("machine_learning", "Physical distance currently not implemented as gate pair feature.");
 
                 return OK({});
@@ -175,7 +178,7 @@ namespace hal
                 return "PhysicalDistance";
             }
 
-            Result<std::vector<u32>> SharedControlSignals::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> SharedControlSignals::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 static const std::vector<PinType> ctrl_pin_types = {
                     PinType::clock,
@@ -203,7 +206,7 @@ namespace hal
                 std::set<Net*> shared;
                 std::set_intersection(nets_a.begin(), nets_a.end(), nets_b.begin(), nets_b.end(), std::inserter(shared, shared.begin()));
 
-                return OK({u32(shared.size())});
+                return OK({FEATURE_TYPE(shared.size())});
             };
 
             std::string SharedControlSignals::to_string() const
@@ -211,7 +214,7 @@ namespace hal
                 return "SharedControlSignals";
             }
 
-            Result<std::vector<u32>> SharedSequentialNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> SharedSequentialNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();
                 if (nl_abstr.is_error())
@@ -281,10 +284,30 @@ namespace hal
                 };
 
                 const auto neighborhood_a = NetlistAbstractionDecorator(*(nl_abstr.get()))
-                                                .get_next_matching_gates_until(g_a, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_a, endpoint_filter_a);
+                                                .get_next_matching_gates_until(
+                                                    g_a,
+                                                    [](const auto* _g) {
+                                                        UNUSED(_g);
+                                                        return true;
+                                                    },
+                                                    m_direction,
+                                                    m_directed,
+                                                    false,
+                                                    endpoint_filter_a,
+                                                    endpoint_filter_a);
 
                 const auto neighborhood_b = NetlistAbstractionDecorator(*(nl_abstr.get()))
-                                                .get_next_matching_gates_until(g_b, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_b, endpoint_filter_b);
+                                                .get_next_matching_gates_until(
+                                                    g_b,
+                                                    [](const auto* _g) {
+                                                        UNUSED(_g);
+                                                        return true;
+                                                    },
+                                                    m_direction,
+                                                    m_directed,
+                                                    false,
+                                                    endpoint_filter_b,
+                                                    endpoint_filter_b);
 
                 if (neighborhood_a.is_error())
                 {
@@ -312,7 +335,7 @@ namespace hal
                 std::set<const Gate*> shared;
                 std::set_intersection(neighbors_a.begin(), neighbors_a.end(), neighbors_b.begin(), neighbors_b.end(), std::inserter(shared, shared.begin()));
 
-                return OK({u32(shared.size())});
+                return OK({FEATURE_TYPE(shared.size())});
             };
 
             std::string SharedSequentialNeighbors::to_string() const
@@ -325,7 +348,7 @@ namespace hal
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> SharedNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
+            Result<std::vector<FEATURE_TYPE>> SharedNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
                 if (nl_abstr.is_error())
@@ -395,10 +418,30 @@ namespace hal
                 };
 
                 const auto neighborhood_a = NetlistAbstractionDecorator(*(nl_abstr.get()))
-                                                .get_next_matching_gates_until(g_a, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_a, endpoint_filter_a);
+                                                .get_next_matching_gates_until(
+                                                    g_a,
+                                                    [](const auto* _g) {
+                                                        UNUSED(_g);
+                                                        return true;
+                                                    },
+                                                    m_direction,
+                                                    m_directed,
+                                                    false,
+                                                    endpoint_filter_a,
+                                                    endpoint_filter_a);
 
                 const auto neighborhood_b = NetlistAbstractionDecorator(*(nl_abstr.get()))
-                                                .get_next_matching_gates_until(g_b, [](const auto* g) { return true; }, m_direction, m_directed, false, endpoint_filter_b, endpoint_filter_b);
+                                                .get_next_matching_gates_until(
+                                                    g_b,
+                                                    [](const auto* _g) {
+                                                        UNUSED(_g);
+                                                        return true;
+                                                    },
+                                                    m_direction,
+                                                    m_directed,
+                                                    false,
+                                                    endpoint_filter_b,
+                                                    endpoint_filter_b);
 
                 if (neighborhood_a.is_error())
                 {
@@ -426,7 +469,7 @@ namespace hal
                 std::set<const Gate*> shared;
                 std::set_intersection(neighbors_a.begin(), neighbors_a.end(), neighbors_b.begin(), neighbors_b.end(), std::inserter(shared, shared.begin()));
 
-                return OK({u32(shared.size())});
+                return OK({FEATURE_TYPE(shared.size())});
             };
 
             std::string SharedNeighbors::to_string() const
@@ -439,15 +482,15 @@ namespace hal
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
-            Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
+            Result<std::vector<FEATURE_TYPE>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
             {
                 Context ctx(g_a->get_netlist());
                 return build_feature_vec(ctx, features, g_a, g_b);
             }
 
-            Result<std::vector<u32>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
+            Result<std::vector<FEATURE_TYPE>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
             {
-                std::vector<u32> feature_vec;
+                std::vector<FEATURE_TYPE> feature_vec;
 
                 for (const auto& gf : features)
                 {
@@ -468,17 +511,17 @@ namespace hal
                 return OK(feature_vec);
             }
 
-            Result<std::vector<u32>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
+            Result<std::vector<FEATURE_TYPE>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
             {
                 return build_feature_vec(features, gate_pair.first, gate_pair.second);
             }
 
-            Result<std::vector<u32>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
+            Result<std::vector<FEATURE_TYPE>> build_feature_vec(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::pair<Gate*, Gate*>& gate_pair)
             {
                 return build_feature_vec(ctx, features, gate_pair.first, gate_pair.second);
             }
 
-            Result<std::vector<std::vector<u32>>> build_feature_vecs(const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
+            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
             {
                 if (gate_pairs.empty())
                 {
@@ -489,10 +532,10 @@ namespace hal
                 return build_feature_vecs(ctx, features, gate_pairs);
             }
 
-            Result<std::vector<std::vector<u32>>> build_feature_vecs(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
+            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(Context& ctx, const std::vector<const GatePairFeature*>& features, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs)
             {
                 // Preallocate the feature vectors
-                std::vector<std::vector<u32>> feature_vecs(gate_pairs.size());
+                std::vector<std::vector<FEATURE_TYPE>> feature_vecs(gate_pairs.size());
                 std::vector<Result<std::monostate>> thread_results(ctx.num_threads, ERR("uninitialized"));
 
 #ifdef PROGRESS_BAR
@@ -567,5 +610,5 @@ namespace hal
             }
 
         }    // namespace gate_pair_feature
-    }    // namespace machine_learning
+    }        // namespace machine_learning
 }    // namespace hal

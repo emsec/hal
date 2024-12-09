@@ -1,5 +1,6 @@
 #pragma once
 
+#include "graph_algorithm/netlist_graph.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 
@@ -8,6 +9,8 @@
 #include <mutex>
 #include <optional>
 #include <vector>
+
+#define FEATURE_TYPE float
 
 namespace hal
 {
@@ -44,10 +47,12 @@ namespace hal
         {
         public:
             Context() = delete;
-            Context(const Netlist* netlist, const u32 num_threads = 1) : nl(netlist), num_threads(num_threads){};
+            Context(const Netlist* netlist, const u32 _num_threads = 1) : nl(netlist), num_threads(_num_threads){};
 
             const Result<NetlistAbstraction*> get_sequential_abstraction();
             const Result<NetlistAbstraction*> get_original_abstraction();
+            const Result<graph_algorithm::NetlistGraph*> get_sequential_netlist_graph();
+            const Result<graph_algorithm::NetlistGraph*> get_original_netlist_graph();
             const std::vector<GateTypeProperty>& get_possible_gate_type_properties();
             const MultiBitInformation& get_multi_bit_information();
 
@@ -55,16 +60,20 @@ namespace hal
             const u32 num_threads;
 
         private:
-            std::shared_ptr<MultiBitInformation> m_mbi{nullptr};
-            std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};
             std::shared_ptr<NetlistAbstraction> m_original_abstraction{nullptr};
+            std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};
+            std::shared_ptr<graph_algorithm::NetlistGraph> m_original_netlist_graph{nullptr};
+            std::shared_ptr<graph_algorithm::NetlistGraph> m_sequential_netlist_graph{nullptr};
             std::shared_ptr<std::vector<GateTypeProperty>> m_possible_gate_type_properties{nullptr};
+            std::shared_ptr<MultiBitInformation> m_mbi{nullptr};
 
             // Mutexes for thread-safe initialization
-            std::mutex m_mbi_mutex;
-            std::mutex m_sequential_abstraction_mutex;
             std::mutex m_original_abstraction_mutex;
+            std::mutex m_sequential_abstraction_mutex;
+            std::mutex m_original_graph_mutex;
+            std::mutex m_sequential_graph_mutex;
             std::mutex m_possible_gate_type_properties_mutex;
+            std::mutex m_mbi_mutex;
         };
 
         enum GraphDirection
