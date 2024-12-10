@@ -155,6 +155,13 @@ namespace hal
             igraph_t* get_graph() const;
 
             /**
+             * @brief Get all the gates that are included in the netlist graph
+             * 
+             * @return A vector of gates.
+             */
+            const std::vector<Gate*> get_included_gates() const;
+
+            /**
              * @brief Get the gates corresponding to the specified vertices.
              * 
              * The result may contain `nullptr` for dummy vertices.

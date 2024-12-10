@@ -187,6 +187,13 @@ namespace hal
             :rtype: hal_py.Netlist
         )");
 
+        py_netlist_graph.def("get_included_gates", &graph_algorithm::NetlistGraph::get_included_gates, R"(
+            Get the gates included in the netlist graph.
+
+            :returns: The gates included in the netlsit graph.
+            :rtype: list[hal_py.Gate]
+        )");
+
         py_netlist_graph.def(
             "get_gates_from_vertices",
             [](const graph_algorithm::NetlistGraph& self, const std::vector<u32>& vertices) -> std::optional<std::vector<Gate*>> {

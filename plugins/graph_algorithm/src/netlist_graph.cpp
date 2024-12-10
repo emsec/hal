@@ -236,7 +236,8 @@ namespace hal
             std::map<Net*, u32> global_out_to_node;
             for (auto* src_gate : nl_asbtr->get_target_gates())
             {
-                for (auto* dst_gate : nl_asbtr->get_unique_successors(src_gate).get())
+                const auto successors = nl_asbtr->get_unique_successors(src_gate).get();
+                for (auto* dst_gate : successors)
                 {
                     VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
                     VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(dst_gate);
@@ -244,7 +245,8 @@ namespace hal
 
                 if (create_dummy_vertices)
                 {
-                    for (auto* global_in : nl_asbtr->get_global_input_predecessors(src_gate).get())
+                    const auto global_predecessors = nl_asbtr->get_global_input_predecessors(src_gate).get();
+                    for (auto* global_in : global_predecessors)
                     {
                         if (global_in_to_node.find(global_in) == global_in_to_node.end())
                         {
@@ -256,7 +258,8 @@ namespace hal
                         VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(src_gate);
                     }
 
-                    for (auto* global_out : nl_asbtr->get_global_output_successors(src_gate).get())
+                    const auto global_successors = nl_asbtr->get_global_output_successors(src_gate).get();
+                    for (auto* global_out : global_successors)
                     {
                         if (global_out_to_node.find(global_out) == global_out_to_node.end())
                         {
@@ -307,6 +310,16 @@ namespace hal
         igraph_t* NetlistGraph::get_graph() const
         {
             return m_graph_ptr;
+        }
+
+        const std::vector<Gate*> NetlistGraph::get_included_gates() const
+        {
+            std::vector<Gate*> gates;
+            gates.reserve(m_gates_to_nodes.size());
+
+            std::transform(m_gates_to_nodes.begin(), m_gates_to_nodes.end(), std::back_inserter(gates), [](const auto& pair) { return pair.first; });
+
+            return gates;
         }
 
         Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices(const std::vector<u32>& vertices) const

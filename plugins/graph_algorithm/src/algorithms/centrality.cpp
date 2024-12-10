@@ -26,7 +26,7 @@ namespace hal
                 return ERR(res.get_error());
             }
 
-            auto res = get_harmonic_centrality(graph, &i_vertices, direction);
+            auto res = get_harmonic_centrality(graph, &i_vertices, direction, cutoff);
 
             igraph_vector_int_destroy(&i_vertices);
 
@@ -61,7 +61,7 @@ namespace hal
                 VECTOR(i_vertices)[i] = vertices.at(i);
             }
 
-            auto res = get_harmonic_centrality(graph, &i_vertices, direction);
+            auto res = get_harmonic_centrality(graph, &i_vertices, direction, cutoff);
 
             igraph_vector_int_destroy(&i_vertices);
 
@@ -153,7 +153,7 @@ namespace hal
                 return ERR(res.get_error());
             }
 
-            auto res = get_betweenness_centrality(graph, &i_vertices, directed);
+            auto res = get_betweenness_centrality(graph, &i_vertices, directed, cutoff);
 
             igraph_vector_int_destroy(&i_vertices);
 
@@ -188,7 +188,7 @@ namespace hal
                 VECTOR(i_vertices)[i] = vertices.at(i);
             }
 
-            auto res = get_betweenness_centrality(graph, &i_vertices, directed);
+            auto res = get_betweenness_centrality(graph, &i_vertices, directed, cutoff);
 
             igraph_vector_int_destroy(&i_vertices);
 

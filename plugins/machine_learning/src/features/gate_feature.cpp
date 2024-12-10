@@ -15,7 +15,7 @@ namespace hal
     {
         namespace gate_feature
         {
-            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(const std::vector<const GateFeatureBulk*>& features, const std::vector<Gate*>& gates)
+            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
             {
                 if (gates.empty())
                 {
@@ -26,7 +26,7 @@ namespace hal
                 return build_feature_vecs(features, gates);
             }
 
-            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(Context& ctx, const std::vector<const GateFeatureBulk*>& features, const std::vector<Gate*>& gates)
+            Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(Context& ctx, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates)
             {
                 std::vector<std::vector<FEATURE_TYPE>> feature_vecs(gates.size(), std::vector<FEATURE_TYPE>());
 
@@ -50,5 +50,5 @@ namespace hal
                 return OK(feature_vecs);
             }
         }    // namespace gate_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

@@ -245,8 +245,10 @@ namespace hal
             }
         }
 
-        std::sort(successors.begin(), successors.end());
-        successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
+        // std::sort(successors.begin(), successors.end());
+        // successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
+
+        successors = utils::to_vector(utils::to_set(successors));
 
         return OK(successors);
     }
@@ -288,7 +290,7 @@ namespace hal
     Result<std::vector<Net*>> NetlistAbstraction::get_global_input_predecessors(const Gate* gate) const
     {
         std::vector<Net*> global_input_predecessors;
-        for (auto* ep : gate->get_fan_out_endpoints())
+        for (auto* ep : gate->get_fan_in_endpoints())
         {
             const auto new_global_input_predecessors = get_global_input_predecessors(ep);
             if (new_global_input_predecessors.is_error())
