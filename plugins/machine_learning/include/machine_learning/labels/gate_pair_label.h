@@ -10,14 +10,12 @@
 #include "machine_learning/types.h"
 
 #include <map>
-#include <optional>
 #include <vector>
 
 namespace hal
 {
     /* Forward declarations */
     class Gate;
-    class Netlist;
     enum class PinDirection : int;
 
     namespace machine_learning
@@ -82,6 +80,38 @@ namespace hal
                 SharedSignalGroup(const PinDirection& direction, const u32 min_pair_count, const double negative_to_positive_factor)
                     : m_direction(direction), m_min_pair_count(min_pair_count), m_negative_to_positive_factor(negative_to_positive_factor){};
 
+                const std::vector<u32> SHARED_GROUP      = {1, 0};
+                const std::vector<u32> INDEPENDENT_GROUP = {0, 1};
+
+                Result<std::vector<std::pair<Gate*, Gate*>>> calculate_gate_pairs(Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates) const override;
+                Result<std::vector<u32>> calculate_label(Context& ctx, const Gate* g_a, const Gate* g_b) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
+                Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(Context& ctx) const override;
+                std::string to_string() const override;
+
+            private:
+                const PinDirection m_direction;
+                const u32 m_min_pair_count;
+                const double m_negative_to_positive_factor;
+            };
+
+            /**
+             * @class BitIndexOrdering
+             * @brief Labels gate pairs based on their order in a shared control word.
+             */
+            class BitIndexOrdering : public GatePairLabel
+            {
+            public:
+                /**
+                 * @brief Default constructor.
+                 */
+                BitIndexOrdering(const PinDirection& direction, const u32 min_pair_count, const double negative_to_positive_factor)
+                    : m_direction(direction), m_min_pair_count(min_pair_count), m_negative_to_positive_factor(negative_to_positive_factor){};
+
+                const std::vector<u32> LOWER  = {1, 0, 0};
+                const std::vector<u32> HIGHER = {0, 1, 0};
+                const std::vector<u32> NA     = {0, 0, 1};
+
                 Result<std::vector<std::pair<Gate*, Gate*>>> calculate_gate_pairs(Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<u32>> calculate_label(Context& ctx, const Gate* g_a, const Gate* g_b) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
@@ -113,5 +143,5 @@ namespace hal
                 std::string to_string() const override;
             };
         }    // namespace gate_pair_label
-    }    // namespace machine_learning
+    }        // namespace machine_learning
 }    // namespace hal

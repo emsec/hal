@@ -7,6 +7,8 @@
 
 namespace hal
 {
+    //  Netlist Abstraction
+
     Result<std::unique_ptr<NetlistAbstraction>> NetlistAbstraction::create(const Netlist* netlist,
                                                                            const std::vector<Gate*>& gates,
                                                                            const bool include_all_netlist_gates,
@@ -345,6 +347,8 @@ namespace hal
 
         return OK(global_output_successors);
     }
+
+    //  Netlist Abstraction Decorator
 
     NetlistAbstractionDecorator::NetlistAbstractionDecorator(const hal::NetlistAbstraction& abstraction) : m_abstraction(abstraction){};
 

@@ -13,6 +13,8 @@ namespace hal
         {
             MultiBitInformation calculate_multi_bit_information(const std::vector<Gate*>& gates)
             {
+                MultiBitInformation m_mbi;
+
                 std::map<std::tuple<std::string, PinDirection, std::string>, std::set<std::tuple<u32, Gate*>>> word_to_gates_unsorted;
 
                 for (const auto g : gates)
@@ -82,13 +84,14 @@ namespace hal
                         unique_gates.insert(gate);
 
                         gates_vec.push_back(gate);
+                        m_mbi.gate_word_to_index.insert({{gate, name_direction}, index});
                     }
 
                     // sanity check
                     if (indices.size() != word.size())
                     {
                         // TODO return result
-                        log_error("machine_learning", "Found index double in word {}-{} - !", std::get<0>(name_direction), enum_to_string(std::get<1>(name_direction)), std::get<2>(name_direction));
+                        log_error("machine_learning", "Found index double in word {}-{} - {} !", std::get<0>(name_direction), enum_to_string(std::get<1>(name_direction)), std::get<2>(name_direction));
 
                         // TODO remove
                         std::cout << "Insane Word: " << std::endl;
@@ -124,8 +127,6 @@ namespace hal
                     }
                     // NOTE could think about a priorization of shorter names or something similar
                 }
-
-                MultiBitInformation m_mbi;
 
                 for (auto& [word_gates, name_direction] : gates_to_word)
                 {
@@ -266,6 +267,83 @@ namespace hal
                         return true;
                     }
                 }
+            }
+
+            return false;
+        }
+
+        std::optional<bool> MultiBitInformation::is_index_a_smaller_index_b(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const
+        {
+            const auto it_a = gate_to_words.find(g_a);
+            if (it_a == gate_to_words.end())
+            {
+                return std::nullopt;
+            }
+
+            const auto it_b = gate_to_words.find(g_b);
+            if (it_b == gate_to_words.end())
+            {
+                return std::nullopt;
+            }
+
+            const auto& words_a = it_a->second;
+            const auto& words_b = it_b->second;
+
+            std::set<std::tuple<std::string, PinDirection, std::string>> filtered_words_a;
+            std::set<std::tuple<std::string, PinDirection, std::string>> filtered_words_b;
+
+            for (const auto& w_a : words_a)
+            {
+                if (direction == PinDirection::inout || std::get<1>(w_a) == direction)
+                {
+                    filtered_words_a.insert(w_a);
+                }
+            }
+
+            for (const auto& w_b : words_b)
+            {
+                if (direction == PinDirection::inout || std::get<1>(w_b) == direction)
+                {
+                    filtered_words_b.insert(w_b);
+                }
+            }
+
+            std::vector<std::pair<std::tuple<std::string, PinDirection, std::string>, std::tuple<std::string, PinDirection, std::string>>> matches;
+            for (const auto& wa : filtered_words_a)
+            {
+                const auto& [wa_org, wa_dir, _wa_pin] = wa;
+                for (const auto& wb : filtered_words_b)
+                {
+                    const auto& [wb_org, wb_dir, _wb_pin] = wb;
+                    if ((wa_org == wb_org) && (wa_dir == wb_dir))
+                    {
+                        matches.push_back({wa, wb});
+                    }
+                }
+            }
+
+            if (matches.empty())
+            {
+                return std::nullopt;
+            }
+
+            std::sort(matches.begin(), matches.end(), [&](const auto& m1, const auto& m2) {
+                const auto& [w1a, w1b] = m1;
+                const auto& [w2a, w2b] = m2;
+
+                const auto size1 = word_to_gates.at(w1a).size() + word_to_gates.at(w1b).size();
+                const auto size2 = word_to_gates.at(w2a).size() + word_to_gates.at(w2b).size();
+
+                return size1 < size2;
+            });
+
+            const auto& [wa, wb] = matches.front();
+            const auto index_a   = gate_word_to_index.at({g_a, wa});
+            const auto index_b   = gate_word_to_index.at({g_b, wb});
+
+            if (index_a < index_b)
+            {
+                return true;
             }
 
             return false;

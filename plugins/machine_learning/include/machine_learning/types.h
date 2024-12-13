@@ -31,6 +31,7 @@ namespace hal
         {
         public:
             bool are_gates_considered_a_pair(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const;
+            std::optional<bool> is_index_a_smaller_index_b(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const;
 
             /**
              * @brief Maps word pairs to corresponding gates.
@@ -41,13 +42,19 @@ namespace hal
              * @brief Maps gates to associated word pairs.
              */
             std::map<const Gate*, std::vector<std::tuple<std::string, PinDirection, std::string>>> gate_to_words;
+
+            std::map<std::pair<const Gate*, std::tuple<std::string, PinDirection, std::string>>, u32> gate_word_to_index;
         };
 
         struct Context
         {
         public:
             Context() = delete;
-            Context(const Netlist* netlist, const u32 _num_threads = 1) : nl(netlist), num_threads(_num_threads){};
+            Context(const Netlist* netlist, const u32 _num_threads = 1) : nl(netlist), num_threads(_num_threads)
+            {
+                m_gates = netlist->get_gates();
+                std::sort(m_gates.begin(), m_gates.end(), [](const auto* g_a, const auto* g_b) { return g_a->get_id() < g_b->get_id(); });
+            };
 
             const Result<NetlistAbstraction*> get_sequential_abstraction();
             const Result<NetlistAbstraction*> get_original_abstraction();
@@ -56,10 +63,14 @@ namespace hal
             const std::vector<GateTypeProperty>& get_possible_gate_type_properties();
             const MultiBitInformation& get_multi_bit_information();
 
+            const std::vector<Gate*>& get_gates() const;
+
             const Netlist* nl;
             const u32 num_threads;
 
         private:
+            std::vector<Gate*> m_gates;
+
             std::shared_ptr<NetlistAbstraction> m_original_abstraction{nullptr};
             std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};
             std::shared_ptr<graph_algorithm::NetlistGraph> m_original_netlist_graph{nullptr};

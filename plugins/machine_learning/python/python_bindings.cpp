@@ -384,8 +384,7 @@ namespace hal
             )");
 
         // ConnectedGlobalIOs class
-        py::class_<machine_learning::gate_feature::ConnectedGlobalIOs, machine_learning::gate_feature::GateFeatureSingle> py_connected_global_ios(
-            py_gate_feature_single_class, "ConnectedGlobalIOs", R"(
+        py::class_<machine_learning::gate_feature::ConnectedGlobalIOs, machine_learning::gate_feature::GateFeatureSingle> py_connected_global_ios(py_gate_feature, "ConnectedGlobalIOs", R"(
             Gate feature representing connected global IOs.
         )");
 
@@ -428,7 +427,7 @@ namespace hal
             )");
 
         // DistanceGlobalIO class
-        py::class_<machine_learning::gate_feature::DistanceGlobalIO, machine_learning::gate_feature::GateFeatureSingle> py_distance_global_io(py_gate_feature_single_class, "DistanceGlobalIO", R"(
+        py::class_<machine_learning::gate_feature::DistanceGlobalIO, machine_learning::gate_feature::GateFeatureSingle> py_distance_global_io(py_gate_feature, "DistanceGlobalIO", R"(
             Gate feature representing distance to global IOs.
         )");
 
@@ -480,7 +479,7 @@ namespace hal
 
         // SequentialDistanceGlobalIO class
         py::class_<machine_learning::gate_feature::SequentialDistanceGlobalIO, machine_learning::gate_feature::GateFeatureSingle> py_sequential_distance_global_io(
-            py_gate_feature_single_class, "SequentialDistanceGlobalIO", R"(
+            py_gate_feature, "SequentialDistanceGlobalIO", R"(
             Gate feature representing sequential distance to global IOs.
         )");
 
@@ -531,7 +530,7 @@ namespace hal
             )");
 
         // IODegrees class
-        py::class_<machine_learning::gate_feature::IODegrees, machine_learning::gate_feature::GateFeatureSingle> py_io_degrees(py_gate_feature_single_class, "IODegrees", R"(
+        py::class_<machine_learning::gate_feature::IODegrees, machine_learning::gate_feature::GateFeatureSingle> py_io_degrees(py_gate_feature, "IODegrees", R"(
             Gate feature representing input/output degrees.
         )");
 
@@ -574,7 +573,7 @@ namespace hal
             )");
 
         // GateTypeOneHot class
-        py::class_<machine_learning::gate_feature::GateTypeOneHot, machine_learning::gate_feature::GateFeatureSingle> py_gate_type_one_hot(py_gate_feature_single_class, "GateTypeOneHot", R"(
+        py::class_<machine_learning::gate_feature::GateTypeOneHot, machine_learning::gate_feature::GateFeatureSingle> py_gate_type_one_hot(py_gate_feature, "GateTypeOneHot", R"(
             Gate feature representing gate type in one-hot encoding.
         )");
 
@@ -617,8 +616,7 @@ namespace hal
             )");
 
         // NeighboringGateTypes class
-        py::class_<machine_learning::gate_feature::NeighboringGateTypes, machine_learning::gate_feature::GateFeatureSingle> py_neighboring_gate_types(
-            py_gate_feature_single_class, "NeighboringGateTypes", R"(
+        py::class_<machine_learning::gate_feature::NeighboringGateTypes, machine_learning::gate_feature::GateFeatureSingle> py_neighboring_gate_types(py_gate_feature, "NeighboringGateTypes", R"(
             Gate feature representing neighboring gate types.
         )");
 
@@ -669,7 +667,7 @@ namespace hal
             )");
 
         py::class_<hal::machine_learning::gate_feature::BetweennessCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_betweenness_centrality(
-            py_gate_feature_bulk_class, "BetweennessCentrality", R"(
+            py_gate_feature, "BetweennessCentrality", R"(
             A class representing the betweenness centrality feature for gates.
             )");
 
@@ -718,8 +716,7 @@ namespace hal
             )");
 
         // HarmonicCentrality class
-        py::class_<hal::machine_learning::gate_feature::HarmonicCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_harmonic_centrality(
-            py_gate_feature_bulk_class, "HarmonicCentrality", R"(
+        py::class_<hal::machine_learning::gate_feature::HarmonicCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_harmonic_centrality(py_gate_feature, "HarmonicCentrality", R"(
             A class representing the harmonic centrality feature for gates.
             )");
 
@@ -769,7 +766,7 @@ namespace hal
 
         // SequentialBetweennessCentrality class
         py::class_<hal::machine_learning::gate_feature::SequentialBetweennessCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_sequential_betweenness_centrality(
-            py_gate_feature_bulk_class, "SequentialBetweennessCentrality", R"(
+            py_gate_feature, "SequentialBetweennessCentrality", R"(
             A class representing the sequential betweenness centrality feature for gates.
             )");
 
@@ -819,7 +816,7 @@ namespace hal
 
         // SequentialHarmonicCentrality class
         py::class_<hal::machine_learning::gate_feature::SequentialHarmonicCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_sequential_harmonic_centrality(
-            py_gate_feature_bulk_class, "SequentialHarmonicCentrality", R"(
+            py_gate_feature, "SequentialHarmonicCentrality", R"(
             A class representing the sequential harmonic centrality feature for gates.
             )");
 

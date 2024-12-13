@@ -42,18 +42,17 @@ namespace hal
                 }
 
                 const auto shortest_path_ab = res_ab.get();
+                auto distance_ab            = MAX_DISTANCE;
 
-                if (!shortest_path_ab.has_value())
+                if (shortest_path_ab.has_value())
                 {
-                    return OK({MAX_DISTANCE});
+                    distance_ab = std::min(MAX_DISTANCE, FEATURE_TYPE(shortest_path_ab.value()));
                 }
 
-                if (shortest_path_ab.value() < 1)
+                if (distance_ab < FEATURE_TYPE(1))
                 {
-                    log_error("machine_learning", "Found shortest path with no components, this is unexpected!");
+                    log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
                 }
-
-                const u32 distance_ab = shortest_path_ab.value();
 
                 if (m_direction != PinDirection::inout)
                 {
@@ -64,22 +63,22 @@ namespace hal
                     }
 
                     const auto shortest_path_ba = res_ba.get();
+                    auto distance_ba            = MAX_DISTANCE;
 
-                    if (!shortest_path_ba.has_value())
+                    if (shortest_path_ba.has_value())
                     {
-                        return OK({MAX_DISTANCE});
+                        distance_ba = std::min(MAX_DISTANCE, FEATURE_TYPE(shortest_path_ba.value()));
                     }
 
-                    if (shortest_path_ba.value() < 1)
+                    if (distance_ba < FEATURE_TYPE(1))
                     {
                         log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
                     }
 
-                    const u32 distance_ba = shortest_path_ba.value();
-                    return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE))), FEATURE_TYPE(std::min(distance_ba, u32(MAX_DISTANCE)))});
+                    return OK({distance_ab, distance_ba});
                 }
 
-                return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE)))});
+                return OK({distance_ab});
             };
 
             std::string LogicalDistance::to_string() const
@@ -116,18 +115,17 @@ namespace hal
                 }
 
                 const auto shortest_path_ab = res_ab.get();
+                auto distance_ab            = MAX_DISTANCE;
 
-                if (!shortest_path_ab.has_value())
+                if (shortest_path_ab.has_value())
                 {
-                    return OK({MAX_DISTANCE});
+                    distance_ab = std::min(MAX_DISTANCE, FEATURE_TYPE(shortest_path_ab.value()));
                 }
 
-                if (shortest_path_ab.value() < 1)
+                if (distance_ab < FEATURE_TYPE(1))
                 {
                     log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
                 }
-
-                const u32 distance_ab = shortest_path_ab.value();
 
                 if (m_direction != PinDirection::inout)
                 {
@@ -138,22 +136,22 @@ namespace hal
                     }
 
                     const auto shortest_path_ba = res_ba.get();
+                    auto distance_ba            = MAX_DISTANCE;
 
-                    if (!shortest_path_ba.has_value())
+                    if (shortest_path_ba.has_value())
                     {
-                        return OK({MAX_DISTANCE});
+                        distance_ba = std::min(MAX_DISTANCE, FEATURE_TYPE(shortest_path_ba.value()));
                     }
 
-                    if (shortest_path_ba.value() < 1)
+                    if (distance_ba < FEATURE_TYPE(1))
                     {
                         log_error("machine_learning", "Found shortest path with only one component, this is unexpected!");
                     }
 
-                    const u32 distance_ba = shortest_path_ba.value();
-                    return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE))), FEATURE_TYPE(std::min(distance_ba, u32(MAX_DISTANCE)))});
+                    return OK({distance_ab, distance_ba});
                 }
 
-                return OK({FEATURE_TYPE(std::min(distance_ab, u32(MAX_DISTANCE)))});
+                return OK({distance_ab});
             };
 
             std::string SequentialDistance::to_string() const
@@ -180,6 +178,8 @@ namespace hal
 
             Result<std::vector<FEATURE_TYPE>> SharedControlSignals::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
+                UNUSED(ctx);
+
                 static const std::vector<PinType> ctrl_pin_types = {
                     PinType::clock,
                     PinType::enable,

@@ -12,9 +12,10 @@ namespace hal
 {
     namespace machine_learning
     {
-
         NetlistGraph construct_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
         {
+            UNUSED(nl);
+
             std::unordered_map<const Gate*, u32> gate_to_idx;
             // init gate to index mapping
             for (u32 g_idx = 0; g_idx < gates.size(); g_idx++)
@@ -137,6 +138,8 @@ namespace hal
 
         void annotate_netlist_graph(Netlist* nl, const std::vector<Gate*>& gates, const NetlistGraph& nlg, const std::vector<std::vector<u32>>& node_features)
         {
+            UNUSED(nl);
+
             for (u32 g_idx = 0; g_idx < gates.size(); g_idx++)
             {
                 gates.at(g_idx)->set_data("netlist_graph", "gate_index", "string", std::to_string(g_idx));
@@ -156,7 +159,7 @@ namespace hal
                 edges[src].push_back(dst);
             }
 
-            for (const auto [src, dsts] : edges)
+            for (const auto& [src, dsts] : edges)
             {
                 const auto vec_str = utils::join(", ", dsts.begin(), dsts.end(), [](const u32 u) { return std::to_string(u); });
                 gates.at(src)->set_data("netlist_graph", "destinations", "string", vec_str);

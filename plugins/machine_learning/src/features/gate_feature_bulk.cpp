@@ -15,20 +15,24 @@ namespace hal
                 const auto graph = ctx.get_original_netlist_graph();
                 if (graph.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to get netlist graph");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to get netlist graph");
                 }
 
                 const auto centrality = graph_algorithm::get_betweenness_centrality(graph.get(), gates, m_directed, m_cutoff);
                 if (centrality.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to calculate centrality");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate centrality");
                 }
 
                 auto centrality_values = centrality.get();
 
                 if (m_normalize)
                 {
-                    normalize_vector_min_max(centrality_values);
+                    const auto res = normalize_vector_min_max(centrality_values);
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to normalize centrality values");
+                    }
                 }
 
                 for (const auto& val : centrality_values)
@@ -50,7 +54,7 @@ namespace hal
                 const auto graph = ctx.get_original_netlist_graph();
                 if (graph.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to get netlist graph");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to get netlist graph");
                 }
 
                 graph_algorithm::NetlistGraph::Direction direction;
@@ -72,14 +76,18 @@ namespace hal
                 const auto centrality = graph_algorithm::get_harmonic_centrality(graph.get(), gates, direction, m_cutoff);
                 if (centrality.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to calculate centrality");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate centrality");
                 }
 
                 auto centrality_values = centrality.get();
 
                 if (m_normalize)
                 {
-                    normalize_vector_min_max(centrality_values);
+                    const auto res = normalize_vector_min_max(centrality_values);
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to normalize centrality values");
+                    }
                 }
 
                 for (const auto& val : centrality_values)
@@ -101,21 +109,25 @@ namespace hal
                 const auto graph = ctx.get_sequential_netlist_graph();
                 if (graph.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to get netlist graph");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to get netlist graph");
                 }
 
                 const auto seq_gates  = graph.get()->get_included_gates();
                 const auto centrality = graph_algorithm::get_betweenness_centrality(graph.get(), seq_gates, m_directed, m_cutoff);
                 if (centrality.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to calculate centrality");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate centrality");
                 }
 
                 auto centrality_values = centrality.get();
 
                 if (m_normalize)
                 {
-                    normalize_vector_min_max(centrality_values);
+                    const auto res = normalize_vector_min_max(centrality_values);
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to normalize centrality values");
+                    }
                 }
 
                 // assign each sequential gate part of the graph its centrality values
@@ -152,7 +164,7 @@ namespace hal
                 const auto graph = ctx.get_sequential_netlist_graph();
                 if (graph.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to get netlist graph");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to get netlist graph");
                 }
 
                 graph_algorithm::NetlistGraph::Direction direction;
@@ -175,14 +187,18 @@ namespace hal
                 const auto centrality = graph_algorithm::get_harmonic_centrality(graph.get(), seq_gates, direction, m_cutoff);
                 if (centrality.is_error())
                 {
-                    return ERR_APPEND(graph.get_error(), "cannot calcualte feature " + to_string() + ": failed to calculate centrality");
+                    return ERR_APPEND(graph.get_error(), "cannot calculate feature " + to_string() + ": failed to calculate centrality");
                 }
 
                 auto centrality_values = centrality.get();
 
                 if (m_normalize)
                 {
-                    normalize_vector_min_max(centrality_values);
+                    const auto res = normalize_vector_min_max(centrality_values);
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "cannot calculate feature " + to_string() + ": failed to normalize centrality values");
+                    }
                 }
 
                 // assign each sequential gate part of the graph its centrality values
@@ -214,5 +230,5 @@ namespace hal
             }
 
         }    // namespace gate_feature
-    }    // namespace machine_learning
+    }        // namespace machine_learning
 }    // namespace hal
