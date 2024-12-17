@@ -19,7 +19,7 @@ namespace hal
             {
                 if (g_a == g_b)
                 {
-                    return OK({FEATURE_TYPE(0)});
+                    return OK({FEATURE_TYPE(0), FEATURE_TYPE(0)});
                 }
 
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
@@ -92,7 +92,7 @@ namespace hal
             {
                 if (g_a == g_b)
                 {
-                    return OK({FEATURE_TYPE(0)});
+                    return OK({FEATURE_TYPE(0), FEATURE_TYPE(0)});
                 }
 
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();

@@ -554,5 +554,10 @@ namespace hal
             }
         }
 
+        const std::vector<Gate*>& Context::get_gates() const
+        {
+            return m_gates;
+        }
+
     }    // namespace machine_learning
 }    // namespace hal

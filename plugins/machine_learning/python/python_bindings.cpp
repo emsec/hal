@@ -4,6 +4,7 @@
 #include "machine_learning/features/gate_feature_single.h"
 #include "machine_learning/features/gate_pair_feature.h"
 #include "machine_learning/graph_neural_network.h"
+#include "machine_learning/labels/gate_label.h"
 #include "machine_learning/labels/gate_pair_label.h"
 #include "machine_learning/plugin_machine_learning.h"
 #include "machine_learning/types.h"
@@ -31,6 +32,7 @@ namespace hal
         py::module py_gate_feature      = m.def_submodule("gate_feature");
         py::module py_gate_pair_feature = m.def_submodule("gate_pair_feature");
         py::module py_gate_pair_label   = m.def_submodule("gate_pair_label");
+        py::module py_gate_label        = m.def_submodule("gate_label");
 
         py::class_<MachineLearningPlugin, RawPtrWrapper<MachineLearningPlugin>, BasePluginInterface> py_machine_learning_plugin(
             m, "MachineLearningPlugin", R"(Provides machine learning functionality as a plugin within the HAL framework.)");
@@ -63,63 +65,92 @@ namespace hal
             :rtype: set(str)
         )");
 
-        // machine_learning::types
-        py::enum_<machine_learning::GraphDirection> py_graph_direction(m, "GraphDirection", R"(
-        Enumeration of graph traversal directions.
-    )");
-
-        py_graph_direction
-            .value("directed", machine_learning::GraphDirection::directed, R"(
-            Directed traversal.
-
-            :type: int
-        )")
+        py::enum_<machine_learning::GraphDirection>(m, "GraphDirection", R"(
+Specifies whether the graph is considered undirected or directed.
+)")
             .value("undirected", machine_learning::GraphDirection::undirected, R"(
-            Undirected traversal.
-
-            :type: int
-        )")
+An undirected graph.
+)")
+            .value("directed", machine_learning::GraphDirection::directed, R"(
+A directed graph.
+)")
             .export_values();
 
-        // MultiBitInformation
-        py::class_<machine_learning::MultiBitInformation> py_multi_bit_information(m,
-                                                                                   "MultiBitInformation",
-                                                                                   R"(
-            Holds mappings between word labels and gates, and gates and word labels.
+        py::class_<machine_learning::MultiBitInformation> py_multibitinformation(m, "MultiBitInformation", R"(
+Holds mappings between word labels and gates, and gates and word labels.
 
-            This struct provides a bi-directional mapping between specific word pairs and their corresponding gates,
-            as well as between gates and associated word pairs.
-        )");
+This struct provides a bi-directional mapping between specific word pairs and their corresponding gates, 
+as well as between gates and associated word pairs.
+)");
 
-        py_multi_bit_information.def_readwrite("word_to_gates",
-                                               &machine_learning::MultiBitInformation::word_to_gates,
-                                               R"(
-            Maps word pairs to corresponding gates.
+        py_multibitinformation.def("are_gates_considered_a_pair",
+                                   &machine_learning::MultiBitInformation::are_gates_considered_a_pair,
+                                   py::arg("direction"),
+                                   py::arg("g_a"),
+                                   py::arg("g_b"),
+                                   R"(
+Check if two gates are considered a pair.
 
-            :type: dict[tuple[str, hal_py.PinDirection, str], list[hal_py.Gate]]
-        )");
+:param hal_py.PinDirection direction: The pin direction.
+:param hal_py.Gate g_a: The first gate.
+:param hal_py.Gate g_b: The second gate.
+:returns: True if the gates are considered a pair, False otherwise.
+:rtype: bool
+)");
 
-        py_multi_bit_information.def_readwrite("gate_to_words",
-                                               &machine_learning::MultiBitInformation::gate_to_words,
-                                               R"(
-            Maps gates to associated word pairs.
+        py_multibitinformation.def("is_index_a_smaller_index_b",
+                                   &machine_learning::MultiBitInformation::is_index_a_smaller_index_b,
+                                   py::arg("direction"),
+                                   py::arg("g_a"),
+                                   py::arg("g_b"),
+                                   R"(
+Check if the index of gate g_a is smaller than the index of gate g_b in the specified direction.
 
-            :type: dict[hal_py.Gate, list[tuple[str, hal_py.PinDirection, str]]]
-        )");
+:param hal_py.PinDirection direction: The pin direction.
+:param hal_py.Gate g_a: The first gate.
+:param hal_py.Gate g_b: The second gate.
+:returns: True if g_a's index is smaller, False if g_b's index is smaller, or None if no information is available.
+:rtype: bool or None
+)");
 
-        // Context class
-        py::class_<machine_learning::Context> py_machine_learning_context(m, "Context", R"(
-            This class holds the context for machine learning feature and label calculations.
-        )");
+        py_multibitinformation.def_readwrite("word_to_gates",
+                                             &machine_learning::MultiBitInformation::word_to_gates,
+                                             R"(
+Maps word pairs to corresponding gates.
 
-        py_machine_learning_context.def(py::init<const Netlist*, const u32>(), py::arg("netlist"), py::arg("num_threads") = 1, R"(
-            Construct a Context with the given netlist.
+:type: dict[(str, hal_py.PinDirection, str), list[hal_py.Gate]]
+)");
 
-            :param hal_py.Netlist netlist: The netlist.
-            :param int : The number of threads to use for the feature generation jobs.
-        )");
+        py_multibitinformation.def_readwrite("gate_to_words",
+                                             &machine_learning::MultiBitInformation::gate_to_words,
+                                             R"(
+Maps gates to associated word pairs.
 
-        py_machine_learning_context.def(
+:type: dict[hal_py.Gate, list[tuple(str, hal_py.PinDirection, str)]]
+)");
+
+        py_multibitinformation.def_readwrite("gate_word_to_index",
+                                             &machine_learning::MultiBitInformation::gate_word_to_index,
+                                             R"(
+Maps a (gate, word) pair to an index.
+
+:type: dict[(hal_py.Gate,(str, hal_py.PinDirection, str)), int]
+)");
+
+        py::class_<machine_learning::Context> py_context(m, "Context", R"()");
+
+        py_context.def(py::init<const hal::Netlist*, const u32>(),
+                       py::arg("netlist"),
+                       py::arg("_num_threads") = 1,
+                       R"(
+Construct a Context object with the given netlist and number of threads.
+
+:param hal_py.Netlist netlist: The netlist.
+:param int _num_threads: The number of threads. Defaults to 1.
+)");
+
+        // get_sequential_abstraction returns a Result<NetlistAbstraction*>
+        py_context.def(
             "get_sequential_abstraction",
             [](machine_learning::Context& self) -> std::optional<NetlistAbstraction*> {
                 auto res = self.get_sequential_abstraction();
@@ -134,13 +165,14 @@ namespace hal
                 }
             },
             R"(
-                Get the sequential abstraction of the netlist.
+Get the sequential netlist abstraction.
 
-                :returns: The sequential NetlistAbstraction on success, None otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
+:returns: The sequential netlist abstraction on success, None otherwise.
+:rtype: hal_py.NetlistAbstraction or None
+)");
 
-        py_machine_learning_context.def(
+        // get_original_abstraction returns a Result<NetlistAbstraction*>
+        py_context.def(
             "get_original_abstraction",
             [](machine_learning::Context& self) -> std::optional<NetlistAbstraction*> {
                 auto res = self.get_original_abstraction();
@@ -155,36 +187,86 @@ namespace hal
                 }
             },
             R"(
-                Get the original abstraction of the netlist.
+Get the original netlist abstraction.
 
-                :returns: The original NetlistAbstraction on success, None otherwise.
-                :rtype: hal_py.NetlistAbstraction or None
-            )");
+:returns: The original netlist abstraction on success, None otherwise.
+:rtype: hal_py.NetlistAbstraction or None
+)");
 
-        py_machine_learning_context.def("get_possible_gate_type_properties",
-                                        &machine_learning::Context::get_possible_gate_type_properties,
-                                        R"(
-                Get the possible gate type properties.
+        // get_sequential_netlist_graph returns a Result<graph_algorithm::NetlistGraph*>
+        py_context.def(
+            "get_sequential_netlist_graph",
+            [](machine_learning::Context& self) -> std::optional<graph_algorithm::NetlistGraph*> {
+                auto res = self.get_sequential_netlist_graph();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting sequential netlist graph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+Get the sequential netlist graph.
 
-                :returns: A list of GateTypeProperties.
-                :rtype: list[hal_py.GateTypeProperty]
-            )");
+:returns: The sequential netlist graph on success, None otherwise.
+:rtype: hal_py.NetlistGraph or None
+)");
 
-        py_machine_learning_context.def("get_multi_bit_information",
-                                        &machine_learning::Context::get_multi_bit_information,
-                                        py::return_value_policy::reference_internal,
-                                        R"(
-            Retrieves the multi-bit information, initializing it if not already done.
+        // get_original_netlist_graph returns a Result<graph_algorithm::NetlistGraph*>
+        py_context.def(
+            "get_original_netlist_graph",
+            [](machine_learning::Context& self) -> std::optional<graph_algorithm::NetlistGraph*> {
+                auto res = self.get_original_netlist_graph();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting original netlist graph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+Get the original netlist graph.
 
-            :returns: The MultiBitInformation object.
-            :rtype: machine_learning.gate_pair_label.MultiBitInformation
-        )");
+:returns: The original netlist graph on success, None otherwise.
+:rtype: hal_py.NetlistGraph or None
+)");
 
-        py_machine_learning_context.def_readonly("nl", &machine_learning::Context::nl, R"(
-            The netlist.
+        // get_possible_gate_type_properties returns const std::vector<GateTypeProperty>&
+        py_context.def("get_possible_gate_type_properties",
+                       &machine_learning::Context::get_possible_gate_type_properties,
+                       R"(
+Get the possible gate type properties.
 
-            :type: hal_py.Netlist
-        )");
+:returns: A list of possible gate type properties.
+:rtype: list[hal_py.GateTypeProperty]
+)");
+
+        // get_multi_bit_information returns const MultiBitInformation&
+        py_context.def("get_multi_bit_information",
+                       &machine_learning::Context::get_multi_bit_information,
+                       py::return_value_policy::reference_internal,
+                       R"(
+Get the multi-bit information.
+
+:returns: The multi-bit information object.
+:rtype: machine_learning.MultiBitInformation
+)");
+
+        // get_gates returns const std::vector<Gate*>&
+        py_context.def("get_gates",
+                       &machine_learning::Context::get_gates,
+                       R"(
+Get the gates of the context.
+
+:returns: A list of gates.
+:rtype: list[hal_py.Gate]
+)");
 
         // Bindings for NetlistGraph
         py::class_<machine_learning::NetlistGraph> py_netlist_graph(m, "NetlistGraph", R"(
@@ -666,8 +748,7 @@ namespace hal
                 :rtype: str
             )");
 
-        py::class_<hal::machine_learning::gate_feature::BetweennessCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_betweenness_centrality(
-            py_gate_feature, "BetweennessCentrality", R"(
+        py::class_<machine_learning::gate_feature::BetweennessCentrality, machine_learning::gate_feature::GateFeatureBulk> py_betweenness_centrality(py_gate_feature, "BetweennessCentrality", R"(
             A class representing the betweenness centrality feature for gates.
             )");
 
@@ -683,9 +764,9 @@ namespace hal
 
         py_betweenness_centrality.def(
             "calculate_feature",
-            [](const hal::machine_learning::gate_feature::BetweennessCentrality& self,
-               hal::machine_learning::Context& ctx,
-               const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+            [](const machine_learning::gate_feature::BetweennessCentrality& self,
+               machine_learning::Context& ctx,
+               const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
                 auto res = self.calculate_feature(ctx, gates);
                 if (res.is_ok())
                 {
@@ -708,7 +789,7 @@ namespace hal
             :rtype: list[list[float]] or None
             )");
 
-        py_betweenness_centrality.def("to_string", &hal::machine_learning::gate_feature::BetweennessCentrality::to_string, R"(
+        py_betweenness_centrality.def("to_string", &machine_learning::gate_feature::BetweennessCentrality::to_string, R"(
             Get a string representation of the BetweennessCentrality object.
 
             :returns: A string description.
@@ -716,11 +797,11 @@ namespace hal
             )");
 
         // HarmonicCentrality class
-        py::class_<hal::machine_learning::gate_feature::HarmonicCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_harmonic_centrality(py_gate_feature, "HarmonicCentrality", R"(
+        py::class_<machine_learning::gate_feature::HarmonicCentrality, machine_learning::gate_feature::GateFeatureBulk> py_harmonic_centrality(py_gate_feature, "HarmonicCentrality", R"(
             A class representing the harmonic centrality feature for gates.
             )");
 
-        py_harmonic_centrality.def(py::init<hal::PinDirection, i32>(),
+        py_harmonic_centrality.def(py::init<PinDirection, i32>(),
                                    py::arg("direction"),
                                    py::arg("cutoff") = -1,
                                    R"(
@@ -732,9 +813,9 @@ namespace hal
 
         py_harmonic_centrality.def(
             "calculate_feature",
-            [](const hal::machine_learning::gate_feature::HarmonicCentrality& self,
-               hal::machine_learning::Context& ctx,
-               const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+            [](const machine_learning::gate_feature::HarmonicCentrality& self,
+               machine_learning::Context& ctx,
+               const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
                 auto res = self.calculate_feature(ctx, gates);
                 if (res.is_ok())
                 {
@@ -757,7 +838,7 @@ namespace hal
             :rtype: list[list[float]] or None
             )");
 
-        py_harmonic_centrality.def("to_string", &hal::machine_learning::gate_feature::HarmonicCentrality::to_string, R"(
+        py_harmonic_centrality.def("to_string", &machine_learning::gate_feature::HarmonicCentrality::to_string, R"(
             Get a string representation of the HarmonicCentrality object.
 
             :returns: A string description.
@@ -765,7 +846,7 @@ namespace hal
             )");
 
         // SequentialBetweennessCentrality class
-        py::class_<hal::machine_learning::gate_feature::SequentialBetweennessCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_sequential_betweenness_centrality(
+        py::class_<machine_learning::gate_feature::SequentialBetweennessCentrality, machine_learning::gate_feature::GateFeatureBulk> py_sequential_betweenness_centrality(
             py_gate_feature, "SequentialBetweennessCentrality", R"(
             A class representing the sequential betweenness centrality feature for gates.
             )");
@@ -782,9 +863,9 @@ namespace hal
 
         py_sequential_betweenness_centrality.def(
             "calculate_feature",
-            [](const hal::machine_learning::gate_feature::SequentialBetweennessCentrality& self,
-               hal::machine_learning::Context& ctx,
-               const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+            [](const machine_learning::gate_feature::SequentialBetweennessCentrality& self,
+               machine_learning::Context& ctx,
+               const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
                 auto res = self.calculate_feature(ctx, gates);
                 if (res.is_ok())
                 {
@@ -807,7 +888,7 @@ namespace hal
             :rtype: list[list[float]] or None
             )");
 
-        py_sequential_betweenness_centrality.def("to_string", &hal::machine_learning::gate_feature::SequentialBetweennessCentrality::to_string, R"(
+        py_sequential_betweenness_centrality.def("to_string", &machine_learning::gate_feature::SequentialBetweennessCentrality::to_string, R"(
             Get a string representation of the SequentialBetweennessCentrality object.
 
             :returns: A string description.
@@ -815,12 +896,12 @@ namespace hal
             )");
 
         // SequentialHarmonicCentrality class
-        py::class_<hal::machine_learning::gate_feature::SequentialHarmonicCentrality, hal::machine_learning::gate_feature::GateFeatureBulk> py_sequential_harmonic_centrality(
+        py::class_<machine_learning::gate_feature::SequentialHarmonicCentrality, machine_learning::gate_feature::GateFeatureBulk> py_sequential_harmonic_centrality(
             py_gate_feature, "SequentialHarmonicCentrality", R"(
             A class representing the sequential harmonic centrality feature for gates.
             )");
 
-        py_sequential_harmonic_centrality.def(py::init<hal::PinDirection, i32>(),
+        py_sequential_harmonic_centrality.def(py::init<PinDirection, i32>(),
                                               py::arg("direction"),
                                               py::arg("cutoff") = -1,
                                               R"(
@@ -832,9 +913,9 @@ namespace hal
 
         py_sequential_harmonic_centrality.def(
             "calculate_feature",
-            [](const hal::machine_learning::gate_feature::SequentialHarmonicCentrality& self,
-               hal::machine_learning::Context& ctx,
-               const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+            [](const machine_learning::gate_feature::SequentialHarmonicCentrality& self,
+               machine_learning::Context& ctx,
+               const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
                 auto res = self.calculate_feature(ctx, gates);
                 if (res.is_ok())
                 {
@@ -857,7 +938,7 @@ namespace hal
             :rtype: list[list[float]] or None
             )");
 
-        py_sequential_harmonic_centrality.def("to_string", &hal::machine_learning::gate_feature::SequentialHarmonicCentrality::to_string, R"(
+        py_sequential_harmonic_centrality.def("to_string", &machine_learning::gate_feature::SequentialHarmonicCentrality::to_string, R"(
             Get a string representation of the SequentialHarmonicCentrality object.
 
             :returns: A string description.
@@ -867,8 +948,8 @@ namespace hal
         // Define build_feature_vecs functions
         py_gate_feature.def(
             "build_feature_vecs",
-            [](const std::vector<const hal::machine_learning::gate_feature::GateFeature*>& features, const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
-                auto res = hal::machine_learning::gate_feature::build_feature_vecs(features, gates);
+            [](const std::vector<const machine_learning::gate_feature::GateFeature*>& features, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+                auto res = machine_learning::gate_feature::build_feature_vecs(features, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -892,10 +973,10 @@ namespace hal
 
         py_gate_feature.def(
             "build_feature_vecs",
-            [](hal::machine_learning::Context& ctx,
-               const std::vector<const hal::machine_learning::gate_feature::GateFeature*>& features,
-               const std::vector<hal::Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
-                auto res = hal::machine_learning::gate_feature::build_feature_vecs(ctx, features, gates);
+            [](machine_learning::Context& ctx,
+               const std::vector<const machine_learning::gate_feature::GateFeature*>& features,
+               const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
+                auto res = machine_learning::gate_feature::build_feature_vecs(ctx, features, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1688,6 +1769,154 @@ namespace hal
                 :rtype: str
             )");
 
+        py::class_<machine_learning::gate_pair_label::BitIndexOrdering, machine_learning::gate_pair_label::GatePairLabel> py_bit_index_ordering(py_gate_pair_label, "BitIndexOrdering", R"(
+            Labels gate pairs based on their order in a shared control word.
+            )");
+
+        py_bit_index_ordering.def(py::init<const PinDirection&, u32, double>(),
+                                  py::arg("direction"),
+                                  py::arg("min_pair_count"),
+                                  py::arg("negative_to_positive_factor"),
+                                  R"(
+            Default constructor.
+
+            :param hal_py.PinDirection direction: The pin direction.
+            :param int min_pair_count: The minimum pair count.
+            :param float negative_to_positive_factor: The negative to positive factor.
+            )");
+
+        py_bit_index_ordering
+            .def_readonly("LOWER", &machine_learning::gate_pair_label::BitIndexOrdering::LOWER, R"(
+            The LOWER label vector.
+
+            :type: list[int]
+            )")
+            .def_readonly("HIGHER", &machine_learning::gate_pair_label::BitIndexOrdering::HIGHER, R"(
+            The HIGHER label vector.
+
+            :type: list[int]
+            )")
+            .def_readonly("NA", &machine_learning::gate_pair_label::BitIndexOrdering::NA, R"(
+            The NA label vector.
+
+            :type: list[int]
+            )");
+
+        py_bit_index_ordering.def(
+            "calculate_gate_pairs",
+            [](machine_learning::gate_pair_label::BitIndexOrdering& self, machine_learning::Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates)
+                -> std::optional<std::vector<std::pair<Gate*, Gate*>>> {
+                auto res = self.calculate_gate_pairs(ctx, nl, gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating gate pairs:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("nl"),
+            py::arg("gates"),
+            R"(
+            Calculate gate pairs based on the provided labeling context and netlist.
+
+            :param hal_py.Context ctx: The machine learning context.
+            :param hal_py.Netlist nl: The netlist to operate on.
+            :param list[hal_py.Gate] gates: The gates to be paired.
+            :returns: A list of gate pairs on success, None otherwise.
+            :rtype: list[tuple(hal_py.Gate, hal_py.Gate)] or None
+            )");
+
+        py_bit_index_ordering.def(
+            "calculate_label",
+            [](machine_learning::gate_pair_label::BitIndexOrdering& self, machine_learning::Context& ctx, const Gate* g_a, const Gate* g_b) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g_a, g_b);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating label:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("g_a"),
+            py::arg("g_b"),
+            R"(
+            Calculate labels for a given gate pair.
+
+            :param hal_py.Context ctx: The machine learning context.
+            :param hal_py.Gate g_a: The first gate in the pair.
+            :param hal_py.Gate g_b: The second gate in the pair.
+            :returns: A list of labels on success, None otherwise.
+            :rtype: list[int] or None
+            )");
+
+        py_bit_index_ordering.def(
+            "calculate_labels",
+            [](machine_learning::gate_pair_label::BitIndexOrdering& self,
+               machine_learning::Context& ctx,
+               const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, gate_pairs);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating labels:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("gate_pairs"),
+            R"(
+            Calculate labels for multiple gate pairs.
+
+            :param hal_py.Context ctx: The machine learning context.
+            :param list[tuple(hal_py.Gate, hal_py.Gate)] gate_pairs: The gate pairs to label.
+            :returns: A list of label vectors for each pair on success, None otherwise.
+            :rtype: list[list[int]] or None
+            )");
+
+        py_bit_index_ordering.def(
+            "calculate_labels",
+            [](machine_learning::gate_pair_label::BitIndexOrdering& self,
+               machine_learning::Context& ctx) -> std::optional<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> {
+                auto res = self.calculate_labels(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating labels:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+            Calculate both gate pairs and their labels within the labeling context.
+
+            :param hal_py.Context ctx: The machine learning context.
+            :returns: A tuple containing gate pairs and corresponding labels on success, None otherwise.
+            :rtype: tuple(list[tuple(hal_py.Gate, hal_py.Gate)], list[list[int]]) or None
+            )");
+
+        py_bit_index_ordering.def("to_string",
+                                  &machine_learning::gate_pair_label::BitIndexOrdering::to_string,
+                                  R"(
+            Get a string representation of the BitIndexOrdering.
+
+            :returns: A string representation.
+            :rtype: str
+            )");
+
         py::class_<machine_learning::gate_pair_label::SharedConnection, machine_learning::gate_pair_label::GatePairLabel> py_shared_connection(py_gate_pair_label,
                                                                                                                                                "SharedConnection",
                                                                                                                                                R"(
@@ -1813,6 +2042,209 @@ namespace hal
                 :returns: The string representation.
                 :rtype: str
             )");
+
+        py::class_<machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::GateLabel>> py_gate_label_class(py_gate_label, "GateLabel", R"(
+            Base class for calculating labels for machine learning models.
+
+            This abstract class provides methods for calculating labels based on various criteria.
+        )");
+
+        py_gate_label_class.def(
+            "calculate_label",
+            [](const machine_learning::gate_label::GateLabel& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating label: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("g"),
+            R"(
+            Calculate labels for a given gate.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param hal_py.Gate g: The gate.
+            :returns: A list of labels on success, or None otherwise.
+            :rtype: list[int] or None
+        )");
+
+        py_gate_label_class.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::GateLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("gates"),
+            R"(
+            Calculate labels for multiple gates.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param list[hal_py.Gate] gates: The gates to label.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_gate_label_class.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::GateLabel& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+            Calculate labels within the labeling context.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_gate_label_class.def("to_string",
+                                &machine_learning::gate_label::GateLabel::to_string,
+                                R"(
+            Get a string representation of the gate label.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        py::class_<machine_learning::gate_label::GateNameKeyWord, machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::GateNameKeyWord>> py_gate_name_key_word(
+            py_gate_label, "GateNameKeyWord", R"(
+            Labels gates based on whether their name includes a keyword or not.
+        )");
+
+        py_gate_name_key_word.def(py::init<const std::string&, const std::vector<GateTypeProperty>&>(),
+                                  py::arg("key_word"),
+                                  py::arg("applicable_to") = std::vector<GateTypeProperty>(),
+                                  R"(
+            Construct a GateNameKeyWord labeler.
+
+            :param str key_word: The keyword to check for in gate names.
+            :param list[hal_py.machine_learning.GateTypeProperty] applicable_to: The gate type properties this label applies to. Defaults to an empty list.
+        )");
+
+        py_gate_name_key_word.def_readonly("MATCH", &machine_learning::gate_label::GateNameKeyWord::MATCH, R"(
+            A label vector indicating a match.
+
+            :type: list[int]
+        )");
+
+        py_gate_name_key_word.def_readonly("MISMATCH", &machine_learning::gate_label::GateNameKeyWord::MISMATCH, R"(
+            A label vector indicating a mismatch.
+
+            :type: list[int]
+        )");
+
+        py_gate_name_key_word.def_readonly("NA", &machine_learning::gate_label::GateNameKeyWord::NA, R"(
+            A label vector indicating not applicable.
+
+            :type: list[int]
+        )");
+
+        py_gate_name_key_word.def(
+            "calculate_label",
+            [](const machine_learning::gate_label::GateNameKeyWord& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating label: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("g"),
+            R"(
+            Calculate labels for a given gate.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param hal_py.Gate g: The gate.
+            :returns: A list of labels on success, or None otherwise.
+            :rtype: list[int] or None
+        )");
+
+        py_gate_name_key_word.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::GateNameKeyWord& self, machine_learning::Context& ctx, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("gates"),
+            R"(
+            Calculate labels for multiple gates.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param list[hal_py.Gate] gates: The gates to label.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_gate_name_key_word.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::GateNameKeyWord& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+            Calculate labels within the labeling context.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_gate_name_key_word.def("to_string",
+                                  &machine_learning::gate_label::GateNameKeyWord::to_string,
+                                  R"(
+            Get a string representation of the gate labeler.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();
