@@ -155,7 +155,6 @@ namespace hal
          */
         Result<u32> simplify_lut_inits(Netlist* nl);
 
-
         /**
          * Represents an identifier with an associated index and additional metadata, used for reconstructing and annotating names and indices
          * for flip flops in synthesized netlists based on input and output net names as well as gate names.
@@ -185,7 +184,7 @@ namespace hal
             PinDirection direction; /**< Direction of the pin. */
             u32 distance;           /**< Distance to merged net which name this index was derived from. */
 
-             // Overload < operator for strict weak ordering
+            // Overload < operator for strict weak ordering
             bool operator<(const indexed_identifier& other) const;
         };
 
