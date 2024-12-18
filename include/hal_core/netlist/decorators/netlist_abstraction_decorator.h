@@ -284,7 +284,7 @@ namespace hal
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
                                                         const PinDirection& direction,
                                                         const bool directed                                                                        = true,
-                                                        bool continue_on_match                                                                     = false,
+                                                        const bool continue_on_match                                                               = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -307,9 +307,55 @@ namespace hal
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
                                                         const PinDirection& direction,
                                                         const bool directed                                                                        = true,
-                                                        bool continue_on_match                                                                     = false,
+                                                        const bool continue_on_match                                                               = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * @brief Starting from the given endpoint, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Traverse over gates that do not meet the `target_gate_filter` condition.
+         * Stop traversal if (1) `continue_on_match` is `false` and the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint, or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint.
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] endpoint - The starting endpoint.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
+         * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluates to `true`, `false` otherwise. Defaults to `false`.
+         * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
+         * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
+         */
+        Result<std::vector<std::set<Gate*>>> get_next_matching_gates(const std::vector<Endpoint*>& endpoints,
+                                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                     const PinDirection& direction,
+                                                                     const bool directed                                                                        = true,
+                                                                     const bool continue_on_match                                                               = false,
+                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * @brief Starting from the given gate, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Traverse over gates that do not meet the `target_gate_filter` condition.
+         * Stop traversal if (1) `continue_on_match` is `false` and the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint, or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint.
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] gate - The starting gate.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in (`PinDirection::input` or `PinDirection::output`).
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
+         * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluates to `true`, `false` otherwise. Defaults to `false`.
+         * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
+         * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
+         */
+        Result<std::vector<std::set<Gate*>>> get_next_matching_gates(const std::vector<Gate*>& gates,
+                                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                     const PinDirection& direction,
+                                                                     const bool directed                                                                        = true,
+                                                                     const bool continue_on_match                                                               = false,
+                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * @brief Starting from the given endpoint, traverse the netlist abstraction and return the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -330,7 +376,7 @@ namespace hal
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
                                                               const PinDirection& direction,
                                                               const bool directed                                                                        = true,
-                                                              bool continue_on_mismatch                                                                  = false,
+                                                              const bool continue_on_mismatch                                                            = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -353,7 +399,7 @@ namespace hal
                                                               const std::function<bool(const Gate*)>& target_gate_filter,
                                                               const PinDirection& direction,
                                                               const bool directed                                                                        = true,
-                                                              bool continue_on_mismatch                                                                  = false,
+                                                              const bool continue_on_mismatch                                                            = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -392,7 +438,28 @@ namespace hal
                                                                  const std::function<bool(const Gate*)>& target_gate_filter,
                                                                  const PinDirection& direction,
                                                                  const bool directed                                                                  = true,
-                                                                 bool continue_on_match                                                               = false,
+                                                                 const bool continue_on_match                                                         = false,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                 const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * @brief Internal method to traverse the netlist abstraction and return matching gates based on the provided filters.
+         *
+         * @param[in] start - The starting endpoints.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] direction - The direction to search in.
+         * @param[in] directed - Defines whether we are searching on a directed or undirected graph represenation of the netlist. 
+         * @param[in] continue_on_match - Determines whether to continue traversal after a match.
+         * @param[in] exit_endpoint_filter - Filter condition to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition to stop traversal on a successor/predecessor endpoint.
+         * @returns OK() and a set of gates fulfilling the `target_gate_filter` condition on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_next_matching_gates_internal(const std::vector<Endpoint*>& start,
+                                                                 const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                 const PinDirection& direction,
+                                                                 std::map<std::pair<Endpoint*, u32>, std::set<Gate*>>& cache,
+                                                                 const bool directed                                                                  = true,
+                                                                 const bool continue_on_match                                                         = false,
                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                  const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -412,7 +479,7 @@ namespace hal
                                                                        const std::function<bool(const Gate*)>& target_gate_filter,
                                                                        const PinDirection& direction,
                                                                        const bool directed                                                                        = true,
-                                                                       bool continue_on_mismatch                                                                  = false,
+                                                                       const bool continue_on_mismatch                                                            = false,
                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                        const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 

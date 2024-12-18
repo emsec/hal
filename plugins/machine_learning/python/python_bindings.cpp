@@ -139,7 +139,7 @@ Maps a (gate, word) pair to an index.
 
         py::class_<machine_learning::Context> py_context(m, "Context", R"()");
 
-        py_context.def(py::init<const hal::Netlist*, const u32>(),
+        py_context.def(py::init<const Netlist*, const u32>(),
                        py::arg("netlist"),
                        py::arg("_num_threads") = 1,
                        R"(
@@ -2245,6 +2245,129 @@ Get the gates of the context.
             :returns: The string representation.
             :rtype: str
         )");
+
+        py::class_<machine_learning::gate_label::NetNameKeyWord, machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::NetNameKeyWord>> py_net_name_key_word(
+            py_gate_label, "NetNameKeyWord", R"(
+Labels gate based on whether one of the net names at specified pins includes a keyword or not.
+)");
+
+        // Constructor:
+        // NetNameKeyWord(const std::string& key_word, const std::vector<PinType>& pin_types, const std::vector<GateTypeProperty>& applicable_to = {})
+        py_net_name_key_word.def(py::init<const std::string&, const std::vector<PinType>&, const std::vector<GateTypeProperty>&>(),
+                                 py::arg("key_word"),
+                                 py::arg("pin_types"),
+                                 py::arg("applicable_to") = std::vector<GateTypeProperty>(),
+                                 R"(
+Construct a new NetNameKeyWord labeler.
+
+:param str key_word: The keyword to search in the net names.
+:param list[hal_py.PinType] pin_types: The pin types to check for the keyword.
+:param list[hal_py.GateTypeProperty] applicable_to: The gate type properties to which this labeling applies. Defaults to an empty list.
+)");
+
+        py_net_name_key_word.def_readonly("MATCH", &machine_learning::gate_label::NetNameKeyWord::MATCH, R"(
+            A label vector indicating a match.
+
+            :type: list[int]
+        )");
+
+        py_net_name_key_word.def_readonly("MISMATCH", &machine_learning::gate_label::NetNameKeyWord::MISMATCH, R"(
+            A label vector indicating a mismatch.
+
+            :type: list[int]
+        )");
+
+        py_net_name_key_word.def_readonly("NA", &machine_learning::gate_label::NetNameKeyWord::NA, R"(
+            A label vector indicating not applicable.
+
+            :type: list[int]
+        )");
+
+        // NetNameKeyWord::calculate_label
+        py_net_name_key_word.def(
+            "calculate_label",
+            [](machine_learning::gate_label::NetNameKeyWord& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<unsigned int>> {
+                auto res = self.calculate_label(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating label:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("g"),
+            R"(
+Calculate labels for a given gate based on net names at specified pins containing the keyword.
+
+:param hal_py.Context ctx: The machine learning context.
+:param hal_py.Gate g: The gate.
+:returns: A list of labels on success, None otherwise.
+:rtype: list[int] or None
+)");
+
+        // NetNameKeyWord::calculate_labels(Context&, const std::vector<Gate*>&)
+        py_net_name_key_word.def(
+            "calculate_labels",
+            [](machine_learning::gate_label::NetNameKeyWord& self, machine_learning::Context& ctx, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<unsigned int>>> {
+                auto res = self.calculate_labels(ctx, gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating labels for gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("gates"),
+            R"(
+Calculate labels for multiple gates based on net names at specified pins containing the keyword.
+
+:param hal_py.Context ctx: The machine learning context.
+:param list[hal_py.Gate] gates: The gates to label.
+:returns: A list of label vectors for each gate on success, None otherwise.
+:rtype: list[list[int]] or None
+)");
+
+        // NetNameKeyWord::calculate_labels(Context&)
+        py_net_name_key_word.def(
+            "calculate_labels",
+            [](machine_learning::gate_label::NetNameKeyWord& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<unsigned int>>> {
+                auto res = self.calculate_labels(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating labels in context:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+Calculate labels within the labeling context based on net names at specified pins containing the keyword.
+
+:param hal_py.Context ctx: The machine learning context.
+:returns: A list of label vectors on success, None otherwise.
+:rtype: list[list[int]] or None
+)");
+
+        // NetNameKeyWord::to_string()
+        py_net_name_key_word.def("to_string",
+                                 &machine_learning::gate_label::NetNameKeyWord::to_string,
+                                 R"(
+Convert the NetNameKeyWord labeler to a string.
+
+:returns: The string representation.
+:rtype: str
+)");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

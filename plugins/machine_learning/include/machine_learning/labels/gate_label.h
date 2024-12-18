@@ -17,6 +17,7 @@ namespace hal
     /* Forward declarations */
     class Gate;
     enum class GateTypeProperty : int;
+    enum class PinType : int;
 
     namespace machine_learning
     {
@@ -80,6 +81,34 @@ namespace hal
 
             private:
                 const std::string m_key_word;
+                const std::vector<GateTypeProperty> m_applicable_to;
+            };
+
+            /**
+             * @class NetNameKeyWord
+             * @brief Labels gate based on whether one of the net names at specified pins includes a keyword or not.
+             */
+            class NetNameKeyWord : public GateLabel
+            {
+            public:
+                /**
+                 * @brief Default constructor.
+                 */
+                NetNameKeyWord(const std::string& key_word, const std::vector<PinType>& pin_types, const std::vector<GateTypeProperty>& applicable_to = {})
+                    : m_key_word(key_word), m_pin_types(pin_types), m_applicable_to(applicable_to){};
+
+                const std::vector<u32> MATCH    = {1, 0, 0};
+                const std::vector<u32> MISMATCH = {0, 1, 0};
+                const std::vector<u32> NA       = {0, 0, 1};
+
+                Result<std::vector<u32>> calculate_label(Context& ctx, const Gate* g) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
+                std::string to_string() const override;
+
+            private:
+                const std::string m_key_word;
+                const std::vector<PinType> m_pin_types;
                 const std::vector<GateTypeProperty> m_applicable_to;
             };
         }    // namespace gate_label
