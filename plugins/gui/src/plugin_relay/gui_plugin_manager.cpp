@@ -143,7 +143,7 @@ namespace hal {
         QString filename = QFileDialog::getOpenFileName(this, "Load HAL Plugin", ".", "Shared library files (*.so)");
         if (filename.isEmpty()) return;
         int irowAdded = mGuiPluginTable->addExternalPlugin(filename);
-        if (plugin_manager::load(QFileInfo(filename).baseName().toStdString(), filename.toStdString()))
+        if (irowAdded >= 0)
             std::cerr << "library file opened <" << filename.toStdString() << ">" << std::endl;
         else
             std::cerr << "failed to load library file <" << filename.toStdString() << ">" << std::endl;
@@ -561,7 +561,9 @@ namespace hal {
             mLookup.remove(gpe->mName);
             endRemoveRows();
             delete gpe;
+            n = -1;  // return value : no row was inserted
         }
+        return n;
     }
 
 
