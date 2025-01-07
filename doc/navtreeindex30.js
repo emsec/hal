@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"namespacehal_1_1gate__library__manager.html#ae28797d933056e47740a71c2cac7aa25":[5,0,2,5,4],
 "namespacehal_1_1gate__library__manager.html#af49606fc605379b7c43be875d0aee276":[5,0,2,5,7],
 "namespacehal_1_1gate__library__parser__manager.html":[5,0,2,6],
 "namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48":[5,0,2,6,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "namespacetest__plugin.html#a79feb4c3846c15acf42a9a2908ecefec":[5,0,9,6],
 "namespacetest__plugin.html#a7efa8a9ff852d172d85bb93479bc913b":[5,0,9,1],
 "namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f":[5,0,9,4],
-"namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542":[5,0,9,8],
-"namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01":[5,0,9,9]
+"namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542":[5,0,9,8]
 };
