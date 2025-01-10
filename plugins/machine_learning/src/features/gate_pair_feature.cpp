@@ -15,6 +15,23 @@ namespace hal
     {
         namespace gate_pair_feature
         {
+            Result<std::vector<std::vector<FEATURE_TYPE>>> GatePairFeature::calculate_features(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const
+            {
+                std::vector<std::vector<FEATURE_TYPE>> results;
+                for (const auto& [g_a, g_b] : gate_pairs)
+                {
+                    auto res = calculate_feature(ctx, g_a, g_b);
+                    if (res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "cannot calculate features for all pairs");
+                    }
+
+                    results.push_back(res.get());
+                }
+
+                return OK(results);
+            }
+
             Result<std::vector<FEATURE_TYPE>> LogicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
@@ -550,7 +567,10 @@ namespace hal
             {
                 // Preallocate the feature vectors
                 std::vector<std::vector<FEATURE_TYPE>> feature_vecs(gate_pairs.size());
-                std::vector<Result<std::monostate>> thread_results(ctx.num_threads, ERR("uninitialized"));
+
+                const u32 used_threads = std::min(u32(gate_pairs.size()), ctx.num_threads);
+
+                std::vector<Result<std::monostate>> thread_results(used_threads, ERR("uninitialized"));
 
 #ifdef PROGRESS_BAR
                 const auto msg = "Calculated gate pair features for " + std::to_string(gate_pairs.size()) + "/" + std::to_string(gate_pairs.size()) + " pairs";
@@ -591,8 +611,8 @@ namespace hal
 
                 // Launch threads to process gate_pairs in parallel
                 std::vector<std::thread> threads;
-                u32 chunk_size = (gate_pairs.size() + ctx.num_threads - 1) / ctx.num_threads;
-                for (u32 t = 0; t < ctx.num_threads; ++t)
+                u32 chunk_size = (gate_pairs.size() + used_threads - 1) / used_threads;
+                for (u32 t = 0; t < used_threads; ++t)
                 {
                     u32 start = t * chunk_size;
                     u32 end   = std::min(start + chunk_size, static_cast<u32>(gate_pairs.size()));
@@ -608,8 +628,9 @@ namespace hal
                 }
 
                 // Check whether a thread encountered an error
-                for (const auto& res : thread_results)
+                for (u32 idx = 0; idx < threads.size(); idx++)
                 {
+                    const auto& res = thread_results.at(idx);
                     if (res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "Encountered error when building feature vectors");

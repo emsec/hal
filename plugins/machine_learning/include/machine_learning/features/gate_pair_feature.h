@@ -20,7 +20,8 @@ namespace hal
             {
             public:
                 virtual Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const = 0;
-                virtual std::string to_string() const                                                                             = 0;
+                virtual Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_features(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const;
+                virtual std::string to_string() const = 0;
             };
 
             class LogicalDistance : public GatePairFeature

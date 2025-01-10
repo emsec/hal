@@ -39,6 +39,9 @@ namespace hal
             // gather all successors
             for (Endpoint* ep_out : gate->get_fan_out_endpoints())
             {
+                // TODO remove debug print
+                // std::cout << ep_out->get_pin()->get_name() << std::endl;
+
                 new_abstraction->m_successors.insert({ep_out, {}});
                 const auto successors = nl_trav_dec.get_next_matching_endpoints(
                     ep_out,
@@ -119,6 +122,9 @@ namespace hal
                 }
             }
         }
+
+        // TODO remove debug print
+        // std::cout << new_abstraction->m_successors.size() << std::endl;
 
         return OK(std::move(new_abstraction));
     }
@@ -207,7 +213,7 @@ namespace hal
         std::vector<Endpoint*> successors;
         for (auto* ep : gate->get_fan_out_endpoints())
         {
-            const auto new_successors = get_predecessors(ep);
+            const auto new_successors = get_successors(ep);
             if (new_successors.is_error())
             {
                 return ERR_APPEND(new_successors.get_error(), "failed to get successors of gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " in netlist abstraction");
@@ -247,10 +253,8 @@ namespace hal
             }
         }
 
-        // std::sort(successors.begin(), successors.end());
-        // successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
-
-        successors = utils::to_vector(utils::to_set(successors));
+        std::sort(successors.begin(), successors.end());
+        successors.erase(std::unique(successors.begin(), successors.end()), successors.end());
 
         return OK(successors);
     }

@@ -29,7 +29,7 @@ namespace hal
                 auto res = NetlistAbstraction::create(netlist, gates, include_all_netlist_gates, exit_endpoint_filter, entry_endpoint_filter);
                 if (res.is_ok())
                 {
-                    return res.get();
+                    return std::shared_ptr<NetlistAbstraction>(res.get());
                 }
                 else
                 {
@@ -523,6 +523,90 @@ namespace hal
                 :param callable entry_endpoint_filter: Filter condition to stop traversal on a successor/predecessor endpoint.
                 :returns: A set of gates fulfilling the `target_gate_filter` condition.
                 :rtype: set[hal_py.Gate] or None
+            )");
+
+        py_netlist_abstraction_decorator.def(
+            "get_next_matching_gates",
+            [](const NetlistAbstractionDecorator& self,
+               const std::vector<Endpoint*>& endpoints,
+               const std::function<bool(const Gate*)>& target_gate_filter,
+               const PinDirection& direction,
+               bool directed,
+               bool continue_on_match,
+               const std::function<bool(const Endpoint*, const u32)>& exit_endpoint_filter,
+               const std::function<bool(const Endpoint*, const u32)>& entry_endpoint_filter) -> std::optional<std::vector<std::set<Gate*>>> {
+                auto res = self.get_next_matching_gates(endpoints, target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error in get_next_matching_gates:{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("endpoints"),
+            py::arg("target_gate_filter"),
+            py::arg("direction"),
+            py::arg("directed")              = true,
+            py::arg("continue_on_match")     = false,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Starting from the given endpoint, traverse the netlist abstraction and return the successor/predecessor gates that satisfy the `target_gate_filter`.
+
+            :param list[hal_py.Endpoint] endpoints: The starting endpoints.
+            :param callable target_gate_filter: A filter function for the target gates.
+            :param hal_py.PinDirection direction: The direction to search (`PinDirection.input` or `PinDirection.output`).
+            :param bool directed: Whether to use a directed graph representation. Defaults to `True`.
+            :param bool continue_on_match: Whether to continue traversal even after finding a match. Defaults to `False`.
+            :param callable exit_endpoint_filter: A filter function to stop traversal on a fan-in/out endpoint. Defaults to `None`.
+            :param callable entry_endpoint_filter: A filter function to stop traversal on successor/predecessor endpoints. Defaults to `None`.
+            :returns: A list of sets of gates matching the filter, or `None` on error.
+            :rtype: list[set[hal_py.Gate]] or None
+            )");
+
+        py_netlist_abstraction_decorator.def(
+            "get_next_matching_gates",
+            [](const NetlistAbstractionDecorator& self,
+               const std::vector<Gate*>& gates,
+               const std::function<bool(const Gate*)>& target_gate_filter,
+               const PinDirection& direction,
+               bool directed,
+               bool continue_on_match,
+               const std::function<bool(const Endpoint*, const u32)>& exit_endpoint_filter,
+               const std::function<bool(const Endpoint*, const u32)>& entry_endpoint_filter) -> std::optional<std::vector<std::set<Gate*>>> {
+                auto res = self.get_next_matching_gates(gates, target_gate_filter, direction, directed, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error in get_next_matching_gates:{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gates"),
+            py::arg("target_gate_filter"),
+            py::arg("direction"),
+            py::arg("directed")              = true,
+            py::arg("continue_on_match")     = false,
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+            Starting from the given gate, traverse the netlist abstraction and return the successor/predecessor gates that satisfy the `target_gate_filter`.
+
+            :param list[hal_py.Gate] gates: The starting gates.
+            :param callable target_gate_filter: A filter function for the target gates.
+            :param hal_py.PinDirection direction: The direction to search (`PinDirection.input` or `PinDirection.output`).
+            :param bool directed: Whether to use a directed graph representation. Defaults to `True`.
+            :param bool continue_on_match: Whether to continue traversal even after finding a match. Defaults to `False`.
+            :param callable exit_endpoint_filter: A filter function to stop traversal on a fan-in/out endpoint. Defaults to `None`.
+            :param callable entry_endpoint_filter: A filter function to stop traversal on successor/predecessor endpoints. Defaults to `None`.
+            :returns: A list of sets of gates matching the filter, or `None` on error.
+            :rtype: list[set[hal_py.Gate]] or None
             )");
 
         // Bind the first overloaded get_next_matching_gates_until method

@@ -29,7 +29,7 @@ namespace hal
                 virtual Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const = 0;
                 virtual std::string to_string() const                                                          = 0;
 
-                Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
+                virtual Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
             };
 
             class GateFeatureBulk : public GateFeature

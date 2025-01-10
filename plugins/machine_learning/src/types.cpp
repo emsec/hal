@@ -21,7 +21,7 @@ namespace hal
                 {
                     if (!g->has_data("preprocessing_information", "multi_bit_indexed_identifiers"))
                     {
-                        log_error("machine_learning", "unable to find indexed identifiers for gate with ID {}", g->get_id());
+                        log_error("machine_learning", "unable to find indexed identifiers for gate with {} ID {}", g->get_name(), g->get_id());
                         continue;
                     }
 

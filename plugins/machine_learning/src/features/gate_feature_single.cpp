@@ -270,7 +270,10 @@ namespace hal
             {
                 // Preallocate the feature vectors
                 std::vector<std::vector<FEATURE_TYPE>> feature_vecs(gates.size());
-                std::vector<Result<std::monostate>> thread_results(ctx.num_threads, ERR("uninitialized"));
+
+                const u32 used_threads = std::min(u32(gates.size()), ctx.num_threads);
+
+                std::vector<Result<std::monostate>> thread_results(used_threads, ERR("uninitialized"));
 
                 // Worker function for each thread
                 auto thread_func = [&](u32 start, u32 end, u32 thread_index) {
@@ -292,8 +295,8 @@ namespace hal
 
                 // Launch threads to process gates in parallel
                 std::vector<std::thread> threads;
-                u32 chunk_size = (gates.size() + ctx.num_threads - 1) / ctx.num_threads;
-                for (u32 t = 0; t < ctx.num_threads; ++t)
+                u32 chunk_size = (gates.size() + used_threads - 1) / used_threads;
+                for (u32 t = 0; t < used_threads; ++t)
                 {
                     u32 start = t * chunk_size;
                     u32 end   = std::min(start + chunk_size, u32(gates.size()));
@@ -309,8 +312,9 @@ namespace hal
                 }
 
                 // Check whether a thread encountered an error
-                for (const auto& res : thread_results)
+                for (u32 idx = 0; idx < threads.size(); idx++)
                 {
+                    const auto& res = thread_results.at(idx);
                     if (res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "Encountered error when building feature vectors");
