@@ -1,0 +1,1 @@
+/home/artemis/Documents/Work/hal/plugins/gate_libraries/definitions
