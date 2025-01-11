@@ -3,29 +3,37 @@
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/gui_utils/netlist.h"
 #include "gui/module_model/module_item.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_move_node.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
 
+#include <QApplication>
 #include <QColorDialog>
 #include <QDebug>
 #include <QInputDialog>
-#include <QApplication>
 #include <functional>
 
 namespace hal
 {
-    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent)
+        : QObject(parent), mModuleColorManager(new ModuleColorManager(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
@@ -40,7 +48,6 @@ namespace hal
     {
         if (!gNetlist)
             return;    // no netlist -> no registered callbacks
-        log_info("test", "unregister netlist callbacks");
         gNetlist->get_event_handler()->unregister_callback("gui_netlist_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_module_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_gate_handler");
@@ -50,7 +57,6 @@ namespace hal
 
     void NetlistRelay::registerNetlistCallbacks()
     {
-        log_info("test", "register netlist callbacks");
         gNetlist->get_event_handler()->register_callback(
             "gui_netlist_handler",
             std::function<void(NetlistEvent::event, Netlist*, u32)>(std::bind(&NetlistRelay::relayNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
@@ -81,33 +87,59 @@ namespace hal
 
     QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return mModuleModel->moduleColor(id);
+        return mModuleColorManager->moduleColor(id);
     }
 
-    ModuleModel* NetlistRelay::getModuleModel()
+    ModuleColorManager* NetlistRelay::getModuleColorManager() const
     {
-        return mModuleModel;
+        return mModuleColorManager;
     }
 
-    void NetlistRelay::changeModuleName(const u32 id)
+    void NetlistRelay::changeElementNameDialog(ModuleItem::TreeItemType type, u32 id)
     {
-        // NOT THREADSAFE
+        QString oldName;
+        QString prompt;
+        UserActionObject uao;
 
-        Module* m = gNetlist->get_module_by_id(id);
-        assert(m);
-
-        bool ok;
-        QString text = QInputDialog::getText(nullptr, "Rename Module", "New Name", QLineEdit::Normal, QString::fromStdString(m->get_name()), &ok);
-
-        if (ok && !text.isEmpty())
+        if (type == ModuleItem::TreeItemType::Module)
         {
-            ActionRenameObject* act = new ActionRenameObject(text);
-            act->setObject(UserActionObject(id, UserActionObjectType::Module));
+            Module* m = gNetlist->get_module_by_id(id);
+            assert(m);
+            oldName   = QString::fromStdString(m->get_name());
+            prompt    = "Change module name";
+            uao = UserActionObject(id, UserActionObjectType::Module);
+        }
+        else if (type == ModuleItem::TreeItemType::Gate)
+        {
+            Gate* g   = gNetlist->get_gate_by_id(id);
+            assert(g);
+            oldName   = QString::fromStdString(g->get_name());
+            prompt    = "Change gate name";
+            uao = UserActionObject(id, UserActionObjectType::Gate);
+        }
+        else if (type == ModuleItem::TreeItemType::Net)
+        {
+            Net* n    = gNetlist->get_net_by_id(id);
+            assert(n);
+            oldName   = QString::fromStdString(n->get_name());
+            prompt    = "Change net name";
+            uao = UserActionObject(id, UserActionObjectType::Net);
+        }
+        else return;
+
+        bool confirm;
+        QString newName =
+                QInputDialog::getText(nullptr, prompt, "New name:", QLineEdit::Normal,
+                                      oldName, &confirm);
+        if (confirm)
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(uao);
             act->exec();
         }
     }
 
-    void NetlistRelay::changeModuleType(const u32 id)
+    void NetlistRelay::changeModuleTypeDialog(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -117,7 +149,7 @@ namespace hal
         bool ok;
         QString text = QInputDialog::getText(nullptr, "Change Module Type", "New Type", QLineEdit::Normal, QString::fromStdString(m->get_type()), &ok);
 
-        if (ok && !text.isEmpty())
+        if (ok)
         {
             ActionSetObjectType* act = new ActionSetObjectType(text);
             act->setObject(UserActionObject(id, UserActionObjectType::Module));
@@ -125,7 +157,7 @@ namespace hal
         }
     }
 
-    void NetlistRelay::changeModuleColor(const u32 id)
+    void NetlistRelay::changeModuleColorDialog(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -140,21 +172,111 @@ namespace hal
         ActionSetObjectColor* act = new ActionSetObjectColor(color);
         act->setObject(UserActionObject(id, UserActionObjectType::Module));
         act->exec();
-
-        Q_EMIT moduleColorChanged(m);
     }
 
-    void NetlistRelay::addSelectionToModule(const u32 id)
+    void NetlistRelay::addToModuleDialog(const Node &node)
     {
-        // NOT THREADSAFE
-        // DECIDE HOW TO HANDLE MODULES
+        // prepare set of content, find first (reference-) node
+        Node firstNode = node;
+        QSet<u32> gatIds;
+        QSet<u32> modIds;
 
-        ActionAddItemsToObject* act = new ActionAddItemsToObject({}, gSelectionRelay->selectedGates());
-        act->setObject(UserActionObject(id, UserActionObjectType::Module));
-        act->exec();
+        GraphContext* context = gContentManager->getContextManagerWidget()->getCurrentContext();
+        Q_ASSERT(context);
+
+        // exclusive module view will update automatically if module elements get moved
+        bool specialUpdateRequired = !context->getExclusiveModuleId();
+
+        if (node.isNull())
+        {
+            for (u32 id : gSelectionRelay->selectedGatesList())
+            {
+                if (specialUpdateRequired && ! context->gates().contains(id))
+                    specialUpdateRequired = false;
+                if (firstNode.isNull()) firstNode = Node(id,Node::Gate);
+                gatIds.insert(id);
+            }
+
+            for (u32 id : gSelectionRelay->selectedModulesList())
+            {
+                if (specialUpdateRequired && ! context->modules().contains(id))
+                    specialUpdateRequired = false;
+                if (firstNode.isNull()) firstNode = Node(id,Node::Module);
+                modIds.insert(id);
+            }
+        }
+        else if (node.isModule())
+            modIds.insert(node.id());
+        else
+            gatIds.insert(node.id());
+        if (firstNode.isNull()) return; // nothing to move
+
+        // find common parent, if nullptr top_level was selected => abort
+        std::unordered_set<Gate*>   gatsContent;
+        for (u32 id : gatIds)
+            gatsContent.insert(gNetlist->get_gate_by_id(id));
+
+        std::unordered_set<Module*> modsContent;
+        for (u32 id : modIds)
+            modsContent.insert(gNetlist->get_module_by_id(id));
+
+        Module* parentModule  = gui_utility::firstCommonAncestor(modsContent, gatsContent);
+        if (!parentModule) return;
+        QString parentName = QString::fromStdString(parentModule->get_name());
+
+        ModuleDialog md({},"Move to module",false,nullptr,qApp->activeWindow());
+        if (md.exec() != QDialog::Accepted) return;
+
+
+        UserActionCompound* compound = new UserActionCompound;
+        compound->setUseCreatedObject();
+
+        if (md.isNewModule())
+        {
+            bool ok;
+            QString name = QInputDialog::getText(nullptr, "",
+                                                 "New module will be created under \"" + parentName + "\"\nModule Name:",
+                                                 QLineEdit::Normal, "", &ok);
+            if (!ok || name.isEmpty()) return;
+            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
+            actNewModule->setParentId(parentModule->get_id());
+            compound->addAction(actNewModule);
+            compound->addAction(new ActionAddItemsToObject(modIds,gatIds));
+        }
+        else
+        {
+            u32 targetModuleId = md.selectedId();
+            ActionAddItemsToObject* actAddItems = new ActionAddItemsToObject(modIds,gatIds);
+            actAddItems->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
+            compound->addAction(actAddItems);
+            specialUpdateRequired = false;
+        }
+
+        // move module to position of first content node
+        const NodeBox* box = context->getLayouter()->boxes().boxForNode(firstNode);
+        if (box && (specialUpdateRequired || context->getExclusiveModuleId()))
+        {
+            ActionMoveNode* actMoveNode = new ActionMoveNode(context->id(), QPoint(box->x(),box->y()));
+            compound->addAction(actMoveNode);
+        }
+
+        if (specialUpdateRequired)
+        {
+            context->setSpecialUpdate(true);
+            context->setScheduleRemove(modIds,gatIds);
+        }
+
+        compound->exec();
+
+        // update selection
+        gSelectionRelay->clear();
+        gSelectionRelay->addModule(compound->object().id());
+        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,compound->object().id());
+        gSelectionRelay->relaySelectionChanged(this);
+        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
     }
 
-    void NetlistRelay::addChildModule(const u32 id)
+    void NetlistRelay::addChildModuleDialog(const u32 id)
     {
         // NOT THREADSAFE
 
@@ -176,9 +298,24 @@ namespace hal
 
     void NetlistRelay::deleteModule(const u32 id)
     {
-        ActionDeleteObject* act = new ActionDeleteObject;
-        act->setObject(UserActionObject(id, UserActionObjectType::Module));
-        act->exec();
+        ActionDeleteObject* delMod = new ActionDeleteObject;
+        delMod->setObject(UserActionObject(id, UserActionObjectType::Module));
+
+        GraphContext* ctx = gGraphContextManager->getContextByExclusiveModuleId(id);
+        if (ctx)
+        {
+            // module exclusively connected to context, so delete context too
+            UserActionCompound* compnd = new UserActionCompound;
+            ActionDeleteObject* delCtx = new ActionDeleteObject;
+            delCtx->setObject(UserActionObject(ctx->id(), UserActionObjectType::ContextView));
+            compnd->addAction(delCtx);
+            compnd->addAction(delMod);
+            compnd->exec();
+        }
+        else
+        {
+            delMod->exec();
+        }
     }
 
     void NetlistRelay::reset()
@@ -198,7 +335,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetNetlist, (int) ev, object, associated_data);
+            Q_EMIT signalThreadEvent(TetNetlist, (int)ev, object, associated_data);
             qApp->processEvents();
             return;
         }
@@ -296,7 +433,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetGrouping, (int) ev, grp, associated_data);
+            Q_EMIT signalThreadEvent(TetGrouping, (int)ev, grp, associated_data);
             qApp->processEvents();
             return;
         }
@@ -348,7 +485,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetModule, (int) ev, mod, associated_data);
+            Q_EMIT signalThreadEvent(TetModule, (int)ev, mod, associated_data);
             qApp->processEvents();
             return;
         }
@@ -361,7 +498,7 @@ namespace hal
                 // suppress actions if we receive this for the top module
                 if (mod->get_parent_module() != nullptr)
                 {
-                    mModuleModel->setRandomColor(mod->get_id());
+                    mModuleColorManager->setRandomColor(mod->get_id());
                 }
 
                 gGraphContextManager->handleModuleCreated(mod);
@@ -372,7 +509,7 @@ namespace hal
             case ModuleEvent::event::removed: {
                 //< no associated_data
 
-                mModuleModel->removeColor(mod->get_id());
+                mModuleColorManager->removeColor(mod->get_id());
 
                 gGraphContextManager->handleModuleRemoved(mod);
                 gSelectionRelay->handleModuleRemoved(mod->get_id());
@@ -382,8 +519,6 @@ namespace hal
             }
             case ModuleEvent::event::name_changed: {
                 //< no associated_data
-
-                mModuleModel->updateModule(mod->get_id());
 
                 gGraphContextManager->handleModuleNameChanged(mod);
 
@@ -399,8 +534,6 @@ namespace hal
             case ModuleEvent::event::submodule_added: {
                 //< associated_data = id of added module
 
-                mModuleModel->addModule(associated_data, mod->get_id());
-
                 gGraphContextManager->handleModuleSubmoduleAdded(mod, associated_data);
 
                 Q_EMIT moduleSubmoduleAdded(mod, associated_data);
@@ -408,8 +541,6 @@ namespace hal
             }
             case ModuleEvent::event::submodule_removed: {
                 //< associated_data = id of removed module
-
-                mModuleModel->remove_module(associated_data);
 
                 gGraphContextManager->handleModuleSubmoduleRemoved(mod, associated_data);
 
@@ -433,11 +564,12 @@ namespace hal
                 break;
             }
             case ModuleEvent::event::pin_changed: {
-                //< no associated_data
+                 //< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
+                PinEvent pev = (PinEvent) (associated_data&0xF);
+                u32 id = (associated_data >> 4);
+                gGraphContextManager->handleModulePortsChanged(mod,pev,id);
 
-                gGraphContextManager->handleModulePortsChanged(mod);
-
-                Q_EMIT modulePortsChanged(mod);
+                Q_EMIT modulePortsChanged(mod,pev,id);
                 break;
             }
             case ModuleEvent::event::type_changed: {
@@ -488,7 +620,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetGate, (int) ev, gat, associated_data);
+            Q_EMIT signalThreadEvent(TetGate, (int)ev, gat, associated_data);
             qApp->processEvents();
             return;
         }
@@ -548,7 +680,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetNet, (int) ev, net, associated_data);
+            Q_EMIT signalThreadEvent(TetNet, (int)ev, net, associated_data);
             qApp->processEvents();
             return;
         }
@@ -629,39 +761,46 @@ namespace hal
     {
         switch (type)
         {
-        case TetNetlist:
-//            qDebug() << "Evt nlst" << evt << associated_data;
-            relayNetlistEvent((NetlistEvent::event) evt, static_cast<Netlist*>(object), associated_data);
-            break;
-        case TetModule:
-//            qDebug() << "Evt modu" << evt << static_cast<Module*>(object)->get_id() << associated_data;
-            relayModuleEvent((ModuleEvent::event) evt, static_cast<Module*>(object), associated_data);
-            break;
-        case TetGate:
-//            qDebug() << "Evt gate" << evt << static_cast<Gate*>(object)->get_id() << associated_data;
-            relayGateEvent((GateEvent::event) evt, static_cast<Gate*>(object), associated_data);
-            break;
-        case TetNet:
-//            qDebug() << "Evt net_" << evt << static_cast<Net*>(object)->get_id() << associated_data;
-            relayNetEvent((NetEvent::event) evt, static_cast<Net*>(object), associated_data);
-            break;
-        case TetGrouping:
-//            qDebug() << "Evt grup" << evt << static_cast<Grouping*>(object)->get_id() << associated_data;
-            relayGroupingEvent((GroupingEvent::event) evt, static_cast<Grouping*>(object), associated_data);
-            break;
+            case TetNetlist:
+                //            qDebug() << "Evt nlst" << evt << associated_data;
+                relayNetlistEvent((NetlistEvent::event)evt, static_cast<Netlist*>(object), associated_data);
+                break;
+            case TetModule:
+                //            qDebug() << "Evt modu" << evt << static_cast<Module*>(object)->get_id() << associated_data;
+                relayModuleEvent((ModuleEvent::event)evt, static_cast<Module*>(object), associated_data);
+                break;
+            case TetGate:
+                //            qDebug() << "Evt gate" << evt << static_cast<Gate*>(object)->get_id() << associated_data;
+                relayGateEvent((GateEvent::event)evt, static_cast<Gate*>(object), associated_data);
+                break;
+            case TetNet:
+                //            qDebug() << "Evt net_" << evt << static_cast<Net*>(object)->get_id() << associated_data;
+                relayNetEvent((NetEvent::event)evt, static_cast<Net*>(object), associated_data);
+                break;
+            case TetGrouping:
+                //            qDebug() << "Evt grup" << evt << static_cast<Grouping*>(object)->get_id() << associated_data;
+                relayGroupingEvent((GroupingEvent::event)evt, static_cast<Grouping*>(object), associated_data);
+                break;
         }
+    }
+
+    void NetlistRelay::dumpModuleRecursion(Module *m)
+    {
+        for (int i=0; i<m->get_submodule_depth(); i++)
+            std::cerr << "   ";
+        std::cerr << "Mod " << m->get_id() << " <" << m->get_name() << ">\n";
+        for (Module* sm : m->get_submodules())
+            dumpModuleRecursion(sm);
     }
 
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())
-            mModuleModel->setRandomColor(m->get_id());
-        mModuleModel->init();
-        mColorSerializer.restore(mModuleModel);
+            mModuleColorManager->setRandomColor(m->get_id());
+        mColorSerializer.restore(mModuleColorManager);
     }
 
     void NetlistRelay::debugHandleFileClosed()
     {
-        mModuleModel->clear();
     }
 }    // namespace hal

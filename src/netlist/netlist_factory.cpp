@@ -4,9 +4,9 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
-#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 
 #include <fstream>
@@ -27,6 +27,23 @@ namespace hal
             return std::make_unique<Netlist>(gate_library);
         }
 
+        std::unique_ptr<Netlist> load_netlist_from_string(const std::string& netlist_string, const std::filesystem::path& gate_library_file)
+        {
+            GateLibrary* lib = nullptr;
+
+            if (!gate_library_file.empty())
+            {
+                lib = gate_library_manager::load(gate_library_file);
+                if (!lib)
+                {
+                    log_critical("netlist", "could not parse gate library '{}', will not read netlist.", gate_library_file.string());
+                    return nullptr;
+                }
+            }
+
+            return netlist_serializer::deserialize_from_string(netlist_string, lib);
+        }
+
         std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file)
         {
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
@@ -35,17 +52,34 @@ namespace hal
                 return nullptr;
             }
 
-            GateLibrary* lib = gate_library_manager::load(gate_library_file);
-            if (!lib)
+            GateLibrary* lib = nullptr;
+
+            if (!gate_library_file.empty())
             {
-                log_critical("netlist", "could not read netlist without gate library.");
-                return nullptr;
+                lib = gate_library_manager::load(gate_library_file);
+                if (!lib)
+                {
+                    log_critical("netlist", "could not parse gate library '{}', will not load netlist.", gate_library_file.string());
+                    return nullptr;
+                }
             }
 
-            return netlist_parser_manager::parse(netlist_file, lib);
+            if (netlist_file.extension() == ".hal")
+            {
+                return netlist_serializer::deserialize_from_file(netlist_file, lib);
+            }
+            else
+            {
+                if (!lib)
+                {
+                    log_critical("netlist", "could not load netlist '{}' without gate library.", netlist_file.string());
+                    return nullptr;
+                }
+                return netlist_parser_manager::parse(netlist_file, lib);
+            }
         }
 
-        std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file)
+        std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, GateLibrary* gate_library)
         {
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
@@ -53,7 +87,20 @@ namespace hal
                 return nullptr;
             }
 
-            return netlist_serializer::deserialize_from_file(netlist_file);
+            if (!gate_library)
+            {
+                log_critical("netlist", "gate library is a nullptr, will not load netlist.");
+                return nullptr;
+            }
+
+            if (netlist_file.extension() == ".hal")
+            {
+                return netlist_serializer::deserialize_from_file(netlist_file, gate_library);
+            }
+            else
+            {
+                return netlist_parser_manager::parse(netlist_file, gate_library);
+            }
         }
 
         std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)
@@ -77,9 +124,7 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args)
         {
-            std::filesystem::path netlist_file = args.is_option_set("--import-netlist")
-                    ? std::filesystem::path(args.get_parameter("--import-netlist"))
-                    : pdir.get_default_filename();
+            std::filesystem::path netlist_file = args.is_option_set("--import-netlist") ? std::filesystem::path(args.get_parameter("--import-netlist")) : pdir.get_default_filename();
 
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {

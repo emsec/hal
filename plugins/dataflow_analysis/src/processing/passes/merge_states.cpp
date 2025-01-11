@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 #include "dataflow_analysis/processing/passes/remove_duplicates.h"
 
 namespace hal
@@ -10,7 +11,8 @@ namespace hal
     {
         namespace merge_states
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<const Grouping>& state1, const std::shared_ptr<const Grouping>& state2, bool delete_from_smaller)
+            std::shared_ptr<Grouping>
+                process(const processing::Configuration& config, const std::shared_ptr<const Grouping>& state1, const std::shared_ptr<const Grouping>& state2, bool delete_from_smaller)
             {
                 auto new_state = std::make_shared<Grouping>(state1->netlist_abstr);
 
@@ -33,11 +35,11 @@ namespace hal
                     }
                 }
 
-                new_state = remove_duplicates::process(new_state, delete_from_smaller);
+                new_state = remove_duplicates::process(config, new_state, delete_from_smaller);
 
                 return new_state;
             }    // namespace merge_states
 
         }    // namespace merge_states
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

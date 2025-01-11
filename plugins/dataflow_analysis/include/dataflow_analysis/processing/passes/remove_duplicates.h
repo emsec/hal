@@ -34,10 +34,15 @@ namespace hal
         /* forward declaration */
         struct Grouping;
 
+        namespace processing
+        {
+            struct Configuration;
+        }
+
         namespace remove_duplicates
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool delete_from_smaller);
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool delete_from_smaller);
 
         }    // namespace remove_duplicates
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

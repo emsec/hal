@@ -1,24 +1,19 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_item.h"
 
 #include "gui/gui_globals.h"
 
 namespace hal
 {
     SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent)
-        : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mGraphicsBusy(0)
+        : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mGraphicsBusy(0)
     {
         mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     }
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        //index to element in source mdoel
-        const QModelIndex& itemIndex = sourceModel()->index(source_row, 0, source_parent);
- 
-        const SelectionTreeItem* sti = static_cast<SelectionTreeItem*>(itemIndex.internalPointer());
-        return sti->match(mFilterExpression);
+        return checkRowRecursion(source_row, source_parent, 0, 2);
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -44,7 +39,7 @@ namespace hal
         return comparison;
     }
 
-    void SelectionTreeProxyModel::applyFilterOnGraphics()
+    /*void SelectionTreeProxyModel::applyFilterOnGraphics()
     {
         if (isGraphicsBusy()) return;
         ++ mGraphicsBusy;
@@ -54,14 +49,14 @@ namespace hal
         static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, mFilterExpression);
         gSelectionRelay->suppressedByFilter(modIds, gatIds, netIds);
         -- mGraphicsBusy;
-    }
+    }*/
 
-    void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
+    /*void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
         mFilterExpression.setPattern(filter_text);
         invalidateFilter();
         applyFilterOnGraphics();
-    }
+    }*/
 
     gui_utility::mSortMechanism SelectionTreeProxyModel::sortMechanism()
     {
@@ -73,4 +68,12 @@ namespace hal
         mSortMechanism = sortMechanism;
         invalidate();
     }
+
+    void SelectionTreeProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+
 }

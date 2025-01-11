@@ -2,8 +2,10 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
 #include <dirent.h>
 #include <fstream>
+#include <random>
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -36,11 +38,17 @@ namespace hal
 #ifdef _WIN32
             DWORD ftyp = GetFileAttributesA(folder.c_str());
             if (ftyp == INVALID_FILE_ATTRIBUTES)
+            {
                 return false;    //something is wrong with your path!
+            }
 
             if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+            {
                 if (0 == access(folder.c_str(), R_OK))
+                {
                     return true;
+                }
+            }
 
             return false;    // this is not a directory!
 #else
@@ -64,7 +72,9 @@ namespace hal
 #ifdef _WIN32
             DWORD ret = GetModuleFileNameA(NULL, buf, sizeof(buf));
             if (ret == 0 || ret == sizeof(buf))
+            {
                 return std::string();
+            }
             return std::filesystem::path(buf);
 #elif __APPLE__ && __MACH__
             uint32_t size = sizeof(buf);
@@ -122,7 +132,7 @@ namespace hal
                 get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
             };
-            
+
             for (const auto& path : path_hints)
             {
                 hal::error_code ec;
@@ -260,6 +270,29 @@ namespace hal
                 }
             }
             return std::filesystem::path();
+        }
+
+        Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix, const u32 max_attmeps)
+        {
+            const auto tmp_dir = std::filesystem::temp_directory_path();
+
+            std::random_device dev;
+            std::mt19937 prng(dev());
+            std::uniform_int_distribution<uint64_t> rand(0);
+
+            for (u32 i = 0; i < max_attmeps; i++)
+            {
+                std::stringstream ss;
+                ss << std::setw(16) << std::setfill('0') << std::hex << rand(prng);
+                std::filesystem::path tmp_path = tmp_dir / (prefix + ss.str());
+
+                if (std::filesystem::create_directories(tmp_path))
+                {
+                    return OK(tmp_path);
+                }
+            }
+
+            return ERR("failed to create unique temporary directory path");
         }
 
         std::string get_open_source_licenses()
@@ -658,5 +691,42 @@ apply, that proxy's public statement of acceptance of any version is
 permanent authorization for you to choose that version for the Library.
 )";
         }
-    }    // namespace core_utils
+
+        Result<u64> wrapped_stoull(const std::string& s, const u32 base)
+        {
+            try
+            {
+                return OK(std::stoull(s, nullptr, base));
+            }
+            catch (const std::invalid_argument& e)
+            {
+                return ERR("could not get u64 from string '" + s + "': " + e.what());
+            }
+            catch (const std::out_of_range& e)
+            {
+                return ERR("could not get u64 from string '" + s + "': " + e.what());
+            }
+
+            return ERR("encountered unknown error");
+        }
+
+        Result<u32> wrapped_stoul(const std::string& s, const u32 base)
+        {
+            try
+            {
+                return OK((u32)std::stoul(s, nullptr, base));
+            }
+            catch (const std::invalid_argument& e)
+            {
+                return ERR("could not get u32 from string '" + s + "': " + e.what());
+            }
+            catch (const std::out_of_range& e)
+            {
+                return ERR("could not get u32 from string '" + s + "': " + e.what());
+            }
+
+            return ERR("encountered unknown error");
+        }
+
+    }    // namespace utils
 }    // namespace hal

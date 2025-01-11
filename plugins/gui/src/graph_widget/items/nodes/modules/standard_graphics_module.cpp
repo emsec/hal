@@ -1,6 +1,7 @@
 #include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 
 #include "gui/graph_widget/graph_widget_constants.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 #include "hal_core/netlist/gate.h"
@@ -62,7 +63,7 @@ namespace hal
         sPen.setCosmetic(true);
         sPen.setJoinStyle(Qt::MiterJoin);
 
-        sTextColor = QColor(160, 160, 160);
+        sTextColor = GraphicsQssAdapter::instance()->nodeTextColor();
 
         QFont font = QFont("Iosevka");
         font.setPixelSize(graph_widget_constants::sFontSize);
@@ -112,7 +113,7 @@ namespace hal
         {
             // draw box and icon
             painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
-            painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), QColor(0, 0, 0, 200));
+            painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), GraphicsQssAdapter::instance()->nodeBackgroundColor());
             //            QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
             //            painter->fillRect(iconRect,Qt::black);
             //            painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());

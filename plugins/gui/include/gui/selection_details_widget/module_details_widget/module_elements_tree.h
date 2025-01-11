@@ -25,8 +25,11 @@
 
 #pragma once
 
-#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "hal_core/defines.h"
+#include "gui/module_model/module_model.h"
+#include "gui/selection_details_widget/module_details_widget/filter_elements_proxy_model.h"
+
+#include <QTreeView>
 
 namespace hal
 {
@@ -36,7 +39,7 @@ namespace hal
     /**
      * @brief A widget to display the specific (direct submodules, gates) items of a given module.
      */
-    class ModuleElementsTree : public SizeAdjustableTreeView
+    class ModuleElementsTree : public QTreeView
     {
         Q_OBJECT
 
@@ -85,7 +88,8 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        ModuleTreeModel* mModel;
+        ModuleModel* mModel;
+        FilterElementsProxyModel* mProxyModel;
         int mModuleID;
 
         void handleNumberSubmodulesChanged(const int number);

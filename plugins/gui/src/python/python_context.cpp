@@ -77,7 +77,7 @@ namespace hal
         }
     }
 
-    PythonThread* PythonContext::currentThread() const
+    PythonThread* PythonContext::pythonThread() const
     {
         return mThread;
     }
@@ -164,6 +164,11 @@ namespace hal
         py::exec(command, *context, *context);
 
         (*context)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
+
+        if (gGuiApi)
+        {
+            (*context)["gui"] = gGuiApi;
+        }
     }
 
 
@@ -359,7 +364,7 @@ namespace hal
             QSet<u32> mods;
             if (gSelectionRelay->numberSelectedModules()) gSelectionRelay->clearAndUpdate();
             PythonModuleSelectionReceiver* pms = new PythonModuleSelectionReceiver(mThread,this);
-            ModuleDialog md({}, prompt, pms, qApp->activeWindow());
+            ModuleDialog md({}, prompt, false, pms, qApp->activeWindow());
             Module* modSelect = (md.exec() == QDialog::Accepted)
                     ? gNetlist->get_module_by_id(md.selectedId())
                     : nullptr;

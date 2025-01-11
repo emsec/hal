@@ -30,6 +30,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <functional>
 #include <set>
@@ -50,7 +51,7 @@ namespace hal
          * 
          * @param[in] vec - The unordered vector.
          * @param[in] element - The element to delete.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         template<typename T>
         CORE_API inline bool unordered_vector_erase(std::vector<T>& vec, T element)
@@ -63,6 +64,27 @@ namespace hal
             *it = vec.back();
             vec.pop_back();
             return true;
+        }
+
+        /**
+         * Check whether two vectors have the same content regardless of their order.
+         *
+         * @param[in] vec_1 - First vector.
+         * @param[in] vec_2 - Second vector.
+         * @returns `true` if the vectors have the same content, `false` otherwise.
+         */
+        template<typename T>
+        bool vectors_have_same_content(std::vector<T> vec_1, std::vector<T> vec_2)
+        {
+            if (vec_1.size() != vec_2.size())
+            {
+                return false;
+            }
+
+            std::sort(vec_1.begin(), vec_1.end());
+            std::sort(vec_2.begin(), vec_2.end());
+
+            return vec_1 == vec_2;
         }
 
         /**
@@ -493,6 +515,39 @@ namespace hal
         }
 
         /**
+         * Turn a given iterable collection into a set.
+         *
+         * @param[in] container - The input collection.
+         * @returns The set containing all items copied from the collection.
+         */
+        template<typename T, template<typename, typename...> class Container, typename... Args>
+        CORE_API inline std::set<T> to_set(const Container<T, Args...>& container)
+        {
+            return std::set<T>(container.begin(), container.end());
+        }
+
+        /**
+         * Check whether one container is a subset of another container.
+         * The function checks whether all elements of the subset container are contained in the superset container.
+         *
+         * @param[in] subset - The container containing the possible subset.
+         * @param[in] superset - The container containing the possible superset.
+         * @returns True if the subset container actually is a subset of the superset.
+         */
+        template<typename T1, typename T2>
+        CORE_API bool is_subset(const T1& subset, const T2& superset)
+        {
+            for (const auto& element : subset)
+            {
+                if (std::find(std::begin(superset), std::end(superset), element) == std::end(superset))
+                {
+                    return false;    // Element not found in superset
+                }
+            }
+            return true;    // All elements found; subset is indeed a subset of superset
+        }
+
+        /**
          * Check whether a file exists.
          *
          * @param[in] filename - The file to check.
@@ -613,6 +668,15 @@ namespace hal
         CORE_API std::filesystem::path get_file(std::string file_name, std::vector<std::filesystem::path> path_hints);
 
         /**
+         * Try to generate a unique temporary directory.
+         * 
+         * @param[in] prefix - A prefix that is added in front of the unique identifier. Defaults to an empty string.
+         * @param[in] max_attmeps - The maximum amount of attempts before the function fails. Defaults to `5`.
+         * @returns OK and the created directory path on success, an error otherwise.
+         */
+        CORE_API Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix = "", const u32 max_attempts = 5);
+
+        /**
          * Get the licenses of all embedded OpenSource Projects.
          *
          * @returns The open source licenses.
@@ -723,5 +787,25 @@ namespace hal
                 return "h=" + std::to_string(h) + " s=" + std::to_string(s) + " v=" + std::to_string(v);
             }
         };
+
+        /**
+         * A safe wrapper around the std::stoull function that provides a Result<> for error handling instead of exceptions.
+         * 
+         * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
+         *
+         * @returns OK and an integer on success, an ERROR otherwise.
+         */
+        CORE_API Result<u64> wrapped_stoull(const std::string& s, const u32 base = 10);
+
+        /**
+         * A safe wrapper around the std::stoul function that provides a Result<> for error handling instead of exceptions.
+         * 
+         * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
+         *
+         * @returns OK and an integer on success, an ERROR otherwise.
+         */
+        CORE_API Result<u32> wrapped_stoul(const std::string& s, const u32 base = 10);
     }    // namespace utils
 }    // namespace hal

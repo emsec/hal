@@ -18,7 +18,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "ground",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -42,7 +42,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "power",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -66,7 +66,7 @@
                     "name": "I",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -80,7 +80,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -104,7 +104,7 @@
                     "name": "I",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -118,7 +118,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -142,7 +142,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -156,7 +156,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -170,7 +170,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -194,7 +194,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -208,7 +208,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -222,7 +222,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -236,7 +236,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -260,7 +260,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -274,7 +274,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -288,7 +288,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -302,7 +302,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -316,7 +316,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -340,7 +340,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -354,7 +354,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -368,7 +368,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -392,7 +392,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -406,7 +406,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -420,7 +420,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -434,7 +434,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -458,7 +458,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -472,7 +472,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -486,7 +486,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -500,7 +500,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -514,7 +514,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -538,7 +538,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -552,7 +552,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -566,7 +566,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -590,7 +590,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -604,7 +604,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -618,7 +618,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -632,7 +632,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -656,7 +656,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -670,7 +670,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -684,7 +684,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -698,7 +698,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -712,7 +712,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -741,7 +741,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -755,7 +755,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -769,7 +769,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -797,7 +797,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -811,7 +811,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -825,7 +825,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -839,7 +839,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -867,7 +867,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -881,7 +881,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -895,7 +895,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -909,7 +909,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -923,7 +923,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -951,7 +951,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -965,7 +965,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -979,7 +979,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -993,7 +993,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1007,7 +1007,7 @@
                     "name": "I4",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1021,7 +1021,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1049,7 +1049,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1063,7 +1063,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1077,7 +1077,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1091,7 +1091,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1105,7 +1105,7 @@
                     "name": "I4",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1119,7 +1119,7 @@
                     "name": "I5",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1133,7 +1133,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "lut",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1156,7 +1156,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1170,7 +1170,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1184,7 +1184,7 @@
                     "name": "S",
                     "direction": "input",
                     "type": "select",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1198,7 +1198,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1222,7 +1222,7 @@
                     "name": "CI",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1236,7 +1236,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1250,7 +1250,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1264,7 +1264,7 @@
                     "name": "CO",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1288,7 +1288,7 @@
                     "name": "CI",
                     "direction": "input",
                     "type": "carry",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1302,7 +1302,7 @@
                     "name": "CYINIT",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1316,16 +1316,11 @@
                     "name": "DI",
                     "direction": "input",
                     "type": "none",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "DI(0)",
-                            "direction": "input",
-                            "type": "none"
-                        },
-                        {
-                            "name": "DI(1)",
+                            "name": "DI(3)",
                             "direction": "input",
                             "type": "none"
                         },
@@ -1335,7 +1330,12 @@
                             "type": "none"
                         },
                         {
-                            "name": "DI(3)",
+                            "name": "DI(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "DI(0)",
                             "direction": "input",
                             "type": "none"
                         }
@@ -1345,16 +1345,11 @@
                     "name": "S",
                     "direction": "input",
                     "type": "none",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "S(0)",
-                            "direction": "input",
-                            "type": "none"
-                        },
-                        {
-                            "name": "S(1)",
+                            "name": "S(3)",
                             "direction": "input",
                             "type": "none"
                         },
@@ -1364,7 +1359,12 @@
                             "type": "none"
                         },
                         {
-                            "name": "S(3)",
+                            "name": "S(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "S(0)",
                             "direction": "input",
                             "type": "none"
                         }
@@ -1374,20 +1374,14 @@
                     "name": "CO",
                     "direction": "output",
                     "type": "carry",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "CO(0)",
+                            "name": "CO(3)",
                             "direction": "output",
                             "type": "carry",
-                            "function": "((S(0) & (CI | CYINIT)) | ((! S(0)) & DI(0)))"
-                        },
-                        {
-                            "name": "CO(1)",
-                            "direction": "output",
-                            "type": "carry",
-                            "function": "((S(1) & CO(0)) | ((! S(1)) & DI(1)))"
+                            "function": "((S(3) & CO(2)) | ((! S(3)) & DI(3)))"
                         },
                         {
                             "name": "CO(2)",
@@ -1396,10 +1390,16 @@
                             "function": "((S(2) & CO(1)) | ((! S(2)) & DI(2)))"
                         },
                         {
-                            "name": "CO(3)",
+                            "name": "CO(1)",
                             "direction": "output",
                             "type": "carry",
-                            "function": "((S(3) & CO(2)) | ((! S(3)) & DI(3)))"
+                            "function": "((S(1) & CO(0)) | ((! S(1)) & DI(1)))"
+                        },
+                        {
+                            "name": "CO(0)",
+                            "direction": "output",
+                            "type": "carry",
+                            "function": "((S(0) & (CI | CYINIT)) | ((! S(0)) & DI(0)))"
                         }
                     ]
                 },
@@ -1407,20 +1407,14 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "O(0)",
+                            "name": "O(3)",
                             "direction": "output",
                             "type": "none",
-                            "function": "(S(0) ^ (CI | CYINIT))"
-                        },
-                        {
-                            "name": "O(1)",
-                            "direction": "output",
-                            "type": "none",
-                            "function": "(S(1) ^ CO(0))"
+                            "function": "(S(3) ^ CO(2))"
                         },
                         {
                             "name": "O(2)",
@@ -1429,10 +1423,16 @@
                             "function": "(S(2) ^ CO(1))"
                         },
                         {
-                            "name": "O(3)",
+                            "name": "O(1)",
                             "direction": "output",
                             "type": "none",
-                            "function": "(S(3) ^ CO(2))"
+                            "function": "(S(1) ^ CO(0))"
+                        },
+                        {
+                            "name": "O(0)",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(S(0) ^ (CI | CYINIT))"
                         }
                     ]
                 }
@@ -1448,7 +1448,7 @@
                     "name": "I",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1462,7 +1462,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1477,7 +1477,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1500,7 +1500,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1514,7 +1514,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1528,7 +1528,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1551,7 +1551,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1565,7 +1565,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1579,7 +1579,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1594,7 +1594,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1617,7 +1617,7 @@
                     "name": "I",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1631,7 +1631,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1646,7 +1646,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1661,7 +1661,7 @@
                     "name": "O2",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1676,7 +1676,7 @@
                     "name": "O3",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1699,7 +1699,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1713,7 +1713,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1727,7 +1727,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1741,7 +1741,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1755,7 +1755,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1778,7 +1778,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1792,7 +1792,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1806,7 +1806,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1820,7 +1820,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1834,7 +1834,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1849,7 +1849,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1864,7 +1864,7 @@
                     "name": "O2",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1879,7 +1879,7 @@
                     "name": "O3",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1902,7 +1902,7 @@
                     "name": "I",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1916,7 +1916,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1931,7 +1931,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1946,7 +1946,7 @@
                     "name": "O2",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1961,7 +1961,7 @@
                     "name": "O3",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1976,7 +1976,7 @@
                     "name": "O4",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -1991,7 +1991,7 @@
                     "name": "O5",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2006,7 +2006,7 @@
                     "name": "O6",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2021,7 +2021,7 @@
                     "name": "O7",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2044,7 +2044,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2058,7 +2058,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2072,7 +2072,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2086,7 +2086,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2100,7 +2100,7 @@
                     "name": "I4",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2114,7 +2114,7 @@
                     "name": "I5",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2128,7 +2128,7 @@
                     "name": "I6",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2142,7 +2142,7 @@
                     "name": "I7",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2156,7 +2156,7 @@
                     "name": "O",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2179,7 +2179,7 @@
                     "name": "I0",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2193,7 +2193,7 @@
                     "name": "I1",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2207,7 +2207,7 @@
                     "name": "I2",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2221,7 +2221,7 @@
                     "name": "I3",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2235,7 +2235,7 @@
                     "name": "I4",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2249,7 +2249,7 @@
                     "name": "I5",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2263,7 +2263,7 @@
                     "name": "I6",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2277,7 +2277,7 @@
                     "name": "I7",
                     "direction": "input",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2291,7 +2291,7 @@
                     "name": "O0",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2306,7 +2306,7 @@
                     "name": "O1",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2321,7 +2321,7 @@
                     "name": "O2",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2336,7 +2336,7 @@
                     "name": "O3",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2351,7 +2351,7 @@
                     "name": "O4",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2366,7 +2366,7 @@
                     "name": "O5",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2381,7 +2381,7 @@
                     "name": "O6",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2396,7 +2396,7 @@
                     "name": "O7",
                     "direction": "output",
                     "type": "none",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2428,7 +2428,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2442,7 +2442,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2456,7 +2456,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2471,7 +2471,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2503,7 +2503,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2517,7 +2517,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2531,7 +2531,7 @@
                     "name": "EN",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2545,7 +2545,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2560,7 +2560,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2593,7 +2593,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2607,7 +2607,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2621,7 +2621,7 @@
                     "name": "S",
                     "direction": "input",
                     "type": "set",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2635,7 +2635,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2650,7 +2650,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2683,7 +2683,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2697,7 +2697,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2711,7 +2711,7 @@
                     "name": "R",
                     "direction": "input",
                     "type": "reset",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2725,7 +2725,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2740,7 +2740,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2776,7 +2776,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2790,7 +2790,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2804,7 +2804,7 @@
                     "name": "R",
                     "direction": "input",
                     "type": "reset",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2818,7 +2818,7 @@
                     "name": "S",
                     "direction": "input",
                     "type": "set",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2832,7 +2832,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2847,7 +2847,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2880,7 +2880,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2894,7 +2894,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2908,7 +2908,7 @@
                     "name": "S",
                     "direction": "input",
                     "type": "set",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2922,7 +2922,7 @@
                     "name": "EN",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2936,7 +2936,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2951,7 +2951,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2984,7 +2984,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -2998,7 +2998,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3012,7 +3012,7 @@
                     "name": "R",
                     "direction": "input",
                     "type": "reset",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3026,7 +3026,7 @@
                     "name": "EN",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3040,7 +3040,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3055,7 +3055,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3091,7 +3091,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3105,7 +3105,7 @@
                     "name": "D",
                     "direction": "input",
                     "type": "data",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3119,7 +3119,7 @@
                     "name": "R",
                     "direction": "input",
                     "type": "reset",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3133,7 +3133,7 @@
                     "name": "S",
                     "direction": "input",
                     "type": "set",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3147,7 +3147,7 @@
                     "name": "EN",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3161,7 +3161,7 @@
                     "name": "Q",
                     "direction": "output",
                     "type": "state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3176,7 +3176,7 @@
                     "name": "QN",
                     "direction": "output",
                     "type": "neg_state",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3200,7 +3200,7 @@
                     "name": "CLK",
                     "direction": "input",
                     "type": "clock",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3214,7 +3214,7 @@
                     "name": "EN",
                     "direction": "input",
                     "type": "enable",
-                    "ascending": false,
+                    "ascending": true,
                     "start_index": 0,
                     "pins": [
                         {
@@ -3228,16 +3228,11 @@
                     "name": "ADDR",
                     "direction": "input",
                     "type": "address",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "ADDR(0)",
-                            "direction": "input",
-                            "type": "address"
-                        },
-                        {
-                            "name": "ADDR(1)",
+                            "name": "ADDR(3)",
                             "direction": "input",
                             "type": "address"
                         },
@@ -3247,7 +3242,12 @@
                             "type": "address"
                         },
                         {
-                            "name": "ADDR(3)",
+                            "name": "ADDR(1)",
+                            "direction": "input",
+                            "type": "address"
+                        },
+                        {
+                            "name": "ADDR(0)",
                             "direction": "input",
                             "type": "address"
                         }
@@ -3257,16 +3257,11 @@
                     "name": "DATA_IN",
                     "direction": "input",
                     "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "DATA_IN(0)",
-                            "direction": "input",
-                            "type": "data"
-                        },
-                        {
-                            "name": "DATA_IN(1)",
+                            "name": "DATA_IN(3)",
                             "direction": "input",
                             "type": "data"
                         },
@@ -3276,7 +3271,12 @@
                             "type": "data"
                         },
                         {
-                            "name": "DATA_IN(3)",
+                            "name": "DATA_IN(1)",
+                            "direction": "input",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATA_IN(0)",
                             "direction": "input",
                             "type": "data"
                         }
@@ -3286,16 +3286,11 @@
                     "name": "DATA_OUT",
                     "direction": "output",
                     "type": "data",
-                    "ascending": true,
-                    "start_index": 0,
+                    "ascending": false,
+                    "start_index": 3,
                     "pins": [
                         {
-                            "name": "DATA_OUT(0)",
-                            "direction": "output",
-                            "type": "data"
-                        },
-                        {
-                            "name": "DATA_OUT(1)",
+                            "name": "DATA_OUT(3)",
                             "direction": "output",
                             "type": "data"
                         },
@@ -3305,7 +3300,12 @@
                             "type": "data"
                         },
                         {
-                            "name": "DATA_OUT(3)",
+                            "name": "DATA_OUT(1)",
+                            "direction": "output",
+                            "type": "data"
+                        },
+                        {
+                            "name": "DATA_OUT(0)",
                             "direction": "output",
                             "type": "data"
                         }

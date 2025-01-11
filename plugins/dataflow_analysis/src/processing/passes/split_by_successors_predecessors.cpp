@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 
 #include <map>
 #include <set>
@@ -12,7 +13,7 @@ namespace hal
     {
         namespace split_by_successors_predecessors
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors)
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -76,5 +77,5 @@ namespace hal
             }
 
         }    // namespace split_by_successors_predecessors
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

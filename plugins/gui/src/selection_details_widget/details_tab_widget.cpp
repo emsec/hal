@@ -23,27 +23,70 @@ namespace hal
 
         QVBoxLayout* containerlLayout = new QVBoxLayout(container);
         containerlLayout->setContentsMargins(0, 0, 0, 0);
+        containerlLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         containerlLayout->setSpacing(5);
         containerlLayout->setSizeConstraint(QLayout::SetNoConstraint);
 
-        container->setLayout(containerlLayout);
         scrollArea->setWidget(container);
 
         for(DetailsFrameWidget* frame : frames)
             containerlLayout->addWidget(frame);
 
+        scrollArea->setVerticalScrollBarPolicy(frames.size()>1 ? Qt::ScrollBarAsNeeded : Qt::ScrollBarAlwaysOff);
         return QTabWidget::addTab(scrollArea, label);
     }
 
-    void DetailsTabWidget::setIcon(const QString& fileName)
+    int DetailsTabWidget::addTab(const QString& label, DetailsFrameWidget* frame, bool useScrollArea)
     {
-        QIcon* icon = new QIcon(fileName);
-        QPixmap scaledIcon = icon->pixmap(24, 24); //assures better quality, icon scaling so smooth, so silky
+        if (useScrollArea)
+        {
+            QList<DetailsFrameWidget*> frames;
+            frames.append(frame);
+            return addTab(label,frames);
+        }
+        QWidget* container = new QWidget(this);
+        container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        QLabel* iconContainer = new QLabel(this);
+        QVBoxLayout* containerlLayout = new QVBoxLayout(container);
+        containerlLayout->setContentsMargins(0, 0, 0, 0);
+        containerlLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        containerlLayout->setSpacing(5);
+
+        containerlLayout->addWidget(frame);
+        return QTabWidget::addTab(container, label);
+    }
+
+    void DetailsTabWidget::setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId)
+    {
+        bool existingContainer = true;
+        QLabel* iconContainer = dynamic_cast<QLabel*>(cornerWidget());
+        if (!iconContainer)
+        {
+            existingContainer = false;
+            iconContainer = new QLabel(this);
+        }
+
+        QPixmap scaledIcon;
+
+        switch (SelectionDetailsIconProvider::sIconSizeSetting->value().toInt())
+        {
+        case SelectionDetailsIconProvider::NoIcon:
+            break;
+        case SelectionDetailsIconProvider::SmallIcon:
+            scaledIcon = QIcon(*SelectionDetailsIconProvider::instance()->getIcon(catg,itemId)).pixmap(16, 16);
+            break;
+        case SelectionDetailsIconProvider::BigIcon:
+             //assures better quality, icon scaling so smooth, so silky
+            scaledIcon = QIcon(*SelectionDetailsIconProvider::instance()->getIcon(catg,itemId)).pixmap(24, 24);
+            break;
+        }
+
         iconContainer->setPixmap(scaledIcon);
-        iconContainer->setContentsMargins(5, 2, 5, 1);
 
-        setCornerWidget(iconContainer);
+        if (!existingContainer)
+        {
+            iconContainer->setContentsMargins(5, 2, 5, 1);
+            setCornerWidget(iconContainer);
+        }
     }
 }

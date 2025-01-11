@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 
 #include <QObject>
 #include <QStringList>
@@ -41,8 +42,9 @@ namespace hal
     class GraphLayouter;
     class GraphShader;
     class GraphContext;
+    class ContextDirectory;
 
-    class ContextTableModel;
+    class ContextTreeModel;
     class SettingsItemCheckbox;
 
     /**
@@ -72,7 +74,32 @@ namespace hal
          * @param name - The name of the new context. Names don't have to be unique.
          * @returns the created GraphContext
          */
-        GraphContext* createNewContext(const QString& name);
+        GraphContext* createNewContext(const QString& name, u32 parentId = 0);
+
+        ContextDirectory* createNewDirectory(const QString &name, u32 parentId = 0);
+
+        /**
+         * Opens a existing view that contains the given module, otherwise creates a new context
+         * and opens it.
+         *
+         * @param moduleId - The module to open.
+         * @param unfold - True to unfold the module upon opening.
+         */
+        void openModuleInView(u32 moduleId, bool unfold);
+
+        /**
+         * Creates and opens a new view that contains the given gate.
+         *
+         * @param netId - The gate to open.
+         */
+        void openGateInView(u32 gateId);
+
+        /**
+         * Creates and opens a new view that contains the sources and desinations of the given net.
+         *
+         * @param netId - The net to open.
+         */
+        void openNetEndpointsInView(u32 netId);
 
         /**
          * Renames a GraphContext. <br>
@@ -84,12 +111,29 @@ namespace hal
         void renameGraphContextAction(GraphContext* ctx, const QString& newName);
 
         /**
+         * Renames a contextDirectory. <br>
+         * Emits the signal directoryRenamed.
+         *
+         * @param ctxDir - The contextDirectory to rename. Must not be a <i>nullptr</i>.
+         * @param newName - The new name of the directory
+         */
+        void renameContextDirectoryAction(ContextDirectory* ctxDir, const QString& newName);
+
+
+        /**
          * Removes and deletes the given GraphContext. The passed pointer will be a <i>nullptr</i> afterwards.<br>
          * Emits deletingContext before the deletion.
          *
          * @param ctx - The graph context to delete.
          */
         void deleteGraphContext(GraphContext* ctx);
+
+        /**
+         * Removes and deletes the given ContextDiretory. The passed pointer will be a <i>nullptr</i> afterwards.<br>
+         *
+         * @param ctxDir - The ContextDirectory to delete.
+         */
+        void deleteContextDirectory(ContextDirectory* ctxDir);
 
         /**
          * Gets a list of all current GraphContext%s.
@@ -99,6 +143,13 @@ namespace hal
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
         GraphContext* getContextById(u32 id) const;
+
+
+        u32 getParentId(u32 childId, bool isDirectory) const;
+
+        bool moveItem(u32 itemId, bool isDirectory, u32 parentId, int row = -1);
+
+        ContextDirectory* getDirectoryById(u32 id) const;
 
         /**
          * Gets the context which is exclusively showing the module with the id module_id.
@@ -114,6 +165,13 @@ namespace hal
          * @returns <b>true</b> if a context with the name exists
          */
         bool contextWithNameExists(const QString& name) const;
+
+        /**
+         * Generate next view name with given prefix
+         * @param prefix
+         * @return the view name which does not exist so far
+         */
+        QString nextViewName(const QString& prefix) const;
 
         /**
          * Handler to be called after a module has been created. Used to apply the changes in the affected contexts.<br>
@@ -193,7 +251,7 @@ namespace hal
          *
          * @param m - The module with the changed port
          */
-        void handleModulePortsChanged(Module* m);
+        void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
 
         /**
          * Handler to be called after a gate has been removed. <br>
@@ -331,11 +389,11 @@ namespace hal
         GraphShader* getDefaultShader(GraphContext* const context) const;
 
         /**
-         * Gets the table model for the contexts.
+         * Gets the tree model for the contexts.
          *
          * @returns the context table model
          */
-        ContextTableModel* getContextTableModel() const;
+        ContextTreeModel* getContextTreeModel() const;
 
         /**
          * Deletes all contexts.
@@ -357,6 +415,8 @@ namespace hal
         }
 
         static SettingsItemCheckbox* sSettingNetGroupingToPins;
+
+        static SettingsItemCheckbox* sSettingPanOnMiddleButton;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -380,14 +440,31 @@ namespace hal
          */
         void deletingContext(GraphContext* context);
 
+        /**
+         * Q_SIGNAL that notifies about the renaming of a directory by the context manager.
+         *
+         * @param directory - The renamed directory
+         */
+        void directoryRenamed(ContextDirectory* directory);
+
+        /**
+         * Q_SIGNAL that notifies that a directory is about to be deleted.
+         * This signal is emitted before the directory is deleted.
+         *
+         * @param directory - The directory that is about to be deleted
+         */
+        void deletingDirectory(ContextDirectory* directory);
+
+
+
     private:
         //        QVector<GraphContext*> mGraphContexts;
 
-        ContextTableModel* mContextTableModel;
+        ContextTreeModel* mContextTreeModel;
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
         SettingsItemCheckbox* mSettingDebugGrid;
-        SettingsItemCheckbox* mSettingNetLayout;
+        SettingsItemCheckbox* mSettingDumpJunction;
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };

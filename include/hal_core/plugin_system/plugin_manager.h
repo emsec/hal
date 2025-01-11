@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/callback_hook.h"
 #include "hal_core/utilities/program_options.h"
@@ -60,6 +61,13 @@ namespace hal
          * @returns The set of plugin names.
          */
         std::set<std::string> get_plugin_names();
+
+        /**
+         * Get the full path for plugin. Will probe several possible extension on MAC
+         *
+         * @returns The full path to plugin in HAL build directory.
+         */
+        std::filesystem::path get_plugin_path(std::string plugin_name);
 
         /**
          * TODO Python binding.
@@ -104,7 +112,7 @@ namespace hal
          * @param[in] file_path - The path to the plugin file.
          * @returns True on success, false otherwise.
          */
-        bool load(const std::string& plugin_name, const std::filesystem::path& file_path);
+        bool load(const std::string& plugin_name, const std::filesystem::path& file_path = std::filesystem::path());
 
         /**
          * Releases all plugins and their associated resources.
@@ -127,9 +135,10 @@ namespace hal
          *
          * @param[in] plugin_name - The name of the plugin.
          * @param[in] initialize - If false, the plugin's initialize function is not called.
+         * @param[in] silent - If true error message gets omitted if plugin not found
          * @returns The basic plugin interface.
          */
-        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true);
+        BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true, bool silent = false);
 
         /**
          * TODO Python bindings for different types and extend by initialize flag.
@@ -145,6 +154,22 @@ namespace hal
         T* get_plugin_instance(const std::string& plugin_name, bool initialize = true)
         {
             return dynamic_cast<T*>(get_plugin_instance(plugin_name, initialize));
+        }
+
+        /**
+         * Get first plugin extension of given type T.
+         *
+         * @param[in] plugin_name - The name of the plugin.
+         * @param[in] initialize - If false, the plugin's initialize function is not called.
+         * @return pointer to first extension of type T or nullptr if no such extension exists.
+         */
+        template<typename T>
+        T* get_first_extension(const std::string& plugin_name, bool initialize = true)
+        {
+            BasePluginInterface* bpif = get_plugin_instance(plugin_name, initialize);
+            if (!bpif)
+                return nullptr;
+            return bpif->get_first_extension<T>();
         }
 
         /**
@@ -168,5 +193,30 @@ namespace hal
          * @param[in] id - The id of the registered callback.
          */
         void remove_model_changed_callback(u64 id);
+
+        /**
+         * The PluginFeature struct. Attribute args may hold file extensions if a parser/writer gets registered.
+         */
+        struct PluginFeature
+        {
+            FacExtensionInterface::Feature feature;
+            std::vector<std::string> args;
+            std::string description;
+        };
+
+        /**
+         * Returns whether file has an extension which is legal for plugins in OS
+         * @param file_name
+         * @return False if extension indicated that this file cannot be a plugin, true otherwise
+         */
+        bool has_valid_file_extension(std::filesystem::path file_name);
+
+        /**
+         * Returns list of features for plugin identified by file name stem
+         * @param name file name stem
+         * @return list of features like parser or writer
+         */
+        std::vector<PluginFeature> get_plugin_features(std::string name);
+
     }    // namespace plugin_manager
 }    // namespace hal

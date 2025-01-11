@@ -59,17 +59,17 @@ namespace hal
     class Toolbar;
     class SimulationInput;
 
-    class NETLIST_API VcdViewerFactory : public ContentFactory
+    class NETLIST_API WaveformViewerFactory : public ContentFactory
     {
     public:
-        VcdViewerFactory() : ContentFactory("VcdViewerFactory") {;}
-        ContentWidget* contentFactory() const;
+        WaveformViewerFactory(const QString& name) : ContentFactory(name) {;}
+        ExternalContentWidget* contentFactory() const;
     };
 
     /**
      * @ingroup netlist_writer
      */
-    class NETLIST_API WaveformViewer : public ContentWidget
+    class NETLIST_API WaveformViewer : public ExternalContentWidget
     {
         Q_OBJECT
 
@@ -85,23 +85,23 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        void setGates(std::vector<Gate*> gates);
         /**
          * Restore previous controller and waveform viewer from saved data files.
          */
         void restoreFromProject() override;
+
+        WaveWidget* mCurrentWaveWidget;
     private Q_SLOTS:
         void handleCreateControl();
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleSaveWaveforms();
-        void handleRunSimulation();
+        void handleInvokeWizzard();
         void handleAddResultWave();
         void handleToggleMaxZoom();
         void handleUndoZoomShift();
 
-        void handleSelectGates();
-        void handleClockSet();
-        void handleEngineSelected(bool checked);
         void handleOpenSettingsDialog();
         void handleShowEngineOutput();
 
@@ -123,12 +123,13 @@ namespace hal
 
     private:
         bool mVisualizeNetState;
+        bool mOwnershipRequired;
 
         QAction* mCreateControlAction;
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
         QAction* mSaveWaveformsAction;
-        QAction* mRunSimulationAction;
+        QAction* mInvokeSWizardAction;
         QAction* mAddResultWaveAction;
         QAction* mToggleMaxZoomAction;
         QAction* mUndoZoomShiftAction;
@@ -136,7 +137,7 @@ namespace hal
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
         QProgressBar* mProgress;
-        WaveWidget* mCurrentWaveWidget;
+
 
         void takeControllerOwnership(std::unique_ptr<NetlistSimulatorController>& ctrlRef, bool create);
         void showCloseButton();

@@ -35,6 +35,7 @@
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/gui_api/gui_api.h"
+#include "gui/comment_system/comment_manager.h"
 
 #include <QSettings>
 
@@ -102,7 +103,10 @@ namespace hal
      */
     extern GuiApi* gGuiApi;
 
-    ///@}
+    /**
+     * The global CommentManager
+     */
+    extern CommentManager* gCommentManager;
 
     // Comment this out to not compile the debug code for the graph grid.
     // This will also hide the respective debug setting from the settings page.

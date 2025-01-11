@@ -32,7 +32,7 @@ namespace hal
     class PluginParameter
     {
     public:
-        enum ParameterType { Absent, Boolean, Color, Dictionary, ExistingDir, Float, Integer, NewFile, PushButton, String, TabName };
+        enum ParameterType { Absent, Boolean, Color, ComboBox, Dictionary, ExistingDir, ExistingFile, Float, Gate, Integer, Label, Module, NewFile, PushButton, String, TabName };
     private:
         ParameterType m_type;
         std::string m_tagname;
@@ -46,5 +46,6 @@ namespace hal
         std::string get_value() const { return m_value; }
         ParameterType get_type() const { return m_type; }
         void set_value(const std::string& v)  { m_value = v; }
+        void set_tagname(const std::string& tg) { m_tagname = tg; }
     };
 }

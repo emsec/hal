@@ -18,7 +18,7 @@ namespace hal
 #else
     PYBIND11_PLUGIN(netlist_simulator)
     {
-        py::module m("netlist_simulator", "hal NetlistSimulatorPlugin python bindings");
+        py::module m("hal_simulator", "hal NetlistSimulatorPlugin python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<NetlistSimulatorPlugin, RawPtrWrapper<NetlistSimulatorPlugin>, BasePluginInterface>(m, "NetlistSimulatorPlugin")
@@ -48,9 +48,8 @@ namespace hal
                 :rtype: str
             )");
 
-
         py::class_<NetlistSimulator>(m, "NetlistSimulator")
-                /*
+            /*
             .def("add_gates", &NetlistSimulator::add_gates, py::arg("gates"), R"(
                 Add gates to the simulation set.
                 Only elements in the simulation set are considered during simulation.
@@ -110,7 +109,11 @@ namespace hal
                 :param lambda filter: The optional filter to be applied before initialization.
             )")
 
-            .def("initialize_sequential_gates", py::overload_cast<BooleanFunction::Value, const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates), py::arg("value"), py::arg("filter") = nullptr, R"(
+            .def("initialize_sequential_gates",
+                 py::overload_cast<BooleanFunction::Value, const std::function<bool(const Gate*)>&>(&NetlistSimulator::initialize_sequential_gates),
+                 py::arg("value"),
+                 py::arg("filter") = nullptr,
+                 R"(
                 Configure the sequential gates matching the (optional) user-defined filter condition with the specified value.
                 Schedules the respective gates for initialization, the actual configuration is applied during initialization of the simulator.
                 This function can only be called before the simulation has started.
@@ -180,7 +183,7 @@ namespace hal
             .def("generate_vcd", &NetlistSimulator::generate_vcd, py::arg("path"), py::arg("start_time"), py::arg("end_time"), py::arg("nets") = std::set<u32>(), R"(
                 Generates the a VCD file for parts the simulated netlist.
 
-                :param hal_py.hal_path path: The path to the VCD file.
+                :param pathlib.Path path: The path to the VCD file.
                 :param int start_time: Start of the timeframe to write to the file (in picoseconds).
                 :param int end_time: End of the timeframe to write to the file (in picoseconds).
                 :param set[hal_py.Net] nets: Nets to include in the VCD file.

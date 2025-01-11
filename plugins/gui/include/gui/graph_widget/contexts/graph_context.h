@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,11 +28,12 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_def.h"
+#include "gui/basic_tree_model/base_tree_item.h"
 
-#include <QObject>
-#include <QSet>
 #include <QDateTime>
 #include <QJsonObject>
+#include <QObject>
+#include <QSet>
 
 namespace hal
 {
@@ -57,7 +58,6 @@ namespace hal
         Q_OBJECT
 
     public:
-
         /**
          * Constructor.
          *
@@ -127,21 +127,12 @@ namespace hal
         bool isModuleUnfolded(const u32 moduleId) const;
 
         /**
-         * Folds a given module with a given placement hint.
-         *
-         * @param moduleId - The module to fold.
-         * @param plc - The placement hint.
-         * @return True on success, False otherwise.
-         */
-        bool foldModuleAction(u32 moduleId, const PlacementHint& plc);
-
-        /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
          *
          * @param id - The id of the module to unfold
          */
-        void unfoldModule(const u32 id);
+        void unfoldModule(const u32 id, const PlacementHint& plc);
 
         /**
          * Check if the context is empty i.e. does not contain Module%s or Gate%s.
@@ -179,11 +170,9 @@ namespace hal
          * @param minus_gates - The ids of the Gate%s that are removed for comparison
          * @param plus_modules - The ids of the Module%s that are added for comparison
          * @param plus_gates - The ids of the Gate%s that are added for comparison
-         * @param exclusively - If false, return true if context contents contain module contents,
-         *                      If true, return true if context contents match module contents
          * @returns <b>true</b> if the context Show%s the content of the module.
          */
-        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively = true) const;
+        bool isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const;
 
         /**
          * Checks wether the context shows an module exclusively or not.
@@ -236,12 +225,19 @@ namespace hal
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
+         * Checks whether there is only the folded top_module in the context
+         * which makes other time consumptive tests unnecessary
+         * @return <b>true</b> If here is only the folded top_module in the context
+         */
+        bool isShowingFoldedTopModule() const;
+
+        /**
          * Given a net, this function returns the first visible source node.
          *
          * @param n - Pointer to net
          * @returns <b>true</b> The first visibible source node, might be Node::None
          */
-        Node getNetSource(const Net *n) const;
+        Node getNetSource(const Net* n) const;
 
         /**
          * Given a net, this function returns the first visible destination node.
@@ -249,7 +245,7 @@ namespace hal
          * @param n - Pointer to net
          * @returns <b>true</b> The first visibible destination node, might be Node::None
          */
-        Node getNetDestination(const Net *n) const;
+        Node getNetDestination(const Net* n) const;
 
         /**
          * Get the ids of the Module%s of the context.
@@ -320,13 +316,16 @@ namespace hal
          *
          * @returns the used GraphLayouter
          */
-        GraphLayouter* getLayouter() const { return mLayouter; }
+        GraphLayouter* getLayouter() const
+        {
+            return mLayouter;
+        }
 
         /**
 		 * Move node to antother grid location
 		 */
         void moveNodeAction(const QPoint& from, const QPoint& to);
-		
+
         /**
          * Returns whether the scene is in an updating process (i.e. layouter process) or not.
          *
@@ -362,9 +361,10 @@ namespace hal
         /**
          * Writes the context (its modules, gates, nets) to a given json object.
          *
-         * @param json - The object to write to.
+         * @param json - The object to write to
+         * @param int - ParentId of the graphContext.
          */
-        void writeToFile(QJsonObject& json);
+        void writeToFile(QJsonObject& json, int parentId);
 
         /**
          * Reads a context from a given json object.
@@ -386,7 +386,10 @@ namespace hal
          *
          * @return The dirty state.
          */
-        bool isDirty() const { return mDirty; }
+        bool isDirty() const
+        {
+            return mDirty;
+        }
 
         /**
          * Set the special update state.
@@ -398,20 +401,29 @@ namespace hal
          *
          * @return The special update state.
          */
-        bool getSpecialUpdate() const { return mSpecialUpdate; }
+        bool getSpecialUpdate() const
+        {
+            return mSpecialUpdate;
+        }
 
         /**
          * Set pointer to parent graph widget
          * @param[in] gw parent of class GraphWidget
          */
-        void setParentWidget(GraphWidget* gw) { mParentWidget = gw; }
+        void setParentWidget(GraphWidget* gw)
+        {
+            mParentWidget = gw;
+        }
 
         /**
          * Get the exclusive module id.
          *
          * @return The exclusive module id.
          */
-        u32 getExclusiveModuleId() { return mExclusiveModuleId; }
+        u32 getExclusiveModuleId() const
+        {
+            return mExclusiveModuleId;
+        }
 
         /**
          * Sets the exclusive module id.
@@ -424,9 +436,25 @@ namespace hal
         void exclusiveModuleCheck();
 
         /**
+         * Open overlay and show nodes
+         * @param nd The node for which comments should be shown
+         */
+        void showComments(const Node& nd);
+
+        /**
          * Update set of nets so that all connections to gates or modules within view are shown
          */
         void updateNets();
+
+        /**
+         * Make sure these nodes gets removed from context
+         */
+        void setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats);
+
+        /**
+         * Check whether node is scheduled for removal
+         */
+        bool isScheduledRemove(const Node& nd);
 
     Q_SIGNALS:
         void dataChanged();
@@ -449,7 +477,6 @@ namespace hal
         void startSceneUpdate();
         bool testIfAffectedInternal(const u32 id, const u32* moduleId, const u32* gateId);
         void removeModuleContents(const u32 moduleId);
-
 
         u32 mId;
         QString mName;
@@ -482,6 +509,9 @@ namespace hal
 
         bool mSpecialUpdate;
 
+        QSet<u32> mScheduleRemoveModules;
+        QSet<u32> mScheduleRemoveGates;
+
         u32 mExclusiveModuleId;
     };
-}
+}    // namespace hal

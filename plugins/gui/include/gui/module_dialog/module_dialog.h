@@ -69,7 +69,7 @@ namespace hal {
          * @param receiver - The receiver for graphical picker, picker will be hidden if nullptr
          * @param parent - The dialog's parent.
          */
-        ModuleDialog(const QSet<u32>& excludeIds = {}, const QString& title=QString("Select module"),
+        ModuleDialog(const QSet<u32>& excludeIds = {}, const QString& title=QString("Select module"), bool omitCreateNew=false,
                      ModuleSelectReceiver* receiver=nullptr, QWidget* parent=nullptr);
 
         /**
@@ -123,13 +123,6 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
-        /**
-         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
-         *
-         * @param text - Contains the regular expression filter as a string
-         */
-        void filter(const QString& text);
-
     private:
         u32 mSelectedId;
         QSet<u32> mExcludeIds;
@@ -140,9 +133,6 @@ namespace hal {
         QTabWidget* mTabWidget;
 
         ModuleProxyModel* mModuleTreeProxyModel;
-        ModuleSelectProxy* mModuleTableProxyModel;
-        ModuleSelectModel* mModuleSelectModel;
-
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
         ModuleSelectExclude mSelectExclude;

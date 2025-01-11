@@ -11,22 +11,32 @@
 #include <QDebug>
 
 namespace hal {
+    PythonMutex::PythonMutex()
+    {
+        mState = PyGILState_Ensure();
+    }
+
+    PythonMutex::~PythonMutex()
+    {
+        PyGILState_Release((PyGILState_STATE)mState);
+    }
+
     PythonThread::PythonThread(const QString& script, bool singleStatement, QObject* parent)
         : QThread(parent), mScript(script), mSingleStatement(singleStatement),
           mAbortRequested(false), mSpamCount(0)
     {
-//        qDebug() << "+++PythonThread" << hex << (quintptr) this;
+      //    qDebug() << "+++PythonThread" << hex << (quintptr) this;
     }
 
     PythonThread::~PythonThread()
     {
-//        qDebug() << "---PythonThread" << hex << (quintptr) this;
+      //    qDebug() << "---PythonThread" << hex << (quintptr) this;
     }
 
     void PythonThread::run()
     {
         // decides it's our turn.
-        PyGILState_STATE state = PyGILState_Ensure();
+        PythonMutex pmutex;
         py::dict tmp_context(py::globals());
         PythonContext::initializeScript(&tmp_context);
 
@@ -60,7 +70,7 @@ namespace hal {
             mErrorMessage = QString::fromStdString(std::string(e.what()) + "#\n");
         }
 
-        PyGILState_Release(state);
+       // running out of scope calls PyGILState_Release(state);
     }
 
     void PythonThread::handleStdout(const QString& output)
@@ -114,7 +124,7 @@ namespace hal {
             mInputMutex.unlock();
         }
         qDebug() << "about to terminate thread..." << mPythonThreadID;
-        PyGILState_STATE state = PyGILState_Ensure();
+        PythonMutex pmutex;
         // We interrupt the thread by forcibly injecting an exception
         // (namely the KeyboardInterrupt exception, but any other one works as well)
         int nThreads = PyThreadState_SetAsyncExc(mPythonThreadID, PyExc_KeyboardInterrupt);
@@ -127,8 +137,8 @@ namespace hal {
             // apparently this can actually happen if you mess up the C<->Python bindings
             qDebug() << "Oh no! There seem to be multiple threads with the same ID!";
         }
-        PyGILState_Release(state);
         qDebug() << "thread terminated";
+        // running out of scope calls PyGILState_Release(state);
     }
 
     bool PythonThread::getInput(InputType type, QString prompt, QVariant defaultValue)
@@ -138,7 +148,8 @@ namespace hal {
             qDebug() << "Oh no! Function already locked waiting for input.";
             return false;
         }
-        Q_EMIT requireInput(type,prompt,defaultValue);
+        if (type != WaitForMenuSelection)
+            Q_EMIT requireInput(type,prompt,defaultValue);
         mInputMutex.lock(); // wait for set Input
         mInputMutex.unlock();
         if (mAbortRequested)
@@ -189,5 +200,12 @@ namespace hal {
     {
         mInput = inp;
         mInputMutex.unlock();
+    }
+
+    void PythonThread::unlock()
+    {
+       // unlocking if not locked might cause undefined behavior
+       mInputMutex.tryLock();
+       mInputMutex.unlock();
     }
 }

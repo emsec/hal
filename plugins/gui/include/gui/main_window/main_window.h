@@ -25,13 +25,12 @@
 
 #pragma once
 
-#include "hal_core/utilities/program_options.h"
-
-#include "gui/content_layout_area/content_layout_area.h"
-#include "hal_core/utilities/program_options.h"
 #include "gui/action/action.h"
+#include "gui/content_layout_area/content_layout_area.h"
 #include "gui/settings/main_settings_widget.h"
 #include "gui/splitter/splitter.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/utilities/program_options.h"
 
 #include <QLayout>
 #include <QMenuBar>
@@ -39,16 +38,19 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
+#include <gui/gatelibrary_management/gatelibrary_manager.h>
 
 namespace hal
 {
     class plugin_manager_dialog;
     class PythonEditor;
     class FileManager;
+    class FileActions;
     class ContentManager;
     class WelcomeScreen;
     class SettingsItemKeybind;
     class SettingsItemDropdown;
+    class GuiPluginManager;
 
     /**
      * @ingroup gui
@@ -65,19 +67,19 @@ namespace hal
         Q_PROPERTY(QString halIconPath READ halIconPath WRITE setHalIconPath)
         Q_PROPERTY(QString halIconStyle READ halIconStyle WRITE setHalIconStyle)
 
-        Q_PROPERTY(QString newFileIconPath READ newFileIconPath WRITE setNewFileIconPath)
-        Q_PROPERTY(QString newFileIconStyle READ newFileIconStyle WRITE setNewFileIconStyle)
-        Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
-        Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
-        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
-        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
-        Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
-        Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
+        Q_PROPERTY(QString openFileIconPath READ openFileIconPath WRITE setOpenFileIconPath)
+        Q_PROPERTY(QString openFileIconStyle READ openFileIconStyle WRITE setOpenFileIconStyle)
+        Q_PROPERTY(QString quitIconPath READ quitIconPath WRITE setQuitIconPath)
+        Q_PROPERTY(QString quitIconStyle READ quitIconStyle WRITE setQuitIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
+        Q_PROPERTY(QString pluginsIconPath READ pluginsIconPath WRITE setPluginsIconPath)
+        Q_PROPERTY(QString pluginsIconStyle READ pluginsIconStyle WRITE setPluginsIconStyle)
         Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
         Q_PROPERTY(QString undoIconStyle READ undoIconStyle WRITE setUndoIconStyle)
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString neGateIconPath READ neGateIconPath WRITE setNeGateIconPath)
+        Q_PROPERTY(QString neGateIconStyle READ neGateIconStyle WRITE setNeGateIconStyle)
 
     public:
         enum StyleSheetOption {Dark, Light};
@@ -112,56 +114,30 @@ namespace hal
         QString halIconStyle() const;
 
         /**
-         * Q_PROPERTY READ function for the 'New File'-icon path.
-         *
-         * @returns the 'New File'-icon path
-         */
-        QString newFileIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'New File'-icon style.
-         *
-         * @returns the 'New File'-icon style
-         */
-        QString newFileIconStyle() const;
-
-        /**
          * Q_PROPERTY READ function for the 'Open File'-icon path.
          *
          * @returns the 'Open File'-icon path
          */
-        QString openIconPath() const;
+        QString openFileIconPath() const;
         /**
         * Q_PROPERTY READ function for the 'Open File'-icon style.
          *
         * @returns the 'Open File'-icon style
         */
-        QString openIconStyle() const;
+        QString openFileIconStyle() const;
 
         /**
-         * Q_PROPERTY READ function for the 'Save File'-icon path.
+         * Q_PROPERTY READ function for the 'Quit HAL session'-icon path.
          *
-         * @returns the 'SaveFile'-icon path
+         * @returns the 'Quit HAL session'-icon path
          */
-        QString saveIconPath() const;
+        QString quitIconPath() const;
         /**
-         * Q_PROPERTY READ function for the 'Save File'-icon style.
+         * Q_PROPERTY READ function for the 'Quit HAL session'-icon style.
          *
-         * @returns the 'Save File'-icon style
+         * @returns the 'Quit HAL session'-icon style
          */
-        QString saveIconStyle() const;
-
-        /**
-         * Q_PROPERTY READ function for the 'SaveAs File'-icon path.
-         *
-         * @returns the 'SaveAsFile'-icon path
-         */
-        QString saveAsIconPath() const;
-        /**
-         * Q_PROPERTY READ function for the 'SaveAs File'-icon style.
-         *
-         * @returns the 'SaveAs File'-icon style
-         */
-        QString saveAsIconStyle() const;
+        QString quitIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Settings'-icon path.
@@ -176,9 +152,24 @@ namespace hal
          */
         QString settingsIconStyle() const;
 
+        /**
+         * Q_PROPERTY READ function for the 'plugins'-icon path.
+         *
+         * @returns the 'plugins'-icon path
+         */
+        QString pluginsIconPath() const;
+        /**
+         * Q_PROPERTY READ function for the 'plugins'-icon style.
+         *
+         * @returns the 'plugins'-icon style
+         */
+        QString pluginsIconStyle() const;
+
         QString undoIconPath() const;
         QString undoIconStyle() const;
         QString disabledIconStyle() const;
+        QString neGateIconPath() const;
+        QString neGateIconStyle() const;
 
         /**
          * Q_PROPERTY WRITE function for the hal icon path.
@@ -194,56 +185,30 @@ namespace hal
         void setHalIconStyle(const QString &style);
 
         /**
-         * Q_PROPERTY WRITE function for the 'New File'-icon path.
+         * Q_PROPERTY WRITE function for the 'Open File'-icon path.
          *
          * @param path - The new path
          */
-        void setNewFileIconPath(const QString& path);
+        void setOpenFileIconPath(const QString& path);
         /**
-         * Q_PROPERTY WRITE function for the 'New File'-icon style.
+         * Q_PROPERTY WRITE function for the 'Open File'-icon style.
          *
          * @param style - The new style
          */
-        void setNewFileIconStyle(const QString &style);
+        void setOpenFileIconStyle(const QString& style);
 
         /**
-        * Q_PROPERTY WRITE function for the 'Open File'-icon path.
-         *
-         * @param path - The new path
-        */
-        void setOpenIconPath(const QString& path);
-        /**
-        * Q_PROPERTY WRITE function for the 'Open File'-icon style.
-         *
-         * @param style - The new style
-        */
-        void setOpenIconStyle(const QString& style);
-
-        /**
-         * Q_PROPERTY WRITE function for the 'Save File'-icon path.
+         * Q_PROPERTY WRITE function for the 'Quit HAL session'-icon path.
          *
          * @param path - The new path
          */
-        void setSaveIconPath(const QString& path);
+        void setQuitIconPath(const QString& path);
         /**
-         * Q_PROPERTY WRITE function for the 'Save File'-icon style.
+         * Q_PROPERTY WRITE function for the 'Quit HAL session'-icon style.
          *
          * @param style - The new style
          */
-        void setSaveIconStyle(const QString& style);
-
-        /**
-         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon path.
-         *
-         * @param path - The new path
-         */
-        void setSaveAsIconPath(const QString& path);
-        /**
-         * Q_PROPERTY WRITE function for the 'SaveAs File'-icon style.
-         *
-         * @param style - The new style
-         */
-        void setSaveAsIconStyle(const QString& style);
+        void setQuitIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon path.
@@ -297,9 +262,24 @@ namespace hal
          */
         void setSettingsIconStyle(const QString& style);
 
+        /**
+         * Q_PROPERTY WRITE function for the 'Plugins'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setPluginsIconPath(const QString& path);
+        /**
+         * Q_PROPERTY WRITE function for the 'Plugins'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setPluginsIconStyle(const QString& style);
+
         void setUndoIconPath(const QString& path);
         void setUndoIconStyle(const QString& style);
         void setDisabledIconStyle(const QString &style);
+        void setNeGateIconPath(const QString &path);
+        void setNeGateIconStyle(const QString &style);
 
         /**
          * Add a content widget to the layout area.
@@ -336,12 +316,27 @@ namespace hal
         /**
          * Q_SLOT to open (toggle to the) settings menu.
          */
-        void toggleSettings();
+        void openSettings();
 
         /**
          * Q_SLOT to close the settings menu.
          */
         void closeSettings();
+
+        /**
+         * Q_SLOT to close the Gatelibrary menu.
+         */
+        void closeGateLibraryManager();
+
+        /**
+         * Q_SLOT to open (toggle to the) PluginManager menu.
+         */
+        void openPluginManager();
+
+        /**
+         * Q_SLOT to close the PluginManager menu.
+         */
+        void closePluginManager();
 
         /**
          * Q_SLOT to create a new empty netlist. Asks the user for the gate_library.
@@ -352,7 +347,7 @@ namespace hal
         /**
          * Q_SLOT to import a netlist. Asks the user for the .hal/.vhdl/.v file to open.
          */
-        void handleActionImport();
+        void handleActionImportNetlist();
 
         /**
          * Q_SLOT to open a hal project located in project directory.
@@ -439,7 +434,9 @@ namespace hal
          */
         void handleEventLogEnabled(bool enable);
 
-        void setPluginParameter();
+        void handleExportProjectTriggered();
+
+        void handleImportProjectTriggered();
 
     private:
         /**
@@ -472,66 +469,64 @@ namespace hal
          */
         void saveState();
 
-        void pluginMenu();
-
         QVBoxLayout* mLayout;
         QMenuBar* mMenuBar;
         QStackedWidget* mStackedWidget;
 
         MainSettingsWidget* mSettings;
+        GuiPluginManager* mPluginManager;
         WelcomeScreen* mWelcomeScreen;
+        GateLibraryManager* mGateLibraryManager;
         QHBoxLayout* mToolBarLayout;
         QToolBar* mLeftToolBar;
         QToolBar* mRightToolBar;
         ContentLayoutArea* mLayoutArea;
 
-        Action* mActionNew;
-        Action* mActionOpenProject;
-        Action* mActionImport;
-        Action* mActionSave;
-        Action* mActionSaveAs;
+        FileActions* mFileActions;
+        Action* mActionImportNetlist;
         Action* mActionGateLibraryManager;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;
         Action* mActionPlayMacro;
         Action* mActionUndo;
+        Action* mActionExportProject;
+        Action* mActionImportProject;
 
         Action* mActionSettings;
-        Action* mActionClose;
+        Action* mActionPluginManager;
+        Action* mActionQuit;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
-        QMenu* mMenuPlugin;
+        QMenu* mMenuUtilities;
+        QMenu* mMenuPlugins;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;
         QString mHalIconPath;
 
-        QString mNewFileIconStyle;
-        QString mNewFileIconPath;
+        QString mOpenFileIconPath;
+        QString mOpenFileIconStyle;
 
-        QString mOpenIconPath;
-        QString mOpenIconStyle;
-
-        QString mSaveIconPath;
-        QString mSaveIconStyle;
-
-        QString mSaveAsIconPath;
-        QString mSaveAsIconStyle;
+        QString mQuitIconPath;
+        QString mQuitIconStyle;
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
 		
+        QString mPluginsIconPath;
+        QString mPluginsIconStyle;
+
    		QString mUndoIconPath;
         QString mUndoIconStyle;
 
-       QString mDisabledIconStyle;
- 
-        SettingsItemKeybind* mSettingCreateFile;
-        SettingsItemKeybind* mSettingOpenFile;
-        SettingsItemKeybind* mSettingSaveFile;
+        QString mDisabledIconStyle;
+
+        QString mNeGateIconPath;
+        QString mNeGateIconStyle;
+
         SettingsItemKeybind* mSettingUndoLast;
 
     };

@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/netlist/project_serializer.h"
 #include <QDir>
 
@@ -53,9 +54,32 @@ namespace hal
         std::vector<std::unique_ptr<NetlistSimulatorController>> restore();
     };
 
+    class NetlistSimulatorControllerPlugin;
+
+    class GuiExtensionSimulator : public GuiExtensionInterface
+    {
+        NetlistSimulatorControllerPlugin* mParent;
+    public:
+        GuiExtensionSimulator(NetlistSimulatorControllerPlugin* p) { mParent = p; }
+
+        /**
+         * Get list of configurable parameter
+         *
+         * @returns  list of parameter
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * Set configurable parameter to values
+         * @param params The parameter with values
+         */
+        void set_parameter(const std::vector<PluginParameter>& params) override;
+    };
+
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
         static u32 sMaxControllerId;
+        GuiExtensionSimulator* mGuiExtensions = nullptr;
     public:
         /**
          * Get the name of the plugin.
@@ -70,6 +94,13 @@ namespace hal
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
+
+        /**
+         * Get short description for plugin.
+         *
+         * @return The short description for the plugin.
+         */
+        std::string get_description() const override;
 
         /**
          * Delete all bindings upon unload
@@ -105,19 +136,6 @@ namespace hal
          */
         std::shared_ptr<NetlistSimulatorController> simulator_controller_by_id(u32 id) const;
 
-
-        /**
-         * Get list of configurable parameter
-         *
-         * @returns  list of parameter
-         */
-        std::vector<PluginParameter> get_parameter() const override;
-
-        /**
-         * Set configurable parameter to values
-         * @param params The parameter with values
-         */
-        void set_parameter(Netlist *nl, const std::vector<PluginParameter>& params) override;
 
         /**
          * Pointer to simulation controller settings. Use sync() to persist settings.

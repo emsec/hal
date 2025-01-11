@@ -7,6 +7,7 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
+#include "gui/graph_widget/drag_controller.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -33,12 +34,6 @@ namespace hal
     bool GraphicsScene::sGridClustersEnabled = true;
     GraphicsScene::GridType GraphicsScene::sGridType = GraphicsScene::GridType::Dots;
 
-    QColor GraphicsScene::sGridBaseLineColor = QColor(30, 30, 30);
-    QColor GraphicsScene::sGridClusterLineColor = QColor(15, 15, 15);
-
-    QColor GraphicsScene::sGridBaseDotColor = QColor(25, 25, 25);
-    QColor GraphicsScene::sGridClusterDotColor = QColor(170, 160, 125);
-
     void GraphicsScene::setLod(const qreal& lod)
     {
         sLod = lod;
@@ -47,21 +42,13 @@ namespace hal
         {
             const qreal alpha = (lod - sGridFadeStart) / (sGridFadeEnd - sGridFadeStart);
 
-            sGridBaseLineColor.setAlphaF(alpha);
-            sGridClusterLineColor.setAlphaF(alpha);
-
-            sGridBaseDotColor.setAlphaF(alpha);
-            sGridClusterDotColor.setAlphaF(alpha);
+            GraphicsQssAdapter::instance()->setGridAlphaF(alpha);
         }
         else
         {
             const int alpha = 255;
 
-            sGridBaseLineColor.setAlpha(alpha);
-            sGridClusterLineColor.setAlpha(alpha);
-
-            sGridBaseDotColor.setAlpha(alpha);
-            sGridClusterDotColor.setAlpha(alpha);
+            GraphicsQssAdapter::instance()->setGridAlpha(alpha);
         }
     }
 
@@ -80,26 +67,6 @@ namespace hal
         sGridType = gridType;
     }
 
-    void GraphicsScene::setGridBaseLineColor(const QColor& color)
-    {
-        sGridBaseLineColor = color;
-    }
-
-    void GraphicsScene::setGridClusterLineColor(const QColor& color)
-    {
-        sGridClusterLineColor = color;
-    }
-
-    void GraphicsScene::setGridBaseDotColor(const QColor& color)
-    {
-        sGridBaseDotColor = color;
-    }
-
-    void GraphicsScene::setGridClusterDotColor(const QColor& color)
-    {
-        sGridClusterDotColor = color;
-    }
-
     QPointF GraphicsScene::snapToGrid(const QPointF& pos)
     {
         int adjusted_x = qRound(pos.x() / graph_widget_constants::sGridSize) * graph_widget_constants::sGridSize;
@@ -108,22 +75,24 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false)
+        mDebugGridEnable(false),
+        mDragController(nullptr),
+        mSelectionStatus(NotPressed)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
 
-
         gSelectionRelay->registerSender(this, "GraphView");
         connectAll();
 
-        QGraphicsScene::addItem(mDragShadowGate);
         connect(gGraphContextManager->sSettingNetGroupingToPins,&SettingsItem::valueChanged,this,&GraphicsScene::updateAllItems);
     }
 
     GraphicsScene::~GraphicsScene()
     {
         disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        if (mDragController) mDragController->clearShadows(this);
+
         for (QGraphicsItem* gi : items())
         {
             removeItem(gi);
@@ -131,26 +100,9 @@ namespace hal
         }
     }
 
-    void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
+    void GraphicsScene::setDragController(DragController* dc)
     {
-        mDragShadowGate->setVisualCue(cue);
-        mDragShadowGate->start(posF, sizeF);
-    }
-
-    void GraphicsScene::moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
-    {
-        mDragShadowGate->setPos(posF);
-        mDragShadowGate->setVisualCue(cue);
-    }
-
-    void GraphicsScene::stopDragShadow()
-    {
-        mDragShadowGate->stop();
-    }
-
-    QPointF GraphicsScene::dropTarget()
-    {
-        return mDragShadowGate->pos();
+        mDragController = dc;
     }
 
     void GraphicsScene::addGraphItem(GraphicsItem* item)
@@ -363,21 +315,17 @@ namespace hal
 
     void GraphicsScene::deleteAllItems()
     {
-        // this breaks the mDragShadowGate
-        // clear();
-        // so we do this instead
-        // TODO check performance hit
+        if (mDragController) mDragController->clearShadows(this);
+
         for (auto item : items())
         {
-            if (item != mDragShadowGate)
-            {
-                removeItem(item);
-            }
+            removeItem(item);
         }
 
         mModuleItems.clear();
         mGateItems.clear();
         mNetItems.clear();
+        GraphicsQssAdapter::instance()->repolish();
     }
 
     void GraphicsScene::updateVisuals(const GraphShader::Shading &s)
@@ -404,8 +352,43 @@ namespace hal
             gn->setZValue(-1);
     }
 
+    void GraphicsScene::setMousePressed(bool isPressed)
+    {
+        if (isPressed)
+        {
+            // internal selection changed event might fire before mouse pressed event
+            if (mSelectionStatus != SelectionChanged)
+                mSelectionStatus = BeginPressed;
+        }
+        else
+        {
+            // released ...
+            if (mSelectionStatus == SelectionChanged)
+            {
+                mSelectionStatus = EndPressed;
+                handleInternSelectionChanged();
+            }
+            mSelectionStatus = NotPressed;
+        }
+    }
+
+
     void GraphicsScene::handleInternSelectionChanged()
     {
+        switch (mSelectionStatus)
+        {
+        case SelectionChanged:
+            return;
+        case BeginPressed:
+            mSelectionStatus = SelectionChanged;
+            gSelectionRelay->clear();
+            gSelectionRelay->relaySelectionChanged(this);
+            return;
+        default:
+            // no mouse pressed (single click) or mouse released
+            break;
+        }
+
         gSelectionRelay->clear();
 
         QSet<u32> mods;
@@ -509,20 +492,20 @@ namespace hal
             gn->update();
     }
 
-    void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
+    void GraphicsScene::handleHighlight(const QVector<const ModuleItem*>& highlightItems)
     {
-        QSet<u32> highlightSet[SelectionTreeItem::MaxItem];
-        for (const SelectionTreeItem* sti : highlightItems)
+        QSet<u32> highlightSet[3];
+        for (const ModuleItem* sti : highlightItems)
         {
-            if (sti) highlightSet[sti->itemType()].insert(sti->id());
+            if (sti) highlightSet[(int)sti->getType()].insert(sti->id());
         }
 
         for (GraphicsModule* gm :  mModuleItems)
-            gm->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(gm->id()));
+            gm->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Module].contains(gm->id()));
         for (GraphicsGate* gg :  mGateItems)
-            gg->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gg->id()));
+            gg->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Gate].contains(gg->id()));
         for (GraphicsNet* gn :  mNetItems)
-            gn->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(gn->id()));
+            gn->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Net].contains(gn->id()));
     }
 
     void GraphicsScene::handleExternSelectionChanged(void* sender)
@@ -646,14 +629,14 @@ namespace hal
                     cluster_lines.append(line);
             }
 
-            pen.setColor(sGridBaseLineColor);
+            pen.setColor(GraphicsQssAdapter::instance()->gridBaseLineColor());
             painter->setPen(pen);
 
             painter->drawLines(base_lines.data(), base_lines.size());
 
             if (sGridClustersEnabled)
             {
-                pen.setColor(sGridClusterLineColor);
+                pen.setColor(GraphicsQssAdapter::instance()->gridClusterLineColor());
                 painter->setPen(pen);
             }
 
@@ -675,14 +658,14 @@ namespace hal
                         cluster_points.append(QPoint(x,y));
                 }
 
-            pen.setColor(sGridBaseDotColor);
+            pen.setColor(GraphicsQssAdapter::instance()->gridBaseDotColor());
             painter->setPen(pen);
 
             painter->drawPoints(base_points.data(), base_points.size());
 
             if (sGridClustersEnabled)
             {
-                pen.setColor(sGridClusterDotColor);
+                pen.setColor(GraphicsQssAdapter::instance()->gridClusterDotColor());
                 painter->setPen(pen);
             }
 
@@ -710,6 +693,7 @@ namespace hal
 
     void GraphicsScene::debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
     {
+        if (mDebugXLines.isEmpty() || mDebugYLines.isEmpty()) return;
         painter->setPen(QPen(Qt::magenta));
 
         for (qreal x : mDebugXLines)

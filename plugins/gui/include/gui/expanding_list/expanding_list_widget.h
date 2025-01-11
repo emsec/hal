@@ -127,6 +127,11 @@ namespace hal
          */
         bool hasGroup(const QString& groupName) const;
 
+        /**
+         * Clear selected button pointer
+         */
+        void clearSelected();
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a new button is selected.

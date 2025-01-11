@@ -25,21 +25,21 @@
 
 #pragma once
 
-#include "gui/size_adjustable_tree_view/size_adjustable_tree_view.h"
 #include "gui/gui_globals.h"
 #include "hal_core/defines.h"
+#include <QTreeView>
 
 namespace hal
 {
     class GatePinsTreeModel;
     class Gate;
-    class TreeItem;
+    class PinTreeItem;
     class GraphNavigationWidget;
 
     /**
      * @brief A widget to display the pins of a given gate.
      */
-    class GatePinTree : public SizeAdjustableTreeView
+    class GatePinTree : public QTreeView
     {
         Q_OBJECT
     public:
@@ -98,8 +98,8 @@ namespace hal
         bool mClearSelection;
 
         //helper functions
-        void buildPythonMenuForPin(QMenu &menu, TreeItem* clickedPinItem);
-        void buildPythonMenuForPinGroup(QMenu &menu, TreeItem* clickedPinIGrouptem);
+        void buildPythonMenuForPin(QMenu &menu, PinTreeItem* clickedPinItem);
+        void buildPythonMenuForPinGroup(QMenu &menu, PinTreeItem* clickedPinIGrouptem);
         void addSourceOurDestinationToSelection(int netId, bool isInputPin);
         void handleNavigationCloseRequested();
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);

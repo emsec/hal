@@ -1,10 +1,12 @@
 #include "dataflow_analysis/processing/pass_collection.h"
 
+#include "dataflow_analysis/processing/configuration.h"
 #include "dataflow_analysis/processing/passes/group_by_control_signals.h"
 #include "dataflow_analysis/processing/passes/group_by_input_output_size.h"
+#include "dataflow_analysis/processing/passes/group_by_successor_predecessor_known_groups.h"
 #include "dataflow_analysis/processing/passes/group_by_successors_predecessors.h"
 #include "dataflow_analysis/processing/passes/group_by_successors_predecessors_iteratively.h"
-#include "dataflow_analysis/processing/passes/merge_successor_predecessor_groupings.h"
+#include "dataflow_analysis/processing/passes/split_by_successor_predecessor_known_groups.h"
 #include "dataflow_analysis/processing/passes/split_by_successors_predecessors.h"
 
 #include <algorithm>
@@ -30,7 +32,7 @@ namespace hal
                     std::vector<PassConfiguration> m_all_passes;
                     std::vector<PassConfiguration> m_intermediate_passes;
                     std::unordered_map<pass_id, std::unordered_set<pass_id>> m_useless_follow_ups;
-                    bool m_initialized;
+                    bool m_initialized = false;
 
                     PassConfiguration group_by_ctrl_sigs;
 
@@ -40,47 +42,65 @@ namespace hal
                     PassConfiguration group_by_successors;
                     PassConfiguration group_by_predecessors;
 
+                    PassConfiguration group_by_successor_known_groups;
+                    PassConfiguration group_by_predecessor_known_groups;
+
                     PassConfiguration group_by_successors_iteratively;
                     PassConfiguration group_by_predecessors_iteratively;
 
                     PassConfiguration split_by_successors;
                     PassConfiguration split_by_predecessors;
 
-                    void initialize()
+                    PassConfiguration split_by_successor_known_groups;
+                    PassConfiguration split_by_predecessor_known_groups;
+
+                    void initialize(const Configuration& config)
                     {
                         using namespace std::placeholders;
 
                         // start passes
 
-                        group_by_ctrl_sigs = m_all_passes.emplace_back(std::bind(&group_by_control_signals::process, _1, true, true, true, true));
+                        group_by_ctrl_sigs = m_all_passes.emplace_back(std::bind(&group_by_control_signals::process, config, _1));
 
-                        group_by_output_size = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, _1, false));
-                        group_by_input_size  = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, _1, true));
+                        group_by_output_size = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, config, _1, false));
+                        group_by_input_size  = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, config, _1, true));
 
-                        group_by_successors   = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors::process, _1, true));
-                        group_by_predecessors = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors::process, _1, false));
+                        group_by_successors   = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors::process, config, _1, true));
+                        group_by_predecessors = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors::process, config, _1, false));
 
-                        group_by_successors_iteratively   = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors_iteratively::process, _1, true));
-                        group_by_predecessors_iteratively = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors_iteratively::process, _1, false));
+                        group_by_successors_iteratively   = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors_iteratively::process, config, _1, true));
+                        group_by_predecessors_iteratively = m_all_passes.emplace_back(std::bind(&group_by_successors_predecessors_iteratively::process, config, _1, false));
 
-                        split_by_successors   = m_all_passes.emplace_back(std::bind(&split_by_successors_predecessors::process, _1, true));
-                        split_by_predecessors = m_all_passes.emplace_back(std::bind(&split_by_successors_predecessors::process, _1, false));
+                        split_by_successors   = m_all_passes.emplace_back(std::bind(&split_by_successors_predecessors::process, config, _1, true));
+                        split_by_predecessors = m_all_passes.emplace_back(std::bind(&split_by_successors_predecessors::process, config, _1, false));
+
+                        if (config.has_known_groups)
+                        {
+                            group_by_successor_known_groups   = m_all_passes.emplace_back(std::bind(&group_by_successor_predecessor_known_groups::process, config, _1, true));
+                            group_by_predecessor_known_groups = m_all_passes.emplace_back(std::bind(&group_by_successor_predecessor_known_groups::process, config, _1, false));
+                            split_by_successor_known_groups   = m_all_passes.emplace_back(std::bind(&split_by_successor_predecessor_known_groups::process, config, _1, true));
+                            split_by_predecessor_known_groups = m_all_passes.emplace_back(std::bind(&split_by_successor_predecessor_known_groups::process, config, _1, false));
+                        }
 
                         m_useless_follow_ups[group_by_successors.id].insert(split_by_successors.id);
                         m_useless_follow_ups[group_by_predecessors.id].insert(split_by_predecessors.id);
                         m_useless_follow_ups[group_by_successors_iteratively.id].insert(group_by_successors.id);
                         m_useless_follow_ups[group_by_predecessors_iteratively.id].insert(group_by_predecessors.id);
+                        m_useless_follow_ups[group_by_successor_known_groups.id].insert(split_by_successor_known_groups.id);
+                        m_useless_follow_ups[group_by_predecessor_known_groups.id].insert(split_by_predecessor_known_groups.id);
 
                         m_initialized = true;
                     }
 
                 }    // namespace
 
-                std::vector<PassConfiguration> get_passes(const std::vector<std::vector<pass_id>>& previous_passes)
+                std::vector<PassConfiguration> get_passes(const processing::Configuration& config, const std::vector<std::vector<pass_id>>& previous_passes)
                 {
                     if (!m_initialized)
                     {
-                        initialize();
+                        m_all_passes.clear();
+                        m_useless_follow_ups.clear();
+                        initialize(config);
                     }
                     std::vector<pass_id> last_pass_ids;
                     last_pass_ids.reserve(previous_passes.size());
@@ -111,7 +131,11 @@ namespace hal
                     return passes;
                 }
 
+                void clear()
+                {
+                    m_initialized = false;
+                }
             }    // namespace pass_collection
-        }        // namespace processing
-    }            // namespace dataflow
-}
+        }    // namespace processing
+    }    // namespace dataflow
+}    // namespace hal

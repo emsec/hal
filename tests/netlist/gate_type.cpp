@@ -466,7 +466,7 @@ namespace hal
             ASSERT_TRUE(a->get_pin_at_index(1).is_ok());
             EXPECT_EQ(a->get_pin_at_index(1).get(), a1);
             EXPECT_EQ(a->get_start_index(), 0);
-            EXPECT_EQ(a->is_ascending(), false);
+            EXPECT_EQ(a->is_ascending(), true);
             EXPECT_EQ(a0->get_group().first, a);
             EXPECT_EQ(a0->get_group().second, 0);
             EXPECT_EQ(a1->get_group().first, a);
@@ -489,13 +489,13 @@ namespace hal
             ASSERT_TRUE(b->get_pin_at_index(1).is_ok());
             EXPECT_EQ(b->get_pin_at_index(1).get(), b1);
             EXPECT_EQ(b->get_start_index(), 0);
-            EXPECT_EQ(b->is_ascending(), false);
+            EXPECT_EQ(b->is_ascending(), true);
             EXPECT_EQ(b0->get_group().first, b);
             EXPECT_EQ(b0->get_group().second, 0);
             EXPECT_EQ(b1->get_group().first, b);
             EXPECT_EQ(b1->get_group().second, 1);
 
-            auto c_res = gt->create_pin_group("C", {c0, c1}, PinDirection::input, PinType::none, true, 3);
+            auto c_res = gt->create_pin_group("C", {c0, c1}, PinDirection::input, PinType::none, false, 3);
             ASSERT_TRUE(c_res.is_ok());
             PinGroup<GatePin>* c = c_res.get();
             EXPECT_EQ(c->get_id(), 2);
@@ -506,17 +506,17 @@ namespace hal
             ASSERT_TRUE(c->get_index(c0).is_ok());
             EXPECT_EQ(c->get_index(c0).get(), 3);
             ASSERT_TRUE(c->get_index(c1).is_ok());
-            EXPECT_EQ(c->get_index(c1).get(), 4);
+            EXPECT_EQ(c->get_index(c1).get(), 2);
             ASSERT_TRUE(c->get_pin_at_index(3).is_ok());
             EXPECT_EQ(c->get_pin_at_index(3).get(), c0);
-            ASSERT_TRUE(c->get_pin_at_index(4).is_ok());
-            EXPECT_EQ(c->get_pin_at_index(4).get(), c1);
+            ASSERT_TRUE(c->get_pin_at_index(2).is_ok());
+            EXPECT_EQ(c->get_pin_at_index(2).get(), c1);
             EXPECT_EQ(c->get_start_index(), 3);
-            EXPECT_EQ(c->is_ascending(), true);
+            EXPECT_EQ(c->is_ascending(), false);
             EXPECT_EQ(c0->get_group().first, c);
             EXPECT_EQ(c0->get_group().second, 3);
             EXPECT_EQ(c1->get_group().first, c);
-            EXPECT_EQ(c1->get_group().second, 4);
+            EXPECT_EQ(c1->get_group().second, 2);
 
             EXPECT_EQ(gt->get_pin_groups(), std::vector<PinGroup<GatePin>*>({a, b, c}));
 

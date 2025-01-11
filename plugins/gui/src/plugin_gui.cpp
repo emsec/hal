@@ -8,12 +8,14 @@
 #include "gui/main_window/main_window.h"
 #include "gui/netlist_relay/netlist_relay.h"
 #include "gui/plugin_relay/plugin_relay.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_context.h"
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/user_action/user_action_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/style/style.h"
 #include "gui/graph_widget/layout_locker.h"
+#include "gui/comment_system/comment_manager.h"
 
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist.h"
@@ -39,6 +41,33 @@
 
 namespace hal
 {
+    void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+    {
+        QByteArray localMsg = msg.toLocal8Bit();
+        const char *file = context.file ? context.file : "";
+        const char *function = context.function ? context.function : "";
+        switch (type) {
+        case QtDebugMsg:
+            fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtInfoMsg:
+            fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtWarningMsg:
+            fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtCriticalMsg:
+            fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtFatalMsg:
+            fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        }
+
+        if (localMsg.startsWith("QFSFileEngine::open"))
+            fprintf(stderr, "***break***\n");
+    }
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<PluginGui>();
@@ -55,6 +84,7 @@ namespace hal
     FileStatusManager* gFileStatusManager         = nullptr;
     GraphContextManager* gGraphContextManager     = nullptr;
     GuiApi* gGuiApi                               = nullptr;
+    CommentManager* gCommentManager               = nullptr;
     PythonContext* gPythonContext                 = nullptr;
 
     static void handleProgramArguments(const ProgramArguments& args)
@@ -139,6 +169,9 @@ namespace hal
         int argc;
         const char** argv;
         args.get_original_arguments(&argc, &argv);
+
+        qInstallMessageHandler(myMessageOutput);
+
         QApplication a(argc, const_cast<char**>(argv));
         //FocusLogger focusLogger(&a);
 
@@ -245,6 +278,11 @@ namespace hal
         return std::string("2.0");
     }
 
+    std::string PluginGui::get_description() const
+    {
+        return std::string("GUI control for HAL app (can't be unloaded)");
+    }
+
     void PluginGui::initialize_logging()
     {
         const char* gui_info_channel[] = {"user", "gui", "python", "UserStudy", nullptr };
@@ -252,7 +290,7 @@ namespace hal
             LogManager::get_instance()->add_channel(gui_info_channel[i], {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
-    ProgramOptions PluginGui::get_cli_options() const
+    ProgramOptions CliExtensionsGui::get_cli_options() const
     {
         ProgramOptions mDescription;
 

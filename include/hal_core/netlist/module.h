@@ -30,6 +30,7 @@
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -147,12 +148,12 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
-         * Get all direct parent of this module.<br>
+         * Get all parents of this module.<br>
          * If `recursive` is set to true, all indirect parents are also included.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to include indirect parents as well, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect parents as well, `false` otherwise.
          * @returns A vector of parent modules.
          */
         std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
@@ -162,7 +163,7 @@ namespace hal
          * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
          *
          * @param[in] new_parent - The new parent module.
-         * @returns True if the parent was changed, false otherwise.
+         * @returns `true` if the parent was changed, `false` otherwise.
          */
         bool set_parent_module(Module* new_parent);
 
@@ -170,8 +171,8 @@ namespace hal
          * Check if the module is a parent of the specified module.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - True to check recursively, false otherwise.
-         * @returns True if the module is a parent of the specified module, false otherwise.
+         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
+         * @returns `true` if the module is a parent of the specified module, `false` otherwise.
          */
         bool is_parent_module_of(const Module* module, bool recursive = false) const;
 
@@ -181,7 +182,7 @@ namespace hal
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to include indirect submodules as well, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
          * @returns A vector of submodules.
          */
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
@@ -190,8 +191,8 @@ namespace hal
          * Check if the module is a submodule of the specified module.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - True to check recursively, false otherwise.
-         * @returns True if the module is a submodule of the specified module, false otherwise.
+         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
+         * @returns `true` if the module is a submodule of the specified module, `false` otherwise.
          */
         bool is_submodule_of(const Module* module, bool recursive = false) const;
 
@@ -200,15 +201,15 @@ namespace hal
          * If \p recursive is set to true, all indirect submodules are also included.
          *
          * @param[in] other - Other module to check for.
-         * @param[in] recursive - True to include indirect submodules as well.
-         * @returns True if the other module is a submodule, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
+         * @returns `true` if the other module is a submodule, `false` otherwise.
          */
         bool contains_module(const Module* other, bool recursive = false) const;
 
         /**
          * Returns true only if the module is the top module of the netlist.
          * 
-         * @returns True if the module is the top module, false otherwise.
+         * @returns `true` if the module is the top module, `false` otherwise.
          */
         bool is_top_module() const;
 
@@ -234,28 +235,33 @@ namespace hal
 
         /**
          * Check whether a net is contained in the module.<br>
-         * If \p recursive is set to true, nets in submodules are considered as well.
+         * If `recursive` is set to `true`, nets in submodules are considered as well.
          *
          * @param[in] net - The net to check for.
          * @param[in] recursive - True to also consider nets in submodules, false otherwise.
-         * @returns True if the net is contained in the module, false otherwise.
+         * @returns `true` if the net is contained in the module, `false` otherwise.
          */
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
-         * TODO add pybind
          * Get all nets that have at least one source or one destination within the module.
-         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-         * If \p recursive is true, nets in submodules are considered as well.
          *
-         * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to also consider nets in submodules, false otherwise.
          * @returns An unordered set of nets.
          */
-        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
+        const std::unordered_set<Net*>& get_nets() const;
 
         /**
-         * TODO add pybind
+         * Get all nets that have at least one source or one destination within the module.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, nets in submodules are considered as well.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @param[in] recursive - `true` to also consider nets in submodules, `false` otherwise.
+         * @returns An unordered set of nets.
+         */
+        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter, bool recursive = false) const;
+
+        /**
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
          *
          * @returns An unordered set of input nets.
@@ -263,7 +269,6 @@ namespace hal
         const std::unordered_set<Net*>& get_input_nets() const;
 
         /**
-         * TODO add pybind
          * Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
          *
          * @returns An unordered set of output nets.
@@ -271,7 +276,6 @@ namespace hal
         const std::unordered_set<Net*>& get_output_nets() const;
 
         /**
-         * TODO add pybind
          * Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
          *
          * @returns An unordered set of internal nets.
@@ -282,7 +286,7 @@ namespace hal
          * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an input net, false otherwise.
+         * @returns `true` if the net is an input net, `false` otherwise.
          */
         bool is_input_net(Net* net) const;
 
@@ -290,7 +294,7 @@ namespace hal
          * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an ouput net, false otherwise.
+         * @returns `true` if the net is an ouput net, `false` otherwise.
          */
         bool is_output_net(Net* net) const;
 
@@ -298,7 +302,7 @@ namespace hal
          * Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an internal net, false otherwise.
+         * @returns `true` if the net is an internal net, `false` otherwise.
          */
         bool is_internal_net(Net* net) const;
 
@@ -309,7 +313,6 @@ namespace hal
          */
 
         /**
-         * TODO test
          * Get a spare pin ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -318,7 +321,6 @@ namespace hal
         u32 get_unique_pin_id();
 
         /**
-         * TODO test
          * Get a spare pin group ID.<br>
          * The value of 0 is reserved and represents an invalid ID.
          * 
@@ -337,10 +339,11 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
-         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise. Defaults to `true`.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to `false`.
          * @returns The module pin on success, an error message otherwise.
          */
-        Result<ModulePin*> create_pin(const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
+        Result<ModulePin*> create_pin(const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true, bool force_name = false);
 
         /**
          * Manually create a module pin and assign it to a net.
@@ -353,10 +356,11 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
-         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise. Defaults to `true`.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to `false`.
          * @returns The module pin on success, an error message otherwise.
          */
-        Result<ModulePin*> create_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
+        Result<ModulePin*> create_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true, bool force_name = false);
 
         /**
          * Get an ordered vector of all pins of the module.
@@ -422,7 +426,6 @@ namespace hal
         ModulePin* get_pin_by_id(const u32 id) const;
 
         /**
-         * TODO test
          * Get the pin corresponding to the given name.
          * 
          * @param[in] name - The name of the pin.
@@ -447,7 +450,6 @@ namespace hal
         PinGroup<ModulePin>* get_pin_group_by_id(const u32 id) const;
 
         /**
-         * TODO test
          * Get the pin group corresponding to the given name.
          * 
          * @param[in] name - The name of the pin group.
@@ -460,18 +462,10 @@ namespace hal
          * 
          * @param[in] pin - The pin.
          * @param[in] new_name - The name to be assigned to the pin.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to `false`.
          * @returns `true` on success, `false` otherwise.
          */
-        bool set_pin_name(ModulePin* pin, const std::string& new_name);
-
-        /**
-         * Set the name of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_name - The name to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+        bool set_pin_name(ModulePin* pin, const std::string& new_name, bool force_name = false);
 
         /**
          * Set the type of the given pin.
@@ -481,6 +475,81 @@ namespace hal
          * @returns `true` on success, `false` otherwise.
          */
         bool set_pin_type(ModulePin* pin, PinType new_type);
+
+        /**
+         * Create a new pin group with the given name.
+         * 
+         * @param[in] id - The ID of the pin group.
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to `false`.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<ModulePin>*> create_pin_group(const u32 id,
+                                                      const std::string& name,
+                                                      const std::vector<ModulePin*> pins = {},
+                                                      PinDirection direction             = PinDirection::none,
+                                                      PinType type                       = PinType::none,
+                                                      bool ascending                     = true,
+                                                      u32 start_index                    = 0,
+                                                      bool delete_empty_groups           = true,
+                                                      bool force_name                    = false);
+
+        /**
+         * Create a new pin group with the given name.
+         * The ID of the pin group is set automatically.
+         * 
+         * @param[in] name - The name of the pin group.
+         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
+         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
+         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to `false`.
+         * @returns The pin group on success, an error message otherwise.
+         */
+        Result<PinGroup<ModulePin>*> create_pin_group(const std::string& name,
+                                                      const std::vector<ModulePin*> pins = {},
+                                                      PinDirection direction             = PinDirection::none,
+                                                      PinType type                       = PinType::none,
+                                                      bool ascending                     = true,
+                                                      u32 start_index                    = 0,
+                                                      bool delete_empty_groups           = true,
+                                                      bool force_name                    = false);
+
+        /**
+         * Delete the given pin group.
+         * 
+         * @param[in] pin_group - The pin group to be deleted.
+         * @returns true on success, false otherwise.
+         */
+        bool delete_pin_group(PinGroup<ModulePin>* pin_group);
+
+        /**
+         * Move a pin group to another index within the module.
+         * The indices of some other pin groups will be incremented or decremented to make room for the moved pin group to be inserted at the desired position.
+         * 
+         * @param[in] pin_group - The pin group to be moved.
+         * @param[in] new_index - The index to which the pin group is moved.
+         * @returns true on success, false message otherwise.
+         */
+        bool move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
+
+        /**
+         * Set the name of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
+         * @param[in] force_name - Set `true` to enforce the name, `false` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to `false`.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name, bool force_name = false);
 
         /**
          * Set the type of the given pin group.
@@ -501,66 +570,14 @@ namespace hal
         bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
-         * Create a new pin group with the given name.
-         * 
-         * @param[in] id - The ID of the pin group.
-         * @param[in] name - The name of the pin group.
-         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
-         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
-         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
-         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
-         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
-         * @returns The pin group on success, an error message otherwise.
-         */
-        Result<PinGroup<ModulePin>*> create_pin_group(const u32 id,
-                                                      const std::string& name,
-                                                      const std::vector<ModulePin*> pins = {},
-                                                      PinDirection direction             = PinDirection::none,
-                                                      PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
-                                                      u32 start_index                    = 0,
-                                                      bool delete_empty_groups           = true);
-
-        /**
-         * Create a new pin group with the given name.
-         * The ID of the pin group is set automatically.
-         * 
-         * @param[in] name - The name of the pin group.
-         * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
-         * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
-         * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
-         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
-         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
-         * @returns The pin group on success, an error message otherwise.
-         */
-        Result<PinGroup<ModulePin>*> create_pin_group(const std::string& name,
-                                                      const std::vector<ModulePin*> pins = {},
-                                                      PinDirection direction             = PinDirection::none,
-                                                      PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
-                                                      u32 start_index                    = 0,
-                                                      bool delete_empty_groups           = true);
-
-        /**
-         * Delete the given pin group.
-         * 
-         * @param[in] pin_group - The pin group to be deleted.
-         * @returns Ok on success, an error message otherwise.
-         */
-        Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
-
-        /**
          * Assign a pin to a pin group.
-         * Only pins with matching direction and type can be assigned to an existing pin group.
          * 
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
+        bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /**
          * Move a pin to another index within the given pin group.
@@ -569,9 +586,9 @@ namespace hal
          * @param[in] pin_group - The pin group.
          * @param[in] pin - The pin to be moved.
          * @param[in] new_index - The index to which the pin is moved.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
+        bool move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
 
         /**
          * Remove a pin from a pin group.
@@ -580,9 +597,9 @@ namespace hal
          * @param[in] pin_group - The old pin group.
          * @param[in] pin - The pin to be removed.
          * @param[in] delete_empty_groups - Set `true` to delete the group of it is empty after the pin has been removed, `false` to keep the empty group. Defaults to `true`.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
+        bool remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /*
          * ################################################################
@@ -648,14 +665,27 @@ namespace hal
 
         /**
          * Get all gates contained within the module.
-         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-         * If `recursive` is `true`, gates in submodules are considered as well.
          *
-         * @param[in] filter - An optional filter.
-         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
          * @return A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
+        const std::vector<Gate*>& get_gates() const;
+
+        /**
+         * Get all gates contained within the module.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, gates in submodules are considered as well.
+         *
+         * @param[in] filter - Filter function to be evaluated on each gate.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise. Defaults to `false`.
+         * @return A vector of gates.
+         */
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter, bool recursive = false) const;
+
+        /**
+         * Get the event handler connected to module
+         * @return The event handler;
+         */
+        EventHandler* get_event_handler() const;
 
     private:
         friend class NetlistInternalManager;
@@ -671,15 +701,6 @@ namespace hal
             bool has_external_source;
             bool has_external_destination;
         };
-
-        NetConnectivity check_net_endpoints(const Net* net) const;
-        Result<std::monostate> check_net(Net* net, bool recursive = false);
-        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
-        Result<std::monostate> remove_pin_net(Net* net);
-        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type);
-        Result<std::monostate> delete_pin_internal(ModulePin* pin);
-        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
-        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
 
         std::string m_name;
         std::string m_type;
@@ -724,5 +745,14 @@ namespace hal
         std::unordered_set<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
+
+        NetConnectivity check_net_endpoints(const Net* net) const;
+        Result<std::monostate> check_net(Net* net, bool recursive = false);
+        bool assign_pin_net(const u32 pin_id, Net* net, PinDirection direction);
+        bool remove_pin_net(Net* net);
+        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type, bool force_name);
+        bool delete_pin_internal(ModulePin* pin);
+        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index, bool force_name);
+        bool delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
     };
 }    // namespace hal

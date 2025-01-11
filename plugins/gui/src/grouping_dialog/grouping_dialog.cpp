@@ -21,6 +21,7 @@ namespace hal {
           mTabWidget(new QTabWidget(this)),
           mNewGrouping(false)
     {
+        mProxyModel = static_cast<GroupingProxyModel*>(mGroupingTableView->model());
         setWindowTitle("Move to grouping …");
         QGridLayout* layout = new QGridLayout(this);
 
@@ -34,7 +35,11 @@ namespace hal {
         connect(butSearch, &QPushButton::pressed, this, &GroupingDialog::handleToggleSearchbar);
         layout->addWidget(butSearch, 0, 1);
 
+        mProxyModel->setSortRole(Qt::UserRole);
+
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mProxyModel->getColumnNames());
+
         layout->addWidget(mSearchbar, 1, 0, 1, 3);
 
         mTabWidget->addTab(mGroupingTableView, "Groupings");
@@ -65,11 +70,16 @@ namespace hal {
         addAction(mToggleSearchbar);
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &GroupingDialog::handleCurrentTabChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::filter);
+
+        // connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::filter);
+
+        // TODO: change parameter in filter() method
+        // connect(mSearchbar, &Searchbar::triggerNewSearch, this, &GroupingDialog::filter);
         connect(mToggleSearchbar, &QAction::triggered, this, &GroupingDialog::handleToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         connect(mGroupingTableView, &GroupingTableView::groupingSelected, this, &GroupingDialog::handleGroupingSelected);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &GroupingProxyModel::startSearch);
     }
 
     void GroupingDialog::handleNewGroupingClicked()
@@ -92,7 +102,7 @@ namespace hal {
         }
     }
 
-    void GroupingDialog::filter(const QString& text)
+    void GroupingDialog::filter(const QString& text) // TODO : add int parameter search options
     {
         static_cast<GroupingProxyModel*>(mGroupingTableView->model())->setFilterRegularExpression(text);
         if (mLastUsed)

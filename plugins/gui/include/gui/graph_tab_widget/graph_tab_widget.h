@@ -81,7 +81,7 @@ namespace hal
          *
          * @param context - The GraphContext to show
          */
-        void showContext(GraphContext* context);
+        void showContext(GraphContext *context);
 
         /**
          * Moves (and scales) the camera in the current GraphWidget to the current selection so that every selected
@@ -94,6 +94,13 @@ namespace hal
          *         whether we are in module/gate pick mode (G or M in cursor shape)
          */
         bool isSelectMode() const { return mSelectCursor == Select; }
+
+        /**
+         * returns visible status flag for context
+         * @param ctx The context for which status flag gets requested
+         * @return 0=not shown in any tab   1=background tab   2=visible tab
+         */
+        int visibleStatus(const GraphContext* ctx) const;
 
         enum KeyboardModifier{Alt, Ctrl, Shift};
         Q_ENUM(KeyboardModifier)
@@ -204,6 +211,13 @@ namespace hal
          */
         void handleCloseAllTabs();
 
+    private Q_SLOTS:
+        void handleZoomInShortcut();
+        void handleZoomOutShortcut();
+        void handleFoldModuleShortcut();
+        void handleUnfoldModuleShortcut();
+        void handleRemoveNodeShortcut();
+
     private:
         QTabWidget* mTabWidget;
         QVBoxLayout* mLayout;
@@ -212,12 +226,9 @@ namespace hal
 
         QMap<GraphContext*, QWidget*> mContextWidgetMap;
 
-        int getContextTabIndex(GraphContext* context) const;
+        int getContextTabIndex(const GraphContext *context) const;
 
         void addGraphWidgetTab(GraphContext* context);
-
-        void zoomInShortcut();
-        void zoomOutShortcut();
 
         static SettingsItemDropdown* sSettingGridType;
         static SettingsItemDropdown* sSettingDragModifier;
@@ -225,6 +236,9 @@ namespace hal
 
         static SettingsItemKeybind* sSettingZoomIn;
         static SettingsItemKeybind* sSettingZoomOut;
+        static SettingsItemKeybind* sSettingFoldModule;
+        static SettingsItemKeybind* sSettingUnfoldModule;
+        static SettingsItemKeybind* sSettingRemoveNode;
 
         static bool sSettingsInitialized;
 

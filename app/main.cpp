@@ -7,8 +7,8 @@
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/plugin_interface_cli.h"
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
@@ -102,8 +102,24 @@ int main(int argc, const char* argv[])
         lm->deactivate_all_channels();
     }
 
-    if (!plugin_manager::load_all_plugins())
+    plugin_manager::load("hal_gui");
+    // We need to check at an early stage (before CLI options are parsed) whether GUI will take control over HAL.
+    //    if yes :    User determines which plugins get loaded
+    //    if no  :    Need to load all plugins to have full range of CLI options available
+    bool guictrl = false;
+    auto ui_plugin_flags = plugin_manager::get_ui_plugin_flags();
+    for (int i=1; i<argc; i++)
     {
+        std::string option(argv[i]);
+        auto it = ui_plugin_flags.find(option);
+        if (it != ui_plugin_flags.end()) {
+            guictrl = true;
+            break;
+        }
+    }
+    if (!guictrl && !plugin_manager::load_all_plugins())
+    {
+        // error loading all plugins
         return cleanup(ERROR);
     }
 
@@ -176,7 +192,9 @@ int main(int argc, const char* argv[])
 
             ProgramArguments plugin_args;
 
-            for (const auto& option : plugin->get_cli_options().get_options())
+            CliExtensionInterface* ceif = plugin->get_first_extension<CliExtensionInterface>();
+            if (ceif)
+            for (const auto& option : ceif->get_cli_options().get_options())
             {
                 auto flags      = std::get<0>(option);
                 auto first_flag = *flags.begin();
@@ -333,15 +351,21 @@ int main(int argc, const char* argv[])
     bool plugins_successful = true;
     for (const auto& plugin_name : plugins_to_execute)
     {
-        auto plugin = plugin_manager::get_plugin_instance<CLIPluginInterface>(plugin_name);
-        if (plugin == nullptr)
+        BasePluginInterface* plugin = plugin_manager::get_plugin_instance(plugin_name);
+        if (!plugin)
+        {
+            return cleanup(ERROR);
+        }
+
+        CliExtensionInterface* ceif = plugin_manager::get_first_extension<CliExtensionInterface>(plugin_name);
+        if (!ceif)
         {
             return cleanup(ERROR);
         }
 
         ProgramArguments plugin_args;
 
-        for (const auto& option : plugin->get_cli_options().get_options())
+        for (const auto& option : ceif->get_cli_options().get_options())
         {
             auto flags      = std::get<0>(option);
             auto first_flag = *flags.begin();
@@ -357,7 +381,7 @@ int main(int argc, const char* argv[])
             log_info("core", "  '{}': {}", option, utils::join(",", plugin_args.get_parameters(option)));
         }
 
-        if (!plugin->handle_cli_call(netlist.get(), plugin_args))
+        if (!ceif->handle_cli_call(netlist.get(), plugin_args))
         {
             plugins_successful = false;
             break;

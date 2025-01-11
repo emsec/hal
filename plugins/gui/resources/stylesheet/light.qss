@@ -30,12 +30,12 @@ QPushButton
 
 QPushButton:default
 {
-    background-color : rgba(180, 180, 180);
+    background-color : rgb(180, 180, 180);
 }
 
 QPushButton:hover
 {
-    background-color : rgba(210, 210, 210);
+    background-color : rgb(210, 210, 210);
 }
 
 QPushButton:checked
@@ -278,7 +278,7 @@ QAbstractScrollArea::corner
 
 QListWidget
 {
-    background-color : rgb(14, 17, 20);
+    background-color : rgb(224, 240, 255);
     min-width        : 200px;
     max-width        : 200px;
 }
@@ -316,10 +316,12 @@ hal--Searchbar
     border-width                : 6px;
     border-style                : solid;
     border-color                : black;
-    qproperty-searchIcon       : ":/icons/search";
-    qproperty-searchIconStyle : "all -> #000000";
-    qproperty-clearIcon        : ":/icons/cross";
-    qproperty-clearIconStyle  : "all -> #000000";
+    qproperty-searchIcon        : ":/icons/search";
+    qproperty-searchIconStyle   : "all -> #000000";
+    qproperty-clearIcon         : ":/icons/cross";
+    qproperty-clearIconStyle    : "all -> #000000";
+    qproperty-optionDialogIcon  : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "all -> #000000";
 }
 
 hal--Searchbar QLabel
@@ -457,17 +459,21 @@ hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit
     background-color: rgba(255, 13, 13, 0.281);
 }
 
-
 hal--SettingsWidgetDropdown QComboBox
 {
-    background-color : white;
+    width : 150px;
+    color : rgb(23,26,26);
+    background-color : rgb(232,242,252);
+    border-radius: 2px;
     border: 1px solid black;
 }
 
 hal--SettingsWidgetDropdown QComboBox:hover
 {
+    color : black;
     background-color : white;
-    border: 1px solid black;
+    border-radius: 2px;
+    border: 1px solid blue;
 }
 
 hal--SettingsWidgetCheckbox QCheckBox
@@ -735,12 +741,12 @@ hal--LabeledFrame #label
 
 #recent-files-frame #label
 {
-    qproperty-text : "RECENT FILES";
+    qproperty-text : "RECENT PROJECTS";
 }
 
 #open-file-frame #label
 {
-    qproperty-text : "OPEN FILE";
+    qproperty-text : "OPEN PROJECT";
 }
 
 #get-in-touch-frame #label
@@ -907,6 +913,60 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibraryLabel
+{
+    background : #E0F0FF;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background : white;
+    color : #171e22;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background    : #E0F0FF;
+    color         : #171e22;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: #E0F0FF;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: darkred;
+}
+
+hal--GatelibraryContentWidget
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#FFFFFF";
+    qproperty-addTypeIconPath:      ":/icons/plus";
+    qproperty-editTypeIconPath:     ":/icons/pen";
+    qproperty-searchIconPath:       ":/icons/search";
+    qproperty-searchIconStyle:       "all->#FFFFFF";
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-deleteIconStyle:       "all->#FFFFFF";
+    qproperty-deleteIconPath:        ":/icons/trashcan";
+    qproperty-saveIconPath:         ":/icons/folder-down";
+    qproperty-saveIconStyle:        "all->#FFFFFF";
+    qproperty-saveAsIconPath:       ":/icons/save-as";
+    qproperty-saveAsIconStyle:      "all->#FFFFFF";
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -978,11 +1038,6 @@ hal--GetInTouchItem[hover=true] *
     background: #7D7D7D;
 }
 
-hal--Overlay
-{
-    background : rgba(0, 0, 0, 128);
-}
-
 hal--ContentWidget *
 {
     background : white;
@@ -1002,6 +1057,10 @@ hal--PythonEditor
     y2         : 1,
     stop       : 0 rgb(33, 40, 44),
     stop       : 1 rgb(23, 30, 34));
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--PythonEditor hal--CodeEditor
@@ -1117,6 +1176,13 @@ hal--GroupingManagerWidget
 
     qproperty-toSelectionIconStyle: "all->#FFFFFF";
     qproperty-toSelectionIconPath: ":/icons/to_selection";
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-tableIconStyle: "all->#FFFFFF";
+    qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget
@@ -1125,6 +1191,7 @@ hal--ContextManagerWidget
 
     qproperty-newViewIconStyle: "all->#FFFFFF";
     qproperty-newViewIconPath: ":/icons/plus";
+    qproperty-newDirIconPath: ":/icons/plusdir";
 
     qproperty-renameIconStyle: "all->#FFFFFF";
     qproperty-renameIconPath: ":/icons/pen";
@@ -1192,30 +1259,68 @@ hal--Toolbar QPushButton:checked:hover {
     background-color : rgb(66, 66, 66);
 }
 
+hal--ModuleWidget {
+    qproperty-disabledIconStyle: "all->#515050";
+    qproperty-activeIconStyle: "all->#FFFFFF";
+
+    qproperty-showNetsIconPath: ":/icons/ne_net";
+    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
+    qproperty-showGatesIconPath: ":/icons/ne_gate";
+    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-expandedIconPath: ":/icons/tree-expanded";
+    qproperty-collapsedIconPath: ":/icons/tree-collapsed";
+}
+
 hal--MainWindow
 {
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
 
-    qproperty-newFileIconStyle: "";
-    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openFileIconStyle: "all->#FFFFFF";
+    qproperty-openFileIconPath: ":/icons/detach";
 
-    qproperty-openIconStyle: "all->#FFFFFF";
-    qproperty-openIconPath: ":/icons/folder";
-
-    qproperty-saveIconStyle: "all->#FFFFFF";
-    qproperty-saveIconPath: ":/icons/folder-down";
-
-    qproperty-saveAsIconStyle: "all->#FFFFFF";
-    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-quitIconStyle: "all->#FFFFFF";
+    qproperty-quitIconPath: ":/icons/switch";
 
     qproperty-settingsIconStyle: "all->#FFFFFF";
     qproperty-settingsIconPath: ":/icons/settings";
+
+    qproperty-pluginsIconStyle: "all->#FFFFFF";
+    qproperty-pluginsIconPath: ":/icons/plugin";
 
     qproperty-undoIconStyle: "all->#FFFFFF";
     qproperty-undoIconPath: ":/icons/undo2";
 
     qproperty-disabledIconStyle: "all->#515050";
+
+    qproperty-neGateIconStyle: "all->#FFFFFF";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->#FFFFFF";
+    qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->#FFFFFF";
+    qproperty-closeIconPath: ":/icons/cross";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->#FFFFFF";
+    qproperty-disabledIconStyle: "all->#515050";
+}
+
+hal--MainWindow QMenu
+{
+    background-color: white;
 }
 
 hal--PythonQssAdapter
@@ -1254,8 +1359,8 @@ hal--LoggerQssAdapter
 hal--PythonConsoleQssAdapter
 {
     qproperty-standardColor: #000000;
-    qproperty-errorColor: #000000;
-    qproperty-promtColor: #000000;
+    qproperty-errorColor: #600000;
+    qproperty-promtColor: #002040;
 }
 
 hal--table_selector_widget
@@ -1350,6 +1455,9 @@ hal--GraphicsQssAdapter
 
     qproperty-gridBaseDotColor: #EEEEEE;
     qproperty-gridClusterDotColor: #DDDDDD;
+
+    qproperty-nodeBackgroundColor: rgba(220, 221, 222, 200);
+    qproperty-nodeTextColor: rgb(20, 21, 22);
 }
 
 QToolBar QToolButton
@@ -1382,4 +1490,101 @@ hal--DetailsFrameWidget QPushButton:checked
 hal--DetailsFrameWidget QPushButton:hover
 {
     background-color : rgba(220, 220, 220, 1);
+}
+
+hal--BooleanFunctionEdit
+{
+    background    : #E0F0FF;
+    color         : #222222;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background : #909090;
+    color : #171e22;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: #F0C8C0;
+    color     : #802010;
+}
+
+hal--GuiPluginManager
+{
+    qproperty-loadIconPath : ":/icons/insert-plugin";
+    qproperty-loadIconStyle: "all->#006030";
+    qproperty-unloadIconPath: ":/icons/cross";
+    qproperty-unloadIconStyle: "all->#480000";
+    qproperty-cliIconPath: ":/icons/cli-options";
+    qproperty-cliIconStyle: "all->#202022";
+    qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
+    qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
+    qproperty-guiIconEnabledStyle: "all->#2060C2";
+    qproperty-guiIconDisabledStyle: "all->#c0c0c0";
+    qproperty-defaultTextColor: rgb(64,64,64);
+    qproperty-hilightTextColor: rgb(0,0,20);
+    qproperty-hilightBackgroundColor: rgb(255,240,220);
+}
+
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath : ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->#000000";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->#000000";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath : ":/icons/pen";
+    qproperty-modifyCommentIconStyle : "all->#111111";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->#111111";
+}
+
+hal--CommentDialog
+{
+    background-color: "#ffffff";
+    qproperty-redColor: "#ff0000";
+    qproperty-yellowColor: "#ffff00";
+    qproperty-greenColor: "#00ff00";
+    qproperty-defaultColor: "#000000";
+
+}
+
+hal--CommentDialog QTextEdit /*Edit for the actual commenttext*/
+{
+    background-color: "#ffffff";
+    color: "#000000";
+    alternate-background-color : "#b0b0b0"; /*used for code action*/
+}
+
+hal--CommentDialog QLineEdit
+{
+    background-color: "#ffffff";
+    color: "#000000";
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 2px;
+}
+
+hal--CommentDialog QLabel
+{
+    /*background-color: "#a0a0a0";*/
+    background-color: "#ffffff";
+    color: "#000000";
+}
+
+/*hal--CommentDialog #header-container
+{
+    background-color: "#a0a0a0";
+}*/
+
+hal--Overlay
+{
+    background : rgba(0, 0, 0, 150);
 }

@@ -287,7 +287,10 @@ namespace hal
             }
             else if (event == ModuleEvent::event::pin_changed)
             {
-                log_info("event", "changed port of module '{}' (id {:08x})", module->get_name(), module->get_id());
+                PinEvent pev = (PinEvent) (associated_data&0xF);
+                u32 id = (associated_data >> 4);
+
+                log_info("event", "module '{}' (id {:08x}) port event '{}' id={}", module->get_name(), module->get_id(), enum_to_string<PinEvent>(pev), id);
             }
             else
             {

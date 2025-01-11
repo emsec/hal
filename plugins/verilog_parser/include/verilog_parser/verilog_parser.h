@@ -95,7 +95,6 @@ namespace hal
             std::string m_expression;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
-            std::vector<VerilogDataEntry> m_attributes;
             std::vector<std::string> m_expanded_identifiers;
         };
 
@@ -148,7 +147,7 @@ namespace hal
             std::vector<std::unique_ptr<VerilogPort>> m_ports;
             std::map<std::string, VerilogPort*> m_ports_by_identifier;
             std::map<std::string, VerilogPort*> m_ports_by_expression;
-            std::set<std::string> m_expanded_port_expressions;
+            std::map<std::string, std::string> m_expanded_port_identifiers_to_expressions;
 
             // signals
             std::vector<std::unique_ptr<VerilogSignal>> m_signals;
@@ -182,17 +181,21 @@ namespace hal
         std::unordered_map<std::string, GateType*> m_vcc_gate_types;
         std::unordered_map<std::string, GateType*> m_gnd_gate_types;
         std::unordered_map<Net*, std::vector<std::pair<Module*, u32>>> m_module_port_by_net;
-        std::unordered_map<Module*, std::vector<std::pair<std::string, Net*>>> m_module_ports;
+        std::unordered_map<Module*, std::vector<std::tuple<std::string, Net*>>> m_module_ports;
 
         // unique aliases
-        std::unordered_map<std::string, u32> m_signal_name_occurrences;
-        std::unordered_map<std::string, u32> m_instance_name_occurrences;
+        std::unordered_map<std::string, u32> m_module_instantiation_count;
+        std::unordered_map<std::string, u32> m_instance_name_occurences;
+        std::unordered_map<std::string, u32> m_net_name_occurences;
 
         // nets
         Net* m_zero_net;
         Net* m_one_net;
         std::unordered_map<std::string, Net*> m_net_by_name;
-        std::unordered_map<std::string, std::vector<std::string>> m_nets_to_merge;
+        std::vector<std::pair<std::string, std::string>> m_nets_to_merge;
+
+        // parser settings
+        const std::string instance_name_seperator = "/";
 
         // parse HDL into intermediate format
         void tokenize();
@@ -215,7 +218,7 @@ namespace hal
             instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
-        std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
+        std::string get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
         std::vector<u32> parse_range(TokenStream<std::string>& stream) const;
         void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;

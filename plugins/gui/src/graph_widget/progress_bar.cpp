@@ -33,6 +33,7 @@ namespace hal {
 
     void ProgressBar::setValue(int percent)
     {
+        if (percent >= 6) mButAbort->setDisabled(true);
         mProgressBar->setValue(percent);
     }
 

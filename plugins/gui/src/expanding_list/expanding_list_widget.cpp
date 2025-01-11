@@ -43,6 +43,13 @@ namespace hal
         connect(button, &ExpandingListButton::clicked, this, &ExpandingListWidget::handleClicked);
     }
 
+    void ExpandingListWidget::clearSelected()
+    {
+        if (!mSelectedButton) return;
+        mSelectedButton->setSelected(false);
+        mSelectedButton = nullptr;
+    }
+
     void ExpandingListWidget::selectButton(ExpandingListButton* button)
     {
         if (button == mSelectedButton)
@@ -50,12 +57,7 @@ namespace hal
 
         if (!button)
         {
-            if (mSelectedButton)
-            {
-                mSelectedButton->setSelected(false);
-                mSelectedButton = nullptr;
-            }
-
+            if (mSelectedButton) clearSelected();
             return;
         }
 

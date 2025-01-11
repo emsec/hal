@@ -57,8 +57,9 @@ namespace hal
         Q_PROPERTY(QColor gridBaseDotColor READ gridBaseDotColor WRITE setGridBaseDotColor)
         Q_PROPERTY(QColor gridClusterDotColor READ gridClusterDotColor WRITE setGridClusterDotColor)
 
+        Q_PROPERTY(QColor nodeBackgroundColor READ nodeBackgroundColor WRITE setNodeBackgroundColor);
+        Q_PROPERTY(QColor nodeTextColor READ nodeTextColor WRITE setNodeTextColor)
     public:
-        explicit GraphicsQssAdapter(QWidget* parent = nullptr);
 
         void repolish();
 
@@ -86,6 +87,9 @@ namespace hal
 
         QColor gridBaseDotColor() const;
         QColor gridClusterDotColor() const;
+
+        QColor nodeBackgroundColor() const;
+        QColor nodeTextColor() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -103,14 +107,53 @@ namespace hal
 
         void setNetFont(const QFont& font);
 
+        void setGridAlpha(int alpha);
+        void setGridAlphaF(qreal alpha);
+        /**
+         * Sets the color of the grid base lines (not the clusters). <br>
+         * It does not affect the dot grid color.
+         *
+         * @param color - The color of the grid base lines
+         */
         void setGridBaseLineColor(const QColor& color);
+
+        /**
+         * Sets the color of the grid cluster lines. The grid cluster lines are the darker lines in the grid that
+         * indicate 8 steps in the main grid. <br>
+         * It does not affect the dot cluster grid color.
+         *
+         * @param color - The color of the grid cluster lines
+         */
         void setGridClusterLineColor(const QColor& color);
 
+        /**
+         * Sets the color of the grid base dotted lines (only shown if grid_type::Dots are activated). <br>
+         *
+         * @param color - The color of the grid base dotted lines
+         */
         void setGridBaseDotColor(const QColor& color);
+
+        /**
+         * Sets the color of the grid dotted cluster lines (only shown if grid_type::Dots are activated).
+         * The grid cluster lines are the darker dots in the grid that indicate 8 steps in the main grid.
+         *
+         * @param color - The color of the grid dotted cluster lines
+         */
         void setGridClusterDotColor(const QColor& color);
+
+        void setNodeBackgroundColor(const QColor& color);
+        void setNodeTextColor(const QColor& color);
         ///@}
 
+        /**
+         * Get singleton instance initialized on first call
+         * @return the instance
+         */
+        static GraphicsQssAdapter* instance();
     private:
+        explicit GraphicsQssAdapter(QWidget* parent = nullptr);
+        static GraphicsQssAdapter* inst;
+
         QColor mGateBaseColor;
         QColor mNetBaseColor;
 
@@ -128,5 +171,8 @@ namespace hal
 
         QColor mGridBaseDotColor;
         QColor mGridClusterDotColor;
+
+        QColor mNodeBackgroundColor;
+        QColor mNodeTextColor;
     };
 }

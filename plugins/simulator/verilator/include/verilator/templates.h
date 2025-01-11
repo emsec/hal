@@ -72,7 +72,7 @@ namespace hal
                                                  "  {\n"
                                                  "    printf(\"error: %d\\n\", val);\n"
                                                  "  }\n"
-                                                 "  else"
+                                                 "  else\n"
                                                  "  {\n"
                                                  "    *vluintPtr = (vluint8_t)val;\n"
                                                  "    //printf(\"%x = 0x%d;\\n\", obj, val);\n"

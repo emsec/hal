@@ -1,5 +1,6 @@
 
 #include "verilator/verilator.h"
+#include "verilator/path_to_verilator_executable.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -21,6 +22,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <regex>
 
 namespace hal
 {
@@ -79,6 +81,40 @@ namespace hal
             return new_net_name;
         }
 
+        void cleanup_gate_type_names(const Netlist* nl, const std::filesystem::path& netlist_verilog)
+        {
+            std::unordered_map<GateType*,std::string> gate_type_names = converter::get_gate_gate_types_from_netlist(nl);
+            std::vector<std::pair<std::string,std::string> > replace_names;
+            for (auto it : gate_type_names)
+                if (it.first->get_name() != it.second)
+                    replace_names.push_back(std::make_pair(it.first->get_name(), it.second));
+            if (replace_names.empty()) return;
+            std::ifstream ifstr;
+            ifstr.open(netlist_verilog);
+            std::string buffer;
+            std::string line;
+            while(ifstr)
+            {
+                std::getline(ifstr, line);
+                for (auto jt : replace_names)
+                {
+                    size_t pos = 0;
+                    for (;;) // loop until string not found (break)
+                    {
+                        pos = line.find(jt.first, pos);
+                        if (pos == std::string::npos) break;
+                        line.replace(pos, jt.first.size(), jt.second);
+                        pos += jt.second.size();
+                    }
+                }
+                buffer += line + "\n";
+            }
+            ifstr.close();
+            std::ofstream ofstr(netlist_verilog, std::ofstream::trunc);
+            ofstr << buffer;
+            ofstr.close();
+        }
+
         const int VerilatorEngine::s_command_lines = 3;
 
         bool VerilatorEngine::setSimulationInput(SimulationInput* simInput)
@@ -130,6 +166,8 @@ namespace hal
             };
 
             netlist_writer_manager::write(m_partial_netlist.get(), netlist_verilog);
+
+            cleanup_gate_type_names(m_partial_netlist.get(), netlist_verilog);
 
             return true;    // everything ok
         }
@@ -190,10 +228,12 @@ namespace hal
             switch (lineIndex)
             {
                 case 0: {
-                    std::vector<std::string> retval = {"verilator",
-                                                       "-I.",
-                                                       "-Wall",
-                                                       "-Wno-fatal",
+                    std::vector<std::string> retval = {"verilator",             // 0
+                                                       "-I.",                   // 1
+                                                       "-Wall",                 // 2
+                                                       "-Wno-fatal",            // 3
+                                                       "-CFLAGS",               // 4
+                                                       "-O3",                   // 5
                                                        "--MMD",
                                                        "-trace",
                                                        //    "--trace-threads",
@@ -206,8 +246,6 @@ namespace hal
                                                        "obj_dir",
                                                        "-O3",
                                                        "--noassert",
-                                                       "-CFLAGS",
-                                                       "-O3",
                                                        "--exe",
                                                        "-cc",
                                                        "-DSIM_VERILATOR",
@@ -220,6 +258,18 @@ namespace hal
                                                        "saleae_parser.cpp",
                                                        "saleae_file.cpp",
                                                        m_design_name + ".v"};
+
+#if defined(__APPLE__)
+                    if (strlen(path_to_verilator_executable))
+                    {
+                        retval[0] = path_to_verilator_executable + std::string("verilator");
+                    }
+#endif
+
+                    if (strlen(path_to_rapidjson_includedir))
+                    {
+                        retval[5] = retval[5] + " -I" + path_to_rapidjson_includedir;
+                    }
 
                     if (!m_compiler.empty())
                     {

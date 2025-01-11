@@ -53,6 +53,7 @@ namespace hal
     }
 
     QString PythonSerializer::sPythonRelDir = "py";
+    std::string PythonSerializer::sControlFileName = "pythoneditor.json";
 
     std::string PythonSerializer::serialize(Netlist* netlist, const std::filesystem::path &savedir, bool isAutosave)
     {
@@ -63,20 +64,43 @@ namespace hal
         return serialize_control(savedir,isAutosave);
     }
 
-    std::string PythonSerializer::serialize_control(const std::filesystem::path& savedir, bool isAutosave)
+    bool PythonSerializer::write_control_file(const std::filesystem::path& savedir, const std::vector<PythonEditorControlEntry>& tabinfo)
     {
-        const std::string retval("pythoneditor.json");
         QDir workDir(QString::fromStdString(savedir.empty()
                                             ? ProjectManager::instance()->get_project_directory().get_canonical_path().string()
                                             : savedir.string()));
         QDir pyDir(workDir.absoluteFilePath(sPythonRelDir));
-        QString pythonEditorControl = workDir.absoluteFilePath(QString::fromStdString(retval));
+        QString PythonEditorControlFile = workDir.absoluteFilePath(QString::fromStdString(sControlFileName));
 
         JsonWriteDocument doc;
 
         doc["python_dir"] = sPythonRelDir.toStdString();
-
         JsonWriteArray& tabArr = doc.add_array("tabs");
+
+        for (const PythonEditorControlEntry& pece : tabinfo)
+        {
+            JsonWriteObject& tabObj = tabArr.add_object();
+            tabObj["tab"]  = pece.tabInx;
+            if (pece.active)
+                tabObj["active"] = true;
+            if (!pece.restore.empty())
+                tabObj["restore"] = pece.restore;
+            tabObj["filename"] = pece.filename;
+            tabObj.close();
+        }
+
+        tabArr.close();
+        return doc.serialize(PythonEditorControlFile.toStdString());
+    }
+
+    std::string PythonSerializer::serialize_control(const std::filesystem::path& savedir, bool isAutosave)
+    {
+        QDir workDir(QString::fromStdString(savedir.empty()
+                                            ? ProjectManager::instance()->get_project_directory().get_canonical_path().string()
+                                            : savedir.string()));
+        QDir pyDir(workDir.absoluteFilePath(sPythonRelDir));
+
+        std::vector<PythonEditorControlEntry> tabinfo;
 
         PythonEditor* pedit = gContentManager->getPythonEditorWidget();
         if (!pedit) return std::string();
@@ -87,30 +111,31 @@ namespace hal
             PythonCodeEditor* pce = pedit->getPythonEditor(tabInx);
             if (!pce) continue;
 
-            JsonWriteObject& tabObj = tabArr.add_object();
-            tabObj["tab"]  = tabInx;
+            PythonEditorControlEntry pece;
+            pece.tabInx = tabInx;
+            pece.active = (tabw->currentWidget() == pce);
 
             QString tabPath = pce->getRelFilename();
             if (tabPath.isEmpty())
                 tabPath = pyDir.absoluteFilePath(pedit->unnamedFilename(tabInx));
             else if (isAutosave)
             {
-                tabObj["restore"] = tabPath.toStdString();
+                pece.restore = tabPath.toStdString();
                 tabPath = pyDir.absoluteFilePath(pedit->autosaveFilename(tabInx));
             }
             QString pydirPrefix = pyDir.absolutePath() + "/";
             QString tabFilename = tabPath.startsWith(pydirPrefix)
                     ? tabPath.mid(pydirPrefix.size())
                     : tabPath;
-            tabObj["filename"] = tabFilename.toStdString();
-            tabObj.close();
+            pece.filename = tabFilename.toStdString();
+            tabinfo.push_back(pece);
         }
 
-        tabArr.close();
-
-        doc.serialize(pythonEditorControl.toStdString());
-
-        return retval;
+        if (!write_control_file(savedir,tabinfo))
+        {
+            log_warning("gui", "Failed to save python editor control file to project dir {}.", workDir.absolutePath().toStdString());
+        }
+        return sControlFileName;
     }
 
     void PythonSerializer::deserialize(Netlist* netlist, const std::filesystem::path& loaddir)
@@ -144,6 +169,7 @@ namespace hal
 
         bool restoreAutosave = false;
 
+        int activeInx = -1;
         if (document.HasMember("tabs"))
         {
             for (const rapidjson::Value& tabVal : document["tabs"].GetArray())
@@ -161,8 +187,13 @@ namespace hal
                     restoreAutosave = true;
                 }
                 pedit->tabLoadFile(tabInx, tabPath);
+                if (tabVal.HasMember("active"))
+                    activeInx = tabInx;
             }
         }
+
+        if (activeInx >= 0)
+            pedit->getTabWidget()->setCurrentIndex(activeInx);
 
         if (restoreAutosave)
         {
@@ -174,7 +205,7 @@ namespace hal
 
 
     PythonEditor::PythonEditor(QWidget* parent)
-        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
+        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar(this)), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
           mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this)),
           mFileWatcher(nullptr)
     {
@@ -219,8 +250,9 @@ namespace hal
         connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
         connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
-        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &PythonEditor::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &PythonEditor::handleSearchbarTextEdited);
+
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
@@ -380,10 +412,10 @@ namespace hal
         }
     }
 
-    void PythonEditor::handleSearchbarTextEdited(const QString& text)
+    void PythonEditor::handleSearchbarTextEdited(const QString& text, SearchOptions opts)
     {
         if (mTabWidget->count() > 0)
-            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, opts);
 
         if (mSearchbar->filterApplied())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
@@ -419,11 +451,11 @@ namespace hal
         PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
         if (!mSearchbar->isHidden())
-            currentEditor->search(mSearchbar->getCurrentText(), getFindFlags());
+            currentEditor->search(mSearchbar->getCurrentText());
         else if (!currentEditor->extraSelections().isEmpty())
             currentEditor->search("");
 
-        if (currentEditor->isBaseFileModified())
+        if (currentEditor->isBaseFileModified() || (gPythonContext->pythonThread()))
             mFileModifiedBar->setHidden(false);
         else
             mFileModifiedBar->setHidden(true);
@@ -820,8 +852,9 @@ namespace hal
         // Update snapshots when clicking on run
         this->updateSnapshots();
 
-        for (const auto& ctx : gGraphContextManager->getContexts())
+        for (GraphContext* ctx : gGraphContextManager->getContexts())
         {
+            mBlockedContextIds.append(ctx->id());
             ctx->beginChange();
         }
 
@@ -830,10 +863,12 @@ namespace hal
 
     void PythonEditor::handleThreadFinished()
     {
-        for (const auto& ctx : gGraphContextManager->getContexts())
+        for (u32 ctxId : mBlockedContextIds)
         {
-            ctx->endChange();
+            GraphContext* ctx = gGraphContextManager->getContextById(ctxId);
+            if (ctx) ctx->endChange();
         }
+        mBlockedContextIds.clear();
 
         mFileModifiedBar->setHidden(true);
     }
@@ -1254,8 +1289,8 @@ namespace hal
                 snapshot_file_name += original_file_name.fileName();
             }
             //if the filename ends with .py because it is loaded from (or saved to) a file, insert the tabindex before the file extension, otherwise append the index and extension
-            snapshot_file_name.endsWith(".py") ? snapshot_file_name.insert(snapshot_file_name.length() - 3, "__(" + QString::number(index) + ")__")
-                                               : snapshot_file_name += "__(" + QString::number(index) + ")__.py";
+
+            snapshot_file_name = QFileInfo(snapshot_file_name).fileName() + QString("__(%1)__.py").arg(index);
 
             QString snapshot_file_path = snapshot_dir.absoluteFilePath(snapshot_file_name);
 
@@ -1600,9 +1635,9 @@ namespace hal
     QTextDocument::FindFlags PythonEditor::getFindFlags()
     {
         QTextDocument::FindFlags options = QTextDocument::FindFlags();
-        if (mSearchbar->caseSensitiveChecked())
+        if (mSearchbar->getSearchOptions().isCaseSensitive())
             options = options | QTextDocument::FindCaseSensitively;
-        if (mSearchbar->exactMatchChecked())
+        if (mSearchbar->getSearchOptions().isExactMatch())
             options = options | QTextDocument::FindWholeWords;
         return options;
     }

@@ -82,9 +82,10 @@ namespace hal
 			 * Checks whether a SMT solver of the given type is available on the local machine.
 			 *
 			 * @param[in] type - The SMT solver type.
+			 * @param[in] call - The solver call.
 			 * @returns `true` if an SMT solver of the requested type is available, `false` otherwise.
 			 */
-            static bool has_local_solver_for(SolverType type);
+            static bool has_local_solver_for(SolverType type, SolverCall call);
 
             /**
 			 * Queries an SMT solver with the specified query configuration.
@@ -92,7 +93,7 @@ namespace hal
 			 * @param[in] config - The SMT solver query configuration.
 			 * @returns OK() and the result on success, Err() otherwise.
 			 */
-            Result<SolverResult> query(const QueryConfig& config) const;
+            Result<SolverResult> query(const QueryConfig& config = QueryConfig()) const;
 
             /**
 			 * Queries a local SMT solver with the specified query configuration.
@@ -101,6 +102,15 @@ namespace hal
 			 * @returns OK() and the result on success, Err() otherwise.
 			 */
             Result<SolverResult> query_local(const QueryConfig& config) const;
+
+            /**
+			 * Queries a local SMT solver with the specified query configuration and the provided smt2 representation of the query.
+			 *
+			 * @param[in] config - The SMT solver query configuration.
+			 * @param[in] smt2   - The SMT solver query as smt2 string.
+			 * @returns OK() and the result on success, Err() otherwise.
+			 */
+            static Result<SolverResult> query_local_with_smt2(const QueryConfig& config, const std::string& smt2);
 
             /**
 			 * Queries a remote SMT solver with the specified query configuration.
@@ -112,6 +122,14 @@ namespace hal
 			 */
             Result<SolverResult> query_remote(const QueryConfig& config) const;
 
+            /**
+			 * Translate the solver into an SMT-LIB v2 string representation
+			 * 
+			 * @param[in] config - The SMT solver query configuration.
+			 * @returns Ok() and the SMT-LIB v2 string representation, Err() otherwise.
+			 */
+            Result<std::string> to_smt2(const QueryConfig& config) const;
+
         private:
             ////////////////////////////////////////////////////////////////////////
             // Member
@@ -119,6 +137,10 @@ namespace hal
 
             /// stores list of SMT solver constraints
             std::vector<Constraint> m_constraints;
+
+            static std::map<std::pair<SolverType, SolverCall>, std::function<Result<std::tuple<bool, std::string>>(const std::string&, const QueryConfig&)>> spec2query;
+            static std::map<SolverType, std::function<Result<std::string>()>> type2query_binary;
+            static std::map<SolverType, bool> type2link_status;
 
             ////////////////////////////////////////////////////////////////////////
             // Interface

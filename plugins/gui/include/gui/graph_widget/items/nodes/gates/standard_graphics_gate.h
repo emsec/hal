@@ -116,8 +116,6 @@ namespace hal
 
         static QPen sPen;
 
-        static QColor sTextColor;
-
         static QFont sTextFont[2];
         static QFont sPinFont;
 
@@ -148,12 +146,16 @@ namespace hal
 
         QPointF mTextPosition[2];
 
-        QVector<QPointF> mOutputPinPositions;
+        QVector<float> mInputPinTextWidth;
+        QVector<float> mOutputPinTextWidth;
         static const int sIconPadding;
         static const QSize sIconSize;
 
         static QPixmap* sIconInstance;
         static const QPixmap& iconPixmap();
         static QColor legibleColor(const QColor& bgColor);
+
+    public:
+        static QColor sTextColor;
     };
 }

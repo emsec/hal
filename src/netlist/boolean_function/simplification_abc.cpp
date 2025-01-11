@@ -4,7 +4,8 @@
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <mutex>
-#include <string.h>
+#include <sstream>
+#include <string>
 
 extern "C" {
 ////////////////////////////////////////////////////////////////////////////
@@ -468,15 +469,23 @@ namespace hal
             if (pName[0] < '0' || pName[0] > '9')
             {
                 for (i = 0; i < Length; i++)
+                {
                     if (!((pName[i] >= 'a' && pName[i] <= 'z') || (pName[i] >= 'A' && pName[i] <= 'Z') || (pName[i] >= '0' && pName[i] <= '9') || pName[i] == '_'))
+                    {
                         break;
+                    }
+                }
                 if (i == Length)
+                {
                     return pName;
+                }
             }
             // create Verilog style name
             Buffer[0] = '\\';
             for (i = 0; i < Length; i++)
+            {
                 Buffer[i + 1] = pName[i];
+            }
             Buffer[Length + 1] = ' ';
             Buffer[Length + 2] = 0;
             return Buffer;
@@ -488,7 +497,9 @@ namespace hal
             Vec_Vec_t* p;
             p = ((Vec_Vec_t*)malloc(sizeof(Vec_Vec_t) * (1)));
             if (nCap > 0 && nCap < 8)
+            {
                 nCap = 8;
+            }
             p->nSize  = 0;
             p->nCap   = nCap;
             p->pArray = p->nCap ? (void**)malloc(sizeof(void*) * p->nCap) : NULL;
@@ -616,7 +627,7 @@ namespace hal
                         return OK(Abc_AigXor((Abc_Aig_t*)network->pManFunc, operands[0], operands[1]));
 
                     default:
-                        return ERR("could not translate Boolean function to ABC notation: not implemented for given node type");
+                        return ERR("could not translate Boolean function to ABC notation: not implemented for given node type " + std::to_string(node.type));
                 }
             };
 
@@ -795,6 +806,8 @@ namespace hal
 
                 // (2.3) assemble "assign $(LHS) = $(RHS);"
                 ss << "assign " << lhs << " = " << rhs << ";" << std::endl;
+
+                fclose(stream);
             }
             Vec_VecFree(vLevels);
 
@@ -980,8 +993,13 @@ namespace hal
             NodeType::Variable,
         });
 
-        if (auto nodes = function.get_nodes();
-            std::any_of(nodes.begin(), nodes.end(), [](auto node) { return valid_abc_node_types.find(node.type) == valid_abc_node_types.end(); }) || function.get_variable_names().empty())
+        if (function.get_variable_names().empty())
+        {
+            return OK(function.clone());
+        }
+
+        if (auto nodes = function.get_nodes(); std::any_of(
+                nodes.begin(), nodes.end(), [](auto node) { return (valid_abc_node_types.find(node.type) == valid_abc_node_types.end()) || (node.type = NodeType::Variable && node.size != 1); }))
         {
             return OK(function.clone());
         }

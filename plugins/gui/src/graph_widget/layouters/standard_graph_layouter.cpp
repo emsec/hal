@@ -1,5 +1,6 @@
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 
+#include "hal_core/utilities/log.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/graph_widget/layouters/position_generator.h"
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
@@ -11,7 +12,7 @@
 
 namespace hal
 {
-    StandardGraphLayouter::StandardGraphLayouter(const GraphContext* const context) : GraphLayouter(context), mParseLayout(true), mLayoutBoxes(true)
+    StandardGraphLayouter::StandardGraphLayouter(GraphContext* context) : GraphLayouter(context), mParseLayout(true), mLayoutBoxes(true)
     {
     }
 
@@ -27,7 +28,17 @@ namespace hal
 
     void StandardGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement)
     {
-        switch(placement.mode())
+        PlacementHint::PlacementModeType pmtype = placement.mode();
+
+        if ((pmtype == PlacementHint::PreferLeft || pmtype == PlacementHint::PreferRight) &&
+                (!placement.preferredOrigin().id() || placement.preferredOrigin().type() == Node::None))
+        {
+            log_warning("gui", "Ignoring placement hint {} since no valid reference node was provided.",
+                        (pmtype == PlacementHint::PreferLeft ? "PreferLeft" : "PreferRight"));
+            pmtype = PlacementHint::Standard;
+        }
+
+        switch(pmtype)
         {
         case PlacementHint::Standard:
             addCompact(modules, gates, nets);
@@ -50,6 +61,7 @@ namespace hal
         Q_UNUSED(nets)
 
         CoordinateFromDataMap cfdMap(modules,gates);
+
         if (mPositionToNodeMap.isEmpty() &&
         	mParseLayout &&
                 !gFileStatusManager->modifiedFilesExisting() &&
@@ -175,24 +187,23 @@ namespace hal
 
         int x;
         int y;
+        NetLayoutPoint originPos = positonForNode(preferredOrigin);
 
-        if (!preferredOrigin.isNull() && nodeToPositionMap().contains(preferredOrigin))
-        {
-            // place all new nodes right respectively left of the origin node
-            QPoint originPoint = nodeToPositionMap().value(preferredOrigin);
-            x = originPoint.x() + (left ? -1 : 1);
-            // vertically center the column of new nodes relative to the origin node
-            int totalNodes = modules.size() + gates.size();
-            y = originPoint.y() - (totalNodes-1)/2;
-        }
-        else
+        if (originPos.isUndefined())
         {
             // create a new column right- respectively leftmost of all current nodes
             x = left ? minXIndex() - 1 : minXIndex() + xValues().size();
             // center column of new ndoes vertically relative to the entire grid
             y = minYIndex() + (yValues().size()-1) / 2;
         }
-
+        else
+        {
+            // place all new nodes right respectively left of the origin node
+            x = originPos.x() + (left ? -1 : 1);
+            // vertically center the column of new nodes relative to the origin node
+            int totalNodes = modules.size() + gates.size();
+            y = originPos.y() - (totalNodes-1)/2;
+        }
 
         for (const u32 mid : modules)
         {

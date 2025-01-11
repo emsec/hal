@@ -1,0 +1,407 @@
+{
+    "version": 3,
+    "library": "basic_hal_i4",
+    "gate_locations": {
+        "data_category": "generic",
+        "data_x_identifier": "X_COORDINATE",
+        "data_y_identifier": "Y_COORDINATE"
+    },
+    "cells": [
+        {
+            "name": "HAL_BUF",
+            "types": [
+                "combinational",
+                "c_buffer"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "A"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_INV",
+            "types": [
+                "combinational",
+                "c_inverter"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(! A)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_AND2",
+            "types": [
+                "combinational",
+                "c_and"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(A & B)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX",
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "S",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((A & S) | (B & (! S)))"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX3",
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((A & S1) | (!S1 & ((B & S2) | (C & !S2))))"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX4",
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((A & S1 & S2) | (B & S1 & !S2) | (C & !S1 & S2) | (D & !S1 & !S2))"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

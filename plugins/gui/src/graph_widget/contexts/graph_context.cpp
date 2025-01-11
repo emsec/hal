@@ -3,6 +3,7 @@
 
 #include "hal_core/netlist/module.h"
 #include "hal_core/utilities/log.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
@@ -155,23 +156,6 @@ namespace hal
         }
     }
 
-    bool GraphContext::foldModuleAction(u32 moduleId, const PlacementHint &plc)
-    {
-        Module* m = gNetlist->get_module_by_id(moduleId);
-        if (!m) return false;
-        QSet<u32> gats;
-        QSet<u32> mods;
-        for (const auto& g : m->get_gates(nullptr, true))
-            gats.insert(g->get_id());
-        for (auto sm : m->get_submodules(nullptr, true))
-            mods.insert(sm->get_id());
-        beginChange();
-        remove(mods, gats);
-        add({m->get_id()}, {}, plc);
-        endChange();
-        return true;
-    }
-
     bool GraphContext::isGateUnfolded(u32 gateId) const
     {
         QSet<u32> containedGates = mGates + mAddedGates - mRemovedGates;
@@ -197,7 +181,7 @@ namespace hal
         return true;
     }
 
-    void GraphContext::unfoldModule(const u32 id)
+    void GraphContext::unfoldModule(const u32 id, const PlacementHint& plc)
     {
         auto contained_modules = mModules + mAddedModules - mRemovedModules;
 
@@ -208,6 +192,7 @@ namespace hal
             QSet<u32> modules;
 
             Node singleContentNode;
+            PlacementHint childPlc;
 
             for (const Gate* g : m->get_gates())
             {
@@ -220,12 +205,18 @@ namespace hal
                 modules.insert(sm->get_id());
             }
 
-            PlacementHint plc;
-            if (gates.size() + modules.size() == 1)
+            if (plc.mode() == PlacementHint::GridPosition)
             {
-                plc = PlacementHint(PlacementHint::GridPosition);
-                plc.addGridPosition(singleContentNode,
-                                    mLayouter->nodeToPositionMap().value(Node(id,Node::Module)));
+                // placement determined by caller
+                childPlc = plc;
+            }
+            else if (gates.size() + modules.size() == 1)
+            {
+                // There is only a single child in this module, keep the grid position
+                childPlc = PlacementHint(PlacementHint::GridPosition);
+                NetLayoutPoint childPos = mLayouter->positonForNode(Node(id,Node::Module));
+                if (!childPos.isUndefined())
+                    childPlc.addGridPosition(singleContentNode,childPos);
             }
 
             // That would unfold the empty module into nothing, meaning there would
@@ -235,7 +226,7 @@ namespace hal
             beginChange();
             mLayouter->prepareRollback();
             remove({id}, {});
-            add(modules, gates, plc);
+            add(modules, gates, childPlc);
             endChange();
         }
     }
@@ -303,7 +294,7 @@ namespace hal
         return isShowingModule(id, {}, {}, {}, {});
     }
 
-    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates, bool exclusively) const
+    bool GraphContext::isShowingModule(const u32 id, const QSet<u32>& minus_modules, const QSet<u32>& minus_gates, const QSet<u32>& plus_modules, const QSet<u32>& plus_gates) const
     {
         // There are all sorts of problems when we allow this, since now any empty
         // module thinks that it is every other empty module. Blocking this,
@@ -327,12 +318,17 @@ namespace hal
         auto moduleGates = (gates - minus_gates) + plus_gates;
         auto moduleModules = (modules - minus_modules) + plus_modules;
 
-        if (exclusively)
-            return contextGates == moduleGates && contextModules == moduleModules;
-        else
-            return (contextGates.contains(moduleGates) && contextModules.contains(moduleModules) && !moduleGates.empty() && !moduleModules.empty()) ||
-                   (contextGates.contains(moduleGates) && !moduleGates.empty() && moduleModules.empty()) ||
-                   (contextModules.contains(moduleModules) && moduleGates.empty() && !moduleModules.empty());
+        return contextGates == moduleGates && contextModules == moduleModules;
+    }
+
+
+    bool GraphContext::isShowingFoldedTopModule() const
+    {
+        auto contextGates = (mGates - mRemovedGates) + mAddedGates;
+        if (!contextGates.isEmpty()) return false;
+        auto contextModules = (mModules - mRemovedModules) + mAddedModules;
+        if (contextModules.size() != 1) return false;
+        return (*mModules.constBegin() == 1); // top_module has ID=1
     }
 
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
@@ -341,6 +337,7 @@ namespace hal
         auto containedModules = mModules + mAddedModules - mRemovedModules;
 
         Module* m = gNetlist->get_module_by_id(id);
+        if (!m) return;
 
         for (const Gate* g : m->get_gates())
         {
@@ -370,7 +367,7 @@ namespace hal
         if (containedGates.empty() && containedModules.size() == 1 && *containedModules.begin() == mExclusiveModuleId)
             return true;
         // unfolded module
-        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}, true))
+        if (isShowingModule(mExclusiveModuleId, {}, {}, {}, {}))
             return true;
         return false;
     }
@@ -725,7 +722,7 @@ namespace hal
         {
             QString name = QString::fromStdString(m->get_name()) + " (ID: " + QString::number(m->get_id()) + ")";
             ActionRenameObject* act = new ActionRenameObject(name);
-            act->setObject(UserActionObject(this->id(), UserActionObjectType::Context));
+            act->setObject(UserActionObject(this->id(), UserActionObjectType::ContextView));
             act->exec();
         }
         Q_EMIT(dataChanged());
@@ -789,6 +786,12 @@ namespace hal
             }
         }
 
+        if (nodesToPlace.isEmpty())
+        {
+            log_warning("gui", "Cannot restore view id={}, there are no nodes to place.", mId);
+            return false;
+        }
+
         mModules.clear();
         mGates.clear();
         for (const QPair<Node,QPoint>& box : nodesToPlace)
@@ -821,26 +824,24 @@ namespace hal
         return true;
     }
 
-    void GraphContext::writeToFile(QJsonObject& json)
+    void GraphContext::writeToFile(QJsonObject& json, int parentId)
     {
         json["id"] = (int) mId;
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
-        if (gContentManager->getContextManagerWidget()->getCurrentContext()==this)
-            json["selected"] = true;
-
+        json["visible"] = gContentManager->getGraphTabWidget()->visibleStatus(this);
+        json["parentId"] = (int) parentId;
         /// modules
         QJsonArray jsonMods;
         for (u32 id : mModules)
         {
-            Node searchMod(id, Node::Module);
-            const NodeBox* box = getLayouter()->boxes().boxForNode(searchMod);
-            Q_ASSERT(box);
+            NetLayoutPoint pos = getLayouter()->positonForNode(Node(id,Node::Module));
+            Q_ASSERT(!pos.isUndefined());
             QJsonObject jsonMod;
             jsonMod["id"] = (int) id;
-            jsonMod["x"]  = (int) box->x();
-            jsonMod["y"]  = (int) box->y();
+            jsonMod["x"]  = (int) pos.x();
+            jsonMod["y"]  = (int) pos.y();
             jsonMods.append(jsonMod);
         }
         json["modules"] = jsonMods;
@@ -849,13 +850,12 @@ namespace hal
         QJsonArray jsonGats;
         for (u32 id : mGates)
         {
-            Node searchGat(id, Node::Gate);
-            const NodeBox* box = getLayouter()->boxes().boxForNode(searchGat);
-            Q_ASSERT(box);
+            NetLayoutPoint pos = getLayouter()->positonForNode(Node(id,Node::Gate));
+            Q_ASSERT(!pos.isUndefined());
             QJsonObject jsonGat;
             jsonGat["id"] = (int) id;
-            jsonGat["x"]  = (int) box->x();
-            jsonGat["y"]  = (int) box->y();
+            jsonGat["x"]  = (int) pos.x();
+            jsonGat["y"]  = (int) pos.y();
             jsonGats.append(jsonGat);
         }
         json["gates"] = jsonGats;
@@ -879,9 +879,50 @@ namespace hal
         Q_EMIT(dataChanged());
     }
 
+    void GraphContext::setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats)
+    {
+        mScheduleRemoveModules = mods;
+        mScheduleRemoveGates = gats;
+    }
+
+    bool GraphContext::isScheduledRemove(const Node& nd)
+    {
+        switch (nd.type()) {
+        case Node::Module:
+        {
+            auto it = mScheduleRemoveModules.find(nd.id());
+            if (it != mScheduleRemoveModules.end())
+            {
+                mScheduleRemoveModules.erase(it);
+                return true;
+            }
+            break;
+        }
+        case Node::Gate:
+        {
+            auto it = mScheduleRemoveGates.find(nd.id());
+            if (it != mScheduleRemoveGates.end())
+            {
+                mScheduleRemoveGates.erase(it);
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        return false;
+    }
+
     void GraphContext::setSpecialUpdate(bool state)
     {
         mSpecialUpdate = state;
+    }
+
+    void GraphContext::showComments(const Node &nd)
+    {
+        if (mParentWidget)
+            mParentWidget->showComments(nd);
     }
 
     void GraphContext::setExclusiveModuleId(u32 id, bool emitSignal)
@@ -920,7 +961,7 @@ namespace hal
             if (!found)
             {
                 ActionRenameObject* act = new ActionRenameObject(new_name);
-                act->setObject(UserActionObject(this->id(),UserActionObjectType::Context));
+                act->setObject(UserActionObject(this->id(),UserActionObjectType::ContextView));
                 act->exec();
                 break;
             }

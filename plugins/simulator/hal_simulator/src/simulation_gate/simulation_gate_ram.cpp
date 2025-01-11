@@ -16,7 +16,7 @@ namespace hal
 
             if (row >= data.size() || 64 % width != 0 || width > 32)
             {
-                log_error("netlist_simulator", "cannot read data word of width {} at address {0:x}.", width, address);
+                log_error("hal_simulator", "cannot read data word of width {} at address {0:x}.", width, address);
                 return 0;
             }
 
@@ -32,7 +32,7 @@ namespace hal
 
             if (row >= data.size() || 64 % width != 0 || width > 32)
             {
-                log_error("netlist_simulator", "cannot write data word {0:x} of width {} to address {0:x}.", in_data, width, address);
+                log_error("hal_simulator", "cannot write data word {0:x} of width {} to address {0:x}.", in_data, width, address);
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace hal
         const RAMComponent* ram_component = gate_type->get_component_as<RAMComponent>([](const GateTypeComponent* c) { return RAMComponent::is_class_of(c); });
         if (ram_component == nullptr)
         {
-            log_error("netlist_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+            log_error("hal_simulator", "cannot find RAM properties for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
             return;
         }
 
@@ -100,7 +100,7 @@ namespace hal
             const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
             if (init_component == nullptr)
             {
-                log_error("netlist_simulator", "cannot find initialization data for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                log_error("hal_simulator", "cannot find initialization data for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 return;
             }
 
@@ -121,7 +121,7 @@ namespace hal
 
             if (ram_component->get_bit_size() != m_data.size() * 64)
             {
-                log_error("netlist_simulator", "initialization data does not fit memory size for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                log_error("hal_simulator", "initialization data does not fit memory size for RAM gate '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 m_data.clear();
                 return;
             }
@@ -140,7 +140,7 @@ namespace hal
                     break;
                 case BooleanFunction::Value::X:
                 case BooleanFunction::Value::Z:
-                    log_error("netlist_simulator", "RAM gate '{}' with ID {} of type {} cannot be initialized with value '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name(), value);
+                    log_error("hal_simulator", "RAM gate '{}' with ID {} of type {} cannot be initialized with value '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name(), BooleanFunction::to_string(value));
                     return;
             }
 

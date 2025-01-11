@@ -67,6 +67,22 @@ namespace hal
         std::filesystem::path get_path() const;
 
         /**
+         * Hack to alter the path if gate library gets modified and written to a new location.
+         * Use this function only if you know exactly what you are doing
+         *
+         * @param[in] modified_path - The path to the new location.
+         */
+        void set_path(const std::filesystem::path& modified_path);
+
+        /**
+         * Hack to alter the name if gate library gets modified and written to a new location.
+         * Use this function only if you know exactly what you are doing
+         *
+         * @param[in] modified_name - The new name.
+         */
+        void set_name(const std::string& modified_name);
+
+        /**
          * Set the data category of the gate location information.
          * 
          * @param[in] category - The data category.
@@ -104,6 +120,18 @@ namespace hal
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
         GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
+
+        /**
+         * TODO pybind
+         * Replace gate type with given ID, might change name, properties, component, and return it.
+         *
+         * @param[in] id - The ID of gate type
+         * @param[in] name - The name of the gate type.
+         * @param[in] properties - The properties of the gate type.
+         * @param[in] component - A component adding additional functionality to the gate type.
+         * @returns The new gate type instance on success, a nullptr otherwise.
+         */
+        GateType* replace_gate_type(u32 id, const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
         /**
          * Check whether the given gate type is contained in this library.
@@ -181,6 +209,8 @@ namespace hal
          * @returns A vector of includes.
          */
         std::vector<std::string> get_includes() const;
+
+        void remove_gate_type(const std::string& name);
 
     private:
         std::string m_name;

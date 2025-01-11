@@ -40,7 +40,6 @@ namespace hal
 
     void ActionRemoveItemsFromObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        writeParentObjectToXml(xmlOut);
         if (!mModules.isEmpty())
             xmlOut.writeTextElement("modules", setToText(mModules));
         if (!mGates.isEmpty())
@@ -55,7 +54,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "modules")
                 mModules = setFromText(xmlIn.readElementText());
             else if (xmlIn.name() == "gates")
@@ -74,7 +72,7 @@ namespace hal
         Grouping* grp;
         switch (mObject.type())
         {
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {
@@ -84,14 +82,14 @@ namespace hal
                     for (u32 id : mModules)
                     {
                         Node nd(id, Node::Module);
-                        QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
-                        plc.addGridPosition(nd, p);
+                        NetLayoutPoint p = ctx->getLayouter()->positonForNode(nd);
+                        if (!p.isUndefined()) plc.addGridPosition(nd, p);
                     }
                     for (u32 id : mGates)
                     {
                         Node nd(id, Node::Gate);
-                        QPoint p = ctx->getLayouter()->nodeToPositionMap().value(nd);
-                        plc.addGridPosition(nd, p);
+                        NetLayoutPoint p = ctx->getLayouter()->positonForNode(nd);
+                        if (!p.isUndefined()) plc.addGridPosition(nd, p);
                     }
                     undo->setPlacementHint(plc);
                     mUndoAction = undo;
@@ -116,52 +114,6 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::PinGroup: {
-                auto mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (mod)
-                {
-                    auto pinGroup = mod->get_pin_group_by_id(mObject.id());
-                    if (pinGroup == nullptr)
-                    {
-                        return false;
-                    }
-
-                    for (u32 id : mPins)
-                    {
-                        if (mod->get_pin_by_id(id) == nullptr)
-                        {
-                            return false;
-                        }
-                    }
-                    for (u32 id : mPins)
-                    {
-                        if (mod->remove_pin_from_group(pinGroup, mod->get_pin_by_id(id), false).is_error())
-                        {
-                            return false;
-                        }
-                    }
-
-                    if (pinGroup->empty())    //delete group and undo=create+add
-                    {
-                        UserActionCompound* act = new UserActionCompound;
-                        act->setUseCreatedObject();
-                        ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroup->get_name()));
-                        actCreate->setParentObject(mParentObject);
-                        act->addAction(actCreate);
-                        act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), mPins));
-                        mUndoAction = act;
-                        if (mod->delete_pin_group(pinGroup).is_error())
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            break;
             default:
                 return false;
         }
@@ -170,7 +122,6 @@ namespace hal
         {
             mUndoAction = new ActionAddItemsToObject(mModules, mGates, mNets, mPins);
             mUndoAction->setObject(mObject);
-            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }

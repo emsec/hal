@@ -268,7 +268,7 @@ namespace hal
         values.reserve(size);
         for (auto i = 0; i < size; i++)
         {
-            values.emplace_back((value & (1 << i)) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            values.emplace_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
         }
 
         return BooleanFunction::Const(values);
@@ -415,7 +415,8 @@ namespace hal
         auto end   = p2.get_index_value().get();
         if ((start > end) || (start >= p0.size()) || (end >= p0.size()) || (end - start + 1) != size)
         {
-            return ERR("could not apply SLICE operation: bit-sizes do not match (p0 = " + std::to_string(p0.size()) + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
+            return ERR("could not apply SLICE operation: bit indices are not valid, p1 must be larger or equal than p1 and smaller than p0 (p0 = " + std::to_string(p0.size())
+                       + ", p1 = " + std::to_string(start) + ", p2 = " + std::to_string(end) + ")");
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Slice, size), std::move(p0), std::move(p1), std::move(p2)));
@@ -462,6 +463,86 @@ namespace hal
         }
 
         return OK(BooleanFunction(Node::Operation(NodeType::Sext, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Shl(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply SHL operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply SHL operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Shl, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Lshr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply LSHR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply LSHR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Lshr, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ashr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ASHR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ASHR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ashr, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Rol(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ROL operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ROL operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Rol, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ror(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ROR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ROR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ror, size), std::move(p0), std::move(p1)));
     }
 
     Result<BooleanFunction> BooleanFunction::Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
@@ -530,9 +611,9 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Ite, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
-    std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction& f)
     {
-        return os << function.to_string();
+        return os << f.to_string();
     }
 
     BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
@@ -662,7 +743,7 @@ namespace hal
 
     u16 BooleanFunction::size() const
     {
-        return this->m_nodes.back().size;
+        return this->get_top_level_node().size;
     }
 
     bool BooleanFunction::is(u16 type) const
@@ -682,12 +763,12 @@ namespace hal
 
     Result<std::string> BooleanFunction::get_variable_name() const
     {
-        if (!this->is_variable())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a variable");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].variable);
+        return this->get_top_level_node().get_variable_name();
     }
 
     bool BooleanFunction::is_constant() const
@@ -695,36 +776,34 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
     }
 
+    bool BooleanFunction::has_constant_value(const std::vector<Value>& value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
+    }
+
     bool BooleanFunction::has_constant_value(u64 value) const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
 
-    Result<u64> BooleanFunction::get_constant_value() const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::get_constant_value() const
     {
-        if (!this->is_constant())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a constant");
+            return ERR("Boolean function is empty");
         }
 
-        if (this->size() > 64)
+        return this->get_top_level_node().get_constant_value();
+    }
+
+    Result<u64> BooleanFunction::get_constant_value_u64() const
+    {
+        if (this->is_empty())
         {
-            return ERR("Boolean function constant has size > 64");
+            return ERR("Boolean function is empty");
         }
 
-        if (std::any_of(this->m_nodes[0].constant.begin(), this->m_nodes[0].constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
-        {
-            return ERR("Boolean function constant is undefined or high-impedance");
-        }
-
-        u64 val = 0;
-        for (auto it = this->m_nodes[0].constant.rbegin(); it != this->m_nodes[0].constant.rend(); it++)
-        {
-            val <<= 1;
-            val |= *it;
-        }
-
-        return OK(val);
+        return this->get_top_level_node().get_constant_value_u64();
     }
 
     bool BooleanFunction::is_index() const
@@ -739,12 +818,12 @@ namespace hal
 
     Result<u16> BooleanFunction::get_index_value() const
     {
-        if (!this->is_index())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not an index");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].index);
+        return this->get_top_level_node().get_index_value();
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
@@ -862,6 +941,17 @@ namespace hal
             case BooleanFunction::NodeType::Sext:
                 return OK("Sext(" + operands[0] + ", " + operands[1] + ")");
 
+            case BooleanFunction::NodeType::Shl:
+                return OK("(" + operands[0] + " << " + operands[1] + ")");
+            case BooleanFunction::NodeType::Lshr:
+                return OK("(" + operands[0] + " >> " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ashr:
+                return OK("(" + operands[0] + " >>a " + operands[1] + ")");
+            case BooleanFunction::NodeType::Rol:
+                return OK("(" + operands[0] + " <<r " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ror:
+                return OK("(" + operands[0] + " >>r " + operands[1] + ")");
+
             case BooleanFunction::NodeType::Eq:
                 return OK("(" + operands[0] + " == " + operands[1] + ")");
             case BooleanFunction::NodeType::Slt:
@@ -874,6 +964,34 @@ namespace hal
                 return OK("(" + operands[0] + " <= " + operands[1] + ")");
             case BooleanFunction::NodeType::Ite:
                 return OK("Ite(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+
+            default:
+                return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
+        }
+    }
+
+    Result<std::string> BooleanFunction::algebraic_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
+    {
+        if (node.get_arity() != operands.size())
+        {
+            return ERR("could not print Boolean function: node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+        }
+
+        switch (node.type)
+        {
+            case BooleanFunction::NodeType::Index:
+            case BooleanFunction::NodeType::Variable:
+                return OK(node.to_string());
+
+            case BooleanFunction::NodeType::Constant:
+                return OK("CONST" + std::string(node.has_constant_value(0) ? "0" : "1"));
+
+            case BooleanFunction::NodeType::And:
+                return OK("(" + operands[0] + "*" + operands[1] + ")");
+            case BooleanFunction::NodeType::Not:
+                return OK("(! " + operands[0] + ")");
+            case BooleanFunction::NodeType::Or:
+                return OK("(" + operands[0] + "+" + operands[1] + ")");
 
             default:
                 return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
@@ -970,6 +1088,13 @@ namespace hal
         return (simplified.is_ok()) ? simplified.get() : this->clone();
     }
 
+    BooleanFunction BooleanFunction::simplify_local() const
+    {
+        auto simplified = Simplification::local_simplification(*this);
+
+        return (simplified.is_ok()) ? simplified.get() : this->clone();
+    }
+
     BooleanFunction BooleanFunction::substitute(const std::string& old_variable_name, const std::string& new_variable_name) const
     {
         auto function = this->clone();
@@ -986,13 +1111,7 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
     {
-        /// Helper function to substitute a variable with a Boolean function.
-        ///
-        /// @param[in] node - Node.
-        /// @param[in] operands - Operands of node.
-        /// @param[in] var_name - Variable name to check for replacement.
-        /// @param[in] repl - Replacement Boolean function.
-        /// @returns AST replacement.
+        // Helper function to substitute a variable with a Boolean function.
         auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> BooleanFunction {
             if (node.has_variable_name(var_name))
             {
@@ -1018,6 +1137,23 @@ namespace hal
             default:
                 return ERR("could not replace variable '" + name + "' with Boolean function '" + replacement.to_string() + "': validation failed, the operations may be imbalanced");
         }
+    }
+
+    BooleanFunction BooleanFunction::substitute(const std::map<std::string, std::string>& substitutions) const
+    {
+        auto function = this->clone();
+        for (auto i = 0u; i < this->m_nodes.size(); i++)
+        {
+            if (const auto var_name_res = this->m_nodes[i].get_variable_name(); var_name_res.is_ok())
+            {
+                if (const auto it = substitutions.find(var_name_res.get()); it != substitutions.end())
+                {
+                    function.m_nodes[i] = Node::Variable(it->second, this->m_nodes[i].size);
+                }
+            }
+        }
+
+        return function;
     }
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
@@ -1275,7 +1411,7 @@ namespace hal
         {
             for (u32 j = 0; j < num_inputs; j++)
             {
-                str << " " << std::left << std::setw(in_widths.at(j)) << std::setfill(' ') << ((i >> (num_inputs - j - 1)) & 1) << " |";
+                str << " " << std::left << std::setw(in_widths.at(j)) << std::setfill(' ') << ((i >> j) & 1) << " |";
             }
 
             for (u32 k = 0; k < num_outputs; k++)
@@ -1561,6 +1697,17 @@ namespace hal
             case NodeType::Sext:
                 return "Sext";
 
+            case NodeType::Shl:
+                return "<<";
+            case NodeType::Lshr:
+                return ">>";
+            case NodeType::Ashr:
+                return ">>a";
+            case NodeType::Rol:
+                return "<<r";
+            case NodeType::Ror:
+                return ">>r";
+
             case NodeType::Eq:
                 return "==";
             case NodeType::Sle:
@@ -1587,12 +1734,14 @@ namespace hal
     u16 BooleanFunction::Node::get_arity_of_type(u16 type)
     {
         static const std::map<u16, u16> type2arity = {
-            {BooleanFunction::NodeType::And, 2},   {BooleanFunction::NodeType::Or, 2},       {BooleanFunction::NodeType::Not, 1},   {BooleanFunction::NodeType::Xor, 2},
-            {BooleanFunction::NodeType::Add, 2},   {BooleanFunction::NodeType::Sub, 2},      {BooleanFunction::NodeType::Mul, 2},   {BooleanFunction::NodeType::Sdiv, 2},
-            {BooleanFunction::NodeType::Udiv, 2},  {BooleanFunction::NodeType::Srem, 2},     {BooleanFunction::NodeType::Urem, 2},  {BooleanFunction::NodeType::Concat, 2},
-            {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},  {BooleanFunction::NodeType::Eq, 2},
-            {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},   {BooleanFunction::NodeType::Ult, 2},
-            {BooleanFunction::NodeType::Ite, 3},   {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
+            {BooleanFunction::NodeType::And, 2},      {BooleanFunction::NodeType::Or, 2},   {BooleanFunction::NodeType::Not, 1},      {BooleanFunction::NodeType::Xor, 2},
+            {BooleanFunction::NodeType::Add, 2},      {BooleanFunction::NodeType::Sub, 2},  {BooleanFunction::NodeType::Mul, 2},      {BooleanFunction::NodeType::Sdiv, 2},
+            {BooleanFunction::NodeType::Udiv, 2},     {BooleanFunction::NodeType::Srem, 2}, {BooleanFunction::NodeType::Urem, 2},     {BooleanFunction::NodeType::Concat, 2},
+            {BooleanFunction::NodeType::Slice, 3},    {BooleanFunction::NodeType::Zext, 2}, {BooleanFunction::NodeType::Sext, 2},     {BooleanFunction::NodeType::Shl, 2},
+            {BooleanFunction::NodeType::Lshr, 2},     {BooleanFunction::NodeType::Ashr, 2}, {BooleanFunction::NodeType::Rol, 2},      {BooleanFunction::NodeType::Ror, 2},
+            {BooleanFunction::NodeType::Eq, 2},       {BooleanFunction::NodeType::Sle, 2},  {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},
+            {BooleanFunction::NodeType::Ult, 2},      {BooleanFunction::NodeType::Ite, 3},  {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0},
+            {BooleanFunction::NodeType::Variable, 0},
         };
 
         return type2arity.at(type);
@@ -1606,6 +1755,11 @@ namespace hal
     bool BooleanFunction::Node::is_constant() const
     {
         return this->is(BooleanFunction::NodeType::Constant);
+    }
+
+    bool BooleanFunction::Node::has_constant_value(const std::vector<Value>& value) const
+    {
+        return this->is_constant() && (this->constant == value);
     }
 
     bool BooleanFunction::Node::has_constant_value(u64 value) const
@@ -1624,6 +1778,43 @@ namespace hal
         return this->constant == bv_value;
     }
 
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::Node::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        return OK(this->constant);
+    }
+
+    Result<u64> BooleanFunction::Node::get_constant_value_u64() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        if (this->size > 64)
+        {
+            return ERR("Node constant has size > 64");
+        }
+
+        if (std::any_of(this->constant.begin(), this->constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
+        {
+            return ERR("Node constant is undefined or high-impedance");
+        }
+
+        u64 val = 0;
+        for (auto it = this->constant.rbegin(); it != this->constant.rend(); it++)
+        {
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
     bool BooleanFunction::Node::is_index() const
     {
         return this->is(BooleanFunction::NodeType::Index);
@@ -1634,6 +1825,16 @@ namespace hal
         return this->is_index() && (this->index == value);
     }
 
+    Result<u16> BooleanFunction::Node::get_index_value() const
+    {
+        if (!this->is_index())
+        {
+            return ERR("Node is not an index");
+        }
+
+        return OK(this->index);
+    }
+
     bool BooleanFunction::Node::is_variable() const
     {
         return this->is(BooleanFunction::NodeType::Variable);
@@ -1642,6 +1843,16 @@ namespace hal
     bool BooleanFunction::Node::has_variable_name(const std::string& value) const
     {
         return this->is_variable() && (this->variable == value);
+    }
+
+    Result<std::string> BooleanFunction::Node::get_variable_name() const
+    {
+        if (!this->is_variable())
+        {
+            return ERR("Node is not a variable");
+        }
+
+        return OK(this->variable);
     }
 
     bool BooleanFunction::Node::is_operation() const

@@ -20,6 +20,16 @@ namespace hal
         return m_path;
     }
 
+    void GateLibrary::set_path(const std::filesystem::path& modified_path)
+    {
+        m_path = modified_path;
+    }
+
+    void GateLibrary::set_name(const std::string &modified_name)
+    {
+        m_name = modified_name;
+    }
+
     void GateLibrary::set_gate_location_data_category(const std::string& category)
     {
         m_gate_location_data_category = category;
@@ -49,6 +59,40 @@ namespace hal
         }
 
         std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, get_unique_gate_type_id(), name, properties, std::move(component)));
+
+        auto res = gt.get();
+        m_gate_type_map.emplace(name, res);
+        m_gate_types.push_back(std::move(gt));
+        return res;
+    }
+
+    GateType* GateLibrary::replace_gate_type(u32 id, const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component)
+    {
+        // must not insert duplicate name
+        auto it = m_gate_type_map.find(name);
+        if (it != m_gate_type_map.end() && it->second->get_id() != id)
+        {
+            log_error("gate_library", "could not replace gate type ID={} since new name '{}' exists already within gate library '{}'.", id, name, m_name);
+            return nullptr;
+        }
+
+        auto jt = m_gate_types.begin();
+        while (jt != m_gate_types.end())
+        {
+            if (jt->get()->get_id() == id) break;
+            ++jt;
+        }
+        if (jt == m_gate_types.end())
+        {
+            log_error("gate_library", "could not replace gate type ID={}, no gate with this ID found within gate library", id, m_name);
+            return nullptr;
+        }
+        auto nt = m_gate_type_map.find(jt->get()->get_name());
+        if (nt != m_gate_type_map.end())
+            m_gate_type_map.erase(nt);
+        m_gate_types.erase(jt);
+
+        std::unique_ptr<GateType> gt = std::unique_ptr<GateType>(new GateType(this, id, name, properties, std::move(component)));
 
         auto res = gt.get();
         m_gate_type_map.emplace(name, res);
@@ -167,5 +211,18 @@ namespace hal
     u32 GateLibrary::get_unique_gate_type_id()
     {
         return m_next_gate_type_id++;
+    }
+
+    void GateLibrary::remove_gate_type(const std::string& name)
+    {
+        if (m_gate_type_map.find(name) == m_gate_type_map.end())
+        {
+            log_error("gate_library", "could not remove gate type with name '{}' as a gate type with this name does not exist within gate library '{}'.", name, m_name);
+        }
+        else
+        {
+            auto it = m_gate_type_map.find(name);
+            m_gate_type_map.erase(it);
+        }
     }
 }    // namespace hal

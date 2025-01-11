@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/gui_def.h"
+#include "gui/module_model/module_model.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 
 #include <QTreeView>
@@ -53,22 +53,14 @@ namespace hal
          *
          * @param sti - The new "selected" item, can be a nullptr if the index was not valid.
          */
-        void triggerSelection(const SelectionTreeItem* sti);
+        void triggerSelection(const ModuleItem* sti);
 
         /**
          * Q_SIGNAL that is emitted when an item is double clicked.
          *
          * @param sti - The double clicked item.
          */
-        void itemDoubleClicked(const SelectionTreeItem* sti);
-
-        /**
-         * Q_SIGNAL that is emitted when the action "Focus item in Graph View" in the context
-         * menu (that appears when you right click on an item) is chosen.
-         *
-         * @param sti - The item that thas right-clicked.
-         */
-        void focusItemClicked(const SelectionTreeItem* sti);
+        void itemDoubleClicked(const ModuleItem* sti);
 
     public Q_SLOTS:
         /**
@@ -77,7 +69,13 @@ namespace hal
          *
          * @param filter_text -The text to filter the model.
          */
-        void handleFilterTextChanged(const QString& filter_text);
+        ///void handleFilterTextChanged(const QString& filter_text);
+
+        /**
+         * Might have to change icon color if module selected, thus updating view upon this event
+         * @param id - unused
+         */
+        void handleModuleColorChanged(u32 id);
  
     protected:
         /**
@@ -103,7 +101,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        SelectionTreeView(QWidget* parent = nullptr);
+        SelectionTreeView(QWidget* parent = nullptr, bool isGrouping = false);
 
         /**
          * Sets the default width of each column.
@@ -116,8 +114,9 @@ namespace hal
          * selection model is cleared and the view itself hides.
          *
          * @param mVisible - The bool to determine the described behaviour.
+         * @param groupingId - If non-zero tree gets populated from grouping rather than from selection
          */
-        void populate(bool mVisible);
+        void populate(bool mVisible, u32 groupingId=0);
 
         /**
          * Converts a given modelIntex to the item it represents.
@@ -125,7 +124,7 @@ namespace hal
          * @param index - The index to convert.
          * @return The item that is represented. Returns a nullptr if the index is invalid or the conversion fails.
          */
-        SelectionTreeItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
+        ModuleItem* itemFromIndex(const QModelIndex& index = QModelIndex()) const;
 
         /**
          * Get the view's proxy model for the SelectionTreeModel.
@@ -136,10 +135,17 @@ namespace hal
 
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
-        void handleIsolationViewAction(const SelectionTreeItem* sti);
+
+        /**
+         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
+         * type of the clicked item.
+         *
+         * @param sti - The clicked item in the selection-treeview.
+         */
+        void handleTreeViewItemFocusClicked(const ModuleItem* sti);
 
     private:
-        SelectionTreeModel* mSelectionTreeModel;
-        SelectionTreeProxyModel* mSelectionTreeProxyModel;
+
+        bool mIsGrouping;
     };
 }    // namespace hal

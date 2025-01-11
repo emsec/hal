@@ -4,6 +4,8 @@
 
 #include "gui/selection_details_widget/net_details_widget/module_table_model.h"
 #include "gui/gui_globals.h"
+#include "gui/module_context_menu/module_context_menu.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/py_code_provider.h"
 
 #include <QHeaderView>
@@ -62,52 +64,29 @@ namespace hal
     void NetModuleTable::handleContextMenuRequested(const QPoint& pos)
     {
         QModelIndex idx = indexAt(pos);
-
         if(!idx.isValid())
             return;
 
         u32 moduleID = mModuleTableModel->getModuleIDFromIndex(idx);
         u32 pinID = mModuleTableModel->getPinIDFromIndex(idx);
         QString pinName = mModuleTableModel->getPortNameFromIndex(idx);
-        QString moduleName = mModuleTableModel->getModuleNameFromIndex(idx);
 
         QMenu menu;
-
-        menu.addAction("Module name to clipboard", [moduleName](){
-            QApplication::clipboard()->setText(moduleName);
-        });
-
-        menu.addAction("Module ID to clipboard", [moduleID](){
-            QApplication::clipboard()->setText(QString::number(moduleID));
-        });
 
         menu.addAction("Pin name to clipboard", [pinName](){
             QApplication::clipboard()->setText(pinName);
         });
+        menu.addAction(QIcon(":/icons/python"), "Extract endpoint as python code (copy to clipboard)", 
+            [moduleID, pinID]()
+            {QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(moduleID, pinID));}
+        );
 
-        menu.addSection("Misc");
-        menu.addAction("Set module as current selection", [this, moduleID](){
-            gSelectionRelay->clear();
-            gSelectionRelay->addModule(moduleID);
-            gSelectionRelay->relaySelectionChanged(this);
-        });
+        ModuleContextMenu::addModuleSubmenu(&menu, moduleID);
 
-        menu.addAction("Add module to current selection", [this, moduleID](){
-            gSelectionRelay->addModule(moduleID);
-            gSelectionRelay->relaySelectionChanged(this);
-        });
+        GuiPluginManager::addPluginSubmenus(&menu, gNetlist, 
+            std::vector<u32>({moduleID}), {}, {});
 
-        menu.addSection("Python");
-        menu.addAction(QIcon(":/icons/python"), "Get module", [moduleID](){
-            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModule(moduleID));
-        });
-
-        menu.addAction(QIcon(":/icons/python"), "Get pin", [moduleID, pinID](){
-            QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(moduleID, pinID));
-        });
-
-        menu.move(mapToGlobal(pos));
-        menu.exec();
+        menu.exec(this->viewport()->mapToGlobal(pos));
     }
 
     void NetModuleTable::fitSizeToContent()

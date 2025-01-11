@@ -75,12 +75,10 @@ namespace hal
                     if (!port->m_ranges.empty())
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
-                        verilog_module->m_expanded_port_expressions.insert(port->m_expanded_identifiers.begin(), port->m_expanded_identifiers.end());
                     }
                     else
                     {
                         port->m_expanded_identifiers = {port->m_identifier};
-                        verilog_module->m_expanded_port_expressions.insert(port->m_identifier);
                     }
                 }
                 else
@@ -89,12 +87,17 @@ namespace hal
                     {
                         port->m_expanded_identifiers = expand_ranges(port->m_identifier, port->m_ranges);
                         auto expanded_expression     = expand_ranges(port->m_expression, port->m_ranges);
-                        verilog_module->m_expanded_port_expressions.insert(expanded_expression.begin(), expanded_expression.end());
+
+                        std::transform(port->m_expanded_identifiers.begin(),
+                                       port->m_expanded_identifiers.end(),
+                                       expanded_expression.begin(),
+                                       std::inserter(verilog_module->m_expanded_port_identifiers_to_expressions, verilog_module->m_expanded_port_identifiers_to_expressions.end()),
+                                       std::make_pair<const std::string&, const std::string&>);
                     }
                     else
                     {
-                        port->m_expanded_identifiers = {port->m_identifier};
-                        verilog_module->m_expanded_port_expressions.insert(port->m_expression);
+                        port->m_expanded_identifiers                                                   = {port->m_identifier};
+                        verilog_module->m_expanded_port_identifiers_to_expressions[port->m_identifier] = port->m_expression;
                     }
                 }
             }
@@ -245,11 +248,13 @@ namespace hal
         m_gate_types.clear();
         m_gnd_gate_types.clear();
         m_vcc_gate_types.clear();
-        m_instance_name_occurrences.clear();
-        m_signal_name_occurrences.clear();
+        m_module_instantiation_count.clear();
+        m_instance_name_occurences.clear();
+        m_net_name_occurences.clear();
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
+        m_module_port_by_net.clear();
         for (const auto& verilog_module : m_modules)
         {
             for (const auto& instance : verilog_module->m_instances)
@@ -322,6 +327,8 @@ namespace hal
         }
 
         // delete unused nets
+        std::queue<Net*> nets_to_be_deleted;
+
         for (auto net : m_netlist->get_nets())
         {
             const u32 num_of_sources      = net->get_num_of_sources();
@@ -330,8 +337,15 @@ namespace hal
             const bool no_destination     = num_of_destinations == 0 && !(net->is_global_output_net() && num_of_sources != 0);
             if (no_source && no_destination)
             {
-                m_netlist->delete_net(net);
+                nets_to_be_deleted.push(net);
             }
+        }
+
+        while (!nets_to_be_deleted.empty())
+        {
+            Net* net = nets_to_be_deleted.front();
+            nets_to_be_deleted.pop();
+            m_netlist->delete_net(net);
         }
 
         m_netlist->load_gate_locations_from_data();
@@ -673,18 +687,31 @@ namespace hal
                 }
                 ports_stream.consume();
 
-                auto port          = std::make_unique<VerilogPort>();
-                port->m_identifier = next_token.string;
-                port->m_expression = next_token.string;
-                port->m_direction  = direction;
+                auto port                          = std::make_unique<VerilogPort>();
+                const std::string& port_expression = next_token.string;
+                port->m_identifier                 = port_expression;
+                port->m_expression                 = port_expression;
+                port->m_direction                  = direction;
                 if (!ranges.empty())
                 {
                     port->m_ranges = ranges;
                 }
-
-                verilog_module->m_ports_by_identifier[port->m_identifier] = port.get();
-                verilog_module->m_ports_by_expression[port->m_expression] = port.get();
+                verilog_module->m_ports_by_identifier[port_expression] = port.get();
+                verilog_module->m_ports_by_expression[port_expression] = port.get();
                 verilog_module->m_ports.push_back(std::move(port));
+
+                // every port implicitly creates a wire, so create signal if not already declared explicitly
+                if (verilog_module->m_signals_by_name.find(port_expression) == verilog_module->m_signals_by_name.end())
+                {
+                    auto signal    = std::make_unique<VerilogSignal>();
+                    signal->m_name = port_expression;
+                    if (!ranges.empty())
+                    {
+                        signal->m_ranges = ranges;
+                    }
+                    verilog_module->m_signals_by_name[port_expression] = signal.get();
+                    verilog_module->m_signals.push_back(std::move(signal));
+                }
             } while (ports_stream.consume(",", ports_stream.remaining() > 0));
         }
 
@@ -733,7 +760,25 @@ namespace hal
             {
                 port->m_ranges = ranges;
             }
-            port->m_attributes.insert(port->m_attributes.end(), attributes.begin(), attributes.end());
+
+            // every port implicitly creates a wire, so create signal if not already declared explicitly
+            if (const auto signal_it = verilog_module->m_signals_by_name.find(port_expression); signal_it == verilog_module->m_signals_by_name.end())
+            {
+                auto signal    = std::make_unique<VerilogSignal>();
+                signal->m_name = port_expression;
+                if (!ranges.empty())
+                {
+                    signal->m_ranges = ranges;
+                }
+                signal->m_attributes.insert(signal->m_attributes.end(), attributes.begin(), attributes.end());
+                verilog_module->m_signals_by_name[port_expression] = signal.get();
+                verilog_module->m_signals.push_back(std::move(signal));
+            }
+            else
+            {
+                auto* signal = signal_it->second;
+                signal->m_attributes.insert(signal->m_attributes.end(), attributes.begin(), attributes.end());
+            }
         } while (m_token_stream.consume(",", false));
 
         m_token_stream.consume(";", true);
@@ -780,15 +825,24 @@ namespace hal
                 verilog_module->m_assignments.push_back(std::move(assignment));
             }
 
-            auto signal    = std::make_unique<VerilogSignal>();
-            signal->m_name = signal_name.string;
-            if (!ranges.empty())
+            // create signal if not already implicitly declared otherwise
+            if (const auto signal_it = verilog_module->m_signals_by_name.find(signal_name.string); signal_it == verilog_module->m_signals_by_name.end())
             {
-                signal->m_ranges = ranges;
+                auto signal    = std::make_unique<VerilogSignal>();
+                signal->m_name = signal_name.string;
+                if (!ranges.empty())
+                {
+                    signal->m_ranges = ranges;
+                }
+                signal->m_attributes.insert(signal->m_attributes.end(), attributes.begin(), attributes.end());
+                verilog_module->m_signals_by_name[signal_name.string] = signal.get();
+                verilog_module->m_signals.push_back(std::move(signal));
             }
-            signal->m_attributes.insert(signal->m_attributes.end(), attributes.begin(), attributes.end());
-            verilog_module->m_signals_by_name[signal_name.string] = signal.get();
-            verilog_module->m_signals.push_back(std::move(signal));
+            else
+            {
+                auto* signal = signal_it->second;
+                signal->m_attributes.insert(signal->m_attributes.end(), attributes.begin(), attributes.end());
+            }
 
         } while (signal_stream.consume(",", false));
 
@@ -820,6 +874,33 @@ namespace hal
         else
         {
             assignment.m_assignment = res.get();
+        }
+
+        // every assignment implicitly creates a wire, so create signal if not already declared explicitly
+        for (const auto& var : assignment.m_variable)
+        {
+            if (const auto* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+            {
+                if (verilog_module->m_signals_by_name.find(*identifier) == verilog_module->m_signals_by_name.end())
+                {
+                    auto signal                                    = std::make_unique<VerilogSignal>();
+                    signal->m_name                                 = *identifier;
+                    verilog_module->m_signals_by_name[*identifier] = signal.get();
+                    verilog_module->m_signals.push_back(std::move(signal));
+                }
+            }
+            else if (const auto* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+            {
+                const auto& signal_name = std::get<0>(*ranged_identifier);
+                if (verilog_module->m_signals_by_name.find(signal_name) == verilog_module->m_signals_by_name.end())
+                {
+                    auto signal                                    = std::make_unique<VerilogSignal>();
+                    signal->m_name                                 = signal_name;
+                    signal->m_ranges                               = std::get<1>(*ranged_identifier);
+                    verilog_module->m_signals_by_name[signal_name] = signal.get();
+                    verilog_module->m_signals.push_back(std::move(signal));
+                }
+            }
         }
         m_token_stream.consume(";", true);
 
@@ -1024,43 +1105,33 @@ namespace hal
         m_netlist->set_design_name(top_module->m_name);
         m_netlist->enable_automatic_net_checks(false);
 
-        std::unordered_map<std::string, u32> instantiation_count;
-
         // preparations for alias: count the occurences of all names
         std::queue<VerilogModule*> q;
         q.push(top_module);
-
-        // top entity instance will be named after its entity, so take into account for aliases
-        m_instance_name_occurrences["top_module"]++;
-
-        // global input/output signals will be named after ports, so take into account for aliases
-        for (const auto& port : top_module->m_ports)
-        {
-            for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
-            {
-                m_signal_name_occurrences[expanded_port_identifier]++;
-            }
-        }
 
         while (!q.empty())
         {
             VerilogModule* module = q.front();
             q.pop();
 
-            instantiation_count[module->m_name]++;
+            m_module_instantiation_count[module->m_name]++;
 
-            for (const auto& signal : module->m_signals)
+            // collect and count all net names in the netlist
+            for (const auto& s : module->m_signals)
             {
-                for (const auto& expanded_name : signal->m_expanded_names)
+                std::vector<std::string> expanded_names;
+                expand_ranges_recursively(expanded_names, s->m_name, s->m_ranges, 0);
+                for (const auto& net_name : expanded_names)
                 {
-                    m_signal_name_occurrences[expanded_name]++;
+                    m_net_name_occurences[net_name]++;
                 }
             }
 
             for (const auto& instance : module->m_instances)
             {
-                m_instance_name_occurrences[instance->m_name]++;
+                m_instance_name_occurences[instance->m_name]++;
 
+                // add type of instance to q if it is a module
                 if (const auto it = m_modules_by_name.find(instance->m_type); it != m_modules_by_name.end())
                 {
                     q.push(it->second);
@@ -1071,7 +1142,7 @@ namespace hal
         for (auto& [module_name, verilog_module] : m_modules_by_name)
         {
             // detect unused modules
-            if (instantiation_count[module_name] == 0)
+            if (m_module_instantiation_count[module_name] == 0)
             {
                 log_warning("verilog_parser", "module '{}' has been defined in the netlist but is not instantiated.", module_name);
                 continue;
@@ -1091,8 +1162,10 @@ namespace hal
                             std::unordered_map<std::string, std::vector<std::string>> pin_groups;
                             for (const auto pin_group : gate_type_it->second->get_pin_groups())
                             {
-                                for (const auto pin : pin_group->get_pins())
+                                const auto pins = pin_group->get_pins();
+                                for (auto it = pins.rbegin(); it != pins.rend(); it++)
                                 {
+                                    const auto* pin = *it;
                                     pin_groups[pin_group->get_name()].push_back(pin->get_name());
                                 }
                             }
@@ -1162,22 +1235,25 @@ namespace hal
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                Net* global_port_net = m_netlist->create_net(expanded_port_identifier);
+                const auto signal_name = get_unique_alias("", expanded_port_identifier + "__GLOBAL_IO__", m_net_name_occurences);
+                m_net_name_occurences[signal_name]++;
+
+                Net* global_port_net = m_netlist->create_net(signal_name);
                 if (global_port_net == nullptr)
                 {
-                    return ERR("could not construct netlist: failed to create global I/O net '" + expanded_port_identifier + "'");
+                    return ERR("could not construct netlist: failed to create global I/O net '" + signal_name + "'");
                 }
 
-                m_net_by_name[expanded_port_identifier] = global_port_net;
+                m_net_by_name[signal_name] = global_port_net;
 
                 // assign global port nets to ports of top module
-                top_assignments[expanded_port_identifier] = expanded_port_identifier;
+                top_assignments[expanded_port_identifier] = signal_name;
 
                 if (port->m_direction == PinDirection::input || port->m_direction == PinDirection::inout)
                 {
                     if (!global_port_net->mark_global_input_net())
                     {
-                        return ERR("could not construct netlist: failed to mark global I/O net '" + expanded_port_identifier + "' as global input");
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + signal_name + "' as global input");
                     }
                 }
 
@@ -1185,7 +1261,7 @@ namespace hal
                 {
                     if (!global_port_net->mark_global_output_net())
                     {
-                        return ERR("could not construct netlist: failed to mark global I/O net '" + expanded_port_identifier + "' as global output");
+                        return ERR("could not construct netlist: failed to mark global I/O net '" + signal_name + "' as global output");
                     }
                 }
             }
@@ -1197,129 +1273,188 @@ namespace hal
         }
 
         // merge nets without gates in between them
-        while (!m_nets_to_merge.empty())
+        std::unordered_map<std::string, std::string> merged_nets;
+        std::unordered_map<std::string, std::vector<std::string>> master_to_slaves;
+
+        for (auto& [master, slave] : m_nets_to_merge)
         {
-            // master = net that other nets are merged into
-            // slave = net to merge into master and then delete
-            bool progress_made = false;
-
-            for (const auto& [master, merge_set] : m_nets_to_merge)
+            // check if master net has already been merged into other net
+            while (true)
             {
-                // check if none of the slaves is itself a master
-                bool is_master = false;
-                for (const auto& slave : merge_set)
+                if (const auto master_it = merged_nets.find(master); master_it != merged_nets.end())
                 {
-                    if (m_nets_to_merge.find(slave) != m_nets_to_merge.end())
-                    {
-                        is_master = true;
-                        break;
-                    }
+                    master = master_it->second;
                 }
-
-                if (is_master)
+                else
                 {
-                    continue;
+                    break;
                 }
-
-                auto master_net = m_net_by_name.at(master);
-                for (const auto& slave : merge_set)
-                {
-                    auto slave_net = m_net_by_name.at(slave);
-
-                    // merge sources
-                    if (slave_net->is_global_input_net())
-                    {
-                        master_net->mark_global_input_net();
-                    }
-
-                    for (auto src : slave_net->get_sources())
-                    {
-                        Gate* src_gate   = src->get_gate();
-                        GatePin* src_pin = src->get_pin();
-
-                        if (!slave_net->remove_source(src))
-                        {
-                            return ERR("could not construct netlist: failed to remove source from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
-                        }
-
-                        if (!master_net->is_a_source(src_gate, src_pin))
-                        {
-                            if (!master_net->add_source(src_gate, src_pin))
-                            {
-                                return ERR("could not construct netlist: failed to add source to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
-                            }
-                        }
-                    }
-
-                    // merge destinations
-                    if (slave_net->is_global_output_net())
-                    {
-                        master_net->mark_global_output_net();
-                    }
-
-                    for (auto dst : slave_net->get_destinations())
-                    {
-                        Gate* dst_gate   = dst->get_gate();
-                        GatePin* dst_pin = dst->get_pin();
-
-                        if (!slave_net->remove_destination(dst))
-                        {
-                            return ERR("could not construct netlist: failed to remove destination from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
-                        }
-
-                        if (!master_net->is_a_destination(dst_gate, dst_pin))
-                        {
-                            if (!master_net->add_destination(dst_gate, dst_pin))
-                            {
-                                return ERR("could not construct netlist: failed to add destination to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
-                            }
-                        }
-                    }
-
-                    // merge generics and attributes
-                    for (const auto& [identifier, content] : slave_net->get_data_map())
-                    {
-                        if (!master_net->set_data(std::get<0>(identifier), std::get<1>(identifier), std::get<0>(content), std::get<1>(content)))
-                        {
-                            log_warning("verilog_parser",
-                                        "unable to transfer data from slave net '{}' with ID {} to master net '{}' with ID {}.",
-                                        slave_net->get_name(),
-                                        slave_net->get_id(),
-                                        master_net->get_name(),
-                                        master_net->get_id());
-                        }
-                    }
-
-                    // update module ports
-                    if (const auto it = m_module_port_by_net.find(slave_net); it != m_module_port_by_net.end())
-                    {
-                        for (auto [module, index] : it->second)
-                        {
-                            std::get<1>(m_module_ports.at(module).at(index)) = master_net;
-                        }
-                        m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
-                        m_module_port_by_net.erase(it);
-                    }
-
-                    m_netlist->delete_net(slave_net);
-                    m_net_by_name.erase(slave);
-                }
-
-                m_nets_to_merge.erase(master);
-                progress_made = true;
-                break;
             }
 
-            if (!progress_made)
+            // check if slave net has already been merged into other net
+            while (true)
             {
-                return ERR("could not construct netlist: cyclic dependency between signals detected");
+                if (const auto slave_it = merged_nets.find(slave); slave_it != merged_nets.end())
+                {
+                    slave = slave_it->second;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            auto master_net = m_net_by_name.at(master);
+            auto slave_net  = m_net_by_name.at(slave);
+
+            if (master_net == slave_net)
+            {
+                continue;
+            }
+            else if (slave_net == m_zero_net || slave_net == m_one_net)
+            {
+                auto* tmp_net = master_net;
+                master_net    = slave_net;
+                slave_net     = tmp_net;
+
+                auto tmp_name = master;
+                master        = slave;
+                slave         = tmp_name;
+            }
+
+            // merge sources
+            if (slave_net->is_global_input_net())
+            {
+                master_net->mark_global_input_net();
+            }
+
+            for (auto src : slave_net->get_sources())
+            {
+                Gate* src_gate   = src->get_gate();
+                GatePin* src_pin = src->get_pin();
+
+                if (!slave_net->remove_source(src))
+                {
+                    return ERR("could not construct netlist: failed to remove source from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                }
+
+                if (!master_net->is_a_source(src_gate, src_pin))
+                {
+                    if (!master_net->add_source(src_gate, src_pin))
+                    {
+                        return ERR("could not construct netlist: failed to add source to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
+                    }
+                }
+            }
+
+            // merge destinations
+            if (slave_net->is_global_output_net())
+            {
+                master_net->mark_global_output_net();
+            }
+
+            for (auto dst : slave_net->get_destinations())
+            {
+                Gate* dst_gate   = dst->get_gate();
+                GatePin* dst_pin = dst->get_pin();
+
+                if (!slave_net->remove_destination(dst))
+                {
+                    return ERR("could not construct netlist: failed to remove destination from net '" + slave_net->get_name() + "' with ID " + std::to_string(slave_net->get_id()));
+                }
+
+                if (!master_net->is_a_destination(dst_gate, dst_pin))
+                {
+                    if (!master_net->add_destination(dst_gate, dst_pin))
+                    {
+                        return ERR("could not construct netlist: failed to add destination to net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()));
+                    }
+                }
+            }
+
+            // merge generics and attributes
+            for (const auto& [identifier, content] : slave_net->get_data_map())
+            {
+                if (!master_net->set_data(std::get<0>(identifier), std::get<1>(identifier), std::get<0>(content), std::get<1>(content)))
+                {
+                    log_warning("verilog_parser",
+                                "unable to transfer data from slave net '{}' with ID {} to master net '{}' with ID {}.",
+                                slave_net->get_name(),
+                                slave_net->get_id(),
+                                master_net->get_name(),
+                                master_net->get_id());
+                }
+            }
+
+            // update module ports
+            if (const auto it = m_module_port_by_net.find(slave_net); it != m_module_port_by_net.end())
+            {
+                for (auto [module, index] : it->second)
+                {
+                    std::get<1>(m_module_ports.at(module).at(index)) = master_net;
+                }
+                m_module_port_by_net[master_net].insert(m_module_port_by_net[master_net].end(), it->second.begin(), it->second.end());
+                m_module_port_by_net.erase(it);
+            }
+
+            m_netlist->delete_net(slave_net);
+            m_net_by_name.erase(slave);
+            merged_nets[slave] = master;
+            master_to_slaves[master].push_back(slave);
+        }
+
+        // annotate all surviving master nets with the net names that where merged into them
+        for (auto& master_net : m_netlist->get_nets())
+        {
+            const auto master_name = master_net->get_name();
+
+            if (const auto m2s_it = master_to_slaves.find(master_name); m2s_it != master_to_slaves.end())
+            {
+                std::vector<std::vector<std::string>> merged_slaves;
+                auto current_slaves = m2s_it->second;
+
+                while (!current_slaves.empty())
+                {
+                    std::vector<std::string> next_slaves;
+                    for (const auto& s : current_slaves)
+                    {
+                        if (const auto m2s_inner_it = master_to_slaves.find(s); m2s_inner_it != master_to_slaves.end())
+                        {
+                            next_slaves.insert(next_slaves.end(), m2s_inner_it->second.begin(), m2s_inner_it->second.end());
+                        }
+                    }
+
+                    merged_slaves.push_back(current_slaves);
+                    current_slaves = next_slaves;
+                    next_slaves.clear();
+                }
+
+                // annotate all merged slave wire names as a JSON formatted list of list of strings
+                // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
+                std::string merged_str = "";
+                bool has_merged_nets   = false;
+                for (const auto& vec : merged_slaves)
+                {
+                    if (!vec.empty())
+                    {
+                        has_merged_nets = true;
+                    }
+                    const auto s = utils::join(", ", vec, [](const auto e) { return '"' + e + '"'; });
+                    merged_str += "[" + s + "], ";
+                }
+                merged_str = merged_str.substr(0, merged_str.size() - 2);
+
+                if (has_merged_nets)
+                {
+                    master_net->set_data("parser_annotation", "merged_nets", "string", "[" + merged_str + "]");
+                }
             }
         }
 
         // add global GND gate if required by any instance
         if (m_netlist->get_gnd_gates().empty())
         {
-            if (!m_zero_net->get_destinations().empty())
+            if (m_zero_net->get_num_of_destinations() > 0)
             {
                 GateType* gnd_type  = m_gnd_gate_types.begin()->second;
                 GatePin* output_pin = gnd_type->get_output_pins().front();
@@ -1338,13 +1473,14 @@ namespace hal
             else
             {
                 m_netlist->delete_net(m_zero_net);
+                m_zero_net = nullptr;
             }
         }
 
         // add global VCC gate if required by any instance
         if (m_netlist->get_vcc_gates().empty())
         {
-            if (!m_one_net->get_destinations().empty())
+            if (m_one_net->get_num_of_destinations() > 0)
             {
                 GateType* vcc_type  = m_vcc_gate_types.begin()->second;
                 GatePin* output_pin = vcc_type->get_output_pins().front();
@@ -1363,6 +1499,7 @@ namespace hal
             else
             {
                 m_netlist->delete_net(m_one_net);
+                m_one_net = nullptr;
             }
         }
 
@@ -1375,9 +1512,12 @@ namespace hal
         // assign module pins
         for (const auto& [module, ports] : m_module_ports)
         {
+            std::unordered_set<Net*> input_nets  = module->get_input_nets();
+            std::unordered_set<Net*> output_nets = module->get_output_nets();
+
             for (const auto& [port_name, port_net] : ports)
             {
-                if (port_net->get_num_of_sources() == 0 && port_net->get_num_of_destinations() == 0)
+                if (!module->is_input_net(port_net) && !module->is_output_net(port_net))
                 {
                     continue;
                 }
@@ -1387,34 +1527,6 @@ namespace hal
                     return ERR_APPEND(res.get_error(),
                                       "could not construct netlist: failed to create pin '" + port_name + "' at net '" + port_net->get_name() + "' with ID " + std::to_string(port_net->get_id())
                                           + " within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                    // TODO: The pin creation fails when there are unused ports that never get a net assigned to them (verliog...),
-                    //       but this also happens when the net just passes through the module (since there is no gate inside the module with that net as either input or output net, the net does not get listed as module input or output)
-                }
-            }
-        }
-
-        for (Module* module : m_netlist->get_modules())
-        {
-            std::unordered_set<Net*> input_nets  = module->get_input_nets();
-            std::unordered_set<Net*> output_nets = module->get_input_nets();
-
-            if (!module->get_pin_by_net(m_one_net) && (input_nets.find(m_one_net) != input_nets.end() || output_nets.find(m_one_net) != input_nets.end()))
-            {
-                if (auto res = module->create_pin("'1'", m_one_net); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '1' at net '" + m_one_net->get_name() + "' with ID " + std::to_string(m_one_net->get_id()) + "within module '"
-                                          + module->get_name() + "' with ID " + std::to_string(module->get_id()));
-                }
-            }
-
-            if (!module->get_pin_by_net(m_zero_net) && (input_nets.find(m_zero_net) != input_nets.end() || output_nets.find(m_zero_net) != input_nets.end()))
-            {
-                if (auto res = module->create_pin("'0'", m_zero_net); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not construct netlist: failed to create pin '0' at net '" + m_zero_net->get_name() + "' with ID " + std::to_string(m_zero_net->get_id())
-                                          + "within module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()));
                 }
             }
         }
@@ -1433,7 +1545,8 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        instance_alias[instance_identifier] = get_unique_alias(m_instance_name_occurrences, instance_identifier);
+        const std::string parent_name       = (parent == nullptr) ? "" : parent->get_name();
+        instance_alias[instance_identifier] = get_unique_alias(parent_name, instance_identifier, m_instance_name_occurences);
 
         // create netlist module
         Module* module;
@@ -1469,7 +1582,7 @@ namespace hal
             }
         }
 
-        // assign module port names and attributes
+        // assign module port names
         for (const auto& port : verilog_module->m_ports)
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
@@ -1477,24 +1590,8 @@ namespace hal
                 if (const auto it = parent_module_assignments.find(expanded_port_identifier); it != parent_module_assignments.end())
                 {
                     Net* port_net = m_net_by_name.at(it->second);
-                    m_module_ports[module].push_back(std::make_pair(expanded_port_identifier, port_net));
+                    m_module_ports[module].push_back(std::make_tuple(expanded_port_identifier, port_net));
                     m_module_port_by_net[port_net].push_back(std::make_pair(module, m_module_ports[module].size() - 1));
-
-                    // assign port attributes
-                    for (const VerilogDataEntry& attribute : port->m_attributes)
-                    {
-                        if (!port_net->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
-                        {
-                            log_warning("verilog_parser",
-                                        "could not set attribute '{} = {}' of type '{}' for port '{}' of instance '{}' of type '{}'.",
-                                        attribute.m_name,
-                                        attribute.m_value,
-                                        attribute.m_type,
-                                        expanded_port_identifier,
-                                        instance_identifier,
-                                        instance_type);
-                        }
-                    }
                 }
             }
         }
@@ -1504,7 +1601,12 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
+                std::string unique_net_name = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
+                if (unique_net_name != expanded_name)
+                {
+                    m_net_name_occurences[unique_net_name]++;
+                }
+                signal_alias[expanded_name] = unique_net_name;
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(signal_alias.at(expanded_name));
@@ -1538,11 +1640,7 @@ namespace hal
             std::string a = left_expanded_signal;
             std::string b = right_expanded_signal;
 
-            if (const auto parent_it = parent_module_assignments.find(a); parent_it != parent_module_assignments.end())
-            {
-                a = parent_it->second;
-            }
-            else if (const auto alias_it = signal_alias.find(a); alias_it != signal_alias.end())
+            if (const auto alias_it = signal_alias.find(a); alias_it != signal_alias.end())
             {
                 a = alias_it->second;
             }
@@ -1551,11 +1649,7 @@ namespace hal
                 return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + a + "'");
             }
 
-            if (const auto parent_it = parent_module_assignments.find(b); parent_it != parent_module_assignments.end())
-            {
-                b = parent_it->second;
-            }
-            else if (const auto alias_it = signal_alias.find(b); alias_it != signal_alias.end())
+            if (const auto alias_it = signal_alias.find(b); alias_it != signal_alias.end())
             {
                 b = alias_it->second;
             }
@@ -1568,7 +1662,32 @@ namespace hal
                 return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + b + "'");
             }
 
-            m_nets_to_merge[b].push_back(a);
+            m_nets_to_merge.push_back(std::make_pair(a, b));
+        }
+
+        // schedule assigned port nets for merging
+        for (const auto& [port_identifier, net_name] : parent_module_assignments)
+        {
+            std::string signal_name;
+            if (const auto expr_it = verilog_module->m_expanded_port_identifiers_to_expressions.find(port_identifier); expr_it == verilog_module->m_expanded_port_identifiers_to_expressions.end())
+            {
+                signal_name = port_identifier;
+            }
+            else
+            {
+                signal_name = expr_it->second;
+            }
+
+            // TODO handle identifier != expression
+            if (const auto alias_it = signal_alias.find(signal_name); alias_it != signal_alias.end())
+            {
+                const bool swap = net_name.find("__GLOBAL_IO__") == std::string::npos;
+                m_nets_to_merge.push_back(swap ? std::make_pair(net_name, alias_it->second) : std::make_pair(alias_it->second, net_name));
+            }
+            else
+            {
+                return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + signal_name + "'");
+            }
         }
 
         // process instances i.e. gates or other entities
@@ -1586,32 +1705,21 @@ namespace hal
                 // expand port assignments
                 for (const auto& [port, assignment] : instance->m_expanded_port_assignments)
                 {
-                    if (const auto it = parent_module_assignments.find(assignment); it != parent_module_assignments.end())
+                    if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
                     {
-                        instance_assignments[port] = it->second;
+                        instance_assignments[port] = alias_it->second;
+                    }
+                    else if (assignment == "'0'" || assignment == "'1'")
+                    {
+                        instance_assignments[port] = assignment;
+                    }
+                    else if (assignment == "'Z'" || assignment == "'X'" || assignment.empty())
+                    {
+                        continue;
                     }
                     else
                     {
-                        if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
-                        {
-                            instance_assignments[port] = alias_it->second;
-                        }
-                        else if (assignment == "'0'" || assignment == "'1'")
-                        {
-                            instance_assignments[port] = assignment;
-                        }
-                        else if (assignment == "'Z'" || assignment == "'X'" || assignment.empty())
-                        {
-                            continue;
-                        }
-                        else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': port assignment '" + port + " = " + assignment + "' is invalid");
-                        }
+                        return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': port assignment '" + port + " = " + assignment + "' is invalid");
                     }
                 }
 
@@ -1630,9 +1738,8 @@ namespace hal
             else if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
             {
                 // create the new gate
-                instance_alias[instance->m_name] = get_unique_alias(m_instance_name_occurrences, instance->m_name);
-
-                Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
+                instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
+                Gate* new_gate                   = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
                 {
                     return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create gate '" + instance->m_name + "'");
@@ -1669,11 +1776,7 @@ namespace hal
                 {
                     std::string signal;
 
-                    if (const auto parent_it = parent_module_assignments.find(assignment); parent_it != parent_module_assignments.end())
-                    {
-                        signal = parent_it->second;
-                    }
-                    else if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
+                    if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
                     {
                         signal = alias_it->second;
                     }
@@ -1682,10 +1785,6 @@ namespace hal
                         signal = assignment;
                     }
                     else if (assignment == "'Z'" || assignment == "'X'")
-                    {
-                        continue;
-                    }
-                    else if (verilog_module->m_expanded_port_expressions.find(assignment) != verilog_module->m_expanded_port_expressions.end())
                     {
                         continue;
                     }
@@ -1830,18 +1929,34 @@ namespace hal
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
     }    // namespace
 
-    std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
+    // generate a unique name for a gate/module instance
+    std::string VerilogParser::get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
     {
-        // if the name only appears once, we don't have to suffix it
-        if (name_occurrences[name] < 2)
+        std::string unique_alias = name;
+
+        if (!parent_name.empty())
         {
-            return name;
+            // if there is no other instance with that name, we omit the name prefix
+
+            auto instance_name_it = name_occurences.find(name);
+
+            int cnt = 0;
+
+            // it is OK if base name (first loop cnt=0) is already in name_occurences once
+            // unique_alias (cnt > 0) must not be in name_occurences
+            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1))
+            {
+                std::string extension;
+                if (cnt++)
+                {
+                    extension = "_u" + std::to_string(cnt);
+                }
+                unique_alias     = parent_name + instance_name_seperator + unique_alias + extension;
+                instance_name_it = name_occurences.find(unique_alias);
+            }
         }
 
-        name_occurrences[name]++;
-
-        // otherwise, add a unique string to the name
-        return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
+        return unique_alias;
     }
 
     std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& stream) const

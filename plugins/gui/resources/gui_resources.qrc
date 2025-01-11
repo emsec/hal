@@ -13,6 +13,9 @@
         <file alias="SourceCodePro-Black">fonts/Source Code Pro/SourceCodePro-Black.ttf</file>
         <file alias="DroidSansMono">fonts/Droid Sans Mono/DroidSansMono.ttf</file>
     </qresource>
+    <qresource prefix="/path">
+        <file alias="gate_library_definitions">path/gate_library_definitions.txt</file>
+    </qresource>
     <qresource prefix="/style">
         <file alias="dark">stylesheet/dark.qss</file>
         <file alias="light">stylesheet/light.qss</file>
@@ -27,7 +30,9 @@
         <file alias="search">icons/0135-search.svg</file>
         <file alias="switch">icons/0183-switch.svg</file>
         <file alias="arrow-up">icons/0307-arrow-up.svg</file>
+        <file alias="arrow-right">icons/0309-arrow-right.svg</file>
         <file alias="arrow-down">icons/0311-arrow-down.svg</file>
+        <file alias="arrow-left">icons/0313-arrow-left.svg</file>
         <file alias="hal">icons/HAL9000.svg</file>
         <file alias="hal9000">icons/HAL9000.png</file>
         <file alias="fire">icons/0170-fire.svg</file>
@@ -64,6 +69,7 @@
         <file alias="new-file">icons/new-file.svg</file>
         <file alias="pen">icons/pen.svg</file>
         <file alias="plus">icons/plus.svg</file>
+        <file alias="plusdir">icons/plusdir.svg</file>
         <file alias="trashcan">icons/trashcan.svg</file>
         <file alias="graph">icons/0189-tree.svg</file>
         <file alias="keyboard">icons/0086-keyboard.svg</file>
@@ -73,9 +79,19 @@
         <file alias="to_grouping">icons/to_grouping.svg</file>
         <file alias="to_module">icons/to_module.svg</file>
         <file alias="to_selection">icons/to_selection.svg</file>
-        <file alias="sel_module">icons/sel_module.png</file>
-        <file alias="sel_gate">icons/sel_gate.png</file>
-        <file alias="sel_net">icons/sel_net.png</file>
+        <file alias="ne_module">icons/netlist_elements/module.svg</file>
+        <file alias="ne_gate">icons/netlist_elements/gate_default.svg</file>
+        <file alias="ne_net">icons/netlist_elements/net.svg</file>
+        <file alias="ne_gate_buffer">icons/netlist_elements/gate_buffer.svg</file>
+        <file alias="ne_gate_inverter">icons/netlist_elements/gate_inverter.svg</file>
+        <file alias="ne_gate_and">icons/netlist_elements/gate_and.svg</file>
+        <file alias="ne_gate_nand">icons/netlist_elements/gate_nand.svg</file>
+        <file alias="ne_gate_or">icons/netlist_elements/gate_or.svg</file>
+        <file alias="ne_gate_nor">icons/netlist_elements/gate_nor.svg</file>
+        <file alias="ne_gate_xor">icons/netlist_elements/gate_xor.svg</file>
+        <file alias="ne_gate_xnor">icons/netlist_elements/gate_xnor.svg</file>
+        <file alias="ne_no_gate">icons/netlist_elements/no_gate.svg</file>
+        <file alias="ne_no_net">icons/netlist_elements/no_net.svg</file>
         <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
         <file alias="module_cursor">icons/module_cursor.png</file>
@@ -87,6 +103,22 @@
         <file alias="add_waveform">icons/add_waveform_net.png</file>
 	<file alias="zoom_waveform">icons/zoom_waveform.png</file>
         <file alias="x_delete">icons/x_delete.png</file>
+        <file alias="check-mark">icons/check-mark.png</file>
+        <file alias="attention">icons/attention.png</file> 
+        <file alias="insert-plugin">icons/0501-insert-plugin.svg</file>
+        <file alias="cli-options">icons/0502-cli-options.svg</file>
+        <file alias="enable-gui-contributions">icons/context-menu.svg</file>
+        <file alias="disable-gui-contributions">icons/no-context-menu.svg</file>
+	<file alias="tree-collapsed">icons/tree-collapsed.svg</file>
+        <file alias="view-ctx">icons/view-ctx.svg</file>
+        <file alias="view-dir">icons/view-dir.svg</file>
+	<file alias="tree-expanded">icons/tree-expanded.svg</file>	
+        <file alias="sw_select_gates">icons/simulation_wizard/select_gates.png</file>
+        <file alias="sw_select_clock">icons/simulation_wizard/select_clock.png</file>
+        <file alias="sw_engine_par">icons/simulation_wizard/engine_par.png</file>
+        <file alias="sw_select_input">icons/simulation_wizard/select_input.png</file>
+        <file alias="sw_run_simulation">icons/simulation_wizard/run_simulation.png</file>
+        <file alias="sw_select_results">icons/simulation_wizard/select_results.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

@@ -208,7 +208,7 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is in the netlist, false otherwise.
          */
-        bool is_gate_in_netlist(Gate* gate) const;
+        bool is_gate_in_netlist(const Gate* gate) const;
 
         /**
          * Get the gate specified by the given ID.
@@ -232,7 +232,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each gate.
          * @return A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter) const;
+        std::vector<Gate*> get_gates(const std::function<bool(const Gate*)>& filter) const;
 
         /**
          * Mark a gate as a global VCC gate.
@@ -342,7 +342,7 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is in the netlist, false otherwise.
          */
-        bool is_net_in_netlist(Net* net) const;
+        bool is_net_in_netlist(const Net* net) const;
 
         /**
          * Get the net specified by the given ID.
@@ -366,7 +366,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each net.
          * @return A vector of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter) const;
+        std::vector<Net*> get_nets(const std::function<bool(const Net*)>& filter) const;
 
         /**
          * Mark a net as a global input net.
@@ -431,6 +431,20 @@ namespace hal
         const std::vector<Net*>& get_global_output_nets() const;
 
         /**
+         * Get all GND nets in the netlist.
+         * 
+         * @returns A vector nets.
+         */
+        std::vector<Net*> get_gnd_nets() const;
+
+        /**
+         * Get all VCC nets in the netlist.
+         * 
+         * @returns A vector of nets.
+         */
+        std::vector<Net*> get_vcc_nets() const;
+
+        /**
          * Enables or disables automatic checks on nets that determine whether a net is an input or output of a module.
          * \warning{\b WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.}
          * 
@@ -476,6 +490,7 @@ namespace hal
 
         /**
          * Remove a module from the netlist.
+         * Submodules, gates and nets under this module will be moved to the parent of this module.
          *
          * @param[in] module - The module.
          * @returns True on success, false otherwise.
@@ -488,7 +503,7 @@ namespace hal
          * @param[in] module - The module to check.
          * @returns True if the module is in the netlist, false otherwise.
          */
-        bool is_module_in_netlist(Module* module) const;
+        bool is_module_in_netlist(const Module* module) const;
 
         /**
          * Get the module specified by the given ID.
@@ -512,7 +527,7 @@ namespace hal
          * @param[in] filter - Filter function to be evaluated on each module.
          * @return A vector of modules.
          */
-        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter) const;
+        std::vector<Module*> get_modules(const std::function<bool(const Module*)>& filter) const;
 
         /**
          * Get the top module of the netlist.
@@ -567,7 +582,7 @@ namespace hal
          * @param[in] grouping - The grouping to check.
          * @returns True if the grouping is in the netlist, false otherwise.
          */
-        bool is_grouping_in_netlist(Grouping* grouping) const;
+        bool is_grouping_in_netlist(const Grouping* grouping) const;
 
         /**
          * Get the grouping specified by the given ID.
@@ -578,13 +593,20 @@ namespace hal
         Grouping* get_grouping_by_id(u32 grouping_id) const;
 
         /**
-         * Get all groupings contained within the netlist.<br>
-         * A filter can be applied to the result to only get groupings matching the specified condition.
+         * Get all groupings contained within the netlist.
          *
-         * @param[in] filter - Filter to be applied to the groupings.
          * @return A vector of groupings.
          */
-        std::vector<Grouping*> get_groupings(const std::function<bool(Grouping*)>& filter = nullptr) const;
+        const std::vector<Grouping*>& get_groupings() const;
+
+        /**
+         * Get all groupings contained within the netlist.<br>
+         * The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each grouping.
+         * @return A vector of groupings.
+         */
+        std::vector<Grouping*> get_groupings(const std::function<bool(const Grouping*)>& filter) const;
 
         /*
          * ################################################################
@@ -828,22 +850,22 @@ namespace hal
         /* stores the modules */
         Module* m_top_module;
         std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
-        std::unordered_set<Module*> m_modules_set;
+        std::unordered_set<const Module*> m_modules_set;
         std::vector<Module*> m_modules;
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
-        std::unordered_set<Net*> m_nets_set;
+        std::unordered_set<const Net*> m_nets_set;
         std::vector<Net*> m_nets;
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
-        std::unordered_set<Gate*> m_gates_set;
+        std::unordered_set<const Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
 
         /* stores the groupings */
         std::unordered_map<u32, std::unique_ptr<Grouping>> m_groupings_map;
-        std::unordered_set<Grouping*> m_groupings_set;
+        std::unordered_set<const Grouping*> m_groupings_set;
         std::vector<Grouping*> m_groupings;
 
         /* stores the set of global gates and nets */

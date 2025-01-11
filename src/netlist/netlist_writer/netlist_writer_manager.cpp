@@ -4,6 +4,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <chrono>
 #include <fstream>

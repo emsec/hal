@@ -277,6 +277,7 @@ namespace hal
                 pg_val.AddMember("type", enum_to_string(group->get_type()), allocator);
                 pg_val.AddMember("ascending", group->is_ascending(), allocator);
                 pg_val.AddMember("start_index", group->get_start_index(), allocator);
+                pg_val.AddMember("ordered", group->is_ordered(), allocator);
 
                 // pins of group
                 rapidjson::Value p_array(rapidjson::kArrayType);

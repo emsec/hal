@@ -69,18 +69,21 @@ namespace hal
                     Net* net_6_7 = test_utils::connect(nl.get(), gate_6, "O", gate_7, "I0");
 
                     Net* net_4_out = test_utils::connect_global_out(nl.get(), gate_4, "O", "net_4_out");
+                    ASSERT_TRUE(net_4_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_4_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_1 = top_module->get_pin_by_net(net_4_out);
                     ASSERT_NE(pin_1, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_1, net_4_out->get_name()));
                     ASSERT_TRUE(top_module->set_pin_group_name(pin_1->get_group().first, net_4_out->get_name()));
 
                     Net* net_5_out = test_utils::connect_global_out(nl.get(), gate_5, "O", "net_5_out");
+                    ASSERT_TRUE(net_5_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_5_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_2 = top_module->get_pin_by_net(net_5_out);
                     ASSERT_NE(pin_2, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_2, net_5_out->get_name()));
                     ASSERT_TRUE(top_module->set_pin_group_name(pin_2->get_group().first, net_5_out->get_name()));
 
                     Net* net_7_out = test_utils::connect_global_out(nl.get(), gate_7, "O", "net_7_out");
+                    ASSERT_TRUE(net_7_out->set_data("parser_annotation", "merged_nets", "string", "[[\"net_7_out__GLOBAL_IO__\"]]"));
                     ModulePin* pin_3 = top_module->get_pin_by_net(net_7_out);
                     ASSERT_NE(pin_3, nullptr);
                     ASSERT_TRUE(top_module->set_pin_name(pin_3, net_7_out->get_name()));

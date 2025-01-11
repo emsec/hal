@@ -25,7 +25,7 @@ QPushButton
     padding-bottom : 4px;
     padding-left   : 14px;
     padding-right  : 14px;
-    min-width      : 50px;
+    /* min-width      : 50px; */
 }
 
 QMenuBar
@@ -293,10 +293,12 @@ hal--Searchbar
     border-width                : 6px;
     border-style                : solid;
     border-color                : rgb(9, 11, 13);
-    qproperty-searchIcon       : ":/icons/search";
-    qproperty-searchIconStyle : "all -> #E4E4E4";
-    qproperty-clearIcon        : ":/icons/cross";
-    qproperty-clearIconStyle  : "all -> #E4E4E4";
+    qproperty-searchIcon        : ":/icons/search";
+    qproperty-searchIconStyle   : "all -> #E4E4E4";
+    qproperty-clearIcon         : ":/icons/cross";
+    qproperty-clearIconStyle    : "all -> #E4E4E4";
+    qproperty-optionDialogIcon  : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "all -> #E4E4E4";
 }
 
 hal--Searchbar QLabel
@@ -713,12 +715,12 @@ hal--LabeledFrame #label
 
 #recent-files-frame #label
 {
-    qproperty-text : "RECENT <font color='#A9B7C6'>FILES</font>";
+    qproperty-text : "RECENT <font color='#A9B7C6'>PROJECTS</font>";
 }
 
 #open-file-frame #label
 {
-    qproperty-text : "OPEN <font color='#A9B7C6'>FILE</font>";
+    qproperty-text : "OPEN <font color='#A9B7C6'>PROJECT</font>";
 }
 
 #get-in-touch-frame #label
@@ -884,6 +886,98 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibraryLabel
+{
+    background : black;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: #171e22;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: yellow;
+}
+
+hal--GatelibraryContentWidget
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-addTypeIconPath:      ":/icons/plus";
+    qproperty-editTypeIconPath:     ":/icons/pen";
+    qproperty-searchIconPath:       ":/icons/search";
+    qproperty-searchIconStyle:       "all->#e8e8e8";
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-deleteIconStyle:       "all->#e8e8e8";
+    qproperty-deleteIconPath:        ":/icons/trashcan";
+}
+
+hal--GeneralInfoWizardPage
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-leftArrowIconPath:    ":/icons/arrow-left";
+    qproperty-rightArrowIconPath:   ":/icons/arrow-right";
+}
+
+hal--GeneralInfoWizardPage #labProperties
+{
+    border-width : 2px 2px 0px 2px;
+    border-style : solid;
+    border-color : #515050;
+    margin-top   : 40px;
+    margin-bottom:  0px;
+}
+
+hal--GeneralInfoWizardPage #arrowButton
+{
+    min-width  : 12px;
+    max-width  : 12px;
+}
+
+hal--PinTreeView::item:focus
+{
+    background : rgba(10,20,80,0.6);
+    selection-background-color : rgba(10,20,80,0.6);
+}
+
+/*
+hal--PinTreeView
+{
+    background : gray;
+}
+
+hal--PinTreeView::item:selected
+{
+    background : red;
+}
+*/
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -953,11 +1047,6 @@ hal--GetInTouchItem[hover=true]
 hal--GetInTouchItem[hover=true] *
 {
     background : rgb(21, 23, 25);
-}
-
-hal--Overlay
-{
-    background : rgba(0, 0, 0, 128);
 }
 
 hal--ContentWidget *
@@ -1104,6 +1193,9 @@ hal--GroupingManagerWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-tableIconStyle: "all->#e8e8e8";
+    qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget
@@ -1112,6 +1204,7 @@ hal--ContextManagerWidget
 
     qproperty-newViewIconStyle: "all->#e8e8e8";
     qproperty-newViewIconPath: ":/icons/plus";
+    qproperty-newDirIconPath: ":/icons/plusdir";
 
     qproperty-renameIconStyle: "all->#e8e8e8";
     qproperty-renameIconPath: ":/icons/pen";
@@ -1180,11 +1273,23 @@ hal--Toolbar QPushButton:checked:hover {
     background-color : rgb(66, 66, 66);
 }
 
-hal--ModuleWidget
-{
+hal--ModuleWidget {
+    qproperty-disabledIconStyle: "all->#515050";
+    qproperty-activeIconStyle: "all->#e8e8e8";
+
+    qproperty-showNetsIconPath: ":/icons/ne_net";
+    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
+    qproperty-showGatesIconPath: ":/icons/ne_gate";
+    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
+
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-expandedIconPath: ":/icons/tree-expanded";
+    qproperty-collapsedIconPath: ":/icons/tree-collapsed";
 }
 
 hal--MainWindow
@@ -1192,24 +1297,38 @@ hal--MainWindow
     qproperty-halIconStyle: "";
     qproperty-halIconPath: ":/icons/hal";
 
-    qproperty-newFileIconStyle: "";
-    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openFileIconStyle: "all->#AFB1B3";
+    qproperty-openFileIconPath: ":/icons/detach";
 
-    qproperty-openIconStyle: "all->#3192C5";
-    qproperty-openIconPath: ":/icons/folder";
-
-    qproperty-saveIconStyle: "all->#3192C5";
-    qproperty-saveIconPath: ":/icons/folder-down";
-
-    qproperty-saveAsIconStyle: "all->#3192C5";
-    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-quitIconStyle: "all->#AFB1B3";
+    qproperty-quitIconPath: ":/icons/switch";
 
     qproperty-settingsIconStyle: "all->#AFB1B3";
     qproperty-settingsIconPath: ":/icons/settings";
 
+    qproperty-pluginsIconStyle: "all->#AFB1B3";
+    qproperty-pluginsIconPath: ":/icons/plugin";
+
     qproperty-undoIconStyle: "all->#e8e8e8";
     qproperty-undoIconPath: ":/icons/undo2";
 
+    qproperty-disabledIconStyle: "all->#515050";
+
+    qproperty-neGateIconStyle: "all->#AFB1B3";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
+}
+
+hal--FileActions
+{
+    qproperty-newFileIconStyle: "";
+    qproperty-newFileIconPath: ":/icons/new-file";
+    qproperty-openProjIconStyle: "all->#3192C5";
+    qproperty-openProjIconPath: ":/icons/folder";
+    qproperty-closeIconStyle: "all->#AFB1B3";
+    qproperty-closeIconPath: ":/icons/cross";
+    qproperty-saveIconPath: ":/icons/folder-down";
+    qproperty-saveAsIconPath: ":/icons/save-as";
+    qproperty-enabledIconStyle: "all->#3192C5";
     qproperty-disabledIconStyle: "all->#515050";
 }
 
@@ -1286,6 +1405,9 @@ hal--GraphicsQssAdapter
 
     qproperty-gridBaseDotColor: rgb(25, 25, 25);
     qproperty-gridClusterDotColor: rgb(170, 160, 125);
+
+    qproperty-nodeBackgroundColor: rgba(0, 0, 0, 200);
+    qproperty-nodeTextColor: rgb(160, 160, 160);
 }
 
 QTreeView
@@ -1394,4 +1516,236 @@ hal--GatelibraryManagementDialog QTableView
 hal--GatelibraryManagementDialog QHeaderView::section
 {
 background: rgb(35, 35, 35);
+}
+
+hal--BooleanFunctionEdit
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: #802010;
+    color     : #F0E0C0;
+}
+
+hal--GuiPluginManager
+{
+    qproperty-loadIconPath : ":/icons/insert-plugin";
+    qproperty-loadIconStyle: "all->#30ffc0";
+    qproperty-unloadIconPath: ":/icons/cross";
+    qproperty-unloadIconStyle: "all->#ff4040";
+    qproperty-cliIconPath: ":/icons/cli-options";
+    qproperty-cliIconStyle: "all->#c0c0c0";
+    qproperty-guiIconEnabledPath: ":/icons/enable-gui-contributions";
+    qproperty-guiIconDisabledPath: ":/icons/disable-gui-contributions";
+    qproperty-guiIconEnabledStyle: "all->#40A0FF";
+    qproperty-guiIconDisabledStyle: "all->#C0C0C0";
+    qproperty-defaultTextColor: rgb(192,192,192);
+    qproperty-hilightTextColor: rgb(255,255,20);
+    qproperty-hilightBackgroundColor: rgb(0,10,30);
+}
+
+hal--CommentWidget
+{
+    qproperty-newCommentIconPath : ":/icons/plus";
+    qproperty-newCommentIconStyle: "all->#dddddd";
+    qproperty-searchIconPath: ":/icons/search";
+    qproperty-searchIconStyle: "all->#dddddd";
+}
+
+hal--CommentItem
+{
+    qproperty-modifyCommentIconPath : ":/icons/pen";
+    qproperty-modifyCommentIconStyle : "all->#dddddd";
+    qproperty-deleteCommentIconPath: ":/icons/trashcan";
+    qproperty-deleteCommentIconStyle: "all->#dddddd";
+}
+
+hal--CommentDialog
+{
+    background-color: "#202020";
+    qproperty-redColor: "#ff0000";
+    qproperty-yellowColor: "#ffff00";
+    qproperty-greenColor: "#00ff00";
+    qproperty-defaultColor: "#A9B7C6";
+
+}
+
+hal--CommentDialog QTextEdit /*Edit for the actual commenttext*/
+{
+    background-color: "#2b2b2b";
+    alternate-background-color : "#1f1f1f"; /*used for code action*/
+}
+
+hal--CommentDialog QLineEdit
+{
+    background-color: "#2b2b2b";
+    border: 1px solid rgb(75, 78, 82);
+    border-radius: 2px;
+}
+
+hal--CommentDialog QLabel
+{
+    /*background-color: "#000000";*/
+    background-color: "#202020";
+}
+
+/*hal--CommentDialog #header-container
+{
+    background-color: "#000000";
+}*/
+
+hal--Overlay
+{
+    background : rgba(0, 0, 0, 150);
+}
+
+hal--LogicEvaluatorDialog
+{
+    font-size                  : 14px;
+    color                      : #A9B7C6;
+    background                 : #515253;
+}
+
+hal--LogicEvaluatorPingroup
+{
+    background                 : #717273;
+    border         : 2px solid gray;
+    padding-top    : 4px;
+    padding-bottom : 4px;
+    padding-left   : 0px;
+    padding-right  : 0px;
+}
+
+
+hal--LogicEvaluatorPingroup[output="true"]
+{
+    border-color   : #A0A5A8 #414243 #414243 black;
+    border-width   : 2 2 2 0;
+}
+
+hal--LogicEvaluatorPingroup[output="false"]
+{
+    border-color   : #A0A5A8 black #414243 #A0A5A8;
+    border-width   : 2 0 2 2;
+}
+
+hal--LogicEvaluatorValue
+{
+    min-width : 48;
+    max-width : 48;
+    min-height : 28;
+    max-height : 28;
+}
+
+hal--LogicEvaluatorValue QSpinBox
+{
+    color            : #CBD2D0;
+    font-family      : "Iosevka";
+    font-style       : normal;
+    background-color : rgb(28, 28, 29);
+    border           : none;
+}
+
+hal--LogicEvaluatorValue QSpinBox::up-button
+{
+    color            : #CBD2D0;
+    background-color : #505152;
+    border-style     : solid;
+    border-color     : #808182 #313233 #313233 #808182;
+    border-width     : 1;
+}
+
+hal--LogicEvaluatorValue QSpinBox::down-button
+{
+    color            : #CBD2D0;
+    background-color : #505152;
+    border-style     : solid;
+    border-color     : #808182 #313233 #313233 #808182;
+    border-width     : 1;
+}
+
+/*
+hal--LogicEvaluatorValue QSpinBox::up-arrow
+{
+    color            : #CBD2D0;
+    background-color : rgb(128, 28, 29);
+}
+
+hal--LogicEvaluatorValue QSpinBox::down-arrow
+{
+    color            : #CBD2D0;
+    background-color : rgb(28, 28, 128);
+}
+*/
+
+hal--LogicEvaluatorValue QLabel
+{
+    color            : #CBD2D0;
+    font-family      : "Iosevka";
+    font-style       : normal;
+    background-color : rgb(28, 28, 29);
+    border           : none;
+}
+
+hal--LogicEvaluatorPingroup > QLabel
+{
+    color            : white;
+    font-family      : "Iosevka";
+    font-style       : bold;
+    border           : none;
+    background-color : none;
+    max-height       : 28;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox
+{
+    font           : bold "Iosevka";
+    color          : white;
+    background     : black;
+    padding-top    : 4px;
+    padding-bottom : 4px;
+    padding-left   : 8px;
+    padding-right  : 8px;
+    min-width      : 250px;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox::indicator:checked
+{
+    background     : rgb(255,0,0);
+    border         : 1px solid black;
+}
+
+hal--LogicEvaluatorPingroup QCheckBox::indicator:unchecked
+{
+    background     : rgb(0,170,255);
+    border         : 1px solid black;
+}
+
+hal--LogicEvaluatorDialog > QTreeView
+{
+    border-style   : solid;
+    border-color   : #A0A5A8 black #414243 black;
+    border-width   : 2 2 2 2;
+    background     : black;
+    min-width      : 400px;
+}
+
+hal--LogicEvaluatorSelectGates
+{
+    qproperty-selForeground : #FFE8A0;
+    qproperty-selBackground : #102030;
+    min-width               : 400px;
 }

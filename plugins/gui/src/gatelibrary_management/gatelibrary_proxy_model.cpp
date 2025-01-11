@@ -1,10 +1,11 @@
 #include "gui/gatelibrary_management/gatelibrary_proxy_model.h"
+#include "gui/searchbar/search_proxy_model.h"
 
 #include "gui/gui_globals.h"
 
 namespace hal
 {
-    GatelibraryProxyModel::GatelibraryProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    GatelibraryProxyModel::GatelibraryProxyModel(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
     {
     }
 
@@ -21,7 +22,6 @@ namespace hal
             else
                 return false;
         }
-
         return true;
     }
 
@@ -60,5 +60,12 @@ namespace hal
     {
         mSortMechanism = sortMechanism;
         invalidate();
+    }
+
+    void GatelibraryProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
     }
 }

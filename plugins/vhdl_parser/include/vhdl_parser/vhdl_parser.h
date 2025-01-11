@@ -96,7 +96,6 @@ namespace hal
             ci_string m_identifier;
             PinDirection m_direction;
             std::vector<std::vector<u32>> m_ranges;
-            std::vector<VhdlDataEntry> m_attributes;
             std::vector<ci_string> m_expanded_identifiers;
         };
 
@@ -209,7 +208,7 @@ namespace hal
         Net* m_zero_net;
         Net* m_one_net;
         std::unordered_map<ci_string, Net*> m_net_by_name;
-        std::unordered_map<ci_string, std::vector<ci_string>> m_nets_to_merge;
+        std::vector<std::pair<ci_string, ci_string>> m_nets_to_merge;
 
         // parse HDL into intermediate format
         void tokenize();
@@ -233,7 +232,7 @@ namespace hal
         Result<Module*> instantiate_entity(const ci_string& instance_name, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
 
         // helper functions
-        ci_string get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const;
+        ci_string get_unique_alias(const ci_string& parent_name, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const;
         std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
         Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
         void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;

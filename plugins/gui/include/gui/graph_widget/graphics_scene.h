@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,15 +25,14 @@
 
 #pragma once
 
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
+#include "gui/graph_widget/shaders/graph_shader.h"
+#include "gui/gui_globals.h"
+#include "gui/module_model/module_item.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "hal_core/defines.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
-
-#include "gui/gui_globals.h"
-#include "gui/graph_widget/shaders/graph_shader.h"
-#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 
 #include <QGraphicsScene>
 #include <QPair>
@@ -45,6 +44,7 @@ namespace hal
     class GraphicsItem;
     class GraphicsModule;
     class GraphicsNet;
+    class DragController;
 
     /**
      * @ingroup graph
@@ -60,9 +60,14 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum GridType {None, Dots, Lines};
-        Q_ENUM(GridType)
-		
+        enum GridType
+        {
+            None,
+            Dots,
+            Lines
+        };
+        Q_ENUM(GridType);
+
         /**
          * Sets the Level of Detail (LOD) of the scene. If the LOD falls below a certain threshold, the grid in the
          * background won't be drawn anymore.
@@ -94,38 +99,6 @@ namespace hal
         static void setGridType(const GridType& gridType);
 
         /**
-         * Sets the color of the grid base lines (not the clusters). <br>
-         * It does not affect the dot grid color.
-         *
-         * @param color - The color of the grid base lines
-         */
-        static void setGridBaseLineColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid cluster lines. The grid cluster lines are the darker lines in the grid that
-         * indicate 8 steps in the main grid. <br>
-         * It does not affect the dot cluster grid color.
-         *
-         * @param color - The color of the grid cluster lines
-         */
-        static void setGridClusterLineColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid base dotted lines (only shown if grid_type::Dots are activated). <br>
-         *
-         * @param color - The color of the grid base dotted lines
-         */
-        static void setGridBaseDotColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid dotted cluster lines (only shown if grid_type::Dots are activated).
-         * The grid cluster lines are the darker dots in the grid that indicate 8 steps in the main grid.
-         *
-         * @param color - The color of the grid dotted cluster lines
-         */
-        static void setGridClusterDotColor(const QColor& color);
-
-        /**
          * Given any position, this function returns a position on the grid that is next to it.
          * \deprecated Please use GraphGraphicsView::closestLayouterPos instead.
          *
@@ -146,28 +119,6 @@ namespace hal
          *
          */
         ~GraphicsScene();
-
-        /**
-         * Starts the dragging of a gate or module to show its shadow meanwhile.
-         *
-         * @param posF - The position of the shadow
-         * @param sizeF - The size of the shadow (i.e. the size of the dragged gate)
-         * @param cue - The cue of the current position
-         */
-        void startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Moves the shadow that appears while dragging a gate or module.
-         *
-         * @param posF - The new position of the shadow
-         * @param cue - The cue of the current position
-         */
-        void moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Removes the shadow that appears while dragging a gate or module (at the end of the drag action).
-         */
-        void stopDragShadow();
 
         /**
          * Gets the position of the drag shadow.
@@ -245,11 +196,17 @@ namespace hal
          */
         const GraphicsModule* getModuleItem(const u32 id) const;
 
-        #ifdef GUI_DEBUG_GRID
+        /**
+         * Keep track on mouse pressed status to avoid premature actions during rubber band selection
+         * @param isPressed true=mouse pressed, false=mouse released.
+         */
+        void setMousePressed(bool isPressed);
+
+#ifdef GUI_DEBUG_GRID
         void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
         void setDebugGridEnabled(bool enabled);
         bool debugGridEnabled();
-        #endif
+#endif
 
     public Q_SLOTS:
         /**
@@ -277,7 +234,7 @@ namespace hal
          *
          * @param highlightItems - The selection tree items to highlight
          */
-        void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
+        void handleHighlight(const QVector<const ModuleItem*>& highlightItems);
 
         /**
          * Q_SLOT to call whenever a module was assigned to or removed from a grouping. It is used to update the
@@ -319,6 +276,12 @@ namespace hal
          */
         void updateAllItems();
 
+        /**
+         * Set reference pointer to drag controller on start drag, nullptr when drag ended
+         * @param dc - Reference to drag controller
+         */
+        void setDragController(DragController* dc);
+
     protected:
         /**
          * Handles the mouse event. Used to intercept and ignore right-clicks.
@@ -337,31 +300,31 @@ namespace hal
         static bool sGridClustersEnabled;
         static GraphicsScene::GridType sGridType;
 
-        static QColor sGridBaseLineColor;
-        static QColor sGridClusterLineColor;
-
-        static QColor sGridBaseDotColor;
-        static QColor sGridClusterDotColor;
-
- //       using QGraphicsScene::addItem;
- //       using QGraphicsScene::removeItem;
+        //       using QGraphicsScene::addItem;
+        //       using QGraphicsScene::removeItem;
         using QGraphicsScene::clear;
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
-
-        NodeDragShadow* mDragShadowGate;
 
         QVector<GraphicsModule*> mModuleItems;
         QVector<GraphicsGate*> mGateItems;
         QVector<GraphicsNet*> mNetItems;
 
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         void debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
         QVector<qreal> mDebugXLines;
         QVector<qreal> mDebugYLines;
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
-        #endif
+        DragController* mDragController;
+        enum RubberBandSelectionStatus
+        {
+            NotPressed,
+            BeginPressed,
+            SelectionChanged,
+            EndPressed
+        } mSelectionStatus;
+#endif
     };
-}
+}    // namespace hal

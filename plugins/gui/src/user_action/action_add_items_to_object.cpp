@@ -5,6 +5,8 @@
 #include "gui/gui_globals.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_move_node.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/grouping.h"
 
@@ -42,14 +44,23 @@ namespace hal
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         writeParentObjectToXml(xmlOut);
-        if (mPlacementHint.mode() != PlacementHint::Standard)
+
+        UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
+        switch (mPlacementHint.mode())
         {
-            UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
+        case PlacementHint::Standard:
+            break;
+        case PlacementHint::PreferLeft:
+        case PlacementHint::PreferRight:
             xmlOut.writeStartElement("placement");
             xmlOut.writeAttribute("id", QString::number(mPlacementHint.preferredOrigin().id()));
             xmlOut.writeAttribute("type", UserActionObjectType::toString(tp));
             xmlOut.writeAttribute("mode", mPlacementHint.mode() == PlacementHint::PreferLeft ? "left" : "right");
             xmlOut.writeEndElement();
+            break;
+        case PlacementHint::GridPosition:
+            xmlOut.writeTextElement("gridposition", gridToText(mPlacementHint.gridPosition()));
+            break;
         }
         if (!mModules.isEmpty())
             xmlOut.writeTextElement("modules", setToText(mModules));
@@ -65,7 +76,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "placement")
             {
                 u32 id                                = xmlIn.attributes().value("id").toInt();
@@ -73,6 +83,11 @@ namespace hal
                 PlacementHint::PlacementModeType mode = (xmlIn.attributes().value("mode").toString() == "left") ? PlacementHint::PreferLeft : PlacementHint::PreferRight;
                 mPlacementHint                        = PlacementHint(mode, Node(id, UserActionObjectType::toNodeType(tp)));
                 xmlIn.skipCurrentElement();    // no text body to read
+            }
+            else if (xmlIn.name() == "gridposition")
+            {
+                GridPlacement gp(gridFromText(xmlIn.readElementText()));
+                mPlacementHint = PlacementHint(gp);
             }
             else if (xmlIn.name() == "modules")
                 mModules = setFromText(xmlIn.readElementText());
@@ -112,7 +127,11 @@ namespace hal
                             return retval;
                         }
                     };
+                    // hash parent module id and collect moved items to generate UNDO action
                     QHash<u32, ChildSet> parentHash;
+                    GridPlacement* plc = nullptr;
+                    const GraphContext* ctx = gContentManager->getContextManagerWidget()->getCurrentContext();
+                    if (ctx) plc = ctx->getLayouter()->gridPlacementFactory();
 
                     std::vector<Gate*> gates;
                     for (u32 id : mGates)
@@ -132,23 +151,23 @@ namespace hal
                         sm->set_parent_module(m);
                     }
 
-                    if (parentHash.size() > 1)
+                    if (!parentHash.isEmpty())
                     {
                         UserActionCompound* compound = new UserActionCompound;
                         for (auto it = parentHash.begin(); it != parentHash.end(); ++it)
                             compound->addAction(it.value().actionFactory(it.key()));
+                        if (ctx && plc)
+                        {
+                            compound->addAction(new ActionMoveNode(ctx->id(),plc));
+                            delete plc;
+                        }
                         mUndoAction = compound;
-                    }
-                    else if (!parentHash.isEmpty())
-                    {
-                        u32 id      = parentHash.keys().at(0);
-                        mUndoAction = parentHash.value(id).actionFactory(id);
                     }
                 }
                 else
                     return false;
                 break;
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {
@@ -173,85 +192,6 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::PinGroup: {
-                if (mPins.empty())
-                    return true;
-
-                auto mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (mod)
-                {
-                    auto* pinGrp = mod->get_pin_group_by_id(mObject.id());
-                    QHash<u32, QSet<u32>> sourceGroups;
-                    if (pinGrp == nullptr)
-                    {
-                        return false;
-                    }
-                    for (auto id : mPins)
-                    {
-                        if (auto* pin = mod->get_pin_by_id(id); pin != nullptr)
-                        {
-                            sourceGroups[pin->get_group().first->get_id()].insert(id);
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-
-                    for (auto id : mPins)
-                    {
-                        if (mod->assign_pin_to_group(pinGrp, mod->get_pin_by_id(id), false).is_error())
-                        {
-                            return false;
-                        }
-                    }
-
-                    UserActionCompound* undo = new UserActionCompound;
-                    for (auto it = sourceGroups.constBegin(); it != sourceGroups.constEnd(); it++)
-                    {
-                        auto* group = mod->get_pin_group_by_id(it.key());
-                        if (group == nullptr)
-                        {
-                            return false;
-                        }
-                        if (group->empty())
-                        {
-                            UserActionCompound* act = new UserActionCompound;
-                            act->setUseCreatedObject();
-                            ActionCreateObject* crtAct = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(group->get_name()));
-                            crtAct->setParentObject(mParentObject);
-                            ActionAddItemsToObject* addAction = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
-                            if (mUsedInCreateContext)
-                            {
-                                addAction->mDeleteSource = false;
-                            }
-                            act->addAction(crtAct);
-                            act->addAction(addAction);
-                            undo->addAction(act);
-                            if (mDeleteSource)
-                            {
-                                if (mod->delete_pin_group(group).is_error())
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), it.value());
-                            act->setObject(UserActionObject(it.key(), UserActionObjectType::PinGroup));
-                            act->setParentObject(mParentObject);
-                            if (mUsedInCreateContext)
-                            {
-                                act->mDeleteSource = false;
-                            }
-                            undo->addAction(act);
-                        }
-                    }
-                    mUndoAction = undo;
-                }
-            }
-            break;
             default:
                 return false;
         }

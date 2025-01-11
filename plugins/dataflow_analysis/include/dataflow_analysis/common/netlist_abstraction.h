@@ -23,14 +23,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file netlist_abstraction.h
+ * @brief This file contains the struct that holds all information on the netlist abstraction used for dataflow analysis.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <set>
 
 namespace hal
 {
@@ -42,30 +48,40 @@ namespace hal
     {
         struct Grouping;
 
+        /**
+         * @struct NetlistAbstraction
+         * @brief The abstraction of the netlist that only contains gates of a specified type, e.g., flip-flops.
+         */
         struct NetlistAbstraction
         {
-            NetlistAbstraction(Netlist* nl_arg);
+            /**
+             * @brief Construct a netlist abstraction from a netlist.
+             * 
+             * @param[in] nl_arg - The netlist.
+             */
+            NetlistAbstraction(const Netlist* nl_arg);
 
-            std::shared_ptr<Grouping> create_initial_grouping(std::vector<std::vector<u32>> known_groups) const;
-
-            // netlist
-            Netlist* nl;
+            /**
+             * The netlist associated with the netlist abstraction.
+             */
+            const Netlist* nl;
 
             // utils
             bool yosys;
 
-            // all ffs
-            std::vector<Gate*> all_sequential_gates;
+            /**
+             * The target gates that should be grouped by dataflow analysis.
+             */
+            std::vector<Gate*> target_gates;
 
             /* pre_processed_data */
             std::unordered_map<u32, std::vector<u32>> gate_to_fingerprint;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_clock_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_enable_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_reset_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_set_signals;
+            std::unordered_map<u32, std::map<PinType, std::unordered_set<u32>>> gate_to_control_signals;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_register_stages;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_predecessors;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_successors;
+            std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_predecessor_groups;
+            std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_successor_groups;
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_output_shape;
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_input_shape;
         };

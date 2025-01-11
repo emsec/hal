@@ -32,6 +32,8 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/module_widget/module_tree_view.h"
 #include "hal_core/netlist/module.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+
 
 #include <QAction>
 #include <QItemSelection>
@@ -43,6 +45,7 @@ class QTreeView;
 
 namespace hal
 {
+    class ModuleModel;
     class ModuleProxyModel;
 
     /**
@@ -55,9 +58,19 @@ namespace hal
     class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString activeIconStyle READ activeIconStyle WRITE setActiveIconStyle)
+        Q_PROPERTY(QString showNetsIconPath READ showNetsIconPath WRITE setShowNetsIconPath)
+        Q_PROPERTY(QString hideNetsIconPath READ hideNetsIconPath WRITE setHideNetsIconPath)
+        Q_PROPERTY(QString showGatesIconPath READ showGatesIconPath WRITE setShowGatesIconPath)
+        Q_PROPERTY(QString hideGatesIconPath READ hideGatesIconPath WRITE setHideGatesIconPath)
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
+        Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
+        Q_PROPERTY(QString expandedIconPath READ expandedIconPath WRITE setExpandedIconPath)
+        Q_PROPERTY(QString collapsedIconPath READ collapsedIconPath WRITE setCollapsedIconPath)
 
     public:
         /**
@@ -82,13 +95,11 @@ namespace hal
         virtual QList<QShortcut*> createShortcuts() override;
 
         /**
-         * Opens a existing view that contains the given module, otherwise creates a new context
-         * and opens it.
+         * Accesses the module model.
          *
-         * @param moduleId - The module to open.
-         * @param unfold - True to unfold the module upon opening.
+         * @returns the module model
          */
-        void openModuleInView(u32 moduleId, bool unfold);
+        ModuleModel* getModuleModel() const;
 
         /**
          * Get the widget's proxy model that represents the ModuleModel.
@@ -100,17 +111,38 @@ namespace hal
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
+        QString disabledIconStyle() const;
+        QString activeIconStyle() const;
+        QString showNetsIconPath() const;
+        QString hideNetsIconPath() const;
+        QString showGatesIconPath() const;
+        QString hideGatesIconPath() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
+        QString deleteIconPath() const;
+        QString renameIconPath() const;
+        QString expandedIconPath() const;
+        QString collapsedIconPath() const;
+
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
          */
         ///@{
+        void setDisabledIconStyle(const QString& style);
+        void setActiveIconStyle(const QString& style);
+        void setShowNetsIconPath(const QString &path);
+        void setHideNetsIconPath(const QString &path);
+        void setShowGatesIconPath(const QString &path);
+        void setHideGatesIconPath(const QString &path);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
+        void setDeleteIconPath(const QString& path);
+        void setRenameIconPath(const QString& path);
+        void setExpandedIconPath(const QString& path);
+        void setCollapsedIconPath(const QString& path);
         ///@}
 
     public Q_SLOTS:
@@ -148,6 +180,14 @@ namespace hal
         void handleTreeSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
         /**
+         * Q_SLOT to handle tree view navigation
+         *
+         * @param current - The current index
+         * @param previous - The previous index (unused)
+         */
+        void handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous = QModelIndex());
+
+        /**
          * Q_SLOT to handle a double-click on a module of the ModuleWidget.
          *
          * @param index - The module index of the item that has been double clicked.
@@ -169,27 +209,72 @@ namespace hal
          */
         void handleModuleRemoved(Module* module, u32 module_id);
 
+    private Q_SLOTS:
+        /**
+         * Q_SLOT to toggle the visibility of nets in the module widget. Called when the 'Toggle Net Visibility'-buttons was clicked.
+         */
+        void handleToggleNetsClicked();
+
+        /**
+         * Q_SLOT to toggle the visibility of gates in the module widget. Called when the 'Toggle Gate Visibility'-buttons was clicked.
+         */
+        void handleToggleGatesClicked();
+
+        /**
+         * Q_SLOT to toggle whether the tree is entirely expanded or collapsed
+         */
+        void handleToggleExpandTreeClicked();
+
+        /**
+         * Q_SLOT to handle rename button
+         */
+        void handleRenameClicked();
+
+    private Q_SLOTS:
+        void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
+
+        void deleteSelectedItem();
 
     private:
         ModuleTreeView* mTreeView;
         Searchbar* mSearchbar;
 
+        QAction* mToggleNetsAction;
+        QAction* mToggleGatesAction;
+        QAction* mRenameAction;
+        QAction* mDeleteAction;
+        QAction* mToggleExpandTreeAction;
+
+        QString mDisabledIconStyle;
+        QString mActiveIconStyle;
+
+        QString mShowNetsIconPath;
+        QString mHideNetsIconPath;
+        QString mShowGatesIconPath;
+        QString mHideGatesIconPath;
+        QString mDeleteIconPath;
+
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
+        QString mRenameIconPath;
+        QString mExpandedIconPath;
+        QString mCollapsedIconPath;
 
         QAction* mFilterAction;
-
-        QSortFilterProxyModel* mCurrentModel;
 
         QList<QRegExp*> mRegexps;
 
         bool mIgnoreSelectionChange;
 
+        ModuleModel* mModuleModel;
         ModuleProxyModel* mModuleProxyModel;
 
-        void openModuleInView(const QModelIndex& index);
+        QShortcut* mShortCutDeleteItem;
+
+        void enableDeleteAction(bool enable);
 
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
+
     };
 }    // namespace hal

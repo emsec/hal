@@ -1,14 +1,14 @@
 
 #include "netlist_test_utils.h"
 
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
 #include "gate_library_test_utils.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
-    namespace test_utils 
-    {   
+    namespace test_utils
+    {
         std::unique_ptr<Netlist> create_empty_netlist(const u32 id)
         {
             std::unique_ptr<Netlist> netlist = std::make_unique<Netlist>(get_gate_library());
@@ -24,7 +24,7 @@ namespace hal
         Net* connect(Netlist* nl, Gate* src, const std::string& src_pin, Gate* dst, const std::string& dst_pin, const std::string& net_name)
         {
             Net* n = nullptr;
-            if(src != nullptr && dst != nullptr)
+            if (src != nullptr && dst != nullptr)
             {
                 if (n = src->get_fan_out_net(src_pin); n != nullptr)
                 {
@@ -38,13 +38,13 @@ namespace hal
                 {
                     if (net_name.empty())
                     {
-                    n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
+                        n = nl->create_net("net_" + std::to_string(src->get_id()) + "_" + std::to_string(dst->get_id()));
                     }
                     else
                     {
                         n = nl->create_net(net_name);
                     }
-                    
+
                     n->add_source(src, src_pin);
                     n->add_destination(dst, dst_pin);
                 }
@@ -55,7 +55,7 @@ namespace hal
         Net* connect_global_in(Netlist* nl, Gate* dst, const std::string& dst_pin, const std::string& net_name)
         {
             Net* n = nullptr;
-            if(dst != nullptr)
+            if (dst != nullptr)
             {
                 if (n = dst->get_fan_in_net(dst_pin); n != nullptr)
                 {
@@ -65,13 +65,13 @@ namespace hal
                 {
                     if (net_name.empty())
                     {
-                    n = nl->create_net("net_" + std::to_string(dst->get_id()));
+                        n = nl->create_net("net_" + std::to_string(dst->get_id()));
                     }
                     else
                     {
                         n = nl->create_net(net_name);
                     }
-                    
+
                     n->add_destination(dst, dst_pin);
                     n->mark_global_input_net();
                 }
@@ -82,7 +82,7 @@ namespace hal
         Net* connect_global_out(Netlist* nl, Gate* src, const std::string& src_pin, const std::string& net_name)
         {
             Net* n = nullptr;
-            if(src != nullptr)
+            if (src != nullptr)
             {
                 if (n = src->get_fan_out_net(src_pin); n != nullptr)
                 {
@@ -98,7 +98,7 @@ namespace hal
                     {
                         n = nl->create_net(net_name);
                     }
-                    
+
                     n->add_source(src, src_pin);
                     n->mark_global_output_net();
                 }
@@ -106,20 +106,20 @@ namespace hal
             return n;
         }
 
-        void clear_connections(Gate* gate) 
+        void clear_connections(Gate* gate)
         {
-            for (Endpoint* ep : gate->get_fan_in_endpoints()) 
+            for (Endpoint* ep : gate->get_fan_in_endpoints())
             {
                 ep->get_net()->remove_destination(ep);
             }
 
-            for (Endpoint* ep : gate->get_fan_out_endpoints()) 
+            for (Endpoint* ep : gate->get_fan_out_endpoints())
             {
                 ep->get_net()->remove_source(ep);
             }
         }
 
-        void clear_connections(Net* net) 
+        void clear_connections(Net* net)
         {
             for (Endpoint* ep : net->get_sources())
             {
@@ -131,7 +131,7 @@ namespace hal
                 net->remove_destination(ep);
             }
         }
-    }
+    }    // namespace test_utils
 
     // TODO clean up everything below
 
@@ -151,8 +151,6 @@ namespace hal
     {
         run_known_issue_tests = false;
     }
-
-    
 
     void test_utils::init_log_channels()
     {
@@ -193,7 +191,7 @@ namespace hal
             if (GatePin* pin = g->get_type()->get_pin_by_name(pin_name); pin != nullptr)
             {
                 return is_destination ? g->get_fan_in_endpoint(pin) : g->get_fan_out_endpoint(pin);
-            }            
+            }
         }
         return nullptr;
     }
@@ -210,7 +208,6 @@ namespace hal
         bool is_destination = (std::find(in_pins.begin(), in_pins.end(), pin_name) != in_pins.end());
         return get_endpoint(nl, gate_id, pin_name, is_destination);
     }
-
 
     std::vector<BooleanFunction::Value> test_utils::minimize_truth_table(const std::vector<BooleanFunction::Value> tt)
     {
@@ -252,7 +249,9 @@ namespace hal
     Net* test_utils::get_net_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
+        {
             return nullptr;
+        }
         auto nets = nl->get_nets();
         Net* res  = nullptr;
         for (auto n : nets)
@@ -274,7 +273,9 @@ namespace hal
     Gate* test_utils::get_gate_by_subname(Netlist* nl, const std::string subname)
     {
         if (nl == nullptr)
+        {
             return nullptr;
+        }
         auto gates = nl->get_gates();
         Gate* res  = nullptr;
         for (auto g : gates)
@@ -475,7 +476,9 @@ namespace hal
         if (n0 == nullptr || n1 == nullptr)
         {
             if (n0 == n1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "nets_are_equal: Nets are not equal! Reason: One net is a nullptr.");
@@ -532,7 +535,9 @@ namespace hal
         if (g0 == nullptr || g1 == nullptr)
         {
             if (g0 == g1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "gates_are_equal: Gates are not equal! Reason: One gate is a nullptr.");
@@ -585,7 +590,9 @@ namespace hal
         if (m_0 == nullptr || m_1 == nullptr)
         {
             if (m_0 == m_1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: One netlist is a nullptr.");
@@ -663,18 +670,12 @@ namespace hal
         // Check that the pins and pin groups are the same
         if (m_0->get_pins().size() != m_0->get_pins().size())
         {
-            log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})",
-                     m_0->get_pins().size(),
-                     m_1->get_pins().size());
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of pins is different ({} vs {})", m_0->get_pins().size(), m_1->get_pins().size());
             return false;
         }
         if (m_0->get_pin_groups().size() != m_0->get_pin_groups().size())
         {
-            log_info("test_utils",
-                     "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})",
-                     m_0->get_pin_groups().size(),
-                     m_1->get_pin_groups().size());
+            log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: The number of pin groups is different ({} vs {})", m_0->get_pin_groups().size(), m_1->get_pin_groups().size());
             return false;
         }
 
@@ -682,32 +683,43 @@ namespace hal
         {
             if (const PinGroup<ModulePin>* pg_1 = m_1->get_pin_group_by_id(pg_0->get_id()); pg_1 != nullptr)
             {
-                if ((!ignore_id && (pg_0->get_id() != pg_1->get_id())) || pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index() || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size()) 
+                if ((!ignore_id && (pg_0->get_id() != pg_1->get_id())) || pg_0->get_name() != pg_1->get_name() || pg_0->get_start_index() != pg_1->get_start_index()
+                    || pg_0->is_ascending() != pg_1->is_ascending() || pg_0->size() != pg_1->size())
                 {
                     log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pin groups are different (\"{}\" vs \"{}\")", pg_0->get_name(), pg_1->get_name());
-                    return false; 
+                    return false;
                 }
-                
+
                 for (const ModulePin* p_0 : pg_0->get_pins())
                 {
-                    if(const ModulePin* p_1 = m_1->get_pin_by_id(p_0->get_id()); p_1 != nullptr) 
+                    if (const ModulePin* p_1 = m_1->get_pin_by_id(p_0->get_id()); p_1 != nullptr)
                     {
-                        if((!ignore_id && (p_0->get_id() != p_1->get_id())) || p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction() || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name)) 
+                        if ((!ignore_id && (p_0->get_id() != p_1->get_id())) || p_0->get_name() != p_1->get_name() || p_0->get_type() != p_1->get_type() || p_0->get_direction() != p_1->get_direction()
+                            || !nets_are_equal(p_0->get_net(), p_1->get_net(), ignore_id, ignore_name))
                         {
                             log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: Two pins are different (\"{}\" vs \"{}\")", p_0->get_name(), p_1->get_name());
-                            return false; 
+                            return false;
                         }
                     }
-                    else 
+                    else
                     {
-                        log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}", p_0->get_name(), pg_1->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                        log_info("test_utils",
+                                 "modules_are_equal: Modules are not equal! Reason: There is no pin with name '{}' in pin group '{}' of module '{}' with ID {} within netlist with ID {}",
+                                 p_0->get_name(),
+                                 pg_1->get_name(),
+                                 m_1->get_name(),
+                                 m_1->get_netlist()->get_id());
                         return false;
                     }
                 }
-            } 
-            else 
+            }
+            else
             {
-                log_info("test_utils", "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}", pg_0->get_name(), m_1->get_name(), m_1->get_netlist()->get_id());
+                log_info("test_utils",
+                         "modules_are_equal: Modules are not equal! Reason: There is no pin group with name '{}' in module '{}' with ID {} within netlist with ID {}",
+                         pg_0->get_name(),
+                         m_1->get_name(),
+                         m_1->get_netlist()->get_id());
                 return false;
             }
         }
@@ -733,7 +745,9 @@ namespace hal
         for (auto sm_0 : m_0->get_submodules(nullptr, true))
         {
             if (sm_0 == nullptr)
+            {
                 continue;
+            }
             if (ignore_id)
             {
                 auto sm_1_list = m_1->get_submodules(module_name_filter(sm_0->get_name()));
@@ -775,7 +789,9 @@ namespace hal
         if (g_0 == nullptr || g_1 == nullptr)
         {
             if (g_0 == g_1)
+            {
                 return true;
+            }
             else
             {
                 log_info("test_utils", "groupings_are_equal: Groupings are not equal! Reason: One netlist is a nullptr.");
@@ -1115,62 +1131,62 @@ namespace hal
 
     // Filter Functions
 
-    std::function<bool(Module*)> test_utils::module_name_filter(const std::string& name)
+    std::function<bool(const Module*)> test_utils::module_name_filter(const std::string& name)
     {
-        return [name](auto m) { return m->get_name() == name; };
+        return [name](const Module* m) { return m->get_name() == name; };
     }
 
-    std::function<bool(Grouping*)> test_utils::grouping_name_filter(const std::string& name)
+    std::function<bool(const Grouping*)> test_utils::grouping_name_filter(const std::string& name)
     {
-        return [name](auto m) { return m->get_name() == name; };
+        return [name](const Grouping* g) { return g->get_name() == name; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_filter(const std::string& type, const std::string& name)
+    std::function<bool(const Gate*)> test_utils::gate_filter(const std::string& type, const std::string& name)
     {
-        return [name, type](auto g) { return g->get_name() == name && g->get_type()->get_name() == type; };
+        return [name, type](const Gate* g) { return g->get_name() == name && g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_name_filter(const std::string& name)
+    std::function<bool(const Gate*)> test_utils::gate_name_filter(const std::string& name)
     {
-        return [name](auto g) { return g->get_name() == name; };
+        return [name](const Gate* g) { return g->get_name() == name; };
     }
 
-    std::function<bool(Gate*)> test_utils::gate_type_filter(const std::string& type)
+    std::function<bool(const Gate*)> test_utils::gate_type_filter(const std::string& type)
     {
-        return [type](auto g) { return g->get_type()->get_name() == type; };
+        return [type](const Gate* g) { return g->get_type()->get_name() == type; };
     }
 
-    std::function<bool(Net*)> test_utils::net_name_filter(const std::string& name)
+    std::function<bool(const Net*)> test_utils::net_name_filter(const std::string& name)
     {
-        return [name](auto n) { return n->get_name() == name; };
+        return [name](const Net* n) { return n->get_name() == name; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_gate_type_filter(const std::string& gate_type)
     {
-        return [gate_type](auto ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
+        return [gate_type](const Endpoint* ep) { return ep->get_gate()->get_type()->get_name() == gate_type; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_gate_name_filter(const std::string& name)
     {
-        return [name](auto ep) { return ep->get_gate()->get_name() == name; };
+        return [name](const Endpoint* ep) { return ep->get_gate()->get_name() == name; };
     }
 
-    std::function<bool(Endpoint*)> test_utils::endpoint_pin_filter(const GatePin* pin)
+    std::function<bool(const Endpoint*)> test_utils::endpoint_pin_filter(const GatePin* pin)
     {
-        return [pin](auto ep) { return *ep->get_pin() == *pin; };
+        return [pin](const Endpoint* ep) { return *ep->get_pin() == *pin; };
     }
 
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin_name)
+    std::function<bool(const GatePin*, const Endpoint*)> test_utils::adjacent_pin_filter(const std::string& pin_name)
     {
-        return [pin_name](auto, auto ep) { return ep->get_pin()->get_name() == pin_name; };
+        return [pin_name](const GatePin*, const Endpoint* ep) { return ep->get_pin()->get_name() == pin_name; };
     }
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::starting_pin_filter(const std::string& pin_name)
+    std::function<bool(const GatePin*, const Endpoint*)> test_utils::starting_pin_filter(const std::string& pin_name)
     {
-        return [pin_name](auto* starting_pin, auto) { return starting_pin->get_name() == pin_name; };
+        return [pin_name](const GatePin* starting_pin, const Endpoint*) { return starting_pin->get_name() == pin_name; };
     }
 
-    std::function<bool(const GatePin*, Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
+    std::function<bool(const GatePin*, const Endpoint*)> test_utils::adjacent_gate_type_filter(const std::string& type)
     {
-        return [type](auto, auto ep) { return ep->get_gate()->get_type()->get_name() == type; };
+        return [type](const GatePin*, const Endpoint* ep) { return ep->get_gate()->get_type()->get_name() == type; };
     }
 }    // namespace hal

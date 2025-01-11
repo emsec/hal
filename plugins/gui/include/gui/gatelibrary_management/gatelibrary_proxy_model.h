@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/gui_utils/sort.h"
+#include "gui/searchbar/search_proxy_model.h"
 
 #include <QSortFilterProxyModel>
 
@@ -39,7 +40,7 @@ namespace hal
      * GatelibraryTableModel (source model) to support data filtering.
      * It is used to provide a search bar (<i>CTRL+F</i>) for groupings.
      */
-    class GatelibraryProxyModel : public QSortFilterProxyModel
+    class GatelibraryProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -64,6 +65,7 @@ namespace hal
          * @param sortMechanism - the new sorting mechanism
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+        void startSearch(QString text, int options);
 
     protected:
         /**

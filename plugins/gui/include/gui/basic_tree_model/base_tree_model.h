@@ -26,7 +26,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include "tree_item.h"
+#include "base_tree_item.h"
 
 namespace hal
 {
@@ -101,7 +101,7 @@ namespace hal
          *
          * @param firstLevelItems - All items that will be appended to this model's root item.
          */
-        void setContent(QList<TreeItem*> firstLevelItems);
+        void setContent(QList<BaseTreeItem*> firstLevelItems);
 
         /**
          * Resets the model (deletes the tree).
@@ -113,7 +113,13 @@ namespace hal
          * classed to initialize
          * @param labels
          */
-        void setHeaderLabels(QList<QVariant> labels);
+        void setHeaderLabels(const QStringList& label);
+
+        /**
+         * Getter for header labels stored in root element
+         * @return List of header labels
+         */
+        QStringList headerLabels() const;
 
         // important converter methods
         /**
@@ -122,7 +128,7 @@ namespace hal
          * @param item - The item from which to get the index.
          * @return The index.
          */
-        QModelIndex getIndexFromItem(TreeItem* item) const;
+        QModelIndex getIndexFromItem(BaseTreeItem* item) const;
 
         /**
          * Helper method to convert between the index and its item.
@@ -130,7 +136,7 @@ namespace hal
          * @param index - The index to convert.
          * @return The internal item.
          */
-        TreeItem* getItemFromIndex(QModelIndex index) const;
+        BaseTreeItem* getItemFromIndex(QModelIndex index) const;
 
         /**
          * Convenient function to get the root item to which the tree is appended
@@ -138,10 +144,12 @@ namespace hal
          *
          * @return The root item.
          */
-        TreeItem* getRootItem() const;
+        BaseTreeItem* getRootItem() const;
+
+        void insertChildItem(BaseTreeItem* childItem, BaseTreeItem* parentItem = nullptr, int row = -1);
 
     protected:
-        TreeItem* mRootItem;
+        RootTreeItem* mRootItem;
     };
 
 }

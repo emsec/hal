@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -39,6 +40,7 @@ namespace hal
 {
     class GraphicsItem;
     class GraphWidget;
+    class DragController;
 
     namespace graph_widget_constants
     {
@@ -101,6 +103,9 @@ namespace hal
         Qt::KeyboardModifier panModifier();
         void setPanModifier(Qt::KeyboardModifier panModifier);
 
+        void handleFoldModuleShortcut();
+        void handleUnfoldModuleShortcut();
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the user double-clicks a module in the current view. <br>
@@ -124,15 +129,16 @@ namespace hal
          */
         void handleShortestPath(u32 idFrom, u32 idTo);
 
+        /**
+         * remove selected nodes from view
+         */
+        void handleRemoveFromView();
+
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
-        void handleRemoveFromView();
-        void handleMoveAction(u32 moduleId);
-        void handleMoveNewAction();
-        void handleRenameAction();
-        void handleChangeTypeAction();
         void adjustMinScale();
+        void handleAddCommentAction();
 
         void handleFoldParentSingle();
         void handleFoldParentAll();
@@ -143,10 +149,6 @@ namespace hal
         void handleQueryShortestPath();
         void handleSelectOutputs();
         void handleSelectInputs();
-        void handleGroupingDialog();
-        void handleGroupingUnassign();
-        void handleGroupingAssignNew();
-        void handleGroupingAssingExisting();
 
         void handleAddModuleToView();
         void handleAddGateToView();
@@ -159,14 +161,16 @@ namespace hal
         void handleHighlightPredecessor();
         void handleSuccessorDistance();
         void handlePredecessorDistance();
-        void handleModuleDialog();
         void handleCancelPickMode();
+        void handlePluginContextContributionTriggered();
+        void selectedNodeToItem();
 
-    private:
+    protected:
         void paintEvent(QPaintEvent* event) override;
         void drawForeground(QPainter* painter, const QRectF& rect) override;
         void mousePressEvent(QMouseEvent* event) override;
         void mouseMoveEvent(QMouseEvent* event) override;
+        void mouseReleaseEvent(QMouseEvent *event) override;
         void mouseDoubleClickEvent(QMouseEvent* event) override;
         void dragEnterEvent(QDragEnterEvent *event) override;
         void dragLeaveEvent(QDragLeaveEvent *event) override;
@@ -177,6 +181,8 @@ namespace hal
         void keyReleaseEvent(QKeyEvent* event) override;
         void resizeEvent(QResizeEvent* event) override;
 
+    private:
+        void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
 
         void updateMatrix(const int delta);
@@ -188,12 +194,19 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        void dragPan(float dpx, float dpy);
+
+        GraphWidget* mGraphWidget;
+
+        QSet<u32> getSelectableGates();
+        QSet<u32> getNotSelectableModules();
+
         struct LayouterPoint
         {
             int mIndex;
             qreal mPos;
         };
-        QVector<QPoint> closestLayouterPos(const QPointF& scene_pos) const;
+        QPair<QPoint, QPointF> closestLayouterPos(const QPointF& scene_pos) const;
         LayouterPoint closestLayouterPoint(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
 
         #ifdef GUI_DEBUG_GRID
@@ -203,7 +216,7 @@ namespace hal
         bool mDebugGridposEnable = true;
         #endif
 
-        GraphWidget* mGraphWidget;
+
 
         GraphicsItem* mItem;
 
@@ -213,13 +226,7 @@ namespace hal
         bool mGridClustersEnabled;
         GraphicsScene::GridType mGridType;
 
-        QPoint mDragMousedownPosition;
-        QPoint mDragStartGridpos;
-        GraphicsGate* mDragItem;
-        QPoint mDragCurrentGridpos;
-        bool mDragCurrentModifier;
-        bool mDropAllowed;
-
+        DragController* mDragController;
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;

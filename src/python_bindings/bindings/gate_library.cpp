@@ -11,7 +11,7 @@ namespace hal
         py_gate_library.def(py::init<const std::filesystem::path&, const std::string&>(), py::arg("path"), py::arg("name"), R"(
             Construct a gate library by specifying its name and the path to the file that describes the library.
 
-            :param hal_py.hal_path path: The path to the gate library file.
+            :param pathlib.Path path: The path to the gate library file.
             :param str name: The name of the gate library.
         )");
 
@@ -31,14 +31,14 @@ namespace hal
         py_gate_library.def_property_readonly("path", &GateLibrary::get_name, R"(
             The path to the file describing the gate library.
 
-            :type: hal_py.hal_path
+            :type: pathlib.Path
         )");
 
         py_gate_library.def("get_path", &GateLibrary::get_name, R"(
             Get the path to the file describing the gate library.
 
             :returns: The path to the gate library file.
-            :rtype: hal_py.hal_path
+            :rtype: pathlib.Path
         )");
 
         py_gate_library.def("set_gate_location_data_category", &GateLibrary::set_gate_location_data_category, py::arg("category"), R"(
@@ -101,7 +101,7 @@ namespace hal
             :rtype: hal_py.GateType or None
         )");
 
-        py_gate_library.def_property_readonly("gate_types", &GateLibrary::get_gate_types, R"(
+        py_gate_library.def_property_readonly("gate_types", [](const GateLibrary& self) { return self.get_gate_types(); }, R"(
             All gate types of the gate library as as dict from gate type names to gate types.
 
             :type: dict[str,hal_py.GateType]

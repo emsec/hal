@@ -35,10 +35,30 @@ namespace hal {
     class Module;
     class Gate;
 
+    /**
+     * Class to aquire and release GIL
+     *
+     * It is important that the GIL is not released before
+     * Python code has removed all objects created during
+     * execution. Therefore the GIL release is done at the
+     * very end when running out of scope and calling the
+     * destructor
+     */
+    class PythonMutex
+    {
+        int mState;
+    public:
+        /// Aquire GIL
+        PythonMutex();
+
+        /// Release GIL
+        ~PythonMutex();
+    };
+
     class PythonThread : public QThread, public PythonContextSubscriber
     {
     public:
-        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput, FilenameInput};
+        enum InputType {ConsoleInput, StringInput, NumberInput, ModuleInput, GateInput, FilenameInput, WaitForMenuSelection};
     private:
         Q_OBJECT
         QString mScript;
@@ -52,7 +72,6 @@ namespace hal {
         bool mSingleStatement;
         bool mAbortRequested;
         int mSpamCount;
-        bool getInput(InputType type, QString prompt, QVariant defaultValue);
     Q_SIGNALS:
         void stdOutput(QString txt);
         void stdError(QString txt);
@@ -74,6 +93,8 @@ namespace hal {
         std::string handleFilenameInput(const QString& prompt, const QString& filetype);
         void clear() override;
         void setInput(const QVariant& inp);
+        bool getInput(InputType type, QString prompt, QVariant defaultValue);
+        void unlock();
         const QString& stdoutBuffer() const { return mStdoutBuffer; }
         QString flushStdout();
      };

@@ -40,15 +40,13 @@ namespace hal
             :rtype: int
         )");
 
-        py_net.def_property_readonly(
-            "netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
+        py_net.def_property_readonly("netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
             The netlist this net is associated with.
 
             :type: hal_py.Netlist
         )");
 
-        py_net.def(
-            "get_netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
+        py_net.def("get_netlist", [](Net* net) { return RawPtrWrapper<Netlist>(net->get_netlist()); }, R"(
             Get the netlist this net is associated with.
 
             :returns: The netlist.
@@ -130,6 +128,14 @@ namespace hal
             :rtype: bool
         )");
 
+        py_net.def("is_a_source", py::overload_cast<const Gate*>(&Net::is_a_source, py::const_), py::arg("gate"), R"(
+            Check whether a gate is a source of the net independent of the pin.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: True if the gate is a source of the net, False otherwise.
+            :rtype: bool
+        )");
+
         py_net.def("is_a_source", py::overload_cast<const Gate*, const std::string&>(&Net::is_a_source, py::const_), py::arg("gate"), py::arg("pin_name"), R"(
             Check whether an endpoint is a source of the net.
             The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
@@ -158,21 +164,22 @@ namespace hal
             :rtype: bool
         )");
 
-        py_net.def_property_readonly("num_of_sources", &Net::get_num_of_sources, R"(
+        py_net.def_property_readonly("num_of_sources", [](Net* n) { return n->get_num_of_sources(); }, R"(
             The number of sources of the net.
 
             :type: int
         )");
 
-        py_net.def("get_num_of_sources", &Net::get_num_of_sources, R"(
+        py_net.def("get_num_of_sources", &Net::get_num_of_sources, py::arg("filter") = nullptr, R"(
             Get the number of sources of the net.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
+            :param lambda filter: An optional filter.
             :returns: The number of sources.
             :rtype: int
         )");
 
-        py_net.def_property_readonly(
-            "sources", [](Net* n) { return n->get_sources(); }, R"(
+        py_net.def_property_readonly("sources", [](Net* n) { return n->get_sources(); }, R"(
             A list of sources of the net.
 
             :type: list[hal_py.Endpoint]
@@ -235,6 +242,14 @@ namespace hal
             :rtype: bool
         )");
 
+        py_net.def("is_a_destination", py::overload_cast<const Gate*>(&Net::is_a_destination, py::const_), py::arg("gate"), R"(
+            Check whether a gate is a destination of the net independent of the pin.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: True if the gate is a destination of the net, False otherwise.
+            :rtype: bool
+        )");
+
         py_net.def("is_a_destination", py::overload_cast<const Gate*, const std::string&>(&Net::is_a_destination, py::const_), py::arg("gate"), py::arg("pin_name"), R"(
             Check whether an endpoint is a destination of the net.
             The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
@@ -263,21 +278,22 @@ namespace hal
             :rtype: bool
         )");
 
-        py_net.def_property_readonly("num_of_destinations", &Net::get_num_of_destinations, R"(
+        py_net.def_property_readonly("num_of_destinations", [](Net* n) { return n->get_num_of_destinations(); }, R"(
             The number of destinations of the net.
 
             :type: int
         )");
 
-        py_net.def("get_num_of_destinations", &Net::get_num_of_destinations, R"(
+        py_net.def("get_num_of_destinations", &Net::get_num_of_destinations, py::arg("filter") = nullptr, R"(
             Get the number of destinations of the net.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
+            :param filter: An optional filter.
             :returns: The number of destinations.
             :rtype: int
         )");
 
-        py_net.def_property_readonly(
-            "destinations", [](Net* n) { return n->get_destinations(); }, R"(
+        py_net.def_property_readonly("destinations", [](Net* n) { return n->get_destinations(); }, R"(
             A list of destinations of the net.
 
             :type: list[hal_py.Endpoint]

@@ -28,15 +28,210 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
+#include "gui/include/gui/gui_def.h"
 
-
-#include <vector>
-#include <tuple>
 
 #include <QObject>
+#include <QSet>
+#include <tuple>
+#include <vector>
+#include <optional>
 
 namespace hal
 {
+    namespace GuiApiClasses {
+
+        class View{
+        public:
+            /**
+             * Isolates given modules and gates into a new view.
+             * If only one module and no gates are given and 
+             * there already exists a view which is exclusively bound the given module, 
+             * then that view is returned instead.
+             * 
+             * @param modules - List of modules to be added.
+             * @param gates - List of gates to be added
+             * 
+             * @return The id of the requested view. Returns 0 if the view could not be created.
+             */
+            static int isolateInNew(const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            /**
+             * Deletes a view.
+             * 
+             * @param id - The id of the view.
+             * 
+             * @return True on success, otherwise false.
+             */
+            static bool deleteView(int id);
+            /**
+             * Adds modules and gates to a view.
+             * 
+             * @param id - The id of the view.
+             * @param modules - The list of modules to be added to the view.
+             * @param gates - The list of gates to be added to the view.
+             * 
+             * @return True on success, otherwise false.
+             */
+            static bool addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            /**
+             * Removes modules and gates from a view.
+             * 
+             * @param id - The id of the view to remove the modules and gates from.
+             * @param modules - The modules to be removed from the view.
+             * @param gates - The gates to be removed from the view.
+             * 
+             * @return True on success, otherwise false.
+             */
+            static bool removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            /**
+             * Sets the name of a view.
+             * 
+             * @param id - The id of the view.
+             * @param name - The new name of the view.
+             * 
+             * @return True on success, otherwise false.
+             */
+            static bool setName(int id, const std::string& name);
+            /**
+             * Returns the id of a view.
+             * 
+             * @param name - The name of the view to search for.
+             * 
+             * @return The id of the view. Returns 0, if the view was not found.
+             */
+            static int getId(const std::string& name);
+            /**
+             * Returns the name of a view.
+             * 
+             * @param id - The id of the view.
+             * 
+             * @return The name of the view. Returns an empty string, if the view was not found.
+             */
+            static std::string getName(int id);
+            /**
+             * Returns the modules contained in a view.
+             * 
+             * @param id - The id of the view.
+             * 
+             * @return A list of modules. Returns an empty list, if the view was not found.
+             */
+            static std::vector<Module*> getModules(int id);
+            /**
+             * Returns the gates contained in a view.
+             * 
+             * @param id - The id of the view.
+             * 
+             * @return A list of gates. Returns an empty list, if the view was not found.
+             */
+            static std::vector<Gate*> getGates(int id);
+            /**
+             * Returns the ids of views containing at least the given modules and gates.
+             * 
+             * @param modules - List of required modules.
+             * @param gates - List of required gates.
+             * 
+             * @return A list of ids of views, which contain all given modules and gates.
+             */
+            static std::vector<u32> getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            /**
+             * Fold a specific module. Hides the submodules and gates, shows the specific module.
+             * 
+             * @param view_id - The id of the view.
+             * @param module - The Module to fold.
+             *
+             * @return True on success, otherwise False.
+             */
+            static bool foldModule(int view_id, Module* module);
+            /**
+             * Unfold a specific module. Hides the module, shows submodules and gates.
+             * 
+             * @param view_id - The id of the view.
+             * @param module - The Module to unfold.
+             *
+             * @return True on success, otherwise False.
+             */
+            static bool unfoldModule(int view_id, Module* module);
+
+            struct ModuleGateIdPair {
+                QSet<u32> moduleIds;
+                QSet<u32> gateIds;
+            };
+
+            static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
+            static GridPlacement* getGridPlacement(int viewId);
+            static bool setGridPlacement(int viewId, GridPlacement* gp);
+
+            /**
+             * Returns the id of the current directory.
+             * 
+             * Used for selection and similar.
+             * 
+             * @returns The id of the current directory.
+             */
+            static u32 getCurrentDirectory();
+            /**
+             * Sets the id of the current directory.
+             * 
+             * Used for selection and similar.
+             * 
+             * @param id - The id of the new current directory.
+             */
+            static void setCurrentDirectory(u32 id);
+            /**
+             * Creates a new directory with a given name.
+             * 
+             * @param name - The name of the new directory.
+             * 
+             * @return The id of the newly created directory.
+             */
+            static u32 createNewDirectory(const std::string& name);
+            /**
+             * Deleted a directory.
+             * 
+             * @param id - The id of the directory.
+             */
+            static void deleteDirectory(u32 id);
+            /**
+             * Moves a view to a directory.
+             * 
+             * @param viewId - The id of the view.
+             * @param destinationDirectoryId - The id of the destination directory. 
+             *                                 If not given, the current directory is used instead.
+             * @param row - Optional. The row there the view is inserted.
+             */
+            static void moveView(u32 viewId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
+            /**
+             * Moves a directory under another directory.
+             * 
+             * @param directoryId - The id of the directory to move.
+             * @param destinationDirectoryId - The id of the destination directory.
+             *                                 If not given, the current directory is used instead.
+             * @param row - Optional. The row there the view is inserted.
+             */
+            static void moveDirectory(u32 directoryId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
+
+            /**
+             * Returns a list of child directories for a given directory.
+             * 
+             * @param directoryId - The id of the parent directory.
+             * 
+             * @return List of ids of child directories. 
+             *         If the parent directory does not exist std::nullopt is returned instead.
+             */
+            static std::optional<std::vector<u32>> getChildDirectories(u32 directoryId);
+            /**
+             * Returns a list of child views for a given directory.
+             * 
+             * @param directoryId - The id of the parent directory.
+             * 
+             * @return List of ids of child views. 
+             *         If the parent directory does not exist std::nullopt is returned instead.
+             */
+            static std::optional<std::vector<u32>> getChildViews(u32 directoryId);
+        };
+    }
+
+
     /**
      * @ingroup gui
      * @brief Interface to interact with the gui itself.
@@ -531,10 +726,11 @@ namespace hal
          */
         void deselect(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules);
 
+        
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the view should be moved to a new selection.
          */
         void navigationRequested();
-    };
+    };    
 }

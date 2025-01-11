@@ -52,6 +52,13 @@ namespace hal
         std::string get_version() const override;
 
         /**
+         * Short description for plugin.
+         *
+         * @return The short description.
+         */
+        std::string get_description() const override;
+
+        /**
          * Get dependencies of plugin
          * @return Set of plugin names which must be loaded first, contains {netlist_simulator_controller}
          */

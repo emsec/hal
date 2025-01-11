@@ -23,71 +23,62 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file plugin_boolean_influence.h 
+ * @brief This file contains all functions related to the HAL plugin API.
+ */
+
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
-    class Net;
-    class Netlist;
-    class Gate;
-
+    /**
+     * @class BooleanInfluencePlugin
+     * @brief Plugin interface for the Boolean influence plugin.
+     * 
+     * This class provides an interface to integrate the Boolean influence plugin within the HAL framework.
+     */
     class PLUGIN_API BooleanInfluencePlugin : public BasePluginInterface
     {
     public:
+        /**
+         * @brief Default constructor for `BooleanInfluencePlugin`.
+         */
+        BooleanInfluencePlugin() = default;
+
+        /**
+         * @brief Default destructor for `BooleanInfluencePlugin`.
+         */
+        ~BooleanInfluencePlugin() = default;
+
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * @brief Get a short description of the plugin.
+         *
+         * @returns The short description.
+         */
+        std::string get_description() const override;
+
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
-        void initialize() override;
-
         /**
-         * Generates the Boolean influence of each input variable of a Boolean function.
-         *
-         * @param[in] bf - The Boolean function.
-         * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
-         * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi threadin.
-         * @returns A mapping of the variables that appear in the function to their boolean influence in said function.
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
          */
-        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations=32000, const std::string& unique_identifier="");
-
-        /**
-         * Generates the Boolean influence of each input variable of a Boolean function.
-         *
-         * @param[in] e - The z3 expression representing a Boolean function.
-         * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
-         * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi threadin.
-         * @returns A mapping of the variables that appear in the function to their boolean influence in said function.
-         */
-        static Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& e, const u32 num_evaluations=32000, const std::string& unique_identifier="");
-
-        /**
-         * Generates the function of the net using only the given gates.
-         * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.
-         *
-         * @param[in] gates - The gates of the subcircuit.
-         * @param[in] start_net - The output net of the subcircuit at which to start the analysis.
-         * @returns A mapping of the nets that appear in the function of the starting net to their Boolean influence in said function.
-         */
-        static Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net);
-
-        /**
-         * Generates the function of the dataport net of the given flip-flop.
-         * Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.
-         *
-         * @param[in] gate - Pointer to the flip-flop which data input net is used to build the Boolean function.
-         * @returns A mapping of the gates that appear in the function of the data net to their Boolean influence in said function.
-         */
-        static Result<std::map<Net*, double>> get_boolean_influences_of_gate(const Gate* gate);
-
-        /**
-         * Get the FF dependency matrix of a netlist.
-         *
-         * @param[in] netlist - The netlist to extract the dependency matrix from.
-         * @param[in] with_boolean_influence - True -- set Boolean influence, False -- sets 1.0 if connection between FFs
-         * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
-         *          IDs to the ones in the matrix, and a std::vector<std::vector<double>, which is the ff dependency matrix
-         */
-        static Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence);
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

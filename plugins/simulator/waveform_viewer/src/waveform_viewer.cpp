@@ -6,6 +6,8 @@
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/simulation_engine.h"
 
+#include "waveform_viewer/wizard.h"
+
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "waveform_viewer/gate_selection_dialog.h"
 #include "waveform_viewer/clock_set_dialog.h"
@@ -38,7 +40,7 @@
 namespace hal
 {
 
-    ContentWidget* VcdViewerFactory::contentFactory() const
+    ExternalContentWidget* WaveformViewerFactory::contentFactory() const
     {
         return new WaveformViewer;
     }
@@ -58,15 +60,15 @@ namespace hal
     }
 
     WaveformViewer::WaveformViewer(QWidget *parent)
-        : ContentWidget("WaveformViewer",parent),
-          mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
+        : ExternalContentWidget("waveform_viewer","WaveformViewer",parent),
+          mVisualizeNetState(false), mOwnershipRequired(false), mCurrentWaveWidget(nullptr)
     {
         LogManager::get_instance()->add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
         mSaveWaveformsAction = new QAction(this);
-        mRunSimulationAction = new QAction(this);
+        mInvokeSWizardAction = new QAction(this);
         mAddResultWaveAction = new QAction(this);
         mToggleMaxZoomAction = new QAction(this);
         mUndoZoomShiftAction = new QAction(this);
@@ -80,7 +82,7 @@ namespace hal
         mSimulSettingsAction->setToolTip("Simulation settings");
         mOpenInputfileAction->setToolTip("Open input file");
         mSaveWaveformsAction->setToolTip("Save waveform data to file");
-        mRunSimulationAction->setToolTip("Run simulation");
+        mInvokeSWizardAction->setToolTip("Invoke simulation wizard");
         mAddResultWaveAction->setToolTip("Add waveform net");
         mToggleMaxZoomAction->setToolTip("Toggle max/min zoom");
         mUndoZoomShiftAction->setToolTip("Undo last zoom or horizontal scroll");
@@ -89,7 +91,7 @@ namespace hal
         connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
         connect(mOpenInputfileAction, &QAction::triggered, this, &WaveformViewer::handleOpenInputFile);
         connect(mSaveWaveformsAction, &QAction::triggered, this, &WaveformViewer::handleSaveWaveforms);
-        connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleRunSimulation);
+        connect(mInvokeSWizardAction, &QAction::triggered, this, &WaveformViewer::handleInvokeWizzard);
         connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
         connect(mToggleMaxZoomAction, &QAction::triggered, this, &WaveformViewer::handleToggleMaxZoom);
         connect(mUndoZoomShiftAction, &QAction::triggered, this, &WaveformViewer::handleUndoZoomShift);
@@ -183,26 +185,31 @@ namespace hal
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         mOpenInputfileAction->setEnabled(true);
+        mInvokeSWizardAction->setEnabled(true);
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5",":/icons/folder"));
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
         {
             mSimulSettingsAction->setDisabled(true);
             mSaveWaveformsAction->setDisabled(true);
-            mRunSimulationAction->setDisabled(true);
+
+            // TODO: das ganze muss anders gestartet werden sonst fehlen einpar ptr
+            mInvokeSWizardAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
             mToggleMaxZoomAction->setDisabled(true);
         }
         else
+
         {
             mSimulSettingsAction->setEnabled(true);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
-            mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
+
+            //mInvokeSWizardAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mToggleMaxZoomAction->setEnabled(!mCurrentWaveWidget->isEmpty());
        }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
 
         mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
-        mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon(mRunSimulationAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
+        mInvokeSWizardAction->setIcon(gui_utility::getStyledSvgIcon(mInvokeSWizardAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
         testUndoEnable();
 
         if (!mCurrentWaveWidget)
@@ -234,10 +241,10 @@ namespace hal
     void WaveformViewer::setupToolbar(Toolbar* toolbar)
     {
         toolbar->addAction(mCreateControlAction);
+        toolbar->addAction(mInvokeSWizardAction);
         toolbar->addAction(mSimulSettingsAction);
         toolbar->addAction(mOpenInputfileAction);
         toolbar->addAction(mSaveWaveformsAction);
-        toolbar->addAction(mRunSimulationAction);
         toolbar->addAction(mAddResultWaveAction);
         toolbar->addAction(mToggleMaxZoomAction);
         toolbar->addAction(mUndoZoomShiftAction);
@@ -259,37 +266,14 @@ namespace hal
             return;
         }
         std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->create_simulator_controller();
-        takeControllerOwnership(ctrlRef, false);
+        if (ctrlRef)
+            takeControllerOwnership(ctrlRef, false);
     }
 
     void WaveformViewer::handleSimulSettings()
     {
          QMenu* settingMenu = new QMenu(this);
          QAction* act;
-         act = new QAction("Select gates for simulation", settingMenu);
-         if (!mCurrentWaveWidget || mCurrentWaveWidget->state() != NetlistSimulatorController::NoGatesSelected)
-             act->setDisabled(true);
-         else
-            connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
-         settingMenu->addAction(act);
-
-         act = new QAction("Select clock net", settingMenu);
-         connect(act, &QAction::triggered, this, &WaveformViewer::handleClockSet);
-         // TODO : enable/disable according to state of current WaveWidget/Controller
-         settingMenu->addAction(act);
-
-         settingMenu->addSeparator();
-         QMenu* engineMenu = settingMenu->addMenu("Select engine ...");
-         QActionGroup* engineGroup = new QActionGroup(this);
-         engineGroup->setExclusive(true);
-         for (SimulationEngineFactory* sef : *SimulationEngineFactories::instance())
-         {
-             act = new QAction(QString::fromStdString(sef->name()), engineMenu);
-             act->setCheckable(true);
-             connect(act,&QAction::triggered,this,&WaveformViewer::handleEngineSelected);
-             engineMenu->addAction(act);
-             engineGroup->addAction(act);
-         }
 
          act = new QAction("Show output of engine");
          connect(act, &QAction::triggered, this, &WaveformViewer::handleShowEngineOutput);
@@ -334,14 +318,6 @@ namespace hal
         browser->show();
     }
 
-    void WaveformViewer::handleEngineSelected(bool checked)
-    {
-        if (!checked || !mCurrentWaveWidget) return;
-        const QAction* act = static_cast<const QAction*>(sender());
-        if (!act) return;
-        mCurrentWaveWidget->createEngine(act->text());
-    }
-
     void WaveformViewer::handleRefreshNetNames()
     {
         for (int inx=0; inx<mTabWidget->count(); inx++)
@@ -364,6 +340,9 @@ namespace hal
 
     void WaveformViewer::handleControllerAdded(u32 controllerId)
     {
+        // nothing to do here, viewer will open widget when taking over ownership
+        if (mOwnershipRequired) return;
+
         // check whether controller already added
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
@@ -404,8 +383,10 @@ namespace hal
             NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
             if (ctrlPlug)
             {
+                mOwnershipRequired = true;
                 std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
                 takeControllerOwnership(ctrlRef, true);
+                mOwnershipRequired = false;
             }
         }
         else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
@@ -481,11 +462,11 @@ namespace hal
         mCurrentWaveWidget->controller()->generate_vcd(filename.toStdString());
     }
 
-    void WaveformViewer::handleRunSimulation()
+    void WaveformViewer::handleInvokeWizzard()
     {
         if (!mCurrentWaveWidget) return;
-        connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
-        mCurrentWaveWidget->controller()->run_simulation();
+        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, mCurrentWaveWidget->controller(), mCurrentWaveWidget);
+        wizard.exec();
     }
 
     void WaveformViewer::handleToggleMaxZoom()
@@ -507,37 +488,10 @@ namespace hal
         mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
     }
 
-    void WaveformViewer::handleClockSet()
+    void WaveformViewer::setGates(std::vector<Gate*> gates)
     {
         if (!mCurrentWaveWidget) return;
-
-        QList<const Net*> inputNets;
-        for (const Net* n : mCurrentWaveWidget->controller()->get_input_nets())
-            inputNets.append(n);
-        if (inputNets.isEmpty()) return;
-
-        ClockSetDialog csd(inputNets, this);
-        if (csd.exec() != QDialog::Accepted) return;
-
-        if (csd.dontUseClock())
-            mCurrentWaveWidget->controller()->set_no_clock_used();
-        else
-        {
-            int period = csd.period();
-            if (period <= 0) return;
-
-            const Net* clk = inputNets.at(csd.netIndex());
-            mCurrentWaveWidget->controller()->add_clock_period(clk,period,csd.startValue()==0,csd.duration());
-        }
-    }
-
-    void WaveformViewer::handleSelectGates()
-    {
-        if (!mCurrentWaveWidget) return;
-        GateSelectionDialog gsd(this);
-        if (gsd.exec() != QDialog::Accepted) return;
-
-        mCurrentWaveWidget->setGates(gsd.selectedGates());
+        mCurrentWaveWidget->setGates(gates);
     }
 
     void WaveformViewer::handleSelectionChanged(void* sender)

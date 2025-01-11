@@ -35,7 +35,6 @@ namespace hal
         /**
          * Construct a new InitComponent with given child component, the category and a vector of identifiers pointing to the initialization data.
          * 
-         * @param[in] component - Another component to be added as a child component.
          * @param[in] init_category - The data category.
          * @param[in] init_identifiers - The data identifiers.
          */

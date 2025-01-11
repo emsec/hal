@@ -26,8 +26,10 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 #include "hal_core/defines.h"
+
 
 class QTableWidget;
 class QStackedWidget;
@@ -40,9 +42,6 @@ namespace hal
     class Grouping;
     class Searchbar;
     class SelectionTreeView;
-    class ModuleDetailsWidget;
-    class GateDetailsWidget;
-    class NetDetailsWidget;
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
@@ -238,31 +237,7 @@ namespace hal
          *
          * @param highlight - The items to highlight (that were selected in the view).
          */
-        void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
-
-        /**
-         * Q_SIGNAL that is emitted when a gate-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param gateId - The id of the clicked gate item.
-         */
-        void focusGateClicked(u32 gateId);
-
-        /**
-         * Q_SIGNAL that is emitted when a net-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param netId - The id of the clicked net item.
-         */
-        void focusNetClicked(u32 netId);
-
-        /**
-         * Q_SIGNAL that is emitted when a module-type item in the treeview is double clicked
-         * (or single clicked if it was in the focus to begin with).
-         *
-         * @param moduleId - The id of the clicked module item.
-         */
-        void focusModuleClicked(u32 moduleId);
+        void triggerHighlight(QVector<const ModuleItem*> highlight);
 
     public Q_SLOTS:
 
@@ -280,7 +255,7 @@ namespace hal
          *
          * @param sti - The selected item.
          */
-        void handleTreeSelection(const SelectionTreeItem* sti);
+        void handleTreeSelection(const ModuleItem* sti);
 
         /**
          * Overriden function of the ContentWidget. Sets up all shortcuts and returns them.
@@ -304,23 +279,9 @@ namespace hal
         void selectionToGrouping();
 
         /**
-         * Checks all modules if the current selection can be added to that specific module. Thereafter it
-         * creates a context menu with all valid modules as options as well as a "New module..." option.
-         */
-        void selectionToModuleMenu();
-
-        /**
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
-
-        /**
-         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
-         * type of the clicked item.
-         *
-         * @param sti - The clicked item in the selection-treeview.
-         */
-        void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
 
@@ -330,24 +291,16 @@ namespace hal
          *
          * @param sti - The item that is to be displayed.
          */
-        void singleSelectionInternal(const SelectionTreeItem* sti);
+        void singleSelectionInternal(const ModuleItem* sti);
 
-        /**
-         * Adds the current selection to a module selected by id (=actionCode if positive).
-         * Create new module an pops up new module dialog if actionCode is negative.
-         */
-        void selectionToModuleAction(int actionCode);
+        void showNoSelection();
 
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;
-        QWidget*             mSelectionDetails;
         unsigned int         mNumberSelectedItems;
 
         QStackedWidget* mStackedWidget;
 
-        GateDetailsWidget* mGateDetails;
-        NetDetailsWidget* mNetDetails;
-        ModuleDetailsWidget* mModuleDetails;
         QLabel* mItemDeletedLabel;
         QLabel* mNoSelectionLabel;
 
@@ -378,5 +331,7 @@ namespace hal
         GateDetailsTabWidget* mGateDetailsTabs;
         NetDetailsTabWidget* mNetDetailsTabs;
         ModuleDetailsTabWidget* mModuleDetailsTabs;
+        SelectionTreeProxyModel* mSelectionTreeProxyModel;
+        ModuleModel* mModuleModel;
     };
 }

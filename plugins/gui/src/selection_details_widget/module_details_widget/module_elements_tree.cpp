@@ -1,8 +1,9 @@
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
-#include "gui/selection_details_widget/module_details_widget/netlist_elements_tree_model.h"
-#include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
-#include "gui/python/py_code_provider.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/gui_globals.h"
+#include "gui/module_context_menu/module_context_menu.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
+
 #include <QMenu>
 #include <QHeaderView>
 #include <QApplication>
@@ -11,20 +12,23 @@
 namespace hal
 {
 
-    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : SizeAdjustableTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
-        mModel(new ModuleTreeModel(this)), mModuleID(-1)
+    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setSelectionMode(QAbstractItemView::NoSelection);
+        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
-        //setModel(mNetlistElementsModel);
-        setModel(mModel);
+        mProxyModel = new FilterElementsProxyModel(this);
+        mModel = new ModuleModel(mProxyModel);
+        mProxyModel->setSourceModel(mModel);
+        mProxyModel->setFilterNets(true);
+        setModel(mProxyModel);
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
-        connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
+        //connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
     void ModuleElementsTree::setModule(u32 moduleID)
@@ -37,18 +41,16 @@ namespace hal
 
     void ModuleElementsTree::setModule(Module *m)
     {
-        //if(!m) return;
+        if(!m) return;
 
-        //mNetlistElementsModel->setModule(m, true, false, false);
-
-        mModel->setModule(m);
+        mModel->populateTree({m->get_id()});
+        setRootIndex(mProxyModel->mapFromSource(mModel->getIndexFromItem(mModel->getItem(m->get_id())))); // hide top-element m in TreeView
+        
         mModuleID = m->get_id();
-        adjustSizeToContents();
     }
 
     void ModuleElementsTree::removeContent()
     {
-        //mNetlistElementsModel->clear();
         mModel->clear();
         mModuleID = -1;
     }
@@ -59,88 +61,24 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        TreeItem* clickedItem = mModel->getItemFromIndex(clickedIndex);
-        int id = clickedItem->getData(ModuleTreeModel::sIdColumn).toInt();
-        ModuleTreeModel::itemType type = mModel->getTypeOfItem(clickedItem);
+        ModuleItem* clickedItem = dynamic_cast<ModuleItem*>(mModel->getItemFromIndex(mProxyModel->mapToSource(clickedIndex)));
+        u32 id = clickedItem->id();
+        ModuleItem::TreeItemType type = clickedItem->getType();
         QMenu menu;
 
-        //menu.addSection("here comes the plaintext");
+        if(type == ModuleItem::TreeItemType::Module)
+            ModuleContextMenu::addModuleSubmenu(&menu, id);
+        else if(type == ModuleItem::TreeItemType::Gate)
+            ModuleContextMenu::addGateSubmenu(&menu, id);
+        else if(type == ModuleItem::TreeItemType::Net)
+            ModuleContextMenu::addNetSubmenu(&menu, id);
 
-        menu.addAction("Name to clipboard",
-           [clickedItem]()
-           {
-               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sNameColumn).toString());
-           }
-        );
+        GuiPluginManager::addPluginSubmenus(&menu, gNetlist, 
+            type==ModuleItem::TreeItemType::Module ? std::vector<u32>({id}) : std::vector<u32>(),
+            type==ModuleItem::TreeItemType::Gate ? std::vector<u32>({id}) : std::vector<u32>(),
+            type==ModuleItem::TreeItemType::Net ? std::vector<u32>({id}) : std::vector<u32>());
 
-        menu.addAction("ID to clipboard",
-           [id]()
-           {
-               QApplication::clipboard()->setText(QString::number(id));
-           }
-        );
-
-        menu.addAction("Type to clipboard",
-           [clickedItem]()
-           {
-               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sTypeColumn).toString());
-           }
-        );
-
-        menu.addSection("Misc");
-
-        menu.addAction("Set as current selection",
-           [this, id, type]()
-           {
-            gSelectionRelay->clear();
-            switch(type)
-            {
-                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
-            }
-            gSelectionRelay->relaySelectionChanged(this);
-           }
-        );
-
-        menu.addAction("Add to current selection",
-           [this, id, type]()
-           {
-            switch(type)
-            {
-                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
-            }
-            gSelectionRelay->relaySelectionChanged(this);
-           }
-        );
-
-        menu.addSection("Python Code");
-
-        QString pythonGetObject = (type == ModuleTreeModel::itemType::module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
-        QString pythonDescription = (type == ModuleTreeModel::itemType::module) ? "Get module" : "Get gate";
-        menu.addAction(QIcon(":/icons/python"), pythonDescription,
-           [pythonGetObject]()
-           {
-               QApplication::clipboard()->setText(pythonGetObject);
-           }
-        );
-
-//        menu.addAction(QIcon(":/icons/python"), descriptions.at(1),
-//           [pythonGetName]()
-//           {
-//               QApplication::clipboard()->setText(pythonGetName);
-//           }
-//        );
-
-//        menu.addAction(QIcon(":/icons/python"), descriptions.at(2),
-//           [pythonGetType]()
-//           {
-//               QApplication::clipboard()->setText(pythonGetType);
-//           }
-//        );
-
-        menu.move(this->mapToGlobal(pos));
-        menu.exec();
+        menu.exec(this->viewport()->mapToGlobal(pos));
     }
 
     void ModuleElementsTree::handleNumberSubmodulesChanged(const int number)

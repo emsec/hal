@@ -15,24 +15,26 @@ namespace hal
 {
     NetDetailsTabWidget::NetDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
     {
-        setIcon(":/icons/sel_net");
+        setIcon(SelectionDetailsIconProvider::NetIcon);
 
         //create all widgets and replace the qWidgets in the frames with them
         mNetInfoTable = new NetInfoTable(this);
 
         //general tab
         mNetInformationFrame = new DetailsFrameWidget(mNetInfoTable, "Net Information", this);
-        mGroupingsOfItemTable = new GroupingsOfItemWidget;
-        mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
-        connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-
         ModuleTableModel* moduleModel = new ModuleTableModel(this);
         mNetModuleTable = new NetModuleTable(moduleModel, this);
 
         mModulesFrame = new DetailsFrameWidget(mNetModuleTable, "Modules", this);
 
-        QList<DetailsFrameWidget*> framesGeneralTab({mNetInformationFrame, mGroupingsFrame, mModulesFrame});
+        QList<DetailsFrameWidget*> framesGeneralTab({mNetInformationFrame, mModulesFrame});
         addTab("General", framesGeneralTab);
+
+        //groupings tab
+        mGroupingsOfItemTable = new GroupingsOfItemWidget;
+        mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
+        connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
+        addTab("Groupings", mGroupingsFrame, false);
 
         //sources / destinations tab
 
@@ -52,8 +54,7 @@ namespace hal
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        QList<DetailsFrameWidget*> framesDataTab({mDataFrame});
-        addTab("Data", framesDataTab);
+        addTab("Data", mDataFrame, false);
 
         //connect widgets with frames for refreshing the headers when necessary
         connect(mNetModuleTable, &NetModuleTable::updateText, mModulesFrame, &DetailsFrameWidget::setText);
@@ -64,13 +65,14 @@ namespace hal
  
     void NetDetailsTabWidget::setNet(Net* net)
     {
+        if (net) setIcon(SelectionDetailsIconProvider::NetIcon, net->get_id());
         //pass net or other stuff to widgets
         mNetInfoTable->setNet(net);
         mGroupingsOfItemTable->setNet(net);
 
-	mNetModuleTable->setNet(net);
+        mNetModuleTable->setNet(net);
         mSourcesTable->setNet(net);
         mDestinationsTable->setNet(net);
-	mDataTable->setNet(net);
+        mDataTable->setNet(net);
     }
 }

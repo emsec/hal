@@ -60,11 +60,18 @@ namespace hal
 
     class PythonSerializer : public ProjectSerializer
     {
+        struct PythonEditorControlEntry {
+            int tabInx;
+            bool active;
+            std::string restore;
+            std::string filename;
+        };
+
         QString mSaveDir;
 
-        static QString sPythonRelDir;
-
         void restoreTabs(const std::filesystem::path& loaddir, const std::string& jsonfile);
+
+        static bool write_control_file(const std::filesystem::path& savedir, const std::vector<PythonEditorControlEntry>& tabinfo);
     public:
         PythonSerializer();
 
@@ -75,6 +82,10 @@ namespace hal
         QString getDirectory() const;
 
         std::string serialize_control(const std::filesystem::path& savedir = std::filesystem::path(), bool isAutosave = false);
+
+        static QString sPythonRelDir;
+        static std::string sControlFileName;
+
     };
 
     /**
@@ -576,7 +587,7 @@ namespace hal
         /**
          * Q_SLOT to handle changes in the searchbar text. Used to update the search logic.
          */
-        void handleSearchbarTextEdited(const QString& text);
+        void handleSearchbarTextEdited(const QString& text, SearchOptions opts);
 
         /**
          * Q_SLOT to handle that the user has selected another tab, so that the index of the current tab has changed.
@@ -837,5 +848,7 @@ namespace hal
         SettingsItemKeybind* mSettingSaveFileAs;
         SettingsItemKeybind* mSettingRunFile;
         SettingsItemKeybind* mSettingCreateFile;
+
+        QList<u32> mBlockedContextIds;
     };
 }    // namespace hal

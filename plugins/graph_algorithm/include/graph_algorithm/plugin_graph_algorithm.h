@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file plugin_graph_algorithm.h 
+ * @brief This file contains all functions related to the HAL plugin API.
+ */
+
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
@@ -36,122 +41,51 @@ namespace hal
     class Gate;
     class Net;
 
+    /**
+     * @class GraphAlgorithmPlugin
+     * @brief Plugin interface for graph algorithms.
+     * 
+     * This class provides an interface to integrate graph algorithms based on `igraph` as a plugin within the HAL framework.
+     */
     class PLUGIN_API GraphAlgorithmPlugin : public BasePluginInterface
     {
     public:
-        /** constructor (= default) */
+        /** 
+         * @brief Default constructor for `GraphAlgorithmPlugin`.
+         */
         GraphAlgorithmPlugin() = default;
 
-        /** destructor (= default) */
+        /** 
+         * @brief Default destructor for `GraphAlgorithmPlugin`.
+         */
         ~GraphAlgorithmPlugin() = default;
 
-        /*
-        *      interface implementations
-        */
-
         /**
-         * Get the name of the plugin.
+         * @brief Get the name of the plugin.
          *
          * @returns The name of the plugin.
          */
         std::string get_name() const override;
 
         /**
-         * Get the version of the plugin.
+         * @brief Get the version of the plugin.
          *
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
 
-        /*
-        *      clustering function
-        */
-
         /**
-         * Get a map of community IDs to communities. Each community is represented by a set of gates.
+         * @brief Get a short description of the plugin.
          *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns A map from community IDs to communities.
+         * @returns The short description of the plugin.
          */
-        std::map<int, std::set<Gate*>> get_communities(Netlist* const netlist);
+        std::string get_description() const override;
 
         /**
-         * Get a map of community IDs to communities running the spinglass clustering algorithm. Each community is represented by a set of gates.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @param[in] spins - The number of spins.
-         * @returns A map from community IDs to communities.
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
          */
-        std::map<int, std::set<Gate*>> get_communities_spinglass(Netlist* const netlist, u32 const spins);
-
-        /**
-         * Get a map of community IDs to communities running the fast greedy clustering algorithm from igraph. Each community is represented by a set of gates.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns A map from community IDs to communities.
-         */
-        std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const netlist);
-
-        /**
-         * Get a map of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns A map from community IDs to communities.
-       
-        std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* netlist);
-          */
-
-        /**
-         *  other graph algorithm
-         */
-
-        /**
-         * Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns A vector of SCCs.
-         */
-        std::vector<std::vector<Gate*>> get_strongly_connected_components(Netlist* netlist);
-
-        /**
-         * Get a graph cut for a specific gate and depth. Further, a set of gates can be specified that limit the graph cut, i.e., flip-flops and memory cells.<br>
-         * The graph cut is returned as a vector of sets of gates with the vector's index representing the distance of each set to the starting point.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @param[in] gate - The gate that is the starting point for the graph cut.
-         * @param[in] depth - The depth of the graph cut.
-         * @param[in] terminal_gate_type - A set of gates at which to terminate the graph cut.
-         * @returns The graph cut as a vector of sets of gates.
-         */
-        std::vector<std::set<Gate*>>
-            get_graph_cut(Netlist* const netlist, Gate* gate, const u32 depth = std::numeric_limits<u32>::max(), const std::set<std::string> terminal_gate_type = std::set<std::string>());
-
-        /*
-         *      igraph specific functions
-         */
-
-        /**
-         * Generates an directed graph, based on the current netlist. Each gate is transformed to a node, while each
-         * net is transformed to an edge. The function returns the mapping from igraph node ids to HAL gates. Note
-         * that for each global input and output dummy nodes are generated in the igraph representation.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
-         */
-        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* igraph);
-
-        /**
-         * Uses the mapping provided by the the get_igraph_directed() function to generate sets of HAL gates
-         * that were generated by the clustering algorithms of igraph. The igraph membership vector contains
-         * the generated clusters from the igraph framework, which is used to generate the sets of gates in HAL.
-         * The sets are stored in a map with the regarding cluster ID from igraph, since these can contain information
-         * generated by the clustering algorithm.
-         *
-         * @param[in] graph - igraph graph object
-         * @param[in] membership - membership vector
-         * @param[in] vertex_to_gate - map from node ID in igraph to HAL gate
-         * @returns map from membership id to set of gates that have the membership.
-         */
-        std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

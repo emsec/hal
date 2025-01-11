@@ -44,7 +44,14 @@ namespace hal
         {
             Z3 = 0,    /**< Z3 SMT solver. */
             Boolector, /**< Boolector SMT solver. */
+            Bitwuzla,  /**< Bitwuzla SMT solver. */
             Unknown,   /**< Unknown (unsupported) SMT solver. */
+        };
+
+        enum class SolverCall : int
+        {
+            Binary,  /**< Call binary in subprocess*/
+            Library, /**< Call linked library */
         };
 
         /**
@@ -58,10 +65,12 @@ namespace hal
 
             /// The SMT solver identifier.
             SolverType solver = SolverType::Z3;
+            /// The calling format for the SMT solver
+            SolverCall call = SolverCall::Binary;
             /// Controls whether the SMT query is performed on a local or a remote machine.
             bool local = true;
             /// Controls whether the SMT solver should generate a model in case formula is satisfiable.
-            bool generate_model = true;
+            bool generate_model = false;
             /// The timeout after which the SMT solver is killed in seconds.
             u64 timeout_in_seconds = 10;
 
@@ -76,6 +85,14 @@ namespace hal
              * @returns The updated SMT query configuration.
              */
             QueryConfig& with_solver(SolverType solver);
+
+            /**
+             * Sets the solver type to the desired SMT solver.
+             *
+             * @param[in] call - The solver call.
+             * @returns The updated SMT query configuration.
+             */
+            QueryConfig& with_call(SolverCall call);
 
             /**
              * Activates local SMT solver execution.

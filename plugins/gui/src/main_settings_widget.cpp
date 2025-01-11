@@ -164,7 +164,7 @@ namespace hal
         connect(mOk, &QPushButton::clicked, this, &MainSettingsWidget::handleOkClicked);
 
         connect(mExpandingListWidget, &ExpandingListWidget::buttonSelected, this, &MainSettingsWidget::handleButtonSelected);
-        connect(mSearchbar,&Searchbar::textEdited,this,&MainSettingsWidget::searchSettings);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &MainSettingsWidget::searchSettings);
     }
 
     void MainSettingsWidget::initWidgets()
@@ -348,13 +348,21 @@ namespace hal
             widget->show();
     }
 
-    void MainSettingsWidget::searchSettings(const QString& needle)
+    void MainSettingsWidget::searchSettings(const QString& needle, SearchOptions searchOpts)
     {
+        mSearchOptions = searchOpts;
+        mActiveSection.clear();
+        if (mExpandingListWidget)
+            mExpandingListWidget->clearSelected();
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
         for (SettingsWidget* widget : mSettingsList)
-            if (widget->matchLabel(needle))
+            if (isMatching(needle, widget->getLabel()))
+            {
+                if (mActiveSection.isEmpty())
+                    mActiveSection = widget->settingsItem()->label();
                 widget->show();
+            }
             else
                 widget->hide();
     }
@@ -375,5 +383,24 @@ namespace hal
             SettingsManager::instance()->persistUserSettings();
         }
         return true;
+    }
+
+    bool MainSettingsWidget::isMatching(QString searchString, QString stringToCheck)
+    {
+        if(!mSearchOptions.isExactMatch() && !mSearchOptions.isRegularExpression()){
+            //check if stringToCheck contains the searchString
+            return stringToCheck.contains(searchString, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isExactMatch()){
+            //check if the stringToCheck is the same as the searchString   - also checks CaseSensitivity
+
+            return 0 == QString::compare(searchString, stringToCheck, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isRegularExpression()){
+            //checks if the stringToCheck matches the regEx given by searchString
+            auto regEx = QRegularExpression(searchString, mSearchOptions.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+            return regEx.match(stringToCheck).hasMatch();
+        }
+        return false;
     }
 }

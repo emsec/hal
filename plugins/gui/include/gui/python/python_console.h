@@ -99,6 +99,9 @@ namespace hal
     public Q_SLOTS:
         void handleThreadFinished();
 
+    private Q_SLOTS:
+        void handleStyleChanged(int istyle);
+
     Q_SIGNALS:
         void inputReceived(QString input);
 
@@ -195,10 +198,6 @@ namespace hal
         PythonConsoleAbortThread* abortThreadWidget();
 
     private:
-        QColor mPromptColor;
-        QColor mStandardColor;
-        QColor mErrorColor;
-
         QString mStandardPrompt;
         QString mCompoundPrompt;
         QString mInputPrompt;

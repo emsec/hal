@@ -386,7 +386,7 @@ namespace hal
      * Testing functions which returns the fan-in nets nets by using the
      * example netlist (see above)
      *
-     * Functions: get_fan_in_nets
+     * Functions: get_fan_in_nets, get_fan_in_net, is_fan_in_net
      */
     TEST_F(GateTest, check_get_fan_in_nets)
     {
@@ -403,12 +403,25 @@ namespace hal
             Gate* gate_0                    = nl->get_gate_by_id(MIN_GATE_ID + 0);
             std::vector<Net*> fan_in_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 30), nl->get_net_by_id(MIN_NET_ID + 20)};
             EXPECT_EQ(gate_0->get_fan_in_nets(), fan_in_nets_0);
+            EXPECT_TRUE(gate_0->is_fan_in_net(nl->get_net_by_id(MIN_NET_ID + 30)));
+            EXPECT_TRUE(gate_0->is_fan_in_net(nl->get_net_by_id(MIN_NET_ID + 20)));
+            EXPECT_EQ(gate_0->get_fan_in_net("I0"), nl->get_net_by_id(MIN_NET_ID + 30));
+            EXPECT_EQ(gate_0->get_fan_in_net("I1"), nl->get_net_by_id(MIN_NET_ID + 20));
+            EXPECT_EQ(gate_0->get_fan_in_net(gate_0->get_type()->get_pin_by_name("I0")), nl->get_net_by_id(MIN_NET_ID + 30));
+            EXPECT_EQ(gate_0->get_fan_in_net(gate_0->get_type()->get_pin_by_name("I1")), nl->get_net_by_id(MIN_NET_ID + 20));
+            EXPECT_EQ(gate_0->get_fan_in_endpoint("I0"), gate_0->get_fan_in_endpoint(nl->get_net_by_id(MIN_NET_ID + 30)));
+            EXPECT_EQ(gate_0->get_fan_in_endpoint("I1"), gate_0->get_fan_in_endpoint(nl->get_net_by_id(MIN_NET_ID + 20)));
+            EXPECT_EQ(gate_0->get_fan_in_endpoint(gate_0->get_type()->get_pin_by_name("I0")), gate_0->get_fan_in_endpoint(nl->get_net_by_id(MIN_NET_ID + 30)));
+            EXPECT_EQ(gate_0->get_fan_in_endpoint(gate_0->get_type()->get_pin_by_name("I1")), gate_0->get_fan_in_endpoint(nl->get_net_by_id(MIN_NET_ID + 20)));
         }
         {
             // Not all input pins are occupied
             Gate* gate_5                    = nl->get_gate_by_id(MIN_GATE_ID + 5);
             std::vector<Net*> fan_in_nets_5 = {nl->get_net_by_id(MIN_NET_ID + 045)};
             EXPECT_EQ(gate_5->get_fan_in_nets(), fan_in_nets_5);
+            EXPECT_TRUE(gate_5->is_fan_in_net(nl->get_net_by_id(MIN_NET_ID + 045)));
+            EXPECT_FALSE(gate_5->is_fan_in_net(nl->get_net_by_id(MIN_NET_ID + 20)));
+            EXPECT_EQ(gate_5->get_fan_in_net("I1"), nullptr);
         }
         {
             // No input pins are occupied
@@ -422,6 +435,20 @@ namespace hal
             std::vector<Net*> fan_in_nets_1 = {};
             EXPECT_EQ(gate_1->get_fan_in_nets(), fan_in_nets_1);
         }
+        {
+            Gate* gate_0                    = nl->get_gate_by_id(MIN_GATE_ID + 0);
+            EXPECT_FALSE(gate_0->is_fan_in_net(nullptr));
+
+            // Get the Net of a non existing pin
+            EXPECT_EQ(gate_0->get_fan_in_net("NEx_PIN"), nullptr);
+
+            // Pass an empty string
+            EXPECT_EQ(gate_0->get_fan_in_net(""), nullptr);
+
+            // Get the Net of a non existing pin-type of a Gate where no input pin exist
+            Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
+            EXPECT_EQ(gate_1->get_fan_in_net("NEx_PIN"), nullptr);
+        }
         TEST_END
     }
 
@@ -429,7 +456,7 @@ namespace hal
      * Testing functions which returns the fan-out nets nets by using the
      * example netlist (see above)
      *
-     * Functions: get_fan_out_nets
+     * Functions: get_fan_out_nets, get_fan_out_net, is_fan_out_net
      */
     TEST_F(GateTest, check_get_fan_out_nets)
     {
@@ -446,12 +473,24 @@ namespace hal
             Gate* gate_0                     = nl->get_gate_by_id(MIN_GATE_ID + 0);
             std::vector<Net*> fan_out_nets_0 = {nl->get_net_by_id(MIN_NET_ID + 045)};
             EXPECT_EQ(gate_0->get_fan_out_nets(), fan_out_nets_0);
+            EXPECT_TRUE(gate_0->is_fan_out_net(nl->get_net_by_id(MIN_NET_ID + 045)));
+            EXPECT_EQ(gate_0->get_fan_out_net("O"), nl->get_net_by_id(MIN_NET_ID + 045));
+            EXPECT_EQ(gate_0->get_fan_out_net(gate_0->get_type()->get_pin_by_name("O")), nl->get_net_by_id(MIN_NET_ID + 045));
+            EXPECT_EQ(gate_0->get_fan_out_endpoint("O"), gate_0->get_fan_out_endpoint(nl->get_net_by_id(MIN_NET_ID + 045)));
+            EXPECT_EQ(gate_0->get_fan_out_endpoint(gate_0->get_type()->get_pin_by_name("O")), gate_0->get_fan_out_endpoint(nl->get_net_by_id(MIN_NET_ID + 045)));
+        }
+        {
+            // Get the Net of a pin where no Net is connected
+            Gate* gate_4 = nl->get_gate_by_id(MIN_GATE_ID + 4);
+            EXPECT_EQ(gate_4->get_fan_out_net("O"), nullptr);
         }
         {
             // Not all output pins are occupied
             Gate* gate_7                     = nl->get_gate_by_id(MIN_GATE_ID + 7);
             std::vector<Net*> fan_out_nets_7 = {nl->get_net_by_id(MIN_NET_ID + 78)};
             EXPECT_EQ(gate_7->get_fan_out_nets(), fan_out_nets_7);
+            EXPECT_TRUE(gate_7->is_fan_out_net(nl->get_net_by_id(MIN_NET_ID + 78)));
+            EXPECT_FALSE(gate_7->is_fan_out_net(nl->get_net_by_id(MIN_NET_ID + 045)));
         }
         {
             // No output pins are occupied
@@ -465,94 +504,19 @@ namespace hal
             std::vector<Net*> fan_out_nets_6 = {};
             EXPECT_EQ(gate_6->get_fan_out_nets(), fan_out_nets_6);
         }
-        TEST_END
-    }
-
-    /**
-     * Testing functions which returns the fan-in Net, connected to a specific pin-type,
-     * by using the example netlist (see above)
-     *
-     * Functions: get_fan_in_net
-     */
-    TEST_F(GateTest, check_get_fan_in_net)
-    {
-        TEST_START
-
-        // Create the example
-        auto nl = test_utils::create_example_netlist();
-
-        // ########################
-        // POSITIVE TESTS
-        // ########################
         {
-            // Get an existing Net at an existing pin-type
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-            EXPECT_EQ(gate_0->get_fan_in_net("I0"), nl->get_net_by_id(MIN_NET_ID + 30));
-            EXPECT_EQ(gate_0->get_fan_in_net("I1"), nl->get_net_by_id(MIN_NET_ID + 20));
-        }
-        {
-            // Get the Net of a pin where no Net is connected
-            Gate* gate_5 = nl->get_gate_by_id(MIN_GATE_ID + 5);
-            EXPECT_EQ(gate_5->get_fan_in_net("I1"), nullptr);
-        }
-        {
+            Gate* gate_0                    = nl->get_gate_by_id(MIN_GATE_ID + 0);
+            EXPECT_FALSE(gate_0->is_fan_out_net(nullptr));
+
             // Get the Net of a non existing pin
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-            EXPECT_EQ(gate_0->get_fan_in_net("NEx_PIN"), nullptr);
-        }
-        {
-            // Get the Net of a non existing pin-type of a Gate where no input pin exist
-            Gate* gate_1 = nl->get_gate_by_id(MIN_GATE_ID + 1);
-            EXPECT_EQ(gate_1->get_fan_in_net("NEx_PIN"), nullptr);
-        }
-        {
-            // Pass an empty string
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-            EXPECT_EQ(gate_0->get_fan_in_net(""), nullptr);
-        }
-        TEST_END
-    }
-
-    /**
-     * Testing functions which returns the fan-out Net, connected to a specific pin-type,
-     * by using the example netlist (see above)
-     *
-     * Functions: get_fan_out_net
-     */
-    TEST_F(GateTest, check_get_fan_out_net)
-    {
-        TEST_START
-
-        // Create the example
-        auto nl = test_utils::create_example_netlist();
-
-        // ########################
-        // POSITIVE TESTS
-        // ########################
-        {
-            // Get an existing Net at an existing pin-type
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-            EXPECT_EQ(gate_0->get_fan_out_net("O"), nl->get_net_by_id(MIN_NET_ID + 045));
-        }
-        {
-            // Get the Net of a pin where no Net is connected
-            Gate* gate_4 = nl->get_gate_by_id(MIN_GATE_ID + 4);
-            EXPECT_EQ(gate_4->get_fan_out_net("O"), nullptr);
-        }
-        {
-            // Get the Net of a non existing pin
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
             EXPECT_EQ(gate_0->get_fan_out_net("NEx_PIN"), nullptr);
-        }
-        {
+
+            // Pass an empty string
+            EXPECT_EQ(gate_0->get_fan_out_net(""), nullptr);
+
             // Get the Net of a non existing pin-type of a Gate where no output pin exist
             Gate* gate_6 = nl->get_gate_by_id(MIN_GATE_ID + 6);
             EXPECT_EQ(gate_6->get_fan_out_net("NEx_PIN"), nullptr);
-        }
-        {
-            // Pass an empty string
-            Gate* gate_0 = nl->get_gate_by_id(MIN_GATE_ID + 0);
-            EXPECT_EQ(gate_0->get_fan_out_net(""), nullptr);
         }
         TEST_END
     }
@@ -1226,7 +1190,7 @@ namespace hal
             ASSERT_TRUE(get_init_res.is_ok());
             auto get_init_data = get_init_res.get();
             EXPECT_EQ(get_init_data.size(), 1);
-            EXPECT_EQ(get_init_data.front(), "1");
+            EXPECT_EQ(get_init_data.front(), "01");
         }
         // NEGATIVE
         {

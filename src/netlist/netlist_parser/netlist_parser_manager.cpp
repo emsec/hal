@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <fstream>
 
@@ -155,13 +156,13 @@ namespace hal
                 }
                 if (auto it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())
                 {
-                    log_warning("hdl_parser", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
+                    log_warning("netlist_parser", "file type '{}' already has associated parser '{}', it remains unchanged", ext, it->second.first);
                     continue;
                 }
                 m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
                 m_parser_to_extensions[name].push_back(ext);
 
-                log_info("hdl_parser", "registered hdl parser '{}' for file type '{}'", name, ext);
+                log_info("netlist_parser", "registered netlist parser '{}' for file type '{}'", name, ext);
             }
         }
 
@@ -174,7 +175,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("hdl_parser", "unregistered hdl parser '{}' which was registered for file type '{}'", name, ext);
+                        log_info("netlist_parser", "unregistered netlist parser '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);
@@ -197,7 +198,7 @@ namespace hal
                 gate_library                  = gate_library_manager::get_gate_library(gate_library_file);
                 if (gate_library == nullptr)
                 {
-                    log_error("hdl_parser", "invalid gate library '{}' specified by user.", gate_library_file);
+                    log_error("netlist_parser", "invalid gate library '{}' specified by user.", gate_library_file);
                     return nullptr;
                 }
             }
@@ -233,5 +234,11 @@ namespace hal
 
             return dispatch_parse(file_name, factory(), nullptr, false);
         }
+
+        std::unordered_map<std::string, std::vector<std::string>> get_parser_to_extensions()
+        {
+            return m_parser_to_extensions;
+        }
+
     }    // namespace netlist_parser_manager
 }    // namespace hal

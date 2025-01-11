@@ -25,7 +25,9 @@
 
 #pragma once
 
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/utilities/result.h"
 
 #include <map>
 #include <set>
@@ -37,65 +39,44 @@ namespace hal
     class Netlist;
     class Net;
 
+    /**
+     * @class SolveFsmPlugin
+     * @brief Plugin interface for the solve FSM plugin.
+     * 
+     * This class provides an interface to integrate FSM solving as a plugin within the HAL framework.
+     */
     class PLUGIN_API SolveFsmPlugin : public BasePluginInterface
     {
     public:
+        /** 
+         * @brief Default constructor for `SolveFsmPlugin`.
+         */
+        SolveFsmPlugin() = default;
+
+        /** 
+         * @brief Default destructor for `SolveFsmPlugin`.
+         */
+        ~SolveFsmPlugin() = default;
+
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
-        void initialize() override;
 
         /**
-         * Generates the state graph of a finite state machine and returns a mapping from each state to a vector of all its possible transitions.
-         * A transition consits of a successor state and a vector of input mappings that lead to such a transition.
+         * @brief Get a short description of the plugin.
          *
-         * @param[in] nl - Pointer to the netlist.
-         * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
-         * @param[in] transition_logic - A vector containing all the gates of the fsm representing the transition_logic.
-         * @param[in] initial_state - A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.
-         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
-         * @param[in] timeout - Timeout value for the sat solvers. Defaults to 600000 ms.
-         * @returns A mapping from each state to all its possible transitions. The transitions are a map from the successor state to all the possible input mappings that lead to it.
+         * @returns The short description of the plugin.
          */
-        static Result<std::map<u64, std::map<u64, BooleanFunction>>> solve_fsm(Netlist* nl,
-                                                                               const std::vector<Gate*> state_reg,
-                                                                               const std::vector<Gate*> transition_logic,
-                                                                               const std::map<Gate*, bool> initial_state = {},
-                                                                               const std::string graph_path              = "",
-                                                                               const u32 timeout                         = 600000);
-
-        /**
-         * Generates the state graph of a finite state machine and returns a mapping from each state to a vector of all its possible successor states using a simple brute force approach.
-         *
-         * @param[in] nl - Pointer to the netlist.
-         * @param[in] state_reg - A vector containing all the gates of the fsm representing the state register.
-         * @param[in] transition_logic - A vector containing all the gates of the fsm representing the transition_logic.
-         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
-         * @returns A mapping from each state to all its possible successors states.
-         */
-        static Result<std::map<u64, std::set<u64>>> solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path = "");
-
-        /**
-         * Generates the state graph of a finite state machine from the transitions of that fsm.
-         *
-         * @param[in] state_reg - Vector contianing the state registers.
-         * @param[in] transitions - Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.
-         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
-         * @param[in] max_condition_length - The maximum character length that is printed for boolean functions representing the conditions.
-         * @param[in] base - The base with that the states are formatted and printed.
-         * @returns A string representing the dot graph.
-         */
-        static Result<std::string> generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::map<u64, BooleanFunction>>& transitions, const std::string& graph_path="", const u32 max_condition_length=128, const u32 base=10);
-
-        /**
-         * Generates the state graph of a finite state machine from the transitions of that fsm.
-         *
-         * @param[in] state_reg - Vector contianing the state registers.
-         * @param[in] transitions - Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.
-         * @param[in] graph_path - Path where the transition state graph in dot format is saved.
-         * @param[in] max_condition_length - The maximum character length that is printed for boolean functions representing the conditions.
-         * @param[in] base - The base with that the states are formatted and printed.
-         * @returns A string representing the dot graph.
-         */
-        static Result<std::string> generate_dot_graph(const std::vector<Gate*>& state_reg, const std::map<u64, std::set<u64>>& transitions, const std::string& graph_path="", const u32 max_condition_length=128, const u32 base=10);
+        std::string get_description() const override;
     };
 }    // namespace hal

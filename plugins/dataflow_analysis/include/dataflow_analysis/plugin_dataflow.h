@@ -25,7 +25,10 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_cli.h"
+#include "dataflow_analysis/api/dataflow.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 #include <vector>
 
@@ -35,57 +38,62 @@ namespace hal
     class Netlist;
     class Gate;
 
-    class PLUGIN_API plugin_dataflow : virtual public CLIPluginInterface
+    class DataflowPlugin;
+
+    class CliExtensionDataflow : public CliExtensionInterface
     {
     public:
-        /*
-         *      interface implementations
-         */
+        CliExtensionDataflow()
+        {
+        }
+        virtual ProgramOptions get_cli_options() const override;
+        virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) override;
+    };
 
-        plugin_dataflow()  = default;
-        ~plugin_dataflow() = default;
+    class GuiExtensionDataflow : public GuiExtensionInterface
+    {
+        std::string m_output_path = "/tmp";
+        bool m_write_dot          = false;
+        bool m_write_txt          = false;
+        bool m_create_modules     = false;
+        bool m_button_clicked     = false;
+
+        std::vector<u32> m_expected_sizes = {};
+        u32 m_min_group_size              = 8;
+        bool m_enable_stages              = false;
+
+    public:
+        /**
+         * @brief Default constructor for `GuiExtensionDataflow`.
+         */
+        GuiExtensionDataflow() = default;
 
         /**
-         * Get the name of the plugin.
+         * @brief Get a vector of configurable parameters.
          *
-         * @returns The name of the plugin.
-         */
-        std::string get_name() const override;
-
-        /**
-         * Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
-        std::string get_version() const override;
-
-        /** interface implementation: i_cli */
-        ProgramOptions get_cli_options() const override;
-
-        /** interface implementation: i_cli */
-        bool handle_cli_call(Netlist* nl, ProgramArguments& args) override;
-
-        std::vector<std::vector<Gate*>> execute(Netlist* nl,
-                                                std::string path,
-                                                const std::vector<u32> sizes,
-                                                bool draw_graph,
-                                                bool create_modules                        = false,
-                                                bool register_stage_identification         = false,
-                                                std::vector<std::vector<u32>> known_groups = {},
-                                                u32 bad_group_size                         = 7);
-
-        /**
-         * Get list of configurable parameter
-         *
-         * @returns  list of parameter
+         * @returns The vector of parameters.
          */
         std::vector<PluginParameter> get_parameter() const override;
 
         /**
-         * Set configurable parameter to values
-         * @param params The parameter with values
+         * @brief Set values for a vector of configurable parameters.
+         * 
+         * @param[in] params - The parameters including their values.
          */
-        void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params) override;
+        void set_parameter(const std::vector<PluginParameter>& params) override;
+
+        /**
+         * @brief Execute the plugin on the given netlist. 
+         * 
+         * All parameters but the netlist are ignored.
+         * 
+         * @param[in] tag - A tag (ignored).
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] mods - Module IDs (ignored).
+         * @param[in] gats - Gate IDs (ignored).
+         * @param[in] nets - Net IDs (ignored).
+         */
+        void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
 
         /**
          * Register function to indicate work progress when busy
@@ -94,5 +102,53 @@ namespace hal
         virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
 
         static std::function<void(int, const std::string&)> s_progress_indicator_function;
+    };
+
+    /**
+     * @class DataflowPlugin
+     * @brief Plugin interface for the dataflow analysis plugin (DANA).
+     * 
+     * This class provides an interface to integrate the DANA tool as a plugin within the HAL framework.
+     */
+    class PLUGIN_API DataflowPlugin : public BasePluginInterface
+    {
+    public:
+        /**
+         * @brief Constructor for `DataflowPlugin`.
+         */
+        DataflowPlugin();
+
+        /** 
+         * @brief Default destructor for `DataflowPlugin`.
+         */
+        ~DataflowPlugin() = default;
+
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
+        std::string get_name() const override;
+
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
+        std::string get_version() const override;
+
+        /**
+         * @brief Get a short description of the plugin.
+         *
+         * @return The short description of the plugin.
+         */
+        std::string get_description() const override;
+
+        /**
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
+         */
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

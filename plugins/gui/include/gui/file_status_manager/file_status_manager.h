@@ -45,6 +45,9 @@ namespace hal
     class FileStatusManager : public QObject
     {
         Q_OBJECT
+    Q_SIGNALS:
+        void status_changed(bool gateLibrary, bool isDirty);
+
     public:
         /**
          * The constructor.
@@ -93,10 +96,24 @@ namespace hal
         void netlistSaved();
 
         /**
-         * Removes all registered files and unsets every modified-flag, effectively resetting
-         * the state of the manager.
+         * Resets the netlist-modified flag that affects the modifiedFilesExisting() method.
          */
-        void flushUnsavedChanges();
+        void netlistClosed();
+
+        /**
+         * Sets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         */
+        void gatelibChanged();
+
+        /**
+         * Unsets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         */
+        void gatelibSaved();
+
+        /**
+         * Query method whether GateLibraryManager has unsaved changes.
+         */
+        bool isGatelibModified() const;
 
         /**
          * Get a list of the descriptions of all modified files that are registered to this manager.
@@ -111,5 +128,6 @@ namespace hal
         QMap<QUuid, QString> mModifiedFilesDescriptors;
 
         bool mNetlistModified;
+        bool mGatelibModified;
     };
 }

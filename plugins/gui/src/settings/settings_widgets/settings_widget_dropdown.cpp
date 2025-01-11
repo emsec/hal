@@ -4,7 +4,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPair>
-
+#include <QDebug>
 #include <QMap>
 #include <QComboBox>
 #include <QStringList>
@@ -18,13 +18,10 @@ namespace hal
     {
         mComboBox = new QComboBox(this);
         mComboBox->addItems(mOptions);
-        mComboBox->setStyleSheet("QComboBox{width: 150px;}");
         connect(mComboBox, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &SettingsWidgetDropdown::on_index_changed);
 
 
         mContainer->addWidget(mComboBox);
-
-
         load(item->value());
     }
 

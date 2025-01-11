@@ -13,6 +13,65 @@ namespace hal
         {
         }
 
+        Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<Gate*>>& groups) : Grouping(na)
+        {
+            /* initialize state */
+            i32 new_id_counter = -1;
+            bool group_is_known;
+
+            for (const auto* gate : na.target_gates)
+            {
+                group_is_known = false;
+                for (const auto& gates : groups)
+                {
+                    for (const auto* g : gates)
+                    {
+                        if (gate == g)
+                        {
+                            group_is_known = true;
+                            break;
+                        }
+                    }
+                    if (group_is_known)
+                    {
+                        break;
+                    }
+                }
+                if (!group_is_known)
+                {
+                    u32 new_group_id = (u32)(++new_id_counter);
+
+                    this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(gate->get_id());
+
+                    this->gates_of_group[new_group_id].insert(gate->get_id());
+                    this->parent_group_of_gate[gate->get_id()] = new_group_id;
+
+                    this->operations_on_group_allowed[new_group_id] = true;
+                }
+            }
+
+            /* merge groups known before execution */
+            for (const auto& gates : groups)
+            {
+                if (gates.empty())
+                {
+                    continue;
+                }
+
+                u32 new_group_id = (u32)(++new_id_counter);
+
+                this->operations_on_group_allowed[new_group_id]   = false;
+                this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(gates.front()->get_id());
+
+                for (const auto& g : gates)
+                {
+                    auto gid = g->get_id();
+                    this->gates_of_group[new_group_id].insert(gid);
+                    this->parent_group_of_gate[gid] = new_group_id;
+                }
+            }
+        }
+
         Grouping::Grouping(const Grouping& other) : Grouping(other.netlist_abstr)
         {
             group_control_fingerprint_map = other.group_control_fingerprint_map;
@@ -47,27 +106,22 @@ namespace hal
             return !(*this == other);
         }
 
-        std::unordered_set<u32> Grouping::get_clock_signals_of_group(u32 id)
+        std::map<PinType, std::unordered_set<u32>> Grouping::get_control_signals_of_group(u32 group_id) const
         {
-            return get_signals_of_group(id, netlist_abstr.gate_to_clock_signals);
+            std::map<PinType, std::unordered_set<u32>> res;
+
+            for (auto gate : gates_of_group.at(group_id))
+            {
+                if (auto it = this->netlist_abstr.gate_to_control_signals.find(gate); it != this->netlist_abstr.gate_to_control_signals.end())
+                {
+                    res.insert(it->second.begin(), it->second.end());
+                }
+            }
+
+            return res;
         }
 
-        std::unordered_set<u32> Grouping::get_control_signals_of_group(u32 id)
-        {
-            return get_signals_of_group(id, netlist_abstr.gate_to_enable_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_reset_signals_of_group(u32 id)
-        {
-            return get_signals_of_group(id, netlist_abstr.gate_to_reset_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_set_signals_of_group(u32 id)
-        {
-            return get_signals_of_group(id, netlist_abstr.gate_to_set_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals)
+        std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals) const
         {
             std::unordered_set<u32> res;
 
@@ -82,14 +136,14 @@ namespace hal
             return res;
         }
 
-        std::set<u32> Grouping::get_register_stage_intersect_of_group(u32 id)
+        std::set<u32> Grouping::get_register_stage_intersect_of_group(u32 id) const
         {
             std::vector<u32> intersect;
             for (auto gate : this->gates_of_group.at(id))
             {
                 // check if gate has register_stages
-                auto it = netlist_abstr.gate_to_register_stages.find(gate);
-                if (it != netlist_abstr.gate_to_register_stages.end())
+                auto it = this->netlist_abstr.gate_to_register_stages.find(gate);
+                if (it != this->netlist_abstr.gate_to_register_stages.end())
                 {
                     auto gate_rs = std::set<u32>(it->second.begin(), it->second.end());
                     if (intersect.empty())
@@ -116,11 +170,11 @@ namespace hal
             return std::set<u32>(intersect.begin(), intersect.end());
         }
 
-        std::unordered_set<u32> Grouping::get_successor_groups_of_group(u32 id)
+        std::unordered_set<u32> Grouping::get_successor_groups_of_group(u32 group_id) const
         {
             {
                 std::shared_lock lock(cache.mutex);
-                if (auto it = cache.suc_cache.find(id); it != cache.suc_cache.end())
+                if (auto it = cache.suc_cache.find(group_id); it != cache.suc_cache.end())
                 {
                     return it->second;
                 }
@@ -128,30 +182,30 @@ namespace hal
             std::unique_lock lock(cache.mutex);
 
             // check again, since another thread might have gotten the unique lock first
-            if (auto it = cache.suc_cache.find(id); it != cache.suc_cache.end())
+            if (auto it = cache.suc_cache.find(group_id); it != cache.suc_cache.end())
             {
                 return it->second;
             }
 
             std::unordered_set<u32> successors;
-            for (auto gate : gates_of_group.at(id))
+            for (auto gate : gates_of_group.at(group_id))
             {
-                for (auto gate_id : netlist_abstr.gate_to_successors.at(gate))
+                for (auto gate_id : this->netlist_abstr.gate_to_successors.at(gate))
                 {
                     successors.insert(parent_group_of_gate.at(gate_id));
                 }
             }
 
-            cache.suc_cache.emplace(id, successors);
+            cache.suc_cache.emplace(group_id, successors);
 
             return successors;
         }
 
-        std::unordered_set<u32> Grouping::get_predecessor_groups_of_group(u32 id)
+        std::unordered_set<u32> Grouping::get_predecessor_groups_of_group(u32 group_id) const
         {
             {
                 std::shared_lock lock(cache.mutex);
-                if (auto it = cache.pred_cache.find(id); it != cache.pred_cache.end())
+                if (auto it = cache.pred_cache.find(group_id); it != cache.pred_cache.end())
                 {
                     return it->second;
                 }
@@ -159,38 +213,100 @@ namespace hal
             std::unique_lock lock(cache.mutex);
 
             // check again, since another thread might have gotten the unique lock first
-            if (auto it = cache.pred_cache.find(id); it != cache.pred_cache.end())
+            if (auto it = cache.pred_cache.find(group_id); it != cache.pred_cache.end())
             {
                 return it->second;
             }
 
             std::unordered_set<u32> predecessors;
-            for (auto gate : gates_of_group.at(id))
+            for (auto gate : gates_of_group.at(group_id))
             {
-                for (auto gate_id : netlist_abstr.gate_to_predecessors.at(gate))
+                for (auto gate_id : this->netlist_abstr.gate_to_predecessors.at(gate))
                 {
                     predecessors.insert(parent_group_of_gate.at(gate_id));
                 }
             }
 
-            cache.pred_cache.emplace(id, predecessors);
+            cache.pred_cache.emplace(group_id, predecessors);
 
             return predecessors;
         }
 
-        bool Grouping::are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id)
+        std::unordered_set<u32> Grouping::get_known_successor_groups_of_group(u32 group_id) const
+        {
+            {
+                std::shared_lock lock(cache.mutex);
+                if (auto it = cache.suc_known_group_cache.find(group_id); it != cache.suc_known_group_cache.end())
+                {
+                    return it->second;
+                }
+            }
+            std::unique_lock lock(cache.mutex);
+
+            // check again, since another thread might have gotten the unique lock first
+            if (auto it = cache.suc_known_group_cache.find(group_id); it != cache.suc_known_group_cache.end())
+            {
+                return it->second;
+            }
+
+            std::unordered_set<u32> successors;
+            for (auto gate : gates_of_group.at(group_id))
+            {
+                for (auto known_group_id : this->netlist_abstr.gate_to_known_successor_groups.at(gate))
+                {
+                    successors.insert(known_group_id);
+                }
+            }
+
+            cache.suc_known_group_cache.emplace(group_id, successors);
+
+            return successors;
+        }
+
+        std::unordered_set<u32> Grouping::get_known_predecessor_groups_of_group(u32 group_id) const
+        {
+            {
+                std::shared_lock lock(cache.mutex);
+                if (auto it = cache.pred_known_group_cache.find(group_id); it != cache.pred_known_group_cache.end())
+                {
+                    return it->second;
+                }
+            }
+            std::unique_lock lock(cache.mutex);
+
+            // check again, since another thread might have gotten the unique lock first
+            if (auto it = cache.pred_known_group_cache.find(group_id); it != cache.pred_known_group_cache.end())
+            {
+                return it->second;
+            }
+
+            std::unordered_set<u32> predecessors;
+            for (auto gate : gates_of_group.at(group_id))
+            {
+                for (auto known_group_id : this->netlist_abstr.gate_to_known_predecessor_groups.at(gate))
+                {
+                    predecessors.insert(known_group_id);
+                }
+            }
+
+            cache.pred_known_group_cache.emplace(group_id, predecessors);
+
+            return predecessors;
+        }
+
+        bool Grouping::are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id, bool enforce_type_consistency) const
         {
             if (this->group_control_fingerprint_map.at(group_1_id) != this->group_control_fingerprint_map.at(group_2_id))
             {
                 return false;
             }
-            /* without type check
-    if (netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type() != netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type())
-    {
-        return false;
-    }
-     */
-            if (!(this->operations_on_group_allowed[group_1_id] && this->operations_on_group_allowed[group_2_id]))
+            if (enforce_type_consistency
+                && (this->netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type()
+                    != this->netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type()))
+            {
+                return false;
+            }
+            if (!(this->operations_on_group_allowed.at(group_1_id) && this->operations_on_group_allowed.at(group_2_id)))
             {
                 return false;
             }
@@ -209,9 +325,9 @@ namespace hal
             return merged_allowed_register_stage;
         }
 
-        bool Grouping::is_group_allowed_to_split(u32 group_id)
+        bool Grouping::is_group_allowed_to_split(u32 group_id) const
         {
-            if (this->operations_on_group_allowed[group_id])
+            if (this->operations_on_group_allowed.at(group_id))
             {
                 return true;
             }

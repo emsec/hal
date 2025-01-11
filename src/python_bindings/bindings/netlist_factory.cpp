@@ -9,47 +9,69 @@ namespace hal
                 "create_netlist", [](const GateLibrary* gate_library) { return std::shared_ptr<Netlist>(netlist_factory::create_netlist(gate_library)); }, py::arg("gate_library"), R"(
                 Create a new empty netlist using the specified gate library.
 
-                :param str gate_library: The gate library.
-                :returns: The netlist on success, None otherwise.
+                :param hal_py.GateLibrary gate_library: The gate library.
+                :returns: The netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None
             )")
 
             .def(
                 "load_netlist",
-                [](const std::filesystem::path& hdl_file, const std::filesystem::path& gate_library_file) {
-                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist(hdl_file, gate_library_file));
+                [](const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path()) {
+                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist(netlist_file, gate_library_file));
                 },
-                py::arg("hdl_file"),
-                py::arg("gate_library_file"),
+                py::arg("netlist_file"),
+                py::arg("gate_library_file") = std::filesystem::path(),
                 R"(
                 Create a netlist from the given file using the specified gate library file.
+                Will either deserialize ``.hal`` file or call parser plugin for other formats.
+                In the latter case the specified gate library file is mandatory.
 
-                :param hdl_file: Path to the file.
-                :type hdl_file: hal_py.hal_path
-                :param gate_library_file: Path to the gate library file.
-                :type gate_library_file: hal_py.hal_path
-                :returns: The netlist on success, None otherwise.
-                :rtype: hal_py.Netlist
+                :param pathlib.Path netlist_file: Path to the file.
+                :param pathlib.Path gate_library_file: Path to the gate library file.
+                :returns: The netlist on success, ``None`` otherwise.
+                :rtype: hal_py.Netlist or None
             )")
 
             .def(
-                "load_netlist", [](const std::filesystem::path& hal_file) { return std::shared_ptr<Netlist>(netlist_factory::load_netlist(hal_file)); }, py::arg("hal_file"), R"(
-                Create a netlist from the given .hal file.
+                "load_netlist",
+                [](const std::filesystem::path& netlist_file, GateLibrary* gate_library) { return std::shared_ptr<Netlist>(netlist_factory::load_netlist(netlist_file, gate_library)); },
+                py::arg("netlist_file"),
+                py::arg("gate_library"),
+                R"(
+                Create a netlist from the given file trying to parse it with the specified gate library.
+                Will either deserialize ``.hal`` file or call parser plugin for other formats.
 
-                :param hal_file: Path to the '.hal' file.
-                :type hal_file: hal_py.hal_path
-                :returns: The netlist on success, None otherwise.
-                :rtype: hal_py.Netlist
+                :param pathlib.Path netlist_file: Path to the file.
+                :param hal_py.GateLibrary gate_library_file: Path to the gate library file.
+                :returns: The netlist on success, ``None`` otherwise.
+                :rtype: hal_py.Netlist or None
             )")
 
-           .def(
-               "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
-                Create a netlist from the given .hal file.
+            .def(
+                "load_netlist_from_string",
+                [](const std::string& hdl_string, const std::filesystem::path& gate_library_file) {
+                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist_from_string(hdl_string, gate_library_file));
+                },
+                py::arg("hdl_string"),
+                py::arg("gate_library_file") = "",
+                R"(
+                Create a netlist from the given string. 
+                The string must contain a netlist in HAL-(JSON)-format.
 
-                :param project_dir: Path to the hal project directory.
-                :type project_dir: hal_py.hal_path
-                :returns: The netlist on success, None otherwise.
-                :rtype: hal_py.Netlist
+                :param pathlib.Path netlist_file: The string containing the netlist.
+                :param pathlib.Path gate_library_file: Path to the gate library file.
+                :returns: The netlist on success, ``None`` otherwise.
+                :rtype: hal_py.Netlist or None
+            )")
+
+            .def(
+                "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
+                Create a netlist using information specified in command line arguments on startup.
+                Will either deserialize ``.hal`` file or call parser plugin for other formats.
+
+                :param pathlib.Path project_dir: Path to the hal project directory.
+                :returns: The netlist on success, ``None`` otherwise.
+                :rtype: hal_py.Netlist or None
             )")
 
             .def(
@@ -62,13 +84,12 @@ namespace hal
                     }
                     return result;
                 },
-                py::arg("hdl_file"),
+                py::arg("netlist_file"),
                 R"(
                 Create a netlist from a given file for each matching pre-loaded gate library.
 
-                :param hdl_file: Path to the file.
-                :type hdl_file: hal_py.hal_path
-                :returns: A list of netlists.
+                :param pathlib.Path netlist_file: Path to the netlist file.
+                :returns: A list of netlists, one for each suitable gate library.
                 :rtype: list[hal_py.Netlist]
             )");
     }

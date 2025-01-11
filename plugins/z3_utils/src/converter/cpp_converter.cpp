@@ -1,7 +1,8 @@
-#include "converter/cpp_converter.h"
+#include "z3_utils/converter/cpp_converter.h"
 
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 
 #include <algorithm>
 
@@ -25,6 +26,7 @@ namespace hal
             }
 
             log_error("z3_utils", "Unkown operand format for {}!", operand);
+            exit(0);
             return "NOT IMPLEMENTED REACHED";
         }
 
@@ -64,7 +66,7 @@ namespace hal
                     op.erase(op.size() - 3);
                     break;
                 default:
-                    log_error("z3_utils", "unkown operation for operation building ({})", operation);
+                    log_error("z3_utils", "unkown operation for operation building ({})", operation_to_string(operation));
                     return "NOT IMPLEMENTED REACHED";
             }
 
@@ -116,10 +118,10 @@ namespace hal
 
             const auto return_var = extract_lhs(last_line);
 
-            func = replace_all(func, "<INIT>", initalization);
+            // func = replace_all(func, "<INIT>", initalization);
             func = replace_all(func, "<ASSIGNMENTS>", assignments);
             func = replace_all(func, "<RETURN>", return_var);
-            func = replace_all(func, "<INPUT_SIZE>", std::to_string(input_vars.size() + 1));
+            // func = replace_all(func, "<INPUT_SIZE>", std::to_string(input_vars.size() + 1));
 
             return func;
         }

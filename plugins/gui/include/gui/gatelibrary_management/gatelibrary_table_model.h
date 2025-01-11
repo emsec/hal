@@ -1,4 +1,4 @@
-// MIT License
+﻿// MIT License
 // 
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
@@ -26,12 +26,11 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QAbstractTableModel>
 #include <QList>
-
 #include <filesystem>
-
 
 namespace hal
 {
@@ -46,15 +45,7 @@ class GatelibraryTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 
-private:
-    struct Entry
-    {
-        QString name;
-        u32 gatecount;
-        std::filesystem::path path;
-        QString timestring;
-        qint64 timevalue;
-    };
+
 
 public:
     /**
@@ -91,6 +82,16 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     /**
+     * Sets the role data for the item at index to value.
+     *
+     * @param index - The model index
+     * @param value - The value to set
+     * @param role - The access role
+     * @returns <b>true</b> on success
+     */
+    //bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    /**
      * Returns the header data fields
      *
      * @param section - The section (column) index
@@ -105,50 +106,23 @@ public:
      */
     void clear();
 
-    /**
-     * Setup the model.
-     */
-    void setup();
-
-    /**
-     * Get the name of the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     * @return The gatelibrary name.
-     */
-    QString getNameFromIndex(const QModelIndex& index);
-
-    /**
-     * Get the gatecount of the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     * @return The gatecount.
-     */
-    u32 getGatecountFromIndex(const QModelIndex& index);
 
     /**
      * Try to load a gate library from file.
      *
      * @param path - The file path
      */
-    void loadFile(const QString& path);
+    void loadFile(const GateLibrary* g);
 
     /**
-     * Reload the gatelibrary at the index. Index has to be valid.
      *
-     * @param index - The index in the table
+     * @param index
+     * @return - The GateType at the given index
      */
-    void reloadIndex(const QModelIndex& index);
-
-    /**
-     * Remove the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     */
-    void removeIndex(const QModelIndex& index);
+    GateType* getGateTypeAtIndex(int index);
 
 private:
-    QList<Entry> mEntries;
+    QList<GateType*> mEntries;
 };
 
 }

@@ -1,30 +1,343 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [Unreleased] 
+* added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
+* changed and unified context menus for all widgets related to netlist elements
+* fixed module colors not updating on creation of modules with previously used ids
+* added python bindings `gui.View` for management of contexts and directories
 
-## [Unreleased]
+## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
+* fixed `hal_py.GateLibrary.gate_types` pybind
+* fixed `hal_py.NetlistFactory.load_netlist` pybind
+* added `get_shortest_path` and `get_shortest_path_distance` to the NetlistTraversalDecorator
+* plugins
+  * updated `bitorder_propagation_plugin`
+    * added functionality to export collected bitorder information as a `.json` file to use external tools for propgating and solving conflicts, like SMT solvers 
+
+## [4.4.0](v4.4.0) - 2024-07-19 15:55:24+02:00 (urgency: medium)
+* **WARNING:** this release breaks the API of the `boolean_influence` and `bitorder_propagation` plugin
+* **WARNING:** this release contains many new unstable plugin APIs that will likely change in the future
+* plugins
+  * updated `boolean_influence` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * file structure and namespace clean up
+  * added `resynthesis` plugin
+    * moved `decompose_gate` and `decompose_gates_of_type` from `netlist_preprocessing` plugin and slightly changed their API
+    * added functions for logic re-synthesis that write out parts of the current netlist and call Yosys as an open-source synthesizer to produce a new gate-level netlist based on a user-defined gate library
+  * changed `bitorder_propagation` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * changed propagation logic for better results
+  * updated `z3_utils`plugin
+    * general code and file structure clean up as well as more documentation
+    * added comprehensive simplification logic that is able to simplify `z3::expr` using an extended rule set as the simplification of `hal::BooleanFunction`
+  * added `module_identification` plugin 
+    * allows a user to automatically search for arithmetic structures in the netlist
+  * added `sequential_symbolic_execution` plugin
+    * allows the user to perform symbolic execution over mulitple cycles including sequential elements
+  * added first rudimentary version of `genlib_writer` that allows to write the combinational gates of a gate library in genlib format which is required for resynthesis.
+* core
+  * decorators
+    * added `NetlistModificationDecorator::add_vcc/gnd_nets()` to create ground and power nets for netlists that do not have a ground/power net already
+  * added `SMT::Solver::query_local()` variant that directly takes an SMT representation of a Solver query
+  * added `Netlist::get_gnd/vcc_nets()` to get all global ground and power nets
+* deps
+    * added `json.hpp` from nlohmann to deps to offer a light weight json api
+    * adapted cmake to consider the correct flags when finding and linking against the new version of Bitwuzla
+* miscellaneous
+  * added logic evaluator plugin
+  * added backward compatibility for view management
+  * slightly improved symbolic execution engine
+  * added a version of `netlist_factory::load_netlist` that takes a path to a netlist file as well as a pointer to a gate library
+  * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
+  * added `utils::get_unique_temp_directory`
+  * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
+  * added `all_global_io` parameter to `SubgraphNetlistDecorator::copy_subgraph_netlist` to configure labeling of global inputs and outputs
+  * added datatype `ExistingFile` to plugin parameter 
+  * added helper gate libraries needed for resynthesis; this is a dirty hack, expect more changes later
+  * changed MUX data input and output pins in all gate libraries to `PinType::data`
+* bugfixes
+  * fixed incompatibility between shipped zlib and QuaZip libraries
+  * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
+  * fixed bugs related to the Boolean function SLICE operation 
+  * fixed VCD writer of `netlist_simulation_controller` plugin
+  * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
+  * fixed layout bug which occured when leftmost node had no inputs
+  * fixed missing sort indicator when sorting entries in `Views` widget
+  * fixed bug loading simulation data by cleaning map before loading controller from project
+  * fixed bug that occured when trying to generate the Boolean influence for a constant Boolean function  
+
+## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
+* **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
+* **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
+* GUI
+  * refactored module widget
+    * added option to show gate content for each module
+    * added option to show interior nets for each module
+    * added `Isolate in new view` feature for nets
+    * added button to expand or collapse all tree items
+    * added delete module action and shortcut
+    * added entries for context menu
+    * adapted appearance for menu content tree, selection details tree, grouping content tree (same model for all)
+  * refactored view widget
+    * changed appearance from tabular view to tree view
+    * added 'directory' elements to organize and manage groups of views
+    * added drag'n drop feature allowing to relocate views or directories to another branch in the tree
+    * added column for view ID
+    * added functions to Python GUI API to create, modify and delete views and directories
+    * added UNDO functionality for create/delete view and directory actions
+    * fixed sort-by-column feature. The tree is not sorted at program start thus showing elements in 'natural' order.
+  * refactored search bar
+    * changed appearance of search bar to be more intuitive
+    * added menu for extended options - e.g. option to search in selected columns only
+    * added search history
+    * added filter proxy class for trees and tables increasing the search performance
+  * refactored layouter module
+    * switched to multithreaded algorithm
+    * boosted performance by using classes with faster memory access
+    * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
+    * added setting option to dump junction layout input data for experts to debug in case of layout errors
+* plugins
+  * added `hawkeye` plugin for the detection of symmetric cryptographic implementations in gate-level netlists
+    * see publication `HAWKEYE - Recovering Symmetric Cryptography From Hardware Circuits` at CRYPTO'24 for details
+  * changed `graph_algorithm` plugin
+    * updated the igraph dependency shipped with HAL
+    * graph corresponding to a netlist is now encapsulated within an `NetlistGraph` object that allows easy interaction with the graph
+    * added new functions for computing neighborhoods, shortest paths, subgraphs, and (strongly) connected components
+    * changed the API to facilitate for the aforementioned changes and made everything accessible via Python
+  * changed `dataflow_analysis` plugin
+    * can now operate on arbitrary, user-defined gate types, not only FFs 
+    * user can now specify the pin types to be considered as control pins
+    * can now take known registers and other known word-level structures into account during analysis
+    * changed the API to facilitate for the aforementioned changes
+  * changed `netlist_simulator_controller` plugin
+    * added feature to VCD parser: removal of leading backslash and trailing whitespace from waveform name
+    * added converter for net names which don't qualify as C++ variable name
+    * extended maximum line with the CSV parser can handle
+    * changed warning messages for waveform parsing and made them more specific
+    * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
+  * changed `waveform_viewer` plugin
+    * added GUI wizard to structure input steps when launching a new simulation
+    * added table widget to enter engine parameter
+    * added table widget to enter simulation input data
+    * added viewer to show output of simulation process while running
+    * added algorithm to identify simulated pin groups and bundle apropriate waveform to groups
+  * changed `xilinx_toolbox` plugin
+    * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
+    * changed Python bindings for better usability
+* core
+  * pin (groups)
+    * added optional flag to determine whether a pin group has an inherent order (defaults to `false`)
+    * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
+    * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+    * added pin types `status`, `error`, `error_detection`, `done`, and `control`
+    * added qualifier for module `pin_changed` core events telling receiver details about the recent modification
+    * added event scope and stacking classes so that module `pin_changed` events can be collected and prioritized
+    * added specific GUI handler for every module `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+    * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
+  * decorators
+    * added `NetlistTraversalDecorator` to ease exploration of a netlist
+      * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
+      * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
+      * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
+      * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
+      * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
+* miscellaneous
+  * added support for Ubuntu 24.04 LTS
+  * added INIT field declaration to FF-gate-types in example library
+  * added drag'n drop feature allowing to move several nodes in graph view at same time
+  * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
+  * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
+  * added `Show content` button to `Groupings` widget to show content of grouping as a list
+  * added flag which Python editor tab is active when serializing project
+  * added extended gate library picker when importing a netlist
+  * added keyboard shortcut for delete-item action from toolbar
+  * added gate type properties `fifo` and `shift_register`
+  * added optional filter to `Net::get_num_of_sources` and `Net::get_num_of_destinations`
+  * added function `unify_ff_outputs` to netlist preprocessing plugin
+  * added function `replace_gate_type` to gate library
+  * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
+  * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
+  * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
+  * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
+  * removed hard coded path names from CI MacOS workflow script
+  * deprecated many functions in `netlist_utils` as they have been moved somewhere else
+* bugfixes
+  * fixed saleae input data reader which gets linked into external Verilator simulation code
+  * fixed waveform viewer: opening old results will no longer generate the same view twice
+  * fixed waveform viewer: opening old results will by now also update waveform time axis
+  * fixed colors in Python Console when switching between color schemes
+  * fixed pybind of `Module::get_gates`
+  * fixed Python script execution abort button disappearing when switching tabs
+  * fixed Python interpreter crash due to release of GIL semaphore before cleanup is done
+  * fixed segfault when deleting a module for which an exclusive view exists
+  * fixed not loading all plugins if the GUI is not in control
+  * fixed Verilog writer not being a dependency of Verilator plugin
+  * fixed order of pins within pin groups not being properly handled for modules and gate types
+  * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
+  * fixed wrong order of pins within pin groups in provided gate libraries
+  * fixed format string handling of enums in log outputs
+  * fixed restoring user assigned module colors from project file
+  * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
+  * fixed declaration of FF-gate type in example gate library
+  * fixed error which could cause crashes in do-not-render-layout-until-complex-operation-finished algorithm
+  * fixed wrong placements of nodes in view by XML-macro (might even crash)
+  * fixed problems in GUI plugin management caused by addressing plugins by absolute path
+  * fixed several bugs related to moving node boxes in GUI by drag'n'drop
+  * fixed several bugs in automated tests, eliminate cases which produce non-deterministic results
+
+## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
+* GUI plugin manager
+  * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
+  * added overview of loaded plugins and their features
+  * added interactive buttons to load and unload plugins
+  * added feature to load plugin automatically if needed for file parsing
+  * prevent unloading of plugin if it is needed as a dependency of another plugin
+  * changed plugin load policy to have only mandatory or user required plugins loaded at startup
+* Boolean functions
+  * added `BooleanFunction::substitute(const std::map<std::string, std::string>&)` to substitute multiple variable names at once
+  * changed `BooleanFunction::get_constant_value` to return `std::vector<BooleanFunction::Value>`, thereby removing the 64-bit limit
+  * added `BooleanFunction::Node::get_constant_value`, `BooleanFunction::Node::get_index_value`, and `BooleanFunction::Node::get_variable_name`
+  * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
+  * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)`
+  * added `BooleanFunction::algebraic_printer` as an alternative printer for `BooleanFunction::to_string` to print a Boolean function in algebraic form
+  * added shift and rotate operators `Shl`, `Lshr`, `Ashr`, `Rol`, and `Ror`
+* plugins
+  * `boolean_influence`
+    * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
+    * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
+  * `netlist_preprocessing`
+    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic gates into basic gate types
+    * added `parse_def_file` to parse a Design Exchange Format file that contains placement information
+    * `simplify_lut_inits` now annotates the original init string into the data container
+  * `verilog_parser`
+    * added annotation of all net names that where merged during parsing in the data container
+    * added implicit wire declarations for assign statements
+    * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we now add a prefix containing the names of parent modules)
+  * `z3_utils`
+    * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
+    * removed class `z3Wrapper`
+    * renamed `to_z3` to `from_bf` and added support for missing node types
+    * renamed `to_hal` to `to_bf` and added support for missing node types
+    * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
+  * `dataflow_analysis`
+    * added API to interact with dataflow analysis results from C++ and Python
+    * added automatic creation of pin groups for data and control pins of register modules
+    * added parameter to only write or retrieve information on certain register groups
+    * deprecated `plugin_dataflow::execute` as its functionality is now split between `dataflow::analyze` and the members of `dataflow::Result`
+    * removed file writes if not explicitly called by user
+  * `netlist_simulation_controller`
+    * added versions of `add_waveform_group` taking a module pin group as input
+    * added versions of `set_input` taking a `WaveData` object, vectors of nets and values, a `WaveDataGroup` and a vector of values, and a module pin group and a vector of values as input
+  * `solve_fsm`
+    * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
+  * `xilinx_toolbox`
+    * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
+* decorators
+  * added `NetlistModificationDecorator`
+    * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
+    * moved `replace_gate` from `netlist_utils`, now returns pointer to replacement gate
+    * added `connect_gates` to connect two gates at the specified pins via a new or already existing net
+    * added `connect_nets` to merge two nets into one, thereby connecting them
+  * `BooleanFunctionDecorator`
+    * added a version of `get_boolean_function_from` that takes a module pin group as input
+* selection details widget
+  * added `Focus item in graph view` to several context menus
+  * added `Isolate in new view` to gate/module related context menus
+  * changed `Isolate in new view` policy for modules: open exclusive module view if such a view already exists
+  * improved drag&drop functionality to move module pins and merge module pin groups
+* miscellaneous
+  * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
+  * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
+  * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+  * added overloaded version of `deserialize_netlist` that takes a gate library, thereby overruling the gate library path in the .hal file
+  * added `utils::wrapped_stoull` and `utils::wrapped_stoul` that wrap the standard string to integer conversion and use `hal::Result<>` for error handlung instead of exceptions
+  * added utility function `is_valid_enum` to check whether the string representation of an enum value is valid.
+  * added serialization of physical gate positions (non-negative integer)
+  * added keyboard shortcuts for fold, unfold, and remove from view
+  * added `filter` parameter to `get_fan_[in/out]_[nets/endpoints]`
+  * added pyBinds for the `LogManager` class
+  * added pyBinds for the `ProjectDirectory` class
+  * added `Module::move_pin_group` to change the order of pin groups of a module
+  * changed abort being more responsive when aborting layouting of large views
+  * changed and improved color scheme for light style
+  * changed labels on HAL startup screen to better resemble the new project structure
+  * removed toolbox from groupings widget
+* bugfixes
+  * fixed build from tarball
+  * fixed minor navigation bugs on settings page
+  * fixed missing Python bindings for `GatePinGroup`
+  * fixed `SolveFsmPlugin` not properly replacing power and ground nets in Boolean functions
+  * fixed searchbar attempting time consuming search when there is no content to search
+  * fixed some documentations of core functions
+  * fixed igraph not building anymore by relaxing irgaph compiler options
+  * fixed Python GUI API being unavailable at runtime
+  * fixed nets without source or destination not being shown when unfolding the module they belong to in the selection details widget
+  * fixed cmake failing to parse HAL version number from file
+  * fixed pins and pin groups not being hashable in Python
+
+## [4.1.0](v4.1.0) - 2023-03-08 16:57:06+01:00 (urgency: medium)
+* selection details widget
+  * module icons reflect module color
+  * gate icons shape according to gate type
+  * user setting to adjust size of or omit icon in upper right corner
+* project import/export
+  * added export feature: generate zipped project including external gate libraries and python source files
+  * added import feature by extracting zipped project
+  * added quazip library sources (deps) since recent distributions no longer link binary packages against qt5
 * netlist parsers
   * added (limited) support for 'defparam' statements to Verilog parser
   * added support for pin assignments by order instead of name to Verilog and VHDL parser
+* GUI comments
+  * user can add comments to gates and modules to take notes on the reverse engineering progress
+  * comments are shown in the graph view (as little notes on the gate/module boxes) and in the selection details widget
+* plugin `netlist_preprocessing`
+  * collection of utility functions preparing a raw netlist for further analysis
+  * remove LUT fan-in endpoints that do not show up in the LUT's boolean function via `remove_unused_lut_inputs`
+  * remove buffer gates via `remove_buffers`, also dynamically by analyzing Boolean function and connected inputs
+  * remove redundant gates via `remove_redundant_logic`, i.e., gates of equal type with identical inputs
+  * remove unconnected gates/nets via `remove_unconnected_gates` and `remove_unconnected_nets`
+  * simplify LUT configuration strings based on constant inputs via `simplify_lut_inits`
+* plugin `bitorder_propagation`
+  * propagate a known order of input/output pins within module pin groups to other connected modules
+* decorators
+  * `BooleanFunctionDecorator`
+    * substitute power and ground nets/pins by constant values in Boolean functions via `substitute_power_ground_nets` and `substitute_power_ground_pins`
+    * get a concatenated Boolean function corresponding to a vector of nets or Boolean functions via get_boolean_function_from`
+  * `BooleanFunctionNetDecorator`
+    * get a unique Boolean function variable for a net via `get_boolean_variable` and `get_boolean_variable_name`
+    * get the net corresponding to a unique Boolean function variable via `get_net_from`
+    * get the net ID corresponding to a unique Boolean function variable via `get_net_id_from`
+  * `SubgraphNetlistDecorator`
+    * copy a subgraph of the netlist via `copy_subgraph_netlist`
+    * get the Boolean function of a subgraph via `get_subgraph_function`
+    * get the inputs to the Boolean function of a subgraph without computing the Boolean function via `get_subgraph_function_inputs`
 * miscellaneous
   * added functions `get_pin_names`, `get_input_pins`, `get_input_pin_names`, `get_output_pins`, and `get_output_pin_names` to class `Module`
   * added function `BooleanFunction::get_truth_table_as_string` that returns the truth table of a Boolean function as a formatted string
   * added missing GND, VCC, and RAM gate types to the `ICE40ULTRA` gate library
   * added Python bindings for the HAL project manager
   * added new GUI dialog for creating an empty project (without providing a netlist)
+  * changed all example netlists to be HAL projects
+  * API cleanup for plugin `solve_fsm`
 * bugfixes
   * fixed Verilog and VHDL parser ignoring pin order of modules
-  * fixed order of module pins in Verilog writer  
+  * fixed order of module pins in Verilog writer
   * fixed some errors in the Python documentation
   * fixed pin types of `power` and `ground` gate types in various gate libraries
-  * fixed spamming the log with messages related to module pins 
+  * fixed spamming the log with messages related to module pins
   * fixed segfault that sometimes occurred when deleting a module
   * fixed saving absolute paths for Python files and not copying them to the new project folder when using `Save as...`
   * fixed some project manager bugs related to inaccessible files
   * fixed missing Python binding for `GateType::get_pin_groups`
+  * fixed incorrect undo action for "fold parent module"
+  * fixed some internal data structure of the Verilog and VHDL parsers not being cleared after each instantiation attempt
+  * fixed wrong gate type properties for MUX gates in various gate libraries
+  * fixed net and instance aliasing in VHDL and Verilog parser
+  * fixed netlist parser bug related to unconnected module pins that are being directly assigned to another wire/signal in the module/entity body
+  * fixed `get_pins` returning pins in wrong order if no filter is specified
 
-## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
+## [4.0.1](v4.0.1) - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
 * project manager
   * added keeping all data belonging to a netlist in a single project directory
@@ -83,7 +396,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * fixed parsing of Liberty gate library attribute `clock`
   * fixed description of flip-flops and latches in all FPGA gate libraries
 
-## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
+## [3.3.0](v3.3.0)- 2021-10-13 16:20:00+02:00 (urgency: medium)
+* Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
   * Command line option -p to open project added
@@ -125,7 +439,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * improved handling of properties for special gate types such as LUTs and FFs.
   * properties that only apply to special gate types have been moved out of the `GateType` class and into a designated `GateTypeComponent`
   * added functions to retrieve a gate type's components based on some filter condition
-  * added special components dealing with RAM properties 
+  * added special components dealing with RAM properties
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
@@ -147,7 +461,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * `dataflow_analysis` plugin
   * can now take groups of flip-flops as input that should not be touched during analysis
   * this is meant to aid the dataflow analysis by passing control registeres identified beforehand, which prevents them from being merged into the datapath
-* new internal event system 
+* new internal event system
   * binds event handlers to a netlist instance
   * facilitates listening to the events of selected netlists only
 * improved search

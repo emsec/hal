@@ -2,6 +2,7 @@
 
 #include "gui/gui_utils/graphics.h"
 #include "gui/label_button/label_button.h"
+#include "gui/searchbar/searchoptions_dialog.h"
 
 #include <QHBoxLayout>
 #include <QIcon>
@@ -11,12 +12,14 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
+#include <QDebug>
+#include <gui/searchbar/searchoptions.h>
 
 namespace hal
 {
     Searchbar::Searchbar(QWidget* parent)
         : QFrame(parent), mLayout(new QHBoxLayout()), mSearchIconLabel(new QLabel()), mLineEdit(new QLineEdit()), mClearIconLabel(new QLabel()), mDownButton(new QToolButton()),
-          mUpButton(new QToolButton()), mCaseSensitiveButton(new QToolButton()), mExactMatchButton(new QToolButton()), mClearButton(new QToolButton())
+          mUpButton(new QToolButton()), mSearchOptionsButton(new QToolButton()), mClearButton(new QToolButton())
     {
         setLayout(mLayout);
 
@@ -25,7 +28,10 @@ namespace hal
 
         ensurePolished();
 
+        mCurrentOptions = new SearchOptions(8);//exact match and search in all columns is on
+        mIncrementalSearch = true;
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
+        mSearchIconLabel->installEventFilter(this);
         mLineEdit->setPlaceholderText("Search");
 
         mClearIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon).pixmap(QSize(10, 10)));
@@ -33,24 +39,13 @@ namespace hal
         //Placeholder icons get better ones
         mDownButton->setIcon(QIcon(":/icons/arrow-down"));
         mUpButton->setIcon(QIcon(":/icons/arrow-up"));
+        mSearchOptionsButton->setIcon(gui_utility::getStyledSvgIcon(mOptionDialogIconStyle,mOptionDialogIcon));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mLineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
         mLayout->addWidget(mSearchIconLabel);
         mLayout->addWidget(mLineEdit);
-
-        mExactMatchButton->setText("==");
-        mExactMatchButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        mExactMatchButton->setCheckable(true);
-        mExactMatchButton->setToolTip("Exact Match");
-        mLayout->addWidget(mExactMatchButton);
-
-        mCaseSensitiveButton->setText("Aa");
-        mCaseSensitiveButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        mCaseSensitiveButton->setCheckable(true);
-        mCaseSensitiveButton->setToolTip("Case Sensitive");
-        mLayout->addWidget(mCaseSensitiveButton);
 
         mClearButton->setIcon(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon));
         mClearButton->setIconSize(QSize(10, 10));
@@ -59,15 +54,27 @@ namespace hal
         mClearButton->setToolTip("Clear");
         mLayout->addWidget(mClearButton);
 
+        mSearchOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+        mSearchOptionsButton->setCheckable(true);
+        mSearchOptionsButton->setToolTip("Search Options");
+        mLayout->addWidget(mSearchOptionsButton);
+
         setFrameStyle(QFrame::NoFrame);
 
-        connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::emitTextEdited);
+        connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::handleTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
-        connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
-        connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
 
+        connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
+        connect(this, &Searchbar::triggerNewSearch, this, &Searchbar::updateSearchHistory);
+
         setFocusProxy(mLineEdit);
+    }
+
+    SearchOptions Searchbar::getSearchOptions() const
+    {
+        if (!mCurrentOptions) return SearchOptions();
+        return *mCurrentOptions;
     }
 
     QString Searchbar::searchIcon() const
@@ -90,24 +97,14 @@ namespace hal
         return mClearIconStyle;
     }
 
-    QString Searchbar::caseSensitivityIcon() const
+    QString Searchbar::optionDialogIcon() const
     {
-        return mCaseSensitivityIcon;
+        return mOptionDialogIcon;
     }
 
-    QString Searchbar::caseSensitivityIconStyle() const
+    QString Searchbar::optionDialogIconStyle() const
     {
-        return mCaseSensitivityIconStyle;
-    }
-
-    QString Searchbar::exactMatchIcon() const
-    {
-        return mExactMatchIcon;
-    }
-
-    QString Searchbar::exactMatchIconStyle() const
-    {
-        return mExactMatchIconStyle;
+        return mOptionDialogIconStyle;
     }
 
     void Searchbar::setSearchIcon(const QString& icon)
@@ -130,24 +127,19 @@ namespace hal
         mClearIconStyle = style;
     }
 
-    void Searchbar::setCaseSensitivityIcon(const QString& icon)
+    void Searchbar::setColumnNames(QList<QString> list)
     {
-        mCaseSensitivityIcon = icon;
+        mColumnNames = list;
     }
 
-    void Searchbar::setCaseSensitivityIconStyle(const QString& style)
+    void Searchbar::setOptionDialogIcon(const QString& icon)
     {
-        mCaseSensitivityIconStyle = style;
+        mOptionDialogIcon = icon;
     }
 
-    void Searchbar::setExactMatchIcon(const QString& icon)
+    void Searchbar::setOptionDialogIconStyle(const QString& style)
     {
-        mExactMatchIcon = icon;
-    }
-
-    void Searchbar::setExactMatchIconStyle(const QString& style)
-    {
-        mExactMatchIconStyle = style;
+        mOptionDialogIconStyle = style;
     }
 
     void Searchbar::setPlaceholderText(const QString& text)
@@ -158,17 +150,17 @@ namespace hal
     void Searchbar::clear()
     {
         mLineEdit->clear();
-        emitTextEdited();
+        handleTextEdited(); // TODO : check use cases . Must reset proxy filter when search string emptied.
     }
 
     void Searchbar::hideEvent(QHideEvent *)
     {
-        Q_EMIT textEdited(QString());
+        Q_EMIT triggerNewSearch(QString(),SearchOptions().toInt());
     }
 
     void Searchbar::showEvent(QShowEvent *)
     {
-        emitTextEdited();
+        // ???
     }
 
     QString Searchbar::getCurrentText()
@@ -185,8 +177,8 @@ namespace hal
     {
         QString textWithFlags;
 
-        textWithFlags.append(mCaseSensitiveButton->isChecked() ? "(?-i)" : "(?i)");
-        if (mExactMatchButton->isChecked())
+        textWithFlags.append(mCurrentOptions->isCaseSensitive() ? "(?-i)" : "(?i)");
+        if (mCurrentOptions->isExactMatch())
         {
             textWithFlags.append("^");
             textWithFlags.append(text);
@@ -212,30 +204,33 @@ namespace hal
         s->polish(mLineEdit);
     }
 
-    void Searchbar::emitTextEdited()
+    void Searchbar::handleTextEdited()
     {
         repolish();
-        Q_EMIT textEdited(mEmitTextWithFlags ? getCurrentTextWithFlags() : getCurrentText());
+        //if the line is empty then start a search with default searchOptions - no filtering
+        if(mLineEdit->text().isEmpty()){
+            Q_EMIT triggerNewSearch(mLineEdit->text(), SearchOptions().toInt());
+        }
+        else if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
+        {
+            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        }
     }
 
     void Searchbar::handleReturnPressed()
     {
-        Q_EMIT returnPressed();
+        //if the line is empty then start a search with default searchOptions - no filtering
+        if(mLineEdit->text().isEmpty()){
+            Q_EMIT triggerNewSearch(mLineEdit->text(), SearchOptions().toInt());
+        }
+        else{
+            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        }
     }
 
     void Searchbar::handleClearClicked()
     {
         clear();
-    }
-
-    bool Searchbar::exactMatchChecked()
-    {
-        return mExactMatchButton->isChecked();
-    }
-
-    bool Searchbar::caseSensitiveChecked()
-    {
-        return mCaseSensitiveButton->isChecked();
     }
 
     void Searchbar::setEmitTextWithFlags(bool emitTextWithFlags)
@@ -248,8 +243,71 @@ namespace hal
         return mEmitTextWithFlags;
     }
 
+    bool Searchbar::eventFilter(QObject *object, QEvent *event)
+    {
+        if(object == mSearchIconLabel && event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent* ev = static_cast<QMouseEvent*>(event);
+            if(ev->button() == Qt::MouseButton::LeftButton)
+                Q_EMIT searchIconClicked();
+
+            return true;
+        }
+        return QWidget::eventFilter(object, event);
+    }
+
     bool Searchbar::filterApplied()
     {
-        return !getCurrentText().isEmpty() || exactMatchChecked() || caseSensitiveChecked();
+        return !getCurrentText().isEmpty() || mCurrentOptions->isExactMatch() || mCurrentOptions->isCaseSensitive();
+    }
+
+    void Searchbar::handleSearchOptionsDialog()
+    {
+        //TODO discuss if previous options should be passed back to the dialog to build dialog from them.
+        // otherwise the use has to enter the same options again
+        SearchOptionsDialog sd;
+        sd.setSearchHistory(mSearchHistory);
+        sd.setOptions(mCurrentOptions, mLineEdit->text(),mColumnNames, mIncrementalSearch, mMinCharsToStartIncSearch);
+        if (sd.exec() == QDialog::Accepted)
+        {
+            mCurrentOptions = sd.getOptions();
+
+            QString txt = sd.getText();
+            mIncrementalSearch = sd.getIncrementalSearch();
+            mMinCharsToStartIncSearch = sd.getMinIncSearchValue();
+            mLineEdit->setText(txt);
+
+           // updateSearchHistory(txt);
+
+
+            qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
+            Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
+            updateSearchHistory(txt);
+        }
+        if(mCurrentOptions->toInt() != SearchOptions().toInt())
+            mSearchOptionsButton->setChecked(true);
+        else
+            mSearchOptionsButton->setChecked(false);
+    }
+
+    void Searchbar::updateSearchHistory(QString entry){
+
+        const int MAX_ENTRIES = 10;
+        const int MIN_LENGTH = 3;
+
+        if(entry.length() >= MIN_LENGTH && !mSearchHistory.contains(entry))
+        {
+            if(!mSearchHistory.empty() && (entry.startsWith(mSearchHistory[0])))
+                mSearchHistory[0] = entry;
+            else
+            {
+                if(!mSearchHistory.empty() && mSearchHistory[0].startsWith(entry))
+                    return;
+
+                if (mSearchHistory.length() >= MAX_ENTRIES) mSearchHistory.removeLast();
+                mSearchHistory.prepend(entry);
+            }
+
+        }
     }
 }

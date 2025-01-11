@@ -26,15 +26,16 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/netlist.h"
-#include "hal_core/plugin_system/plugin_parameter.h"
 #include "hal_core/utilities/log.h"
 
 #include <set>
 #include <string>
+#include <vector>
 
 namespace hal
 {
+    class AbstractExtensionInterface;
+
 /**
  * Automatically declares a factory function when including this header.
  * Has to be implemented in the plugin.
@@ -50,26 +51,16 @@ namespace hal
 #endif
 
     /**
-     * Enum for all possible plugin types
-     * 
-     * @ingroup plugins
-     */
-    enum class CORE_API PluginInterfaceType
-    {
-        base,
-        cli,
-        interactive_ui,
-        gui
-    };
-
-    /**
      * @ingroup plugins
      */
     class CORE_API BasePluginInterface
     {
+    protected:
+        std::vector<AbstractExtensionInterface*> m_extensions;
+
     public:
-        BasePluginInterface()          = default;
-        virtual ~BasePluginInterface() = default;
+        BasePluginInterface() = default;
+        virtual ~BasePluginInterface();
 
         /**
          * Plugins utilize two phase construction.
@@ -93,12 +84,18 @@ namespace hal
         virtual std::string get_version() const = 0;
 
         /**
-         * Check whether the plugin has a specific type.
+         * Get the description of the plugin.
          *
-         * @param[in] t - the type to check
-         * @returns True, if the type is supported.
+         * @return The description of the plugin.
          */
-        bool has_type(PluginInterfaceType t) const;
+        virtual std::string get_description() const;
+
+        /**
+         * Get all dependencies of this plugin.
+         *
+         * @return The plugins that this plugin depends on.
+         */
+        virtual std::set<std::string> get_dependencies() const;
 
         /**
          * Shorthand for fast text logging.
@@ -110,13 +107,6 @@ namespace hal
         {
             log_info(get_name(), args...);
         }
-
-        /**
-         * Get all plugin dependencies of this plugin.
-         *
-         * @return A set of plugins that this plugin depends on.
-         */
-        virtual std::set<std::string> get_dependencies() const;
 
         /**
          * This function is automatically executed when the factory is loaded by the plugin manager
@@ -135,23 +125,32 @@ namespace hal
         virtual void initialize_logging();
 
         /**
-         * Get list of configurable parameter
-         * @return List of configurable parameter
+         * Get GUI/CLI/FAC extension functionality if implemented by derived class
+         * @return pointer to instance implementing extensions
          */
-        virtual std::vector<PluginParameter> get_parameter() const;
+        virtual std::vector<AbstractExtensionInterface*> get_extensions() const;
 
         /**
-         * Set values for configurable parameter
-         * @param[in] nl The current netlist
-         * @param[in] params List of configurable parameter with values
+         * Get first extension of given type T.
+         * @return pointer to first extension of type T or nullptr if no such extension exists.
          */
-        virtual void set_parameter(Netlist* nl, const std::vector<PluginParameter>& params);
+        template<typename T>
+        T* get_first_extension() const
+        {
+            for (AbstractExtensionInterface* aeif : get_extensions())
+            {
+                T* retval = dynamic_cast<T*>(aeif);
+                if (retval)
+                    return retval;
+            }
+            return nullptr;
+        }
 
         /**
-         * Register function to indicate work progress when busy
-         * @param pif Progress Indicator Function to register
+         * Delete extension instance and free memory
+         * @param aeif The extenstion instance to be deleted. Nothing will be done if not found in list.
          */
-        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif);
+        void delete_extension(AbstractExtensionInterface* aeif);
     };
 
     using instantiate_plugin_function = std::unique_ptr<BasePluginInterface> (*)();

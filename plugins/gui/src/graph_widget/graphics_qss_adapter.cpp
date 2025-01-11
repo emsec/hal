@@ -2,23 +2,34 @@
 
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/shaders/module_shader.h"
-
+#include "gui/graph_widget/items/nodes/gates/standard_graphics_gate.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include <QStyle>
 
 namespace hal
 {
+    GraphicsQssAdapter* GraphicsQssAdapter::inst = nullptr;
+
     GraphicsQssAdapter::GraphicsQssAdapter(QWidget* parent) : QWidget(parent),
         mGateBaseColor(255, 200, 0),
         mNetBaseColor(255, 200, 0),
         mGateSelectionColor(255, 200, 0),
         mNetSelectionColor(255, 200, 0),
-        mGridBaseLineColor(255, 200, 0),
-        mGridClusterLineColor(255, 200, 0),
-        mGridBaseDotColor(255, 200, 0),
-        mGridClusterDotColor(255, 200, 0)
+        mGridBaseLineColor(30, 30, 30),
+        mGridClusterLineColor(15, 15, 15),
+        mGridBaseDotColor(25, 25, 25),
+        mGridClusterDotColor(170, 160, 125),
+        mNodeBackgroundColor(0,0,0,200),
+        mNodeTextColor(160,160,160)
     {
         ensurePolished();
         repolish();
+    }
+
+    GraphicsQssAdapter* GraphicsQssAdapter::instance()
+    {
+        if (!inst) inst = new GraphicsQssAdapter;
+        return inst;
     }
 
     void GraphicsQssAdapter::repolish()
@@ -28,13 +39,27 @@ namespace hal
         s->unpolish(this);
         s->polish(this);
 
-        GraphicsScene::setGridBaseLineColor(mGridBaseLineColor);
-        GraphicsScene::setGridClusterLineColor(mGridClusterLineColor);
-
-        GraphicsScene::setGridBaseDotColor(mGridBaseDotColor);
-        GraphicsScene::setGridClusterDotColor(mGridClusterDotColor);
-
         ModuleShader::debugSetNetColor(mNetBaseColor);
+        StandardGraphicsGate::sTextColor = mNodeTextColor;
+        StandardGraphicsModule::sTextColor = mNodeTextColor;
+    }
+
+    void GraphicsQssAdapter::setGridAlpha(int alpha)
+    {
+        mGridBaseLineColor.setAlpha(alpha);
+        mGridClusterLineColor.setAlpha(alpha);
+
+        mGridBaseDotColor.setAlpha(alpha);
+        mGridClusterDotColor.setAlpha(alpha);
+    }
+
+    void GraphicsQssAdapter::setGridAlphaF(qreal alpha)
+    {
+        mGridBaseLineColor.setAlphaF(alpha);
+        mGridClusterLineColor.setAlphaF(alpha);
+
+        mGridBaseDotColor.setAlphaF(alpha);
+        mGridClusterDotColor.setAlphaF(alpha);
     }
 
     QColor GraphicsQssAdapter::gateBaseColor() const
@@ -97,6 +122,16 @@ namespace hal
         return mGridClusterDotColor;
     }
 
+    QColor GraphicsQssAdapter::nodeBackgroundColor() const
+    {
+        return mNodeBackgroundColor;
+    }
+
+    QColor GraphicsQssAdapter::nodeTextColor() const
+    {
+        return mNodeTextColor;
+    }
+
     void GraphicsQssAdapter::setGateBaseColor(const QColor& color)
     {
         mGateBaseColor = color;
@@ -155,5 +190,15 @@ namespace hal
     void GraphicsQssAdapter::setGridClusterDotColor(const QColor& color)
     {
         mGridClusterDotColor = color;
+    }
+
+    void GraphicsQssAdapter::setNodeBackgroundColor(const QColor &color)
+    {
+        mNodeBackgroundColor = color;
+    }
+
+    void GraphicsQssAdapter::setNodeTextColor(const QColor &color)
+    {
+        mNodeTextColor = color;
     }
 }

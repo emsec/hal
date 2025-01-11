@@ -1,5 +1,6 @@
 #include "gui/graph_widget/graph_widget.h"
 
+#include "gui/comment_system/widgets/comment_widget.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
@@ -18,6 +19,7 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/module_widget/module_widget.h"
 #include "gui/overlay/widget_overlay.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/spinner_widget/spinner_widget.h"
 #include "gui/toolbar/toolbar.h"
@@ -29,6 +31,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -53,14 +56,15 @@ namespace hal
     GraphWidget* GraphWidget::sInstance = nullptr;
 
     GraphWidget::GraphWidget(GraphContext* context, QWidget* parent)
-        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)), mNavigationWidgetV3(new GraphNavigationWidget(false)),
-          mProgressBar(nullptr), mSpinnerWidget(new SpinnerWidget(this)), mCurrentExpansion(0)
+        : ContentWidget("Graph", parent), mView(new GraphGraphicsView(this)), mContext(context), mOverlay(new WidgetOverlay(this)),
+          mNavigationWidgetV3(new GraphNavigationWidget(false)), mProgressBar(nullptr),
+          mSpinnerWidget(new SpinnerWidget(this)), mCommentWidget(nullptr), mCurrentExpansion(0)
     {
         connect(mNavigationWidgetV3, &GraphNavigationWidget::navigationRequested, this, &GraphWidget::handleNavigationJumpRequested);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, mOverlay, &WidgetOverlay::hide);
         connect(mNavigationWidgetV3, &GraphNavigationWidget::closeRequested, this, &GraphWidget::resetFocus);
 
-        connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        connect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
         connect(mView, &GraphGraphicsView::moduleDoubleClicked, this, &GraphWidget::handleModuleDoubleClicked);
 
@@ -82,13 +86,8 @@ namespace hal
             mView->centerOn(0, 0);
         }
         sInstance = this;
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            bpif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
-        }
-
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
+            geif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
     }
 
     GraphWidget::~GraphWidget()
@@ -105,15 +104,9 @@ namespace hal
     {
         mView->setScene(mContext->scene());
 
-        connect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        connect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
-        mOverlay->hide();
-        if (mProgressBar)
-        {
-            AbstractBusyIndicator* removeBusyIndicator = mProgressBar;
-            mProgressBar           = nullptr;
-            removeBusyIndicator->deleteLater();
-        }
+        hideOverlay();
         mSpinnerWidget->hide();
         mOverlay->setWidget(mNavigationWidgetV3);
 
@@ -122,6 +115,23 @@ namespace hal
         else if (mStoreViewport.mValid)
         {
             mView->fitInView(restoreViewport(), Qt::KeepAspectRatio);
+        }
+    }
+
+    void GraphWidget::hideOverlay()
+    {
+        mOverlay->hide();
+        if (mProgressBar)
+        {
+            mProgressBar->deleteLater();
+            mProgressBar           = nullptr;
+            mOverlay->clearWidget();
+        }
+        if (mCommentWidget)
+        {
+            mCommentWidget->deleteLater();
+            mCommentWidget = nullptr;
+            mOverlay->clearWidget();
         }
     }
 
@@ -139,6 +149,14 @@ namespace hal
             mProgressBar->setText(text);
         mProgressBar->setValue(percent);
         qApp->processEvents();
+    }
+
+    void GraphWidget::showComments(const Node &nd)
+    {
+        mCommentWidget = new CommentWidget(this);
+        mCommentWidget->nodeChanged(nd);
+        mOverlay->setWidget(mCommentWidget);
+        mOverlay->show();
     }
 
     void GraphWidget::showProgress(int percent, const QString& text)
@@ -162,7 +180,7 @@ namespace hal
     {
         mView->setScene(nullptr);
 
-        disconnect(mOverlay, &WidgetOverlay::clicked, mOverlay, &WidgetOverlay::hide);
+        disconnect(mOverlay, &WidgetOverlay::clicked, this, &GraphWidget::hideOverlay);
 
         mOverlay->setWidget(mSpinnerWidget);
 
@@ -188,7 +206,7 @@ namespace hal
         mStoreViewport.mValid = true;
         mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
         mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
-        //        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
+        //        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid.first << mStoreViewport.mGrid.second << mStoreViewport.mRect;
     }
 
     QRectF GraphWidget::restoreViewport(bool reset)
@@ -198,8 +216,8 @@ namespace hal
         if (reset)
             mStoreViewport.mValid = false;
 
-        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()), mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
-        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid[1] + centerPos;
+        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid.first.x()), mContext->getLayouter()->gridYposition(mStoreViewport.mGrid.first.y()));
+        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid.second + centerPos;
         return QRectF(topLeft, mStoreViewport.mRect.size());
     }
 
@@ -399,14 +417,14 @@ namespace hal
             if (!remove_modules.isEmpty() || !remove_gates.isEmpty())
             {
                 ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(remove_modules, remove_gates);
-                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::ContextView));
                 act->exec();
             }
             if (!nonvisible_modules.isEmpty() || !nonvisible_gates.isEmpty())
             {
                 ActionAddItemsToObject* act = new ActionAddItemsToObject(nonvisible_modules, nonvisible_gates);
                 act->setPlacementHint(PlacementHint(placementMode, origin));
-                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::ContextView));
                 act->exec();
             }
 
@@ -523,7 +541,9 @@ namespace hal
     // ADD SOUND OR ERROR MESSAGE TO FAILED NAVIGATION ATTEMPTS
     void GraphWidget::handleNavigationLeftRequest()
     {
+        if (!hasFocusedItem(SelectionRelay::Subfocus::Left)) return;
         const SelectionRelay::Subfocus navigateLeft = SelectionRelay::Subfocus::Left;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
@@ -639,7 +659,9 @@ namespace hal
 
     void GraphWidget::handleNavigationRightRequest()
     {
+        if (!hasFocusedItem(SelectionRelay::Subfocus::Right)) return;
         const SelectionRelay::Subfocus navigateRight = SelectionRelay::Subfocus::Right;
+        mOverlay->setWidget(mNavigationWidgetV3);
         switch (gSelectionRelay->focusType())
         {
             case SelectionRelay::ItemType::None: {
@@ -748,8 +770,75 @@ namespace hal
         }
     }
 
+    bool GraphWidget::hasFocusedItem(SelectionRelay::Subfocus navigateDirection) const
+    {
+        if (gSelectionRelay->focusType() == SelectionRelay::ItemType::None && gSelectionRelay->numberSelectedItems() == 1)
+        {
+            // focus item has not been set but since only one item is selected it is obvious what the user wants
+            if (gSelectionRelay->numberSelectedModules())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Module, gSelectionRelay->selectedModulesVector().at(0));
+            else if (gSelectionRelay->numberSelectedGates())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Gate, gSelectionRelay->selectedGatesVector().at(0));
+            else if (gSelectionRelay->numberSelectedNets())
+                gSelectionRelay->setFocusDirect(SelectionRelay::ItemType::Net, gSelectionRelay->selectedNetsVector().at(0));
+        }
+
+        u32 id = gSelectionRelay->focusId();
+        switch (gSelectionRelay->focusType())
+        {
+        case SelectionRelay::ItemType::Module:
+            if (!mContext->modules().contains(id))
+            {
+                log_warning("gui", "Cannot navigate from selected origin module ID={}, folded module not found on current view.", id);
+                return false;
+            }
+            break;
+        case SelectionRelay::ItemType::Gate:
+            if (!mContext->gates().contains(id))
+            {
+                log_warning("gui", "Cannot navigate from selected origin gate ID={}, gate not found on current view.", id);
+                return false;
+            }
+            break;
+        case SelectionRelay::ItemType::Net:
+            switch (navigateDirection) {
+            case SelectionRelay::Subfocus::Left:
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
+                    if (hasGate(ep->get_gate())) return true;
+                break;
+            case SelectionRelay::Subfocus::Right:
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
+                    if (hasGate(ep->get_gate())) return true;
+                break;
+            default:
+                return true;
+            }
+            log_warning("gui", "Cannot navigate from selected origin net ID={}, net not found on current view.", id);
+            return false;
+        default:
+            log_warning("gui", "Cannot navigate, no origin selected");
+            return false;
+        }
+        return true;
+    }
+
+    bool GraphWidget::hasGate(const Gate* g) const
+    {
+        if (!g) return false;
+        if (mContext->gates().contains(g->get_id())) return true;
+        const Module* parentModule = g->get_module();
+        while (parentModule)
+        {
+            if (mContext->modules().contains(parentModule->get_id()))
+                return true;
+            parentModule = parentModule->get_parent_module();
+        }
+        return false;
+    }
+
     void GraphWidget::handleNavigationUpRequest()
     {
+        if (!hasFocusedItem(SelectionRelay::Subfocus::None)) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
@@ -758,6 +847,7 @@ namespace hal
 
     void GraphWidget::handleNavigationDownRequest()
     {
+        if (!hasFocusedItem(SelectionRelay::Subfocus::None)) return;
         // FIXME this is ugly
         if ((gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate && mContext->gates().contains(gSelectionRelay->focusId()))
             || (gSelectionRelay->focusType() == SelectionRelay::ItemType::Module && mContext->modules().contains(gSelectionRelay->focusId())))
@@ -786,7 +876,7 @@ namespace hal
             act->exec();
         }
         else
-            gContentManager->getModuleWidget()->openModuleInView(id, true);
+            gGraphContextManager->openModuleInView(id, true);
     }
 
     void GraphWidget::ensureItemsVisible(const QSet<u32>& gates, const QSet<u32>& modules)
@@ -976,7 +1066,7 @@ namespace hal
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
         // qDebug() << "progress" << hex << (quintptr) QThread::currentThread() << (quintptr) gPythonContext->currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
-        if (!sInstance || gPythonContext->currentThread()) return;
+        if (!sInstance || gPythonContext->pythonThread()) return;
         if (percent==100)
             sInstance->handleSceneAvailable();
         else

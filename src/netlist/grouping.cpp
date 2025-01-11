@@ -16,7 +16,7 @@ namespace hal
         m_color            = next_color();
         m_internal_manager = internal_manager;
 
-        m_event_handler    = event_handler;
+        m_event_handler = event_handler;
     }
 
     u32 Grouping::get_id() const
@@ -31,10 +31,10 @@ namespace hal
             log_error("grouping", "grouping name cannot be empty.");
             return;
         }
+
         if (name != m_name)
         {
             m_name = name;
-
             m_event_handler->notify(GroupingEvent::event::name_changed, this);
         }
     }
@@ -57,8 +57,8 @@ namespace hal
 
     utils::Color Grouping::next_color()
     {
-        int baseCol = (get_id()-1) * 37;
-        return utils::Color(baseCol%255, 200, std::max(250-baseCol/255*50,50));
+        int baseCol = (get_id() - 1) * 37;
+        return utils::Color(baseCol % 255, 200, std::max(250 - baseCol / 255 * 50, 50));
     }
 
     Netlist* Grouping::get_netlist() const
@@ -80,6 +80,11 @@ namespace hal
         }
 
         return assign_gate(gate, force);
+    }
+
+    const std::vector<Gate*>& Grouping::get_gates() const
+    {
+        return m_gates;
     }
 
     std::vector<Gate*> Grouping::get_gates(const std::function<bool(Gate*)>& filter) const
@@ -164,6 +169,11 @@ namespace hal
         return assign_net(net, force);
     }
 
+    const std::vector<Net*>& Grouping::get_nets() const
+    {
+        return m_nets;
+    }
+
     std::vector<Net*> Grouping::get_nets(const std::function<bool(Net*)>& filter) const
     {
         std::vector<Net*> res;
@@ -244,6 +254,11 @@ namespace hal
         }
 
         return assign_module(module, force);
+    }
+
+    const std::vector<Module*>& Grouping::get_modules() const
+    {
+        return m_modules;
     }
 
     std::vector<Module*> Grouping::get_modules(const std::function<bool(Module*)>& filter) const

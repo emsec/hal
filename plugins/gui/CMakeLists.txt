@@ -59,6 +59,29 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE RSRC ${RSRCROOT}/*.qrc)
 
     qt5_wrap_cpp(MOC_source ${SRC})
+
+    foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+            set(STORE_${j}_OUTDIR${i} ${CMAKE_${j}_OUTPUT_DIRECTORY${i}})
+            set(CMAKE_${j}_OUTPUT_DIRECTORY${i} "${CMAKE_BINARY_DIR}/lib")
+        endforeach()
+    endforeach()
+    if(USE_VENDORED_QUAZIP)
+        set (QUAZIP_SUBDIR "${CMAKE_SOURCE_DIR}/deps/quazip-1.3")
+        add_subdirectory(${QUAZIP_SUBDIR} ${CMAKE_BINARY_DIR}/quazip)
+        message(STATUS "Using quazip from ${QUAZIP_SUBDIR}")
+    else()
+        find_package(QuaZip-Qt5 REQUIRED)
+        get_target_property(QUAZIP_LIBRARIES QuaZip::QuaZip IMPORTED_LOCATION_RELEASE)
+        message(STATUS "Using system's quazip from ${QUAZIP_LIBRARIES}")
+    endif()
+
+    foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
+        foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
+            set(CMAKE_${j}_OUTPUT_DIRECTORY${i} ${STORE_${j}_OUTDIR${i}})
+        endforeach()
+    endforeach()
+
     qt5_wrap_cpp(MOC_HDR ${HDR})
     qt5_wrap_ui(MOC_UI ${UI})
     qt5_add_resources(MOC_RSRC ${RSRC})
@@ -83,6 +106,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                                PUBLIC
                                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                                $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+                               $<BUILD_INTERFACE:${QuaZip_Library_SOURCE_DIR}>
                                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                )
     target_compile_options(gui
@@ -90,7 +114,10 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg QuaZip::QuaZip)
+    add_dependencies(gui update_internal_gate_library_definitions)
+    get_property(GLDIR GLOBAL PROPERTY GATE_LIBS_DEFINITIONS)
+    file(WRITE "${RSRCROOT}/path/gate_library_definitions.txt" "${GLDIR}")
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
 
     install(TARGETS gui

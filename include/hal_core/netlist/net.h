@@ -172,6 +172,14 @@ namespace hal
         bool remove_source(Endpoint* ep);
 
         /**
+         * Check whether a gate is a source of the net independent of the pin.
+         *
+         * @param[in] gate - The gate.
+         * @returns `true` if the gate is a source of the net, `false` otherwise.
+         */
+        bool is_a_source(const Gate* gate) const;
+
+        /**
          * Check whether an endpoint is a source of the net.
          * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
          *
@@ -190,7 +198,7 @@ namespace hal
          * @param[in] pin - The output pin of the gate.
          * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
-        bool is_a_source(const Gate* gate, const GatePin* pin_name) const;
+        bool is_a_source(const Gate* gate, const GatePin* pin) const;
 
         /**
          * Check whether an endpoint is a source of the net.
@@ -202,10 +210,12 @@ namespace hal
 
         /**
          * Get the number of sources of the net.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
+         * @param[in] filter - An optional filter.
          * @returns The number of sources.
          */
-        u32 get_num_of_sources() const;
+        u32 get_num_of_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of sources of the net.
@@ -272,6 +282,14 @@ namespace hal
         bool remove_destination(Endpoint* ep);
 
         /**
+         * Check whether a gate is a destination of the net independent of the pin.
+         *
+         * @param[in] gate - The gate.
+         * @returns `true` if the gate is a destination of the net, `false` otherwise.
+         */
+        bool is_a_destination(const Gate* gate) const;
+
+        /**
          * Check whether an endpoint is a destination of the net.
          * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
          *
@@ -290,7 +308,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(const Gate* gate, const GatePin* pin_name) const;
+        bool is_a_destination(const Gate* gate, const GatePin* pin) const;
 
         /**
          * Check whether an endpoint is a destination of the net.
@@ -302,10 +320,12 @@ namespace hal
 
         /**
          * Get the number of destinations of the net.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
+         * @param[in] filter - An optional filter.
          * @returns The number of destinations.
          */
-        u32 get_num_of_destinations() const;
+        u32 get_num_of_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of destinations of the net.
@@ -383,10 +403,10 @@ namespace hal
         friend class NetlistInternalManager;
         explicit Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name = "");
 
-        Net(const Net&) = delete;
-        Net(Net&&)      = delete;
+        Net(const Net&)            = delete;
+        Net(Net&&)                 = delete;
         Net& operator=(const Net&) = delete;
-        Net& operator=(Net&&) = delete;
+        Net& operator=(Net&&)      = delete;
 
         NetlistInternalManager* m_internal_manager;
 

@@ -185,7 +185,7 @@ namespace hal
         return m_manager->delete_gate(gate);
     }
 
-    bool Netlist::is_gate_in_netlist(Gate* gate) const
+    bool Netlist::is_gate_in_netlist(const Gate* gate) const
     {
         return gate != nullptr && m_gates_set.find(gate) != m_gates_set.end();
     }
@@ -197,7 +197,7 @@ namespace hal
             return it->second.get();
         }
 
-        log_error("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
+        log_debug("netlist", "there is no gate with ID {} in the netlist with ID {}.", gate_id, m_netlist_id);
         return nullptr;
     }
 
@@ -206,7 +206,7 @@ namespace hal
         return m_gates;
     }
 
-    std::vector<Gate*> Netlist::get_gates(const std::function<bool(Gate*)>& filter) const
+    std::vector<Gate*> Netlist::get_gates(const std::function<bool(const Gate*)>& filter) const
     {
         if (!filter)
         {
@@ -345,20 +345,20 @@ namespace hal
         return m_manager->delete_net(n);
     }
 
-    bool Netlist::is_net_in_netlist(Net* n) const
+    bool Netlist::is_net_in_netlist(const Net* n) const
     {
         return n != nullptr && m_nets_set.find(n) != m_nets_set.end();
     }
 
     Net* Netlist::get_net_by_id(u32 net_id) const
     {
-        auto it = m_nets_map.find(net_id);
-        if (it == m_nets_map.end())
+        if (auto it = m_nets_map.find(net_id); it != m_nets_map.end())
         {
-            log_error("netlist", "there is no net with ID {} in the netlist with ID {}.", net_id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no net with ID {} in the netlist with ID {}.", net_id, m_netlist_id);
+        return nullptr;
     }
 
     const std::vector<Net*>& Netlist::get_nets() const
@@ -366,7 +366,7 @@ namespace hal
         return m_nets;
     }
 
-    std::vector<Net*> Netlist::get_nets(const std::function<bool(Net*)>& filter) const
+    std::vector<Net*> Netlist::get_nets(const std::function<bool(const Net*)>& filter) const
     {
         if (!filter)
         {
@@ -526,6 +526,40 @@ namespace hal
         return m_global_output_nets;
     }
 
+    std::vector<Net*> Netlist::get_gnd_nets() const
+    {
+        std::vector<Net*> gnd_nets;
+        for (const auto& gnd_gate : m_gnd_gates)
+        {
+            for (const auto& o_net : gnd_gate->get_fan_out_nets())
+            {
+                if (o_net->is_gnd_net())
+                {
+                    gnd_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return gnd_nets;
+    }
+
+    std::vector<Net*> Netlist::get_vcc_nets() const
+    {
+        std::vector<Net*> vcc_nets;
+        for (const auto& vcc_gate : m_vcc_gates)
+        {
+            for (const auto& o_net : vcc_gate->get_fan_out_nets())
+            {
+                if (o_net->is_vcc_net())
+                {
+                    vcc_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return vcc_nets;
+    }
+
     void Netlist::enable_automatic_net_checks(bool enable_checks)
     {
         m_manager->m_net_checks_enabled = enable_checks;
@@ -578,13 +612,13 @@ namespace hal
 
     Module* Netlist::get_module_by_id(u32 id) const
     {
-        auto it = m_modules_map.find(id);
-        if (it == m_modules_map.end())
+        if (auto it = m_modules_map.find(id); it != m_modules_map.end())
         {
-            log_error("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no module with ID {} in the netlist with ID {}.", id, m_netlist_id);
+        return nullptr;
     }
 
     const std::vector<Module*>& Netlist::get_modules() const
@@ -592,7 +626,7 @@ namespace hal
         return m_modules;
     }
 
-    std::vector<Module*> Netlist::get_modules(const std::function<bool(Module*)>& filter) const
+    std::vector<Module*> Netlist::get_modules(const std::function<bool(const Module*)>& filter) const
     {
         if (!filter)
         {
@@ -610,7 +644,7 @@ namespace hal
         return res;
     }
 
-    bool Netlist::is_module_in_netlist(Module* module) const
+    bool Netlist::is_module_in_netlist(const Module* module) const
     {
         return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
     }
@@ -649,23 +683,28 @@ namespace hal
         return m_manager->delete_grouping(g);
     }
 
-    bool Netlist::is_grouping_in_netlist(Grouping* n) const
+    bool Netlist::is_grouping_in_netlist(const Grouping* n) const
     {
         return n != nullptr && m_groupings_set.find(n) != m_groupings_set.end();
     }
 
     Grouping* Netlist::get_grouping_by_id(u32 grouping_id) const
     {
-        auto it = m_groupings_map.find(grouping_id);
-        if (it == m_groupings_map.end())
+        if (auto it = m_groupings_map.find(grouping_id); it != m_groupings_map.end())
         {
-            log_error("netlist", "there is no grouping with ID {} in the netlist with ID {}.", grouping_id, m_netlist_id);
-            return nullptr;
+            return it->second.get();
         }
-        return it->second.get();
+
+        log_debug("netlist", "there is no grouping with ID {} in the netlist with ID {}.", grouping_id, m_netlist_id);
+        return nullptr;
     }
 
-    std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(Grouping*)>& filter) const
+    const std::vector<Grouping*>& Netlist::get_groupings() const
+    {
+        return m_groupings;
+    }
+
+    std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(const Grouping*)>& filter) const
     {
         if (!filter)
         {

@@ -16,6 +16,16 @@ namespace hal
 
     std::string GraphAlgorithmPlugin::get_version() const
     {
-        return std::string("0.1");
+        return std::string("0.2");
+    }
+
+    std::string GraphAlgorithmPlugin::get_description() const
+    {
+        return "Graph algorithms based on igraph operating on a netlist graph abstraction.";
+    }
+
+    std::set<std::string> GraphAlgorithmPlugin::get_dependencies() const
+    {
+        return {};
     }
 }    // namespace hal

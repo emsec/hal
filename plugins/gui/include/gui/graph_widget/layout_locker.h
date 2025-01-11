@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QSet>
+#include "hal_core/defines.h"
 
 namespace hal
 {
@@ -37,7 +38,7 @@ namespace hal
         LayoutLockerManager();
 
         int mLockCount;
-        QSet<GraphContext*> mWaitingRoom;
+        QSet<u32> mWaitingRoom;
 
     public:
         static LayoutLockerManager* instance();

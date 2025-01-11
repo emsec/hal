@@ -27,10 +27,18 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/pins/module_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
 
 namespace hal
 {
+    /**
+     * A Boolean function decorator that provides functionality to operate on the associated Boolean function.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API BooleanFunctionDecorator
     {
     public:
@@ -42,12 +50,40 @@ namespace hal
         BooleanFunctionDecorator(const BooleanFunction& bf);
 
         /**
-         * Substitute all Boolean function variables fed by power or ground gates by constant '1' and '0'. 
+         * Substitute all Boolean function variables fed by power or ground gates by constant `0` and `1`. 
          * 
          * @param[in] nl - The netlist to operate on.
          * @return The resulting Boolean function on success, an error otherwise.
          */
         Result<BooleanFunction> substitute_power_ground_nets(const Netlist* nl) const;
+
+        /**
+         * Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant `0` and `1`. 
+         * 
+         * @param[in] g  - The gate which is connected to the pins and belongs to the Boolean function under inspection.
+         * @return The resulting Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> substitute_power_ground_pins(const Gate* g) const;
+
+        /**
+         * Substitute all Boolean function variables that are either 1) output or 2) input nets to one of the passed module with a BooleanFunction of the form Extract(Var(<module_name>_<pin_group_name>), index, index).
+         * This allows a simplification in case multiple pins of the same pin group are concatenated.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @return The resulting Boolean function on success, an error otherwise.
+         */
+        Result<BooleanFunction> substitute_module_pins(const std::vector<Module*>& modules) const;
+
+        /**
+         * Get the Boolean function that is the concatenation of Boolean functions.
+         * The Boolean function can optionally be extended to any desired size greater the size of the given Boolean function vector.
+         * 
+         * @param[in] functions - The Boolean functions to concatenate. 
+         * @param[in] extend_to_size - The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
+         * @param[in] sign_extend - Set `true` to sign extend, `false` to zero extend. Defaults to `false`.
+         * @return The resulting Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size = 0, bool sign_extend = false);
 
         /**
          * Get the Boolean function that is the concatenation of variable names corresponding to nets of a netlist.
@@ -61,15 +97,15 @@ namespace hal
         static Result<BooleanFunction> get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false);
 
         /**
-         * Get the Boolean function that is the concatenation of Boolean functions.
+         * Get the Boolean function that is the concatenation of variable names corresponding to the nets connected to the pins of the given pin group.
          * The Boolean function can optionally be extended to any desired size greater the size of the given Boolean function vector.
          * 
-         * @param[in] functions - The Boolean functions to concatenate. 
+         * @param[in] pin_group - The module pin group.
          * @param[in] extend_to_size - The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
          * @param[in] sign_extend - Set `true` to sign extend, `false` to zero extend. Defaults to `false`.
          * @return The resulting Boolean function on success, an error otherwise.
          */
-        static Result<BooleanFunction> get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size = 0, bool sign_extend = false);
+        static Result<BooleanFunction> get_boolean_function_from(const PinGroup<ModulePin>* pin_group, u32 extend_to_size = 0, bool sign_extend = false);
 
     private:
         const BooleanFunction& m_bf;

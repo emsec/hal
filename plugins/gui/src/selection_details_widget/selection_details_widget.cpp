@@ -16,6 +16,7 @@
 #include "gui/selection_details_widget/net_details_tab_widget.h"
 #include "gui/selection_details_widget/module_details_tab_widget.h"
 
+#include "gui/gui_def.h"
 
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/gate.h"
@@ -73,51 +74,57 @@ namespace hal
 
         QVBoxLayout* containerLayout = new QVBoxLayout(treeViewContainer);
 
+
+
+
+
         mSelectionTreeView  = new SelectionTreeView(treeViewContainer);
+
+        mModuleModel = new ModuleModel(this);
+        mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        mSelectionTreeProxyModel->setSourceModel(mModuleModel);
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
+        //mSelectionTreeProxyModel->setSourceModel(mSelectionTreeView->model());
+        //mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
         mSelectionTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mSelectionTreeView->setMinimumWidth(280);
         mSelectionTreeView->hide();
 
         mSearchbar = new Searchbar(treeViewContainer);
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mSelectionTreeProxyModel->getColumnNames());
 
         containerLayout->addWidget(mSelectionTreeView);
         containerLayout->addWidget(mSearchbar);
         containerLayout->setSpacing(0);
         containerLayout->setContentsMargins(0,0,0,0);
 
+        mStackedWidget = new QStackedWidget(mSplitter);
 
-        mSelectionDetails = new QWidget(mSplitter);
-        QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
-        selDetailsLayout->setContentsMargins(0,0,0,0);
-        selDetailsLayout->setSpacing(0);
-
-        mStackedWidget = new QStackedWidget(mSelectionDetails);
-
-        mGateDetailsTabs = new GateDetailsTabWidget(mSelectionDetails);
+        mGateDetailsTabs = new GateDetailsTabWidget(mStackedWidget);
         mStackedWidget->addWidget(mGateDetailsTabs);
 
-        mNetDetailsTabs = new NetDetailsTabWidget(mSelectionDetails);
+        mNetDetailsTabs = new NetDetailsTabWidget(mStackedWidget);
         mStackedWidget->addWidget(mNetDetailsTabs);
 
         mModuleDetailsTabs = new ModuleDetailsTabWidget();
         mStackedWidget->addWidget(mModuleDetailsTabs);
 
-        mItemDeletedLabel = new QLabel(mSelectionDetails);
+        mItemDeletedLabel = new QLabel(mStackedWidget);
         mItemDeletedLabel->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
         mItemDeletedLabel->setWordWrap(true);
         mItemDeletedLabel->setAlignment(Qt::AlignmentFlag::AlignTop);
         mStackedWidget->addWidget(mItemDeletedLabel);
 
-        mNoSelectionLabel = new QLabel(mSelectionDetails);
+        mNoSelectionLabel = new QLabel(mStackedWidget);
         mNoSelectionLabel->setText("No Selection");
         mNoSelectionLabel->setWordWrap(true);
         mNoSelectionLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
         mStackedWidget->addWidget(mNoSelectionLabel);
 
         mStackedWidget->setCurrentWidget(mNoSelectionLabel);
-
-        selDetailsLayout->addWidget(mStackedWidget);
 
         mContentLayout->addWidget(mSplitter);
 
@@ -142,76 +149,13 @@ namespace hal
 
         gSelectionRelay->registerSender(this, "SelectionDetailsWidget");
         connect(mSelectionToGrouping, &QAction::triggered, this, &SelectionDetailsWidget::selectionToGrouping);
-        connect(mSelectionToModule, &QAction::triggered, this, &SelectionDetailsWidget::selectionToModuleMenu);
+        connect(mSelectionToModule, &QAction::triggered, gNetlistRelay, &NetlistRelay::addToModuleDialog);
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
-        connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
-        connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-        connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
-    }
 
-    void SelectionDetailsWidget::selectionToModuleMenu()
-    {
-        if (gSelectionRelay->numberSelectedNodes() <= 0) return;
-
-        ModuleDialog md({},"Move to module",nullptr,this);
-        if (md.exec() != QDialog::Accepted) return;
-
-        if (md.isNewModule())
-            SelectionDetailsWidget::selectionToModuleAction(-1);
-        else
-            SelectionDetailsWidget::selectionToModuleAction(md.selectedId());
-    }
-
-    void SelectionDetailsWidget::selectionToModuleAction(int actionCode)
-    {
-
-        ActionAddItemsToObject* actAddSelected =
-                new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                           gSelectionRelay->selectedGates());
-        u32 targetModuleId = 0;
-
-        if (actionCode < 0)
-        {
-            // add to new module
-            std::unordered_set<Gate*> gatesSelected;
-            std::unordered_set<Module*> modulesSelected;
-            for (u32 id : gSelectionRelay->selectedGatesList())
-                gatesSelected.insert(gNetlist->get_gate_by_id(id));
-
-            for (u32 id : gSelectionRelay->selectedModulesList())
-                modulesSelected.insert(gNetlist->get_module_by_id(id));
-
-            Module* parentModule = gui_utility::firstCommonAncestor(modulesSelected, gatesSelected);
-            if(!parentModule) return; //hotfix, when the top-level module is in modulesSelected, this will be a nullptr
-            QString parentName            = QString::fromStdString(parentModule->get_name());
-            bool ok;
-            QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + parentName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
-            if (!ok || name.isEmpty()) return;
-            ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
-            actNewModule->setParentId(parentModule->get_id());
-            UserActionCompound* act = new UserActionCompound;
-            act->setUseCreatedObject();
-            act->addAction(actNewModule);
-            act->addAction(actAddSelected);
-            act->exec();
-            targetModuleId = act->object().id();
-        }
-        else
-        {
-            // add to existing module
-            targetModuleId = actionCode;
-            actAddSelected->setObject(UserActionObject(targetModuleId,UserActionObjectType::Module));
-            actAddSelected->exec();
-        }
-
-        gSelectionRelay->clear();
-        gSelectionRelay->addModule(targetModuleId);
-        gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,targetModuleId);
-        gSelectionRelay->relaySelectionChanged(this);
-        gContentManager->getGraphTabWidget()->ensureSelectionVisible();
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &SelectionDetailsWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
     }
 
     void SelectionDetailsWidget::selectionToGrouping()
@@ -281,9 +225,40 @@ namespace hal
             UserAction* act = groupingUnassignActionFactory(obj);
             if (act) compound->addAction(act);
         }
-        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                                 gSelectionRelay->selectedGates(),
-                                                                 gSelectionRelay->selectedNets());
+
+        //get selected items from Model
+        QSet<u32> mods = {};
+        QSet<u32> gates = {};
+        QSet<u32> nets = {};
+        auto* sourceModel = static_cast<ModuleModel*>(mSelectionTreeProxyModel->sourceModel());
+
+        //check each row for its Itemtype and append the ID to the corresponding QSet {mods, gates, nets}
+        for(int i = 0; i < mSelectionTreeProxyModel->rowCount(); i++){
+
+                QModelIndex sourceModelIndex = mSelectionTreeProxyModel->mapToSource(mSelectionTreeProxyModel->index(i,0));
+                ModuleItem* item = dynamic_cast<ModuleItem*>(sourceModel->getItemFromIndex(sourceModelIndex));
+                switch (item->getType())
+                {
+                    case ModuleItem::TreeItemType::Module:
+                        mods.insert(item->id());
+                        break;
+
+                    case ModuleItem::TreeItemType::Gate:
+                        gates.insert(item->id());
+                        break;
+
+                    case ModuleItem::TreeItemType::Net:
+                        nets.insert(item->id());
+                        break;
+                    default:
+                        break;
+                }          
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(mods,
+                                                                 gates,
+                                                                 nets);
+
+
         act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
         compound->addAction(act);
         compound->addAction(new ActionSetSelectionFocus);
@@ -320,15 +295,18 @@ namespace hal
         {
             return;
         }
-
+        
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
         if (proxy->isGraphicsBusy()) return;
-
-        mSearchbar->clear();
-        updateSearchIcon();
+        if (!mSearchbar->getCurrentText().isEmpty())
+        {
+            mSearchbar->clear();
+            updateSearchIcon();
+        }
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
-        QVector<const SelectionTreeItem*> defaultHighlight;
+        QVector<const ModuleItem*> defaultHighlight;
 
         if (mNumberSelectedItems)
         {
@@ -367,62 +345,75 @@ namespace hal
 
         if (gSelectionRelay->numberSelectedModules())
         {
-            SelectionTreeItemModule sti(gSelectionRelay->selectedModulesList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedModulesList().at(0), ModuleItem::TreeItemType::Module, mModuleModel);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedGates())
         {
-            SelectionTreeItemGate sti(gSelectionRelay->selectedGatesList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedGatesList().at(0), ModuleItem::TreeItemType::Gate, mModuleModel);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedNets())
         {
-            SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedNetsList().at(0), ModuleItem::TreeItemType::Net, mModuleModel);
             singleSelectionInternal(&sti);
         }
+
         Q_EMIT triggerHighlight(defaultHighlight);
     }
 
-    void SelectionDetailsWidget::handleTreeSelection(const SelectionTreeItem *sti)
+    void SelectionDetailsWidget::handleTreeSelection(const ModuleItem *sti)
     {
         singleSelectionInternal(sti);
-        QVector<const SelectionTreeItem*> highlight;
+        QVector<const ModuleItem*> highlight;
         if (sti) highlight.append(sti);
         Q_EMIT triggerHighlight(highlight);
     }
 
-    void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
+    void SelectionDetailsWidget::showNoSelection()
     {
-        SelectionTreeItem::TreeItemType tp = sti
-                ? sti->itemType()
-                : SelectionTreeItem::NullItem;
+        if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+            mModuleDetailsTabs->clear();
+        mStackedWidget->setCurrentWidget(mNoSelectionLabel);
+    }
 
-        switch (tp) {
-        case SelectionTreeItem::NullItem:
-            //mModuleDetails->update(0);
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mStackedWidget->setCurrentWidget(mNoSelectionLabel);
-//            set_name("Selection Details");
+    void SelectionDetailsWidget::singleSelectionInternal(const ModuleItem *sti)
+    {
+        if(!sti){
+            showNoSelection();
+            return;
+        }
+
+        switch (sti->getType()) {
+        case ModuleItem::TreeItemType::Module:
+            if (Module* m = gNetlist->get_module_by_id(sti->id()); m)
+            {
+                mModuleDetailsTabs->setModule(m);
+                mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
+                //            if (mNumberSelectedItems==1) set_name("Module Details");
+            }
+            else
+                showNoSelection();
+
             break;
-        case SelectionTreeItem::ModuleItem:
-            mModuleDetailsTabs->setModule(gNetlist->get_module_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Module Details");
+
+        case ModuleItem::TreeItemType::Gate:
+            showNoSelection();
+            if (Gate* g = gNetlist->get_gate_by_id(sti->id()); g)
+            {
+                mGateDetailsTabs->setGate(g);
+                mStackedWidget->setCurrentWidget(mGateDetailsTabs);
+                //            if (mNumberSelectedItems==1) set_name("Gate Details");
+            }
             break;
-        case SelectionTreeItem::GateItem:
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mGateDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Gate Details");
-            break;
-        case SelectionTreeItem::NetItem:
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mNetDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Net Details");
+        case ModuleItem::TreeItemType::Net:
+            showNoSelection();
+            if (Net* n = gNetlist->get_net_by_id(sti->id()); n)
+            {
+                mNetDetailsTabs->setNet(n);
+                mStackedWidget->setCurrentWidget(mNetDetailsTabs);
+                //            if (mNumberSelectedItems==1) set_name("Net Details");
+            }
             break;
         default:
             break;
@@ -463,19 +454,6 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-    }
-
-    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
-    {
-        u32 itemId = sti->id();
-
-        switch (sti->itemType())
-        {
-            case SelectionTreeItem::TreeItemType::GateItem:     Q_EMIT focusGateClicked(itemId);     break;
-            case SelectionTreeItem::TreeItemType::NetItem:      Q_EMIT focusNetClicked(itemId);      break;
-            case SelectionTreeItem::TreeItemType::ModuleItem:   Q_EMIT focusModuleClicked(itemId);   break;
-            default: break;
-        }
     }
 
     void SelectionDetailsWidget::setupToolbar(Toolbar* toolbar)
