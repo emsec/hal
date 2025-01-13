@@ -81,6 +81,14 @@ namespace hal
                                                       log_error("machine_learning", "{}", global_io_connections.get_error().get());
                                                       return false;
                                                   }
+
+                                                  // TODO remove debug print
+                                                  //   if (!global_io_connections.get().empty())
+                                                  //   {
+                                                  //       std::cout << "Global IO connections: " << global_io_connections.get().front()->get_name() << std::endl;
+                                                  //       std::cout << "Endpoint: " << ep->get_pin()->get_name() << std::endl;
+                                                  //   }
+
                                                   return !global_io_connections.get().empty();
                                               },
                                               m_direction,
@@ -324,5 +332,5 @@ namespace hal
                 return OK(feature_vecs);
             }
         }    // namespace gate_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

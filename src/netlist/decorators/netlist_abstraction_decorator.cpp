@@ -43,10 +43,26 @@ namespace hal
                 // std::cout << ep_out->get_pin()->get_name() << std::endl;
 
                 new_abstraction->m_successors.insert({ep_out, {}});
+                new_abstraction->m_global_output_successors.insert({ep_out, {}});
+
                 const auto successors = nl_trav_dec.get_next_matching_endpoints(
                     ep_out,
                     true,
-                    [target_gates_set](const auto& ep) { return ep->is_destination_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end(); },
+                    [target_gates_set](const auto& ep) {
+                        bool found_target_gate = ep->is_destination_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end();
+                        if (found_target_gate)
+                        {
+                            return true;
+                        }
+
+                        bool found_global_output = ep->is_source_pin() && ep->get_net()->is_global_output_net();
+                        if (found_global_output)
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    },
                     false,
                     exit_endpoint_filter,
                     entry_endpoint_filter);
@@ -59,27 +75,14 @@ namespace hal
 
                 for (Endpoint* ep : successors.get())
                 {
-                    new_abstraction->m_successors.at(ep_out).push_back(ep);
-                }
-            }
-
-            // gather all global output succesors
-            for (Endpoint* ep_out : gate->get_fan_out_endpoints())
-            {
-                new_abstraction->m_global_output_successors.insert({ep_out, {}});
-
-                const auto destinations = nl_trav_dec.get_next_matching_endpoints(
-                    ep_out, true, [](const auto& ep) { return ep->is_source_pin() && ep->get_net()->is_global_output_net(); }, false, exit_endpoint_filter, entry_endpoint_filter);
-
-                if (destinations.is_error())
-                {
-                    return ERR_APPEND(destinations.get_error(),
-                                      "cannot build netlist abstraction: failed to gather global succesor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
-                }
-
-                for (const auto* ep : destinations.get())
-                {
-                    new_abstraction->m_global_output_successors.at(ep_out).push_back({ep->get_net()});
+                    if (ep->is_destination_pin())
+                    {
+                        new_abstraction->m_successors.at(ep_out).push_back(ep);
+                    }
+                    else if (ep->is_source_pin())
+                    {
+                        new_abstraction->m_global_output_successors.at(ep_out).push_back(ep->get_net());
+                    }
                 }
             }
 
@@ -87,9 +90,27 @@ namespace hal
             for (Endpoint* ep_in : gate->get_fan_in_endpoints())
             {
                 new_abstraction->m_predecessors.insert({ep_in, {}});
+                new_abstraction->m_global_input_predecessors.insert({ep_in, {}});
 
-                const auto predecessors = nl_trav_dec.get_next_matching_endpoints(
-                    ep_in, false, [target_gates_set](const auto& ep) { return ep->is_source_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end(); });
+                const auto predecessors = nl_trav_dec.get_next_matching_endpoints(ep_in,
+                                                                                  false,
+                                                                                  [target_gates_set](const auto& ep) {
+                                                                                      bool found_target_gate = ep->is_source_pin() && target_gates_set.find(ep->get_gate()) != target_gates_set.end();
+                                                                                      if (found_target_gate)
+                                                                                      {
+                                                                                          return true;
+                                                                                      }
+
+                                                                                      bool found_global_input = ep->is_destination_pin() && ep->get_net()->is_global_input_net();
+                                                                                      if (found_global_input)
+                                                                                      {
+                                                                                          return true;
+                                                                                      }
+
+                                                                                      return false;
+                                                                                  }
+
+                );
 
                 if (predecessors.is_error())
                 {
@@ -99,26 +120,14 @@ namespace hal
 
                 for (Endpoint* ep : predecessors.get())
                 {
-                    new_abstraction->m_predecessors.at(ep_in).push_back(ep);
-                }
-            }
-
-            // gather all global input predecessors
-            for (Endpoint* ep_in : gate->get_fan_in_endpoints())
-            {
-                new_abstraction->m_global_input_predecessors.insert({ep_in, {}});
-
-                const auto predecessors = nl_trav_dec.get_next_matching_endpoints(ep_in, false, [](const auto& ep) { return ep->is_destination_pin() && ep->get_net()->is_global_input_net(); });
-
-                if (predecessors.is_error())
-                {
-                    return ERR_APPEND(predecessors.get_error(),
-                                      "cannot build netlist abstraction: failed to gather global predecessor endpoints for gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
-                }
-
-                for (const auto* ep : predecessors.get())
-                {
-                    new_abstraction->m_global_input_predecessors.at(ep_in).push_back({ep->get_net()});
+                    if (ep->is_source_pin())
+                    {
+                        new_abstraction->m_predecessors.at(ep_in).push_back(ep);
+                    }
+                    else if (ep->is_destination_pin())
+                    {
+                        new_abstraction->m_global_input_predecessors.at(ep_in).push_back(ep->get_net());
+                    }
                 }
             }
         }
@@ -396,11 +405,11 @@ namespace hal
                 for (const auto& exit_ep : current)
                 {
                     // currently only works for input and output pins
-                    if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::input)
-                    {
-                        return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
-                                   + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
-                    }
+                    // if (exit_ep->get_pin()->get_direction() != PinDirection::output && exit_ep->get_pin()->get_direction() != PinDirection::input)
+                    // {
+                    //     return ERR("failed to get shortest path distance: found endpoint at gate " + exit_ep->get_gate()->get_name() + " with ID " + std::to_string(exit_ep->get_gate()->get_id())
+                    //                + " and pin " + exit_ep->get_pin()->get_name() + " with direction " + enum_to_string(exit_ep->get_pin()->get_direction()) + " that is currently unhandled");
+                    // }
 
                     const auto entry_eps = (exit_ep->get_pin()->get_direction() == PinDirection::output) ? m_abstraction.get_successors(exit_ep) : m_abstraction.get_predecessors(exit_ep);
                     if (entry_eps.is_error())
