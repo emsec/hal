@@ -54,28 +54,40 @@ namespace hal
             {
                 m_gates = netlist->get_gates();
                 std::sort(m_gates.begin(), m_gates.end(), [](const auto* g_a, const auto* g_b) { return g_a->get_id() < g_b->get_id(); });
+
+                m_sequential_gates = netlist->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
+                std::sort(m_sequential_gates.begin(), m_sequential_gates.end(), [](const auto* g_a, const auto* g_b) { return g_a->get_id() < g_b->get_id(); });
             };
 
             const Result<NetlistAbstraction*> get_sequential_abstraction();
             const Result<NetlistAbstraction*> get_original_abstraction();
+
             const Result<graph_algorithm::NetlistGraph*> get_sequential_netlist_graph();
             const Result<graph_algorithm::NetlistGraph*> get_original_netlist_graph();
+
             const std::vector<GateTypeProperty>& get_possible_gate_type_properties();
+            const std::vector<PinType>& get_possible_pin_types();
+            const std::vector<PinDirection>& get_possible_pin_directions();
+
             const MultiBitInformation& get_multi_bit_information();
 
             const std::vector<Gate*>& get_gates() const;
+            const std::vector<Gate*>& get_sequential_gates() const;
 
             const Netlist* nl;
             const u32 num_threads;
 
         private:
             std::vector<Gate*> m_gates;
+            std::vector<Gate*> m_sequential_gates;
 
             std::shared_ptr<NetlistAbstraction> m_original_abstraction{nullptr};
             std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};
             std::shared_ptr<graph_algorithm::NetlistGraph> m_original_netlist_graph{nullptr};
             std::shared_ptr<graph_algorithm::NetlistGraph> m_sequential_netlist_graph{nullptr};
             std::shared_ptr<std::vector<GateTypeProperty>> m_possible_gate_type_properties{nullptr};
+            std::shared_ptr<std::vector<PinType>> m_possible_pin_types{nullptr};
+            std::shared_ptr<std::vector<PinDirection>> m_possible_pin_directions{nullptr};
             std::shared_ptr<MultiBitInformation> m_mbi{nullptr};
 
             // Mutexes for thread-safe initialization
@@ -84,6 +96,8 @@ namespace hal
             std::mutex m_original_graph_mutex;
             std::mutex m_sequential_graph_mutex;
             std::mutex m_possible_gate_type_properties_mutex;
+            std::mutex m_possible_pin_types_mutex;
+            std::mutex m_possible_pin_directions_mutex;
             std::mutex m_mbi_mutex;
         };
 

@@ -7,6 +7,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
+#include "machine_learning/features/edge_feature.h"
 #include "machine_learning/types.h"
 
 #include <vector>
@@ -33,6 +34,12 @@ namespace hal
             std::pair<std::vector<u32>, std::vector<u32>> edge_list;
 
             /**
+             * @brief Vector of edge features
+             * 
+             */
+            std::vector<std::vector<FEATURE_TYPE>> edge_features;
+
+            /**
              * @brief The direction of the graph (e.g., forward or backward).
              */
             GraphDirection direction;
@@ -48,7 +55,7 @@ namespace hal
          * @param[in] dir - The direction of the graph.
          * @returns A `NetlistGraph` representing the netlist connections.
          */
-        NetlistGraph construct_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir);
+        Result<NetlistGraph> construct_netlist_graph(Context& ctx, const GraphDirection& dir, const std::vector<const edge_feature::EdgeFeature*>& edge_features);
 
         /**
          * @brief Constructs a sequential netlist graph representation. The connections are an edge list of indices representing the position of the gates in the gates vector.
@@ -60,7 +67,7 @@ namespace hal
          * @param[in] dir - The direction of the graph.
          * @returns A `NetlistGraph` representing the sequential connections within the netlist.
          */
-        Result<NetlistGraph> construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir);
+        Result<NetlistGraph> construct_sequential_netlist_graph(Context& ctx, const GraphDirection& dir, const std::vector<const edge_feature::EdgeFeature*>& edge_features);
 
         /**
          * @brief Annotates a netlist graph with features for machine learning tasks.

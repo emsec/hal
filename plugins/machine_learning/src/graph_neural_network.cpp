@@ -1,6 +1,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/utils.h"
 #include "machine_learning/features/gate_feature.h"
@@ -12,9 +13,32 @@ namespace hal
 {
     namespace machine_learning
     {
-        NetlistGraph construct_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
+        namespace
         {
-            UNUSED(nl);
+            struct TupleHash
+            {
+                std::size_t operator()(const std::tuple<Gate*, Gate*, std::vector<FEATURE_TYPE>>& t) const
+                {
+                    auto& [g1, g2, features] = t;
+                    std::size_t h            = reinterpret_cast<std::size_t>(g1) ^ (reinterpret_cast<std::size_t>(g2) << 1);
+                    for (const auto& f : features)
+                    {
+                        h ^= std::hash<FEATURE_TYPE>{}(f) + 0x9e3779b9 + (h << 6) + (h >> 2);
+                    }
+                    return h;
+                }
+            };
+
+            void dedupe_connections(std::vector<std::tuple<Gate*, Gate*, std::vector<FEATURE_TYPE>>>& connections)
+            {
+                std::unordered_set<std::tuple<Gate*, Gate*, std::vector<FEATURE_TYPE>>, TupleHash> seen;
+                connections.erase(std::remove_if(connections.begin(), connections.end(), [&seen](const auto& conn) { return !seen.insert(conn).second; }), connections.end());
+            }
+        }    // namespace
+
+        Result<NetlistGraph> construct_netlist_graph(Context& ctx, const GraphDirection& dir, const std::vector<const edge_feature::EdgeFeature*>& edge_features)
+        {
+            const auto& gates = ctx.get_gates();
 
             std::unordered_map<const Gate*, u32> gate_to_idx;
             // init gate to index mapping
@@ -27,48 +51,56 @@ namespace hal
             // edge list
             std::vector<u32> sources;
             std::vector<u32> destinations;
+            std::vector<std::vector<FEATURE_TYPE>> features;
 
             for (const auto& g : gates)
             {
-                const u32 g_idx = gate_to_idx.at(g);
-                if (dir == GraphDirection::directed)
+                std::vector<std::tuple<Gate*, Gate*, std::vector<FEATURE_TYPE>>> connections;
+
+                for (const auto* src_ep : g->get_fan_out_endpoints())
                 {
-                    for (const auto& pre : g->get_unique_predecessors())
+                    for (const auto* dst_ep : src_ep->get_net()->get_destinations())
                     {
-                        sources.push_back(gate_to_idx.at(pre));
-                        destinations.push_back(g_idx);
+                        const auto ef = build_feature_vec(ctx, edge_features, src_ep, dst_ep);
+                        connections.push_back({src_ep->get_gate(), dst_ep->get_gate(), ef.get()});
+
+                        if (dir == GraphDirection::undirected)
+                        {
+                            const auto ef_rev = build_feature_vec(ctx, edge_features, src_ep, dst_ep);
+                            connections.push_back({dst_ep->get_gate(), src_ep->get_gate(), ef_rev.get()});
+                        }
                     }
                 }
 
-                if (dir == GraphDirection::undirected)
-                {
-                    for (const auto& suc : g->get_unique_successors())
-                    {
-                        sources.push_back(g_idx);
-                        destinations.push_back(gate_to_idx.at(suc));
+                // possibly dedupe
+                dedupe_connections(connections);
 
-                        sources.push_back(gate_to_idx.at(suc));
-                        destinations.push_back(g_idx);
-                    }
+                for (auto& [src_g, dst_g, ef] : connections)
+                {
+                    const auto src_idx = gate_to_idx.at(src_g);
+                    const auto dst_idx = gate_to_idx.at(dst_g);
+
+                    sources.push_back(src_idx);
+                    destinations.push_back(dst_idx);
+                    features.push_back(ef);
                 }
             }
 
-            return {{sources, destinations}, dir};
+            return OK({{sources, destinations}, features, dir});
         }
 
-        Result<NetlistGraph> construct_sequential_netlist_graph(const Netlist* nl, const std::vector<Gate*>& gates, const GraphDirection& dir)
+        Result<NetlistGraph> construct_sequential_netlist_graph(Context& ctx, const GraphDirection& dir, const std::vector<const edge_feature::EdgeFeature*>& edge_features)
         {
             std::unordered_map<const Gate*, u32> gate_to_idx;
+            const auto& all_gates = ctx.get_gates();
+
             std::vector<Gate*> sequential_gates;
 
-            // init gate to index mapping
-            for (u32 g_idx = 0; g_idx < gates.size(); g_idx++)
+            // init gate to index mapping (increment index even for non sequential gates, to get the same gate to index mapping as for the regular netlist graph)
+            for (u32 g_idx = 0; g_idx < all_gates.size(); g_idx++)
             {
-                Gate* g = gates.at(g_idx);
-                // if (!g->get_type()->has_property(GateTypeProperty::sequential))
-                // {
-                //     return ERR("cannot construct sequential netlist graph: gates contain non sequential gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                // }
+                Gate* g = all_gates.at(g_idx);
+
                 if (g->get_type()->has_property(GateTypeProperty::sequential))
                 {
                     sequential_gates.push_back(g);
@@ -77,15 +109,7 @@ namespace hal
                 gate_to_idx.insert({g, g_idx});
             }
 
-            const std::vector<PinType> forbidden_pins = {
-                PinType::clock, /*PinType::done, PinType::error, PinType::error_detection,*/ /*PinType::none,*/ PinType::ground, PinType::power /*, PinType::status*/};
-
-            const auto endpoint_filter = [forbidden_pins](const auto* ep, const auto& _d) {
-                UNUSED(_d);
-                return std::find(forbidden_pins.begin(), forbidden_pins.end(), ep->get_pin()->get_type()) == forbidden_pins.end();
-            };
-
-            const auto sequential_abstraction_res = NetlistAbstraction::create(nl, sequential_gates, false, endpoint_filter, endpoint_filter);
+            const auto sequential_abstraction_res = ctx.get_sequential_abstraction();
             if (sequential_abstraction_res.is_error())
             {
                 return ERR_APPEND(sequential_abstraction_res.get_error(), "cannot get sequential netlist abstraction for gate feature context: failed to build abstraction.");
@@ -95,45 +119,49 @@ namespace hal
             // edge list
             std::vector<u32> sources;
             std::vector<u32> destinations;
+            std::vector<std::vector<FEATURE_TYPE>> features;
 
             for (const auto& g : sequential_gates)
             {
-                const u32 g_idx = gate_to_idx.at(g);
-                if (dir == GraphDirection::directed)
+                std::vector<std::tuple<Gate*, Gate*, std::vector<FEATURE_TYPE>>> connections;
+
+                for (const auto* src_ep : g->get_fan_out_endpoints())
                 {
-                    const auto unique_predecessors = sequential_abstraction->get_unique_predecessors(g);
-                    if (unique_predecessors.is_error())
+                    const auto successors = sequential_abstraction->get_successors(src_ep);
+                    if (successors.is_error())
                     {
-                        return ERR_APPEND(unique_predecessors.get_error(),
-                                          "cannot construct sequential netlist graph: failed to find unique predecessors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                        return ERR_APPEND(successors.get_error(),
+                                          "cannot construct sequential netlist graph: failed to find successors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
                     }
-                    for (const auto& pre : unique_predecessors.get())
+
+                    for (const auto* dst_ep : successors.get())
                     {
-                        sources.push_back(gate_to_idx.at(pre));
-                        destinations.push_back(g_idx);
+                        const auto ef = build_feature_vec(ctx, edge_features, src_ep, dst_ep);
+                        connections.push_back({src_ep->get_gate(), dst_ep->get_gate(), ef.get()});
+
+                        if (dir == GraphDirection::undirected)
+                        {
+                            const auto ef_rev = build_feature_vec(ctx, edge_features, src_ep, dst_ep);
+                            connections.push_back({dst_ep->get_gate(), src_ep->get_gate(), ef_rev.get()});
+                        }
                     }
                 }
 
-                if (dir == GraphDirection::undirected)
-                {
-                    const auto unique_successors = sequential_abstraction->get_unique_successors(g);
-                    if (unique_successors.is_error())
-                    {
-                        return ERR_APPEND(unique_successors.get_error(),
-                                          "cannot construct sequential netlist graph: failed to find unique successors for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                    }
-                    for (const auto& suc : unique_successors.get())
-                    {
-                        sources.push_back(g_idx);
-                        destinations.push_back(gate_to_idx.at(suc));
+                // possibly dedupe
+                dedupe_connections(connections);
 
-                        sources.push_back(gate_to_idx.at(suc));
-                        destinations.push_back(g_idx);
-                    }
+                for (auto& [src_g, dst_g, ef] : connections)
+                {
+                    const auto src_idx = gate_to_idx.at(src_g);
+                    const auto dst_idx = gate_to_idx.at(dst_g);
+
+                    sources.push_back(src_idx);
+                    destinations.push_back(dst_idx);
+                    features.push_back(ef);
                 }
             }
 
-            return OK({{sources, destinations}, dir});
+            return OK({{sources, destinations}, features, dir});
         }
 
         void annotate_netlist_graph(Netlist* nl, const std::vector<Gate*>& gates, const NetlistGraph& nlg, const std::vector<std::vector<u32>>& node_features)

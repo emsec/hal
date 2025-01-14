@@ -554,9 +554,92 @@ namespace hal
             }
         }
 
+        const std::vector<PinType>& Context::get_possible_pin_types()
+        {
+            auto pin_types = std::atomic_load_explicit(&m_possible_pin_types, std::memory_order_acquire);
+            if (pin_types)
+            {
+                return *pin_types;
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_possible_pin_types_mutex);
+                // Double-check after acquiring the lock
+                pin_types = std::atomic_load_explicit(&m_possible_pin_types, std::memory_order_acquire);
+                if (pin_types)
+                {
+                    return *pin_types;
+                }
+
+                std::set<PinType> type_set;
+
+                for (const auto& [_name, gt] : nl->get_gate_library()->get_gate_types())
+                {
+                    const auto& gt_pins = gt->get_pins();
+                    for (const auto& pin : gt_pins)
+                    {
+                        type_set.insert(pin->get_type());
+                    }
+                }
+
+                auto pin_types_vec = std::make_shared<std::vector<PinType>>(type_set.begin(), type_set.end());
+
+                // Sort alphabetically
+                std::sort(pin_types_vec->begin(), pin_types_vec->end(), [](const auto& a, const auto& b) { return enum_to_string(a) < enum_to_string(b); });
+
+                std::atomic_store_explicit(&m_possible_pin_types, pin_types_vec, std::memory_order_release);
+
+                return *pin_types_vec;
+            }
+        }
+
+        const std::vector<PinDirection>& Context::get_possible_pin_directions()
+        {
+            auto pin_directions = std::atomic_load_explicit(&m_possible_pin_directions, std::memory_order_acquire);
+            if (pin_directions)
+            {
+                return *pin_directions;
+            }
+            else
+            {
+                std::lock_guard<std::mutex> lock(m_possible_pin_directions_mutex);
+                // Double-check after acquiring the lock
+                pin_directions = std::atomic_load_explicit(&m_possible_pin_directions, std::memory_order_acquire);
+                if (pin_directions)
+                {
+                    return *pin_directions;
+                }
+
+                std::set<PinDirection> pin_directions_set;
+
+                for (const auto& [_name, gt] : nl->get_gate_library()->get_gate_types())
+                {
+                    const auto& gt_pins = gt->get_pins();
+                    for (const auto& pin : gt_pins)
+                    {
+                        pin_directions_set.insert(pin->get_direction());
+                    }
+                }
+
+                auto pin_directions_vec = std::make_shared<std::vector<PinDirection>>(pin_directions_set.begin(), pin_directions_set.end());
+
+                // Sort alphabetically
+                std::sort(pin_directions_vec->begin(), pin_directions_vec->end(), [](const auto& a, const auto& b) { return enum_to_string(a) < enum_to_string(b); });
+
+                std::atomic_store_explicit(&m_possible_pin_directions, pin_directions_vec, std::memory_order_release);
+
+                return *pin_directions_vec;
+            }
+        }
+
         const std::vector<Gate*>& Context::get_gates() const
         {
             return m_gates;
+        }
+
+        const std::vector<Gate*>& Context::get_sequential_gates() const
+        {
+            return m_sequential_gates;
         }
 
     }    // namespace machine_learning

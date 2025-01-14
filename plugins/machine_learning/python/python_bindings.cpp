@@ -1,4 +1,5 @@
 #include "hal_core/python_bindings/python_bindings.h"
+#include "machine_learning/features/edge_feature.h"
 #include "machine_learning/features/gate_feature.h"
 #include "machine_learning/features/gate_feature_bulk.h"
 #include "machine_learning/features/gate_feature_single.h"
@@ -286,12 +287,26 @@ Get the gates of the context.
         )");
 
         // Bindings for construct_netlist_graph
-        m.def("construct_netlist_graph",
-              &machine_learning::construct_netlist_graph,
-              py::arg("netlist"),
-              py::arg("gates"),
-              py::arg("direction"),
-              R"(
+        m.def(
+            "construct_netlist_graph",
+            [](machine_learning::Context& ctx,
+               const machine_learning::GraphDirection& dir,
+               const std::vector<const machine_learning::edge_feature::EdgeFeature*>& edge_features) -> std::optional<machine_learning::NetlistGraph> {
+                auto res = machine_learning::construct_netlist_graph(ctx, dir, edge_features);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while constructing sequential netlist graph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("direction"),
+            py::arg("edge_features"),
+            R"(
             Constructs a netlist graph from the given netlist and gates.
 
             :param hal_py.Netlist netlist: The netlist.
@@ -303,8 +318,10 @@ Get the gates of the context.
 
         m.def(
             "construct_sequential_netlist_graph",
-            [](const Netlist* nl, const std::vector<Gate*>& gates, const machine_learning::GraphDirection& dir) -> std::optional<machine_learning::NetlistGraph> {
-                auto res = machine_learning::construct_sequential_netlist_graph(nl, gates, dir);
+            [](machine_learning::Context& ctx,
+               const machine_learning::GraphDirection& dir,
+               const std::vector<const machine_learning::edge_feature::EdgeFeature*>& edge_features) -> std::optional<machine_learning::NetlistGraph> {
+                auto res = machine_learning::construct_sequential_netlist_graph(ctx, dir, edge_features);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -315,9 +332,9 @@ Get the gates of the context.
                     return std::nullopt;
                 }
             },
-            py::arg("nl"),
-            py::arg("gates"),
-            py::arg("dir"),
+            py::arg("ctx"),
+            py::arg("direction"),
+            py::arg("edge_features"),
             R"(
                 Constructs a sequential netlist graph representation. The connections are an edge list of indices representing the position of the gates in the gates vector.
 
