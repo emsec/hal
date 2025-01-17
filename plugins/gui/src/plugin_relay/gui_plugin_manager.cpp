@@ -8,6 +8,7 @@
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/utilities/log.h"
+#include "patchelf.h"
 #include <QMap>
 #include <QDir>
 #include <iostream>
@@ -16,6 +17,7 @@
 #include <QSettings>
 #include <QBrush>
 #include <QApplication>
+#include <QProcess>
 #include <QPainter>
 #include <QPushButton>
 #include <QMouseEvent>
@@ -24,9 +26,29 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QProcessEnvironment>
+
+const char* LD_LIBRARY_PATH = "LD_LIBRARY_PATH";
+const char* HAL_BASE_PATH   = "HAL_BASE_PATH";
+const char* HAL_LIB_PATH    = "lib";
+const char* HAL_PLUGIN_PATH = "hal_plugins";
 
 namespace hal {
 
+    void setLdLibraryPath() {
+        QString halBasePath = QProcessEnvironment::systemEnvironment().value(HAL_BASE_PATH);
+        QString executableDir = QCoreApplication::applicationDirPath();
+        QString halLibPath = QDir(halBasePath).absoluteFilePath(HAL_LIB_PATH);
+        QString halPluginPath = QDir(halLibPath).absoluteFilePath(HAL_PLUGIN_PATH);
+        QStringList currentLdLibraryPath =  QProcessEnvironment::systemEnvironment().value(LD_LIBRARY_PATH).split(':');
+        if (!currentLdLibraryPath.contains(halLibPath))
+            currentLdLibraryPath.append(halLibPath);
+        if (!currentLdLibraryPath.contains(halPluginPath))
+            currentLdLibraryPath.append(halPluginPath);
+        // TODO : MacOS
+        setenv(LD_LIBRARY_PATH, currentLdLibraryPath.join(':').toUtf8().data(), 1);
+        log_info("gui", "LD_LIBRARY_PATH set to '{}'", currentLdLibraryPath.join(':').toStdString());
+    }
 
     GuiPluginManager::GuiPluginManager(QWidget *parent)
         : QWidget(parent),
@@ -539,6 +561,7 @@ namespace hal {
 
     int GuiPluginTable::addExternalPlugin(const QString& path)
     {
+        setLdLibraryPath();
         QFileInfo finfo(path);
         GuiPluginEntry* gpe = new GuiPluginEntry(finfo);
         int n = mEntries.size();

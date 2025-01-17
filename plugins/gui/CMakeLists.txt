@@ -76,6 +76,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         message(STATUS "Using system's quazip from ${QUAZIP_LIBRARIES}")
     endif()
 
+    add_subdirectory(patchelf::patchelf)
+
     foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
             set(CMAKE_${j}_OUTPUT_DIRECTORY${i} ${STORE_${j}_OUTDIR${i}})

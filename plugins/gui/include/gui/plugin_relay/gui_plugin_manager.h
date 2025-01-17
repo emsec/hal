@@ -201,6 +201,8 @@ namespace hal {
         QColor mHilightTextColor;
         QColor mHilightBackgroundColor;
         QLabel* mIconLegend[4];
+
+        void setLdLibraryPath();
     Q_SIGNALS:
         void backToNetlist();
     private Q_SLOTS:
