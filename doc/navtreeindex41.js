@@ -1,6 +1,5 @@
 var NAVTREEINDEX41 =
 {
-"src_2python__bindings_2bindings_2netlist_8cpp_source.html":[7,0,2,2,0,20],
 "src_2python__bindings_2python__bindings_8cpp.html":[7,0,2,2,1],
 "src_2python__bindings_2python__bindings_8cpp.html#a034467b937d9c580d84c198167d00929":[7,0,2,2,1,0],
 "src_2python__bindings_2python__bindings_8cpp_source.html":[7,0,2,2,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX41 =
 "struct_vec___ptr__t__.html":[6,0,8],
 "struct_vec___ptr__t__.html#a2187f4258003e7ace1e78832f3b093b0":[6,0,8,0],
 "struct_vec___ptr__t__.html#a986a7360e5ffc8c07eea470e393d83f3":[6,0,8,2],
-"struct_vec___ptr__t__.html#abc4dfe50a6fa663480591ca80e4d65c0":[6,0,8,1]
+"struct_vec___ptr__t__.html#abc4dfe50a6fa663480591ca80e4d65c0":[6,0,8,1],
+"struct_vec___vec__t__.html":[6,0,9]
 };
