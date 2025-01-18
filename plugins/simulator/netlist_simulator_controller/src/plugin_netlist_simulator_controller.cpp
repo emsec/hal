@@ -148,7 +148,11 @@ namespace hal
     std::shared_ptr<NetlistSimulatorController> NetlistSimulatorControllerPlugin::simulator_controller_by_id(u32 id) const
     {
         NetlistSimulatorController* ctrl = NetlistSimulatorControllerMap::instance()->controller(id);
-        if (!ctrl) return nullptr;
+        if (!ctrl)
+        {
+            log_warning("simulation_plugin", "Simulation controller with ID={} not found in memory, will return nullptr", id);
+            return nullptr;
+        }
         qApp->processEvents();
         return std::shared_ptr<NetlistSimulatorController>(ctrl,[](void*){;});
     }
