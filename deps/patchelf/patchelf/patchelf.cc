@@ -63,6 +63,8 @@ static bool clobberOldSections = true;
 static std::vector<std::string> fileNames;
 static std::string outputFileName;
 static bool alwaysWrite = false;
+static std::string oldRPath;
+static std::vector<std::string> neededLibraries;
 #ifdef DEFAULT_PAGESIZE
 static int forcedPageSize = DEFAULT_PAGESIZE;
 #else
@@ -1645,7 +1647,7 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op,
 
     switch (op) {
         case rpPrint: {
-            printf("%s\n", rpath ? rpath : "");
+            oldRPath = std::string(rpath ? rpath : "");
             return;
         }
         case rpRemove: {
@@ -1968,6 +1970,7 @@ void ElfFile<ElfFileParamNames>::addNeeded(const std::set<std::string> & libs)
 template<ElfFileParams>
 void ElfFile<ElfFileParamNames>::printNeededLibs() const
 {
+    neededLibraries.clear();
     const auto shdrDynamic = findSectionHeader(".dynamic");
     const auto shdrDynStr = findSectionHeader(".dynstr");
     const char *strTab = (const char *)fileContents->data() + rdi(shdrDynStr.sh_offset);
@@ -1977,7 +1980,7 @@ void ElfFile<ElfFileParamNames>::printNeededLibs() const
     for (; rdi(dyn->d_tag) != DT_NULL; dyn++) {
         if (rdi(dyn->d_tag) == DT_NEEDED) {
             const char *name = strTab + rdi(dyn->d_un.d_val);
-            printf("%s\n", name);
+            neededLibraries.push_back(name);
         }
     }
 }
@@ -2569,196 +2572,33 @@ static void showHelp(const std::string & progName)
   FILENAME...\n", progName.c_str());
 }
 
-
-static int mainWrapped(int argc, char * * argv)
+std::string patchelf::get_rpath(const std::string& filename)
 {
-    if (argc <= 1) {
-        showHelp(argv[0]);
-        return 1;
-    }
-
-    if (getenv("PATCHELF_DEBUG") != nullptr)
-        debugMode = true;
-
-    int i;
-    for (i = 1; i < argc; ++i) {
-        std::string arg(argv[i]);
-        if (arg == "--set-interpreter" || arg == "--interpreter") {
-            if (++i == argc) error("missing argument");
-            newInterpreter = resolveArgument(argv[i]);
-        }
-        else if (arg == "--page-size") {
-            if (++i == argc) error("missing argument");
-            forcedPageSize = atoi(argv[i]);
-            if (forcedPageSize <= 0) error("invalid argument to --page-size");
-        }
-        else if (arg == "--print-interpreter") {
-            printInterpreter = true;
-        }
-        else if (arg == "--print-os-abi") {
-            printOsAbi = true;
-        }
-        else if (arg == "--set-os-abi") {
-            if (++i == argc) error("missing argument");
-            setOsAbi = true;
-            newOsAbi = resolveArgument(argv[i]);
-        }
-        else if (arg == "--print-soname") {
-            printSoname = true;
-        }
-        else if (arg == "--set-soname") {
-            if (++i == argc) error("missing argument");
-            setSoname = true;
-            newSoname = resolveArgument(argv[i]);
-        }
-        else if (arg == "--remove-rpath") {
-            removeRPath = true;
-        }
-        else if (arg == "--shrink-rpath") {
-            shrinkRPath = true;
-        }
-        else if (arg == "--allowed-rpath-prefixes") {
-            if (++i == argc) error("missing argument");
-            allowedRpathPrefixes = splitColonDelimitedString(argv[i]);
-        }
-        else if (arg == "--set-rpath") {
-            if (++i == argc) error("missing argument");
-            setRPath = true;
-            newRPath = resolveArgument(argv[i]);
-        }
-        else if (arg == "--add-rpath") {
-            if (++i == argc) error("missing argument");
-            addRPath = true;
-            newRPath = resolveArgument(argv[i]);
-        }
-        else if (arg == "--print-rpath") {
-            printRPath = true;
-        }
-        else if (arg == "--force-rpath") {
-            /* Generally we prefer to emit DT_RUNPATH instead of
-               DT_RPATH, as the latter is obsolete.  However, there is
-               a slight semantic difference: DT_RUNPATH is "scoped",
-               it only affects the executable or library in question,
-               not its recursive imports.  So maybe you really want to
-               force the use of DT_RPATH.  That's what this option
-               does.  Without it, DT_RPATH (if encountered) is
-               converted to DT_RUNPATH, and if neither is present, a
-               DT_RUNPATH is added.  With it, DT_RPATH isn't converted
-               to DT_RUNPATH, and if neither is present, a DT_RPATH is
-               added. */
-            forceRPath = true;
-        }
-        else if (arg == "--print-needed") {
-            printNeeded = true;
-        }
-        else if (arg == "--no-sort") {
-            noSort = true;
-        }
-        else if (arg == "--add-needed") {
-            if (++i == argc) error("missing argument");
-            neededLibsToAdd.insert(resolveArgument(argv[i]));
-        }
-        else if (arg == "--remove-needed") {
-            if (++i == argc) error("missing argument");
-            neededLibsToRemove.insert(resolveArgument(argv[i]));
-        }
-        else if (arg == "--replace-needed") {
-            if (i+2 >= argc) error("missing argument(s)");
-            neededLibsToReplace[ argv[i+1] ] = argv[i+2];
-            i += 2;
-        }
-        else if (arg == "--clear-symbol-version") {
-            if (++i == argc) error("missing argument");
-            symbolsToClearVersion.insert(resolveArgument(argv[i]));
-        }
-        else if (arg == "--print-execstack") {
-            printExecstack = true;
-        }
-        else if (arg == "--clear-execstack") {
-            clearExecstack = true;
-        }
-        else if (arg == "--set-execstack") {
-            setExecstack = true;
-        }
-        else if (arg == "--output") {
-            if (++i == argc) error("missing argument");
-            outputFileName = resolveArgument(argv[i]);
-            alwaysWrite = true;
-        }
-        else if (arg == "--debug") {
-            debugMode = true;
-        }
-        else if (arg == "--no-default-lib") {
-            noDefaultLib = true;
-        }
-        else if (arg == "--add-debug-tag") {
-            addDebugTag = true;
-        }
-        else if (arg == "--rename-dynamic-symbols") {
-            renameDynamicSymbols = true;
-            if (++i == argc) error("missing argument");
-
-            const char* fname = argv[i];
-            std::ifstream infile(fname);
-            if (!infile) error(fmt("Cannot open map file ", fname));
-
-            std::string line, from, to;
-            size_t lineCount = 1;
-            while (std::getline(infile, line))
-            {
-                std::istringstream iss(line);
-                if (!(iss >> from))
-                    break;
-                if (!(iss >> to))
-                    error(fmt(fname, ":", lineCount, ": Map file line is missing the second element"));
-                if (symbolsToRenameKeys.count(from))
-                    error(fmt(fname, ":", lineCount, ": Name '", from, "' appears twice in the map file"));
-                if (from.find('@') != std::string_view::npos || to.find('@') != std::string_view::npos)
-                    error(fmt(fname, ":", lineCount, ": Name pair contains version tag: ", from, " ", to));
-                lineCount++;
-                symbolsToRename[*symbolsToRenameKeys.insert(from).first] = to;
-            }
-        }
-        else if (arg == "--no-clobber-old-sections") {
-            clobberOldSections = false;
-        }
-        else if (arg == "--help" || arg == "-h" ) {
-            showHelp(argv[0]);
-            return 0;
-        }
-        else if (arg == "--version") {
-            printf(PACKAGE_STRING "\n");
-            return 0;
-        }
-        else {
-            fileNames.push_back(arg);
-        }
-    }
-
-    if (fileNames.empty()) error("missing filename");
-
-    if (!outputFileName.empty() && fileNames.size() != 1)
-        error("--output option only allowed with single input file");
-
-    if (setRPath && addRPath)
-        error("--set-rpath option not allowed with --add-rpath");
-
+    fileNames.push_back(filename);
+    printRPath = true;
     patchElf();
-
-    return 0;
+    return oldRPath;
 }
 
-int main(int argc, char * * argv)
+void patchelf::set_rpath(const std::string& filename, const std::string& rp)
 {
-#ifdef __OpenBSD__
-    if (pledge("stdio rpath wpath cpath", NULL) == -1)
-        error("pledge");
-#endif
+    fileNames.push_back(filename);
+    setRPath = true;
+    newRPath = rp;
+    patchElf();
+}
 
-    try {
-        return mainWrapped(argc, argv);
-    } catch (std::exception & e) {
-        fprintf(stderr, "patchelf: %s\n", e.what());
-        return 1;
-    }
+std::vector<std::string> patchelf::get_needed_libraries(const std::string& filename)
+{
+    fileNames.push_back(filename);
+    printNeeded = true;
+    patchElf();
+    return neededLibraries;
+}
+
+void patchelf::replace_needed_library(const std::string& filename, const std::string& oldLib, const std::string& newLib)
+{
+    fileNames.push_back(filename);
+    neededLibsToReplace[oldLib] = newLib;
+    patchElf();
 }

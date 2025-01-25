@@ -234,6 +234,7 @@ endif()
 # ####   patchelf
 # ###############################
 message(STATUS "using patchelf from deps")
+add_subdirectory(deps/patchelf)
 add_library(patchelf::patchelf INTERFACE IMPORTED)
 set_target_properties(patchelf::patchelf PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/patchelf"

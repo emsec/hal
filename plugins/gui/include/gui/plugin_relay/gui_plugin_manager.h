@@ -36,6 +36,7 @@
 #include <QTableView>
 #include <QItemDelegate>
 #include <QMenu>
+#include <QFileSystemWatcher>
 
 #include "gui/gui_utils/netlist.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -48,6 +49,25 @@ class QPushButton;
 namespace hal {
     class GuiExtensionInterface;
 
+    class ExternalBinaryPlugin : public QObject
+    {
+        Q_OBJECT
+        QString mPluginName;
+        QString mSourcePath;
+        QString mTargetPath;
+        enum DirectoryType { UnknownDir, LibDir, PluginDir };
+        static QString libquazipName();
+        QMultiMap<DirectoryType, QString> getLibraryRpath() const;
+        static QString halLibraryPath(DirectoryType dirType);
+    public:
+        QFileSystemWatcher* mFileWatcher;
+        ExternalBinaryPlugin(const QString& plugName, const QString& filename);
+        QString sourcePath() const { return mSourcePath; }
+        QString targetPath() const { return mTargetPath; }
+        QString pluginName() const { return mPluginName; }
+        void updateLibraryPath();
+    };
+
     class GuiPluginEntry
     {
     public:
@@ -57,7 +77,7 @@ namespace hal {
         QString mVersion;
         QString mDescription;
         QString mFilePath;
-        QString mExternalPath;
+        ExternalBinaryPlugin* mExternalBinaryPlugin;
         QDateTime mFileModified;
         QStringList mDependencies;
         FacExtensionInterface::Feature mFeature;
@@ -70,6 +90,7 @@ namespace hal {
     public:
         GuiPluginEntry(const QFileInfo& info);
         GuiPluginEntry(const QSettings* settings);
+        ~GuiPluginEntry();
         QVariant data(int icol) const;
         QString name() const { return mName; }
         void persist(QSettings* settings) const;
@@ -137,6 +158,7 @@ namespace hal {
         void handlePluginLoaded(const QString& pluginName, const QString& path);
         void handlePluginUnloaded(const QString& pluginName, const QString& path);
         void handleRefresh();
+        void handleExternalBinaryPluginChanged();
     public:
         GuiPluginTable(GuiPluginManager* parent = nullptr);
         ~GuiPluginTable();
@@ -202,7 +224,6 @@ namespace hal {
         QColor mHilightBackgroundColor;
         QLabel* mIconLegend[4];
 
-        void setLdLibraryPath();
     Q_SIGNALS:
         void backToNetlist();
     private Q_SLOTS:

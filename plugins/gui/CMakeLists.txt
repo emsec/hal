@@ -76,8 +76,6 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
         message(STATUS "Using system's quazip from ${QUAZIP_LIBRARIES}")
     endif()
 
-    add_subdirectory(patchelf::patchelf)
-
     foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
             set(CMAKE_${j}_OUTPUT_DIRECTORY${i} ${STORE_${j}_OUTDIR${i}})
@@ -116,7 +114,7 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
                            PRIVATE ${COMPILE_OPTIONS_PRIVATE}
                            INTERFACE ${COMPILE_OPTIONS_INTERFACE})
     target_compile_definitions(gui PUBLIC QT_NO_KEYWORDS)
-    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg QuaZip::QuaZip)
+    target_link_libraries(gui PUBLIC hal::core hal::netlist PRIVATE ${Python3_LIBRARIES} pybind11::embed Qt5::Widgets Qt5::Concurrent Qt5::Svg QuaZip::QuaZip patchelf)
     add_dependencies(gui update_internal_gate_library_definitions)
     get_property(GLDIR GLOBAL PROPERTY GATE_LIBS_DEFINITIONS)
     file(WRITE "${RSRCROOT}/path/gate_library_definitions.txt" "${GLDIR}")

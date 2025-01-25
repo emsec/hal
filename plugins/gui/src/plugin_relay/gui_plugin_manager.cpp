@@ -8,7 +8,7 @@
 #include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/utilities/log.h"
-#include "patchelf.h"
+#include "patchelf/patchelf.h"
 #include <QMap>
 #include <QDir>
 #include <iostream>
@@ -28,27 +28,12 @@
 #include <QFileDialog>
 #include <QProcessEnvironment>
 
-const char* LD_LIBRARY_PATH = "LD_LIBRARY_PATH";
-const char* HAL_BASE_PATH   = "HAL_BASE_PATH";
-const char* HAL_LIB_PATH    = "lib";
-const char* HAL_PLUGIN_PATH = "hal_plugins";
-
+const char* LD_LIBRARY_PATH  = "LD_LIBRARY_PATH";
+const char* HAL_BASE_PATH    = "HAL_BASE_PATH";
+const char* HAL_LIB_PATH     = "lib";
+const char* HAL_PLUGIN_PATH  = "hal_plugins";
+const char* EXTERNAL_PRAEFIX = "_external_binary_plugin_";
 namespace hal {
-
-    void setLdLibraryPath() {
-        QString halBasePath = QProcessEnvironment::systemEnvironment().value(HAL_BASE_PATH);
-        QString executableDir = QCoreApplication::applicationDirPath();
-        QString halLibPath = QDir(halBasePath).absoluteFilePath(HAL_LIB_PATH);
-        QString halPluginPath = QDir(halLibPath).absoluteFilePath(HAL_PLUGIN_PATH);
-        QStringList currentLdLibraryPath =  QProcessEnvironment::systemEnvironment().value(LD_LIBRARY_PATH).split(':');
-        if (!currentLdLibraryPath.contains(halLibPath))
-            currentLdLibraryPath.append(halLibPath);
-        if (!currentLdLibraryPath.contains(halPluginPath))
-            currentLdLibraryPath.append(halPluginPath);
-        // TODO : MacOS
-        setenv(LD_LIBRARY_PATH, currentLdLibraryPath.join(':').toUtf8().data(), 1);
-        log_info("gui", "LD_LIBRARY_PATH set to '{}'", currentLdLibraryPath.join(':').toStdString());
-    }
 
     GuiPluginManager::GuiPluginManager(QWidget *parent)
         : QWidget(parent),
@@ -166,9 +151,9 @@ namespace hal {
         if (filename.isEmpty()) return;
         int irowAdded = mGuiPluginTable->addExternalPlugin(filename);
         if (irowAdded >= 0)
-            std::cerr << "library file opened <" << filename.toStdString() << ">" << std::endl;
+            log_info("gui", "External library file loaded '{}'.", filename.toStdString());
         else
-            std::cerr << "failed to load library file <" << filename.toStdString() << ">" << std::endl;
+            log_warning("gui", "Failed to load external library file '{}'.", filename.toStdString());
     }
 
 
@@ -381,6 +366,28 @@ namespace hal {
         clearMemory();
     }
 
+    void GuiPluginTable::handleExternalBinaryPluginChanged()
+    {
+        if (mWaitForRefresh) return;
+
+        QObject* obj = sender();
+        if (!obj) return;
+        ExternalBinaryPlugin* ebp = dynamic_cast<ExternalBinaryPlugin*>(obj->parent());
+        if (!ebp) return;
+
+        mWaitForRefresh = true;
+        if (QMessageBox::information(QApplication::activeWindow(),
+                                     "Reload Plugin?", "External HAL plugin\n" + ebp->sourcePath() + "\nchanged on disk. Reload?",
+                                     QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes)
+        {
+            std::string pluginName = ebp->pluginName().toStdString();
+            plugin_manager::unload(pluginName);
+            ebp->updateLibraryPath();
+            plugin_manager::load(pluginName, ebp->targetPath().toStdString());
+        }
+        mWaitForRefresh = false;
+    }
+
     void GuiPluginTable::handleRefresh()
     {
         if (mWaitForRefresh) return;
@@ -406,6 +413,8 @@ namespace hal {
         {
             mSettings->setArrayIndex(i);
             GuiPluginEntry* gpe = new GuiPluginEntry(mSettings);
+            if (gpe->mExternalBinaryPlugin)
+                connect(gpe->mExternalBinaryPlugin->mFileWatcher, &QFileSystemWatcher::fileChanged, this, &GuiPluginTable::handleExternalBinaryPluginChanged);
             pluginEntries.insert(gpe->mName,gpe);
         }
         mSettings->endArray();
@@ -418,6 +427,7 @@ namespace hal {
             {
                 if (!info.isFile()) continue;
                 if (!plugin_manager::has_valid_file_extension(info.absoluteFilePath().toStdString())) continue;
+                if (info.fileName().startsWith(EXTERNAL_PRAEFIX)) continue; // load external binary only upon user request
 
                 QString pluginName = info.baseName();
                 GuiPluginEntry* gpe = pluginEntries.value(pluginName);
@@ -521,7 +531,7 @@ namespace hal {
                     mAvoid.append(gpe);
                 }
             }
-            else if (gpe->mExternalPath.isEmpty() || !gpe->requestLoad() )
+            else if (!gpe->mExternalBinaryPlugin || !gpe->requestLoad() )
             {
                 // plugin does no longer exist or no longer required
                 removeEntry = true;
@@ -529,7 +539,7 @@ namespace hal {
             else
             {
                 // loaded plugin as binary from user provided path
-                QFileInfo info(gpe->mExternalPath);
+                QFileInfo info(gpe->mExternalBinaryPlugin->targetPath());
                 if (info.exists() && info.isReadable())
                 {
                     mLookup.insert(gpe->mName,mEntries.size());
@@ -561,7 +571,6 @@ namespace hal {
 
     int GuiPluginTable::addExternalPlugin(const QString& path)
     {
-        setLdLibraryPath();
         QFileInfo finfo(path);
         GuiPluginEntry* gpe = new GuiPluginEntry(finfo);
         int n = mEntries.size();
@@ -569,11 +578,14 @@ namespace hal {
         mLookup.insert(gpe->mName,n);
         mEntries.append(gpe);
         endInsertRows();
-        BasePluginInterface* bpif = load(finfo.baseName(),path);
+        gpe->mName = finfo.baseName();
+        gpe->mExternalBinaryPlugin = new ExternalBinaryPlugin(gpe->mName, path);
+        gpe->mFilePath = gpe->mExternalBinaryPlugin->targetPath();
+        BasePluginInterface* bpif = load(gpe->mName,gpe->mFilePath);
         if (bpif)
         {
+            connect(gpe->mExternalBinaryPlugin->mFileWatcher, &QFileSystemWatcher::fileChanged, this, &GuiPluginTable::handleExternalBinaryPluginChanged);
             gpe->updateFromLoaded(bpif,true);
-            gpe->mExternalPath = path;
             gpe->mLoadState = GuiPluginEntry::UserLoad;
             persist();
         }
@@ -626,7 +638,20 @@ namespace hal {
             }
             gpe->mGuiExtensionState = newGuiExtensionState;
         }
-        Q_EMIT dataChanged(index(irow,0),index(irow,10));
+
+        if (gpe->mLoadState == GuiPluginEntry::NotLoaded && gpe->mExternalBinaryPlugin)
+        {
+            beginRemoveRows(QModelIndex(),irow,irow);
+            mEntries.removeAt(irow);
+            mLookup.remove(gpe->mName);
+            endRemoveRows();
+            QFile::remove(gpe->mExternalBinaryPlugin->targetPath());
+            delete gpe;
+        }
+        else
+        {
+            Q_EMIT dataChanged(index(irow,0),index(irow,10));
+        }
     }
 
     SupportedFileFormats GuiPluginTable::listFacFeature(FacExtensionInterface::Feature ft) const
@@ -832,6 +857,7 @@ namespace hal {
         if (gpe->mName == "hal_gui") return;
 
         bool success = false;
+        bool external = (gpe->mExternalBinaryPlugin != nullptr);
         if (gpe->isLoaded())
         {
             QStringList need = neededBy(gpe->mName);
@@ -839,7 +865,14 @@ namespace hal {
             {
                 success = plugin_manager::unload(gpe->mName.toStdString());
                 if (success)
+                {
+                    if (external)
+                    {
+                        persist();
+                        return;
+                    }
                     gpe->mLoadState = GuiPluginEntry::NotLoaded;
+                }
                 else
                     QMessageBox::warning(qApp->activeWindow(),"Unload failed",
                                          QString("Unload of plugin %1\nrefused by plugin_manager")
@@ -946,15 +979,126 @@ namespace hal {
 
     //------------------------------------------------------------
 
+    ExternalBinaryPlugin::ExternalBinaryPlugin(const QString &plugName, const QString &filename)
+        : QObject(nullptr), mPluginName(plugName), mSourcePath(filename)
+    {
+        mFileWatcher = new QFileSystemWatcher(this);
+        std::filesystem::path pluginDir = utils::get_library_directory() / "hal_plugins";
+        mTargetPath = QDir(QString::fromStdString(pluginDir.string())).absoluteFilePath(EXTERNAL_PRAEFIX + QFileInfo(mSourcePath).fileName());
+        updateLibraryPath();
+        mFileWatcher->addPath(mSourcePath);
+    }
+
+    QString ExternalBinaryPlugin::libquazipName()
+    {
+        QDir libDir(QString::fromStdString(utils::get_library_directory()));
+        for (QString entry : libDir.entryList(QDir::Files | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot))
+        {
+            if (entry.startsWith("libquazip")) return entry;
+        }
+        return QString();
+    }
+
+    QMultiMap<ExternalBinaryPlugin::DirectoryType, QString> ExternalBinaryPlugin::getLibraryRpath() const
+    {
+        QMultiMap<DirectoryType, QString> retval;
+        for (QString rpath : QString::fromStdString(patchelf::get_rpath(mTargetPath.toStdString())).split(":")) {
+            if (rpath.toLower().contains("hal"))
+            {
+                if (rpath.endsWith("/lib") )
+                    retval.insertMulti(LibDir, rpath);
+                else if (rpath.endsWith("/hal_plugins"))
+                    retval.insertMulti(PluginDir, rpath);
+                else
+                    retval.insertMulti(UnknownDir, rpath);
+            }
+            else
+                retval.insertMulti(UnknownDir, rpath);
+        }
+        return retval;
+    }
+
+    QString ExternalBinaryPlugin::halLibraryPath(DirectoryType dirType)
+    {
+        QString halBasePath = QProcessEnvironment::systemEnvironment().value(HAL_BASE_PATH);
+        if (halBasePath.isEmpty())
+        {
+            QString executableDir = QCoreApplication::applicationDirPath();  // bin direcory
+            halBasePath = QFileInfo(executableDir).absolutePath();
+        }
+        QMultiMap<DirectoryType, QString> retval;
+        QString halLibPath = QDir(halBasePath).absoluteFilePath(HAL_LIB_PATH);
+        if (dirType == LibDir)
+            return halLibPath;
+        if (dirType == PluginDir)
+            return QDir(halLibPath).absoluteFilePath(HAL_PLUGIN_PATH);
+        return QString();
+        // TODO : MacOS
+    }
+
+    void ExternalBinaryPlugin::updateLibraryPath()
+    {
+        bool modify = false;
+        if (QFileInfo::exists(mTargetPath)) QFile::remove(mTargetPath);
+        QFile::copy(mSourcePath, mTargetPath);
+
+        QMultiMap<DirectoryType, QString> rpathMap = getLibraryRpath();
+        for (int dirType = LibDir; dirType <= PluginDir; dirType++)
+        {
+            QString halPath = halLibraryPath((DirectoryType)dirType);
+            auto it = rpathMap.find((DirectoryType)dirType);
+            if (it == rpathMap.end())
+            {
+                rpathMap.insert((DirectoryType)dirType, halPath);
+                modify = true;
+            }
+            else if (it.value() != halPath)
+            {
+                *it = halPath;
+                modify = true;
+            }
+            // else   ... nothing to do
+        }
+        if (modify)
+        {
+            std::string rpathUpdate = rpathMap.values().join(':').toStdString();
+            patchelf::set_rpath(mTargetPath.toStdString(), rpathUpdate);
+            log_info("gui", "Library RPATH updated to '{}'.", rpathUpdate);
+        }
+        else
+            log_info("gui", "No library RPATH update necessary.");
+
+        std::string libquazip = libquazipName().toStdString();
+        if (!libquazip.empty())
+        {
+            for (const std::string nlib : patchelf::get_needed_libraries(mTargetPath.toStdString()))
+            {
+                if (nlib.rfind("libquazip",0) == 0 && nlib != libquazip) // startsWith libquazip
+                {
+                    patchelf::replace_needed_library(mTargetPath.toStdString(), nlib, libquazip);
+                    log_info("gui", "Quazip library '{}' replaced", nlib);
+                }
+            }
+        }
+    }
+
+    //------------------------------------------------------------
+
     GuiPluginEntry::GuiPluginEntry(const QFileInfo& info)
         : mLoadState(NotAPlugin), mName(info.baseName()),
           mFilePath(info.absoluteFilePath()),
+          mExternalBinaryPlugin(nullptr),
           mFileModified(info.lastModified()),
           mFeature(FacExtensionInterface::FacUnknown),
           mUserInterface(false),
           mGuiExtensionState(Unknown),
           mFileFound(true)
     {;}
+
+    GuiPluginEntry::~GuiPluginEntry()
+    {
+        if (mExternalBinaryPlugin) mExternalBinaryPlugin->deleteLater();
+    }
 
     QVariant GuiPluginEntry::data(int icol) const
     {
@@ -982,7 +1126,7 @@ namespace hal {
         case 7: return mGuiExtensionState;
         case 8: return mCliOptions;
         case 9: if (!isLoaded()) return "-";
-                else if (mExternalPath.isEmpty()) return "LOADED";
+                else if (!mExternalBinaryPlugin) return "LOADED";
                 else return "EXTERN";
         case 10: return (int) mLoadState;
         }
@@ -1021,11 +1165,11 @@ namespace hal {
         settings->setValue("user_interface", mUserInterface);
         settings->setValue("gui_extension_state", (int) mGuiExtensionState);
         settings->setValue("cli_options", mCliOptions);
-        settings->setValue("ext_path", mExternalPath);
+        settings->setValue("ext_path", mExternalBinaryPlugin ? mExternalBinaryPlugin->sourcePath() : QString());
     }
 
     GuiPluginEntry::GuiPluginEntry(const QSettings *settings)
-        : mFileFound(false)
+        : mExternalBinaryPlugin(nullptr), mFileFound(false)
     {
         mLoadState    = (LoadState) settings->value("state").toInt();
         mName               = settings->value("name").toString();
@@ -1038,8 +1182,14 @@ namespace hal {
         mUserInterface      = settings->value("user_interface").toBool();
         mGuiExtensionState = (GuiExtensionState) settings->value("gui_extension_state").toInt();
         mCliOptions         = settings->value("cli_options").toString();
-        mExternalPath       = settings->value("ext_path").toString();
-        mFilePath = QString::fromStdString(plugin_manager::get_plugin_path(mName.toStdString()).string());
+        QString extPath     = settings->value("ext_path").toString();
+        if (extPath.isEmpty())
+            mFilePath = QString::fromStdString(plugin_manager::get_plugin_path(mName.toStdString()).string());
+        else
+        {
+            mExternalBinaryPlugin = new ExternalBinaryPlugin(mName,extPath);
+            mFilePath = mExternalBinaryPlugin->targetPath();
+        }
     }
 
     void GuiPluginEntry::updateFromLoaded(const BasePluginInterface *bpif, bool isUser, const QDateTime& modified)

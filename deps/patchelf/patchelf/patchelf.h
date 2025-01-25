@@ -8,6 +8,13 @@
 
 #include "elf.h"
 
+namespace patchelf {
+    std::string get_rpath(const std::string& filename);
+    void set_rpath(const std::string& filename, const std::string& rp);
+    std::vector<std::string> get_needed_libraries(const std::string& filename);
+    void replace_needed_library(const std::string& filename, const std::string& oldLib, const std::string& newLib);
+}
+
 using FileContents = std::shared_ptr<std::vector<unsigned char>>;
 
 #define ElfFileParams class Elf_Ehdr, class Elf_Phdr, class Elf_Shdr, class Elf_Addr, class Elf_Off, class Elf_Dyn, class Elf_Sym, class Elf_Versym, class Elf_Verdef, class Elf_Verdaux, class Elf_Verneed, class Elf_Vernaux, class Elf_Rel, class Elf_Rela, unsigned ElfClass
