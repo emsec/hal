@@ -374,7 +374,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2netlist__modifica
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="comment">// get pin that was created automatically when connecting the net to a gate inside the module</span></div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> pin = m-&gt;get_pin_by_net(master_net); pin != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            {</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                pin-&gt;set_name(pin_name);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                m-&gt;set_pin_name(pin, pin_name, <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                pin-&gt;set_type(pin_type);</div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                <span class="comment">// remove pin from current pin group</span></div>
@@ -648,7 +648,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2netlist__modifica
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_8b970151d598b4fae8bb0815b2681fca.html">decorators</a></li><li class="navelem"><a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp.html">netlist_modification_decorator.cpp</a></li>
-    <li class="footer">Generated on Tue Jan 21 2025 21:50:23 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Feb 14 2025 14:22:43 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
