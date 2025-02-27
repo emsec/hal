@@ -158,8 +158,8 @@ namespace hal
         {
             return;
         }
-        mGuiPluginTable->addExternalPlugin(filename);
-        if (plugin_manager::load(QFileInfo(filename).baseName().toStdString(), filename.toStdString()))
+        int irowAdded = mGuiPluginTable->addExternalPlugin(filename);
+        if (irowAdded >= 0)
         {
             std::cerr << "library file opened <" << filename.toStdString() << ">" << std::endl;
         }
@@ -577,7 +577,7 @@ namespace hal
         persist();
     }
 
-    void GuiPluginTable::addExternalPlugin(const QString& path)
+    int GuiPluginTable::addExternalPlugin(const QString& path)
     {
         QFileInfo finfo(path);
         GuiPluginEntry* gpe = new GuiPluginEntry(finfo);
@@ -601,7 +601,9 @@ namespace hal
             mLookup.remove(gpe->mName);
             endRemoveRows();
             delete gpe;
+            n = -1;    // return value : no row was inserted
         }
+        return n;
     }
 
     void GuiPluginTable::handlePluginLoaded(const QString& pluginName, const QString&)

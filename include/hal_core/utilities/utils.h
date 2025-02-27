@@ -32,6 +32,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 
+#include <algorithm>
 #include <functional>
 #include <set>
 #include <sstream>
