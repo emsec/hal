@@ -237,12 +237,11 @@ namespace hal
 
                 // First, create a Bitwuzla options instance.
                 bitwuzla::Options options;
+                bitwuzla::TermManager tm;
                 // We will parse example file `smt2/quickstart.smt2`.
                 // Create parser instance.
                 // We expect no error to occur.
-                const char* smt2_char_string = input.c_str();
 
-                auto in_stream = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
                 std::stringbuf result_string;
                 std::ostream output_stream(&result_string);
 
@@ -256,16 +255,16 @@ namespace hal
                 // std::filesystem::path tmp_path = utils::get_unique_temp_directory().get();
                 // std::string output_file        = std::string(tmp_path) + "/out.smt2";
 
-                bitwuzla::parser::Parser parser(options, "VIRTUAL_FILE", in_stream, "smt2", &output_stream);
+                bitwuzla::parser::Parser parser(tm, options, "smt2", &output_stream);
                 // Now parse the input file.
-                std::string err_msg = parser.parse(false);
-
-                if (!err_msg.empty())
+                try
                 {
-                    return ERR("failed to parse input file: " + err_msg);
+                    parser.parse(input, false, false);
                 }
-
-                fclose(in_stream);
+                catch (bitwuzla::Exception& e)
+                {
+                    return ERR("failed to parse input file: " + e.msg());
+                }
 
                 std::string output(result_string.str());
                 // std::cout << "output" << std::endl;
