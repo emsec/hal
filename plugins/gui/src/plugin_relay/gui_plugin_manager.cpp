@@ -500,6 +500,55 @@ namespace hal {
             }
         }
 
+        // deal with external binary plugnis
+        auto it = pluginEntries.begin();
+        while (it != pluginEntries.end())
+        {
+            GuiPluginEntry* gpe = it.value();
+            bool removeEntry = false;
+            if (gpe->mExternalBinaryPlugin)
+            {
+                if (!gpe->requestLoad())
+                {
+                    removeEntry = true;
+                }
+                else
+                {
+                    // loaded plugin as binary from user provided path
+                    QFileInfo info(gpe->mExternalBinaryPlugin->targetPath());
+                    if (info.exists() && info.isReadable())
+                    {
+                        mLookup.insert(gpe->mName,mEntries.size());
+                        mEntries.append(gpe);
+                        BasePluginInterface* bpif = load(gpe->mName, info.absoluteFilePath());
+                        if (bpif)
+                        {
+                            connect(gpe->mExternalBinaryPlugin->mFileWatcher, &QFileSystemWatcher::fileChanged, this, &GuiPluginTable::handleExternalBinaryPluginChanged);
+                            gpe->updateFromLoaded(bpif, true, info.lastModified());
+                            gpe->mLoadState = GuiPluginEntry::UserLoad;
+                            log_info("gui", "GuiPluginManager: '{}' loaded external plugin upon user request.", gpe->mName.toStdString());
+                        }
+                        else
+                        {
+                            log_warning("gui", "GuiPluginManager: loading of requested plugin '{}' failed.", gpe->mName.toStdString());
+                            removeEntry = true;
+                        }
+
+                    }
+                    else
+                    {
+                        removeEntry = true;
+                    }
+                }
+            }
+            if (removeEntry)
+                it = pluginEntries.erase(it);
+            else
+                ++it;
+
+        }
+
+
         // update entry if plugin loaded in meantime as dependency
         for (std::string loadedPluginName:  plugin_manager::get_plugin_names())
         {
@@ -514,7 +563,9 @@ namespace hal {
         mEntries.clear();
         mAvoid.clear();
         mLookup.clear();
-        auto it = pluginEntries.begin();
+
+        // apend entry to list only if plugin file exists
+        it = pluginEntries.begin();
         while (it != pluginEntries.end())
         {
             bool removeEntry = false;
@@ -531,36 +582,18 @@ namespace hal {
                     mAvoid.append(gpe);
                 }
             }
-            else if (!gpe->mExternalBinaryPlugin || !gpe->requestLoad() )
+            else if (gpe->mExternalBinaryPlugin)
             {
-                // plugin does no longer exist or no longer required
-                removeEntry = true;
+                mLookup.insert(gpe->mName,mEntries.size());
+                mEntries.append(gpe);
             }
             else
             {
-                // loaded plugin as binary from user provided path
-                QFileInfo info(gpe->mExternalBinaryPlugin->targetPath());
-                if (info.exists() && info.isReadable())
-                {
-                    mLookup.insert(gpe->mName,mEntries.size());
-                    mEntries.append(gpe);
-                    BasePluginInterface* bpif = load(gpe->mName, info.absoluteFilePath());
-                    if (!bpif)
-                    {
-                        log_warning("gui", "GuiPluginManager: loading of requested plugin '{}' failed.", gpe->mName.toStdString());
-                        removeEntry = true;
-                    }
-                    else
-                    {
-                        gpe->updateFromLoaded(bpif, true, info.lastModified());
-                        log_info("gui", "GuiPluginManager: '{}' loaded external plugin upon user request.", gpe->mName.toStdString());
-                    }
-                }
-                else
-                {
-                    removeEntry = true;
-                }
+                // plugin does no longer exist
+                removeEntry = true;
             }
+            // no else here, external path handled above
+
             if (removeEntry)
                 it = pluginEntries.erase(it);
             else
