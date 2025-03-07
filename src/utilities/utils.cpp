@@ -8,6 +8,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <iomanip>
 
 #ifdef _WIN32
 #include <tchar.h>
