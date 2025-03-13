@@ -376,14 +376,24 @@ namespace hal {
         if (!ebp) return;
 
         mWaitForRefresh = true;
-        if (QMessageBox::information(QApplication::activeWindow(),
-                                     "Reload Plugin?", "External HAL plugin\n" + ebp->sourcePath() + "\nchanged on disk. Reload?",
-                                     QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes)
+        if (QFileInfo(ebp->sourcePath()).isReadable())
         {
-            std::string pluginName = ebp->pluginName().toStdString();
-            plugin_manager::unload(pluginName);
-            ebp->updateLibraryPath();
-            plugin_manager::load(pluginName, ebp->targetPath().toStdString());
+            if (QMessageBox::information(QApplication::activeWindow(),
+                                         "Reload Plugin?", "External HAL plugin\n" + ebp->sourcePath() + "\nchanged on disk. Reload?",
+                                         QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes)
+            {
+                std::string pluginName = ebp->pluginName().toStdString();
+                plugin_manager::unload(pluginName);
+                ebp->updateLibraryPath();
+                plugin_manager::load(pluginName, ebp->targetPath().toStdString());
+            }
+        }
+        else
+        {
+            QMessageBox::information(QApplication::activeWindow(),
+                                     "Unload Plugin", "External HAL plugin\n" + ebp->sourcePath() + "\nremoved from disk.\nPlugin will be unloaded.",
+                                     QMessageBox::Ok);
+            changeState(ebp->pluginName(),GuiPluginEntry::NotLoaded);
         }
         mWaitForRefresh = false;
     }
@@ -408,13 +418,12 @@ namespace hal {
 
         std::set<std::string> loadedPlugins = plugin_manager::get_plugin_names();
 
+        // fill pluginEntries container with elements from settings array
         int nentry = mSettings->beginReadArray("plugins");
         for (int i=0; i<nentry; i++)
         {
             mSettings->setArrayIndex(i);
             GuiPluginEntry* gpe = new GuiPluginEntry(mSettings);
-            if (gpe->mExternalBinaryPlugin)
-                connect(gpe->mExternalBinaryPlugin->mFileWatcher, &QFileSystemWatcher::fileChanged, this, &GuiPluginTable::handleExternalBinaryPluginChanged);
             pluginEntries.insert(gpe->mName,gpe);
         }
         mSettings->endArray();
