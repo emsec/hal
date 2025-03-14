@@ -24,7 +24,7 @@ jobs:
 
 
       - name: Cache pip macOS
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
@@ -34,7 +34,7 @@ jobs:
 
       - name: Cache Homebrew Downloads
         if: startsWith(runner.os, 'macOS')
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/Library/Caches/Homebrew
           #        key: ${{ runner.OS }}-build-downloads-${{ hashFiles('**/package-lock.json') }}
@@ -45,7 +45,7 @@ jobs:
 
 #      - name: Cache Homebrew
 #        if: matrix.os == 'macOS-latest'
-#        uses: actions/cache@v1
+#        uses: actions/cache@v4
 #        with:
 #          path: /usr/local/Homebrew
 #          #        key: ${{ runner.OS }}-build-localbrew-${{ hashFiles('**/package-lock.json') }}
@@ -62,7 +62,7 @@ jobs:
           message("::set-output name=timestamp::${current_date}")
 
       - name: ccache cache files
-        uses: actions/cache@v1.1.0
+        uses: actions/cache@v4
         with:
           path: ${{runner.workspace}}/.ccache
           key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
