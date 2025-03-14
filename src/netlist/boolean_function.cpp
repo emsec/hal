@@ -11,6 +11,7 @@
 #include <boost/spirit/home/x3.hpp>
 #include <chrono>
 #include <map>
+#include <iomanip>
 
 namespace hal
 {
