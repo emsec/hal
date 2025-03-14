@@ -1,6 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"logger__widget_8cpp_source.html":[7,0,1,3,2,28,2],
 "logger__widget_8h.html":[7,0,1,3,0,0,30,3],
 "logger__widget_8h_source.html":[7,0,1,3,0,0,30,3],
 "lut__component_8cpp.html":[7,0,2,0,3,3,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX28 =
 "namespacehal.html#a92e0cb3a8c98c906d812269fa8f366e2":[5,0,2,592],
 "namespacehal.html#a974188318f6c3613e6fa1993cea21a1e":[5,0,2,507],
 "namespacehal.html#a9b94e3ef8bcc389805078723c41a205a":[5,0,2,605],
-"namespacehal.html#a9ef1dd3fd45f140c6fff468abd96c303":[5,0,2,578]
+"namespacehal.html#a9ef1dd3fd45f140c6fff468abd96c303":[5,0,2,578],
+"namespacehal.html#aa0beecf81a444ab07294784926724675":[5,0,2,574]
 };
