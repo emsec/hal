@@ -1058,7 +1058,7 @@ namespace hal
             // delete the created directory and the contained files
             std::filesystem::remove_all(base_path);
 
-            return OK(subgraph.size());
+            return OK(static_cast<unsigned int>(subgraph.size()));
         }
 
         Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
