@@ -163,6 +163,36 @@ namespace hal
             :rtype: bool or None
         )");
 
+        m.def(
+            "simplify",
+            [](const BooleanFunction& bf) -> std::optional<BooleanFunction> {
+                auto expr = z3_utils::from_bf(bf);
+                if (expr.is_error())
+                {
+                    log_error("python_context", "{}", expr.get_error().get());
+                    return std::nullopt;
+                }
+
+                auto res = z3_utils::simplify(expr.get());
+                if (res.is_error())
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                auto bf = z3_utils::to_bf(res.get());
+                if (bf.is_ok())
+                {
+                    return bf.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+        )
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
