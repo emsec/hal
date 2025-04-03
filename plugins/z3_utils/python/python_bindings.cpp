@@ -166,24 +166,20 @@ namespace hal
         m.def(
             "simplify",
             [](const BooleanFunction& bf) -> std::optional<BooleanFunction> {
-                auto expr = z3_utils::from_bf(bf);
-                if (expr.is_error())
-                {
-                    log_error("python_context", "{}", expr.get_error().get());
-                    return std::nullopt;
-                }
+                auto ctx = z3::context();
+                auto expr = z3_utils::from_bf(bf, ctx);
 
-                auto res = z3_utils::simplify(expr.get());
+                auto res = z3_utils::simplify_local(expr);
                 if (res.is_error())
                 {
                     log_error("python_context", "{}", res.get_error().get());
                     return std::nullopt;
                 }
 
-                auto bf = z3_utils::to_bf(res.get());
-                if (bf.is_ok())
+                auto bf_s = z3_utils::to_bf(res.get());
+                if (bf_s.is_ok())
                 {
-                    return bf.get();
+                    return bf_s.get();
                 }
                 else
                 {
@@ -191,7 +187,14 @@ namespace hal
                     return std::nullopt;
                 }
             },
-        )
+            py::arg("bf"),
+            R"(
+            Simplifies a Boolean function using the Z3 solver.
+            This is done by using the Z3 solver to simplify the function and then converting it back to a Boolean function.
+            :param hal_py.BooleanFunction bf: The Boolean function to simplify.
+            :returns: The simplified Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();
