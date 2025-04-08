@@ -406,7 +406,7 @@ namespace hal
 
                 const u32 num_threads = std::min(config.m_max_thread_count, std::thread::hardware_concurrency() - 1);
 
-                log_info("module_identification", "running with {} threads and {} multithreading priority", num_threads, config.m_multithreading_priority);
+                log_info("module_identification", "running with {} threads and {} multithreading priority", num_threads, fmt::underlying(config.m_multithreading_priority));
 
                 auto stats = Statistics();
 
