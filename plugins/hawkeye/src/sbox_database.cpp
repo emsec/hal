@@ -304,7 +304,7 @@ namespace hal
                 return ERR("S-box '" + name + "' has bit-size greater 8, but only S-boxes of up to 8 bits are supported");
             }
 
-            for (u8 alpha = 0; alpha < sbox.size(); alpha++)
+            for (size_t alpha = 0; alpha < sbox.size(); alpha++)
             {
                 std::vector<u8> sbox_alpha;
                 for (u32 i = 0; i < sbox.size(); i++)
