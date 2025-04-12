@@ -445,7 +445,7 @@ namespace hal
         auto dsts = net->m_destinations_raw;
         for (auto dst : dsts)
         {
-            if (!this->net_remove_destination(net, dst))
+            if (!this->net_remove_destination_internal(net, dst))
             {
                 return false;
             }
@@ -454,7 +454,7 @@ namespace hal
         auto srcs = net->m_sources_raw;
         for (auto src : srcs)
         {
-            if (!this->net_remove_source(net, src))
+            if (!this->net_remove_source_internal(net, src))
             {
                 return false;
             }
@@ -540,17 +540,15 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            if (!gate->get_module()->check_net(net, true))
             {
-                log_error("net", "{}", res.get_error().get());
                 return nullptr;
             }
 
             for (Endpoint* ep : net->get_destinations())
             {
-                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                if (!ep->get_gate()->get_module()->check_net(net, true))
                 {
-                    log_error("net", "{}", res.get_error().get());
                     return nullptr;
                 }
             }
@@ -561,7 +559,7 @@ namespace hal
         return new_endpoint_raw;
     }
 
-    bool NetlistInternalManager::net_remove_source(Net* net, Endpoint* ep)
+    bool NetlistInternalManager::net_remove_source_internal(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
 
@@ -570,7 +568,6 @@ namespace hal
             return false;
         }
 
-        bool removed = false;
         for (u32 i = 0; i < net->m_sources.size(); ++i)
         {
             if (net->m_sources_raw[i] == ep)
@@ -582,12 +579,18 @@ namespace hal
                 net->m_sources_raw[i] = net->m_sources_raw.back();
                 net->m_sources_raw.pop_back();
                 m_event_handler->notify(NetEvent::event::src_removed, net, gate->get_id());
-                removed = true;
-                break;
+                return true;
             }
         }
 
-        if (!removed)
+        return false;
+    }
+
+    bool NetlistInternalManager::net_remove_source(Net* net, Endpoint* ep)
+    {
+        auto gate = ep->get_gate();
+
+        if (!net_remove_source_internal(net, ep))
         {
             log_warning("net",
                         "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
@@ -603,17 +606,15 @@ namespace hal
             // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                if (!gate->get_module()->check_net(net, true))
                 {
-                    log_error("net", "{}", res.get_error().get());
                     return false;
                 }
 
                 for (Endpoint* dst : net->get_destinations())
                 {
-                    if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    if (!dst->get_gate()->get_module()->check_net(net, true))
                     {
-                        log_error("net", "{}", res.get_error().get());
                         return false;
                     }
                 }
@@ -678,17 +679,15 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            if (!gate->get_module()->check_net(net, true))
             {
-                log_error("net", "{}", res.get_error().get());
                 return nullptr;
             }
 
             for (Endpoint* ep : net->get_sources())
             {
-                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                if (!ep->get_gate()->get_module()->check_net(net, true))
                 {
-                    log_error("net", "{}", res.get_error().get());
                     return nullptr;
                 }
             }
@@ -699,15 +698,15 @@ namespace hal
         return new_endpoint_raw;
     }
 
-    bool NetlistInternalManager::net_remove_destination(Net* net, Endpoint* ep)
+    bool NetlistInternalManager::net_remove_destination_internal(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
+
         if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
         {
             return false;
         }
 
-        bool removed = false;
         for (u32 i = 0; i < net->m_destinations.size(); ++i)
         {
             if (net->m_destinations_raw[i] == ep)
@@ -719,12 +718,18 @@ namespace hal
                 net->m_destinations_raw[i] = net->m_destinations_raw.back();
                 net->m_destinations_raw.pop_back();
                 m_event_handler->notify(NetEvent::event::dst_removed, net, gate->get_id());
-                removed = true;
-                break;
+                return true;
             }
         }
 
-        if (!removed)
+        return false;
+    }
+
+    bool NetlistInternalManager::net_remove_destination(Net* net, Endpoint* ep)
+    {
+        auto gate = ep->get_gate();
+
+        if (!net_remove_destination_internal(net,ep))
         {
             log_warning("net",
                         "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
@@ -739,17 +744,15 @@ namespace hal
         {    // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                if (!gate->get_module()->check_net(net, true))
                 {
-                    log_error("net", "{}", res.get_error().get());
                     return false;
                 }
 
                 for (Endpoint* src : net->get_sources())
                 {
-                    if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    if (!src->get_gate()->get_module()->check_net(net, true))
                     {
-                        log_error("net", "{}", res.get_error().get());
                         return false;
                     }
                 }
@@ -977,9 +980,8 @@ namespace hal
             {
                 for (Net* net : nets)
                 {
-                    if (const auto res = affected_module->check_net(net, true); res.is_error())
+                    if (!affected_module->check_net(net, true))
                     {
-                        log_error("module", "{}", res.get_error().get());
                         return false;
                     }
                 }
@@ -997,11 +999,7 @@ namespace hal
 
     bool NetlistInternalManager::module_check_net(Module* module, Net* net, bool recursive)
     {
-        if (const auto res = module->check_net(net, recursive); res.is_error())
-        {
-            return false;
-        }
-        return true;
+        return module->check_net(net, recursive);
     }
 
     //######################################################################

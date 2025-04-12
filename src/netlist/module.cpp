@@ -204,10 +204,7 @@ namespace hal
         {
             for (Net* net : get_nets(nullptr, true))
             {
-                if (auto res = m_parent->check_net(net, true); res.is_error())
-                {
-                    log_error("module", "{}", res.get_error().get());
-                }
+                m_parent->check_net(net, true);
             }
         }
 
@@ -222,10 +219,7 @@ namespace hal
         {
             for (Net* net : get_nets(nullptr, true))
             {
-                if (auto res = m_parent->check_net(net, true); res.is_error())
-                {
-                    log_error("module", "{}", res.get_error().get());
-                }
+                m_parent->check_net(net, true);
             }
         }
 
@@ -241,16 +235,19 @@ namespace hal
         {
             return false;
         }
-        for (auto sm : m_submodules)
+
+        Module* parent_module = module->m_parent;
+        while (parent_module)
         {
-            if (sm == module)
+            if (parent_module == this)
             {
                 return true;
             }
-            else if (recursive && sm->is_parent_module_of(module, true))
+            if (!recursive)
             {
-                return true;
+                break;
             }
+            parent_module = parent_module->m_parent;
         }
 
         return false;
@@ -630,7 +627,31 @@ namespace hal
         return res;
     }
 
-    Result<std::monostate> Module::check_net(Net* net, bool recursive)
+    bool Module::delete_net(Net* net, bool recursive)
+    {
+        if (!m_internal_manager->m_net_checks_enabled)
+        {
+            return true; // do nothing, no error either to reproduce check_net() behavior
+        }
+
+        m_internal_nets.erase(net);
+        m_nets.erase(net);
+        m_input_nets.erase(net);
+        m_output_nets.erase(net);
+
+        if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
+        {
+            if (!m_parent->delete_net(net, recursive))
+            {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    bool Module::check_net(Net* net, bool recursive)
     {
         NetConnectivity con = check_net_endpoints(net);
         if (con.has_internal_source && con.has_internal_destination)
@@ -673,7 +694,8 @@ namespace hal
             {
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::inout))
                 {
-                    return ERR("could not assign inout pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
+                    log_warning("module", "could not assign inout pin to net ID {}: failed to create pin", net->get_id() );
+                    return false;
                 }
             }
         }
@@ -695,7 +717,8 @@ namespace hal
                 m_input_nets.insert(net);
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::input))
                 {
-                    return ERR("could not assign input pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
+                    log_warning("module", "could not assign input pin to net ID {}: failed to create pin", net->get_id() );
+                    return false;
                 }
             }
         }
@@ -717,7 +740,8 @@ namespace hal
                 m_output_nets.insert(net);
                 if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::output))
                 {
-                    return ERR("could not assign output pin to net ID " + std::to_string(net->get_id()) + ": failed to create pin");
+                    log_warning("module", "could not assign output pin to net ID {}: failed to create pin", net->get_id() );
+                    return false;
                 }
             }
         }
@@ -736,20 +760,21 @@ namespace hal
                 }
                 if (!remove_pin_net(net))
                 {
-                    return ERR("Remove pin net failed");
+                    log_warning("module", "Remove pin net failed");
+                    return false;
                 }
             }
         }
 
         if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
         {
-            if (auto res = m_parent->check_net(net, true); res.is_error())
+            if (!m_parent->check_net(net, true))
             {
-                return res;
+                return false;
             }
         }
 
-        return OK({});
+        return true;
     }
 
     /*

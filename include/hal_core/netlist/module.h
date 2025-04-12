@@ -747,7 +747,8 @@ namespace hal
         EventHandler* m_event_handler;
 
         NetConnectivity check_net_endpoints(const Net* net) const;
-        Result<std::monostate> check_net(Net* net, bool recursive = false);
+        bool check_net(Net* net, bool recursive = false);
+        bool delete_net(Net* net, bool recursive = false);
         bool assign_pin_net(const u32 pin_id, Net* net, PinDirection direction);
         bool remove_pin_net(Net* net);
         Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type, bool force_name);
