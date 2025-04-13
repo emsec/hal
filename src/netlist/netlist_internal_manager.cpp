@@ -442,9 +442,12 @@ namespace hal
             return false;
         }
 
+        std::unordered_set<Gate*> gates_to_check;
+
         auto dsts = net->m_destinations_raw;
         for (auto dst : dsts)
         {
+            gates_to_check.insert(dst->get_gate());
             if (!this->net_remove_destination_internal(net, dst))
             {
                 return false;
@@ -454,9 +457,20 @@ namespace hal
         auto srcs = net->m_sources_raw;
         for (auto src : srcs)
         {
+            gates_to_check.insert(src->get_gate());
             if (!this->net_remove_source_internal(net, src))
             {
                 return false;
+            }
+        }
+
+        for (const Gate* g : gates_to_check)
+        {
+            Module* m = g->get_module();
+            while (m)
+            {
+                m->delete_net(net);
+                m = m->get_parent_module();
             }
         }
 

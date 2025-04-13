@@ -627,7 +627,7 @@ namespace hal
         return res;
     }
 
-    bool Module::delete_net(Net* net, bool recursive)
+    bool Module::delete_net(Net* net)
     {
         if (!m_internal_manager->m_net_checks_enabled)
         {
@@ -639,16 +639,16 @@ namespace hal
         m_input_nets.erase(net);
         m_output_nets.erase(net);
 
-        if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
+        if (auto pin = get_pin_by_net(net); pin != nullptr)
         {
-            if (!m_parent->delete_net(net, recursive))
+            if (!remove_pin_net(net))
             {
+                log_warning("module", "Cannot delete pin ID {} from net ID {}", pin->get_id(), net->get_id());
                 return false;
             }
         }
 
         return true;
-
     }
 
     bool Module::check_net(Net* net, bool recursive)

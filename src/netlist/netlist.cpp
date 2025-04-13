@@ -7,7 +7,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
 #include "hal_core/utilities/log.h"
-#include <valgrind/callgrind.h>
+//#include <valgrind/callgrind.h>
 
 namespace hal
 {
@@ -343,11 +343,11 @@ namespace hal
 
     bool Netlist::delete_net(Net* n)
     {
-        CALLGRIND_START_INSTRUMENTATION;
-        CALLGRIND_TOGGLE_COLLECT;
+    //    CALLGRIND_START_INSTRUMENTATION;
+    //    CALLGRIND_TOGGLE_COLLECT;
         return m_manager->delete_net(n);
-        CALLGRIND_TOGGLE_COLLECT;
-        CALLGRIND_STOP_INSTRUMENTATION;
+    //    CALLGRIND_TOGGLE_COLLECT;
+    //    CALLGRIND_STOP_INSTRUMENTATION;
     }
 
     bool Netlist::is_net_in_netlist(const Net* n) const
