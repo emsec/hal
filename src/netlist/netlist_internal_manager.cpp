@@ -604,6 +604,11 @@ namespace hal
     {
         auto gate = ep->get_gate();
 
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_source(ep))
+        {
+            return false;
+        }
+
         if (!net_remove_source_internal(net, ep))
         {
             log_warning("net",
@@ -614,6 +619,7 @@ namespace hal
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
+            return false;
         }
         else
         {
@@ -743,6 +749,11 @@ namespace hal
     {
         auto gate = ep->get_gate();
 
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
+        {
+            return false;
+        }
+
         if (!net_remove_destination_internal(net,ep))
         {
             log_warning("net",
@@ -753,6 +764,7 @@ namespace hal
                         net->get_name(),
                         net->get_id(),
                         m_netlist->m_netlist_id);
+            return false;
         }
         else
         {    // update internal nets and port nets
