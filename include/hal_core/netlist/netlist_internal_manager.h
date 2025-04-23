@@ -76,9 +76,10 @@ namespace hal
         Endpoint* net_add_source(Net* net, Gate* gate, GatePin* pin);
         Endpoint* net_add_destination(Net* net, Gate* gate, GatePin* pin);
         bool net_remove_source(Net* net, Endpoint* ep);
-        bool net_remove_source_internal(Net* net, Endpoint* ep);
         bool net_remove_destination(Net* net, Endpoint* ep);
-        bool net_remove_destination_internal(Net* net, Endpoint* ep);
+        bool remove_source_by_index(Net* net, int inx);
+        bool remove_destination_by_index(Net* net, int inx);
+
 
         // module functions
         Module* create_module(u32 id, Module* parent, const std::string& name);

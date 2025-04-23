@@ -243,6 +243,15 @@ namespace hal
         return std::find(m_sources_raw.begin(), m_sources_raw.end(), ep) != m_sources_raw.end();
     }
 
+    int Net::get_source_index(const Endpoint* ep) const
+    {
+        for (int inx = 0; inx < m_sources_raw.size(); inx++)
+        {
+            if (m_sources_raw.at(inx) == ep) return inx;
+        }
+        return -1;
+    }
+
     u32 Net::get_num_of_sources(const std::function<bool(Endpoint* ep)>& filter) const
     {
         if (!filter)
@@ -403,6 +412,15 @@ namespace hal
         }
 
         return std::find(m_destinations_raw.begin(), m_destinations_raw.end(), ep) != m_destinations_raw.end();
+    }
+
+    int Net::get_destination_index(const Endpoint* ep) const
+    {
+        for (int inx = 0; inx < m_destinations_raw.size(); inx++)
+        {
+            if (m_destinations_raw.at(inx) == ep) return inx;
+        }
+        return -1;
     }
 
     u32 Net::get_num_of_destinations(const std::function<bool(Endpoint* ep)>& filter) const

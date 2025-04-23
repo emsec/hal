@@ -209,6 +209,13 @@ namespace hal
         bool is_a_source(const Endpoint* ep) const;
 
         /**
+         * Returns the position of the source endpoint in vector
+         * @param[in] ep - The endpoint.
+         * @returns the position index or -1 if not found in vector
+         */
+        int get_source_index(const Endpoint* ep) const;
+
+        /**
          * Get the number of sources of the net.
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
@@ -291,7 +298,7 @@ namespace hal
 
         /**
          * Check whether an endpoint is a destination of the net.
-         * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
+         * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.bool
          *
          * @param[in] gate - The gate.
          * @param[in] pin_name - The name of an input pin of the gate.
@@ -317,6 +324,13 @@ namespace hal
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
         bool is_a_destination(const Endpoint* ep) const;
+
+        /**
+         * Returns the position of the destination endpoint in vector
+         * @param[in] ep - The endpoint.
+         * @returns the position index or -1 if not found in vector
+         */
+        int get_destination_index(const Endpoint* ep) const;
 
         /**
          * Get the number of destinations of the net.

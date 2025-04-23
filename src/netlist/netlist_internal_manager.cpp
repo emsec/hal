@@ -448,7 +448,12 @@ namespace hal
         for (auto dst : dsts)
         {
             gates_to_check.insert(dst->get_gate());
-            if (!this->net_remove_destination_internal(net, dst))
+            int inx = net->get_destination_index(dst);
+            if (inx < 0)
+            {
+                return false;
+            }
+            if (!this->remove_destination_by_index(net, inx))
             {
                 return false;
             }
@@ -458,7 +463,12 @@ namespace hal
         for (auto src : srcs)
         {
             gates_to_check.insert(src->get_gate());
-            if (!this->net_remove_source_internal(net, src))
+            int inx = net->get_source_index(src);
+            if (inx < 0)
+            {
+                return false;
+            }
+            if (!this->remove_source_by_index(net, inx))
             {
                 return false;
             }
@@ -573,6 +583,57 @@ namespace hal
         return new_endpoint_raw;
     }
 
+    bool NetlistInternalManager::remove_destination_by_index(Net* net, int inx)
+    {
+        size_t n = net->m_destinations.size();
+        if (inx >= n) return false;
+        auto ep = net->m_destinations_raw.at(inx);
+        auto gate = ep->get_gate();
+
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return false;
+        }
+        utils::unordered_vector_erase(gate->m_in_endpoints, ep);
+        utils::unordered_vector_erase(gate->m_in_nets, net);
+
+        if (inx < n-1)
+        {
+            net->m_destinations[inx] = std::move(net->m_destinations.back());
+            net->m_destinations_raw[inx] = net->m_destinations_raw.back();
+        }
+        net->m_destinations.pop_back();
+        net->m_destinations_raw.pop_back();
+        m_event_handler->notify(NetEvent::event::dst_removed, net, gate->get_id());
+        return true;
+    }
+
+    bool NetlistInternalManager::remove_source_by_index(Net* net, int inx)
+    {
+        size_t n = net->m_sources.size();
+        if (inx >= n) return false;
+        auto ep = net->m_sources_raw.at(inx);
+        auto gate = ep->get_gate();
+
+        if (!m_netlist->is_gate_in_netlist(gate))
+        {
+            return false;
+        }
+        utils::unordered_vector_erase(gate->m_out_endpoints, ep);
+        utils::unordered_vector_erase(gate->m_out_nets, net);
+
+        if (inx < n-1)
+        {
+            net->m_sources[inx] = std::move(net->m_sources.back());
+            net->m_sources_raw[inx] = net->m_sources_raw.back();
+        }
+        net->m_sources.pop_back();
+        net->m_sources_raw.pop_back();
+        m_event_handler->notify(NetEvent::event::src_removed, net, gate->get_id());
+        return true;
+    }
+
+    /*
     bool NetlistInternalManager::net_remove_source_internal(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
@@ -599,17 +660,26 @@ namespace hal
 
         return false;
     }
+    */
 
     bool NetlistInternalManager::net_remove_source(Net* net, Endpoint* ep)
     {
+        int inx = net->get_source_index(ep);
+        if (inx < 0)
+        {
+            log_warning("net", "given endpoint is not a source of net '{}' with ID {}.",
+                        net->get_name(), net->get_id());
+            return false;
+        }
+
         auto gate = ep->get_gate();
 
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_source(ep))
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
         {
             return false;
         }
 
-        if (!net_remove_source_internal(net, ep))
+        if (!remove_source_by_index(net, inx))
         {
             log_warning("net",
                         "output pin '{}' of gate '{}' with ID {} is not a source of net '{}' with ID {} in netlist with ID {}",
@@ -718,6 +788,7 @@ namespace hal
         return new_endpoint_raw;
     }
 
+    /*
     bool NetlistInternalManager::net_remove_destination_internal(Net* net, Endpoint* ep)
     {
         auto gate = ep->get_gate();
@@ -744,17 +815,26 @@ namespace hal
 
         return false;
     }
+*/
 
     bool NetlistInternalManager::net_remove_destination(Net* net, Endpoint* ep)
     {
+        int inx = net->get_destination_index(ep);
+        if (inx < 0)
+        {
+            log_warning("net", "given endpoint is not a destination of net '{}' with ID {}.",
+                        net->get_name(), net->get_id());
+            return false;
+        }
+
         auto gate = ep->get_gate();
 
-        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate) || !net->is_a_destination(ep))
+        if (!m_netlist->is_net_in_netlist(net) || !m_netlist->is_gate_in_netlist(gate))
         {
             return false;
         }
 
-        if (!net_remove_destination_internal(net,ep))
+        if (!remove_destination_by_index(net, inx))
         {
             log_warning("net",
                         "input pin '{}' of gate '{}' with ID {} is not a destination of net '{}' with ID {} in netlist with ID {}",
