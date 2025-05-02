@@ -1,5 +1,6 @@
 var NAVTREEINDEX0 =
 {
+"":[5,0,5],
 "about__dialog_8cpp.html":[7,0,1,3,2,29,0],
 "about__dialog_8cpp_source.html":[7,0,1,3,2,29,0],
 "about__dialog_8h.html":[7,0,1,3,0,0,31,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classhal_1_1_action_add_items_to_object.html#ab6afd75b5138ac9845842a8d633662aa":[4,0,5,0,6],
 "classhal_1_1_action_add_items_to_object.html#ac2f544b4001353c823f184219b34344e":[4,0,5,0,3],
 "classhal_1_1_action_add_items_to_object.html#acbf6bfb0668c7cbbcb16be295d93b6dc":[4,0,5,0,1],
-"classhal_1_1_action_add_items_to_object_factory.html":[4,0,5,1],
-"classhal_1_1_action_add_items_to_object_factory.html#a5a10c2c868b808d34a191fa1f42adf98":[4,0,5,1,0]
+"classhal_1_1_action_add_items_to_object_factory.html":[4,0,5,1]
 };

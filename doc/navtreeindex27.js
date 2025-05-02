@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[5,0,2,522],
 "group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[4,1,3,4],
 "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d":[5,0,2,568],
 "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d":[4,1,3,32],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "logger__qss__adapter_8h_source.html":[7,0,1,3,0,0,30,1],
 "logger__settings_8h.html":[7,0,1,3,0,0,30,2],
 "logger__settings_8h_source.html":[7,0,1,3,0,0,30,2],
-"logger__widget_8cpp.html":[7,0,1,3,2,28,2],
-"logger__widget_8cpp_source.html":[7,0,1,3,2,28,2]
+"logger__widget_8cpp.html":[7,0,1,3,2,28,2]
 };
