@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"classhal_1_1_standard_graphics_module.html#a07e8842e38593307888f8283f776001c":[4,0,0,0,1,1,4],
 "classhal_1_1_standard_graphics_module.html#a14225cf527302e5a70b644268b4f9075":[4,0,0,0,1,1,3],
 "classhal_1_1_standard_graphics_module.html#a6ba12416b6d95ea1c8466b5d65ade3fe":[4,0,0,0,1,1,5],
 "classhal_1_1_standard_graphics_module.html#a9d5667b36d9c3eb384598f35430f6d5d":[4,0,0,0,1,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "classhal_1_1_wait_to_be_seated_entry.html#af5af8d559c13d811e7e4890c0be186ec":[4,0,0,2,22,0],
 "classhal_1_1_wait_to_be_seated_list.html":[4,0,0,2,23],
 "classhal_1_1_wait_to_be_seated_list.html#a13ed2e8ca2e3abd34d8727a9b5b65186":[4,0,0,2,23,4],
-"classhal_1_1_wait_to_be_seated_list.html#a15a4b4a9b6fa9c7d23938002dbe5b5f8":[4,0,0,2,23,1],
-"classhal_1_1_wait_to_be_seated_list.html#a1f6f3589eba031742502197d42c9e6cf":[4,0,0,2,23,2]
+"classhal_1_1_wait_to_be_seated_list.html#a15a4b4a9b6fa9c7d23938002dbe5b5f8":[4,0,0,2,23,1]
 };

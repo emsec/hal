@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classhal_1_1_latch_wizard_page.html":[6,0,0,88],
 "classhal_1_1_latch_wizard_page.html#a24da2df6d067ca2eea98f181064be561":[6,0,0,88,1],
 "classhal_1_1_latch_wizard_page.html#a49b843a0668343e6daee18af9cd7429e":[6,0,0,88,2],
 "classhal_1_1_latch_wizard_page.html#ad7a5184749cef22fd9ced7b0b2c0c5f4":[6,0,0,88,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "classhal_1_1_main_window.html#afe4e77b5541c8f6949aebfcddccaed7e":[4,0,24,60],
 "classhal_1_1_minimap_scrollbar.html":[4,0,1,0,4],
 "classhal_1_1_minimap_scrollbar.html#a03688adf74509fd1157c91cf0e91b252":[4,0,1,0,4,3],
-"classhal_1_1_minimap_scrollbar.html#a1bfd60d64da9c1a63476f4f4d0f6de92":[4,0,1,0,4,2],
-"classhal_1_1_minimap_scrollbar.html#a2d07402bb58ac56fd6f332ace9cc04fa":[4,0,1,0,4,13]
+"classhal_1_1_minimap_scrollbar.html#a1bfd60d64da9c1a63476f4f4d0f6de92":[4,0,1,0,4,2]
 };

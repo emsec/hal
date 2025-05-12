@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01":[5,0,9,9],
 "namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740":[5,0,9,2],
 "namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9":[5,0,9,5],
 "namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd":[5,0,9,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "netlist__utils_8h.html#afed43ba864b63d01b07464dfb114f847":[7,0,0,0,1,18,13],
 "netlist__utils_8h_source.html":[7,0,0,0,1,18],
 "netlist__writer_8h.html":[7,0,0,0,1,5,0],
-"netlist__writer_8h_source.html":[7,0,0,0,1,5,0],
-"netlist__writer__manager_8h.html":[7,0,0,0,1,5,1]
+"netlist__writer_8h_source.html":[7,0,0,0,1,5,0]
 };
