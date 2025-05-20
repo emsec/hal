@@ -1,7 +1,15 @@
-#include "graph_algorithm/algorithms/centrality.h"
+#include "hal_core/defines.h"
+#include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/gate.h"
-#include "machine_learning/features/gate_feature_bulk.h"
+#include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/progress_printer.h"
+#include "machine_learning/features/gate_feature.h"
 #include "machine_learning/utilities/normalization.h"
+#include "graph_algorithm/algorithms/centrality.h"
+
+#include <vector>
 
 namespace hal
 {
@@ -9,6 +17,7 @@ namespace hal
     {
         namespace gate_feature
         {
+
             Result<std::vector<std::vector<FEATURE_TYPE>>> BetweennessCentrality::calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const
             {
                 std::vector<std::vector<FEATURE_TYPE>> features;
@@ -230,5 +239,5 @@ namespace hal
             }
 
         }    // namespace gate_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal
