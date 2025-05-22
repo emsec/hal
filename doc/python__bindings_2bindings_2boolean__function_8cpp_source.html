@@ -1383,507 +1383,514 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2boolean__f
 <div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
 <div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>, py::overload_cast&lt;const std::string&amp;, const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">BooleanFunction::substitute</a>, py::const_), py::arg(<span class="stringliteral">&quot;old_variable_name&quot;</span>), py::arg(<span class="stringliteral">&quot;new_variable_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;<span class="stringliteral">            Substitute a variable name with another one, i.e., renames the variable.</span></div>
-<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
-<div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;<span class="stringliteral">            :param str old_variable_name: The old variable name to substitute.</span></div>
-<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;<span class="stringliteral">            :param str new_variable_name: The new variable name.</span></div>
-<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function.</span></div>
-<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
-<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::string&amp; variable_name, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">function</span>) -&gt; std::optional&lt;BooleanFunction&gt; {</div>
-<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.substitute(variable_name, <span class="keyword">function</span>);</div>
-<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;                {</div>
-<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;                }</div>
-<div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;                {</div>
-<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;                }</div>
-<div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;            },</div>
-<div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;            py::arg(<span class="stringliteral">&quot;variable_name&quot;</span>),</div>
-<div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160;            py::arg(<span class="stringliteral">&quot;function&quot;</span>),</div>
-<div class="line"><a name="l01325"></a><span class="lineno"> 1325</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01326"></a><span class="lineno"> 1326</span>&#160;<span class="stringliteral">            Substitute a variable with another Boolean function.</span></div>
-<div class="line"><a name="l01327"></a><span class="lineno"> 1327</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
-<div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;<span class="stringliteral">            :param str variable_name: The variable to substitute.</span></div>
-<div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction function: The function replace the variable with.</span></div>
-<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function on success, None otherwise.</span></div>
-<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction or None</span></div>
-<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
-<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;                                py::overload_cast&lt;<span class="keyword">const</span> std::map&lt;std::string, std::string&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">BooleanFunction::substitute</a>, py::const_),</div>
-<div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;                                py::arg(<span class="stringliteral">&quot;substitutions&quot;</span>),</div>
-<div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160;                                R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;<span class="stringliteral">            Substitute multiple variable names with different names at once, i.e., rename the variables.</span></div>
-<div class="line"><a name="l01340"></a><span class="lineno"> 1340</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
+<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span><span class="stringliteral">&quot;simplify_local&quot;</span>, &amp;<a class="code" href="classhal_1_1_boolean_function.html#acce561ac2183c0f586284e7580b410a4">BooleanFunction::simplify_local</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;<span class="stringliteral">            Simplifies the Boolean function only with local simplification rules and not invoking ABC.</span></div>
+<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;<span class="stringliteral">            :returns: The simplified Boolean function.</span></div>
+<div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>, py::overload_cast&lt;const std::string&amp;, const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">BooleanFunction::substitute</a>, py::const_), py::arg(<span class="stringliteral">&quot;old_variable_name&quot;</span>), py::arg(<span class="stringliteral">&quot;new_variable_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;<span class="stringliteral">            Substitute a variable name with another one, i.e., renames the variable.</span></div>
+<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
+<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;<span class="stringliteral">            :param str old_variable_name: The old variable name to substitute.</span></div>
+<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;<span class="stringliteral">            :param str new_variable_name: The new variable name.</span></div>
+<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function.</span></div>
+<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
+<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::string&amp; variable_name, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">function</span>) -&gt; std::optional&lt;BooleanFunction&gt; {</div>
+<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.substitute(variable_name, <span class="keyword">function</span>);</div>
+<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;                {</div>
+<div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;                }</div>
+<div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01325"></a><span class="lineno"> 1325</span>&#160;                {</div>
+<div class="line"><a name="l01326"></a><span class="lineno"> 1326</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01327"></a><span class="lineno"> 1327</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160;                }</div>
+<div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;            },</div>
+<div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;            py::arg(<span class="stringliteral">&quot;variable_name&quot;</span>),</div>
+<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;            py::arg(<span class="stringliteral">&quot;function&quot;</span>),</div>
+<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;<span class="stringliteral">            Substitute a variable with another Boolean function.</span></div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
+<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;<span class="stringliteral">            :param str variable_name: The variable to substitute.</span></div>
+<div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction function: The function replace the variable with.</span></div>
+<div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function on success, None otherwise.</span></div>
+<div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction or None</span></div>
+<div class="line"><a name="l01340"></a><span class="lineno"> 1340</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01341"></a><span class="lineno"> 1341</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01342"></a><span class="lineno"> 1342</span>&#160;<span class="stringliteral">            :param dict[str,str] substitutions: A dict from old variable names to new variable names.</span></div>
-<div class="line"><a name="l01343"></a><span class="lineno"> 1343</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function.</span></div>
-<div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
-<div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::map&lt;std::string, BooleanFunction&gt;&amp; substitutions) -&gt; std::optional&lt;BooleanFunction&gt; {</div>
-<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.substitute(substitutions);</div>
-<div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;                {</div>
-<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;                }</div>
-<div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;                {</div>
-<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;                }</div>
-<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;            },</div>
-<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;            py::arg(<span class="stringliteral">&quot;substitutions&quot;</span>),</div>
-<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;<span class="stringliteral">            Substitute multiple variables with other boolean functions at once.</span></div>
-<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
-<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;<span class="stringliteral">            :param dict substitutions: A map from the variable names to the function to replace the variable with.</span></div>
-<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function on success, None otherwise.</span></div>
-<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction or None</span></div>
-<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;evaluate&quot;</span>,</div>
-<div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction::Value&gt;&amp; inputs) -&gt; std::optional&lt;BooleanFunction::Value&gt; {</div>
-<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.evaluate(inputs);</div>
-<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;                {</div>
-<div class="line"><a name="l01377"></a><span class="lineno"> 1377</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01378"></a><span class="lineno"> 1378</span>&#160;                }</div>
-<div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;                {</div>
-<div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;                }</div>
-<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;            },</div>
-<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;            py::arg(<span class="stringliteral">&quot;inputs&quot;</span>),</div>
-<div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;<span class="stringliteral">            Evaluates a Boolean function comprising only single-bit variables using the given input values.</span></div>
-<div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01389"></a><span class="lineno"> 1389</span>&#160;<span class="stringliteral">            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable name to input value.</span></div>
-<div class="line"><a name="l01390"></a><span class="lineno"> 1390</span>&#160;<span class="stringliteral">            :returns: The resulting value on success, None otherwise.</span></div>
-<div class="line"><a name="l01391"></a><span class="lineno"> 1391</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Value or None</span></div>
-<div class="line"><a name="l01392"></a><span class="lineno"> 1392</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01393"></a><span class="lineno"> 1393</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01394"></a><span class="lineno"> 1394</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01395"></a><span class="lineno"> 1395</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;evaluate&quot;</span>,</div>
-<div class="line"><a name="l01396"></a><span class="lineno"> 1396</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::unordered_map&lt;std::string, std::vector&lt;BooleanFunction::Value&gt;&gt;&amp; inputs) -&gt; std::optional&lt;std::vector&lt;BooleanFunction::Value&gt;&gt; {</div>
-<div class="line"><a name="l01397"></a><span class="lineno"> 1397</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.evaluate(inputs);</div>
-<div class="line"><a name="l01398"></a><span class="lineno"> 1398</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01399"></a><span class="lineno"> 1399</span>&#160;                {</div>
-<div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160;                }</div>
-<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;                {</div>
-<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160;                }</div>
-<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;            },</div>
-<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160;            py::arg(<span class="stringliteral">&quot;inputs&quot;</span>),</div>
-<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160;<span class="stringliteral">            Evaluates a Boolean function comprising multi-bit variables using the given input values.</span></div>
-<div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;<span class="stringliteral">            :param dict[str,list[hal_py.BooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.</span></div>
-<div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;<span class="stringliteral">            :returns: A vector of values on success, None otherwise.</span></div>
-<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.BooleanFunction.Value] or None</span></div>
-<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;compute_truth_table&quot;</span>,</div>
-<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; ordered_variables, <span class="keywordtype">bool</span> remove_unknown_variables) -&gt; std::optional&lt;std::vector&lt;std::vector&lt;BooleanFunction::Value&gt;&gt;&gt; {</div>
-<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.compute_truth_table(ordered_variables, remove_unknown_variables);</div>
-<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;                {</div>
-<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;                }</div>
-<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;                {</div>
-<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;                }</div>
-<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;            },</div>
-<div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;            py::arg(<span class="stringliteral">&quot;ordered_variables&quot;</span>)        = std::vector&lt;std::string&gt;(),</div>
-<div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;            py::arg(<span class="stringliteral">&quot;remove_unknown_variables&quot;</span>) = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;<span class="stringliteral">            Computes the truth table outputs for a Boolean function that comprises &lt;= 10 single-bit variables.</span></div>
-<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;<span class="stringliteral">            **Warning:** The generation of the truth table is exponential in the number of parameters.</span></div>
-<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;<span class="stringliteral">            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.</span></div>
-<div class="line"><a name="l01439"></a><span class="lineno"> 1439</span>&#160;<span class="stringliteral">            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.</span></div>
-<div class="line"><a name="l01440"></a><span class="lineno"> 1440</span>&#160;<span class="stringliteral">            :returns: A list of values representing the truth table output on success, None otherwise.</span></div>
-<div class="line"><a name="l01441"></a><span class="lineno"> 1441</span>&#160;<span class="stringliteral">            :rtype: list[list[hal_py.BooleanFunction.Value]] or None</span></div>
-<div class="line"><a name="l01442"></a><span class="lineno"> 1442</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01443"></a><span class="lineno"> 1443</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01444"></a><span class="lineno"> 1444</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
-<div class="line"><a name="l01445"></a><span class="lineno"> 1445</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_truth_table_as_string&quot;</span>,</div>
-<div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; ordered_variables, std::string function_name, <span class="keywordtype">bool</span> remove_unknown_variables) -&gt; std::optional&lt;std::string&gt; {</div>
-<div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_truth_table_as_string(ordered_variables, function_name, remove_unknown_variables);</div>
-<div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
-<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;                {</div>
-<div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;                }</div>
-<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;                {</div>
-<div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01455"></a><span class="lineno"> 1455</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01456"></a><span class="lineno"> 1456</span>&#160;                }</div>
-<div class="line"><a name="l01457"></a><span class="lineno"> 1457</span>&#160;            },</div>
-<div class="line"><a name="l01458"></a><span class="lineno"> 1458</span>&#160;            py::arg(<span class="stringliteral">&quot;ordered_variables&quot;</span>)        = std::vector&lt;std::string&gt;(),</div>
-<div class="line"><a name="l01459"></a><span class="lineno"> 1459</span>&#160;            py::arg(<span class="stringliteral">&quot;function_name&quot;</span>)            = std::string(<span class="stringliteral">&quot;&quot;</span>),</div>
-<div class="line"><a name="l01460"></a><span class="lineno"> 1460</span>&#160;            py::arg(<span class="stringliteral">&quot;remove_unknown_variables&quot;</span>) = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l01461"></a><span class="lineno"> 1461</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01462"></a><span class="lineno"> 1462</span>&#160;<span class="stringliteral">            Prints the truth table for a Boolean function that comprises &lt;= 10 single-bit variables.</span></div>
-<div class="line"><a name="l01463"></a><span class="lineno"> 1463</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01464"></a><span class="lineno"> 1464</span>&#160;<span class="stringliteral">            **Warning:** The generation of the truth table is exponential in the number of parameters.</span></div>
-<div class="line"><a name="l01465"></a><span class="lineno"> 1465</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01466"></a><span class="lineno"> 1466</span>&#160;<span class="stringliteral">            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.</span></div>
-<div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160;<span class="stringliteral">            :param str function_name: The name of the Boolean function to be printed as header of the output columns.</span></div>
-<div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160;<span class="stringliteral">            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.</span></div>
-<div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160;<span class="stringliteral">            :returns: A string representing the truth table on success, None otherwise.</span></div>
-<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
-<div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01342"></a><span class="lineno"> 1342</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
+<div class="line"><a name="l01343"></a><span class="lineno"> 1343</span>&#160;                                py::overload_cast&lt;<span class="keyword">const</span> std::map&lt;std::string, std::string&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">BooleanFunction::substitute</a>, py::const_),</div>
+<div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;                                py::arg(<span class="stringliteral">&quot;substitutions&quot;</span>),</div>
+<div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;                                R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;<span class="stringliteral">            Substitute multiple variable names with different names at once, i.e., rename the variables.</span></div>
+<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
+<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;<span class="stringliteral">            :param dict[str,str] substitutions: A dict from old variable names to new variable names.</span></div>
+<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function.</span></div>
+<div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;substitute&quot;</span>,</div>
+<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::map&lt;std::string, BooleanFunction&gt;&amp; substitutions) -&gt; std::optional&lt;BooleanFunction&gt; {</div>
+<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.substitute(substitutions);</div>
+<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;                {</div>
+<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;                }</div>
+<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;                {</div>
+<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;                }</div>
+<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;            },</div>
+<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160;            py::arg(<span class="stringliteral">&quot;substitutions&quot;</span>),</div>
+<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;<span class="stringliteral">            Substitute multiple variables with other boolean functions at once.</span></div>
+<div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;<span class="stringliteral">            The operation is applied to all instances of the variable in the function.</span></div>
+<div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;<span class="stringliteral">            :param dict substitutions: A map from the variable names to the function to replace the variable with.</span></div>
+<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;<span class="stringliteral">            :returns: The resulting Boolean function on success, None otherwise.</span></div>
+<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction or None</span></div>
+<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01377"></a><span class="lineno"> 1377</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01378"></a><span class="lineno"> 1378</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;evaluate&quot;</span>,</div>
+<div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction::Value&gt;&amp; inputs) -&gt; std::optional&lt;BooleanFunction::Value&gt; {</div>
+<div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.evaluate(inputs);</div>
+<div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160;                {</div>
+<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;                }</div>
+<div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;                {</div>
+<div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01389"></a><span class="lineno"> 1389</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01390"></a><span class="lineno"> 1390</span>&#160;                }</div>
+<div class="line"><a name="l01391"></a><span class="lineno"> 1391</span>&#160;            },</div>
+<div class="line"><a name="l01392"></a><span class="lineno"> 1392</span>&#160;            py::arg(<span class="stringliteral">&quot;inputs&quot;</span>),</div>
+<div class="line"><a name="l01393"></a><span class="lineno"> 1393</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01394"></a><span class="lineno"> 1394</span>&#160;<span class="stringliteral">            Evaluates a Boolean function comprising only single-bit variables using the given input values.</span></div>
+<div class="line"><a name="l01395"></a><span class="lineno"> 1395</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01396"></a><span class="lineno"> 1396</span>&#160;<span class="stringliteral">            :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable name to input value.</span></div>
+<div class="line"><a name="l01397"></a><span class="lineno"> 1397</span>&#160;<span class="stringliteral">            :returns: The resulting value on success, None otherwise.</span></div>
+<div class="line"><a name="l01398"></a><span class="lineno"> 1398</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Value or None</span></div>
+<div class="line"><a name="l01399"></a><span class="lineno"> 1399</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;evaluate&quot;</span>,</div>
+<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::unordered_map&lt;std::string, std::vector&lt;BooleanFunction::Value&gt;&gt;&amp; inputs) -&gt; std::optional&lt;std::vector&lt;BooleanFunction::Value&gt;&gt; {</div>
+<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.evaluate(inputs);</div>
+<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160;                {</div>
+<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160;                }</div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160;                {</div>
+<div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;                }</div>
+<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;            },</div>
+<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160;            py::arg(<span class="stringliteral">&quot;inputs&quot;</span>),</div>
+<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;<span class="stringliteral">            Evaluates a Boolean function comprising multi-bit variables using the given input values.</span></div>
+<div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;<span class="stringliteral">            :param dict[str,list[hal_py.BooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.</span></div>
+<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;<span class="stringliteral">            :returns: A vector of values on success, None otherwise.</span></div>
+<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.BooleanFunction.Value] or None</span></div>
+<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;compute_truth_table&quot;</span>,</div>
+<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; ordered_variables, <span class="keywordtype">bool</span> remove_unknown_variables) -&gt; std::optional&lt;std::vector&lt;std::vector&lt;BooleanFunction::Value&gt;&gt;&gt; {</div>
+<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.compute_truth_table(ordered_variables, remove_unknown_variables);</div>
+<div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;                {</div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;                }</div>
+<div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;                {</div>
+<div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;                }</div>
+<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;            },</div>
+<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;            py::arg(<span class="stringliteral">&quot;ordered_variables&quot;</span>)        = std::vector&lt;std::string&gt;(),</div>
+<div class="line"><a name="l01439"></a><span class="lineno"> 1439</span>&#160;            py::arg(<span class="stringliteral">&quot;remove_unknown_variables&quot;</span>) = <span class="keyword">false</span>,</div>
+<div class="line"><a name="l01440"></a><span class="lineno"> 1440</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01441"></a><span class="lineno"> 1441</span>&#160;<span class="stringliteral">            Computes the truth table outputs for a Boolean function that comprises &lt;= 10 single-bit variables.</span></div>
+<div class="line"><a name="l01442"></a><span class="lineno"> 1442</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01443"></a><span class="lineno"> 1443</span>&#160;<span class="stringliteral">            **Warning:** The generation of the truth table is exponential in the number of parameters.</span></div>
+<div class="line"><a name="l01444"></a><span class="lineno"> 1444</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01445"></a><span class="lineno"> 1445</span>&#160;<span class="stringliteral">            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.</span></div>
+<div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160;<span class="stringliteral">            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.</span></div>
+<div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160;<span class="stringliteral">            :returns: A list of values representing the truth table output on success, None otherwise.</span></div>
+<div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160;<span class="stringliteral">            :rtype: list[list[hal_py.BooleanFunction.Value]] or None</span></div>
+<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;<span class="stringliteral">        py_boolean_function.def(</span></div>
+<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_truth_table_as_string&quot;</span>,</div>
+<div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; <span class="keyword">self</span>, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; ordered_variables, std::string function_name, <span class="keywordtype">bool</span> remove_unknown_variables) -&gt; std::optional&lt;std::string&gt; {</div>
+<div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_truth_table_as_string(ordered_variables, function_name, remove_unknown_variables);</div>
+<div class="line"><a name="l01455"></a><span class="lineno"> 1455</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
+<div class="line"><a name="l01456"></a><span class="lineno"> 1456</span>&#160;                {</div>
+<div class="line"><a name="l01457"></a><span class="lineno"> 1457</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01458"></a><span class="lineno"> 1458</span>&#160;                }</div>
+<div class="line"><a name="l01459"></a><span class="lineno"> 1459</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01460"></a><span class="lineno"> 1460</span>&#160;                {</div>
+<div class="line"><a name="l01461"></a><span class="lineno"> 1461</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01462"></a><span class="lineno"> 1462</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01463"></a><span class="lineno"> 1463</span>&#160;                }</div>
+<div class="line"><a name="l01464"></a><span class="lineno"> 1464</span>&#160;            },</div>
+<div class="line"><a name="l01465"></a><span class="lineno"> 1465</span>&#160;            py::arg(<span class="stringliteral">&quot;ordered_variables&quot;</span>)        = std::vector&lt;std::string&gt;(),</div>
+<div class="line"><a name="l01466"></a><span class="lineno"> 1466</span>&#160;            py::arg(<span class="stringliteral">&quot;function_name&quot;</span>)            = std::string(<span class="stringliteral">&quot;&quot;</span>),</div>
+<div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160;            py::arg(<span class="stringliteral">&quot;remove_unknown_variables&quot;</span>) = <span class="keyword">false</span>,</div>
+<div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160;<span class="stringliteral">            Prints the truth table for a Boolean function that comprises &lt;= 10 single-bit variables.</span></div>
+<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;<span class="stringliteral">            **Warning:** The generation of the truth table is exponential in the number of parameters.</span></div>
 <div class="line"><a name="l01472"></a><span class="lineno"> 1472</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;<span class="stringliteral">        py::class_&lt;BooleanFunction::Node&gt; py_boolean_function_node(py_boolean_function, </span><span class="stringliteral">&quot;Node&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;<span class="stringliteral">            Node refers to an abstract syntax tree node of a Boolean function. A node is an abstract base class for either an operation (e.g., AND, XOR) or an operand (e.g., a signal name variable).</span></div>
-<div class="line"><a name="l01475"></a><span class="lineno"> 1475</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;type&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a1d4b856fba4b710a2a43dcfeb0af2610">BooleanFunction::Node::type</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;<span class="stringliteral">            The type of the node.</span></div>
+<div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;<span class="stringliteral">            :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.</span></div>
+<div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;<span class="stringliteral">            :param str function_name: The name of the Boolean function to be printed as header of the output columns.</span></div>
+<div class="line"><a name="l01475"></a><span class="lineno"> 1475</span>&#160;<span class="stringliteral">            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.</span></div>
+<div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;<span class="stringliteral">            :returns: A string representing the truth table on success, None otherwise.</span></div>
+<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
+<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01479"></a><span class="lineno"> 1479</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;<span class="stringliteral">            :type: int</span></div>
-<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01482"></a><span class="lineno"> 1482</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01483"></a><span class="lineno"> 1483</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;size&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a6460e3ba8a6f0091f1c8d98f6aa0fb39">BooleanFunction::Node::size</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01484"></a><span class="lineno"> 1484</span>&#160;<span class="stringliteral">            The bit-size of the node.</span></div>
-<div class="line"><a name="l01485"></a><span class="lineno"> 1485</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01486"></a><span class="lineno"> 1486</span>&#160;<span class="stringliteral">            :type: int</span></div>
-<div class="line"><a name="l01487"></a><span class="lineno"> 1487</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01488"></a><span class="lineno"> 1488</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01489"></a><span class="lineno"> 1489</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a02d61def74fa62c7849e629a64b7af61">BooleanFunction::Node::constant</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01490"></a><span class="lineno"> 1490</span>&#160;<span class="stringliteral">            The (optional) constant value of the node.</span></div>
-<div class="line"><a name="l01491"></a><span class="lineno"> 1491</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01492"></a><span class="lineno"> 1492</span>&#160;<span class="stringliteral">            :type: list[hal_py.BooleanFunction.Value]</span></div>
-<div class="line"><a name="l01493"></a><span class="lineno"> 1493</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01494"></a><span class="lineno"> 1494</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01495"></a><span class="lineno"> 1495</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#aef5ff44962299006d2f70b65a78444cc">BooleanFunction::Node::index</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01496"></a><span class="lineno"> 1496</span>&#160;<span class="stringliteral">            The (optional) index value of the node.</span></div>
-<div class="line"><a name="l01497"></a><span class="lineno"> 1497</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01498"></a><span class="lineno"> 1498</span>&#160;<span class="stringliteral">            :type: int</span></div>
-<div class="line"><a name="l01499"></a><span class="lineno"> 1499</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a8814277b9dd9b74e883ad94038971f42">BooleanFunction::Node::variable</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;<span class="stringliteral">            The (optional) variable name of the node.</span></div>
-<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Operation&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a94a3c29a855572ee404369cb8ffe1cd5">BooleanFunction::Node::Operation</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;<span class="stringliteral">            Constructs an &#39;operation&#39; node.</span></div>
-<div class="line"><a name="l01509"></a><span class="lineno"> 1509</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01510"></a><span class="lineno"> 1510</span>&#160;<span class="stringliteral">            :param int type: The type of the operation.</span></div>
-<div class="line"><a name="l01511"></a><span class="lineno"> 1511</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the operation.</span></div>
-<div class="line"><a name="l01512"></a><span class="lineno"> 1512</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
-<div class="line"><a name="l01513"></a><span class="lineno"> 1513</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
-<div class="line"><a name="l01514"></a><span class="lineno"> 1514</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01516"></a><span class="lineno"> 1516</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Constant&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a7b42cc86d0da5d2b9ea8726d8d301834">BooleanFunction::Node::Constant</a>, py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;<span class="stringliteral">            Constructs a &#39;constant&#39; node.</span></div>
-<div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01519"></a><span class="lineno"> 1519</span>&#160;<span class="stringliteral">            :param list[hal_py.BooleanFunction.Value] value: The constant value of the node.</span></div>
-<div class="line"><a name="l01520"></a><span class="lineno"> 1520</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
-<div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
-<div class="line"><a name="l01522"></a><span class="lineno"> 1522</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01523"></a><span class="lineno"> 1523</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01524"></a><span class="lineno"> 1524</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Index&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ad8a563d49d27d9814cba0f2c3cad455e">BooleanFunction::Node::Index</a>, py::arg(<span class="stringliteral">&quot;index&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01525"></a><span class="lineno"> 1525</span>&#160;<span class="stringliteral">            Constructs an &#39;index&#39; node.</span></div>
-<div class="line"><a name="l01526"></a><span class="lineno"> 1526</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01527"></a><span class="lineno"> 1527</span>&#160;<span class="stringliteral">            :param int value: The index value of the node.</span></div>
-<div class="line"><a name="l01528"></a><span class="lineno"> 1528</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the node.</span></div>
-<div class="line"><a name="l01529"></a><span class="lineno"> 1529</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
-<div class="line"><a name="l01530"></a><span class="lineno"> 1530</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
-<div class="line"><a name="l01531"></a><span class="lineno"> 1531</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01532"></a><span class="lineno"> 1532</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01533"></a><span class="lineno"> 1533</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Variable&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#af6accbcb85e5d64ffcccdde2490983aa">BooleanFunction::Node::Variable</a>, py::arg(<span class="stringliteral">&quot;variable&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01534"></a><span class="lineno"> 1534</span>&#160;<span class="stringliteral">            Constructs a &#39;variable&#39; node.</span></div>
-<div class="line"><a name="l01535"></a><span class="lineno"> 1535</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01536"></a><span class="lineno"> 1536</span>&#160;<span class="stringliteral">            :param int value: The variable name of the node.</span></div>
-<div class="line"><a name="l01537"></a><span class="lineno"> 1537</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the node.</span></div>
-<div class="line"><a name="l01538"></a><span class="lineno"> 1538</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
-<div class="line"><a name="l01539"></a><span class="lineno"> 1539</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
-<div class="line"><a name="l01540"></a><span class="lineno"> 1540</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01541"></a><span class="lineno"> 1541</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01542"></a><span class="lineno"> 1542</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self == py::self, R</span><span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01543"></a><span class="lineno"> 1543</span>&#160;<span class="stringliteral">            Checks whether two Boolean function nodes are equal.</span></div>
-<div class="line"><a name="l01544"></a><span class="lineno"> 1544</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01545"></a><span class="lineno"> 1545</span>&#160;<span class="stringliteral">            :returns: True if both Boolean function nodes are equal, False otherwise.</span></div>
-<div class="line"><a name="l01546"></a><span class="lineno"> 1546</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;<span class="stringliteral">        py::class_&lt;BooleanFunction::Node&gt; py_boolean_function_node(py_boolean_function, </span><span class="stringliteral">&quot;Node&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160;<span class="stringliteral">            Node refers to an abstract syntax tree node of a Boolean function. A node is an abstract base class for either an operation (e.g., AND, XOR) or an operand (e.g., a signal name variable).</span></div>
+<div class="line"><a name="l01482"></a><span class="lineno"> 1482</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01483"></a><span class="lineno"> 1483</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01484"></a><span class="lineno"> 1484</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;type&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a1d4b856fba4b710a2a43dcfeb0af2610">BooleanFunction::Node::type</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01485"></a><span class="lineno"> 1485</span>&#160;<span class="stringliteral">            The type of the node.</span></div>
+<div class="line"><a name="l01486"></a><span class="lineno"> 1486</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01487"></a><span class="lineno"> 1487</span>&#160;<span class="stringliteral">            :type: int</span></div>
+<div class="line"><a name="l01488"></a><span class="lineno"> 1488</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01489"></a><span class="lineno"> 1489</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01490"></a><span class="lineno"> 1490</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;size&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a6460e3ba8a6f0091f1c8d98f6aa0fb39">BooleanFunction::Node::size</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01491"></a><span class="lineno"> 1491</span>&#160;<span class="stringliteral">            The bit-size of the node.</span></div>
+<div class="line"><a name="l01492"></a><span class="lineno"> 1492</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01493"></a><span class="lineno"> 1493</span>&#160;<span class="stringliteral">            :type: int</span></div>
+<div class="line"><a name="l01494"></a><span class="lineno"> 1494</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01495"></a><span class="lineno"> 1495</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01496"></a><span class="lineno"> 1496</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a02d61def74fa62c7849e629a64b7af61">BooleanFunction::Node::constant</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01497"></a><span class="lineno"> 1497</span>&#160;<span class="stringliteral">            The (optional) constant value of the node.</span></div>
+<div class="line"><a name="l01498"></a><span class="lineno"> 1498</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01499"></a><span class="lineno"> 1499</span>&#160;<span class="stringliteral">            :type: list[hal_py.BooleanFunction.Value]</span></div>
+<div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#aef5ff44962299006d2f70b65a78444cc">BooleanFunction::Node::index</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;<span class="stringliteral">            The (optional) index value of the node.</span></div>
+<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;<span class="stringliteral">            :type: int</span></div>
+<div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_readwrite(</span><span class="stringliteral">&quot;variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a8814277b9dd9b74e883ad94038971f42">BooleanFunction::Node::variable</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01509"></a><span class="lineno"> 1509</span>&#160;<span class="stringliteral">            The (optional) variable name of the node.</span></div>
+<div class="line"><a name="l01510"></a><span class="lineno"> 1510</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01511"></a><span class="lineno"> 1511</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l01512"></a><span class="lineno"> 1512</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01513"></a><span class="lineno"> 1513</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01514"></a><span class="lineno"> 1514</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Operation&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a94a3c29a855572ee404369cb8ffe1cd5">BooleanFunction::Node::Operation</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160;<span class="stringliteral">            Constructs an &#39;operation&#39; node.</span></div>
+<div class="line"><a name="l01516"></a><span class="lineno"> 1516</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;<span class="stringliteral">            :param int type: The type of the operation.</span></div>
+<div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the operation.</span></div>
+<div class="line"><a name="l01519"></a><span class="lineno"> 1519</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
+<div class="line"><a name="l01520"></a><span class="lineno"> 1520</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
+<div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01522"></a><span class="lineno"> 1522</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01523"></a><span class="lineno"> 1523</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Constant&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a7b42cc86d0da5d2b9ea8726d8d301834">BooleanFunction::Node::Constant</a>, py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01524"></a><span class="lineno"> 1524</span>&#160;<span class="stringliteral">            Constructs a &#39;constant&#39; node.</span></div>
+<div class="line"><a name="l01525"></a><span class="lineno"> 1525</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01526"></a><span class="lineno"> 1526</span>&#160;<span class="stringliteral">            :param list[hal_py.BooleanFunction.Value] value: The constant value of the node.</span></div>
+<div class="line"><a name="l01527"></a><span class="lineno"> 1527</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
+<div class="line"><a name="l01528"></a><span class="lineno"> 1528</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
+<div class="line"><a name="l01529"></a><span class="lineno"> 1529</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01530"></a><span class="lineno"> 1530</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01531"></a><span class="lineno"> 1531</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Index&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ad8a563d49d27d9814cba0f2c3cad455e">BooleanFunction::Node::Index</a>, py::arg(<span class="stringliteral">&quot;index&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01532"></a><span class="lineno"> 1532</span>&#160;<span class="stringliteral">            Constructs an &#39;index&#39; node.</span></div>
+<div class="line"><a name="l01533"></a><span class="lineno"> 1533</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01534"></a><span class="lineno"> 1534</span>&#160;<span class="stringliteral">            :param int value: The index value of the node.</span></div>
+<div class="line"><a name="l01535"></a><span class="lineno"> 1535</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the node.</span></div>
+<div class="line"><a name="l01536"></a><span class="lineno"> 1536</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
+<div class="line"><a name="l01537"></a><span class="lineno"> 1537</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
+<div class="line"><a name="l01538"></a><span class="lineno"> 1538</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01539"></a><span class="lineno"> 1539</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01540"></a><span class="lineno"> 1540</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;Variable&quot;</span>, <a class="code" href="structhal_1_1_boolean_function_1_1_node.html#af6accbcb85e5d64ffcccdde2490983aa">BooleanFunction::Node::Variable</a>, py::arg(<span class="stringliteral">&quot;variable&quot;</span>), py::arg(<span class="stringliteral">&quot;size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01541"></a><span class="lineno"> 1541</span>&#160;<span class="stringliteral">            Constructs a &#39;variable&#39; node.</span></div>
+<div class="line"><a name="l01542"></a><span class="lineno"> 1542</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01543"></a><span class="lineno"> 1543</span>&#160;<span class="stringliteral">            :param int value: The variable name of the node.</span></div>
+<div class="line"><a name="l01544"></a><span class="lineno"> 1544</span>&#160;<span class="stringliteral">            :param int size: The bit-size of the node.</span></div>
+<div class="line"><a name="l01545"></a><span class="lineno"> 1545</span>&#160;<span class="stringliteral">            :returns: The node.</span></div>
+<div class="line"><a name="l01546"></a><span class="lineno"> 1546</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
 <div class="line"><a name="l01547"></a><span class="lineno"> 1547</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01548"></a><span class="lineno"> 1548</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01549"></a><span class="lineno"> 1549</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self != py::self, R</span><span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;<span class="stringliteral">            Checks whether two Boolean function nodes are unequal.</span></div>
+<div class="line"><a name="l01549"></a><span class="lineno"> 1549</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self == py::self, R</span><span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;<span class="stringliteral">            Checks whether two Boolean function nodes are equal.</span></div>
 <div class="line"><a name="l01551"></a><span class="lineno"> 1551</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01552"></a><span class="lineno"> 1552</span>&#160;<span class="stringliteral">            :returns: True if both Boolean function nodes are unequal, False otherwise.</span></div>
+<div class="line"><a name="l01552"></a><span class="lineno"> 1552</span>&#160;<span class="stringliteral">            :returns: True if both Boolean function nodes are equal, False otherwise.</span></div>
 <div class="line"><a name="l01553"></a><span class="lineno"> 1553</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01554"></a><span class="lineno"> 1554</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01555"></a><span class="lineno"> 1555</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01556"></a><span class="lineno"> 1556</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self &lt; py::self, R</span><span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01557"></a><span class="lineno"> 1557</span>&#160;<span class="stringliteral">            Checks whether this Boolean function node is &#39;smaller&#39; than the ``other`` Boolean function node.</span></div>
+<div class="line"><a name="l01556"></a><span class="lineno"> 1556</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self != py::self, R</span><span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01557"></a><span class="lineno"> 1557</span>&#160;<span class="stringliteral">            Checks whether two Boolean function nodes are unequal.</span></div>
 <div class="line"><a name="l01558"></a><span class="lineno"> 1558</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01559"></a><span class="lineno"> 1559</span>&#160;<span class="stringliteral">            :returns: True if this Boolean function node is &#39;smaller&#39;, False otherwise.</span></div>
+<div class="line"><a name="l01559"></a><span class="lineno"> 1559</span>&#160;<span class="stringliteral">            :returns: True if both Boolean function nodes are unequal, False otherwise.</span></div>
 <div class="line"><a name="l01560"></a><span class="lineno"> 1560</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01561"></a><span class="lineno"> 1561</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01562"></a><span class="lineno"> 1562</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01563"></a><span class="lineno"> 1563</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;clone&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ac14f6eb42a80b1ed987b1aadd112a9cd">BooleanFunction::Node::clone</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01564"></a><span class="lineno"> 1564</span>&#160;<span class="stringliteral">            Clones the Boolean function node.</span></div>
+<div class="line"><a name="l01563"></a><span class="lineno"> 1563</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(py::self &lt; py::self, R</span><span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01564"></a><span class="lineno"> 1564</span>&#160;<span class="stringliteral">            Checks whether this Boolean function node is &#39;smaller&#39; than the ``other`` Boolean function node.</span></div>
 <div class="line"><a name="l01565"></a><span class="lineno"> 1565</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01566"></a><span class="lineno"> 1566</span>&#160;<span class="stringliteral">            :returns: The cloned Boolean function node.</span></div>
-<div class="line"><a name="l01567"></a><span class="lineno"> 1567</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
+<div class="line"><a name="l01566"></a><span class="lineno"> 1566</span>&#160;<span class="stringliteral">            :returns: True if this Boolean function node is &#39;smaller&#39;, False otherwise.</span></div>
+<div class="line"><a name="l01567"></a><span class="lineno"> 1567</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01568"></a><span class="lineno"> 1568</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01569"></a><span class="lineno"> 1569</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01570"></a><span class="lineno"> 1570</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;__str__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) { <span class="keywordflow">return</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>.to_string(); }, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01571"></a><span class="lineno"> 1571</span>&#160;<span class="stringliteral">            Translates the Boolean function node into its string representation.</span></div>
+<div class="line"><a name="l01570"></a><span class="lineno"> 1570</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;clone&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ac14f6eb42a80b1ed987b1aadd112a9cd">BooleanFunction::Node::clone</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01571"></a><span class="lineno"> 1571</span>&#160;<span class="stringliteral">            Clones the Boolean function node.</span></div>
 <div class="line"><a name="l01572"></a><span class="lineno"> 1572</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01573"></a><span class="lineno"> 1573</span>&#160;<span class="stringliteral">            :returns: The Boolean function node as a string.</span></div>
-<div class="line"><a name="l01574"></a><span class="lineno"> 1574</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l01573"></a><span class="lineno"> 1573</span>&#160;<span class="stringliteral">            :returns: The cloned Boolean function node.</span></div>
+<div class="line"><a name="l01574"></a><span class="lineno"> 1574</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction.Node</span></div>
 <div class="line"><a name="l01575"></a><span class="lineno"> 1575</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01576"></a><span class="lineno"> 1576</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01577"></a><span class="lineno"> 1577</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_property_readonly(</span><span class="stringliteral">&quot;arity&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a43c91ca11b662b751f9c105124a510cc">BooleanFunction::Node::get_arity</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01578"></a><span class="lineno"> 1578</span>&#160;<span class="stringliteral">            The arity of the Boolean function node, i.e., the number of parameters.</span></div>
+<div class="line"><a name="l01577"></a><span class="lineno"> 1577</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;__str__&quot;</span>, [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) { <span class="keywordflow">return</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>.to_string(); }, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01578"></a><span class="lineno"> 1578</span>&#160;<span class="stringliteral">            Translates the Boolean function node into its string representation.</span></div>
 <div class="line"><a name="l01579"></a><span class="lineno"> 1579</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01580"></a><span class="lineno"> 1580</span>&#160;<span class="stringliteral">            :type: int</span></div>
-<div class="line"><a name="l01581"></a><span class="lineno"> 1581</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01582"></a><span class="lineno"> 1582</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01583"></a><span class="lineno"> 1583</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;get_arity&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a43c91ca11b662b751f9c105124a510cc">BooleanFunction::Node::get_arity</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01584"></a><span class="lineno"> 1584</span>&#160;<span class="stringliteral">            Returns the arity of the Boolean function node, i.e., the number of parameters.</span></div>
-<div class="line"><a name="l01585"></a><span class="lineno"> 1585</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01586"></a><span class="lineno"> 1586</span>&#160;<span class="stringliteral">            :returns: The arity.</span></div>
-<div class="line"><a name="l01587"></a><span class="lineno"> 1587</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l01580"></a><span class="lineno"> 1580</span>&#160;<span class="stringliteral">            :returns: The Boolean function node as a string.</span></div>
+<div class="line"><a name="l01581"></a><span class="lineno"> 1581</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l01582"></a><span class="lineno"> 1582</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01583"></a><span class="lineno"> 1583</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01584"></a><span class="lineno"> 1584</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_property_readonly(</span><span class="stringliteral">&quot;arity&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a43c91ca11b662b751f9c105124a510cc">BooleanFunction::Node::get_arity</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01585"></a><span class="lineno"> 1585</span>&#160;<span class="stringliteral">            The arity of the Boolean function node, i.e., the number of parameters.</span></div>
+<div class="line"><a name="l01586"></a><span class="lineno"> 1586</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01587"></a><span class="lineno"> 1587</span>&#160;<span class="stringliteral">            :type: int</span></div>
 <div class="line"><a name="l01588"></a><span class="lineno"> 1588</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01589"></a><span class="lineno"> 1589</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01590"></a><span class="lineno"> 1590</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;get_arity_of_type&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a6e05ce44a823c93ec1904297b098f5ec">BooleanFunction::Node::get_arity_of_type</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01591"></a><span class="lineno"> 1591</span>&#160;<span class="stringliteral">            Returns the arity for a Boolean function node of the given type, i.e., the number of parameters.</span></div>
+<div class="line"><a name="l01590"></a><span class="lineno"> 1590</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;get_arity&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a43c91ca11b662b751f9c105124a510cc">BooleanFunction::Node::get_arity</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01591"></a><span class="lineno"> 1591</span>&#160;<span class="stringliteral">            Returns the arity of the Boolean function node, i.e., the number of parameters.</span></div>
 <div class="line"><a name="l01592"></a><span class="lineno"> 1592</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l01593"></a><span class="lineno"> 1593</span>&#160;<span class="stringliteral">            :returns: The arity.</span></div>
 <div class="line"><a name="l01594"></a><span class="lineno"> 1594</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
 <div class="line"><a name="l01595"></a><span class="lineno"> 1595</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01596"></a><span class="lineno"> 1596</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01597"></a><span class="lineno"> 1597</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a53be0e2ead809c92f615da09167aba8a">BooleanFunction::Node::is</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01598"></a><span class="lineno"> 1598</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of a specific type.</span></div>
+<div class="line"><a name="l01597"></a><span class="lineno"> 1597</span>&#160;<span class="stringliteral">        py_boolean_function_node.def_static(</span><span class="stringliteral">&quot;get_arity_of_type&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a6e05ce44a823c93ec1904297b098f5ec">BooleanFunction::Node::get_arity_of_type</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01598"></a><span class="lineno"> 1598</span>&#160;<span class="stringliteral">            Returns the arity for a Boolean function node of the given type, i.e., the number of parameters.</span></div>
 <div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;<span class="stringliteral">            :param int type: The type to check for.</span></div>
-<div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160;<span class="stringliteral">            :returns: True if the node is of the given type, False otherwise.</span></div>
-<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a163de3a1f8fc8e0a6a6b5a1c938d74f6">BooleanFunction::Node::is_constant</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant.</span></div>
-<div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant, False otherwise.</span></div>
+<div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;<span class="stringliteral">            :returns: The arity.</span></div>
+<div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01603"></a><span class="lineno"> 1603</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01604"></a><span class="lineno"> 1604</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a53be0e2ead809c92f615da09167aba8a">BooleanFunction::Node::is</a>, py::arg(<span class="stringliteral">&quot;type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of a specific type.</span></div>
+<div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160;<span class="stringliteral">            :param int type: The type to check for.</span></div>
+<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;<span class="stringliteral">            :returns: True if the node is of the given type, False otherwise.</span></div>
 <div class="line"><a name="l01609"></a><span class="lineno"> 1609</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01610"></a><span class="lineno"> 1610</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01611"></a><span class="lineno"> 1611</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_constant_value&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::vector&lt;BooleanFunction::Value&gt;&amp;&gt;(&amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a97b6ae858cdf17345e4c667b1fe41791">BooleanFunction::Node::has_constant_value</a>, py::const_), py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant and holds a specific value.</span></div>
+<div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a163de3a1f8fc8e0a6a6b5a1c938d74f6">BooleanFunction::Node::is_constant</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant.</span></div>
 <div class="line"><a name="l01614"></a><span class="lineno"> 1614</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;<span class="stringliteral">            :param list[hal_py.BooleanFunction.Value] value: The value to check for.</span></div>
-<div class="line"><a name="l01616"></a><span class="lineno"> 1616</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.</span></div>
-<div class="line"><a name="l01617"></a><span class="lineno"> 1617</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l01618"></a><span class="lineno"> 1618</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01619"></a><span class="lineno"> 1619</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01620"></a><span class="lineno"> 1620</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_constant_value&quot;</span>, py::overload_cast&lt;u64&gt;(&amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a97b6ae858cdf17345e4c667b1fe41791">BooleanFunction::Node::has_constant_value</a>, py::const_), py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant and holds a specific value.</span></div>
-<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;<span class="stringliteral">            :param int value: The value to check for.</span></div>
-<div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.</span></div>
-<div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l01626"></a><span class="lineno"> 1626</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01627"></a><span class="lineno"> 1627</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
-<div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_constant_value&quot;</span>,</div>
-<div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;std::vector&lt;BooleanFunction::Value&gt;&gt; {</div>
-<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_constant_value(); res.is_ok())</div>
-<div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160;                {</div>
-<div class="line"><a name="l01633"></a><span class="lineno"> 1633</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01634"></a><span class="lineno"> 1634</span>&#160;                }</div>
-<div class="line"><a name="l01635"></a><span class="lineno"> 1635</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01636"></a><span class="lineno"> 1636</span>&#160;                {</div>
-<div class="line"><a name="l01637"></a><span class="lineno"> 1637</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get constant value:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01638"></a><span class="lineno"> 1638</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01639"></a><span class="lineno"> 1639</span>&#160;                }</div>
-<div class="line"><a name="l01640"></a><span class="lineno"> 1640</span>&#160;            },</div>
-<div class="line"><a name="l01641"></a><span class="lineno"> 1641</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01642"></a><span class="lineno"> 1642</span>&#160;<span class="stringliteral">            Get the constant value of the node of type ``Constant`` as a list of ``hal_py.BooleanFunction.Value``.</span></div>
-<div class="line"><a name="l01643"></a><span class="lineno"> 1643</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01644"></a><span class="lineno"> 1644</span>&#160;<span class="stringliteral">            :returns: The constant value on success, None otherwise. </span></div>
-<div class="line"><a name="l01645"></a><span class="lineno"> 1645</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.BooleanFunction.Value] or None</span></div>
-<div class="line"><a name="l01646"></a><span class="lineno"> 1646</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01648"></a><span class="lineno"> 1648</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
-<div class="line"><a name="l01649"></a><span class="lineno"> 1649</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_constant_value_u64&quot;</span>,</div>
-<div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;u64&gt; {</div>
-<div class="line"><a name="l01651"></a><span class="lineno"> 1651</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_constant_value_u64(); res.is_ok())</div>
-<div class="line"><a name="l01652"></a><span class="lineno"> 1652</span>&#160;                {</div>
-<div class="line"><a name="l01653"></a><span class="lineno"> 1653</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01654"></a><span class="lineno"> 1654</span>&#160;                }</div>
-<div class="line"><a name="l01655"></a><span class="lineno"> 1655</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01656"></a><span class="lineno"> 1656</span>&#160;                {</div>
-<div class="line"><a name="l01657"></a><span class="lineno"> 1657</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get constant value:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01658"></a><span class="lineno"> 1658</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01659"></a><span class="lineno"> 1659</span>&#160;                }</div>
-<div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;            },</div>
-<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;<span class="stringliteral">            Get the constant value of the node of type ``Constant`` as long as it has a size &lt;= 64-bit.</span></div>
-<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;<span class="stringliteral">            :returns: The constant value on success, None otherwise. </span></div>
-<div class="line"><a name="l01665"></a><span class="lineno"> 1665</span>&#160;<span class="stringliteral">            :rtype: int or None</span></div>
-<div class="line"><a name="l01666"></a><span class="lineno"> 1666</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01667"></a><span class="lineno"> 1667</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01668"></a><span class="lineno"> 1668</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ac918a01a18abdb126434c1c8c49f8558">BooleanFunction::Node::is_index</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01669"></a><span class="lineno"> 1669</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Index.</span></div>
+<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant, False otherwise.</span></div>
+<div class="line"><a name="l01616"></a><span class="lineno"> 1616</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01617"></a><span class="lineno"> 1617</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01618"></a><span class="lineno"> 1618</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01619"></a><span class="lineno"> 1619</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_constant_value&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::vector&lt;BooleanFunction::Value&gt;&amp;&gt;(&amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a97b6ae858cdf17345e4c667b1fe41791">BooleanFunction::Node::has_constant_value</a>, py::const_), py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01620"></a><span class="lineno"> 1620</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant and holds a specific value.</span></div>
+<div class="line"><a name="l01621"></a><span class="lineno"> 1621</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01622"></a><span class="lineno"> 1622</span>&#160;<span class="stringliteral">            :param list[hal_py.BooleanFunction.Value] value: The value to check for.</span></div>
+<div class="line"><a name="l01623"></a><span class="lineno"> 1623</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.</span></div>
+<div class="line"><a name="l01624"></a><span class="lineno"> 1624</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01625"></a><span class="lineno"> 1625</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01626"></a><span class="lineno"> 1626</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01627"></a><span class="lineno"> 1627</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_constant_value&quot;</span>, py::overload_cast&lt;u64&gt;(&amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a97b6ae858cdf17345e4c667b1fe41791">BooleanFunction::Node::has_constant_value</a>, py::const_), py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Constant and holds a specific value.</span></div>
+<div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;<span class="stringliteral">            :param int value: The value to check for.</span></div>
+<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.</span></div>
+<div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01633"></a><span class="lineno"> 1633</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01634"></a><span class="lineno"> 1634</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01635"></a><span class="lineno"> 1635</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
+<div class="line"><a name="l01636"></a><span class="lineno"> 1636</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_constant_value&quot;</span>,</div>
+<div class="line"><a name="l01637"></a><span class="lineno"> 1637</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;std::vector&lt;BooleanFunction::Value&gt;&gt; {</div>
+<div class="line"><a name="l01638"></a><span class="lineno"> 1638</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_constant_value(); res.is_ok())</div>
+<div class="line"><a name="l01639"></a><span class="lineno"> 1639</span>&#160;                {</div>
+<div class="line"><a name="l01640"></a><span class="lineno"> 1640</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01641"></a><span class="lineno"> 1641</span>&#160;                }</div>
+<div class="line"><a name="l01642"></a><span class="lineno"> 1642</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01643"></a><span class="lineno"> 1643</span>&#160;                {</div>
+<div class="line"><a name="l01644"></a><span class="lineno"> 1644</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get constant value:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01645"></a><span class="lineno"> 1645</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01646"></a><span class="lineno"> 1646</span>&#160;                }</div>
+<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;            },</div>
+<div class="line"><a name="l01648"></a><span class="lineno"> 1648</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01649"></a><span class="lineno"> 1649</span>&#160;<span class="stringliteral">            Get the constant value of the node of type ``Constant`` as a list of ``hal_py.BooleanFunction.Value``.</span></div>
+<div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01651"></a><span class="lineno"> 1651</span>&#160;<span class="stringliteral">            :returns: The constant value on success, None otherwise. </span></div>
+<div class="line"><a name="l01652"></a><span class="lineno"> 1652</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.BooleanFunction.Value] or None</span></div>
+<div class="line"><a name="l01653"></a><span class="lineno"> 1653</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01654"></a><span class="lineno"> 1654</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01655"></a><span class="lineno"> 1655</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
+<div class="line"><a name="l01656"></a><span class="lineno"> 1656</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_constant_value_u64&quot;</span>,</div>
+<div class="line"><a name="l01657"></a><span class="lineno"> 1657</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;u64&gt; {</div>
+<div class="line"><a name="l01658"></a><span class="lineno"> 1658</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_constant_value_u64(); res.is_ok())</div>
+<div class="line"><a name="l01659"></a><span class="lineno"> 1659</span>&#160;                {</div>
+<div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;                }</div>
+<div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;                {</div>
+<div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get constant value:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01665"></a><span class="lineno"> 1665</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01666"></a><span class="lineno"> 1666</span>&#160;                }</div>
+<div class="line"><a name="l01667"></a><span class="lineno"> 1667</span>&#160;            },</div>
+<div class="line"><a name="l01668"></a><span class="lineno"> 1668</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01669"></a><span class="lineno"> 1669</span>&#160;<span class="stringliteral">            Get the constant value of the node of type ``Constant`` as long as it has a size &lt;= 64-bit.</span></div>
 <div class="line"><a name="l01670"></a><span class="lineno"> 1670</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01671"></a><span class="lineno"> 1671</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Index, False otherwise.</span></div>
-<div class="line"><a name="l01672"></a><span class="lineno"> 1672</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01671"></a><span class="lineno"> 1671</span>&#160;<span class="stringliteral">            :returns: The constant value on success, None otherwise. </span></div>
+<div class="line"><a name="l01672"></a><span class="lineno"> 1672</span>&#160;<span class="stringliteral">            :rtype: int or None</span></div>
 <div class="line"><a name="l01673"></a><span class="lineno"> 1673</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01674"></a><span class="lineno"> 1674</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01675"></a><span class="lineno"> 1675</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_index_value&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a864612168420ece94949dbc8c5b74d5d">BooleanFunction::Node::has_index_value</a>, py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Index and holds a specific value.</span></div>
+<div class="line"><a name="l01675"></a><span class="lineno"> 1675</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#ac918a01a18abdb126434c1c8c49f8558">BooleanFunction::Node::is_index</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Index.</span></div>
 <div class="line"><a name="l01677"></a><span class="lineno"> 1677</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;<span class="stringliteral">            :param int value: The value to check for.</span></div>
-<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Index and holds the given value, False otherwise.</span></div>
-<div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01682"></a><span class="lineno"> 1682</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01683"></a><span class="lineno"> 1683</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
-<div class="line"><a name="l01684"></a><span class="lineno"> 1684</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_index_value&quot;</span>,</div>
-<div class="line"><a name="l01685"></a><span class="lineno"> 1685</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;u64&gt; {</div>
-<div class="line"><a name="l01686"></a><span class="lineno"> 1686</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_index_value(); res.is_ok())</div>
-<div class="line"><a name="l01687"></a><span class="lineno"> 1687</span>&#160;                {</div>
-<div class="line"><a name="l01688"></a><span class="lineno"> 1688</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01689"></a><span class="lineno"> 1689</span>&#160;                }</div>
-<div class="line"><a name="l01690"></a><span class="lineno"> 1690</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160;                {</div>
-<div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get index value:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;                }</div>
-<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;            },</div>
-<div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160;<span class="stringliteral">            Get the index value of node of type ``Index``.</span></div>
-<div class="line"><a name="l01698"></a><span class="lineno"> 1698</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01699"></a><span class="lineno"> 1699</span>&#160;<span class="stringliteral">            :returns: The index value on success, None otherwise. </span></div>
-<div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160;<span class="stringliteral">            :rtype: int or None</span></div>
-<div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#abcc4e63a2fc7a4ff5cc35bea1e3e6439">BooleanFunction::Node::is_variable</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Variable.</span></div>
+<div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Index, False otherwise.</span></div>
+<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01682"></a><span class="lineno"> 1682</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_index_value&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a864612168420ece94949dbc8c5b74d5d">BooleanFunction::Node::has_index_value</a>, py::arg(<span class="stringliteral">&quot;value&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01683"></a><span class="lineno"> 1683</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Index and holds a specific value.</span></div>
+<div class="line"><a name="l01684"></a><span class="lineno"> 1684</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01685"></a><span class="lineno"> 1685</span>&#160;<span class="stringliteral">            :param int value: The value to check for.</span></div>
+<div class="line"><a name="l01686"></a><span class="lineno"> 1686</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Index and holds the given value, False otherwise.</span></div>
+<div class="line"><a name="l01687"></a><span class="lineno"> 1687</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01688"></a><span class="lineno"> 1688</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01689"></a><span class="lineno"> 1689</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01690"></a><span class="lineno"> 1690</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
+<div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_index_value&quot;</span>,</div>
+<div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;u64&gt; {</div>
+<div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_index_value(); res.is_ok())</div>
+<div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;                {</div>
+<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160;                }</div>
+<div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01698"></a><span class="lineno"> 1698</span>&#160;                {</div>
+<div class="line"><a name="l01699"></a><span class="lineno"> 1699</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get index value:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160;                }</div>
+<div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160;            },</div>
+<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160;<span class="stringliteral">            Get the index value of node of type ``Index``.</span></div>
 <div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Variable, False otherwise.</span></div>
-<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160;<span class="stringliteral">            :returns: The index value on success, None otherwise. </span></div>
+<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;<span class="stringliteral">            :rtype: int or None</span></div>
 <div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_variable_name&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a8ef4e740560fbb4eb134b012ea393a2d">BooleanFunction::Node::has_variable_name</a>, py::arg(<span class="stringliteral">&quot;variable_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Variable and holds a specific variable name.</span></div>
+<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#abcc4e63a2fc7a4ff5cc35bea1e3e6439">BooleanFunction::Node::is_variable</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Variable.</span></div>
 <div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160;<span class="stringliteral">            :param str variable_name: The variable name to check for.</span></div>
-<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Variable and holds the given variable name, False otherwise.</span></div>
-<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
-<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_variable_name&quot;</span>,</div>
-<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;std::string&gt; {</div>
-<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_variable_name(); res.is_ok())</div>
-<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160;                {</div>
-<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
-<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;                }</div>
-<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;                {</div>
-<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get variable name:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;                }</div>
-<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;            },</div>
-<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;<span class="stringliteral">            Get the variable name of node of type ``Variable``.</span></div>
-<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;<span class="stringliteral">            :returns: The variable name on success, None otherwise. </span></div>
-<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
-<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_operation&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a1f5dc54901de011a396a3cc0f2bf199f">BooleanFunction::Node::is_operation</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is an operation node.</span></div>
+<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Variable, False otherwise.</span></div>
+<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;has_variable_name&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a8ef4e740560fbb4eb134b012ea393a2d">BooleanFunction::Node::has_variable_name</a>, py::arg(<span class="stringliteral">&quot;variable_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is of type Variable and holds a specific variable name.</span></div>
+<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160;<span class="stringliteral">            :param str variable_name: The variable name to check for.</span></div>
+<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is of type Variable and holds the given variable name, False otherwise.</span></div>
+<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span></div>
+<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_variable_name&quot;</span>,</div>
+<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="structhal_1_1_boolean_function_1_1_node.html">BooleanFunction::Node</a>&amp; <span class="keyword">self</span>) -&gt; std::optional&lt;std::string&gt; {</div>
+<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_variable_name(); res.is_ok())</div>
+<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;                {</div>
+<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;                    <span class="keywordflow">return</span> res.get();</div>
+<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;                }</div>
+<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160;                {</div>
+<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python_context&quot;</span>, <span class="stringliteral">&quot;could not get variable name:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160;                    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160;                }</div>
+<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;            },</div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;<span class="stringliteral">            Get the variable name of node of type ``Variable``.</span></div>
 <div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is an operation node, False otherwise.</span></div>
-<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160;<span class="stringliteral">            :returns: The variable name on success, None otherwise. </span></div>
+<div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
 <div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_operand&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#aaf94afd87dde8f1405f23faed4125f27">BooleanFunction::Node::is_operand</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is an operand node.</span></div>
+<div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_operation&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a1f5dc54901de011a396a3cc0f2bf199f">BooleanFunction::Node::is_operation</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is an operation node.</span></div>
 <div class="line"><a name="l01747"></a><span class="lineno"> 1747</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is an operand node, False otherwise.</span></div>
+<div class="line"><a name="l01748"></a><span class="lineno"> 1748</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is an operation node, False otherwise.</span></div>
 <div class="line"><a name="l01749"></a><span class="lineno"> 1749</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01750"></a><span class="lineno"> 1750</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01751"></a><span class="lineno"> 1751</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_commutative&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a9e1a7c62d8f8f229b6613cf26e4c75dd">BooleanFunction::Node::is_commutative</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is commutative.</span></div>
+<div class="line"><a name="l01752"></a><span class="lineno"> 1752</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_operand&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#aaf94afd87dde8f1405f23faed4125f27">BooleanFunction::Node::is_operand</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01753"></a><span class="lineno"> 1753</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is an operand node.</span></div>
 <div class="line"><a name="l01754"></a><span class="lineno"> 1754</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is commutative, False otherwise.</span></div>
+<div class="line"><a name="l01755"></a><span class="lineno"> 1755</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is an operand node, False otherwise.</span></div>
 <div class="line"><a name="l01756"></a><span class="lineno"> 1756</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l01757"></a><span class="lineno"> 1757</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l01758"></a><span class="lineno"> 1758</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;<span class="stringliteral">        py::class_&lt;BooleanFunction::NodeType&gt; py_boolean_function_node_type(py_boolean_function, </span><span class="stringliteral">&quot;NodeType&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;<span class="stringliteral">            Holds all node types available in a Boolean function.</span></div>
-<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;<span class="stringliteral">        py_boolean_function_node_type.def_readonly_static(</span><span class="stringliteral">&quot;And&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a9ef4b3ee6ad92357376d5610edef6077">BooleanFunction::NodeType::And</a>);</div>
-<div class="line"><a name="l01764"></a><span class="lineno"> 1764</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Or&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a1ae1400d25cad9a17aa996fc95d79dd8">BooleanFunction::NodeType::Or</a>);</div>
-<div class="line"><a name="l01765"></a><span class="lineno"> 1765</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Not&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ae3be2bcf0aa0c179d288c0697816e39a">BooleanFunction::NodeType::Not</a>);</div>
-<div class="line"><a name="l01766"></a><span class="lineno"> 1766</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Xor&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a4d610f0eb8d160dcda59bacbe270348f">BooleanFunction::NodeType::Xor</a>);</div>
-<div class="line"><a name="l01767"></a><span class="lineno"> 1767</span>&#160; </div>
-<div class="line"><a name="l01768"></a><span class="lineno"> 1768</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Add&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a2676405521e531c66ee4985c5d47f2e6">BooleanFunction::NodeType::Add</a>);</div>
-<div class="line"><a name="l01769"></a><span class="lineno"> 1769</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sub&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a87fbe95430e42250924cadb6fc699ceb">BooleanFunction::NodeType::Sub</a>);</div>
-<div class="line"><a name="l01770"></a><span class="lineno"> 1770</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Mul&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac66f7a56f7a91fb5f8990f4b289c3b55">BooleanFunction::NodeType::Mul</a>);</div>
-<div class="line"><a name="l01771"></a><span class="lineno"> 1771</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sdiv&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5f23491c6237bc1639c7fb5f320243d8">BooleanFunction::NodeType::Sdiv</a>);</div>
-<div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Udiv&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5744785f9dfd92ffac3a75cfaf873281">BooleanFunction::NodeType::Udiv</a>);</div>
-<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Srem&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a4f11f23d527f0eb92dff9d046ab2fc2a">BooleanFunction::NodeType::Srem</a>);</div>
-<div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Urem&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a6097593aea3ecdd1ed6aa7b2e45786b3">BooleanFunction::NodeType::Urem</a>);</div>
-<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160; </div>
-<div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Concat&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ad97fde32054d942ee52c887066c1d64c">BooleanFunction::NodeType::Concat</a>);</div>
-<div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Slice&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#add9e19bb57b3610d18257ecfdea8b742">BooleanFunction::NodeType::Slice</a>);</div>
-<div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Zext&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#adef96263ffc5f919cb8c59e3dccae205">BooleanFunction::NodeType::Zext</a>);</div>
-<div class="line"><a name="l01779"></a><span class="lineno"> 1779</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sext&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a85f0eb5e86dea154a4cc4d0436cd3769">BooleanFunction::NodeType::Sext</a>);</div>
-<div class="line"><a name="l01780"></a><span class="lineno"> 1780</span>&#160; </div>
-<div class="line"><a name="l01781"></a><span class="lineno"> 1781</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Shl&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ae836eb621a4d6fc138683d985e73dea2">BooleanFunction::NodeType::Shl</a>);</div>
-<div class="line"><a name="l01782"></a><span class="lineno"> 1782</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Lshr&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a858ff1bdc05b89c1b8dbeb81271e319f">BooleanFunction::NodeType::Lshr</a>);</div>
-<div class="line"><a name="l01783"></a><span class="lineno"> 1783</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ashr&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac2e474bfc23b01ee0f99e4db4b6bda84">BooleanFunction::NodeType::Ashr</a>);</div>
-<div class="line"><a name="l01784"></a><span class="lineno"> 1784</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Rol&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a1dc6e161f5ce2d98d5b17962708ab48e">BooleanFunction::NodeType::Rol</a>);</div>
-<div class="line"><a name="l01785"></a><span class="lineno"> 1785</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ror&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a7ae7dbc15e28bf14be72cd18c66d09cc">BooleanFunction::NodeType::Ror</a>);</div>
-<div class="line"><a name="l01786"></a><span class="lineno"> 1786</span>&#160; </div>
-<div class="line"><a name="l01787"></a><span class="lineno"> 1787</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Eq&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#afadfae12ed0d723c149b8fb9adeb30cb">BooleanFunction::NodeType::Eq</a>);</div>
-<div class="line"><a name="l01788"></a><span class="lineno"> 1788</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sle&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a41833087ec6b1848ee01eed5e81f8bc6">BooleanFunction::NodeType::Sle</a>);</div>
-<div class="line"><a name="l01789"></a><span class="lineno"> 1789</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Slt&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a39c83575d0cf1fb736bb137da924c4b7">BooleanFunction::NodeType::Slt</a>);</div>
-<div class="line"><a name="l01790"></a><span class="lineno"> 1790</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ule&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a9b71eb8ec30c0fc748b75d5e5e120aca">BooleanFunction::NodeType::Ule</a>);</div>
-<div class="line"><a name="l01791"></a><span class="lineno"> 1791</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ult&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5a78aed4e71f3303459a5614cc5dfa01">BooleanFunction::NodeType::Ult</a>);</div>
-<div class="line"><a name="l01792"></a><span class="lineno"> 1792</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ite&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ab9b656212d14be4572dca95f307bee83">BooleanFunction::NodeType::Ite</a>);</div>
+<div class="line"><a name="l01759"></a><span class="lineno"> 1759</span>&#160;<span class="stringliteral">        py_boolean_function_node.def(</span><span class="stringliteral">&quot;is_commutative&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node.html#a9e1a7c62d8f8f229b6613cf26e4c75dd">BooleanFunction::Node::is_commutative</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01760"></a><span class="lineno"> 1760</span>&#160;<span class="stringliteral">            Checks whether the Boolean function node is commutative.</span></div>
+<div class="line"><a name="l01761"></a><span class="lineno"> 1761</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01762"></a><span class="lineno"> 1762</span>&#160;<span class="stringliteral">            :returns: True if the Boolean function node is commutative, False otherwise.</span></div>
+<div class="line"><a name="l01763"></a><span class="lineno"> 1763</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l01764"></a><span class="lineno"> 1764</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01765"></a><span class="lineno"> 1765</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01766"></a><span class="lineno"> 1766</span>&#160;<span class="stringliteral">        py::class_&lt;BooleanFunction::NodeType&gt; py_boolean_function_node_type(py_boolean_function, </span><span class="stringliteral">&quot;NodeType&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01767"></a><span class="lineno"> 1767</span>&#160;<span class="stringliteral">            Holds all node types available in a Boolean function.</span></div>
+<div class="line"><a name="l01768"></a><span class="lineno"> 1768</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l01769"></a><span class="lineno"> 1769</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01770"></a><span class="lineno"> 1770</span>&#160;<span class="stringliteral">        py_boolean_function_node_type.def_readonly_static(</span><span class="stringliteral">&quot;And&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a9ef4b3ee6ad92357376d5610edef6077">BooleanFunction::NodeType::And</a>);</div>
+<div class="line"><a name="l01771"></a><span class="lineno"> 1771</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Or&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a1ae1400d25cad9a17aa996fc95d79dd8">BooleanFunction::NodeType::Or</a>);</div>
+<div class="line"><a name="l01772"></a><span class="lineno"> 1772</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Not&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ae3be2bcf0aa0c179d288c0697816e39a">BooleanFunction::NodeType::Not</a>);</div>
+<div class="line"><a name="l01773"></a><span class="lineno"> 1773</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Xor&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a4d610f0eb8d160dcda59bacbe270348f">BooleanFunction::NodeType::Xor</a>);</div>
+<div class="line"><a name="l01774"></a><span class="lineno"> 1774</span>&#160; </div>
+<div class="line"><a name="l01775"></a><span class="lineno"> 1775</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Add&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a2676405521e531c66ee4985c5d47f2e6">BooleanFunction::NodeType::Add</a>);</div>
+<div class="line"><a name="l01776"></a><span class="lineno"> 1776</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sub&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a87fbe95430e42250924cadb6fc699ceb">BooleanFunction::NodeType::Sub</a>);</div>
+<div class="line"><a name="l01777"></a><span class="lineno"> 1777</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Mul&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac66f7a56f7a91fb5f8990f4b289c3b55">BooleanFunction::NodeType::Mul</a>);</div>
+<div class="line"><a name="l01778"></a><span class="lineno"> 1778</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sdiv&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5f23491c6237bc1639c7fb5f320243d8">BooleanFunction::NodeType::Sdiv</a>);</div>
+<div class="line"><a name="l01779"></a><span class="lineno"> 1779</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Udiv&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5744785f9dfd92ffac3a75cfaf873281">BooleanFunction::NodeType::Udiv</a>);</div>
+<div class="line"><a name="l01780"></a><span class="lineno"> 1780</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Srem&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a4f11f23d527f0eb92dff9d046ab2fc2a">BooleanFunction::NodeType::Srem</a>);</div>
+<div class="line"><a name="l01781"></a><span class="lineno"> 1781</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Urem&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a6097593aea3ecdd1ed6aa7b2e45786b3">BooleanFunction::NodeType::Urem</a>);</div>
+<div class="line"><a name="l01782"></a><span class="lineno"> 1782</span>&#160; </div>
+<div class="line"><a name="l01783"></a><span class="lineno"> 1783</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Concat&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ad97fde32054d942ee52c887066c1d64c">BooleanFunction::NodeType::Concat</a>);</div>
+<div class="line"><a name="l01784"></a><span class="lineno"> 1784</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Slice&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#add9e19bb57b3610d18257ecfdea8b742">BooleanFunction::NodeType::Slice</a>);</div>
+<div class="line"><a name="l01785"></a><span class="lineno"> 1785</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Zext&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#adef96263ffc5f919cb8c59e3dccae205">BooleanFunction::NodeType::Zext</a>);</div>
+<div class="line"><a name="l01786"></a><span class="lineno"> 1786</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sext&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a85f0eb5e86dea154a4cc4d0436cd3769">BooleanFunction::NodeType::Sext</a>);</div>
+<div class="line"><a name="l01787"></a><span class="lineno"> 1787</span>&#160; </div>
+<div class="line"><a name="l01788"></a><span class="lineno"> 1788</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Shl&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ae836eb621a4d6fc138683d985e73dea2">BooleanFunction::NodeType::Shl</a>);</div>
+<div class="line"><a name="l01789"></a><span class="lineno"> 1789</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Lshr&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a858ff1bdc05b89c1b8dbeb81271e319f">BooleanFunction::NodeType::Lshr</a>);</div>
+<div class="line"><a name="l01790"></a><span class="lineno"> 1790</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ashr&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac2e474bfc23b01ee0f99e4db4b6bda84">BooleanFunction::NodeType::Ashr</a>);</div>
+<div class="line"><a name="l01791"></a><span class="lineno"> 1791</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Rol&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a1dc6e161f5ce2d98d5b17962708ab48e">BooleanFunction::NodeType::Rol</a>);</div>
+<div class="line"><a name="l01792"></a><span class="lineno"> 1792</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ror&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a7ae7dbc15e28bf14be72cd18c66d09cc">BooleanFunction::NodeType::Ror</a>);</div>
 <div class="line"><a name="l01793"></a><span class="lineno"> 1793</span>&#160; </div>
-<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a485f936a7dd69c157c296fc2155abd08">BooleanFunction::NodeType::Constant</a>);</div>
-<div class="line"><a name="l01795"></a><span class="lineno"> 1795</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac801a2203d38d3ffced3db169cbe48d4">BooleanFunction::NodeType::Index</a>);</div>
-<div class="line"><a name="l01796"></a><span class="lineno"> 1796</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#afa2b16532236872811eb0c68caff71b7">BooleanFunction::NodeType::Variable</a>);</div>
-<div class="line"><a name="l01797"></a><span class="lineno"> 1797</span>&#160;    }</div>
-<div class="line"><a name="l01798"></a><span class="lineno"> 1798</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01794"></a><span class="lineno"> 1794</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Eq&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#afadfae12ed0d723c149b8fb9adeb30cb">BooleanFunction::NodeType::Eq</a>);</div>
+<div class="line"><a name="l01795"></a><span class="lineno"> 1795</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Sle&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a41833087ec6b1848ee01eed5e81f8bc6">BooleanFunction::NodeType::Sle</a>);</div>
+<div class="line"><a name="l01796"></a><span class="lineno"> 1796</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Slt&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a39c83575d0cf1fb736bb137da924c4b7">BooleanFunction::NodeType::Slt</a>);</div>
+<div class="line"><a name="l01797"></a><span class="lineno"> 1797</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ule&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a9b71eb8ec30c0fc748b75d5e5e120aca">BooleanFunction::NodeType::Ule</a>);</div>
+<div class="line"><a name="l01798"></a><span class="lineno"> 1798</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ult&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a5a78aed4e71f3303459a5614cc5dfa01">BooleanFunction::NodeType::Ult</a>);</div>
+<div class="line"><a name="l01799"></a><span class="lineno"> 1799</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Ite&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ab9b656212d14be4572dca95f307bee83">BooleanFunction::NodeType::Ite</a>);</div>
+<div class="line"><a name="l01800"></a><span class="lineno"> 1800</span>&#160; </div>
+<div class="line"><a name="l01801"></a><span class="lineno"> 1801</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Constant&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#a485f936a7dd69c157c296fc2155abd08">BooleanFunction::NodeType::Constant</a>);</div>
+<div class="line"><a name="l01802"></a><span class="lineno"> 1802</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Index&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#ac801a2203d38d3ffced3db169cbe48d4">BooleanFunction::NodeType::Index</a>);</div>
+<div class="line"><a name="l01803"></a><span class="lineno"> 1803</span>&#160;        py_boolean_function_node_type.def_readonly_static(<span class="stringliteral">&quot;Variable&quot;</span>, &amp;<a class="code" href="structhal_1_1_boolean_function_1_1_node_type.html#afa2b16532236872811eb0c68caff71b7">BooleanFunction::NodeType::Variable</a>);</div>
+<div class="line"><a name="l01804"></a><span class="lineno"> 1804</span>&#160;    }</div>
+<div class="line"><a name="l01805"></a><span class="lineno"> 1805</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_a03d59bd878bff5cb40f2d4a888ff028f"><div class="ttname"><a href="classhal_1_1_boolean_function.html#a03d59bd878bff5cb40f2d4a888ff028f">hal::BooleanFunction::Slt</a></div><div class="ttdeci">static Result&lt; BooleanFunction &gt; Slt(BooleanFunction &amp;&amp;p0, BooleanFunction &amp;&amp;p1, u16 size)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00571">boolean_function.cpp:571</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_a0a9cb3f9d4ab694df2ee1a3fd3a997b5"><div class="ttname"><a href="classhal_1_1_boolean_function.html#a0a9cb3f9d4ab694df2ee1a3fd3a997b5">hal::BooleanFunction::has_index_value</a></div><div class="ttdeci">bool has_index_value(u16 index) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00815">boolean_function.cpp:815</a></div></div>
@@ -1924,6 +1931,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2boolean__f
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_ab89a8b133b47393ac34d007f26d93b47"><div class="ttname"><a href="classhal_1_1_boolean_function.html#ab89a8b133b47393ac34d007f26d93b47">hal::BooleanFunction::Ror</a></div><div class="ttdeci">static Result&lt; BooleanFunction &gt; Ror(BooleanFunction &amp;&amp;p0, BooleanFunction &amp;&amp;p1, u16 size)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00533">boolean_function.cpp:533</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_acb55bddf60dda42106b4712c8f1ae845"><div class="ttname"><a href="classhal_1_1_boolean_function.html#acb55bddf60dda42106b4712c8f1ae845">hal::BooleanFunction::Sdiv</a></div><div class="ttdeci">static Result&lt; BooleanFunction &gt; Sdiv(BooleanFunction &amp;&amp;p0, BooleanFunction &amp;&amp;p1, u16 size)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00359">boolean_function.cpp:359</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_acc5f75a5a1c393c06c89237576f5bb0f"><div class="ttname"><a href="classhal_1_1_boolean_function.html#acc5f75a5a1c393c06c89237576f5bb0f">hal::BooleanFunction::to_string</a></div><div class="ttdeci">static std::string to_string(Value value)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00024">boolean_function.cpp:24</a></div></div>
+<div class="ttc" id="aclasshal_1_1_boolean_function_html_acce561ac2183c0f586284e7580b410a4"><div class="ttname"><a href="classhal_1_1_boolean_function.html#acce561ac2183c0f586284e7580b410a4">hal::BooleanFunction::simplify_local</a></div><div class="ttdeci">BooleanFunction simplify_local() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l01092">boolean_function.cpp:1092</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_acf976ad78130da5eaf34eba81697bacf"><div class="ttname"><a href="classhal_1_1_boolean_function.html#acf976ad78130da5eaf34eba81697bacf">hal::BooleanFunction::Const</a></div><div class="ttdeci">static BooleanFunction Const(const BooleanFunction::Value &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00256">boolean_function.cpp:256</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_ada85165ff0a9184b83d86eba4c01b62f"><div class="ttname"><a href="classhal_1_1_boolean_function.html#ada85165ff0a9184b83d86eba4c01b62f">hal::BooleanFunction::Ashr</a></div><div class="ttdeci">static Result&lt; BooleanFunction &gt; Ashr(BooleanFunction &amp;&amp;p0, BooleanFunction &amp;&amp;p1, u16 size)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00501">boolean_function.cpp:501</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_adbb8cd1823360db7046cd7fc1f1cde80"><div class="ttname"><a href="classhal_1_1_boolean_function.html#adbb8cd1823360db7046cd7fc1f1cde80">hal::BooleanFunction::to_u64</a></div><div class="ttdeci">static Result&lt; u64 &gt; to_u64(const std::vector&lt; BooleanFunction::Value &gt; &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00208">boolean_function.cpp:208</a></div></div>
@@ -2002,7 +2010,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2boolean__f
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2boolean__function_8cpp.html">boolean_function.cpp</a></li>
-    <li class="footer">Generated on Tue May 13 2025 10:20:04 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu May 22 2025 12:52:42 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
