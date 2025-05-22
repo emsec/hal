@@ -411,86 +411,8 @@ Get the gates of the context.
                 :rtype: str
             )");
 
-        // GateFeatureSingle class
-        py::class_<machine_learning::gate_feature::GateFeatureSingle, machine_learning::gate_feature::GateFeature> py_gate_feature_single_class(py_gate_feature_class, "GateFeatureSingle", R"(
-            Class for gate features that can be computed one gate at a time.
-        )");
-
-        py_gate_feature_single_class.def(
-            "calculate_feature",
-            [](const machine_learning::gate_feature::GateFeatureSingle& self, machine_learning::Context& ctx, Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
-                auto res = self.calculate_feature(ctx, g);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("feature_context"),
-            py::arg("gate"),
-            R"(
-                Calculate the feature for the given gate in the given feature context.
-
-                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
-                :param hal_py.Gate gate: The gate.
-                :returns: A list of unsigned integers representing the feature on success, None otherwise.
-                :rtype: list[list[FEATURE_TYPE]] or None
-            )");
-
-        py_gate_feature_single_class.def("to_string",
-                                         &machine_learning::gate_feature::GateFeatureSingle::to_string,
-                                         R"(
-                Get the string representation of the gate feature.
-
-                :returns: The string representation.
-                :rtype: str
-            )");
-
-        // GateFeatureBulk class
-        py::class_<machine_learning::gate_feature::GateFeatureBulk, machine_learning::gate_feature::GateFeature> py_gate_feature_bulk_class(py_gate_feature_class, "GateFeatureBulk", R"(
-            Class for gate features that are computed for a bulk of gates at a time.
-        )");
-
-        py_gate_feature_bulk_class.def(
-            "calculate_feature",
-            [](const machine_learning::gate_feature::GateFeatureBulk& self, machine_learning::Context& ctx, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<FEATURE_TYPE>>> {
-                auto res = self.calculate_feature(ctx, gates);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("feature_context"),
-            py::arg("gatse"),
-            R"(
-                Calculate the feature for the given gates in the given feature context.
-
-                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
-                :param list[hal_py.Gate] gates: The gates.
-                :returns: A list of unsigned integers representing the feature on success, None otherwise.
-                :rtype: list[list[FEATURE_TYPE]] or None
-            )");
-
-        py_gate_feature_bulk_class.def("to_string",
-                                       &machine_learning::gate_feature::GateFeatureBulk::to_string,
-                                       R"(
-                Get the string representation of the gate feature.
-
-                :returns: The string representation.
-                :rtype: str
-            )");
-
         // ConnectedGlobalIOs class
-        py::class_<machine_learning::gate_feature::ConnectedGlobalIOs, machine_learning::gate_feature::GateFeatureSingle> py_connected_global_ios(py_gate_feature, "ConnectedGlobalIOs", R"(
+        py::class_<machine_learning::gate_feature::ConnectedGlobalIOs, machine_learning::gate_feature::GateFeature> py_connected_global_ios(py_gate_feature, "ConnectedGlobalIOs", R"(
             Gate feature representing connected global IOs.
         )");
 
@@ -533,7 +455,7 @@ Get the gates of the context.
             )");
 
         // DistanceGlobalIO class
-        py::class_<machine_learning::gate_feature::DistanceGlobalIO, machine_learning::gate_feature::GateFeatureSingle> py_distance_global_io(py_gate_feature, "DistanceGlobalIO", R"(
+        py::class_<machine_learning::gate_feature::DistanceGlobalIO, machine_learning::gate_feature::GateFeature> py_distance_global_io(py_gate_feature, "DistanceGlobalIO", R"(
             Gate feature representing distance to global IOs.
         )");
 
@@ -584,7 +506,7 @@ Get the gates of the context.
             )");
 
         // SequentialDistanceGlobalIO class
-        py::class_<machine_learning::gate_feature::SequentialDistanceGlobalIO, machine_learning::gate_feature::GateFeatureSingle> py_sequential_distance_global_io(
+        py::class_<machine_learning::gate_feature::SequentialDistanceGlobalIO, machine_learning::gate_feature::GateFeature> py_sequential_distance_global_io(
             py_gate_feature, "SequentialDistanceGlobalIO", R"(
             Gate feature representing sequential distance to global IOs.
         )");
@@ -636,7 +558,7 @@ Get the gates of the context.
             )");
 
         // IODegrees class
-        py::class_<machine_learning::gate_feature::IODegrees, machine_learning::gate_feature::GateFeatureSingle> py_io_degrees(py_gate_feature, "IODegrees", R"(
+        py::class_<machine_learning::gate_feature::IODegrees, machine_learning::gate_feature::GateFeature> py_io_degrees(py_gate_feature, "IODegrees", R"(
             Gate feature representing input/output degrees.
         )");
 
@@ -679,7 +601,7 @@ Get the gates of the context.
             )");
 
         // GateTypeOneHot class
-        py::class_<machine_learning::gate_feature::GateTypeOneHot, machine_learning::gate_feature::GateFeatureSingle> py_gate_type_one_hot(py_gate_feature, "GateTypeOneHot", R"(
+        py::class_<machine_learning::gate_feature::GateTypeOneHot, machine_learning::gate_feature::GateFeature> py_gate_type_one_hot(py_gate_feature, "GateTypeOneHot", R"(
             Gate feature representing gate type in one-hot encoding.
         )");
 
@@ -722,7 +644,7 @@ Get the gates of the context.
             )");
 
         // NeighboringGateTypes class
-        py::class_<machine_learning::gate_feature::NeighboringGateTypes, machine_learning::gate_feature::GateFeatureSingle> py_neighboring_gate_types(py_gate_feature, "NeighboringGateTypes", R"(
+        py::class_<machine_learning::gate_feature::NeighboringGateTypes, machine_learning::gate_feature::GateFeature> py_neighboring_gate_types(py_gate_feature, "NeighboringGateTypes", R"(
             Gate feature representing neighboring gate types.
         )");
 
@@ -772,7 +694,7 @@ Get the gates of the context.
                 :rtype: str
             )");
 
-        py::class_<machine_learning::gate_feature::BetweennessCentrality, machine_learning::gate_feature::GateFeatureBulk> py_betweenness_centrality(py_gate_feature, "BetweennessCentrality", R"(
+        py::class_<machine_learning::gate_feature::BetweennessCentrality, machine_learning::gate_feature::GateFeature> py_betweenness_centrality(py_gate_feature, "BetweennessCentrality", R"(
             A class representing the betweenness centrality feature for gates.
             )");
 
@@ -821,7 +743,7 @@ Get the gates of the context.
             )");
 
         // HarmonicCentrality class
-        py::class_<machine_learning::gate_feature::HarmonicCentrality, machine_learning::gate_feature::GateFeatureBulk> py_harmonic_centrality(py_gate_feature, "HarmonicCentrality", R"(
+        py::class_<machine_learning::gate_feature::HarmonicCentrality, machine_learning::gate_feature::GateFeature> py_harmonic_centrality(py_gate_feature, "HarmonicCentrality", R"(
             A class representing the harmonic centrality feature for gates.
             )");
 
@@ -870,7 +792,7 @@ Get the gates of the context.
             )");
 
         // SequentialBetweennessCentrality class
-        py::class_<machine_learning::gate_feature::SequentialBetweennessCentrality, machine_learning::gate_feature::GateFeatureBulk> py_sequential_betweenness_centrality(
+        py::class_<machine_learning::gate_feature::SequentialBetweennessCentrality, machine_learning::gate_feature::GateFeature> py_sequential_betweenness_centrality(
             py_gate_feature, "SequentialBetweennessCentrality", R"(
             A class representing the sequential betweenness centrality feature for gates.
             )");
@@ -920,7 +842,7 @@ Get the gates of the context.
             )");
 
         // SequentialHarmonicCentrality class
-        py::class_<machine_learning::gate_feature::SequentialHarmonicCentrality, machine_learning::gate_feature::GateFeatureBulk> py_sequential_harmonic_centrality(
+        py::class_<machine_learning::gate_feature::SequentialHarmonicCentrality, machine_learning::gate_feature::GateFeature> py_sequential_harmonic_centrality(
             py_gate_feature, "SequentialHarmonicCentrality", R"(
             A class representing the sequential harmonic centrality feature for gates.
             )");

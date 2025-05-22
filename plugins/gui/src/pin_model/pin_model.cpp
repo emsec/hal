@@ -455,8 +455,25 @@ namespace hal
         PinItem::TreeItemType type = treeItem->getItemType();
         bool isGroup = (type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::GroupCreator || type == PinItem::TreeItemType::InvalidPinGroup);
         if(isGroup){
-            return !(mAssignedGroupNames.contains(newName) || mAssignedPinNames.contains(newName));
-        }else{
+            if (mAssignedGroupNames.contains(newName))
+            {
+                log_warning("gui", "Pin group name '{}' not available, another group with that name exists.", newName.toStdString());
+                return false;
+            }
+            if (!mAssignedPinNames.contains(newName))
+            {
+                return true;
+            }
+            // Pin with intended new name exists. However, this is OK if pin is part of this group.
+            for (BaseTreeItem* bti : treeItem->getChildren())
+            {
+                if (static_cast<PinItem*>(bti)->getName() == newName)
+                    return true;
+            }
+            log_warning("gui", "Pin group name '{}' not available, another group contains a pin with that name.", newName.toStdString());
+            return false;
+        }
+        else{
             //get group name
             QString groupName = static_cast<PinItem*>(treeItem->getParent())->getName();
             //check if pin can be named after the group

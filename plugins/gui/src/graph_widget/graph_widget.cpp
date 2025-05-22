@@ -803,11 +803,11 @@ namespace hal
         case SelectionRelay::ItemType::Net:
             switch (navigateDirection) {
             case SelectionRelay::Subfocus::Left:
-                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
                     if (hasGate(ep->get_gate())) return true;
                 break;
             case SelectionRelay::Subfocus::Right:
-                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
                     if (hasGate(ep->get_gate())) return true;
                 break;
             default:
