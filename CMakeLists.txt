@@ -130,6 +130,25 @@ set(CMAKE_C_STANDARD_REQUIRED on)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
+# Do not hardcode install RPATH into build tree binaries
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+# Add the install RPATH (for use after make install)
+if (DEFINED LIBRARY_INSTALL_DIRECTORY_FULL)
+    set(CMAKE_INSTALL_RPATH "${LIBRARY_INSTALL_DIRECTORY_FULL}")
+elseif (DEFINED CMAKE_INSTALL_PREFIX)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+else()
+    set(CMAKE_INSTALL_RPATH "/usr/local/lib")
+endif()
+
+# Also include the library path from linked targets in the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# Optional: Make sure build tree still works by allowing RPATH in build
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
 # Set Build Timestamp (used in configured file)
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 string(TIMESTAMP CURRENT_YEAR "%Y")
