@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
 * changed and unified context menus for all widgets related to netlist elements
 * fixed module colors not updating on creation of modules with previously used ids
+* fixed `netlist_preprocessing` build dependencies
+* fixed cmake warnings that minimum version 3.5 is required
+* added RPATH setting so that libraries get found after `make install`
 * added python bindings `gui.View` for management of contexts and directories
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
