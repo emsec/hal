@@ -464,13 +464,15 @@ namespace hal
 
                 // rename top module pins to the var names.
                 // NOTE: this seems to be really depended on the order. Doing this earlier causes a crash. I did not fully understand what causes the top module pins to be created.
+
+                Module* top_mod = nl->get_top_module();
                 for (const auto& [var, in_net] : var_name_to_net)
                 {
-                    auto in_pin = nl->get_top_module()->get_pin_by_net(in_net);
-                    in_pin->set_name(var);
+                    auto in_pin = top_mod->get_pin_by_net(in_net);
+                    top_mod->set_pin_name(in_pin, var, true);
                 }
-                auto out_pin = nl->get_top_module()->get_pin_by_net(new_out_net);
-                out_pin->set_name(out_pin_name);
+                auto out_pin = top_mod->get_pin_by_net(new_out_net);
+                top_mod->set_pin_name(out_pin, out_pin_name, true);
             }
 
             return OK(std::move(nl));
@@ -1056,7 +1058,7 @@ namespace hal
             // delete the created directory and the contained files
             std::filesystem::remove_all(base_path);
 
-            return OK(subgraph.size());
+            return OK(static_cast<unsigned int>(subgraph.size()));
         }
 
         Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)

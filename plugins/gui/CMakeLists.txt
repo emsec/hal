@@ -1,6 +1,6 @@
 option(PL_GUI "PL_GUI" ON)
 if(PL_GUI OR BUILD_ALL_PLUGINS)
-    cmake_minimum_required(VERSION 3.1.0)
+    cmake_minimum_required(VERSION 3.5.0)
 
 
     if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR)
