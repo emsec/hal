@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 4,
     "library": "basic_hal_i4",
     "gate_locations": {
         "data_category": "generic",
@@ -20,6 +20,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -34,6 +35,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -58,6 +60,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -72,6 +75,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -96,6 +100,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -110,6 +115,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -124,6 +130,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -148,6 +155,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -162,6 +170,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -176,6 +185,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -200,6 +210,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -214,6 +225,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -228,6 +240,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -252,6 +265,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -266,6 +280,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -280,6 +295,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -294,12 +310,13 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
                             "direction": "output",
                             "type": "none",
-                            "function": "(A ^ B ^ C)"
+                            "function": "(A ^ (B ^ C))"
                         }
                     ]
                 }
@@ -318,6 +335,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -332,6 +350,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -346,6 +365,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -360,6 +380,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -374,12 +395,13 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
                             "direction": "output",
                             "type": "none",
-                            "function": "(A ^ B ^ C ^ D)"
+                            "function": "(A ^ (B ^ (C ^ D)))"
                         }
                     ]
                 }
@@ -398,6 +420,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -412,6 +435,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -426,6 +450,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -450,6 +475,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -464,6 +490,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -478,6 +505,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -492,6 +520,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -516,6 +545,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -530,6 +560,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -544,6 +575,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -558,6 +590,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -572,6 +605,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -596,6 +630,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -610,6 +645,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -624,6 +660,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S",
@@ -638,6 +675,7 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
@@ -662,6 +700,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -676,6 +715,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -690,6 +730,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -704,6 +745,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S1",
@@ -718,6 +760,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S2",
@@ -732,12 +775,13 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
                             "direction": "output",
                             "type": "none",
-                            "function": "((A & S1) | (!S1 & ((B & S2) | (C & !S2))))"
+                            "function": "((A & S1) | ((! S1) & ((B & S2) | (C & (! S2)))))"
                         }
                     ]
                 }
@@ -756,6 +800,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "A",
@@ -770,6 +815,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "B",
@@ -784,6 +830,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "C",
@@ -798,6 +845,7 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "D",
@@ -812,6 +860,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S1",
@@ -826,6 +875,7 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "S2",
@@ -840,12 +890,13 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
+                    "ordered": false,
                     "pins": [
                         {
                             "name": "O",
                             "direction": "output",
                             "type": "none",
-                            "function": "((A & S1 & S2) | (B & S1 & !S2) | (C & !S1 & S2) | (D & !S1 & !S2))"
+                            "function": "((A & (S1 & S2)) | ((B & (S1 & (! S2))) | ((C & ((! S1) & S2)) | (D & ((! S1) & (! S2))))))"
                         }
                     ]
                 }
@@ -853,7 +904,10 @@
         },
         {
             "name": "HAL_MUX5",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -861,7 +915,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -869,7 +930,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -877,7 +945,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -885,7 +960,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -893,7 +975,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -901,7 +990,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -909,7 +1005,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -917,7 +1020,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -925,13 +1035,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | (S1 & (S2 & ((! S3) & E)))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX6",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -939,7 +1060,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -947,7 +1075,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -955,7 +1090,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -963,7 +1105,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -971,7 +1120,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -979,7 +1135,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -987,7 +1150,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -995,7 +1165,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1003,7 +1180,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1011,13 +1195,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | (S1 & ((! S2) & (S3 & F))))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX7",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1025,7 +1220,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1033,7 +1235,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1041,7 +1250,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1049,7 +1265,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1057,7 +1280,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -1065,7 +1295,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "G",
@@ -1073,7 +1310,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "G",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1081,7 +1325,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1089,7 +1340,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1097,7 +1355,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1105,13 +1370,24 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | ((S1 & ((! S2) & (S3 & F))) | ((! S1) & (S2 & (S3 & G)))))))))"
+                        }
+                    ]
                 }
             ]
         },
         {
             "name": "HAL_MUX8",
-            "types": ["combinational", "c_mux"],
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
             "pin_groups": [
                 {
                     "name": "A",
@@ -1119,7 +1395,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "B",
@@ -1127,7 +1410,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "C",
@@ -1135,7 +1425,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "D",
@@ -1143,7 +1440,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "E",
@@ -1151,7 +1455,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "F",
@@ -1159,7 +1470,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "F",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "G",
@@ -1167,7 +1485,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "G",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "H",
@@ -1175,7 +1500,14 @@
                     "type": "data",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "H", "direction": "input", "type": "data"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "H",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
                 },
                 {
                     "name": "S1",
@@ -1183,7 +1515,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S2",
@@ -1191,7 +1530,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "S3",
@@ -1199,7 +1545,14 @@
                     "type": "select",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "S3",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
                 },
                 {
                     "name": "O",
@@ -1207,7 +1560,15 @@
                     "type": "none",
                     "ascending": false,
                     "start_index": 0,
-                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G) | (S1 & S2 & S3 & H))"}]
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(((! S1) & ((! S2) & ((! S3) & A))) | ((S1 & ((! S2) & ((! S3) & B))) | (((! S1) & (S2 & ((! S3) & C))) | (((! S1) & ((! S2) & (S3 & D))) | ((S1 & (S2 & ((! S3) & E))) | ((S1 & ((! S2) & (S3 & F))) | (((! S1) & (S2 & (S3 & G))) | (S1 & (S2 & (S3 & H))))))))))"
+                        }
+                    ]
                 }
             ]
         }

@@ -1295,6 +1295,13 @@ namespace hal
             :rtype: hal_py.BooleanFunction
         )");
 
+        py_boolean_function.def("simplify_local", &BooleanFunction::simplify_local, R"(
+            Simplifies the Boolean function only with local simplification rules and not invoking ABC.
+
+            :returns: The simplified Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
         py_boolean_function.def(
             "substitute", py::overload_cast<const std::string&, const std::string&>(&BooleanFunction::substitute, py::const_), py::arg("old_variable_name"), py::arg("new_variable_name"), R"(
             Substitute a variable name with another one, i.e., renames the variable.
