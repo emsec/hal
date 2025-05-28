@@ -1240,9 +1240,8 @@ namespace hal
             {
                 if (node.has_variable_name(name) && node.size != value.size())
                 {
-                    // TODO the error message does not reflect what is being checked
-                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the number of variables (" + std::to_string(node.size)
-                               + ") does not match the number of provided inputs (" + std::to_string(value.size()) + ")");
+                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the size of vairbale " + name + " with size " + std::to_string(node.size)
+                               + " does not match the size of the provided input (" + std::to_string(value.size()) + ")");
                 }
             }
         }
