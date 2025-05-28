@@ -1,6 +1,5 @@
 var NAVTREEINDEX22 =
 {
-"classhal_1_1_wait_to_be_seated_list.html#a1f6f3589eba031742502197d42c9e6cf":[4,0,0,2,23,2],
 "classhal_1_1_wait_to_be_seated_list.html#a5ead74e61ee19bfedc478d4a3a2a86aa":[4,0,0,2,23,3],
 "classhal_1_1_wait_to_be_seated_list.html#a75d46d7bc179b84e993e980e80e315a6":[4,0,0,2,23,5],
 "classhal_1_1_wait_to_be_seated_list.html#acc1440d7d55387d6536803dad076a0bb":[4,0,0,2,23,6],
@@ -249,5 +248,6 @@ var NAVTREEINDEX22 =
 "data__container_8h.html":[7,0,0,0,1,9],
 "data__container_8h_source.html":[7,0,0,0,1,9],
 "data__table__model_8cpp.html":[7,0,1,3,2,40,4],
-"data__table__model_8cpp_source.html":[7,0,1,3,2,40,4]
+"data__table__model_8cpp_source.html":[7,0,1,3,2,40,4],
+"data__table__model_8h.html":[7,0,1,3,0,0,42,4]
 };

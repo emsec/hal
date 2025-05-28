@@ -1,6 +1,5 @@
 var NAVTREEINDEX25 =
 {
-"functions_prop_v.html":[6,3,6,20],
 "functions_prop_w.html":[6,3,6,21],
 "functions_prop_y.html":[6,3,6,22],
 "functions_q.html":[6,3,0,16],
@@ -11,8 +10,8 @@ var NAVTREEINDEX25 =
 "functions_type.html":[6,3,3],
 "functions_u.html":[6,3,0,20],
 "functions_v.html":[6,3,0,21],
-"functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
+"functions_vars.html":[6,3,2],
 "functions_vars_b.html":[6,3,2,1],
 "functions_vars_c.html":[6,3,2,2],
 "functions_vars_d.html":[6,3,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX25 =
 "geometry_8h_source.html":[7,0,1,3,0,0,25,1],
 "get__in__touch__item_8cpp.html":[7,0,1,3,2,50,0],
 "get__in__touch__item_8cpp_source.html":[7,0,1,3,2,50,0],
-"get__in__touch__item_8h.html":[7,0,1,3,0,0,53,0]
+"get__in__touch__item_8h.html":[7,0,1,3,0,0,53,0],
+"get__in__touch__item_8h_source.html":[7,0,1,3,0,0,53,0]
 };
