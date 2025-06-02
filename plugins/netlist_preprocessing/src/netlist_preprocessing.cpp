@@ -680,14 +680,21 @@ namespace hal
                         auto* suc_gate = suc_ep->get_gate();
                         if (suc_gate == start_ff || cache.find(suc_gate) != cache.end())
                         {
-                            loops_by_start_gate[start_ff].insert(current_gate);
+                            // Only add current_gate if it's combinational
+                            if (current_gate->get_type()->has_property(GateTypeProperty::combinational))
+                            {
+                                loops_by_start_gate[start_ff].insert(current_gate);
+                            }
                             cache.insert(current_gate);
                             if (!previous_gates.empty())
                             {
                                 for (auto it = ++(previous_gates.begin()); it != previous_gates.end(); it++)
                                 {
                                     cache.insert(*it);
-                                    loops_by_start_gate[start_ff].insert(*it);
+                                    if ((*it)->get_type()->has_property(GateTypeProperty::combinational))
+                                    {
+                                        loops_by_start_gate[start_ff].insert(*it);
+                                    }
                                 }
                             }
                         }
