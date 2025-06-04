@@ -1,5 +1,4 @@
 #include "hal_core/python_bindings/python_bindings.h"
-
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -8,6 +7,7 @@
 #include "z3_utils/plugin_z3_utils.h"
 #include "z3_utils/simplification.h"
 #include "z3_utils/subgraph_function_generation.h"
+#include "z3_utils/subgraph_function_generation_parallelized.h"
 #include "z3_utils/z3_utils.h"
 
 namespace py = pybind11;
@@ -33,6 +33,53 @@ namespace hal
         py_z3_utils.def("get_name", &Z3UtilsPlugin::get_name);
         py_z3_utils.def_property_readonly("version", &Z3UtilsPlugin::get_version);
         py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version);
+
+        m.def(
+            "get_subgraph_functions_test",
+            [](const std::vector<Net*> subgraph_outputs) -> std::optional<std::vector<hal::BooleanFunction>> {
+                z3::context ctx;
+
+                const auto res = z3_utils::get_subgraph_z3_functions(GateTypeProperty::combinational, subgraph_outputs, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                std::vector<BooleanFunction> bfs;
+                for (const auto& z : res.get())
+                {
+                    bfs.push_back(z3_utils::to_bf(z).get());
+                }
+
+                return bfs;
+            },
+            py::arg("subgraph_outputs"),
+            R"(TEST)");
+
+        m.def(
+            "get_subgraph_z3_functions_parallelized_test",
+            [](const std::vector<Net*> subgraph_outputs, const u32 num_threads) -> std::optional<std::vector<hal::BooleanFunction>> {
+                z3::context ctx;
+
+                const auto res = z3_utils::get_subgraph_z3_functions_parallelized(GateTypeProperty::combinational, subgraph_outputs, ctx, num_threads);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                std::vector<BooleanFunction> bfs;
+                for (const auto& z : res.get())
+                {
+                    bfs.push_back(z3_utils::to_bf(z).get());
+                }
+
+                return bfs;
+            },
+            py::arg("subgraph_outputs"),
+            py::arg("num_threads"),
+            R"(TEST)");
 
         m.def(
             "get_subgraph_function",
@@ -166,7 +213,7 @@ namespace hal
         m.def(
             "simplify",
             [](const BooleanFunction& bf) -> std::optional<BooleanFunction> {
-                auto ctx = z3::context();
+                auto ctx  = z3::context();
                 auto expr = z3_utils::from_bf(bf, ctx);
 
                 auto res = z3_utils::simplify_local(expr);

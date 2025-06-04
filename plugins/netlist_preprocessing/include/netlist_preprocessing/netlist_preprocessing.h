@@ -87,11 +87,13 @@ namespace hal
         /**
          * Removes redundant logic trees made up of combinational gates.
          * If two trees compute the exact same function even if implemented with different gates we will disconnect one of the trees and afterwards clean up all dangling gates and nets. 
+         * Parts of this function can be sped up using threads.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] num_threads - The number of threads to use. 
          * @return OK() and the number of disconnected net on success, an error otherwise.
          */
-        Result<u32> remove_redundant_logic_trees(Netlist* nl);
+        Result<u32> remove_redundant_logic_trees(Netlist* nl, const u32 num_threads = 1);
 
         /**
          * Removes gates for which all fan-out nets do not have a destination and are not global output nets.

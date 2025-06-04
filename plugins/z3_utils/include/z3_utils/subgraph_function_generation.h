@@ -40,6 +40,8 @@ namespace hal
 
     namespace z3_utils
     {
+        Result<z3::expr> get_subgraph_z3_function(const std::function<bool(const Gate*)> subgraph_filter, const Net* subgraph_output, z3::context& ctx);
+
         /**
          * @brief Get the z3 expression representation of a combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
          * 
@@ -51,6 +53,13 @@ namespace hal
          */
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx);
 
+        Result<z3::expr> get_subgraph_z3_function(const GateTypeProperty subgraph_property, const Net* subgraph_output, z3::context& ctx);
+
+        Result<z3::expr> get_subgraph_z3_function(const std::function<bool(const Gate*)> subgraph_filter,
+                                                  const Net* subgraph_output,
+                                                  z3::context& ctx,
+                                                  std::map<u32, z3::expr>& net_cache,
+                                                  std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
 
         /**
          * @brief Get the z3 expression representation of a combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
@@ -61,8 +70,19 @@ namespace hal
          * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
          * @return The the z3 expression representation of combined Boolean function of the subgraph on success, an error otherwise.
          */
-        Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx,  std::map<u32, z3::expr>& net_cache,
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
+        Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates,
+                                                  const Net* subgraph_output,
+                                                  z3::context& ctx,
+                                                  std::map<u32, z3::expr>& net_cache,
+                                                  std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
+
+        Result<z3::expr> get_subgraph_z3_function(const GateTypeProperty subgraph_property,
+                                                  const Net* subgraph_output,
+                                                  z3::context& ctx,
+                                                  std::map<u32, z3::expr>& net_cache,
+                                                  std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
+
+        Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::function<bool(const Gate*)> subgraph_filter, const std::vector<Net*>& subgraph_outputs, z3::context& ctx);
 
         /**
          * @brief  Get the z3 expression representations of combined Boolean functions of a subgraph of combinational gates starting at the sources of the provided subgraph output nets.
@@ -74,5 +94,7 @@ namespace hal
          * @return The the z3 expression representations of combined Boolean functions of the subgraph on success, an error otherwise.
          */
         Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs, z3::context& ctx);
+
+        Result<std::vector<z3::expr>> get_subgraph_z3_functions(const GateTypeProperty subgraph_property, const std::vector<Net*>& subgraph_outputs, z3::context& ctx);
     }    // namespace z3_utils
 }    // namespace hal
