@@ -58,6 +58,30 @@ namespace hal
             R"(TEST)");
 
         m.def(
+            "get_subgraph_functions_slow_test",
+            [](const std::vector<Gate*> subgraph_gates, const std::vector<Net*> subgraph_outputs) -> std::optional<std::vector<hal::BooleanFunction>> {
+                z3::context ctx;
+
+                const auto res = z3_utils::get_subgraph_z3_functions(subgraph_gates, subgraph_outputs, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                std::vector<BooleanFunction> bfs;
+                for (const auto& z : res.get())
+                {
+                    bfs.push_back(z3_utils::to_bf(z).get());
+                }
+
+                return bfs;
+            },
+            py::arg("subgraph_gates"),
+            py::arg("subgraph_outputs"),
+            R"(TEST)");
+
+        m.def(
             "get_subgraph_z3_functions_parallelized_test",
             [](const std::vector<Net*> subgraph_outputs, const u32 num_threads) -> std::optional<std::vector<hal::BooleanFunction>> {
                 z3::context ctx;
