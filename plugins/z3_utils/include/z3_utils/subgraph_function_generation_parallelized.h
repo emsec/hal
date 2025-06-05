@@ -38,7 +38,6 @@ namespace hal
 
     namespace z3_utils
     {
-
         Result<std::vector<z3::expr>>
             get_subgraph_z3_functions_parallelized(const std::function<bool(const Gate*)> subgraph_filter, const std::vector<Net*>& subgraph_outputs, z3::context& ctx, const u32 num_threads);
 

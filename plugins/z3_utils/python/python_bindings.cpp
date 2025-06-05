@@ -35,11 +35,37 @@ namespace hal
         py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version);
 
         m.def(
-            "get_subgraph_functions_test",
+            "get_subgraph_functions_fast_test",
             [](const std::vector<Net*> subgraph_outputs) -> std::optional<std::vector<hal::BooleanFunction>> {
                 z3::context ctx;
 
                 const auto res = z3_utils::get_subgraph_z3_functions(GateTypeProperty::combinational, subgraph_outputs, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                std::vector<BooleanFunction> bfs;
+                for (const auto& z : res.get())
+                {
+                    bfs.push_back(z3_utils::to_bf(z).get());
+                }
+
+                return bfs;
+            },
+            py::arg("subgraph_outputs"),
+            R"(TEST)");
+
+        m.def(
+            "get_subgraph_functions_test",
+            [](const std::vector<Net*> subgraph_outputs) -> std::optional<std::vector<hal::BooleanFunction>> {
+                z3::context ctx;
+
+                std::map<u32, z3::expr> net_cache;
+                std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+
+                const auto res = z3_utils::get_subgraph_z3_functions(GateTypeProperty::combinational, subgraph_outputs, ctx, net_cache, gate_cache);
                 if (res.is_error())
                 {
                     log_error("z3_utils", "{}", res.get_error().get());
