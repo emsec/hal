@@ -47,10 +47,10 @@ namespace hal
                 }
 
                 std::vector<BooleanFunction> bfs;
-                for (const auto& z : res.get())
-                {
-                    bfs.push_back(z3_utils::to_bf(z).get());
-                }
+                // for (const auto& z : res.get())
+                // {
+                //     bfs.push_back(z3_utils::to_bf(z).get());
+                // }
 
                 return bfs;
             },
@@ -73,10 +73,10 @@ namespace hal
                 }
 
                 std::vector<BooleanFunction> bfs;
-                for (const auto& z : res.get())
-                {
-                    bfs.push_back(z3_utils::to_bf(z).get());
-                }
+                // for (const auto& z : res.get())
+                // {
+                //     bfs.push_back(z3_utils::to_bf(z).get());
+                // }
 
                 return bfs;
             },
@@ -96,10 +96,10 @@ namespace hal
                 }
 
                 std::vector<BooleanFunction> bfs;
-                for (const auto& z : res.get())
-                {
-                    bfs.push_back(z3_utils::to_bf(z).get());
-                }
+                // for (const auto& z : res.get())
+                // {
+                //     bfs.push_back(z3_utils::to_bf(z).get());
+                // }
 
                 return bfs;
             },
