@@ -1,5 +1,4 @@
 #include "hal_core/python_bindings/python_bindings.h"
-
 #include "netlist_preprocessing/netlist_preprocessing.h"
 #include "netlist_preprocessing/plugin_netlist_preprocessing.h"
 #include "pybind11/operators.h"
@@ -180,8 +179,8 @@ namespace hal
 
         m.def(
             "remove_redundant_logic_trees",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_redundant_logic_trees(nl);
+            [](Netlist* nl, const u32 num_threads) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_redundant_logic_trees(nl, num_threads);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -193,11 +192,14 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("num_threads") = 1,
             R"(
                 Removes redundant logic trees made up of combinational gates.
-                If two trees compute the exact same function even if implemented with different gates we will disconnect one of the trees and afterwards clean up all dangling gates and nets. 
+                If two trees compute the exact same function even if implemented with different gates we will disconnect one of the trees and afterwards clean up all dangling gates and nets.
+                Parts of the process can be parallelized. The amount of available threads can be specified.
                 
-                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param int num_threads: Amount of threads to use. Defaults to 1.
                 :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");

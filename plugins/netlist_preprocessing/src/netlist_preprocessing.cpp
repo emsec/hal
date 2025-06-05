@@ -903,31 +903,27 @@ namespace hal
                 }
             };
 
-            Result<std::map<TreeFingerprint, std::set<Net*>>> fingerprint_nets(const Netlist* nl, const u32 num_threads)
+            Result<std::map<TreeFingerprint, std::set<Net*>>> fingerprint_nets(const Netlist* nl, const std::vector<Net*>& nets, const u32 num_threads)
             {
                 // Worker function for processing gates
-                auto process_gates_worker = [&](const std::vector<Gate*>& gates, size_t start_idx, size_t end_idx) -> Result<std::map<TreeFingerprint, std::set<Net*>>> {
+                auto process_gates_worker = [&](size_t start_idx, size_t end_idx) -> Result<std::map<TreeFingerprint, std::set<Net*>>> {
                     std::map<TreeFingerprint, std::set<Net*>> local_fingerprint_to_nets;
 
                     for (size_t i = start_idx; i < end_idx; ++i)
                     {
-                        const auto& g = gates[i];
+                        const auto& n = nets[i];
 
-                        for (const auto& out_ep : g->get_fan_out_endpoints())
+                        auto inputs_res = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, n);
+
+                        if (inputs_res.is_error())
                         {
-                            const auto& out_net = out_ep->get_net();
-                            auto inputs_res     = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, out_net);
-
-                            if (inputs_res.is_error())
-                            {
-                                return ERR_APPEND(inputs_res.get_error(),
-                                                  "Unable to remove redundant logic trees: failed to gather inputs for net " + out_net->get_name() + " with ID " + std::to_string(out_net->get_id()));
-                            }
-
-                            TreeFingerprint tf;
-                            tf.external_inputs = inputs_res.get();
-                            local_fingerprint_to_nets[tf].insert(out_net);
+                            return ERR_APPEND(inputs_res.get_error(),
+                                              "Unable to remove redundant logic trees: failed to gather inputs for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
                         }
+
+                        TreeFingerprint tf;
+                        tf.external_inputs = inputs_res.get();
+                        local_fingerprint_to_nets[tf].insert(n);
                     }
 
                     return OK(local_fingerprint_to_nets);
@@ -936,26 +932,20 @@ namespace hal
                 // Main multi-threaded processing
                 std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets;
 
-                const std::vector<Gate*> all_comb_gates_vec = nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
-
-                if (num_threads <= 1 || all_comb_gates_vec.size() < num_threads)
+                if (num_threads <= 1 || nets.size() < num_threads)
                 {
                     // Single-threaded fallback for small datasets or num_threads = 1
-                    for (const auto& g : all_comb_gates_vec)
+                    for (const auto& n : nets)
                     {
-                        for (const auto& out_ep : g->get_fan_out_endpoints())
+                        auto inputs_res = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, n);
+                        if (inputs_res.is_error())
                         {
-                            const auto& out_net = out_ep->get_net();
-                            auto inputs_res     = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, out_net);
-                            if (inputs_res.is_error())
-                            {
-                                return ERR_APPEND(inputs_res.get_error(),
-                                                  "Unable to remove redundant logic trees: failed to gather inputs for net " + out_net->get_name() + " with ID " + std::to_string(out_net->get_id()));
-                            }
-                            TreeFingerprint tf;
-                            tf.external_inputs = inputs_res.get();
-                            fingerprint_to_nets[tf].insert(out_net);
+                            return ERR_APPEND(inputs_res.get_error(),
+                                              "Unable to remove redundant logic trees: failed to gather inputs for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
                         }
+                        TreeFingerprint tf;
+                        tf.external_inputs = inputs_res.get();
+                        fingerprint_to_nets[tf].insert(n);
                     }
                 }
                 else
@@ -963,16 +953,16 @@ namespace hal
                     // Multi-threaded processing
                     std::vector<std::thread> threads;
                     std::vector<Result<std::map<TreeFingerprint, std::set<Net*>>>> results(num_threads, ERR("uninitialized thread result"));
-                    size_t gates_per_thread = all_comb_gates_vec.size() / num_threads;
-                    size_t remainder        = all_comb_gates_vec.size() % num_threads;
+                    size_t nets_per_thread = nets.size() / num_threads;
+                    size_t remainder       = nets.size() % num_threads;
 
                     size_t start_idx = 0;
                     for (size_t t = 0; t < num_threads; ++t)
                     {
-                        size_t current_chunk_size = gates_per_thread + (t < remainder ? 1 : 0);
+                        size_t current_chunk_size = nets_per_thread + (t < remainder ? 1 : 0);
                         size_t end_idx            = start_idx + current_chunk_size;
 
-                        threads.emplace_back([&, t, start_idx, end_idx]() { results[t] = process_gates_worker(all_comb_gates_vec, start_idx, end_idx); });
+                        threads.emplace_back([&, t, start_idx, end_idx]() { results[t] = process_gates_worker(start_idx, end_idx); });
                         start_idx = end_idx;
                     }
 
@@ -995,9 +985,9 @@ namespace hal
                     for (const auto& result : results)
                     {
                         const auto& local_map = result.get();
-                        for (const auto& [tf, nets] : local_map)
+                        for (const auto& [tf, local_nets] : local_map)
                         {
-                            for (const auto& net : nets)
+                            for (const auto& net : local_nets)
                             {
                                 fingerprint_to_nets[tf].insert(net);
                             }
@@ -1011,18 +1001,37 @@ namespace hal
 
         Result<u32> remove_redundant_logic_trees(Netlist* nl, const u32 num_threads)
         {
-            const auto res = fingerprint_nets(nl, num_threads);
+            const std::vector<Gate*> all_comb_gates_vec = nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+
+            std::vector<Net*> all_nets;
+            u32 max_net_id = 0;
+
+            for (const auto& g : all_comb_gates_vec)
+            {
+                for (const auto& out_ep : g->get_fan_out_endpoints())
+                {
+                    all_nets.push_back(out_ep->get_net());
+                    if (out_ep->get_net()->get_id() > max_net_id)
+                    {
+                        max_net_id = out_ep->get_net()->get_id();
+                    }
+                }
+            }
+
+            const auto res = fingerprint_nets(nl, all_nets, num_threads);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "cannot remove redundant logic trees: failed to fingerprint nets");
             }
             const std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets = res.get();
 
+            std::cout << "Done with fingerprinting" << std::endl;
+            std::cout << "Got " << fingerprint_to_nets.size() << " different finger prints" << std::endl;
+
             std::vector<std::vector<Net*>> equality_classes;
 
             z3::context ctx;
-            std::map<u32, z3::expr> net_cache;
-            std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
+            std::vector<z3::expr> net_cache(max_net_id + 1, z3::expr(ctx));
 
             for (const auto& [_fingerprint, nets] : fingerprint_to_nets)
             {
@@ -1050,8 +1059,8 @@ namespace hal
 
                     for (const auto& m : current_candidate_nets)
                     {
-                        const auto bf_n = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, n, ctx, net_cache, gate_cache);
-                        const auto bf_m = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, m, ctx, net_cache, gate_cache);
+                        const auto bf_n = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, n, ctx, net_cache);
+                        const auto bf_m = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, m, ctx, net_cache);
 
                         if (bf_n.is_error())
                         {
@@ -1086,6 +1095,8 @@ namespace hal
                     next_candidate_nets.clear();
                 }
             }
+
+            std::cout << "Done with equivalnce checking" << std::endl;
 
             u32 counter = 0;
             for (const auto& eq_class : equality_classes)
