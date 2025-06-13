@@ -1,5 +1,6 @@
 var NAVTREEINDEX41 =
 {
+"src_2python__bindings_2bindings_2grouping_8cpp.html":[7,0,2,2,0,14],
 "src_2python__bindings_2bindings_2grouping_8cpp.html#ga0b8291fb8af058d824b23bcd16a86821":[7,0,2,2,0,14,0],
 "src_2python__bindings_2bindings_2grouping_8cpp_source.html":[7,0,2,2,0,14],
 "src_2python__bindings_2bindings_2netlist_8cpp.html":[7,0,2,2,0,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX41 =
 "struct_hop___obj__t__.html#a9002d8b9970f133cd0e88e660385aada":[6,0,6,6],
 "struct_vec___int__t__.html":[6,0,7],
 "struct_vec___int__t__.html#a1e28bb412871d25734ce8333c410b77d":[6,0,7,1],
-"struct_vec___int__t__.html#a3122cbf46c7105b837d073cdbd93f594":[6,0,7,2],
-"struct_vec___int__t__.html#aa4e999ab47a7bbfa2251160dc7d5134d":[6,0,7,0]
+"struct_vec___int__t__.html#a3122cbf46c7105b837d073cdbd93f594":[6,0,7,2]
 };
