@@ -19,6 +19,54 @@ namespace hal
     {
         namespace
         {
+            // Might be unified
+            std::vector<Gate*> get_shortest_path_to_module_internal(Gate* start_gate, Module* end_module)
+            {
+                std::unordered_set<Gate*> end_gates;
+                for (Gate* g : end_module->get_gates(nullptr, true))
+                {
+                    end_gates.insert(g);
+                }
+                if (end_gates.find(start_gate) != end_gates.end())
+                    return std::vector<Gate*>();
+                std::vector<Gate*> v0;
+                v0.push_back(start_gate);
+                std::unordered_map<Gate*, Gate*> originMap;
+                for (;;)
+                {
+                    std::vector<Gate*> v1;
+                    for (Gate* g0 : v0)
+                    {
+                        for (Gate* g1 : get_next_gates(g0, true, 1))
+                        {
+                            if (originMap.find(g1) != originMap.end())
+                                continue;    // already routed to
+                            v1.push_back(g1);
+                            originMap[g1] = g0;
+                            if (end_gates.find(g1) != end_gates.end())
+                            {
+                                // heureka!
+                                std::vector<Gate*> retval;
+                                Gate* g = g1;
+                                while (g != start_gate)
+                                {
+                                    retval.insert(retval.begin(), g);
+                                    auto it = originMap.find(g);
+                                    assert(it != originMap.end());
+                                    g = it->second;
+                                }
+                                retval.insert(retval.begin(), start_gate);
+                                return retval;
+                            }
+                        }
+                    }
+                    if (v1.empty())
+                        break;
+                    v0 = v1;
+                }
+                return std::vector<Gate*>();
+            }
+
             std::vector<Gate*> get_shortest_path_internal(Gate* start_gate, Gate* end_gate)
             {
                 if (start_gate == end_gate)
@@ -266,6 +314,11 @@ namespace hal
                 v0 = v1;
             }
             return retval;
+        }
+
+        std::vector<Gate*> get_shortest_path_to_module(Gate* start_gate, Module* end_module)
+        {
+            return get_shortest_path_to_module_internal(start_gate, end_module);
         }
 
         std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)

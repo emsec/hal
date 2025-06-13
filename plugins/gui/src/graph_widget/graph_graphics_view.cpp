@@ -555,9 +555,12 @@ namespace hal
                 recursionLevelMenu(preSucMenu->addMenu("Highlight successors by distance …"), true, &GraphGraphicsView::handleSuccessorDistance);
                 if (isGate)
                 {
-                    action = preSucMenu->addAction("Highlight path to successor …");
+                    action = preSucMenu->addAction("Highlight path to successor gate …");
                     action->setData(true);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathGate);
+                    action = preSucMenu->addAction("Highlight path to successor module …");
+                    action->setData(true); // direction currently not used
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathModule);
                 }
 
                 preSucMenu->addSeparator();
@@ -576,7 +579,7 @@ namespace hal
                 {
                     action = preSucMenu->addAction("Highlight path to predecessor …");
                     action->setData(false);
-                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPath);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathGate);
                 }
             }
 
@@ -1177,7 +1180,28 @@ namespace hal
         act->exec();
     }
 
-    void GraphGraphicsView::handleQueryShortestPath()
+    void GraphGraphicsView::handleQueryShortestPathModule()
+    {
+        QAction* send = static_cast<QAction*>(sender());
+        Q_ASSERT(send);
+
+        QSet<u32> excludeModules;
+        Gate* g = gNetlist->get_gate_by_id(mItem->id());
+        Q_ASSERT(g);
+        Module* par = g->get_module();
+        while(par)
+        {
+            excludeModules.insert(par->get_id());
+            par = par->get_parent_module();
+        }
+        ModuleDialog md(excludeModules, "Shortest path to module", true, nullptr, this);
+
+        if (md.exec() != QDialog::Accepted) return;
+
+        handleShortestPath(mItem->id(),Node(md.selectedId(),Node::Module));
+    }
+
+    void GraphGraphicsView::handleQueryShortestPathGate()
     {
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
@@ -1196,18 +1220,36 @@ namespace hal
         if (!targetId) return;
 
         if (succ)
-            handleShortestPath(mItem->id(),targetId);
+            handleShortestPath(mItem->id(),Node(targetId,Node::Gate));
         else
-            handleShortestPath(targetId,mItem->id());
+            handleShortestPath(targetId,Node(mItem->id(),Node::Gate));
     }
 
-    void GraphGraphicsView::handleShortestPath(u32 idFrom, u32 idTo)
+    void GraphGraphicsView::handleShortestPath(u32 idFrom, Node nodeTo)
     {
+        std::vector<Gate*> spath;
+
         Gate* g0 = gNetlist->get_gate_by_id(idFrom);
         Q_ASSERT(g0);
-        Gate* g1 = gNetlist->get_gate_by_id(idTo);
-        Q_ASSERT(g1);
-        std::vector<Gate*> spath = netlist_utils::get_shortest_path(g0,g1);
+        Q_ASSERT(!nodeTo.isNull());
+
+        QString target;
+
+        if(nodeTo.isGate())
+        {
+            Gate* g1 = gNetlist->get_gate_by_id(nodeTo.id());
+            Q_ASSERT(g1);
+            spath = netlist_utils::get_shortest_path(g0,g1);
+            target = QString("gate '%1'[%2]").arg(QString::fromStdString(g1->get_name()), g1->get_id());
+        }
+        else
+        {
+            Module* m = gNetlist->get_module_by_id(nodeTo.id());
+            Q_ASSERT(m);
+            spath = netlist_utils::get_shortest_path_to_module(g0,m);
+            target = QString("module '%1'[%2]").arg(QString::fromStdString(m->get_name()), m->get_id());
+        }
+
 
         QSet<u32> mods;
         QSet<u32> gats;
@@ -1230,9 +1272,9 @@ namespace hal
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Grouping,
-                                              QString("Path from %1[%2] to %3[%4]")
+                                              QString("Path from '%1'[%2] to %3")
                                               .arg(QString::fromStdString(g0->get_name())).arg(g0->get_id())
-                                              .arg(QString::fromStdString(g1->get_name())).arg(g1->get_id())));
+                                              .arg(target)));
         act->addAction(new ActionAddItemsToObject(mods,gats,nets));
         act->addAction(new ActionSetSelectionFocus());
         act->exec();
@@ -1625,9 +1667,9 @@ namespace hal
             if (ggv)
             {
                 if (mPickSuccessor)
-                    ggv->handleShortestPath(mOrigin,pickedGate);
+                    ggv->handleShortestPath(mOrigin,Node(pickedGate,Node::Gate));
                 else
-                    ggv->handleShortestPath(pickedGate,mOrigin);
+                    ggv->handleShortestPath(pickedGate,Node(mOrigin,Node::Gate));
             }
         }
         this->deleteLater();

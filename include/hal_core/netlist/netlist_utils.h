@@ -349,5 +349,7 @@ namespace hal
          */
         [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*>
             get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+
+        CORE_API std::vector<Gate*> get_shortest_path_to_module(Gate* start_gate, Module* end_module);
     }    // namespace netlist_utils
 }    // namespace hal
