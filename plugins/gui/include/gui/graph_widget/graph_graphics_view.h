@@ -146,6 +146,7 @@ namespace hal
         void handleUnfoldAllAction();
 
         void handleShortestPathToView();
+        void handleShortestModulePathToView();
         void handleQueryShortestPathGate();
         void handleQueryShortestPathModule();
         void handleSelectOutputs();
@@ -183,6 +184,8 @@ namespace hal
         void resizeEvent(QResizeEvent* event) override;
 
     private:
+
+        enum SearchAction {PredecessorGate, SuccessorGate, SuccessorModule};
         void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
 
