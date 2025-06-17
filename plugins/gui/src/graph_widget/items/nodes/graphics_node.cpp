@@ -6,10 +6,9 @@
 
 namespace hal
 {
-    GraphicsNode::GraphicsNode(const ItemType type, const u32 id, const QString& name)
+    GraphicsNode::GraphicsNode(const ItemType type, const u32 id)
         : GraphicsItem(type, id)
     {
-        mNodeText[0] = name;
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
         //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
         //setAcceptHoverEvents(true);

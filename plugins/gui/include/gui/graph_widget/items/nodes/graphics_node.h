@@ -63,9 +63,8 @@ namespace hal
          *
          * @param type - The type of the GraphicsItem (i.e. module, gate or net)
          * @param id - The id of the underlying object (e.g. the module id if ItemType::Module)
-         * @param name - The name of the node
          */
-        GraphicsNode(const ItemType type, const u32 id, const QString& name);
+        GraphicsNode(const ItemType type, const u32 id);
 
          /**
           * Get the bounding rectangle of the GrahpicsNode that represent its size. Therefore the returned rectangle is

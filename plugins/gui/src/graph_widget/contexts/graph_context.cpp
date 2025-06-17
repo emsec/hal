@@ -7,6 +7,7 @@
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/graph_widget.h"
+#include "gui/graph_widget/items/nodes/modules/standard_graphics_module.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_def.h"
@@ -479,6 +480,18 @@ namespace hal
 
         if(mUserUpdateCount == 0)
             update();
+    }
+
+    void GraphContext::refreshModule(const u32 moduleId)
+    {
+        NodeBox* box = getLayouter()->boxes().boxForNode(Node(moduleId,Node::Module));
+        if (!box) return;
+        Module* m = gNetlist->get_module_by_id(moduleId);
+        if (!m) return;
+        GraphicsModule* gm = dynamic_cast<GraphicsModule*>(box->item());
+        if (!gm) return;
+        gm->setModuleLabel(m);
+        gm->update();
     }
 
     Node GraphContext::nodeForGate(const u32 id) const

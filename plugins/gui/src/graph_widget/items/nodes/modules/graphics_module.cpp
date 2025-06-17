@@ -7,10 +7,9 @@
 
 namespace hal
 {
-    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(ItemType::Module, m->get_id(), QString::fromStdString(m->get_name()))
+    GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(ItemType::Module, m->get_id())
     {
-        mNodeText[1]                              = QString::fromStdString(m->get_type());
-        mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
+        setModuleLabel(m);
 
         for (hal::ModulePin* pin : m->get_pins())
         {
@@ -37,5 +36,12 @@ namespace hal
                     break;
             }
         }
+    }
+
+    void GraphicsModule::setModuleLabel(const Module* m)
+    {
+        mNodeText[0]                              = QString::fromStdString(m->get_name());
+        mNodeText[1]                              = QString::fromStdString(m->get_type());
+        mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
     }
 }    // namespace hal

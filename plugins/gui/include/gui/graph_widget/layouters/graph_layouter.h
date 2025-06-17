@@ -260,7 +260,6 @@ namespace hal
          * Does the actual layout process.
          */
         void layout();
-        void alternateLayout();
 
         /**
          * Gets the GraphicsScene the layouter works on.

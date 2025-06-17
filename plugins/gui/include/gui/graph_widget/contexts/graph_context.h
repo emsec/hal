@@ -126,6 +126,9 @@ namespace hal
          */
         bool isModuleUnfolded(const u32 moduleId) const;
 
+
+        void refreshModule(const u32 moduleId);
+
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
