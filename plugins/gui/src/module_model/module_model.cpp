@@ -17,6 +17,7 @@ namespace hal
         setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
         connect(gNetlistRelay, &NetlistRelay::moduleCreated,          this, &ModuleModel::handleModuleCreated);
         connect(gNetlistRelay, &NetlistRelay::moduleNameChanged,      this, &ModuleModel::handleModuleNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleTypeChanged,      this, &ModuleModel::handleModuleTypeChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleParentChanged,    this, &ModuleModel::handleModuleParentChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleAdded,   this, &ModuleModel::handleModuleSubmoduleAdded);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleModel::handleModuleSubmoduleRemoved);
@@ -367,6 +368,11 @@ namespace hal
     void ModuleModel::handleModuleNameChanged(Module* mod)
     {
         updateModuleName(mod->get_id());
+    }
+
+    void ModuleModel::handleModuleTypeChanged(Module* mod)
+    {
+        updateModuleType(mod->get_id());
     }
 
     void ModuleModel::handleModuleRemoved(Module* mod)
@@ -786,7 +792,23 @@ namespace hal
             ModuleItem* item = it.value();
             Q_ASSERT(item);
 
-            item->setName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+            item->setName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));
+
+            QModelIndex index = getIndexFromItem(item);
+            Q_EMIT dataChanged(index, index);
+        }
+    }
+
+    void ModuleModel::updateModuleType(u32 id)
+    {
+        Q_ASSERT(gNetlist->get_module_by_id(id));
+
+        for (auto it = mModuleMap.lowerBound(id); it != mModuleMap.upperBound(id); ++it)
+        {
+            ModuleItem* item = it.value();
+            Q_ASSERT(item);
+
+            item->setModuleType(QString::fromStdString(gNetlist->get_module_by_id(id)->get_type()));
 
             QModelIndex index = getIndexFromItem(item);
             Q_EMIT dataChanged(index, index);

@@ -7,7 +7,8 @@ namespace hal
 {
     GraphicsGate::GraphicsGate(Gate* g) : GraphicsNode(ItemType::Gate, g->get_id()), mGate(g), mType(QString::fromStdString(g->get_type()->get_name()))
     {
-        mNodeText[0] = QString::fromStdString(g->get_name());
+        QString textLines[3];
+        textLines[0] = QString::fromStdString(g->get_name());
         const GateType* gt = g->get_type();
         for (const GatePin* input_pin : gt->get_input_pins())
         {
@@ -37,6 +38,7 @@ namespace hal
             mOutputPins.append(QString::fromStdString(output_pin->get_name()));
         }
 
-        mNodeText[1] = QString::fromStdString(gt->get_name());
+        textLines[1] = QString::fromStdString(gt->get_name());
+        setNodeText(textLines,true);
     }
 }    // namespace hal

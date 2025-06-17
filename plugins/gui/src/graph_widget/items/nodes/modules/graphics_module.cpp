@@ -9,7 +9,7 @@ namespace hal
 {
     GraphicsModule::GraphicsModule(Module* m) : GraphicsNode(ItemType::Module, m->get_id())
     {
-        setModuleLabel(m);
+        setModuleLabel(m, true);
 
         for (hal::ModulePin* pin : m->get_pins())
         {
@@ -38,10 +38,12 @@ namespace hal
         }
     }
 
-    void GraphicsModule::setModuleLabel(const Module* m)
+    void GraphicsModule::setModuleLabel(const Module* m, bool init)
     {
-        mNodeText[0]                              = QString::fromStdString(m->get_name());
-        mNodeText[1]                              = QString::fromStdString(m->get_type());
-        mNodeText[mNodeText[1].isEmpty() ? 1 : 2] = "Module";
+        QString textLines[3];
+        textLines[0]                              = QString::fromStdString(m->get_name());
+        textLines[1]                              = QString::fromStdString(m->get_type());
+        textLines[textLines[1].isEmpty() ? 1 : 2] = "Module";
+        setNodeText(textLines,init);
     }
 }    // namespace hal

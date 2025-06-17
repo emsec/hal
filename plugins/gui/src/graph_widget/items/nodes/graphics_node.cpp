@@ -3,16 +3,80 @@
 #include "gui/graph_widget/graph_widget_constants.h"
 
 #include <QApplication>
+#include <QFontMetricsF>
 
 namespace hal
 {
+    QColor GraphicsNode::sTextColor;
+    QFont GraphicsNode::sTextFont[3];
+    qreal GraphicsNode::sTextFontHeight[3] = {0, 0, 0};
+
+
     GraphicsNode::GraphicsNode(const ItemType type, const u32 id)
-        : GraphicsItem(type, id)
+        : GraphicsItem(type, id), mMaxTextWidth(0)
     {
         setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemSendsGeometryChanges);
+
         //setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges | ItemIsFocusable);
         //setAcceptHoverEvents(true);
     }
+
+    void GraphicsNode::loadSettings()
+    {
+        QFont font = QFont("Iosevka");
+        font.setPixelSize(graph_widget_constants::sFontSize);
+
+        for (int iline=0; iline<3; iline++)
+        {
+            sTextFont[iline] = font;
+            QFontMetricsF fmf(font);
+            sTextFontHeight[iline] = fmf.height();
+        }
+    }
+
+    void GraphicsNode::setNodeText(const QString* lines, bool init)
+    {
+        for (int iline=0; iline<3; iline++)
+        {
+            if (lines[iline].isEmpty()) continue;
+            QFontMetricsF fmf(sTextFont[iline]);
+            mNodeText[iline] = lines[iline];
+            qreal textWidth = fmf.width(mNodeText[iline]);
+            if (init)
+            {
+                if (textWidth > mMaxTextWidth)
+                    mMaxTextWidth = textWidth;
+            }
+            else
+            {
+                if (textWidth > mMaxTextWidth)
+                {
+                    QString shorter = mNodeText[iline];
+                    while (!mNodeText[iline].isEmpty() && textWidth > mMaxTextWidth)
+                    {
+                        shorter.chop(1);
+                        textWidth = fmf.width(shorter + "…");
+                    }
+                    mNodeText[iline] = shorter + "…";
+                }
+                mTextPosition[iline].setX(mWidth / 2 - textWidth / 2);
+            }
+        }
+    }
+
+    void GraphicsNode::initTextPosition(qreal y0, qreal spacing)
+    {
+        for (int iline=0; iline<3; iline++)
+        {
+            QFontMetricsF fmf(sTextFont[iline]);
+            qreal textWidth = fmf.width(mNodeText[iline]);
+            y0 += sTextFontHeight[iline];
+            mTextPosition[iline].setX(mWidth / 2 - textWidth / 2);
+            mTextPosition[iline].setY(y0);
+            y0 += spacing;
+        }
+    }
+
 
     QRectF GraphicsNode::boundingRect() const
     {

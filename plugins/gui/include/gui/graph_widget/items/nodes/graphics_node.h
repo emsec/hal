@@ -28,6 +28,7 @@
 #include "gui/graph_widget/items/graphics_item.h"
 
 #include <QString>
+#include <QFont>
 
 namespace hal
 {
@@ -199,15 +200,47 @@ namespace hal
          */
         void set_name(const QString& name);
 
+        /**
+         * Loads the cosmetic setting that will be applied to all GraphicsModules.
+         */
+        static void loadSettings();
+
+        /**
+         * Pen color for text lines
+         */
+        static QColor sTextColor;
+
+
     //    qreal xOffset() const;
     //    qreal yOffset() const;
 
     protected:
         /**
+         * The text font for node name and type. Consider to change it to non-static in case derived class wants to overwrite
+         */
+        static QFont sTextFont[3];
+
+        /**
+         * Height of selected font
+         */
+        static qreal sTextFontHeight[3];
+
+
+        /**
          * The text in the center of the GraphicsNode. Each index stores one line of text. Therefore there is a maximum
          * of 3 lines in total.
          */
         QString mNodeText[3];
+
+        /**
+         * Text position in box.
+         */
+        QPointF mTextPosition[3];
+
+        /**
+         * Maximum text width, used to determine box width
+         */
+        qreal mMaxTextWidth;
 
         /**
          * The <b>width</b> of the GraphicsNode
@@ -232,5 +265,15 @@ namespace hal
          * netId=0 implies that no net is connected to the output pin at pinIdx.
          */
         QMultiHash<u32,int> mOutputByNet;
+
+        /**
+         * Set text lines, on init adjust width, else truncate lines
+         */
+        void setNodeText(const QString* lines, bool init);
+
+        /**
+         * Init text position after box width has been calculated
+         */
+        void initTextPosition(qreal y0, qreal spacing);
     };
 }

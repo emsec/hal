@@ -56,7 +56,7 @@ namespace hal
          *
          * @param m - The underlying module of this GraphicsModule
          */
-        void setModuleLabel(const Module* m);
+        void setModuleLabel(const Module* m, bool init=false);
 
     protected:
         /**
