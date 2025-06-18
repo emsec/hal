@@ -325,9 +325,10 @@ namespace hal
         }
 
         /**
-		 * Move node to antother grid location
-		 */
-        void moveNodeAction(const QPoint& from, const QPoint& to);
+         * Update placement of nodes already existing in view
+         * @param plc - the placement hash (Node -> QPoint)
+         */
+        void updatePlacement(const GridPlacement& plc);
 
         /**
          * Returns whether the scene is in an updating process (i.e. layouter process) or not.

@@ -284,6 +284,8 @@ namespace hal
 
         void dumpNodePositions(const QPoint& search) const;
 
+        void updatePlacement(const GridPlacement& plc);
+
         void setNodePosition(const Node& n, const QPoint& p);
         void swapNodePositions(const Node& n1, const Node& n2);
         void removeNodeFromMaps(const Node& n);

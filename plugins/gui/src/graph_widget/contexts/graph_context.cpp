@@ -533,12 +533,9 @@ namespace hal
         if (mParentWidget) mParentWidget->storeViewport();
     }
 
-    void GraphContext::moveNodeAction(const QPoint& from, const QPoint& to)
+    void GraphContext::updatePlacement(const GridPlacement& plc)
     {
-        const QMap<QPoint,Node> nodeMap = mLayouter->positionToNodeMap();
-        auto it = nodeMap.find(from);
-        if (it==nodeMap.constEnd()) return;
-        mLayouter->setNodePosition(it.value(),to);
+        mLayouter->updatePlacement(plc);
         scheduleSceneUpdate();
     }
 

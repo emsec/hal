@@ -160,18 +160,7 @@ namespace hal
         }
 
         LayoutLocker llock;
-        ctx->clear();
-
-        QSet<u32> modIds;
-        QSet<u32> gateIds;
-
-        for (Node node : mGridPlacement.keys())
-        {
-            if(node.isModule()) modIds.insert(node.id());
-            else gateIds.insert(node.id());
-        }
-
-        ctx->add(modIds, gateIds, PlacementHint(mGridPlacement));
+        ctx->updatePlacement(mGridPlacement);
         ctx->scheduleSceneUpdate();
 
         return UserAction::exec();

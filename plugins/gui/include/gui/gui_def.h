@@ -144,7 +144,13 @@ namespace hal
         GridPlacement(const QHash<hal::Node,QPoint>& data) : QHash<hal::Node,QPoint>(data) {;}
 
         void setGatePosition(u32 gateId, std::pair<int,int>p, bool swap = false) {
-            QPoint pos = QPoint(gatePosition(gateId)->first, gatePosition(gateId)->second); //position of current gate to move
+            std::pair<int,int>* posPtr = gatePosition(gateId);
+            if (!posPtr)
+            {
+                log_warning("gui", "Gate id {} cannot be moved, not found in current placement", gateId);
+                return;
+            }
+            QPoint pos = QPoint(posPtr->first, posPtr->second); //position of current gate to move
             hal::Node nd = key(QPoint(p.first, p.second)); //find the node in the destination
 
             if(!nd.isNull() && !swap) //if the destination placement is not available
@@ -159,8 +165,15 @@ namespace hal
             else
                 operator[](hal::Node(gateId,hal::Node::Gate)) = QPoint(p.first,p.second);
         }
+
         void setModulePosition(u32 moduleId, std::pair<int,int>p, bool swap = false){
-            QPoint pos = QPoint(modulePosition(moduleId)->first, modulePosition(moduleId)->second);
+            std::pair<int,int>* posPtr = modulePosition(moduleId);
+            if (!posPtr)
+            {
+                log_warning("gui", "Module id {} cannot be moved, not found in current placement", moduleId);
+                return;
+            }
+            QPoint pos = QPoint(posPtr->first, posPtr->second); //position of current module to move
             hal::Node nd = key(QPoint(p.first, p.second));
 
             if(!nd.isNull() && !swap)
@@ -174,11 +187,13 @@ namespace hal
             }
             else
                 operator[](hal::Node(moduleId,hal::Node::Module)) = QPoint(p.first,p.second);};
+
         std::pair<int,int>* gatePosition(u32 gateId) const
         {
             auto it = constFind(hal::Node(gateId,hal::Node::Gate));
             return (it == constEnd() ? nullptr : new std::pair<int,int>(it->x(),it->y()));
         }
+
         std::pair<int,int>* modulePosition(u32 moduleId) const
         {
             auto it = constFind(hal::Node(moduleId,hal::Node::Module));
