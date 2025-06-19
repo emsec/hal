@@ -116,10 +116,8 @@ namespace hal
 
         static QPen sPen;
 
-        static QFont sTextFont[2];
         static QFont sPinFont;
 
-        static qreal sTextFontHeight[2];
 
         static qreal sColorBarHeight;
 
@@ -144,8 +142,6 @@ namespace hal
 
         void format(const bool& adjust_size_to_grid);
 
-        QPointF mTextPosition[2];
-
         QVector<float> mInputPinTextWidth;
         QVector<float> mOutputPinTextWidth;
         static const int sIconPadding;
@@ -155,7 +151,5 @@ namespace hal
         static const QPixmap& iconPixmap();
         static QColor legibleColor(const QColor& bgColor);
 
-    public:
-        static QColor sTextColor;
     };
 }

@@ -122,12 +122,12 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * highlight shortest path between two gates by putting the items on path into a new group
+         * highlight shortest path between source gate and target node by putting the items on path into a new group
          *
          * @param idFrom - id of gate where path starts
          * @param idTo - id of gate where path ends
          */
-        void handleShortestPath(u32 idFrom, u32 idTo);
+        void handleShortestPath(u32 idFrom, Node nodeTo);
 
         /**
          * remove selected nodes from view
@@ -146,7 +146,9 @@ namespace hal
         void handleUnfoldAllAction();
 
         void handleShortestPathToView();
-        void handleQueryShortestPath();
+        void handleShortestModulePathToView();
+        void handleQueryShortestPathGate();
+        void handleQueryShortestPathModule();
         void handleSelectOutputs();
         void handleSelectInputs();
 
@@ -182,6 +184,8 @@ namespace hal
         void resizeEvent(QResizeEvent* event) override;
 
     private:
+
+        enum SearchAction {PredecessorGate, SuccessorGate, SuccessorModule};
         void mousePressEventNotItemDrag(QMouseEvent* event);
         void showContextMenu(const QPoint& pos);
 

@@ -28,6 +28,7 @@ namespace hal
         void debugUpdate()
         {
             GraphicsItem::loadSettings();
+            GraphicsNode::loadSettings();
             StandardGraphicsModule::loadSettings();
             StandardGraphicsGate::loadSettings();
             GraphicsNet::loadSettings();

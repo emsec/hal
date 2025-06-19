@@ -126,6 +126,9 @@ namespace hal
          */
         bool isModuleUnfolded(const u32 moduleId) const;
 
+
+        void refreshModule(const u32 moduleId);
+
         /**
          * Unfold a specific module. The specified module is removed from the context and replaced by its Gate%s and
          * submodules.
@@ -322,9 +325,10 @@ namespace hal
         }
 
         /**
-		 * Move node to antother grid location
-		 */
-        void moveNodeAction(const QPoint& from, const QPoint& to);
+         * Update placement of nodes already existing in view
+         * @param plc - the placement hash (Node -> QPoint)
+         */
+        void updatePlacement(const GridPlacement& plc);
 
         /**
          * Returns whether the scene is in an updating process (i.e. layouter process) or not.
