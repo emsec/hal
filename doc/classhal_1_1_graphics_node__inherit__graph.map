@@ -1,9 +1,9 @@
 <map id="hal::GraphicsNode" name="hal::GraphicsNode">
-<area shape="rect" id="node1" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="126,696,329,905"/>
-<area shape="rect" id="node4" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="73,953,211,1075"/>
-<area shape="rect" id="node6" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="251,968,406,1060"/>
+<area shape="rect" id="node1" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="126,696,329,1023"/>
+<area shape="rect" id="node4" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="73,1071,211,1192"/>
+<area shape="rect" id="node6" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="251,1078,406,1185"/>
 <area shape="rect" id="node2" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="157,365,297,648"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="143,5,312,317"/>
-<area shape="rect" id="node5" href="$classhal_1_1_standard_graphics_gate.html" title="The standard gate to visualize netlist gates." alt="" coords="5,1123,215,1317"/>
-<area shape="rect" id="node7" href="$classhal_1_1_standard_graphics_module.html" title="The standard module to visualize netlist modules." alt="" coords="239,1123,453,1317"/>
+<area shape="rect" id="node5" href="$classhal_1_1_standard_graphics_gate.html" title="The standard gate to visualize netlist gates." alt="" coords="5,1240,215,1435"/>
+<area shape="rect" id="node7" href="$classhal_1_1_standard_graphics_module.html" title="The standard module to visualize netlist modules." alt="" coords="239,1240,453,1435"/>
 </map>

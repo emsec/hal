@@ -1,5 +1,15 @@
 var NAVTREEINDEX40 =
 {
+"settings__item_8h_source.html":[7,0,1,3,0,0,44,0,0],
+"settings__item__checkbox_8cpp.html":[7,0,1,3,2,42,0,0],
+"settings__item__checkbox_8cpp_source.html":[7,0,1,3,2,42,0,0],
+"settings__item__checkbox_8h.html":[7,0,1,3,0,0,44,0,1],
+"settings__item__checkbox_8h_source.html":[7,0,1,3,0,0,44,0,1],
+"settings__item__dropdown_8cpp.html":[7,0,1,3,2,42,0,1],
+"settings__item__dropdown_8cpp_source.html":[7,0,1,3,2,42,0,1],
+"settings__item__dropdown_8h.html":[7,0,1,3,0,0,44,0,2],
+"settings__item__dropdown_8h_source.html":[7,0,1,3,0,0,44,0,2],
+"settings__item__keybind_8cpp.html":[7,0,1,3,2,42,0,2],
 "settings__item__keybind_8cpp_source.html":[7,0,1,3,2,42,0,2],
 "settings__item__keybind_8h.html":[7,0,1,3,0,0,44,0,3],
 "settings__item__keybind_8h_source.html":[7,0,1,3,0,0,44,0,3],
@@ -239,15 +249,5 @@ var NAVTREEINDEX40 =
 "splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8cpp_source.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8h.html":[7,0,1,3,0,0,11,4],
-"splitter__anchor_8h_source.html":[7,0,1,3,0,0,11,4],
-"src_2hgl__parser_8cpp.html":[7,0,1,4,1,0],
-"src_2hgl__parser_8cpp_source.html":[7,0,1,4,1,0],
-"src_2hgl__writer_8cpp.html":[7,0,1,5,1,0],
-"src_2hgl__writer_8cpp_source.html":[7,0,1,5,1,0],
-"src_2liberty__parser_8cpp.html":[7,0,1,6,1,0],
-"src_2liberty__parser_8cpp_source.html":[7,0,1,6,1,0],
-"src_2netlist_2grouping_8cpp.html":[7,0,2,0,12],
-"src_2netlist_2grouping_8cpp_source.html":[7,0,2,0,12],
-"src_2netlist_2netlist_8cpp.html":[7,0,2,0,15],
-"src_2netlist_2netlist_8cpp_source.html":[7,0,2,0,15]
+"splitter__anchor_8h_source.html":[7,0,1,3,0,0,11,4]
 };

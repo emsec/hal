@@ -1,5 +1,12 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_pingroup_selector_dialog.html#a067a24701fe2e689297f8126b1206f6b":[6,0,0,193,0],
+"classhal_1_1_pingroup_selector_dialog.html#a5a330dbb04ffccb743eac3d10a741719":[6,0,0,193,1],
+"classhal_1_1_pins_wizard_page.html":[6,0,0,90],
+"classhal_1_1_pins_wizard_page.html#a2e2da6b644fbfe6ba00b67a40efa41fd":[6,0,0,90,2],
+"classhal_1_1_pins_wizard_page.html#a7baa29765d779bf7b421e4f02e747109":[6,0,0,90,0],
+"classhal_1_1_pins_wizard_page.html#a82453129b924e18f0f182f0c34d1a732":[6,0,0,90,5],
+"classhal_1_1_pins_wizard_page.html#ac7902875db080a884f6e1d048a107c7f":[6,0,0,90,1],
 "classhal_1_1_pins_wizard_page.html#ad4830bc5215ec0788161cdd243cdd016":[6,0,0,90,3],
 "classhal_1_1_pins_wizard_page.html#adce47181e9e48f208735f2f62e2dc611":[6,0,0,90,4],
 "classhal_1_1_pins_wizard_page.html#ae938c954c8f26b45c2ce31d8159e5cac":[6,0,0,90,6],
@@ -242,12 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce":[4,0,1,1,3,0],
 "classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9":[4,0,1,1,3,1],
 "classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab":[4,0,1,1,3,2],
-"classhal_1_1_python_context_subscriber.html":[4,0,1,4],
-"classhal_1_1_python_context_subscriber.html#a0e0a66d92c70d921ceef5fd5af92ef6f":[4,0,1,4,2],
-"classhal_1_1_python_context_subscriber.html#a3ed556552deb7dc41898a67842aecf38":[4,0,1,4,1],
-"classhal_1_1_python_context_subscriber.html#a79500bfa9299a4783ebe7e025965a17c":[4,0,1,4,0],
-"classhal_1_1_python_editor.html":[4,0,1,0,6],
-"classhal_1_1_python_editor.html#a027b86c5245b61f291f39539c3849f7f":[4,0,1,0,6,20],
-"classhal_1_1_python_editor.html#a07e5c226eac0a9cc320604bae8f05931":[4,0,1,0,6,92],
-"classhal_1_1_python_editor.html#a0b8f6c287fb9ae1f13668b392bfde7df":[4,0,1,0,6,4]
+"classhal_1_1_python_context_subscriber.html":[4,0,1,4]
 };

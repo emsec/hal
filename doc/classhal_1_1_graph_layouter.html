@@ -139,8 +139,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a17d5e49b37db0df8c9370966c78cdad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90fc93ef75eb16b89139460b8d7c1046"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a90fc93ef75eb16b89139460b8d7c1046">layout</a> ()</td></tr>
 <tr class="separator:a90fc93ef75eb16b89139460b8d7c1046"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42a1f1a565b63cbfa24ae215b088639d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a42a1f1a565b63cbfa24ae215b088639d">alternateLayout</a> ()</td></tr>
-<tr class="separator:a42a1f1a565b63cbfa24ae215b088639d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa659e34b122f066720bd70c6abf210d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_graphics_scene.html">GraphicsScene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6">scene</a> () const</td></tr>
 <tr class="separator:aa659e34b122f066720bd70c6abf210d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62ea0b873099148db83fcb7320726adb"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html">QMap</a>&lt; <a class="el" href="classhal_1_1_node.html">Node</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a62ea0b873099148db83fcb7320726adb">nodeToPositionMap</a> () const</td></tr>
@@ -157,6 +155,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac0a09a36d86d794d397d33bc3f2f52cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e128152ac90a4e92d5422555867f952"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a5e128152ac90a4e92d5422555867f952">dumpNodePositions</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;search) const</td></tr>
 <tr class="separator:a5e128152ac90a4e92d5422555867f952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affcf753d8c23ef575827920c53b4539a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#affcf753d8c23ef575827920c53b4539a">updatePlacement</a> (const <a class="el" href="classhal_1_1_grid_placement.html">GridPlacement</a> &amp;plc)</td></tr>
+<tr class="separator:affcf753d8c23ef575827920c53b4539a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a91cb2f3e9d19f5849ccbb04f5fe3c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4">setNodePosition</a> (const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;n, const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;p)</td></tr>
 <tr class="separator:a1a91cb2f3e9d19f5849ccbb04f5fe3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f56e5f1f0fa2cd19e4773a09021e511"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a3f56e5f1f0fa2cd19e4773a09021e511">swapNodePositions</a> (const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;n1, const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;n2)</td></tr>
@@ -457,7 +457,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00044">44</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="classhal_1_1_comment_manager.html#a8baf740f65a2857f9917821b2b62430f">hal::CommentManager::entryAboutToBeDeleted()</a>, <a class="el" href="classhal_1_1_comment_manager.html#ae22e126729492d15863cbc093d4faf90">hal::CommentManager::entryAdded()</a>, <a class="el" href="classhal_1_1_comment_manager.html#af83f24f7ca17ec8e95a1323b85e3d6f2">hal::CommentManager::entryModified()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00087">hal::gCommentManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00144">hal::ContentManager::getSelectionDetailsWidget()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00495">hal::GraphicsScene::handleHighlight()</a>, <a class="el" href="graph__layouter_8h_source.html#l00322">mScene</a>, and <a class="el" href="classhal_1_1_selection_details_widget.html#af95582c1acedaa718aed0ffb552652b2">hal::SelectionDetailsWidget::triggerHighlight()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="classhal_1_1_comment_manager.html#a8baf740f65a2857f9917821b2b62430f">hal::CommentManager::entryAboutToBeDeleted()</a>, <a class="el" href="classhal_1_1_comment_manager.html#ae22e126729492d15863cbc093d4faf90">hal::CommentManager::entryAdded()</a>, <a class="el" href="classhal_1_1_comment_manager.html#af83f24f7ca17ec8e95a1323b85e3d6f2">hal::CommentManager::entryModified()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00087">hal::gCommentManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00144">hal::ContentManager::getSelectionDetailsWidget()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00495">hal::GraphicsScene::handleHighlight()</a>, <a class="el" href="graph__layouter_8h_source.html#l00323">mScene</a>, and <a class="el" href="classhal_1_1_selection_details_widget.html#af95582c1acedaa718aed0ffb552652b2">hal::SelectionDetailsWidget::triggerHighlight()</a>.</p>
 
 </div>
 </div>
@@ -479,7 +479,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00056">56</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00322">mScene</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00323">mScene</a>.</p>
 
 </div>
 </div>
@@ -534,23 +534,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a42a1f1a565b63cbfa24ae215b088639d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42a1f1a565b63cbfa24ae215b088639d">&#9670;&nbsp;</a></span>alternateLayout()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::GraphLayouter::alternateLayout </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="af3c01b3f53761de10a07641a4fef1b7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af3c01b3f53761de10a07641a4fef1b7e">&#9670;&nbsp;</a></span>boxes()</h2>
 
@@ -574,9 +557,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00312">312</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00313">313</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00177">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="graph__context_8cpp_source.html#l00420">hal::GraphContext::getNetDestination()</a>, <a class="el" href="graph__context_8cpp_source.html#l00409">hal::GraphContext::getNetSource()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01204">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00182">hal::DragController::isDropAllowed()</a>, and <a class="el" href="drag__controller_8cpp_source.html#l00048">hal::DragController::set()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00177">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="graph__context_8cpp_source.html#l00421">hal::GraphContext::getNetDestination()</a>, <a class="el" href="graph__context_8cpp_source.html#l00410">hal::GraphContext::getNetSource()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01261">hal::GraphGraphicsView::handleShortestPath()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00182">hal::DragController::isDropAllowed()</a>, <a class="el" href="graph__context_8cpp_source.html#l00485">hal::GraphContext::refreshModule()</a>, and <a class="el" href="drag__controller_8cpp_source.html#l00048">hal::DragController::set()</a>.</p>
 
 </div>
 </div>
@@ -595,11 +578,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00282">282</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00305">305</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00326">mNodeToPositionRollback</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00327">mNodeToPositionRollback</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00287">rollback()</a>, and <a class="el" href="graph__widget_8cpp_source.html#l00162">hal::GraphWidget::showProgress()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00310">rollback()</a>, and <a class="el" href="graph__widget_8cpp_source.html#l00162">hal::GraphWidget::showProgress()</a>.</p>
 
 </div>
 </div>
@@ -618,9 +601,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00200">200</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00223">223</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00216">gridYposition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00239">gridYposition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>.</p>
 
 </div>
 </div>
@@ -639,9 +622,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00195">195</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00218">218</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00205">gridXposition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00228">gridXposition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>.</p>
 
 </div>
 </div>
@@ -660,7 +643,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00170">170</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00193">193</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l00414">hal::GraphGraphicsView::dropEvent()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00048">hal::DragController::set()</a>, and <a class="el" href="graph__widget_8cpp_source.html#l00197">hal::GraphWidget::storeViewport()</a>.</p>
 
@@ -681,7 +664,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l01341">1341</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l01364">1364</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 </div>
 </div>
@@ -703,7 +686,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00092">92</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#FieldAlignment-enum">QTextStream::AlignRight</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#setFieldAlignment">QTextStream::setFieldAlignment()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#setFieldWidth">QTextStream::setFieldWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#FieldAlignment-enum">QTextStream::AlignRight</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#setFieldAlignment">QTextStream::setFieldAlignment()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#setFieldWidth">QTextStream::setFieldWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
 
 </div>
 </div>
@@ -725,7 +708,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00071">71</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#insert">QHash::insert()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00103">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00213">hal::DragController::finalGridPlacement()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00921">hal::GuiApiClasses::View::getGridPlacement()</a>.</p>
 
@@ -747,7 +730,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00149">149</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00172">172</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="node__box_8h_source.html#l00209">hal::NodeBoxes::boxForItem()</a>, <a class="el" href="node__box_8h_source.html#l00093">hal::NodeBox::x()</a>, and <a class="el" href="node__box_8h_source.html#l00099">hal::NodeBox::y()</a>.</p>
 
@@ -769,9 +752,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00205">205</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00228">228</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00195">defaultGridWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#last">QVector::last()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#size">QVector::size()</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00218">defaultGridWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#last">QVector::last()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#size">QVector::size()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00156">hal::DragController::move()</a>.</p>
 
@@ -793,9 +776,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00216">216</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00239">239</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00200">defaultGridHeight()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#last">QVector::last()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#size">QVector::size()</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00223">defaultGridHeight()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#isEmpty">QVector::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#last">QVector::last()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#size">QVector::size()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00156">hal::DragController::move()</a>.</p>
 
@@ -817,11 +800,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Does the actual layout process. </p>
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00227">227</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00250">250</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00200">defaultGridHeight()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00195">defaultGridWidth()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::deleteAllItems()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qelapsedtimer.html#elapsed">QElapsedTimer::elapsed()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, <a class="el" href="graph__context_8cpp_source.html#l00511">hal::GraphContext::layoutProgress()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00349">hal::GraphicsScene::moveNetsToBackground()</a>, <a class="el" href="graph__layouter_8h_source.html#l00323">mParentContext</a>, <a class="el" href="graph__layouter_8h_source.html#l00322">mScene</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00936">hal::NetLayoutJunctionEntries::resetFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qelapsedtimer.html#start">QElapsedTimer::start()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00175">xValues()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00180">yValues()</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00223">defaultGridHeight()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00218">defaultGridWidth()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00316">hal::GraphicsScene::deleteAllItems()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qelapsedtimer.html#elapsed">QElapsedTimer::elapsed()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, <a class="el" href="graph__context_8cpp_source.html#l00524">hal::GraphContext::layoutProgress()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00349">hal::GraphicsScene::moveNetsToBackground()</a>, <a class="el" href="graph__layouter_8h_source.html#l00324">mParentContext</a>, <a class="el" href="graph__layouter_8h_source.html#l00323">mScene</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00936">hal::NetLayoutJunctionEntries::resetFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qelapsedtimer.html#start">QElapsedTimer::start()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00198">xValues()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00203">yValues()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00688">hal::GraphContext::abortLayout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00698">hal::GraphContext::abortLayout()</a>.</p>
 
 </div>
 </div>
@@ -840,7 +823,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00190">190</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00213">213</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 </div>
 </div>
@@ -859,7 +842,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00185">185</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00208">208</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 </div>
 </div>
@@ -907,7 +890,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00160">160</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00183">183</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 </div>
 </div>
@@ -926,7 +909,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00165">165</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00188">188</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
 </div>
 </div>
@@ -977,7 +960,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00079">79</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00213">hal::DragController::finalGridPlacement()</a>.</p>
 
@@ -1000,9 +983,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00066">66</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00688">hal::GraphContext::abortLayout()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, and <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00698">hal::GraphContext::abortLayout()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, and <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>.</p>
 
 </div>
 </div>
@@ -1023,9 +1006,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00105">105</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00523">hal::GraphContext::moveNodeAction()</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>.</p>
 
 </div>
 </div>
@@ -1047,9 +1028,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00084">84</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>.</p>
+<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, and <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="action__fold__module_8cpp_source.html#l00035">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00068">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00184">hal::GraphContext::unfoldModule()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00827">hal::GraphContext::writeToFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__fold__module_8cpp_source.html#l00035">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00068">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="graph__context_8cpp_source.html#l00185">hal::GraphContext::unfoldModule()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00837">hal::GraphContext::writeToFile()</a>.</p>
 
 </div>
 </div>
@@ -1068,11 +1049,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00276">276</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00299">299</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>, and <a class="el" href="graph__layouter_8h_source.html#l00326">mNodeToPositionRollback</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, and <a class="el" href="graph__layouter_8h_source.html#l00327">mNodeToPositionRollback</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00184">hal::GraphContext::unfoldModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00185">hal::GraphContext::unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -1136,9 +1117,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00139">139</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00162">162</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="physical__graph__layouter_8cpp_source.html#l00072">hal::PhysicalGraphLayouter::remove()</a>, and <a class="el" href="standard__graph__layouter_8cpp_source.html#l00234">hal::StandardGraphLayouter::remove()</a>.</p>
 
@@ -1159,11 +1140,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00287">287</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00310">310</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00282">canRollback()</a>, <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00326">mNodeToPositionRollback</a>, and <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8cpp_source.html#l00305">canRollback()</a>, <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00327">mNodeToPositionRollback</a>, and <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00688">hal::GraphContext::abortLayout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00698">hal::GraphContext::abortLayout()</a>.</p>
 
 </div>
 </div>
@@ -1186,9 +1167,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00061">61</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00322">mScene</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00323">mScene</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00013">hal::DragController::clear()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00446">hal::GraphContext::scene()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00013">hal::DragController::clear()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00447">hal::GraphContext::scene()</a>.</p>
 
 </div>
 </div>
@@ -1208,9 +1189,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l01346">1346</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l01369">1369</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00676">hal::GraphContextManager::getDefaultLayouter()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00695">hal::GraphContextManager::getDefaultLayouter()</a>.</p>
 
 </div>
 </div>
@@ -1240,11 +1221,11 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00110">110</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00133">133</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00523">hal::GraphContext::moveNodeAction()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00736">hal::GraphContext::readFromFile()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00746">hal::GraphContext::readFromFile()</a>.</p>
 
 </div>
 </div>
@@ -1274,9 +1255,33 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00124">124</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00147">147</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00324">mNodeToPositionMap</a>, and <a class="el" href="graph__layouter_8h_source.html#l00325">mPositionToNodeMap</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, and <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>.</p>
+
+</div>
+</div>
+<a id="affcf753d8c23ef575827920c53b4539a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affcf753d8c23ef575827920c53b4539a">&#9670;&nbsp;</a></span>updatePlacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphLayouter::updatePlacement </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_grid_placement.html">GridPlacement</a> &amp;&#160;</td>
+          <td class="paramname"><em>plc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00110">110</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#begin">QHash::begin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constBegin">QHash::constBegin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constEnd">QHash::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#end">QHash::end()</a>, <a class="el" href="graph__layouter_8h_source.html#l00325">mNodeToPositionMap</a>, <a class="el" href="graph__layouter_8h_source.html#l00326">mPositionToNodeMap</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#value">QHash::value()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00536">hal::GraphContext::updatePlacement()</a>.</p>
 
 </div>
 </div>
@@ -1295,9 +1300,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00175">175</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00198">198</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>.</p>
 
 </div>
 </div>
@@ -1316,9 +1321,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00180">180</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8cpp_source.html#l00203">203</a> of file <a class="el" href="graph__layouter_8cpp_source.html">graph_layouter.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>.</p>
 
 </div>
 </div>
@@ -1368,9 +1373,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00324">324</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00325">325</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00071">gridPlacementFactory()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00066">nodeToPositionMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00084">positonForNode()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00276">prepareRollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00139">removeNodeFromMaps()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00287">rollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00110">setNodePosition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00124">swapNodePositions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00071">gridPlacementFactory()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00066">nodeToPositionMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00084">positonForNode()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00299">prepareRollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00162">removeNodeFromMaps()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00310">rollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00133">setNodePosition()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00147">swapNodePositions()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00110">updatePlacement()</a>.</p>
 
 </div>
 </div>
@@ -1394,9 +1399,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00326">326</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00327">327</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00282">canRollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00276">prepareRollback()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00287">rollback()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00305">canRollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00299">prepareRollback()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00310">rollback()</a>.</p>
 
 </div>
 </div>
@@ -1420,9 +1425,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00323">323</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00324">324</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>.</p>
 
 </div>
 </div>
@@ -1446,9 +1451,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00325">325</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00326">326</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00092">dumpNodePositions()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00079">nodeAtPosition()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00105">positionToNodeMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00139">removeNodeFromMaps()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00287">rollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00110">setNodePosition()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00124">swapNodePositions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00092">dumpNodePositions()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00079">nodeAtPosition()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00105">positionToNodeMap()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00162">removeNodeFromMaps()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00310">rollback()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00133">setNodePosition()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00147">swapNodePositions()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00110">updatePlacement()</a>.</p>
 
 </div>
 </div>
@@ -1472,9 +1477,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00322">322</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__layouter_8h_source.html#l00323">323</a> of file <a class="el" href="graph__layouter_8h_source.html">graph_layouter.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00044">GraphLayouter()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00227">layout()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00061">scene()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00056">~GraphLayouter()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00044">GraphLayouter()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00250">layout()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00061">scene()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00056">~GraphLayouter()</a>.</p>
 
 </div>
 </div>
@@ -1488,7 +1493,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_layouter.html">GraphLayouter</a></li>
-    <li class="footer">Generated on Fri Jun 13 2025 17:07:28 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jun 19 2025 21:47:38 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

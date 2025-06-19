@@ -1,8 +1,11 @@
 <map id="hal::GraphicsModule" name="hal::GraphicsModule">
-<area shape="rect" id="node1" title="Abstract base class for modules." alt="" coords="279,740,434,817"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="138,446,341,611"/>
-<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="5,42,145,281"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="170,5,309,317"/>
-<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmultihash.html" title=" " alt="" coords="333,86,511,237"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="365,395,586,663"/>
+<area shape="rect" id="node1" title="Abstract base class for modules." alt="" coords="533,1159,687,1251"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="391,828,594,1067"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="160,453,300,692"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="10,5,135,317"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qpointf.html" title=" " alt="" coords="325,483,487,663"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="511,417,650,729"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmultihash.html" title=" " alt="" coords="675,497,852,648"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qfont.html" title=" " alt="" coords="876,409,1059,736"/>
+<area shape="rect" id="node9" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="618,813,839,1081"/>
 </map>

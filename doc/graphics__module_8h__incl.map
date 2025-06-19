@@ -1,10 +1,11 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h">
-<area shape="rect" id="node1" title=" " alt="" coords="117,5,369,76"/>
-<area shape="rect" id="node2" href="$graphics__node_8h.html" title=" " alt="" coords="5,124,180,165"/>
-<area shape="rect" id="node5" title=" " alt="" coords="205,131,282,158"/>
-<area shape="rect" id="node6" href="$sort_8h.html" title=" " alt="" coords="307,131,449,158"/>
+<area shape="rect" id="node1" title=" " alt="" coords="244,5,496,76"/>
+<area shape="rect" id="node2" href="$graphics__node_8h.html" title=" " alt="" coords="132,124,307,165"/>
+<area shape="rect" id="node6" title=" " alt="" coords="331,131,409,158"/>
+<area shape="rect" id="node7" href="$sort_8h.html" title=" " alt="" coords="433,131,576,158"/>
 <area shape="rect" id="node3" href="$graphics__item_8h.html" title=" " alt="" coords="5,213,180,255"/>
-<area shape="rect" id="node4" title=" " alt="" coords="229,221,300,247"/>
-<area shape="rect" id="node7" title=" " alt="" coords="337,221,392,247"/>
-<area shape="rect" id="node8" title=" " alt="" coords="416,221,575,247"/>
+<area shape="rect" id="node4" title=" " alt="" coords="343,221,413,247"/>
+<area shape="rect" id="node5" title=" " alt="" coords="204,221,264,247"/>
+<area shape="rect" id="node8" title=" " alt="" coords="464,221,519,247"/>
+<area shape="rect" id="node9" title=" " alt="" coords="543,221,701,247"/>
 </map>

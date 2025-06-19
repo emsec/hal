@@ -1,6 +1,16 @@
 var NAVTREEINDEX32 =
 {
-"netlist__utils_8h.html#af985cd5c5eb7aa39f151f9fc890e6005":[7,0,0,0,1,18,20],
+"netlist__utils_8h.html#a91da9ccb1b2005faf2ec66b2e0618aba":[7,0,0,0,1,18,23],
+"netlist__utils_8h.html#aaee8c9cb19883060c6efff0b260cf907":[7,0,0,0,1,18,5],
+"netlist__utils_8h.html#ab4c23f16593143c305d3d5de79dcb196":[7,0,0,0,1,18,22],
+"netlist__utils_8h.html#ab8c3054566941b75019e3f599ec16814":[7,0,0,0,1,18,20],
+"netlist__utils_8h.html#ad44878a824ec4f37dcc5317ddec67db3":[7,0,0,0,1,18,16],
+"netlist__utils_8h.html#ad7253a1f33ed519527e3e41da39b32ee":[7,0,0,0,1,18,7],
+"netlist__utils_8h.html#ae10e4d2360be0f2493d267fa63d6a350":[7,0,0,0,1,18,9],
+"netlist__utils_8h.html#aed730c36a6fe7e185bf8b936ad7e0d6d":[7,0,0,0,1,18,17],
+"netlist__utils_8h.html#af2c5370e1cfb407c98dd5c855e1e9022":[7,0,0,0,1,18,3],
+"netlist__utils_8h.html#af2f10749460ef2bf67a20b9705a8c062":[7,0,0,0,1,18,11],
+"netlist__utils_8h.html#af985cd5c5eb7aa39f151f9fc890e6005":[7,0,0,0,1,18,21],
 "netlist__utils_8h.html#afed43ba864b63d01b07464dfb114f847":[7,0,0,0,1,18,13],
 "netlist__utils_8h_source.html":[7,0,0,0,1,18],
 "netlist__writer_8h.html":[7,0,0,0,1,5,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX32 =
 "plugin__manager_8h.html#acb6d1f3c164b832fb19257b1df06aa53":[7,0,0,0,2,6,17],
 "plugin__manager_8h.html#acfef91bcd7b9db938f10e4b705cf3bfb":[7,0,0,0,2,6,10],
 "plugin__manager_8h.html#ad34e384af419d40a22d5486356772c24":[7,0,0,0,2,6,4],
-"plugin__manager_8h.html#ad66fea3d4017a3c7b058436924d3dda3":[7,0,0,0,2,6,15],
-"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[7,0,0,0,2,6,14],
-"plugin__manager_8h.html#af29b336d33b785a18be71e538a3cd48a":[7,0,0,0,2,6,6],
-"plugin__manager_8h.html#af5d031db41abe777dfa8da61f5583ff2":[7,0,0,0,2,6,13],
-"plugin__manager_8h_source.html":[7,0,0,0,2,6],
-"plugin__parameter_8h.html":[7,0,0,0,2,7],
-"plugin__parameter_8h_source.html":[7,0,0,0,2,7],
-"plugin__parameter__dialog_8cpp.html":[7,0,1,3,2,29,5],
-"plugin__parameter__dialog_8cpp_source.html":[7,0,1,3,2,29,5],
-"plugin__parameter__dialog_8h.html":[7,0,1,3,0,0,31,5],
-"plugin__parameter__dialog_8h_source.html":[7,0,1,3,0,0,31,5]
+"plugin__manager_8h.html#ad66fea3d4017a3c7b058436924d3dda3":[7,0,0,0,2,6,15]
 };

@@ -1,5 +1,15 @@
 var NAVTREEINDEX33 =
 {
+"plugin__manager_8h.html#af13862a2a5565fb995d7cc93c0bfd980":[7,0,0,0,2,6,14],
+"plugin__manager_8h.html#af29b336d33b785a18be71e538a3cd48a":[7,0,0,0,2,6,6],
+"plugin__manager_8h.html#af5d031db41abe777dfa8da61f5583ff2":[7,0,0,0,2,6,13],
+"plugin__manager_8h_source.html":[7,0,0,0,2,6],
+"plugin__parameter_8h.html":[7,0,0,0,2,7],
+"plugin__parameter_8h_source.html":[7,0,0,0,2,7],
+"plugin__parameter__dialog_8cpp.html":[7,0,1,3,2,29,5],
+"plugin__parameter__dialog_8cpp_source.html":[7,0,1,3,2,29,5],
+"plugin__parameter__dialog_8h.html":[7,0,1,3,0,0,31,5],
+"plugin__parameter__dialog_8h_source.html":[7,0,1,3,0,0,31,5],
 "plugin__relay_8cpp.html":[7,0,1,3,2,37,1],
 "plugin__relay_8cpp_source.html":[7,0,1,3,2,37,1],
 "plugin__relay_8h.html":[7,0,1,3,0,0,39,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX33 =
 "python__bindings_8h.html#gaab97b444976a9d5305e3efc20b8bfad6":[7,0,0,0,3,0,15],
 "python__bindings_8h.html#gab35847badbf935ed3e01dbcaad19205c":[7,0,0,0,3,0,4],
 "python__bindings_8h.html#gac072de2b8e9f09d8320090e5873be90d":[7,0,0,0,3,0,32],
-"python__bindings_8h.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[7,0,0,0,3,0,34],
-"python__bindings_8h.html#gac711bd76ed6d19d0ae42c56d8f190cfa":[7,0,0,0,3,0,18],
-"python__bindings_8h.html#gacd94e2b9ac19cb0a128446c71673aabf":[7,0,0,0,3,0,10],
-"python__bindings_8h.html#gad09c61daaa174b451b0519d0f54a2382":[7,0,0,0,3,0,14],
-"python__bindings_8h.html#gad828e83bab5914c1f8f18d2cf61e5f98":[7,0,0,0,3,0,25],
-"python__bindings_8h.html#gada2e57065ce648d389abb22e94a9ab69":[7,0,0,0,3,0,27],
-"python__bindings_8h.html#gadc243ad319cf87e17b4593eec859d1f4":[7,0,0,0,3,0,6],
-"python__bindings_8h.html#gadcbe9ddba67d0061af0b3f101c727c6e":[7,0,0,0,3,0,2],
-"python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7":[7,0,0,0,3,0,30],
-"python__bindings_8h.html#gae5a4b7d4ff2a9896d9372662906d05fb":[7,0,0,0,3,0,3],
-"python__bindings_8h.html#gae67f2029fac093c1e1990401edbcfd0a":[7,0,0,0,3,0,5]
+"python__bindings_8h.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[7,0,0,0,3,0,34]
 };

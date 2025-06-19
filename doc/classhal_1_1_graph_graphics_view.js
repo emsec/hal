@@ -11,7 +11,7 @@ var classhal_1_1_graph_graphics_view =
     [ "gridType", "classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba", null ],
     [ "handleFoldModuleShortcut", "classhal_1_1_graph_graphics_view.html#a8fdc66bd671a088de2314b69fcb77c2f", null ],
     [ "handleRemoveFromView", "classhal_1_1_graph_graphics_view.html#a081af4cd62a86d6cc4e172a7155b8c36", null ],
-    [ "handleShortestPath", "classhal_1_1_graph_graphics_view.html#abeb84861a826fdce426fab17c819d6f8", null ],
+    [ "handleShortestPath", "classhal_1_1_graph_graphics_view.html#ac6e430a2ae4d225910d79cd37a4b6365", null ],
     [ "handleUnfoldModuleShortcut", "classhal_1_1_graph_graphics_view.html#ae1cdfb11eaa448ccd5f8b5e77cb446f6", null ],
     [ "keyPressEvent", "classhal_1_1_graph_graphics_view.html#a08f750f8cef48bdc1523d7c719e20a05", null ],
     [ "keyReleaseEvent", "classhal_1_1_graph_graphics_view.html#a3685204f7103b0ec53b467e756761acb", null ],

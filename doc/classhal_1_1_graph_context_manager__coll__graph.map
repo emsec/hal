@@ -1,5 +1,5 @@
 <map id="hal::GraphContextManager" name="hal::GraphContextManager">
-<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,824,203,975"/>
+<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,839,203,989"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="15,5,182,347"/>
 <area shape="rect" id="node4" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="133,396,278,547"/>
 <area shape="rect" id="node3" href="$classhal_1_1_settings_item_checkbox.html" title="A SettingsItem representing a Checkbox." alt="" coords="120,596,317,747"/>

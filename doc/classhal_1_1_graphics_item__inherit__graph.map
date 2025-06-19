@@ -1,10 +1,10 @@
 <map id="hal::GraphicsItem" name="hal::GraphicsItem">
 <area shape="rect" id="node1" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="344,365,484,648"/>
-<area shape="rect" id="node3" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="250,696,386,964"/>
-<area shape="rect" id="node6" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="410,725,613,935"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from." alt="" coords="250,725,386,993"/>
+<area shape="rect" id="node6" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="410,696,613,1023"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="329,5,499,317"/>
-<area shape="rect" id="node4" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="5,1012,201,1207"/>
-<area shape="rect" id="node5" href="$classhal_1_1_standard_graphics_net.html" title="The most basic net to display the standard nets." alt="" coords="225,1049,413,1170"/>
-<area shape="rect" id="node7" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="441,1049,579,1170"/>
-<area shape="rect" id="node8" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="603,1063,758,1155"/>
+<area shape="rect" id="node4" href="$classhal_1_1_separated_graphics_net.html" title="Abstract base class for separated nets (e.g. ArrowSeparatedNet)" alt="" coords="5,1071,201,1265"/>
+<area shape="rect" id="node5" href="$classhal_1_1_standard_graphics_net.html" title="The most basic net to display the standard nets." alt="" coords="225,1107,413,1229"/>
+<area shape="rect" id="node7" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="441,1107,579,1229"/>
+<area shape="rect" id="node8" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="603,1115,758,1221"/>
 </map>

@@ -1,5 +1,12 @@
 var NAVTREEINDEX27 =
 {
+"group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e":[4,1,3,24],
+"group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[5,0,2,532],
+"group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[4,1,3,8],
+"group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[5,0,2,546],
+"group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[4,1,3,19],
+"group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6":[5,0,2,539],
+"group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6":[4,1,3,15],
 "group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[5,0,2,522],
 "group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[4,1,3,4],
 "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d":[5,0,2,568],
@@ -47,8 +54,8 @@ var NAVTREEINDEX27 =
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,2,7],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,2,12],
-"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,2,11],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
+"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,2,11],
 "group__utility__widgets-context.html":[4,0,7,0],
 "group__utility__widgets-grouping.html":[4,0,7,2],
 "group__utility__widgets-module.html":[4,0,7,1],
@@ -242,12 +249,5 @@ var NAVTREEINDEX27 =
 "logger__marshall_8cpp.html":[7,0,1,3,2,28,0],
 "logger__marshall_8cpp_source.html":[7,0,1,3,2,28,0],
 "logger__marshall_8h.html":[7,0,1,3,0,0,30,0],
-"logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0],
-"logger__qss__adapter_8cpp.html":[7,0,1,3,2,28,1],
-"logger__qss__adapter_8cpp_source.html":[7,0,1,3,2,28,1],
-"logger__qss__adapter_8h.html":[7,0,1,3,0,0,30,1],
-"logger__qss__adapter_8h_source.html":[7,0,1,3,0,0,30,1],
-"logger__settings_8h.html":[7,0,1,3,0,0,30,2],
-"logger__settings_8h_source.html":[7,0,1,3,0,0,30,2],
-"logger__widget_8cpp.html":[7,0,1,3,2,28,2]
+"logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0]
 };

@@ -1,8 +1,9 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/gates/graphics_gate.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/gates/graphics_gate.h">
-<area shape="rect" id="node1" title=" " alt="" coords="211,5,423,76"/>
-<area shape="rect" id="node2" href="$graphics__node_8h.html" title=" " alt="" coords="79,124,253,165"/>
-<area shape="rect" id="node5" title=" " alt="" coords="278,131,355,158"/>
-<area shape="rect" id="node6" title=" " alt="" coords="380,131,445,158"/>
+<area shape="rect" id="node1" title=" " alt="" coords="284,5,496,76"/>
+<area shape="rect" id="node2" href="$graphics__node_8h.html" title=" " alt="" coords="152,124,327,165"/>
+<area shape="rect" id="node6" title=" " alt="" coords="351,131,429,158"/>
+<area shape="rect" id="node7" title=" " alt="" coords="453,131,519,158"/>
 <area shape="rect" id="node3" href="$graphics__item_8h.html" title=" " alt="" coords="5,213,180,255"/>
 <area shape="rect" id="node4" title=" " alt="" coords="204,221,275,247"/>
+<area shape="rect" id="node5" title=" " alt="" coords="299,221,359,247"/>
 </map>

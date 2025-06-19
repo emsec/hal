@@ -1,5 +1,5 @@
 <map id="hal::StandardGraphicsGate" name="hal::StandardGraphicsGate">
-<area shape="rect" id="node1" title="The standard gate to visualize netlist gates." alt="" coords="5,432,215,627"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="41,263,179,384"/>
-<area shape="rect" id="node3" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="9,5,211,215"/>
+<area shape="rect" id="node1" title="The standard gate to visualize netlist gates." alt="" coords="5,549,215,744"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="41,380,179,501"/>
+<area shape="rect" id="node3" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="9,5,211,332"/>
 </map>
