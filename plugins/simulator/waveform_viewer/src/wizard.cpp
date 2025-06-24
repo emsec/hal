@@ -132,6 +132,8 @@ namespace hal {
     bool PageSelectGates::validatePage()
     {
         mController->reset();
+        WaveDataList* wd = mController->get_waves();
+        SaleaeDirectoryStoreRequest save(&wd->saleaeDirectory());
         mController->add_gates(selectedGates());
         for (const Net* inpNet : mController->get_input_nets())
             mController->get_waveform_by_net(inpNet);

@@ -302,6 +302,11 @@ namespace hal {
 
     void WaveWidget::handleNumberWaveformChanged(int count)
     {
+        if (mTreeModel)
+        {
+            int expectMoreEvents = mTreeModel->decreaseNumberEntriesChangedEvents();
+            if (expectMoreEvents) return;
+        }
         Q_UNUSED(count);
         Q_EMIT stateChanged(mController->get_state());
     }

@@ -22,7 +22,7 @@ namespace hal {
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash), mGraphicsCanvas(wgc),
           mDragCommand(None), mDragIsGroup(false),
           mCursorTime(0), mCursorXpos(0),
-          mReorderRequestWaiting(0)
+          mReorderRequestWaiting(0), mNumberEntriesChangedEvents(0)
     {
 
         mRoot = new WaveDataRoot(mWaveDataList);
@@ -312,7 +312,17 @@ namespace hal {
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
         connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn,Qt::QueuedConnection);
         int count = mWaveItemHash->size();
-        if (count != oldCount) Q_EMIT numberEntriesChanged(count);
+        if (count != oldCount)
+        {
+            ++mNumberEntriesChangedEvents;
+            Q_EMIT numberEntriesChanged(count);
+        }
+    }
+
+    int WaveTreeModel::decreaseNumberEntriesChangedEvents()
+    {
+        if (mNumberEntriesChangedEvents <= 0) return 0;
+        return --mNumberEntriesChangedEvents;
     }
 
     void WaveTreeModel::handleWaveAdded(int iwave)
