@@ -1,6 +1,5 @@
 var NAVTREEINDEX27 =
 {
-"group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e":[4,1,3,24],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[5,0,2,532],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[4,1,3,8],
 "group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22":[5,0,2,546],
@@ -50,8 +49,8 @@ var NAVTREEINDEX27 =
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[4,1,2,8],
 "group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[7,0,0,0,4,4,8],
 "group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[4,1,2,10],
-"group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,0,0,4,4,5],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,2,7],
+"group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,0,0,4,4,5],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,2,12],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
@@ -249,5 +248,6 @@ var NAVTREEINDEX27 =
 "logger__marshall_8cpp.html":[7,0,1,3,2,28,0],
 "logger__marshall_8cpp_source.html":[7,0,1,3,2,28,0],
 "logger__marshall_8h.html":[7,0,1,3,0,0,30,0],
-"logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0]
+"logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0],
+"logger__qss__adapter_8cpp.html":[7,0,1,3,2,28,1]
 };
