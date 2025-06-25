@@ -791,12 +791,19 @@ namespace hal {
 
         bool ok;
 
+        int n = mTableView->model()->columnCount();
         for (int irow = 0; irow<nrows; irow++)
         {
             u32 gid = modl->data(modl->index(irow,0)).toUInt(&ok);
             if (!ok) continue;
             if (guiNetSel.contains(gid))
-                mTableView->selectRow(irow);
+            {
+                for (int i=0; i<n; i++)
+                {
+                    QModelIndex inx = mTableView->model()->index(irow,i);
+                    mTableView->selectionModel()->select(inx, QItemSelectionModel::Select);
+                }
+            }
         }
     }
 
