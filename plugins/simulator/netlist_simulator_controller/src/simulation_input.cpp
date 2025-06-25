@@ -283,7 +283,7 @@ namespace hal {
            const Module*m = (*it);
            for (PinGroup<ModulePin>* pg : m->get_pin_groups())
            {
-               if (pg->size() < 2) continue;
+               if (pg->size() < 2 || pg->size() > 31) continue;
                bool pin_group_simulated = true;
                DirectionType groupType = Undefined;
 
@@ -335,7 +335,7 @@ namespace hal {
 
             for (PinGroup<GatePin>* pg : gt->get_pin_groups())
             {
-                if (pg->size() < 2) continue;
+                if (pg->size() < 2 || pg->size() > 31) continue;
                 bool pin_group_simulated = true;
                 DirectionType groupType = Undefined;
                 std::unordered_set<const Net*> connectedNets;
