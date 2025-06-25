@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_pingroup_selector_dialog.html#a067a24701fe2e689297f8126b1206f6b":[6,0,0,193,0],
 "classhal_1_1_pingroup_selector_dialog.html#a5a330dbb04ffccb743eac3d10a741719":[6,0,0,193,1],
 "classhal_1_1_pins_wizard_page.html":[6,0,0,90],
 "classhal_1_1_pins_wizard_page.html#a2e2da6b644fbfe6ba00b67a40efa41fd":[6,0,0,90,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce":[4,0,1,1,3,0],
 "classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9":[4,0,1,1,3,1],
 "classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab":[4,0,1,1,3,2],
-"classhal_1_1_python_context_subscriber.html":[4,0,1,4],
-"classhal_1_1_python_context_subscriber.html#a0e0a66d92c70d921ceef5fd5af92ef6f":[4,0,1,4,2]
+"classhal_1_1_python_context_subscriber.html":[4,0,1,4]
 };

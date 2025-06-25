@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classhal_1_1_python_context_subscriber.html#a0e0a66d92c70d921ceef5fd5af92ef6f":[4,0,1,4,2],
 "classhal_1_1_python_context_subscriber.html#a3ed556552deb7dc41898a67842aecf38":[4,0,1,4,1],
 "classhal_1_1_python_context_subscriber.html#a79500bfa9299a4783ebe7e025965a17c":[4,0,1,4,0],
 "classhal_1_1_python_editor.html":[4,0,1,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classhal_1_1_recent_file_item.html#abf53f74bf7bddd3afef1463547b8149d":[4,0,51,16],
 "classhal_1_1_recent_file_item.html#ac0f9c33df8153c46e3d73249d2124a62":[4,0,51,2],
 "classhal_1_1_recent_file_item.html#ace21bce12087ede7676b6349d85de975":[4,0,51,19],
-"classhal_1_1_recent_file_item.html#ad6e9237537525e4512a5d779db1561b0":[4,0,51,14],
-"classhal_1_1_recent_file_item.html#adec57c7f413cc4f058e5e3bb18ed12e5":[4,0,51,5]
+"classhal_1_1_recent_file_item.html#ad6e9237537525e4512a5d779db1561b0":[4,0,51,14]
 };

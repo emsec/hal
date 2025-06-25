@@ -1,5 +1,6 @@
 var NAVTREEINDEX40 =
 {
+"settings__item_8h_source.html":[7,0,1,3,0,0,44,0,0],
 "settings__item__checkbox_8cpp.html":[7,0,1,3,2,42,0,0],
 "settings__item__checkbox_8cpp_source.html":[7,0,1,3,2,42,0,0],
 "settings__item__checkbox_8h.html":[7,0,1,3,0,0,44,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX40 =
 "splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8cpp_source.html":[7,0,1,3,2,10,4],
 "splitter__anchor_8h.html":[7,0,1,3,0,0,11,4],
-"splitter__anchor_8h_source.html":[7,0,1,3,0,0,11,4],
-"src_2hgl__parser_8cpp.html":[7,0,1,4,1,0]
+"splitter__anchor_8h_source.html":[7,0,1,3,0,0,11,4]
 };
