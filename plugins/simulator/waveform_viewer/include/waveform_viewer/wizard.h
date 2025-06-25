@@ -200,12 +200,16 @@ namespace hal {
         virtual bool validatePage() override;
         virtual void initializePage() override;
 
+    private Q_SLOTS:
+        void useGuiSelection();
+
     private:
         NetlistSimulatorController *mController;
         WaveWidget* mWaveWidget;
         WaveSelectionTable* mWaveModel;
         QSortFilterProxyModel* mProxyModel;
         QPushButton* mButAll;
+        QPushButton* mButGui;
         QPushButton* mButNone;
         QTableView* mTableView;
     };

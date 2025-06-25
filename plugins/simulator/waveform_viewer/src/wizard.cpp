@@ -163,7 +163,7 @@ namespace hal {
         mSpinPeriod = new QSpinBox(this);
         mSpinPeriod->setMinimum(0);
         mSpinPeriod->setMaximum(1000000);
-        mSpinPeriod->setValue(10);
+        mSpinPeriod->setValue(1000);
         layout->addWidget(mSpinPeriod,1,1);
 
         layout->addWidget(new QLabel("Start value:",this),2,0);
@@ -175,8 +175,8 @@ namespace hal {
         layout->addWidget(new QLabel("Duration:",this),3,0);
         mSpinDuration = new QSpinBox(this);
         mSpinDuration->setMinimum(0);
-        mSpinDuration->setMaximum(1000000);
-        mSpinDuration->setValue(2000);
+        mSpinDuration->setMaximum(10000000);
+        mSpinDuration->setValue(100000);
         layout->addWidget(mSpinDuration,3,1);
 
         mDontUseClock = new QCheckBox("Do not use clock generator in simulation",this);
@@ -754,6 +754,8 @@ namespace hal {
 
          mButAll = new QPushButton("Wave data for all nets", this);
          layout->addWidget(mButAll,0,0);
+         mButGui = new QPushButton("Only nets selected in GUI", this);
+         layout->addWidget(mButGui,0,1);
          mButNone = new QPushButton("Clear selection", this);
          layout->addWidget(mButNone,0,2);
 
@@ -764,7 +766,7 @@ namespace hal {
          mTableView->setModel(mProxyModel);
          mTableView->setSortingEnabled(true);
          mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-         mTableView->setSelectionMode(QAbstractItemView::MultiSelection);
+         mTableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
          QHeaderView* hv = mTableView->horizontalHeader();
          hv->setSectionResizeMode(0,QHeaderView::Interactive);
          hv->setSectionResizeMode(1,QHeaderView::Stretch);
@@ -773,9 +775,29 @@ namespace hal {
          mTableView->setColumnWidth(1,256);
          mTableView->setColumnWidth(2,36);
          connect(mButAll,&QPushButton::clicked,mTableView,&QTableView::selectAll);
+         connect(mButGui,&QPushButton::clicked,this,&PageLoadResults::useGuiSelection);
          connect(mButNone,&QPushButton::clicked,mTableView,&QTableView::clearSelection);
 
          layout->addWidget(mTableView,1,0,1,3);
+    }
+
+    void PageLoadResults::useGuiSelection()
+    {
+        QSet<u32> guiNetSel = gSelectionRelay->selectedNets();
+
+        const QAbstractItemModel* modl = mTableView->model(); // proxy model
+        int nrows = modl->rowCount();
+        mTableView->clearSelection();
+
+        bool ok;
+
+        for (int irow = 0; irow<nrows; irow++)
+        {
+            u32 gid = modl->data(modl->index(irow,0)).toUInt(&ok);
+            if (!ok) continue;
+            if (guiNetSel.contains(gid))
+                mTableView->selectRow(irow);
+        }
     }
 
     bool PageLoadResults::validatePage()

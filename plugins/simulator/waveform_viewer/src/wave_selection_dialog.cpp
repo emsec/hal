@@ -32,7 +32,7 @@ namespace hal {
         mTableView->setModel(mProxyModel);
         mTableView->setSortingEnabled(true);
         mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        mTableView->setSelectionMode(QAbstractItemView::MultiSelection);
+        mTableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         QHeaderView* hv = mTableView->horizontalHeader();
         hv->setSectionResizeMode(0,QHeaderView::Interactive);
         hv->setSectionResizeMode(1,QHeaderView::Stretch);
