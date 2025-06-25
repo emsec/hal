@@ -90,12 +90,11 @@ jobs:
           mkdir -p build
           cd build
           export PATH="$(brew --prefix qt@5)/bin:$PATH"
-          brew ls llvm@19
-          brew --prefix llvm@19
-          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=$(brew --prefix llvm@19)/bin/clang -DCMAKE_CXX_COMPILER=$(brew --prefix llvm@19)/bin/clang++
+          brew ls llvm
+          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -DCMAKE_CXX_COMPILER=$(brew --prefix llvm)/bin/clang++
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@19)/lib -Wl,-rpath,$(brew --prefix llvm@19)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@19)/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -113,8 +112,8 @@ jobs:
           export SDKROOT=$(xcrun --show-sdk-path)
           cmake --build . --target all --clean-first --config $BUILD_TYPE
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@19)/lib -Wl,-rpath,$(brew --prefix llvm@19)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@19)/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -135,8 +134,8 @@ jobs:
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@19)/lib -Wl,-rpath,$(brew --prefix llvm@19)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@19)/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
