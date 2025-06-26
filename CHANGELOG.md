@@ -1,13 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] 
+## [Unreleased]
+* simulation
+  * fixed load simulation input data from previous simulation in setup wizard
+  * changed selection behavior in load simulation results allowing a range selection with single click
+  * fixed bug in load simulation data for selected nets in graph view
+  * changed waveform event handling so that duplicate events get blocked
+
+* build process
+  * fixed `make install` by updating RPATH on installation
+  * fixed required minimum cmake version, demanding at least version 3.5
+  * added build support for RedHat Enterprise Linux
+  * fixed `netlist_preprocessing` build dependencies
+
+* added `get_shortest_path` overload to find shortest path from gate to module
+* fixed left/right arrow navigation from global inputs/outputs
+* fixed bug in node placement via GUI API
 * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
 * changed and unified context menus for all widgets related to netlist elements
 * fixed module colors not updating on creation of modules with previously used ids
-* fixed `netlist_preprocessing` build dependencies
-* fixed cmake warnings that minimum version 3.5 is required
-* added RPATH setting so that libraries get found after `make install`
 * added python bindings `gui.View` for management of contexts and directories
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
