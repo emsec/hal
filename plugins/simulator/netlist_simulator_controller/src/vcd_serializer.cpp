@@ -735,7 +735,6 @@ namespace hal
     bool VcdSerializer::importSaleae(const QString& saleaeDirecotry, const std::unordered_map<hal::Net*, int>& lookupTable, const QString& workdir, u64 timeScale)
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
-        qDebug() << "workdir" << mWorkdir;
         deleteFiles();
         mTime                          = 0;
         SaleaeParser::sTimeScaleFactor = timeScale;

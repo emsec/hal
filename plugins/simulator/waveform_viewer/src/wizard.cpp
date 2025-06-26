@@ -532,8 +532,9 @@ namespace hal {
 
     void PageInputData::openFileBrowser()
     {
-        QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
-        filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
+        QString filter("Simulation data (saleae.json);;"
+                       " VCD files (*.vcd);;"
+                       " CSV files (*.csv)");
 
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
@@ -563,7 +564,7 @@ namespace hal {
                 {
                     subtitle = "File '" + fileName + "' is not readable";
                 }
-                else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv"))
+                else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv") && !fileName.endsWith("saleae.json"))
                 {
                     subtitle = "Parsing input files with extension '." + fileInfo.suffix() + "' is not supported";
                 }
@@ -602,14 +603,18 @@ namespace hal {
                 return false;
             }
 
-            if (fileName.endsWith(NetlistSimulatorController::sPersistFile))
+            if (fileName.endsWith("saleae.json"))
             {
-                NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-                if (ctrlPlug)
+                SaleaeDirectory externSD(fileName.toStdString(), false);
+
+                std::unordered_map<Net*, int> lookupTable;
+                for (const Net* inpNet : mController->get_input_nets())
                 {
-                    std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist, fileName.toStdString());
-                    //mController->takeControllerOwnership(ctrlRef.get(), true); // save controller
+                    //TODO : keep clock ??
+                    int inx = externSD.get_datafile_index(inpNet->get_name(), inpNet->get_id());
+                    lookupTable[const_cast<Net*>(inpNet)] = inx;
                 }
+                mController->import_saleae(QFileInfo(fileName).absolutePath().toStdString(), lookupTable);
             }
             else if (mController->can_import_data() && fileName.toLower().endsWith(".vcd"))
                 mController->import_vcd(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
@@ -816,6 +821,8 @@ namespace hal {
         }
         if (!selIndexList.isEmpty())
         {
+            WaveDataList* wd = mController->get_waves();
+            SaleaeDirectoryStoreRequest save(&wd->saleaeDirectory());
             mWaveWidget->addSelectedResults(mWaveModel->entryMap(selIndexList));
             mController->load_waveform_groups(false); // create waveform groups EXCEPT(=false) input groups
         }
