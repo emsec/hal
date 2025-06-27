@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
   * fixed `netlist_preprocessing` build dependencies
 
 * added `get_shortest_path` overload to find shortest path from gate to module
-* fixed left/right arrow navigation from global inputs/outputs
+* fixed left/right arrow navigation issues when starting from selected net
 * fixed bug in node placement via GUI API
 * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
 * changed and unified context menus for all widgets related to netlist elements
