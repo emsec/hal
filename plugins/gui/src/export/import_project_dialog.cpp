@@ -52,6 +52,14 @@ namespace hal {
         Q_EMIT selectionStatusChanged();
     }
 
+    void FileSelectWidget::setFixedEntry(const QString& entry)
+    {
+        mEditor->setText(entry);
+        mEditor->setReadOnly(true);
+        mButton->setDisabled(true);
+        mButton->hide();
+    }
+
     ImportProjectDialog::ImportProjectDialog(QWidget *parent)
         : QDialog(parent), mStatus(NoImport)
     {
@@ -82,6 +90,13 @@ namespace hal {
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         layout->addWidget(mButtonBox);
         handleSelectionStatusChanged();
+    }
+
+    void ImportProjectDialog::setZippedFile(const QString& filename)
+    {
+        mZippedFile->setFixedEntry(filename);
+        handleSelectionStatusChanged();
+        disconnect(mZippedFile,&FileSelectWidget::selectionStatusChanged, this, &ImportProjectDialog::handleSelectionStatusChanged);
     }
 
     void ImportProjectDialog::handleSelectionStatusChanged()

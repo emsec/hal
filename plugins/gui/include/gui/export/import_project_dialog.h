@@ -48,6 +48,7 @@ namespace hal
     public:
        FileSelectWidget(const QString& defaultEntry, bool existingDir, QWidget* parent = nullptr);
        bool valid() const {return mValid; }
+       void setFixedEntry(const QString& entry);
        QString selection() const { return mEditor->text(); }
     };
 
@@ -72,6 +73,7 @@ namespace hal
     public:
         ImportProjectDialog(QWidget* parent = nullptr);
         bool importProject();
+        void setZippedFile(const QString& filename);
         ImportStatus status() const { return mStatus; }
         QString extractedProjectAbsolutePath() const { return mExtractedProjectAbsolutePath; }
         static QString suggestedProjectDir(const QString& filename);
