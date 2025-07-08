@@ -1223,9 +1223,6 @@ namespace hal
             }
             const std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets = res.get();
 
-            std::cout << "Done with fingerprinting" << std::endl;
-            std::cout << "Got " << fingerprint_to_nets.size() << " different finger prints" << std::endl;
-
             auto equality_result = (num_threads > 1) ? equivalence_check_parallel(fingerprint_to_nets, max_net_id, num_threads) : equivalence_check(fingerprint_to_nets, max_net_id);
             if (equality_result.is_error())
             {
@@ -1233,7 +1230,6 @@ namespace hal
             }
 
             std::vector<std::vector<Net*>> equality_classes = equality_result.get();
-            std::cout << "Done with equivalence checking" << std::endl;
 
             u32 counter = 0;
             for (const auto& eq_class : equality_classes)
