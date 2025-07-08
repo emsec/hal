@@ -15,8 +15,11 @@
 #include "z3_utils/subgraph_function_generation.h"
 
 #include <fstream>
+#include <future>
+#include <mutex>
 #include <queue>
 #include <regex>
+#include <thread>
 
 namespace hal
 {
@@ -903,7 +906,29 @@ namespace hal
                 }
             };
 
-            Result<std::map<TreeFingerprint, std::set<Net*>>> fingerprint_nets(const Netlist* nl, const std::vector<Net*>& nets, const u32 num_threads)
+            Result<std::map<TreeFingerprint, std::set<Net*>>> fingerprint_nets(const Netlist* nl, const std::vector<Net*>& nets)
+            {
+                // Main multi-threaded processing
+                std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets;
+
+                // Single-threaded fallback for small datasets or num_threads = 1
+                for (const auto& n : nets)
+                {
+                    auto inputs_res = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, n);
+                    if (inputs_res.is_error())
+                    {
+                        return ERR_APPEND(inputs_res.get_error(),
+                                          "Unable to remove redundant logic trees: failed to gather inputs for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
+                    }
+                    TreeFingerprint tf;
+                    tf.external_inputs = inputs_res.get();
+                    fingerprint_to_nets[tf].insert(n);
+                }
+
+                return OK(fingerprint_to_nets);
+            }
+
+            Result<std::map<TreeFingerprint, std::set<Net*>>> fingerprint_nets_parallel(const Netlist* nl, const std::vector<Net*>& nets, const u32 num_threads)
             {
                 // Worker function for processing gates
                 auto process_gates_worker = [&](size_t start_idx, size_t end_idx) -> Result<std::map<TreeFingerprint, std::set<Net*>>> {
@@ -932,70 +957,243 @@ namespace hal
                 // Main multi-threaded processing
                 std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets;
 
-                if (num_threads <= 1 || nets.size() < num_threads)
+                // Multi-threaded processing
+                std::vector<std::thread> threads;
+                std::vector<Result<std::map<TreeFingerprint, std::set<Net*>>>> results(num_threads, ERR("uninitialized thread result"));
+                size_t nets_per_thread = nets.size() / num_threads;
+                size_t remainder       = nets.size() % num_threads;
+
+                size_t start_idx = 0;
+                for (size_t t = 0; t < num_threads; ++t)
                 {
-                    // Single-threaded fallback for small datasets or num_threads = 1
-                    for (const auto& n : nets)
+                    size_t current_chunk_size = nets_per_thread + (t < remainder ? 1 : 0);
+                    size_t end_idx            = start_idx + current_chunk_size;
+
+                    threads.emplace_back([&, t, start_idx, end_idx]() { results[t] = process_gates_worker(start_idx, end_idx); });
+                    start_idx = end_idx;
+                }
+
+                // Wait for all threads to complete
+                for (auto& thread : threads)
+                {
+                    thread.join();
+                }
+
+                // Check results and merge if no errors
+                for (const auto& result : results)
+                {
+                    if (result.is_error())
                     {
-                        auto inputs_res = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(GateTypeProperty::combinational, n);
-                        if (inputs_res.is_error())
-                        {
-                            return ERR_APPEND(inputs_res.get_error(),
-                                              "Unable to remove redundant logic trees: failed to gather inputs for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
-                        }
-                        TreeFingerprint tf;
-                        tf.external_inputs = inputs_res.get();
-                        fingerprint_to_nets[tf].insert(n);
+                        return result;
                     }
                 }
-                else
+
+                // Merge all successful results
+                for (const auto& result : results)
                 {
-                    // Multi-threaded processing
-                    std::vector<std::thread> threads;
-                    std::vector<Result<std::map<TreeFingerprint, std::set<Net*>>>> results(num_threads, ERR("uninitialized thread result"));
-                    size_t nets_per_thread = nets.size() / num_threads;
-                    size_t remainder       = nets.size() % num_threads;
-
-                    size_t start_idx = 0;
-                    for (size_t t = 0; t < num_threads; ++t)
+                    const auto& local_map = result.get();
+                    for (const auto& [tf, local_nets] : local_map)
                     {
-                        size_t current_chunk_size = nets_per_thread + (t < remainder ? 1 : 0);
-                        size_t end_idx            = start_idx + current_chunk_size;
-
-                        threads.emplace_back([&, t, start_idx, end_idx]() { results[t] = process_gates_worker(start_idx, end_idx); });
-                        start_idx = end_idx;
-                    }
-
-                    // Wait for all threads to complete
-                    for (auto& thread : threads)
-                    {
-                        thread.join();
-                    }
-
-                    // Check results and merge if no errors
-                    for (const auto& result : results)
-                    {
-                        if (result.is_error())
+                        for (const auto& net : local_nets)
                         {
-                            return result;
-                        }
-                    }
-
-                    // Merge all successful results
-                    for (const auto& result : results)
-                    {
-                        const auto& local_map = result.get();
-                        for (const auto& [tf, local_nets] : local_map)
-                        {
-                            for (const auto& net : local_nets)
-                            {
-                                fingerprint_to_nets[tf].insert(net);
-                            }
+                            fingerprint_to_nets[tf].insert(net);
                         }
                     }
                 }
 
                 return OK(fingerprint_to_nets);
+            }
+
+            // Simple structure to hold thread-local Z3 context and cache
+            struct ThreadData
+            {
+                z3::context ctx;
+                std::vector<z3::expr> net_cache;
+
+                ThreadData(size_t max_net_id) : ctx(), net_cache(max_net_id + 1, z3::expr(ctx))
+                {
+                }
+            };
+
+            // Process one fingerprint group with proper error handling
+            Result<std::vector<std::vector<Net*>>> process_group(const std::vector<Net*>& nets, ThreadData& data)
+            {
+                std::vector<std::vector<Net*>> equality_classes;
+                std::vector<Net*> current_candidate_nets = nets;
+                std::vector<Net*> next_candidate_nets;
+
+                while (!current_candidate_nets.empty())
+                {
+                    const auto n = current_candidate_nets.back();
+                    current_candidate_nets.pop_back();
+
+                    std::vector<Net*> new_equality_class = {n};
+
+                    for (const auto& m : current_candidate_nets)
+                    {
+                        const auto bf_n = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, n, data.ctx, data.net_cache);
+                        const auto bf_m = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, m, data.ctx, data.net_cache);
+
+                        if (bf_n.is_error())
+                        {
+                            return ERR_APPEND(bf_n.get_error(),
+                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
+                        }
+
+                        if (bf_m.is_error())
+                        {
+                            return ERR_APPEND(bf_m.get_error(),
+                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+                        }
+
+                        z3::solver s(data.ctx);
+                        s.add(bf_n.get() != bf_m.get());
+                        const bool are_equal = (s.check() == z3::unsat);
+
+                        if (are_equal)
+                        {
+                            new_equality_class.push_back(m);
+                        }
+                        else
+                        {
+                            next_candidate_nets.push_back(m);
+                        }
+                    }
+
+                    equality_classes.push_back(new_equality_class);
+                    current_candidate_nets = next_candidate_nets;
+                    next_candidate_nets.clear();
+                }
+
+                return OK(equality_classes);
+            }
+
+            // Main function with proper Result<> error handling
+            Result<std::vector<std::vector<Net*>>> equivalence_check(const std::map<TreeFingerprint, std::set<Net*>>& fingerprint_to_nets, const size_t max_net_id)
+            {
+                // Convert fingerprint groups to vector for easy indexing
+                std::vector<std::vector<Net*>> groups;
+                for (const auto& [fingerprint, nets] : fingerprint_to_nets)
+                {
+                    if (nets.size() > 1)
+                    {
+                        groups.emplace_back(nets.begin(), nets.end());
+                    }
+                }
+
+                ThreadData data(max_net_id);
+                std::vector<std::vector<Net*>> equality_classes;
+                for (auto idx = 0; idx < groups.size(); ++idx)
+                {
+                    auto group_result = process_group(groups[idx], data);
+                    if (group_result.is_error())
+                    {
+                        return group_result;
+                    }
+
+                    auto group_classes = group_result.get();
+                    equality_classes.insert(equality_classes.end(), group_classes.begin(), group_classes.end());
+                }
+
+                // Add single-net groups
+                for (const auto& [fingerprint, nets] : fingerprint_to_nets)
+                {
+                    if (nets.size() == 1)
+                    {
+                        equality_classes.push_back({*nets.begin()});
+                    }
+                }
+
+                return OK(equality_classes);
+            }
+
+            Result<std::vector<std::vector<Net*>>> equivalence_check_parallel(const std::map<TreeFingerprint, std::set<Net*>>& fingerprint_to_nets, const size_t max_net_id, const u32 num_threads)
+            {
+                // Convert fingerprint groups to vector for easy indexing
+                std::vector<std::vector<Net*>> groups;
+                for (const auto& [fingerprint, nets] : fingerprint_to_nets)
+                {
+                    if (nets.size() > 1)
+                    {
+                        groups.emplace_back(nets.begin(), nets.end());
+                    }
+                }
+
+                // Shared error storage - first error wins
+                std::mutex error_mutex;
+                std::optional<Error> first_error;
+
+                // Launch threads with futures
+                std::vector<std::future<Result<std::vector<std::vector<Net*>>>>> futures;
+                std::atomic<size_t> group_index{0};
+
+                for (int i = 0; i < num_threads; ++i)
+                {
+                    futures.push_back(std::async(std::launch::async, [&]() -> Result<std::vector<std::vector<Net*>>> {
+                        ThreadData data(max_net_id);
+                        std::vector<std::vector<Net*>> thread_results;
+
+                        while (true)
+                        {
+                            // Check if another thread already encountered an error
+                            {
+                                std::lock_guard<std::mutex> lock(error_mutex);
+                                if (first_error.has_value())
+                                {
+                                    return OK(thread_results);    // Early exit on error
+                                }
+                            }
+
+                            size_t idx = group_index.fetch_add(1);
+                            if (idx >= groups.size())
+                            {
+                                break;
+                            }
+
+                            auto group_result = process_group(groups[idx], data);
+                            if (group_result.is_error())
+                            {
+                                // Store first error and return
+                                std::lock_guard<std::mutex> lock(error_mutex);
+                                if (!first_error.has_value())
+                                {
+                                    first_error = group_result.get_error();
+                                }
+                                return group_result;
+                            }
+
+                            auto group_classes = group_result.get();
+                            thread_results.insert(thread_results.end(), group_classes.begin(), group_classes.end());
+                        }
+
+                        return OK(thread_results);
+                    }));
+                }
+
+                // Collect results and check for errors
+                std::vector<std::vector<Net*>> equality_classes;
+                for (auto& future : futures)
+                {
+                    auto thread_result = future.get();
+                    if (thread_result.is_error())
+                    {
+                        return ERR_APPEND(thread_result.get_error(), "Failed during parallel equivalence checking");
+                    }
+
+                    auto thread_classes = thread_result.get();
+                    equality_classes.insert(equality_classes.end(), thread_classes.begin(), thread_classes.end());
+                }
+
+                // Add single-net groups
+                for (const auto& [fingerprint, nets] : fingerprint_to_nets)
+                {
+                    if (nets.size() == 1)
+                    {
+                        equality_classes.push_back({*nets.begin()});
+                    }
+                }
+
+                return OK(equality_classes);
             }
         }    // namespace
 
@@ -1018,7 +1216,7 @@ namespace hal
                 }
             }
 
-            const auto res = fingerprint_nets(nl, all_nets, num_threads);
+            const auto res = (num_threads > 1) ? fingerprint_nets_parallel(nl, all_nets, num_threads) : fingerprint_nets(nl, all_nets);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "cannot remove redundant logic trees: failed to fingerprint nets");
@@ -1028,75 +1226,14 @@ namespace hal
             std::cout << "Done with fingerprinting" << std::endl;
             std::cout << "Got " << fingerprint_to_nets.size() << " different finger prints" << std::endl;
 
-            std::vector<std::vector<Net*>> equality_classes;
-
-            z3::context ctx;
-            std::vector<z3::expr> net_cache(max_net_id + 1, z3::expr(ctx));
-
-            for (const auto& [_fingerprint, nets] : fingerprint_to_nets)
+            auto equality_result = (num_threads > 1) ? equivalence_check_parallel(fingerprint_to_nets, max_net_id, num_threads) : equivalence_check(fingerprint_to_nets, max_net_id);
+            if (equality_result.is_error())
             {
-                // TODO remove
-                // std::cout << "Fingerprint(" << _fingerprint.external_inputs.size() << "): " << std::endl;
-                // for (const auto& n : _fingerprint.external_inputs)
-                // {
-                //     std::cout << "\t" << n << std::endl;
-                // }
-                // std::cout << "Checking nets: " << std::endl;
-                // for (const auto& n : nets)
-                // {
-                //     std::cout << "\t" << n->get_name() << std::endl;
-                // }
-
-                std::vector<Net*> current_candidate_nets = {nets.begin(), nets.end()};
-                std::vector<Net*> next_candidate_nets;
-
-                while (!current_candidate_nets.empty())
-                {
-                    const auto n = current_candidate_nets.back();
-                    current_candidate_nets.pop_back();
-
-                    std::vector<Net*> new_equality_class = {n};
-
-                    for (const auto& m : current_candidate_nets)
-                    {
-                        const auto bf_n = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, n, ctx, net_cache);
-                        const auto bf_m = z3_utils::get_subgraph_z3_function(GateTypeProperty::combinational, m, ctx, net_cache);
-
-                        if (bf_n.is_error())
-                        {
-                            return ERR_APPEND(bf_n.get_error(),
-                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
-                        }
-
-                        if (bf_m.is_error())
-                        {
-                            return ERR_APPEND(bf_m.get_error(),
-                                              "Unable to remove redundant logic trees: failed to build Boolean function for net " + m->get_name() + " with ID " + std::to_string(m->get_id()));
-                        }
-
-                        z3::solver s(ctx);
-                        s.add(bf_n.get() != bf_m.get());
-                        const auto check_res = s.check();
-
-                        const bool are_equal = (check_res == z3::unsat);
-
-                        if (are_equal)
-                        {
-                            new_equality_class.push_back(m);
-                        }
-                        else
-                        {
-                            next_candidate_nets.push_back(m);
-                        }
-                    }
-
-                    equality_classes.push_back(new_equality_class);
-                    current_candidate_nets = next_candidate_nets;
-                    next_candidate_nets.clear();
-                }
+                return ERR_APPEND(equality_result.get_error(), "Failed to perform equivalence checking");
             }
 
-            std::cout << "Done with equivalnce checking" << std::endl;
+            std::vector<std::vector<Net*>> equality_classes = equality_result.get();
+            std::cout << "Done with equivalence checking" << std::endl;
 
             u32 counter = 0;
             for (const auto& eq_class : equality_classes)
