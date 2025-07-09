@@ -6,8 +6,6 @@
 #include "gui/gui_utils/graphics.h"
 #include "hal_core/netlist/gate.h"
 
-#include <QFont>
-#include <QFontMetricsF>
 #include <QImage>
 #include <QPainter>
 #include <QPen>
@@ -22,12 +20,7 @@ namespace hal
 
     QPen StandardGraphicsModule::sPen;
 
-    QColor StandardGraphicsModule::sTextColor;
-
-    QFont StandardGraphicsModule::sTextFont[3];
     QFont StandardGraphicsModule::sPinFont;
-
-    qreal StandardGraphicsModule::sTextFontHeight[3] = {0, 0, 0};
 
     qreal StandardGraphicsModule::sColorBarHeight = 30;
 
@@ -67,13 +60,6 @@ namespace hal
 
         QFont font = QFont("Iosevka");
         font.setPixelSize(graph_widget_constants::sFontSize);
-
-        for (int iline = 0; iline < 3; iline++)
-        {
-            sTextFont[iline] = font;
-            QFontMetricsF fmf(font);
-            sTextFontHeight[iline] = fmf.height();
-        }
 
         sPinFont = font;
 
@@ -243,13 +229,6 @@ namespace hal
 
     void StandardGraphicsModule::format(const bool& adjust_size_to_grid)
     {
-        qreal textWidth[3] = {0, 0, 0};
-        for (int iline = 0; iline < 3; iline++)
-        {
-            QFontMetricsF fmf(sTextFont[iline]);
-            textWidth[iline] = fmf.width(mNodeText[iline]);
-        }
-
         QFontMetricsF pin_fm(sPinFont);
         qreal max_pin_width = 0;
 
@@ -280,16 +259,12 @@ namespace hal
 
         qreal max_pin_height  = std::max(total_input_pin_height, total_output_pin_height);
         qreal min_body_height = sInnerNameTypeSpacing + 2 * sOuterNameTypeSpacing;
-        qreal maxTextWidth    = 0;
         for (int iline = 0; iline < 3; iline++)
         {
-            if (iline != 2 || !mNodeText[iline].isEmpty())
-                min_body_height += sTextFontHeight[iline];
-            if (maxTextWidth < textWidth[iline])
-                maxTextWidth = textWidth[iline];
+            min_body_height += sTextFontHeight[iline];
         }
 
-        mWidth  = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + maxTextWidth;
+        mWidth  = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
         mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
 
         if (adjust_size_to_grid)
@@ -309,13 +284,7 @@ namespace hal
 
         qreal ytext = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2, sColorBarHeight + sOuterNameTypeSpacing);
 
-        for (int iline = 0; iline < 3; iline++)
-        {
-            ytext += sTextFontHeight[iline];
-            mTextPosition[iline].setX(mWidth / 2 - textWidth[iline] / 2);
-            mTextPosition[iline].setY(ytext);
-            ytext += sInnerNameTypeSpacing / 2;
-        }
+        initTextPosition(ytext, sInnerNameTypeSpacing);
 
         qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 

@@ -40,8 +40,7 @@ namespace hal
         s->polish(this);
 
         ModuleShader::debugSetNetColor(mNetBaseColor);
-        StandardGraphicsGate::sTextColor = mNodeTextColor;
-        StandardGraphicsModule::sTextColor = mNodeTextColor;
+        GraphicsNode::sTextColor = mNodeTextColor;
     }
 
     void GraphicsQssAdapter::setGridAlpha(int alpha)

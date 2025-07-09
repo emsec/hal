@@ -42,6 +42,13 @@ namespace hal
                                                                                                     "If enabled middle mouse button will pan the graphics.\n"
                                                                                                     "If disabled middle mouse button can be used for rubber band selection.");
 
+    SettingsItemCheckbox* GraphContextManager::sSettingLayoutOnEveryChange = new SettingsItemCheckbox("Invoke Layout on Every Change",
+                                                                                                      "graph_view/layout_on_chage",
+                                                                                                      false,
+                                                                                                      "Graph View",
+                                                                                                      "If enabled every change will invoke layout() routine,\n"
+                                                                                                      "which will not happen upon rename and recolor otherwise.");
+
     GraphContextManager::GraphContextManager()
         : mMaxContextId(0)
     {
@@ -341,14 +348,20 @@ namespace hal
     {
         for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id()))
-                context->scheduleSceneUpdate();
+                if (sSettingLayoutOnEveryChange->value().toBool())
+                    context->scheduleSceneUpdate();
+                else
+                    context->refreshModule(m->get_id());
     }
 
     void GraphContextManager::handleModuleTypeChanged(Module* m) const
     {
         for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id()))
-                context->scheduleSceneUpdate();
+                if (sSettingLayoutOnEveryChange->value().toBool())
+                    context->scheduleSceneUpdate();
+                else
+                    context->refreshModule(m->get_id());
     }
 
     void GraphContextManager::handleModuleColorChanged(Module* m) const
@@ -360,7 +373,13 @@ namespace hal
         for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id())    // contains module
                 || context->gates().intersects(gateIDs))    // contains gate from module
-                context->scheduleSceneUpdate();
+                if (sSettingLayoutOnEveryChange->value().toBool())
+                    context->scheduleSceneUpdate();
+                else
+                {
+                    context->handleLayouterFinished();
+                    context->refreshModule(m->get_id());
+                }
         // a context can contain a gate from a module if it is showing the module
         // or if it's showing a parent and the module is unfolded
     }

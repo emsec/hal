@@ -11,8 +11,6 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/gui_globals.h"
 
-#include <QFont>
-#include <QFontMetricsF>
 #include <QPainter>
 #include <QPen>
 #include <QStyle>
@@ -25,12 +23,7 @@ qreal StandardGraphicsGate::sAlpha;
 
 QPen StandardGraphicsGate::sPen;
 
-QColor StandardGraphicsGate::sTextColor;
-
-QFont StandardGraphicsGate::sTextFont[2];
 QFont StandardGraphicsGate::sPinFont;
-
-qreal StandardGraphicsGate::sTextFontHeight[2];
 
 qreal StandardGraphicsGate::sColorBarHeight = 30;
 
@@ -75,13 +68,6 @@ void StandardGraphicsGate::loadSettings()
 
     QFont font = QFont("Iosevka");
     font.setPixelSize(graph_widget_constants::sFontSize);
-
-    for (int iline=0; iline<2; iline++)
-    {
-        sTextFont[iline] = font;
-        QFontMetricsF fmf(font);
-        sTextFontHeight[iline] = fmf.height();
-    }
 
     sPinFont = font;
     QFontMetricsF pin_fm(sPinFont);
@@ -310,13 +296,6 @@ QPointF StandardGraphicsGate::endpointPositionByIndex(int index, bool isInput) c
 
 void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 {
-    qreal textWidth[2];
-    for (int iline=0; iline<2; iline++)
-    {
-        QFontMetricsF fmf(sTextFont[iline]);
-        textWidth[iline] = fmf.width(mNodeText[iline]);
-    }
-
     QFontMetricsF pin_fm(sPinFont);
     qreal max_pin_width = 0;
 
@@ -351,15 +330,13 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     qreal max_pin_height = std::max(total_input_pin_height, total_output_pin_height);
     qreal min_body_height = sInnerNameTypeSpacing + 2 * sOuterNameTypeSpacing;
 
-    qreal maxTextWidth = 0;
     for (int iline=0; iline<2; iline++)
     {
         min_body_height += sTextFontHeight[iline];
-        if (maxTextWidth  < textWidth[iline]) maxTextWidth = textWidth[iline];
     }
 
 
-    mWidth = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + maxTextWidth;
+    mWidth = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
     mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
 
     if (adjust_size_to_grid)
@@ -377,12 +354,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
             mHeight = (quotient + 1) * graph_widget_constants::sGridSize;
     }
 
-    mTextPosition[0].setX(mWidth / 2 - textWidth[0] / 2);
-    mTextPosition[0].setY(std::max(mHeight / 2 - sTextFontHeight[0] / 2 - sInnerNameTypeSpacing / 2,
-                          sColorBarHeight + sOuterNameTypeSpacing + sTextFontHeight[0]));
-
-    mTextPosition[1].setX(mWidth / 2 - textWidth[1] / 2);
-    mTextPosition[1].setY(mTextPosition[0].y() + sTextFontHeight[1] + sInnerNameTypeSpacing / 2);
+    // reproduce formatting, sTextFontHeight[0] will be added befor placing line
+    qreal y0 = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2,
+                          sColorBarHeight + sOuterNameTypeSpacing);
+    initTextPosition(y0, sInnerNameTypeSpacing);
 
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 

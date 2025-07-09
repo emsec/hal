@@ -1,9 +1,12 @@
 #include "gui/welcome_screen/open_file_widget.h"
 
+#include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/user_action/action_open_netlist_file.h"
 #include "hal_core/utilities/log.h"
 
+#include <QDebug>
 #include <QDragEnterEvent>
 #include <QLabel>
 #include <QMimeData>
@@ -64,6 +67,27 @@ namespace hal
             //            return;
 
             QString file                      = mime_data->urls().at(0).toLocalFile();
+            if (QFileInfo(file).suffix().toLower()=="zip")
+            {
+                qDebug() << "zip file" << file;
+                ImportProjectDialog ipd(this);
+                ipd.setZippedFile(file);
+                if (ipd.exec() == QDialog::Accepted)
+                {
+                    if (ipd.importProject())
+                    {
+                        ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject,
+                                                                               ipd.extractedProjectAbsolutePath());
+                        act->exec();
+                    }
+                    else
+                        QMessageBox::warning(this,
+                                             "Import Project Failed",
+                                             "Failed to extract a HAL project from selected archive file.\n"
+                                             "You might want to uncompress the archive manually and try to fetchGateLibrary the project.");
+                }
+            }
+
             FileManager::DirectoryStatus stat = FileManager::directoryStatus(file);
 
             switch (stat)

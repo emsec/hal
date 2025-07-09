@@ -8,6 +8,8 @@
 #include <hal_core/utilities/program_arguments.h>
 #include <hal_core/utilities/log.h>
 #include <QFileInfo>
+#include <QString>
+#include <sys/resource.h>
 
 using namespace hal;
 
@@ -745,7 +747,30 @@ void saleae_export(std::string path_1, std::string path_2, std::string ids, std:
         last_time = wave_data_list->timeFrame().sceneMaxTime();
     }
 
-    bool ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), last_time, time_shift);
+
+    // add new waveform, might need to increase ulimit
+    struct rlimit rlim;
+    getrlimit(RLIMIT_NOFILE, &rlim);
+
+    unsigned int required = wave_data_qlist.size() + 256;
+    Q_ASSERT(rlim.rlim_max >= required);
+    if (rlim.rlim_cur < required)
+    {
+        rlim.rlim_cur = required;
+        setrlimit(RLIMIT_NOFILE, &rlim);
+    }
+
+
+    QString ext = QFileInfo(QString::fromStdString(path_1)).suffix().toLower();
+    bool ret = false;
+
+    if (ext == "vcd")
+        ret = vcd_s->exportVcd(QString::fromStdString(path_1), wave_data_qlist, wave_data_list->timeFrame().sceneMinTime(), last_time, time_shift);
+    else if (ext == "csv")
+        ret = vcd_s->exportCsv(QString::fromStdString(path_1), wave_data_qlist);
+    else
+        std::cout << "Export file format not supported, must be either vcd or csv." << std::endl;
+
     if (ret) {
         exit (0);
     }

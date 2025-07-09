@@ -132,6 +132,8 @@ namespace hal {
     bool PageSelectGates::validatePage()
     {
         mController->reset();
+        WaveDataList* wd = mController->get_waves();
+        SaleaeDirectoryStoreRequest save(&wd->saleaeDirectory());
         mController->add_gates(selectedGates());
         for (const Net* inpNet : mController->get_input_nets())
             mController->get_waveform_by_net(inpNet);
@@ -161,7 +163,7 @@ namespace hal {
         mSpinPeriod = new QSpinBox(this);
         mSpinPeriod->setMinimum(0);
         mSpinPeriod->setMaximum(1000000);
-        mSpinPeriod->setValue(10);
+        mSpinPeriod->setValue(1000);
         layout->addWidget(mSpinPeriod,1,1);
 
         layout->addWidget(new QLabel("Start value:",this),2,0);
@@ -173,8 +175,8 @@ namespace hal {
         layout->addWidget(new QLabel("Duration:",this),3,0);
         mSpinDuration = new QSpinBox(this);
         mSpinDuration->setMinimum(0);
-        mSpinDuration->setMaximum(1000000);
-        mSpinDuration->setValue(2000);
+        mSpinDuration->setMaximum(10000000);
+        mSpinDuration->setValue(100000);
         layout->addWidget(mSpinDuration,3,1);
 
         mDontUseClock = new QCheckBox("Do not use clock generator in simulation",this);
@@ -530,8 +532,9 @@ namespace hal {
 
     void PageInputData::openFileBrowser()
     {
-        QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
-        filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
+        QString filter("Simulation data (saleae.json);;"
+                       " VCD files (*.vcd);;"
+                       " CSV files (*.csv)");
 
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
@@ -561,7 +564,7 @@ namespace hal {
                 {
                     subtitle = "File '" + fileName + "' is not readable";
                 }
-                else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv"))
+                else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv") && !fileName.endsWith("saleae.json"))
                 {
                     subtitle = "Parsing input files with extension '." + fileInfo.suffix() + "' is not supported";
                 }
@@ -600,14 +603,18 @@ namespace hal {
                 return false;
             }
 
-            if (fileName.endsWith(NetlistSimulatorController::sPersistFile))
+            if (fileName.endsWith("saleae.json"))
             {
-                NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-                if (ctrlPlug)
+                SaleaeDirectory externSD(fileName.toStdString(), false);
+
+                std::unordered_map<Net*, int> lookupTable;
+                for (const Net* inpNet : mController->get_input_nets())
                 {
-                    std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist, fileName.toStdString());
-                    //mController->takeControllerOwnership(ctrlRef.get(), true); // save controller
+                    //TODO : keep clock ??
+                    int inx = externSD.get_datafile_index(inpNet->get_name(), inpNet->get_id());
+                    lookupTable[const_cast<Net*>(inpNet)] = inx;
                 }
+                mController->import_saleae(QFileInfo(fileName).absolutePath().toStdString(), lookupTable);
             }
             else if (mController->can_import_data() && fileName.toLower().endsWith(".vcd"))
                 mController->import_vcd(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
@@ -752,6 +759,8 @@ namespace hal {
 
          mButAll = new QPushButton("Wave data for all nets", this);
          layout->addWidget(mButAll,0,0);
+         mButGui = new QPushButton("Only nets selected in GUI", this);
+         layout->addWidget(mButGui,0,1);
          mButNone = new QPushButton("Clear selection", this);
          layout->addWidget(mButNone,0,2);
 
@@ -762,7 +771,7 @@ namespace hal {
          mTableView->setModel(mProxyModel);
          mTableView->setSortingEnabled(true);
          mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-         mTableView->setSelectionMode(QAbstractItemView::MultiSelection);
+         mTableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
          QHeaderView* hv = mTableView->horizontalHeader();
          hv->setSectionResizeMode(0,QHeaderView::Interactive);
          hv->setSectionResizeMode(1,QHeaderView::Stretch);
@@ -771,9 +780,36 @@ namespace hal {
          mTableView->setColumnWidth(1,256);
          mTableView->setColumnWidth(2,36);
          connect(mButAll,&QPushButton::clicked,mTableView,&QTableView::selectAll);
+         connect(mButGui,&QPushButton::clicked,this,&PageLoadResults::useGuiSelection);
          connect(mButNone,&QPushButton::clicked,mTableView,&QTableView::clearSelection);
 
          layout->addWidget(mTableView,1,0,1,3);
+    }
+
+    void PageLoadResults::useGuiSelection()
+    {
+        QSet<u32> guiNetSel = gSelectionRelay->selectedNets();
+
+        const QAbstractItemModel* modl = mTableView->model(); // proxy model
+        int nrows = modl->rowCount();
+        mTableView->clearSelection();
+
+        bool ok;
+
+        int n = mTableView->model()->columnCount();
+        for (int irow = 0; irow<nrows; irow++)
+        {
+            u32 gid = modl->data(modl->index(irow,0)).toUInt(&ok);
+            if (!ok) continue;
+            if (guiNetSel.contains(gid))
+            {
+                for (int i=0; i<n; i++)
+                {
+                    QModelIndex inx = mTableView->model()->index(irow,i);
+                    mTableView->selectionModel()->select(inx, QItemSelectionModel::Select);
+                }
+            }
+        }
     }
 
     bool PageLoadResults::validatePage()
@@ -785,6 +821,8 @@ namespace hal {
         }
         if (!selIndexList.isEmpty())
         {
+            WaveDataList* wd = mController->get_waves();
+            SaleaeDirectoryStoreRequest save(&wd->saleaeDirectory());
             mWaveWidget->addSelectedResults(mWaveModel->entryMap(selIndexList));
             mController->load_waveform_groups(false); // create waveform groups EXCEPT(=false) input groups
         }

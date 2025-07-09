@@ -1584,7 +1584,7 @@ namespace hal
                 return new_operand;
             }
 
-            std::vector<Net*> zero_extend_operand(const std::vector<Net*>& operand, const u32 new_size)
+            std::vector<Net*> zero_extend_operand(const std::vector<Net*>& operand, const u32 new_size, const Netlist* nl)
             {
                 std::vector<Net*> new_operand;
 
@@ -1596,14 +1596,14 @@ namespace hal
                     }
                     else
                     {
-                        new_operand.push_back(operand.front()->get_netlist()->get_gnd_nets().front());
+                        new_operand.push_back(nl->get_gnd_nets().front());
                     }
                 }
 
                 return new_operand;
             }
 
-            std::vector<Net*> apply_extension(const std::vector<Net*>& op, const u32 size, const u32 extension_type, Net* sign_net)
+            std::vector<Net*> apply_extension(const std::vector<Net*>& op, const u32 size, const u32 extension_type, Net* sign_net, const Netlist* nl)
             {
                 std::vector<Net*> new_op = op;
 
@@ -1611,7 +1611,7 @@ namespace hal
                 {
                     case 0:
                         // zero extended
-                        new_op = zero_extend_operand(new_op, size);
+                        new_op = zero_extend_operand(new_op, size, nl);
                         break;
                     case 1:
                         // sign extended
@@ -1620,7 +1620,7 @@ namespace hal
                     case 2:
                         // sign extended up until the second highest bit
                         new_op = sign_extend_operand(new_op, size - 1, sign_net);
-                        new_op = zero_extend_operand(new_op, size);
+                        new_op = zero_extend_operand(new_op, size, nl);
                         break;
                     case 3:
                         if ((op.size() == size) && (op.back() == sign_net))
@@ -1629,7 +1629,7 @@ namespace hal
                         }
                         else
                         {
-                            new_op = zero_extend_operand(new_op, size);
+                            new_op = zero_extend_operand(new_op, size, nl);
                         }
                 }
 
@@ -1772,12 +1772,12 @@ namespace hal
                         {
                             // new_candidate.m_operands.at(op_idx) = apply_extension_const_mul(new_candidate.m_operands.at(op_idx), new_candidate.m_output_nets.size(), ex_s.at(op_idx), msb);
                             auto sign_net                       = candidate.m_operands.front().back();
-                            new_candidate.m_operands.at(op_idx) = apply_extension(new_candidate.m_operands.at(op_idx), out_size, ex_s.at(op_idx), sign_net);
+                            new_candidate.m_operands.at(op_idx) = apply_extension(new_candidate.m_operands.at(op_idx), out_size, ex_s.at(op_idx), sign_net, ctx.m_netlist);
                         }
                         else
                         {
                             auto sign_net                       = new_candidate.m_operands.at(op_idx).back();
-                            new_candidate.m_operands.at(op_idx) = apply_extension(new_candidate.m_operands.at(op_idx), out_size, ex_s.at(op_idx), sign_net);
+                            new_candidate.m_operands.at(op_idx) = apply_extension(new_candidate.m_operands.at(op_idx), out_size, ex_s.at(op_idx), sign_net, ctx.m_netlist);
                         }
                     }
 

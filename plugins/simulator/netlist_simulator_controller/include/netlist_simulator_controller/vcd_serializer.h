@@ -97,6 +97,7 @@ namespace hal {
         VcdSerializer(const QString& workdir=QString(), bool saleae_cli=false, QObject* parent = nullptr);
         std::string get_saleae_directory_filename() const { return mSaleaeDirectoryFilename.toStdString(); }
         bool exportVcd(const QString& filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime, u32 timeShift=0);
+        bool exportCsv(const QString& filename, const QList<const WaveData*>& waves);
         bool importVcd(const QString& vcdFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>());
         bool importCsv(const QString& csvFilename, const QString& workdir=QString(), const QList<const Net*>& onlyNets = QList<const Net*>(), u64 timeScale = 1000000000);
         bool importSaleae(const QString& saleaeDirecotry, const std::unordered_map<Net*,int>& lookupTable, const QString& workdir=QString(),  u64 timeScale = 1000000000);

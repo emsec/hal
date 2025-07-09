@@ -104,6 +104,71 @@ namespace hal
         }
     }
 
+    bool VcdSerializer::exportCsv(const QString& filename, const QList<const WaveData*>& waves)
+    {
+        if (waves.isEmpty())
+        {
+            return false;
+        }
+        SaleaeParser parser(mSaleaeDirectoryFilename.toStdString());
+        QFile of(filename);
+        if (!of.open(QIODevice::WriteOnly))
+        {
+            return false;
+        }
+
+        mTime = 0;
+        int n = waves.size();
+
+        int* values = new int [n];
+        memset(values, 0, n*sizeof(int));
+
+        of.write("Time");
+        for (int i = 0; i < n; i++)
+        {
+            const WaveData* wd = waves.at(i);
+            of.write(QString(",\"%1\"").arg(wd->name()).toUtf8());
+            parser.register_callback(
+                wd->name().toStdString(),
+                wd->id(),
+                [this,&of,values,n](const void* obj, uint64_t t, int val) {
+                    if (t != mTime)
+                    {
+                        of.write(QByteArray::number((qulonglong)mTime));
+                        for (int j=0; j<n; j++)
+                        {
+                            of.write(",");
+                            of.write(QByteArray::number(values[j]));
+                        }
+                        of.write("\n");
+                        mTime = t;
+                    }
+                    *((int*)obj) = val;
+                },
+                values+i);
+        }
+
+        while (parser.next_event())
+        {;}
+
+        if (mTime)
+        {
+            of.write(QByteArray::number((qulonglong)mTime));
+            for (int j=0; j<n; j++)
+            {
+                of.write(",");
+                of.write(QByteArray::number(values[j]));
+            }
+        }
+
+        of.write("\n");
+
+        delete [] values;
+
+        return true;
+    }
+
+
     bool VcdSerializer::exportVcd(const QString& filename, const QList<const WaveData*>& waves, u32 startTime, u32 endTime, u32 timeSift)
     {
         mTimeShift      = timeSift;
@@ -735,7 +800,6 @@ namespace hal
     bool VcdSerializer::importSaleae(const QString& saleaeDirecotry, const std::unordered_map<hal::Net*, int>& lookupTable, const QString& workdir, u64 timeScale)
     {
         mWorkdir = workdir.isEmpty() ? QDir::currentPath() : workdir;
-        qDebug() << "workdir" << mWorkdir;
         deleteFiles();
         mTime                          = 0;
         SaleaeParser::sTimeScaleFactor = timeScale;
