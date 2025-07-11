@@ -29,8 +29,6 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/netlist.h"
 
-#include <unordered_set>
-
 namespace hal
 {
     class Gate;
@@ -358,6 +356,6 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module);
+        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
     }    // namespace netlist_utils
 }    // namespace hal
