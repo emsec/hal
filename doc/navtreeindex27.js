@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777":[4,1,3,31],
+"group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e":[5,0,2,552],
 "group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e":[4,1,3,24],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[5,0,2,532],
 "group__pybind.html#gaa2fbdd0b4ea1f33476ee30d7f2ce6a81":[4,1,3,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "log_8h.html#ac96c6afee3270eb88719a98239ea7f75":[7,0,0,0,4,4,12],
 "log_8h_source.html":[7,0,0,0,4,4],
 "logger__marshall_8cpp.html":[7,0,1,3,2,28,0],
-"logger__marshall_8cpp_source.html":[7,0,1,3,2,28,0],
-"logger__marshall_8h.html":[7,0,1,3,0,0,30,0],
-"logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0]
+"logger__marshall_8cpp_source.html":[7,0,1,3,2,28,0]
 };

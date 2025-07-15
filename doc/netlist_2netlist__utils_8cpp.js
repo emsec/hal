@@ -18,10 +18,17 @@ var netlist_2netlist__utils_8cpp =
     [ "get_path", "netlist_2netlist__utils_8cpp.html#a1d92e0a85d024f090e2070c009633ec9", null ],
     [ "get_path", "netlist_2netlist__utils_8cpp.html#ad44878a824ec4f37dcc5317ddec67db3", null ],
     [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#aed730c36a6fe7e185bf8b936ad7e0d6d", null ],
-    [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#a10f4d828c8c0784a08e990353c508056", null ],
+    [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#ad4d03ec3fea021d21e9247e70d03aecc", null ],
     [ "get_subgraph_function", "netlist_2netlist__utils_8cpp.html#a77025d97353281c42b543f073de27099", null ],
     [ "get_subgraph_function", "netlist_2netlist__utils_8cpp.html#ab8c3054566941b75019e3f599ec16814", null ],
     [ "remove_buffers", "netlist_2netlist__utils_8cpp.html#af985cd5c5eb7aa39f151f9fc890e6005", null ],
     [ "remove_unused_lut_endpoints", "netlist_2netlist__utils_8cpp.html#ab4c23f16593143c305d3d5de79dcb196", null ],
-    [ "replace_gate", "netlist_2netlist__utils_8cpp.html#a91da9ccb1b2005faf2ec66b2e0618aba", null ]
+    [ "replace_gate", "netlist_2netlist__utils_8cpp.html#a91da9ccb1b2005faf2ec66b2e0618aba", null ],
+    [ "m_end_gate", "netlist_2netlist__utils_8cpp.html#aeda31464705e0c4a1aadb69fad0483d8", null ],
+    [ "m_end_gates", "netlist_2netlist__utils_8cpp.html#a99a317b19f67289ce69aa5b60d4055d5", null ],
+    [ "m_forward", "netlist_2netlist__utils_8cpp.html#a7ea1e03751028d529281e0c508b50410", null ],
+    [ "m_get_next_gates", "netlist_2netlist__utils_8cpp.html#a9a2546b9a10ad47e21c2b510d805082c", null ],
+    [ "m_heureka", "netlist_2netlist__utils_8cpp.html#a3007347b7d5a24f1bf85facfb9eb4e5d", null ],
+    [ "m_origin_map", "netlist_2netlist__utils_8cpp.html#adf8d493b2fe5ea6551746b1b4ee31a6a", null ],
+    [ "m_start_gate", "netlist_2netlist__utils_8cpp.html#ac2518108ee79896150e82e01ca59ce1b", null ]
 ];

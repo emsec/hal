@@ -97,7 +97,7 @@ Inheritance diagram for hal::FileSelectWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_file_select_widget__inherit__graph.png" border="0" usemap="#ahal_1_1_file_select_widget_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_file_select_widget_inherit__map" id="ahal_1_1_file_select_widget_inherit__map">
-<area shape="rect" title=" " alt="" coords="29,916,188,1023"/>
+<area shape="rect" title=" " alt="" coords="29,916,188,1037"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qframe.html" title=" " alt="" coords="37,497,181,868"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="5,5,212,449"/>
 </map>
@@ -107,7 +107,7 @@ Collaboration diagram for hal::FileSelectWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_file_select_widget__coll__graph.png" border="0" usemap="#ahal_1_1_file_select_widget_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_file_select_widget_coll__map" id="ahal_1_1_file_select_widget_coll__map">
-<area shape="rect" title=" " alt="" coords="29,916,188,1023"/>
+<area shape="rect" title=" " alt="" coords="29,916,188,1037"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qframe.html" title=" " alt="" coords="37,497,181,868"/>
 <area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="5,5,212,449"/>
 </map>
@@ -124,6 +124,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa297c06b87669ff54375eae5b89237f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeffa299f08b3f2467948fa719f0c2c8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_file_select_widget.html#aeffa299f08b3f2467948fa719f0c2c8e">valid</a> () const</td></tr>
 <tr class="separator:aeffa299f08b3f2467948fa719f0c2c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8983ed6d550713e59e98050be27c103"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_file_select_widget.html#ac8983ed6d550713e59e98050be27c103">setFixedEntry</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;entry)</td></tr>
+<tr class="separator:ac8983ed6d550713e59e98050be27c103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa445d71719fea1bef158a9659881ad99"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_file_select_widget.html#aa445d71719fea1bef158a9659881ad99">selection</a> () const</td></tr>
 <tr class="separator:aa445d71719fea1bef158a9659881ad99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qframe"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qframe')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qframe.html">QFrame</a></td></tr>
@@ -1230,11 +1232,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00051">51</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00052">52</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="import__project__dialog_8cpp_source.html#l00111">hal::ImportProjectDialog::importProject()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="import__project__dialog_8cpp_source.html#l00126">hal::ImportProjectDialog::importProject()</a>.</p>
 
 </div>
 </div>
@@ -1261,7 +1263,31 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="import__project__dialog_8cpp_source.html#l00055">hal::ImportProjectDialog::ImportProjectDialog()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="import__project__dialog_8cpp_source.html#l00063">hal::ImportProjectDialog::ImportProjectDialog()</a>, and <a class="el" href="import__project__dialog_8cpp_source.html#l00095">hal::ImportProjectDialog::setZippedFile()</a>.</p>
+
+</div>
+</div>
+<a id="ac8983ed6d550713e59e98050be27c103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8983ed6d550713e59e98050be27c103">&#9670;&nbsp;</a></span>setFixedEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::FileSelectWidget::setFixedEntry </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>entry</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00055">55</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setDisabled">QWidget::setDisabled()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#readOnly-prop">QLineEdit::setReadOnly()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::setText()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="import__project__dialog_8cpp_source.html#l00095">hal::ImportProjectDialog::setZippedFile()</a>.</p>
 
 </div>
 </div>
@@ -1302,7 +1328,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_file_select_widget.html">FileSelectWidget</a></li>
-    <li class="footer">Generated on Wed Jun 25 2025 15:21:21 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 15 2025 13:09:41 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

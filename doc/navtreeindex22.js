@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"classhal_1_1_wait_to_be_seated_entry.html#a7b2586c86a9eb219c90855caa74e8130":[4,0,0,2,22,7],
+"classhal_1_1_wait_to_be_seated_entry.html#a914af9fe2f87682ea758c23ae509d248":[4,0,0,2,22,1],
 "classhal_1_1_wait_to_be_seated_entry.html#a9ab8bb82886be206b60e9325fa68709a":[4,0,0,2,22,6],
 "classhal_1_1_wait_to_be_seated_entry.html#aacc2f6258ee58ad223c001d0855e90fa":[4,0,0,2,22,2],
 "classhal_1_1_wait_to_be_seated_entry.html#ae5b6c62e2594fdadf311054f1e49a8c7":[4,0,0,2,22,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "control_8py_source.html":[7,0,1,1,1,1],
 "coordinate__from__data_8cpp.html":[7,0,1,3,2,19,2,0],
 "coordinate__from__data_8cpp_source.html":[7,0,1,3,2,19,2,0],
-"coordinate__from__data_8h.html":[7,0,1,3,0,0,20,2,0],
-"coordinate__from__data_8h.html#a03c8fd5f8f885f73f187e01af2713227":[7,0,1,3,0,0,20,2,0,0],
-"coordinate__from__data_8h_source.html":[7,0,1,3,0,0,20,2,0]
+"coordinate__from__data_8h.html":[7,0,1,3,0,0,20,2,0]
 };

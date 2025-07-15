@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classhal_1_1_gui_plugin_table.html#a47311840de5b5ceb945924462f255752":[6,0,0,244,4],
 "classhal_1_1_gui_plugin_table.html#a49861ce4efb518c79a0e27220ee80491":[6,0,0,244,6],
 "classhal_1_1_gui_plugin_table.html#a56dab5b0aa4a3de4d117e204326dbd5c":[6,0,0,244,0],
 "classhal_1_1_gui_plugin_table.html#a616a31854bcddac2fcb267106f40fa2e":[6,0,0,244,2],
@@ -67,7 +68,7 @@ var NAVTREEINDEX11 =
 "classhal_1_1_import_project_dialog.html":[6,0,0,59],
 "classhal_1_1_import_project_dialog.html#a2007fc4a4a11d18565bb2fec5d592f30":[6,0,0,59,3],
 "classhal_1_1_import_project_dialog.html#a294ebcef84e29fb3b4054440e66cd478":[6,0,0,59,2],
-"classhal_1_1_import_project_dialog.html#a3227f983fb6b5e7c7d46871b4e1d0aee":[6,0,0,59,4],
+"classhal_1_1_import_project_dialog.html#a3227f983fb6b5e7c7d46871b4e1d0aee":[6,0,0,59,5],
 "classhal_1_1_import_project_dialog.html#a9b7af9fa1cf0d45f3f24e0633397adc6":[6,0,0,59,1],
 "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17":[6,0,0,59,0],
 "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17a7779968b1c3c398f35c829c1a6ade01b":[6,0,0,59,0,0],
@@ -75,6 +76,7 @@ var NAVTREEINDEX11 =
 "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17ab55e5ec7f9b9af33c231ae558d6673a0":[6,0,0,59,0,4],
 "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17ad6b4e8d047ca01404d135456d5db1c9d":[6,0,0,59,0,2],
 "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17add6043326bef8ed70f8031ee8155cb48":[6,0,0,59,0,3],
+"classhal_1_1_import_project_dialog.html#ae4fa3684b6704440951efa9c0d419f08":[6,0,0,59,4],
 "classhal_1_1_init_component.html":[6,0,0,440],
 "classhal_1_1_init_component.html#a15e16fd17bb74e3016702a58e5d52ba6":[6,0,0,440,0],
 "classhal_1_1_init_component.html#a3a0498f6c6327b1c1c9eae921f983cba":[6,0,0,440,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX11 =
 "classhal_1_1_latch_component.html#ae6d2c0a9d6b9bc227aa85355c050dee8":[6,0,0,441,5],
 "classhal_1_1_latch_component.html#af5a7874278d537a83b29f4005591ed83":[6,0,0,441,11],
 "classhal_1_1_latch_component_entry.html":[4,0,7,3,8],
-"classhal_1_1_latch_component_entry.html#a584e7c68b2b1b9f5cbbd442ebb2c101b":[4,0,7,3,8,2],
-"classhal_1_1_latch_component_entry.html#a68bec8bc431cf41b1c95cb69af23d399":[4,0,7,3,8,3],
-"classhal_1_1_latch_component_entry.html#acab352b731300adad5dbbe2d6030d406":[4,0,7,3,8,1]
+"classhal_1_1_latch_component_entry.html#a584e7c68b2b1b9f5cbbd442ebb2c101b":[4,0,7,3,8,2]
 };

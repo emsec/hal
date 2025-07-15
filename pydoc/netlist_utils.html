@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Utils &mdash; hal_py v4.4.1-286-gac5983a1a documentation</title>
+  <title>Netlist Utils &mdash; hal_py v4.4.1-304-g3368034ab documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-286-gac5983a1a
+                v4.4.1-304-g3368034ab
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -533,7 +533,7 @@ If there is no such path an empty vector is returned. If there is more than one 
 <dt class="field-even">param hal_py.Gate end_gate</dt>
 <dd class="field-even"><p>The end gate for the path (might be the start if searching both directions)</p>
 </dd>
-<dt class="field-odd">bool search_both_directions</dt>
+<dt class="field-odd">param bool search_both_directions</dt>
 <dd class="field-odd"><p>If true checking start &lt;-&gt; end, which ever direction is shorter</p>
 </dd>
 <dt class="field-even">returns</dt>
@@ -545,7 +545,7 @@ If there is no such path an empty vector is returned. If there is more than one 
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_shortest_path(start_gate: hal::Gate, end_module: hal::Module) -&gt; List[hal::Gate]</p>
+<li><p>get_shortest_path(start_gate: hal::Gate, end_module: hal::Module, forward_direction: bool) -&gt; List[hal::Gate]</p>
 <blockquote>
 <div><p>Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate for the given module.
 The gate where the search started from will be the first in the result vector, the end gate will be the last.
@@ -557,11 +557,14 @@ If there is no such path an empty vector is returned. If there is more than one 
 <dt class="field-even">param hal_py.Module end_module</dt>
 <dd class="field-even"><p>The module which contains the end gate for the path</p>
 </dd>
-<dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>A list of gates that form a chain on success, an empty list on error.</p>
+<dt class="field-odd">param bool forward_direction</dt>
+<dd class="field-odd"><p>Search successor module to gate if true, else search predecessor module.</p>
 </dd>
-<dt class="field-even">rtype</dt>
-<dd class="field-even"><p>list[hal_py.Gate]</p>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>A list of gates that form a chain on success, an empty list on error.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>list[hal_py.Gate]</p>
 </dd>
 </dl>
 </div></blockquote>
