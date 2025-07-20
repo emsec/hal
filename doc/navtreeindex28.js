@@ -1,6 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"logger__marshall_8h.html":[7,0,1,3,0,0,30,0],
 "logger__marshall_8h_source.html":[7,0,1,3,0,0,30,0],
 "logger__qss__adapter_8cpp.html":[7,0,1,3,2,28,1],
 "logger__qss__adapter_8cpp_source.html":[7,0,1,3,2,28,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX28 =
 "namespacehal.html#a727315bb04e7d8b01d1b172818a1bb56":[5,0,2,562],
 "namespacehal.html#a75149032538edc19dd5073e7ef475ad4":[5,0,2,571],
 "namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078":[5,0,2,622],
-"namespacehal.html#a7b69c559c5934b72c3783843d5d17dea":[5,0,2,576]
+"namespacehal.html#a7b69c559c5934b72c3783843d5d17dea":[5,0,2,576],
+"namespacehal.html#a7c7bf0ebac5fa48494f224e4bdd55a6c":[5,0,2,616]
 };
