@@ -865,260 +865,277 @@ $(document).ready(function(){initNavTree('main__window_8cpp_source.html',''); in
 <div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160; </div>
 <div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;    <span class="keywordtype">void</span> MainWindow::handleExportProjectTriggered()</div>
 <div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    {</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;        ExportProjectDialog epd(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <span class="keywordflow">if</span> (epd.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        {</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;            epd.exportProject();</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;        }</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;    }</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160; </div>
-<div class="line"><a name="l00787"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a2c8497b3a5179617c83e8d01bd0a6020">  787</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleSaveAsTriggered()</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;    {</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filename = saveHandler();</div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        <span class="keywordflow">if</span> (!filename.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;            <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#ac04ba8d4a380b15550acd61c4a6f2e04">setWindowTitle</a>(filename);</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    }</div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160; </div>
-<div class="line"><a name="l00794"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#acf671deb01bbf6cac6ea1eeb20345fe5">  794</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleSaveTriggered()</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    {</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;        <span class="keywordflow">if</span> (pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a554f192f625ac931206386efb359989f">get_project_status</a>() == ProjectManager::ProjectStatus::NONE) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>  projectDir = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().string());</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;        saveHandler(projectDir);</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#ac04ba8d4a380b15550acd61c4a6f2e04">setWindowTitle</a>(projectDir);</div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;    }</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; </div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> MainWindow::saveHandler(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;projectDir)</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;    {</div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>) <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160; </div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> saveProjectDir(projectDir);</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160; </div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;        ProjectManager* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <span class="keywordflow">if</span> (pm-&gt;get_project_status() == ProjectManager::ProjectStatus::NONE) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">modifiedFilesExisting</a>())</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;        {</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;            <span class="keywordflow">switch</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>, <span class="stringliteral">&quot;Unsaved Changes&quot;</span>, <span class="stringliteral">&quot;The HAL project have been modified.\n&quot;</span></div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                                         <span class="stringliteral">&quot;You might want to save the changes\n&quot;</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;                                         <span class="stringliteral">&quot;before exporting the project.&quot;</span>,</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;                                         <span class="stringliteral">&quot;Save&quot;</span>,</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;                                         <span class="stringliteral">&quot;Export without save&quot;</span>,</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;                                         <span class="stringliteral">&quot;Cancel&quot;</span>, 0, 2)) {</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;                <span class="keywordflow">case</span> 2: <span class="comment">// Escape</span></div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;                    <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;                <span class="keywordflow">case</span> 0:</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;                    handleSaveTriggered();</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;            }</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        }</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;        ExportProjectDialog epd(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;        <span class="keywordflow">if</span> (epd.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;        {</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;            epd.exportProject();</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;        }</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    }</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
+<div class="line"><a name="l00804"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a2c8497b3a5179617c83e8d01bd0a6020">  804</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleSaveAsTriggered()</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;    {</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filename = saveHandler();</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;        <span class="keywordflow">if</span> (!filename.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;            <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#ac04ba8d4a380b15550acd61c4a6f2e04">setWindowTitle</a>(filename);</div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;    }</div>
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;        <span class="keywordflow">if</span> (saveProjectDir.isEmpty())</div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;        {</div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> title = <span class="stringliteral">&quot;Save Project&quot;</span>;</div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filter = <span class="stringliteral">&quot;HAL Directory Folder (*)&quot;</span>;</div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160; </div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;            <span class="comment">// Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!</span></div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;            saveProjectDir = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getSaveFileName">QFileDialog::getSaveFileName</a>(<span class="keyword">nullptr</span>, title, <a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html#currentPath">QDir::currentPath</a>(), filter, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;            <span class="keywordflow">if</span> (saveProjectDir.isEmpty()) <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00811"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#acf671deb01bbf6cac6ea1eeb20345fe5">  811</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleSaveTriggered()</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;    {</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;        <span class="keywordflow">if</span> (pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a554f192f625ac931206386efb359989f">get_project_status</a>() == ProjectManager::ProjectStatus::NONE) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>  projectDir = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().string());</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;        saveHandler(projectDir);</div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#ac04ba8d4a380b15550acd61c4a6f2e04">setWindowTitle</a>(projectDir);</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;    }</div>
 <div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a> finfo(saveProjectDir);</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160; </div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;            <span class="keywordflow">if</span> (!finfo.suffix().isEmpty())</div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;            {</div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;selected project directory name must not have suffix .&quot;</span> + finfo.suffix());</div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            }</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;            <span class="keywordflow">if</span> (finfo.exists())</div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;            {</div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;folder &quot;</span> + saveProjectDir + <span class="stringliteral">&quot; already exists&quot;</span>);</div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
-<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;            }</div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> MainWindow::saveHandler(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;projectDir)</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;    {</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>) <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160; </div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> saveProjectDir(projectDir);</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160; </div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;        <a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>* pm = ProjectManager::instance();</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160; </div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;        <span class="keywordflow">if</span> (saveProjectDir.isEmpty())</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;        {</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> title = <span class="stringliteral">&quot;Save Project&quot;</span>;</div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filter = <span class="stringliteral">&quot;HAL Directory Folder (*)&quot;</span>;</div>
 <div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160; </div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;            <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a189c61c9b73c15b360018572ce9510d3">create_project_directory</a>(saveProjectDir.toStdString()))</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;            {</div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;cannot create folder &quot;</span> + saveProjectDir);</div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;            }</div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;        }</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160; </div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> qNetlistPath = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().<a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename</a>(<span class="stringliteral">&quot;.hal&quot;</span>));</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
-<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;        <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a25cef7230c5e916046d1fc68dc53c7bb">serialize_project</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>))</div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;        {</div>
-<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;gui&quot;</span>, <span class="stringliteral">&quot;error saving netlist to &lt;&quot;</span> + qNetlistPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>() + <span class="stringliteral">&quot;&gt;&quot;</span>);</div>
-<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
-<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;        }</div>
-<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160; </div>
-<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">netlistSaved</a>();</div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;            <span class="comment">// Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!</span></div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;            saveProjectDir = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getSaveFileName">QFileDialog::getSaveFileName</a>(<span class="keyword">nullptr</span>, title, <a class="codeRef" href="https://doc.qt.io/qt-5/qdir.html#currentPath">QDir::currentPath</a>(), filter, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;            <span class="keywordflow">if</span> (saveProjectDir.isEmpty()) <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160; </div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a> finfo(saveProjectDir);</div>
+<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160; </div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;            <span class="keywordflow">if</span> (!finfo.suffix().isEmpty())</div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;            {</div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;selected project directory name must not have suffix .&quot;</span> + finfo.suffix());</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;            }</div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;            <span class="keywordflow">if</span> (finfo.exists())</div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;            {</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;folder &quot;</span> + saveProjectDir + <span class="stringliteral">&quot; already exists&quot;</span>);</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;            }</div>
 <div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160; </div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;        FileManager* fm = FileManager::get_instance();</div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;        fm-&gt;watchFile(qNetlistPath);</div>
-<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;        fm-&gt;emitProjectSaved(saveProjectDir, qNetlistPath);</div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160; </div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().string());</div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;    }</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;            <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a189c61c9b73c15b360018572ce9510d3">create_project_directory</a>(saveProjectDir.toStdString()))</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;            {</div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning</a>(<span class="keyword">this</span>,<span class="stringliteral">&quot;Save Error&quot;</span>, <span class="stringliteral">&quot;cannot create folder &quot;</span> + saveProjectDir);</div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;                <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;            }</div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;        }</div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
-<div class="line"><a name="l00857"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a7740f2fc27dbb0a0e5f985e20b990961">  857</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionStartRecording()</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;    {</div>
-<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;        mActionStartRecording-&gt;setEnabled(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;        mActionStopRecording-&gt;setEnabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;        mActionPlayMacro-&gt;setEnabled(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;        UserActionManager::instance()-&gt;setStartRecording();</div>
-<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;    }</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> qNetlistPath = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().<a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename</a>(<span class="stringliteral">&quot;.hal&quot;</span>));</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160; </div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;        <span class="keywordflow">if</span> (!pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#a25cef7230c5e916046d1fc68dc53c7bb">serialize_project</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>))</div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;        {</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;gui&quot;</span>, <span class="stringliteral">&quot;error saving netlist to &lt;&quot;</span> + qNetlistPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>() + <span class="stringliteral">&quot;&gt;&quot;</span>);</div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>();</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;        }</div>
 <div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160; </div>
-<div class="line"><a name="l00865"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a4b04ba7653ca22b3d16083acee7f0152">  865</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionStopRecording()</div>
-<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;    {</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        <a class="code" href="classhal_1_1_user_action_manager.html">UserActionManager</a>* uam = UserActionManager::instance();</div>
-<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> macroFile;</div>
-<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;        <span class="keywordtype">bool</span> trySaveMacro = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;        <span class="keywordflow">while</span> (trySaveMacro) {</div>
-<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;            <span class="keywordflow">if</span> (uam-&gt;<a class="code" href="classhal_1_1_user_action_manager.html#ae4318c5e95504afe8f6973068d519c8f">hasRecorded</a>())</div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;            {</div>
-<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;                macroFile = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getSaveFileName">QFileDialog::getSaveFileName</a>(<span class="keyword">this</span>, <span class="stringliteral">&quot;Save macro to file&quot;</span>, <span class="stringliteral">&quot;.&quot;</span>);</div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;                <span class="keywordflow">if</span> (!macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>() &amp;&amp; !macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#contains-1">contains</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(<span class="charliteral">&#39;.&#39;</span>)))</div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;                    macroFile += <span class="stringliteral">&quot;.xml&quot;</span>;</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;            }</div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;            <span class="keywordflow">switch</span> (uam-&gt;<a class="code" href="classhal_1_1_user_action_manager.html#abafecd55ef7291cce1570df93623dc9e">setStopRecording</a>(macroFile))</div>
-<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;            {</div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;            <span class="keywordflow">case</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Retry</a>:</div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;            <span class="keywordflow">case</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Cancel</a>:</div>
-<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;                <span class="comment">// Ok or Discard</span></div>
-<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;                trySaveMacro = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;            }</div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;        }</div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;        mActionStartRecording-&gt;setEnabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;        mActionStopRecording-&gt;setEnabled(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;        mActionPlayMacro-&gt;setEnabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;    }</div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160; </div>
-<div class="line"><a name="l00894"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07">  894</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionPlayMacro()</div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;    {</div>
-<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> macroFile = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileName">QFileDialog::getOpenFileName</a>(<span class="keyword">this</span>, <span class="stringliteral">&quot;Load macro file&quot;</span>, <span class="stringliteral">&quot;.&quot;</span>, <span class="stringliteral">&quot;Macro files (*.xml);;All files(*)&quot;</span>);</div>
-<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;        <span class="keywordflow">if</span> (!macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;            UserActionManager::instance()-&gt;playMacro(macroFile);</div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;    }</div>
-<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160; </div>
-<div class="line"><a name="l00901"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a218cf9b1c90b6a2cbf12932e48254139">  901</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionAbout()</div>
-<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;    {</div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;        <a class="code" href="classhal_1_1_about_dialog.html">AboutDialog</a> ad;</div>
-<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;        ad.<a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">exec</a>();</div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;    }</div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160; </div>
-<div class="line"><a name="l00907"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a2d3d563fb73a78b9c208d3ac0522cd67">  907</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionUndo()</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;    {</div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;        UserActionManager::instance()-&gt;undoLastAction();</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;    }</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160; </div>
-<div class="line"><a name="l00912"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a77adbaedd6afed86b148ecd39710a5c9">  912</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::enableUndo(<span class="keywordtype">bool</span> enable)</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;    {</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> iconStyle = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">enable</a> ? mUndoIconStyle : mDisabledIconStyle;</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;        mActionUndo-&gt;setEnabled(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">enable</a>);</div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;        mActionUndo-&gt;setIcon(<a class="code" href="namespacehal_1_1gui__utility.html#a23e27c6df089a9e860e00ac4577a1894">gui_utility::getStyledSvgIcon</a>(iconStyle, mUndoIconPath));</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;    }</div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160; </div>
-<div class="line"><a name="l00919"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a33e100a72ed2b63e1251546db93b48ca">  919</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionCloseFile()</div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;    {</div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;        <span class="keywordflow">if</span> (FileManager::get_instance()-&gt;fileOpen())</div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;            tryToCloseFile();</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;    }</div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160; </div>
-<div class="line"><a name="l00925"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a96191ff2596e09cc7b696fb14fedc7dc">  925</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::onActionQuitTriggered()</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;    {</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;        close();</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;    }</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160; </div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;    <span class="keywordtype">void</span> MainWindow::closeEvent(<a class="codeRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a>* event)</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;    {</div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>() || FileManager::get_instance()-&gt;fileOpen())</div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;        {</div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;            <span class="keywordflow">if</span> (tryToCloseFile())</div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;                <span class="keyword">event</span>-&gt;accept();</div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;            {</div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;                <span class="keyword">event</span>-&gt;ignore();</div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;            }</div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;        }</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160; </div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;        saveState();</div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;        qApp-&gt;quit();</div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;        <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a0ff27a9c9d5aedfc4ee4b5ce38f0abba">netlistSaved</a>();</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160; </div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        FileManager* fm = FileManager::get_instance();</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;        fm-&gt;watchFile(qNetlistPath);</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;        fm-&gt;emitProjectSaved(saveProjectDir, qNetlistPath);</div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160; </div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(pm-&gt;<a class="code" href="classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5">get_project_directory</a>().string());</div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;    }</div>
+<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160; </div>
+<div class="line"><a name="l00874"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a7740f2fc27dbb0a0e5f985e20b990961">  874</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionStartRecording()</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;    {</div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;        mActionStartRecording-&gt;setEnabled(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;        mActionStopRecording-&gt;setEnabled(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;        mActionPlayMacro-&gt;setEnabled(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;        UserActionManager::instance()-&gt;setStartRecording();</div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;    }</div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160; </div>
+<div class="line"><a name="l00882"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a4b04ba7653ca22b3d16083acee7f0152">  882</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionStopRecording()</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;    {</div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;        <a class="code" href="classhal_1_1_user_action_manager.html">UserActionManager</a>* uam = UserActionManager::instance();</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> macroFile;</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;        <span class="keywordtype">bool</span> trySaveMacro = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;        <span class="keywordflow">while</span> (trySaveMacro) {</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;            <span class="keywordflow">if</span> (uam-&gt;<a class="code" href="classhal_1_1_user_action_manager.html#ae4318c5e95504afe8f6973068d519c8f">hasRecorded</a>())</div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;            {</div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;                macroFile = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getSaveFileName">QFileDialog::getSaveFileName</a>(<span class="keyword">this</span>, <span class="stringliteral">&quot;Save macro to file&quot;</span>, <span class="stringliteral">&quot;.&quot;</span>);</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;                <span class="keywordflow">if</span> (!macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>() &amp;&amp; !macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#contains-1">contains</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(<span class="charliteral">&#39;.&#39;</span>)))</div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;                    macroFile += <span class="stringliteral">&quot;.xml&quot;</span>;</div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;            }</div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;            <span class="keywordflow">switch</span> (uam-&gt;<a class="code" href="classhal_1_1_user_action_manager.html#abafecd55ef7291cce1570df93623dc9e">setStopRecording</a>(macroFile))</div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;            {</div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;            <span class="keywordflow">case</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Retry</a>:</div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;            <span class="keywordflow">case</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Cancel</a>:</div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;                <span class="comment">// Ok or Discard</span></div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;                trySaveMacro = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;            }</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;        }</div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;        mActionStartRecording-&gt;setEnabled(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;        mActionStopRecording-&gt;setEnabled(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;        mActionPlayMacro-&gt;setEnabled(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;    }</div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160; </div>
+<div class="line"><a name="l00911"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07">  911</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionPlayMacro()</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;    {</div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> macroFile = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileName">QFileDialog::getOpenFileName</a>(<span class="keyword">this</span>, <span class="stringliteral">&quot;Load macro file&quot;</span>, <span class="stringliteral">&quot;.&quot;</span>, <span class="stringliteral">&quot;Macro files (*.xml);;All files(*)&quot;</span>);</div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;        <span class="keywordflow">if</span> (!macroFile.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;            UserActionManager::instance()-&gt;playMacro(macroFile);</div>
+<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;    }</div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160; </div>
+<div class="line"><a name="l00918"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a218cf9b1c90b6a2cbf12932e48254139">  918</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionAbout()</div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    {</div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;        <a class="code" href="classhal_1_1_about_dialog.html">AboutDialog</a> ad;</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;        ad.<a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#exec">exec</a>();</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    }</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160; </div>
+<div class="line"><a name="l00924"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a2d3d563fb73a78b9c208d3ac0522cd67">  924</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionUndo()</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;    {</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;        UserActionManager::instance()-&gt;undoLastAction();</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;    }</div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160; </div>
+<div class="line"><a name="l00929"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a77adbaedd6afed86b148ecd39710a5c9">  929</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::enableUndo(<span class="keywordtype">bool</span> enable)</div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;    {</div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> iconStyle = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">enable</a> ? mUndoIconStyle : mDisabledIconStyle;</div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;        mActionUndo-&gt;setEnabled(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">enable</a>);</div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;        mActionUndo-&gt;setIcon(<a class="code" href="namespacehal_1_1gui__utility.html#a23e27c6df089a9e860e00ac4577a1894">gui_utility::getStyledSvgIcon</a>(iconStyle, mUndoIconPath));</div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;    }</div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160; </div>
+<div class="line"><a name="l00936"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a33e100a72ed2b63e1251546db93b48ca">  936</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::handleActionCloseFile()</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;    {</div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;        <span class="keywordflow">if</span> (FileManager::get_instance()-&gt;fileOpen())</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;            tryToCloseFile();</div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;    }</div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160; </div>
+<div class="line"><a name="l00942"></a><span class="lineno"><a class="line" href="classhal_1_1_main_window.html#a96191ff2596e09cc7b696fb14fedc7dc">  942</a></span>&#160;    <span class="keywordtype">void</span> MainWindow::onActionQuitTriggered()</div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;    {</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;        close();</div>
 <div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;    }</div>
 <div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160; </div>
-<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;    <span class="keywordtype">bool</span> MainWindow::tryToCloseFile()</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;    <span class="keywordtype">void</span> MainWindow::closeEvent(<a class="codeRef" href="https://doc.qt.io/qt-5/qcloseevent.html">QCloseEvent</a>* event)</div>
 <div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;    {</div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">modifiedFilesExisting</a>() || <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>())</div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>() || FileManager::get_instance()-&gt;fileOpen())</div>
 <div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;        {</div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html">QMessageBox</a> msgBox(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;            msgBox.setStyleSheet(<span class="stringliteral">&quot;QLabel{min-width: 600px;}&quot;</span>);</div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <span class="keyword">auto</span> cancelButton = msgBox.addButton(<span class="stringliteral">&quot;Cancel&quot;</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::RejectRole</a>);</div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            msgBox.addButton(<span class="stringliteral">&quot;Close Anyway&quot;</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::ApplyRole</a>);</div>
-<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;            msgBox.setDefaultButton(cancelButton);</div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;            msgBox.setInformativeText(<span class="stringliteral">&quot;Are you sure you want to close the application ?&quot;</span>);</div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160; </div>
-<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;            msgBox.setText(<span class="stringliteral">&quot;There are unsaved modifications.&quot;</span>);</div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> detailed_text = <span class="stringliteral">&quot;The following modifications have not been saved yet:\n&quot;</span>;</div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>())</div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;                detailed_text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#append-1">append</a>(<span class="stringliteral">&quot;   -&gt; modified Gate Library\n&quot;</span>);</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; s : <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">getUnsavedChangeDescriptors</a>())</div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;                detailed_text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#append-1">append</a>(<span class="stringliteral">&quot;   -&gt;  &quot;</span> + s + <span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160; </div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;            msgBox.setDetailedText(detailed_text);</div>
-<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160; </div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; button : msgBox.buttons())</div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;            {</div>
-<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;                <span class="comment">// if (button-&gt;text() == &quot;Show Details...&quot;)</span></div>
-<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;                <span class="keywordflow">if</span> (msgBox.buttonRole(button) == <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::ActionRole</a>)</div>
-<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;                {</div>
-<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;                    button-&gt;click();</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;                }</div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;            }</div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160; </div>
-<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;            msgBox.exec();</div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160; </div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;            <span class="keywordflow">if</span> (msgBox.clickedButton() == cancelButton)</div>
-<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        }</div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160; </div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        <span class="comment">// going to close</span></div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;        <span class="keywordflow">for</span> (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())</div>
-<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            geif-&gt;netlist_about_to_close(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>);</div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160; </div>
-<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;        mActionExportProject-&gt;setDisabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;        mActionImportProject-&gt;setEnabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160; </div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;        <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;abortThreadAndWait();</div>
-<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160; </div>
-<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;        <a class="code" href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">gGraphContextManager</a>-&gt;<a class="code" href="classhal_1_1_graph_context_manager.html#a331cf651207943068957342db8d6eac5">clear</a>();</div>
-<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160; </div>
-<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;        <a class="code" href="namespacehal_1_1dataflow_1_1processing_1_1pass__collection.html#a80395b66ac1e4386f381ba4ae9509700">clear</a>();</div>
-<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160; </div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a3f44df886385f5fa85dd5ea929d7e18d">deleteContent</a>();</div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;        <span class="comment">// PYTHON ???</span></div>
-<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;        <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ac2ec1e9645338033da5a7aee713cf090">clear</a>();</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        <a class="code" href="namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078">gCommentManager</a>-&gt;<a class="code" href="classhal_1_1_comment_manager.html#aed4325dcdda1d2b12caaedf1414408af">clear</a>();</div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;            <span class="keywordflow">if</span> (tryToCloseFile())</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;                <span class="keyword">event</span>-&gt;accept();</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            {</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;                <span class="keyword">event</span>-&gt;ignore();</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;            }</div>
+<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;        }</div>
+<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160; </div>
+<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;        saveState();</div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;        qApp-&gt;quit();</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;    }</div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160; </div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;    <span class="keywordtype">bool</span> MainWindow::tryToCloseFile()</div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;    {</div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aa30234a1327fed69ac1009a3f81c8dfa">modifiedFilesExisting</a>() || <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>())</div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;        {</div>
+<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html">QMessageBox</a> msgBox(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;            msgBox.setStyleSheet(<span class="stringliteral">&quot;QLabel{min-width: 600px;}&quot;</span>);</div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;            <span class="keyword">auto</span> cancelButton = msgBox.addButton(<span class="stringliteral">&quot;Cancel&quot;</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::RejectRole</a>);</div>
+<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;            msgBox.addButton(<span class="stringliteral">&quot;Close Anyway&quot;</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::ApplyRole</a>);</div>
+<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;            msgBox.setDefaultButton(cancelButton);</div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;            msgBox.setInformativeText(<span class="stringliteral">&quot;Are you sure you want to close the application ?&quot;</span>);</div>
+<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160; </div>
+<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;            msgBox.setText(<span class="stringliteral">&quot;There are unsaved modifications.&quot;</span>);</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> detailed_text = <span class="stringliteral">&quot;The following modifications have not been saved yet:\n&quot;</span>;</div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#aad28a11ec4b7ae1961b1f12538f7deed">isGatelibModified</a>())</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;                detailed_text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#append-1">append</a>(<span class="stringliteral">&quot;   -&gt; modified Gate Library\n&quot;</span>);</div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; s : <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a4060437518086a1d8ddcbfca3d734776">getUnsavedChangeDescriptors</a>())</div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;                detailed_text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#append-1">append</a>(<span class="stringliteral">&quot;   -&gt;  &quot;</span> + s + <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160; </div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;            msgBox.setDetailedText(detailed_text);</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160; </div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; button : msgBox.buttons())</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;            {</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;                <span class="comment">// if (button-&gt;text() == &quot;Show Details...&quot;)</span></div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;                <span class="keywordflow">if</span> (msgBox.buttonRole(button) == <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum">QMessageBox::ActionRole</a>)</div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;                {</div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;                    button-&gt;click();</div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;                }</div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;            }</div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160; </div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;            msgBox.exec();</div>
+<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160; </div>
+<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;            <span class="keywordflow">if</span> (msgBox.clickedButton() == cancelButton)</div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;        }</div>
+<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160; </div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        <span class="comment">// going to close</span></div>
 <div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160; </div>
-<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        FileManager::get_instance()-&gt;closeFile();</div>
-<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;        setWindowTitle(<span class="stringliteral">&quot;HAL&quot;</span>);</div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a9c31f53d419afec770772247e2f39d08">netlistClosed</a>(); <span class="comment">// disable save actions</span></div>
-<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160; </div>
-<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;        mStackedWidget-&gt;setCurrentWidget(mWelcomeScreen);</div>
+<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        <span class="keywordflow">for</span> (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())</div>
+<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;            geif-&gt;netlist_about_to_close(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>);</div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160; </div>
+<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;        mActionExportProject-&gt;setDisabled(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;        mActionImportProject-&gt;setEnabled(<span class="keyword">true</span>);</div>
 <div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160; </div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">reset</a>();</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;abortThreadAndWait();</div>
 <div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160; </div>
-<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        mMenuPlugins-&gt;clear();</div>
-<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;        mMenuPlugins-&gt;setDisabled(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;<span class="comment">//        mActionGateLibraryManager-&gt;setVisible(true);</span></div>
+<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        <a class="code" href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">gGraphContextManager</a>-&gt;<a class="code" href="classhal_1_1_graph_context_manager.html#a331cf651207943068957342db8d6eac5">clear</a>();</div>
+<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160; </div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        <a class="code" href="namespacehal_1_1dataflow_1_1processing_1_1pass__collection.html#a80395b66ac1e4386f381ba4ae9509700">clear</a>();</div>
 <div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160; </div>
-<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;    }</div>
-<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160; </div>
-<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;    <span class="keywordtype">void</span> MainWindow::restoreState()</div>
-<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;    {</div>
-<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> pos = SettingsManager::instance()-&gt;mainWindowPosition();</div>
-<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;        move(pos);</div>
-<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a> size = SettingsManager::instance()-&gt;mainWindowSize();</div>
-<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;        resize(size);</div>
-<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;        <span class="comment">//restore state of all subwindows</span></div>
-<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;        mLayoutArea-&gt;initSplitterSize(size);</div>
-<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;    }</div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;        <a class="code" href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">gContentManager</a>-&gt;<a class="code" href="classhal_1_1_content_manager.html#a3f44df886385f5fa85dd5ea929d7e18d">deleteContent</a>();</div>
+<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;        <span class="comment">// PYTHON ???</span></div>
+<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;        <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ac2ec1e9645338033da5a7aee713cf090">clear</a>();</div>
+<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;        <a class="code" href="namespacehal.html#a7b0cfc60e8b2fee81c0ec6131190b078">gCommentManager</a>-&gt;<a class="code" href="classhal_1_1_comment_manager.html#aed4325dcdda1d2b12caaedf1414408af">clear</a>();</div>
+<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160; </div>
+<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;        FileManager::get_instance()-&gt;closeFile();</div>
+<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;        setWindowTitle(<span class="stringliteral">&quot;HAL&quot;</span>);</div>
+<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;        <a class="code" href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">gFileStatusManager</a>-&gt;<a class="code" href="classhal_1_1_file_status_manager.html#a9c31f53d419afec770772247e2f39d08">netlistClosed</a>(); <span class="comment">// disable save actions</span></div>
+<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160; </div>
+<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;        mStackedWidget-&gt;setCurrentWidget(mWelcomeScreen);</div>
+<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160; </div>
+<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;        <a class="code" href="namespacehal.html#ac87c0ce709dc346017d7c2aff4aea006">gNetlistRelay</a>-&gt;<a class="code" href="classhal_1_1_netlist_relay.html#a5b1738463cab64e14d9392a43b77a357">reset</a>();</div>
 <div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160; </div>
-<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;    <span class="keywordtype">void</span> MainWindow::saveState()</div>
-<div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160;    {</div>
-<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;        SettingsManager::instance()-&gt;mainWindowSaveGeometry(pos(), size());</div>
-<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;    }</div>
-<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160; </div>
-<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160; </div>
-<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;        mMenuPlugins-&gt;clear();</div>
+<div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160;        mMenuPlugins-&gt;setDisabled(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;<span class="comment">//        mActionGateLibraryManager-&gt;setVisible(true);</span></div>
+<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160; </div>
+<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;    }</div>
+<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160; </div>
+<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;    <span class="keywordtype">void</span> MainWindow::restoreState()</div>
+<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;    {</div>
+<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> pos = SettingsManager::instance()-&gt;mainWindowPosition();</div>
+<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;        move(pos);</div>
+<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qsize.html">QSize</a> size = SettingsManager::instance()-&gt;mainWindowSize();</div>
+<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;        resize(size);</div>
+<div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;        <span class="comment">//restore state of all subwindows</span></div>
+<div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;        mLayoutArea-&gt;initSplitterSize(size);</div>
+<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;    }</div>
+<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160; </div>
+<div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;    <span class="keywordtype">void</span> MainWindow::saveState()</div>
+<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;    {</div>
+<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;        SettingsManager::instance()-&gt;mainWindowSaveGeometry(pos(), size());</div>
+<div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160;    }</div>
+<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160; </div>
+<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160; </div>
+<div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aabout__dialog_8h_html"><div class="ttname"><a href="about__dialog_8h.html">about_dialog.h</a></div></div>
 <div class="ttc" id="aaction_8h_html"><div class="ttname"><a href="action_8h.html">action.h</a></div></div>
 <div class="ttc" id="aaction__open__netlist__file_8h_html"><div class="ttname"><a href="action__open__netlist__file_8h.html">action_open_netlist_file.h</a></div></div>
@@ -1158,18 +1175,18 @@ $(document).ready(function(){initNavTree('main__window_8cpp_source.html',''); in
 <div class="ttc" id="aclasshal_1_1_main_window_html_a04e3c2e080e2271b5dc099d558c99a0f"><div class="ttname"><a href="classhal_1_1_main_window.html#a04e3c2e080e2271b5dc099d558c99a0f">hal::MainWindow::closeGateLibraryManager</a></div><div class="ttdeci">void closeGateLibraryManager()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00554">main_window.cpp:554</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a058838092420ab89403792a0c4ef4acb"><div class="ttname"><a href="classhal_1_1_main_window.html#a058838092420ab89403792a0c4ef4acb">hal::MainWindow::openPluginManager</a></div><div class="ttdeci">void openPluginManager()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00564">main_window.cpp:564</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a06aeb9c26143818f1dcdca9475d7676a"><div class="ttname"><a href="classhal_1_1_main_window.html#a06aeb9c26143818f1dcdca9475d7676a">hal::MainWindow::handleActionImportNetlist</a></div><div class="ttdeci">void handleActionImportNetlist()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00648">main_window.cpp:648</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a218cf9b1c90b6a2cbf12932e48254139"><div class="ttname"><a href="classhal_1_1_main_window.html#a218cf9b1c90b6a2cbf12932e48254139">hal::MainWindow::handleActionAbout</a></div><div class="ttdeci">void handleActionAbout()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00901">main_window.cpp:901</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a218cf9b1c90b6a2cbf12932e48254139"><div class="ttname"><a href="classhal_1_1_main_window.html#a218cf9b1c90b6a2cbf12932e48254139">hal::MainWindow::handleActionAbout</a></div><div class="ttdeci">void handleActionAbout()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00918">main_window.cpp:918</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a258818c82a1734f56135ec7e7f230f97"><div class="ttname"><a href="classhal_1_1_main_window.html#a258818c82a1734f56135ec7e7f230f97">hal::MainWindow::handleActionGatelibraryManager</a></div><div class="ttdeci">void handleActionGatelibraryManager()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00721">main_window.cpp:721</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a2d3d563fb73a78b9c208d3ac0522cd67"><div class="ttname"><a href="classhal_1_1_main_window.html#a2d3d563fb73a78b9c208d3ac0522cd67">hal::MainWindow::handleActionUndo</a></div><div class="ttdeci">void handleActionUndo()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00907">main_window.cpp:907</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a2d3d563fb73a78b9c208d3ac0522cd67"><div class="ttname"><a href="classhal_1_1_main_window.html#a2d3d563fb73a78b9c208d3ac0522cd67">hal::MainWindow::handleActionUndo</a></div><div class="ttdeci">void handleActionUndo()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00924">main_window.cpp:924</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a328059b7931181be6e375c4cabbd2f9a"><div class="ttname"><a href="classhal_1_1_main_window.html#a328059b7931181be6e375c4cabbd2f9a">hal::MainWindow::closePluginManager</a></div><div class="ttdeci">void closePluginManager()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00584">main_window.cpp:584</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a380542f624230ae54843840c50c80e1b"><div class="ttname"><a href="classhal_1_1_main_window.html#a380542f624230ae54843840c50c80e1b">hal::MainWindow::reloadStylsheet</a></div><div class="ttdeci">void reloadStylsheet(int istyle)</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00335">main_window.cpp:335</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a4b04ba7653ca22b3d16083acee7f0152"><div class="ttname"><a href="classhal_1_1_main_window.html#a4b04ba7653ca22b3d16083acee7f0152">hal::MainWindow::handleActionStopRecording</a></div><div class="ttdeci">void handleActionStopRecording()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00865">main_window.cpp:865</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a7740f2fc27dbb0a0e5f985e20b990961"><div class="ttname"><a href="classhal_1_1_main_window.html#a7740f2fc27dbb0a0e5f985e20b990961">hal::MainWindow::handleActionStartRecording</a></div><div class="ttdeci">void handleActionStartRecording()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00857">main_window.cpp:857</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a77adbaedd6afed86b148ecd39710a5c9"><div class="ttname"><a href="classhal_1_1_main_window.html#a77adbaedd6afed86b148ecd39710a5c9">hal::MainWindow::enableUndo</a></div><div class="ttdeci">void enableUndo(bool enable=true)</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00912">main_window.cpp:912</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a4b04ba7653ca22b3d16083acee7f0152"><div class="ttname"><a href="classhal_1_1_main_window.html#a4b04ba7653ca22b3d16083acee7f0152">hal::MainWindow::handleActionStopRecording</a></div><div class="ttdeci">void handleActionStopRecording()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00882">main_window.cpp:882</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a7740f2fc27dbb0a0e5f985e20b990961"><div class="ttname"><a href="classhal_1_1_main_window.html#a7740f2fc27dbb0a0e5f985e20b990961">hal::MainWindow::handleActionStartRecording</a></div><div class="ttdeci">void handleActionStartRecording()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00874">main_window.cpp:874</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a77adbaedd6afed86b148ecd39710a5c9"><div class="ttname"><a href="classhal_1_1_main_window.html#a77adbaedd6afed86b148ecd39710a5c9">hal::MainWindow::enableUndo</a></div><div class="ttdeci">void enableUndo(bool enable=true)</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00929">main_window.cpp:929</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a7c360e2b5e3c13872311b205fd1d2d7d"><div class="ttname"><a href="classhal_1_1_main_window.html#a7c360e2b5e3c13872311b205fd1d2d7d">hal::MainWindow::handleProjectOpened</a></div><div class="ttdeci">void handleProjectOpened(const QString &amp;projDir, const QString &amp;fileName)</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00687">main_window.cpp:687</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a7d7458466769fbfc1b688f2fd8682281"><div class="ttname"><a href="classhal_1_1_main_window.html#a7d7458466769fbfc1b688f2fd8682281">hal::MainWindow::closeSettings</a></div><div class="ttdeci">void closeSettings()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00544">main_window.cpp:544</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a90c41d58ef3e4aefcc5b88a40288bc07"><div class="ttname"><a href="classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07">hal::MainWindow::handleActionPlayMacro</a></div><div class="ttdeci">void handleActionPlayMacro()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00894">main_window.cpp:894</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_window_html_a96191ff2596e09cc7b696fb14fedc7dc"><div class="ttname"><a href="classhal_1_1_main_window.html#a96191ff2596e09cc7b696fb14fedc7dc">hal::MainWindow::onActionQuitTriggered</a></div><div class="ttdeci">void onActionQuitTriggered()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00925">main_window.cpp:925</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a90c41d58ef3e4aefcc5b88a40288bc07"><div class="ttname"><a href="classhal_1_1_main_window.html#a90c41d58ef3e4aefcc5b88a40288bc07">hal::MainWindow::handleActionPlayMacro</a></div><div class="ttdeci">void handleActionPlayMacro()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00911">main_window.cpp:911</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_window_html_a96191ff2596e09cc7b696fb14fedc7dc"><div class="ttname"><a href="classhal_1_1_main_window.html#a96191ff2596e09cc7b696fb14fedc7dc">hal::MainWindow::onActionQuitTriggered</a></div><div class="ttdeci">void onActionQuitTriggered()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00942">main_window.cpp:942</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_a9da68893eaab7983e8f15299edf28a00"><div class="ttname"><a href="classhal_1_1_main_window.html#a9da68893eaab7983e8f15299edf28a00">hal::MainWindow::handleFileOpened</a></div><div class="ttdeci">void handleFileOpened(const QString &amp;fileName)</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00695">main_window.cpp:695</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_ac65fab18815b8253e7aaae656837b936"><div class="ttname"><a href="classhal_1_1_main_window.html#ac65fab18815b8253e7aaae656837b936">hal::MainWindow::openSettings</a></div><div class="ttdeci">void openSettings()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00531">main_window.cpp:531</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_window_html_ae68cd5c12714f48219ab9f31156bf751"><div class="ttname"><a href="classhal_1_1_main_window.html#ae68cd5c12714f48219ab9f31156bf751">hal::MainWindow::handleActionExport</a></div><div class="ttdeci">void handleActionExport()</div><div class="ttdef"><b>Definition:</b> <a href="main__window_8cpp_source.html#l00709">main_window.cpp:709</a></div></div>
@@ -1339,7 +1356,7 @@ $(document).ready(function(){initNavTree('main__window_8cpp_source.html',''); in
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7a0626338f63bd87363790a595d37c04.html">main_window</a></li><li class="navelem"><a class="el" href="main__window_8cpp.html">main_window.cpp</a></li>
-    <li class="footer">Generated on Sun Jul 20 2025 17:57:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Jul 21 2025 15:14:24 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
