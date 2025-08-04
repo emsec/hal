@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   * added build support for RedHat Enterprise Linux
   * fixed `netlist_preprocessing` build dependencies
 
+* fixed availability of "save as" so that does not required modifications to be enabaled
 * added feature to unzip and open hal project by dropping zipped file on welcome screen
 * added `get_shortest_path` overload to find shortest path from gate to module
 * fixed left/right arrow navigation issues when starting from selected net

@@ -46,7 +46,8 @@ namespace hal
     {
         Q_OBJECT
     Q_SIGNALS:
-        void status_changed(bool gateLibrary, bool isDirty);
+        void status_changed(bool gateLibraryAffected, bool isDirty);
+        void open_changed(bool gateLibraryAffected, bool isOpen);
 
     public:
         /**
@@ -86,29 +87,44 @@ namespace hal
         void fileSaved(const QUuid uuid);
 
         /**
-         * Sets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag to Clean.
+         */
+        void netlistOpened();
+
+        /**
+         * Sets the netlist-state flag to Dirty.
          */
         void netlistChanged();
 
         /**
-         * Unsets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag back to Clean.
          */
         void netlistSaved();
 
         /**
-         * Resets the netlist-modified flag that affects the modifiedFilesExisting() method.
+         * Sets the netlist-state flag back to NotOpen.
          */
         void netlistClosed();
 
         /**
-         * Sets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         * Sets the gatelib-state flag to Clean.
+         */
+        void gatelibOpened();
+
+        /**
+         * Sets the gatelib-state flag to Dirty.
          */
         void gatelibChanged();
 
         /**
-         * Unsets the gate-library-modified flag that can be queried by isGatelibModified() method.
+         * Sets the gatelib-state flag to Clean.
          */
         void gatelibSaved();
+
+        /**
+         * Sets the gatelib-state flag back to NotOpen.
+         */
+        void gatelibClosed();
 
         /**
          * Query method whether GateLibraryManager has unsaved changes.
@@ -124,10 +140,12 @@ namespace hal
         QList<QString> getUnsavedChangeDescriptors() const;
 
     private:
+        enum CurrentState { NotOpen, Clean, Dirty };
+
         QSet<QUuid> mModifiedFilesUuid;
         QMap<QUuid, QString> mModifiedFilesDescriptors;
 
-        bool mNetlistModified;
-        bool mGatelibModified;
+        CurrentState mNetlistState;
+        CurrentState mGatelibState;
     };
 }
