@@ -121,21 +121,33 @@ namespace hal
                 return ERR("could not find gate type 'FDE' in gate library");
             }
 
-            // iterate over all shift registers of type 'SRL16E'
-            for (const auto& gate : nl->get_gates([](const auto& g) { return g->get_type()->get_name() == "SRL16E"; }))
+            // iterate over all shift registers of type 'SRL16E' or 'SRLC32E'
+            for (const auto& gate : nl->get_gates([](const auto& g) { return g->get_type()->get_name() == "SRL16E" || g->get_type()->get_name() == "SRLC32E"; }))
             {
                 auto control_pins = gate->get_type()->get_pins([](const auto& pg) { return (pg->get_direction() == PinDirection::input) && (pg->get_type() == PinType::control); });
-                if (control_pins.size() != 4)
+                if (control_pins.size() != 4 && gate->get_type()->get_name() == "SRLC16E" || control_pins.size() != 5 && gate->get_type()->get_name() == "SRLC32E")
                 {
                     return ERR("invalid number of control pins");
                 }
 
-                std::sort(control_pins.begin(), control_pins.end(), [](const auto& p1, const auto& p2) {
-                    const u32 idx1 = std::stoull(p1->get_name().substr(1));
-                    const u32 idx2 = std::stoull(p2->get_name().substr(1));
+                if (gate->get_type()->get_name() == "SRL16E")
+                {
+                    std::sort(control_pins.begin(), control_pins.end(), [](const auto& p1, const auto& p2) {
+                        const u32 idx1 = std::stoull(p1->get_name().substr(1));    // Ai
+                        const u32 idx2 = std::stoull(p2->get_name().substr(1));    // Ai
 
-                    return idx1 < idx2;
-                });
+                        return idx1 < idx2;
+                    });
+                }
+                else
+                {
+                    std::sort(control_pins.begin(), control_pins.end(), [](const auto& p1, const auto& p2) {
+                        const u32 idx1 = std::stoull(p1->get_name().substr(2));    // A(i)
+                        const u32 idx2 = std::stoull(p2->get_name().substr(2));    // A(i)
+
+                        return idx1 < idx2;
+                    });
+                }
 
                 u32 select_value = 0;
                 for (u32 idx = 0; idx < control_pins.size(); idx++)
@@ -175,16 +187,21 @@ namespace hal
                     return ERR("invalid number of input data pins at shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
                 }
 
-                const auto state_pins = gate->get_type()->get_pins([](const auto& p) { return (p->get_direction() == PinDirection::output) && (p->get_type() == PinType::state); });
-                if (state_pins.size() != 1)
-                {
-                    return ERR("invalid number of output state pins at shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
+                Net* clk_in        = gate->get_fan_in_net(clock_pins.front());
+                Net* enable_in     = gate->get_fan_in_net(enable_pins.front());
+                Net* data_in       = gate->get_fan_in_net(data_pins.front());
+                Net* state_out     = nullptr;
+                Net* max_state_out = nullptr;
 
-                Net* clk_in    = gate->get_fan_in_net(clock_pins.front());
-                Net* enable_in = gate->get_fan_in_net(enable_pins.front());
-                Net* data_in   = gate->get_fan_in_net(data_pins.front());
-                Net* state_out = gate->get_fan_out_net(state_pins.front());
+                if (gate->get_type()->get_name() == "SRLC32E")
+                {
+                    state_out     = gate->get_fan_out_net("Q");
+                    max_state_out = gate->get_fan_out_net("Q31");
+                }
+                else
+                {
+                    state_out = gate->get_fan_out_net("Q");
+                }
 
                 if (clk_in == nullptr)
                 {
@@ -201,15 +218,25 @@ namespace hal
                     return ERR("no data input net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
                 }
 
-                if (state_out == nullptr)
+                if (state_out == nullptr && max_state_out == nullptr)
                 {
                     return ERR("no state output net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
                 }
 
+                u32 register_size = 0;
                 std::vector<Gate*> flip_flops;
                 std::vector<Net*> state_nets;
 
-                for (u32 ff_idx = 0; ff_idx <= select_value; ff_idx++)
+                if (max_state_out != nullptr)
+                {
+                    register_size = max_state_out->get_num_of_destinations() > 0 ? 31 : select_value;
+                }
+                else
+                {
+                    register_size = select_value;
+                }
+
+                for (u32 ff_idx = 0; ff_idx <= register_size; ff_idx++)
                 {
                     const std::string ff_name = gate->get_name() + "_split_ff_" + std::to_string(ff_idx);
                     Gate* new_gate            = nl->create_gate(ff_gt, ff_name);
@@ -227,10 +254,15 @@ namespace hal
                         state_nets.back()->add_destination(new_gate, "D");
                     }
 
-                    if (ff_idx == select_value)
+                    if (ff_idx == select_value && state_out != nullptr)
                     {
                         state_out->add_source(new_gate, "Q");
                         state_nets.push_back(state_out);
+                    }
+                    else if (ff_idx == register_size && max_state_out != nullptr)
+                    {
+                        max_state_out->add_source(new_gate, "Q");
+                        state_nets.push_back(max_state_out);
                     }
                     else
                     {
@@ -256,7 +288,8 @@ namespace hal
                 }
             }
 
-            log_info("xilinx_toolbox", "split {} SRLE16 gates into {} flip-flops", deleted_gates, new_gates);
+            log_info("xilinx_toolbox", "split {} SRL16E/SRLC32E gates into {} flip-flops", deleted_gates, new_gates);
+
             return OK(deleted_gates);
         }
     }    // namespace xilinx_toolbox
