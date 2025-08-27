@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module &mdash; hal_py v4.4.1-308-g842a866c2 documentation</title>
+  <title>Module &mdash; hal_py v4.4.1-310-g3bf4ae168 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-308-g842a866c2
+                v4.4.1-310-g3bf4ae168
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -311,7 +311,7 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <span class="sig-name descname"><span class="pre">create_pin_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.create_pin_group" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>create_pin_group(self: hal_py.Module, id: int, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
+<li><p>create_pin_group(self: hal_py.Module, id: int, name: str, pins: List[hal_py.ModulePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
 <blockquote>
 <div><p>Create a new pin group with the given name.
 All pins to be added to the pin group must have the same direction and type.</p>
@@ -352,7 +352,7 @@ All pins to be added to the pin group must have the same direction and type.</p>
 </dl>
 </div></blockquote>
 </li>
-<li><p>create_pin_group(self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
+<li><p>create_pin_group(self: hal_py.Module, name: str, pins: List[hal_py.ModulePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
 <blockquote>
 <div><p>Create a new pin group with the given name.
 All pins to be added to the pin group must have the same direction and type.</p>
