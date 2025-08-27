@@ -157,12 +157,12 @@ namespace hal
              */
             std::vector<Gate*> m_gates;
 
-        private:
             /**
              * @brief The netlist associated with the candidate context.
              */
             const Netlist* m_netlist;
 
+        private:
             /**
              * @brief Cache for boolean functions.
              */

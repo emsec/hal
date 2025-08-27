@@ -74,7 +74,8 @@ namespace hal {
         SettingsItemKeybind* mSettingSaveFile;
 
     public Q_SLOTS:
-        void handleFileStatusChanged(bool gateLibrary, bool isDirty);
+        void handleFileStatusChanged(bool gateLibraryAffected, bool isDirty);
+        void handleFileOpenChanged(bool gateLibraryAffected, bool isOpen);
 
     public:
         FileActions(QWidget* parent = nullptr);

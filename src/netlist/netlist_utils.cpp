@@ -10,7 +10,6 @@
 #include "hal_core/utilities/log.h"
 
 #include <deque>
-#include <queue>
 #include <unordered_set>
 
 namespace hal
@@ -19,63 +18,127 @@ namespace hal
     {
         namespace
         {
-
-            std::vector<Gate*> get_shortest_path_internal(Gate* start_gate, const std::unordered_set<Gate*>& end_gates)
+            class ShortestPathInternal
             {
-                if (end_gates.empty())
-                    return std::vector<Gate*>();
+                Gate* m_start_gate;
+                Gate* m_end_gate;
+                const std::unordered_set<Gate*>& m_end_gates;
+                bool m_forward;
+                std::unordered_map<Gate*, Gate*> m_origin_map;
+                bool (ShortestPathInternal::*m_heureka) (Gate*) const;
+                std::unordered_set<Gate*> (ShortestPathInternal::*m_get_next_gates) (Gate*) const;
 
-                Gate* end_gate_single = *(end_gates.begin());
-
-                auto heurekaSingle = [end_gate_single] (Gate* test_gate) { return test_gate==end_gate_single; } ;
-
-                auto heurekaMultiple = [end_gates] (Gate* test_gate) { return end_gates.find(test_gate) != end_gates.end(); } ;
-
-                auto heureka = [heurekaSingle, heurekaMultiple, end_gates] (Gate* test_gate) {
-                    if (end_gates.size() > 1)
-                        return heurekaMultiple(test_gate);
-                    return heurekaSingle(test_gate);} ;
-
-                if (heureka(start_gate))
-                    return std::vector<Gate*>();
-
-                std::vector<Gate*> v0;
-                v0.push_back(start_gate);
-                std::unordered_map<Gate*, Gate*> originMap;
-                for (;;)
+                bool heureka_single(Gate* test_gate) const
                 {
-                    std::vector<Gate*> v1;
-                    for (Gate* g0 : v0)
+                    return (m_end_gate == test_gate);
+                }
+
+                bool heureka_multiple(Gate* test_gate) const
+                {
+                    return (m_end_gates.find(test_gate) != m_end_gates.end());
+                }
+
+                std::unordered_set<Gate*> get_next_gates_forward(Gate* origin) const
+                {
+                    std::unordered_set<Gate*> retval;
+                    for (const Net* n : origin->get_fan_out_nets())
                     {
-                        for (Gate* g1 : get_next_gates(g0, true, 1))
+                        for (const Endpoint* ep : n->get_destinations())
                         {
-                            if (originMap.find(g1) != originMap.end())
-                                continue;    // already routed to
-                            v1.push_back(g1);
-                            originMap[g1] = g0;
-                            if (heureka(g1))
-                            {
-                                // heureka!
-                                std::vector<Gate*> retval;
-                                Gate* g = g1;
-                                while (g != start_gate)
-                                {
-                                    retval.insert(retval.begin(), g);
-                                    auto it = originMap.find(g);
-                                    assert(it != originMap.end());
-                                    g = it->second;
-                                }
-                                retval.insert(retval.begin(), start_gate);
-                                return retval;
-                            }
+                            retval.insert(ep->get_gate());
                         }
                     }
-                    if (v1.empty())
-                        break;
-                    v0 = v1;
+                    return retval;
                 }
-                return std::vector<Gate*>();
-            }
+
+                std::unordered_set<Gate*> get_next_gates_backward(Gate* origin) const
+                {
+                    std::unordered_set<Gate*> retval;
+                    for (const Net* n : origin->get_fan_in_nets())
+                    {
+                        for (const Endpoint* ep : n->get_sources())
+                        {
+                            retval.insert(ep->get_gate());
+                        }
+                    }
+                    return retval;
+                }
+
+            public:
+                ShortestPathInternal(Gate* start_gate, const std::unordered_set<Gate*>& end_gates, bool forward=true)
+                    : m_start_gate(start_gate), m_end_gate(nullptr), m_end_gates(end_gates), m_forward(forward)
+                {
+                    if (m_end_gates.size() == 1)
+                    {
+                        m_end_gate = *(m_end_gates.begin());
+                        m_heureka = &ShortestPathInternal::heureka_single;
+                    }
+                    else
+                        m_heureka = &ShortestPathInternal::heureka_multiple;
+
+                    if (forward)
+                        m_get_next_gates = &ShortestPathInternal::get_next_gates_forward;
+                    else
+                        m_get_next_gates = &ShortestPathInternal::get_next_gates_backward;
+                }
+
+                std::vector<Gate*> get_path() const
+                {
+                    if (m_end_gates.empty())
+                    {
+                        log_warning("netlist_utils", "Cannot find shortest path from start gate ID={}, no target given.", m_start_gate->get_id());
+                        return std::vector<Gate*>();
+                    }
+                    if ((this->*m_heureka)(m_start_gate))
+                    {
+                        log_warning("netlist_utils", "Cannot find shortest path since start gate ID={} and target are the same.", m_start_gate->get_id());
+                        return std::vector<Gate*>();
+                    }
+
+                    std::vector<Gate*> v0;
+                    std::vector<Gate*> v1;
+                    v0.push_back(m_start_gate);
+                    std::unordered_map<Gate*, Gate*> originMap;
+
+                    while (!v0.empty())
+                    {
+                        for (Gate* g0 : v0)
+                        {
+                            for (Gate* g1 : (this->*m_get_next_gates)(g0))
+                            {
+                                if (originMap.find(g1) != originMap.end())
+                                continue;    // already routed to
+                                v1.push_back(g1);
+                                originMap[g1] = g0;
+
+                                if ((this->*m_heureka)(g1))
+                                {
+                                    // heureka! Path found
+                                    std::vector<Gate*> retval;
+                                    Gate* g = g1;
+                                    while (g != m_start_gate)
+                                    {
+                                        retval.push_back(g);
+                                        auto it = originMap.find(g);
+                                        assert(it != originMap.end());
+                                        g = it->second;
+                                    }
+                                    retval.push_back(m_start_gate);
+                                    if (m_forward)
+                                        std::reverse(retval.begin(),retval.end());
+                                    return retval;
+                                }
+                            }
+                        }
+                        v0 = v1;
+                        v1.clear();
+                    }
+
+                    log_warning("netlist_utils", "It looks like there is no path from start gate ID={} to selected {} target(s).", m_start_gate->get_id(), m_end_gates.size());
+                    return std::vector<Gate*>();
+                }
+            };
+
         }    // namespace
 
         Result<BooleanFunction> get_subgraph_function(const Net* net, const std::vector<const Gate*>& subgraph_gates, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& cache)
@@ -284,26 +347,29 @@ namespace hal
             return retval;
         }
 
-        std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module)
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction)
         {
             std::unordered_set<Gate*> end_gates;
             for (Gate* g : end_module->get_gates(nullptr, true))
             {
                 end_gates.insert(g);
             }
-            return get_shortest_path_internal(start_gate, end_gates);
+            ShortestPathInternal spi(start_gate, end_gates, forward_direction);
+            return spi.get_path();
         }
 
         std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)
         {
             std::unordered_set<Gate*> end_gates_forward;
             end_gates_forward.insert(end_gate);
-            std::vector<Gate*> path_forward = get_shortest_path_internal(start_gate, end_gates_forward);
+            ShortestPathInternal spi_forward(start_gate, end_gates_forward, true);
+            std::vector<Gate*> path_forward = spi_forward.get_path();
             if (!search_both_directions)
                 return path_forward;
             std::unordered_set<Gate*> start_gates_reverse;
             start_gates_reverse.insert(start_gate);
-            std::vector<Gate*> path_reverse = get_shortest_path_internal(end_gate, start_gates_reverse);
+            ShortestPathInternal spi_reverse(end_gate, start_gates_reverse, false);
+            std::vector<Gate*> path_reverse = spi_reverse.get_path();
             return (path_reverse.size() < path_forward.size()) ? path_reverse : path_forward;
         }
 

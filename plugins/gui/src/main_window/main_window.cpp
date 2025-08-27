@@ -777,6 +777,23 @@ namespace hal
 
     void MainWindow::handleExportProjectTriggered()
     {
+        ProjectManager* pm = ProjectManager::instance();
+        if (pm->get_project_status() == ProjectManager::ProjectStatus::NONE) return;
+        if (gFileStatusManager->modifiedFilesExisting())
+        {
+            switch (QMessageBox::warning(this, "Unsaved Changes", "The HAL project have been modified.\n"
+                                         "You might want to save the changes\n"
+                                         "before exporting the project.",
+                                         "Save",
+                                         "Export without save",
+                                         "Cancel", 0, 2)) {
+                case 2: // Escape
+                    return;
+                case 0:
+                    handleSaveTriggered();
+                    break;
+            }
+        }
         ExportProjectDialog epd(this);
         if (epd.exec() == QDialog::Accepted)
         {

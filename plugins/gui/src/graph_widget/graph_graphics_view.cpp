@@ -562,7 +562,7 @@ namespace hal
                     action->setData(SuccessorGate);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathGate);
                     action = preSucMenu->addAction("Highlight path to successor module …");
-                    action->setData(SuccessorModule); // direction currently not used
+                    action->setData(SuccessorModule);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathModule);
                 }
 
@@ -575,6 +575,9 @@ namespace hal
                     action = preSucMenu->addAction("Add path to predecessor gate to view …");
                     action->setData(PredecessorGate);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
+                    action = preSucMenu->addAction("Add path to predecessor module to view …");
+                    action->setData(PredecessorModule);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleShortestPathToView);
                 }
                 recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors …"),             false, &GraphGraphicsView::handleHighlightPredecessor, true);
                 recursionLevelMenu(preSucMenu->addMenu("Highlight predecessors by distance …"), false, &GraphGraphicsView::handlePredecessorDistance);
@@ -583,6 +586,9 @@ namespace hal
                     action = preSucMenu->addAction("Highlight path to predecessor gate …");
                     action->setData(PredecessorGate);
                     connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathGate);
+                    action = preSucMenu->addAction("Highlight path to predecessor module …");
+                    action->setData(PredecessorModule);
+                    connect(action, &QAction::triggered, this, &GraphGraphicsView::handleQueryShortestPathModule);
                 }
             }
 
@@ -1119,22 +1125,19 @@ namespace hal
         gContentManager->getGroupingManagerWidget()->newGroupingByDistance(level,false,mItem);
     }
 
-    void GraphGraphicsView::handleShortestModulePathToView()
-    {
-
-    }
-
     void GraphGraphicsView::handleShortestPathToView()
     {
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
 
-        bool succ = true;
+        int param = send->data().toInt();
+        bool succ = (param == SuccessorModule || param == SuccessorGate);
+        bool isMod = (param == SuccessorModule || param == PredecessorModule);
         std::vector<Gate*> spath;
         Gate* startGate = gNetlist->get_gate_by_id(mItem->id());
         Q_ASSERT(startGate);
 
-        if (send->data().toInt() == SuccessorModule)
+        if (isMod)
         {
             QSet<u32> excludeModules;
             const Module* parMod = startGate->get_module();
@@ -1151,12 +1154,10 @@ namespace hal
             Module* endModule = gNetlist->get_module_by_id(md.selectedId());
             Q_ASSERT(endModule);
 
-            spath = netlist_utils::get_shortest_path(startGate,endModule);
+            spath = netlist_utils::get_shortest_path(startGate,endModule,succ);
         }
         else
         {
-            succ = (send->data().toInt() == SuccessorGate);
-
             QSet<u32> selectableGates;
 
             for (Gate* g : netlist_utils::get_next_gates(startGate,succ))
@@ -1177,34 +1178,31 @@ namespace hal
             else
             {
                 spath = netlist_utils::get_shortest_path(endGate,startGate);
-                std::reverse(spath.begin(), spath.end());
             }
         }
         if (spath.empty()) return;
-        auto it = spath.begin() + 1;
+        if (!succ) std::reverse(spath.begin(), spath.end());
+
         const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
-        const NodeBox* lastBox = boxes.boxForGate(startGate);
-        Q_ASSERT(lastBox);
-        QPoint point(lastBox->x(),lastBox->y());
+        const NodeBox* originBox = boxes.boxForGate(startGate);
+        Q_ASSERT(originBox);
+        QPoint point(originBox->x(),originBox->y());
         QPoint deltaX(succ ? 1 : -1, 0);
         PlacementHint plc(PlacementHint::Standard);
 
         QSet<u32> gats;
 
-        while (it != spath.end())
+        for (Gate* g : spath)
         {
-            point += deltaX;
-            Gate* g = *(it++);
             if (boxes.boxForGate(g)) continue; // already in view
+            do {
+                point += deltaX;
+            } while (boxes.boxForPoint(point)); // find grid point not occupied
             gats.insert(g->get_id());
             Node nd(g->get_id(),Node::Gate);
-            if (!boxes.boxForPoint(point)) // not occupied yet
-            {
-                if (plc.mode() == PlacementHint::Standard)
-                    plc = PlacementHint(PlacementHint::GridPosition);
-                plc.addGridPosition(nd,point);
-            }
-            startGate = g;
+            if (plc.mode() == PlacementHint::Standard)
+                plc = PlacementHint(PlacementHint::GridPosition);
+            plc.addGridPosition(nd,point);
         }
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject({},gats);
@@ -1217,6 +1215,7 @@ namespace hal
     {
         QAction* send = static_cast<QAction*>(sender());
         Q_ASSERT(send);
+        bool succ = send->data().toInt() == SuccessorGate;
 
         QSet<u32> excludeModules;
         Gate* g = gNetlist->get_gate_by_id(mItem->id());
@@ -1231,7 +1230,7 @@ namespace hal
 
         if (md.exec() != QDialog::Accepted) return;
 
-        handleShortestPath(mItem->id(),Node(md.selectedId(),Node::Module));
+        handleShortestPathToGrouping(mItem->id(),Node(md.selectedId(),Node::Module),succ);
     }
 
     void GraphGraphicsView::handleQueryShortestPathGate()
@@ -1253,12 +1252,12 @@ namespace hal
         if (!targetId) return;
 
         if (succ)
-            handleShortestPath(mItem->id(),Node(targetId,Node::Gate));
+            handleShortestPathToGrouping(mItem->id(),Node(targetId,Node::Gate),true);
         else
-            handleShortestPath(targetId,Node(mItem->id(),Node::Gate));
+            handleShortestPathToGrouping(targetId,Node(mItem->id(),Node::Gate),true);
     }
 
-    void GraphGraphicsView::handleShortestPath(u32 idFrom, Node nodeTo)
+    void GraphGraphicsView::handleShortestPathToGrouping(u32 idFrom, Node nodeTo, bool forwardDirection)
     {
         std::vector<Gate*> spath;
 
@@ -1272,14 +1271,16 @@ namespace hal
         {
             Gate* g1 = gNetlist->get_gate_by_id(nodeTo.id());
             Q_ASSERT(g1);
-            spath = netlist_utils::get_shortest_path(g0,g1);
+            spath = forwardDirection ?
+                        netlist_utils::get_shortest_path(g0,g1) :
+                        netlist_utils::get_shortest_path(g1,g0);
             target = QString("gate '%1'[%2]").arg(QString::fromStdString(g1->get_name()), g1->get_id());
         }
         else
         {
             Module* m = gNetlist->get_module_by_id(nodeTo.id());
             Q_ASSERT(m);
-            spath = netlist_utils::get_shortest_path(g0,m);
+            spath = netlist_utils::get_shortest_path(g0,m,forwardDirection);
             target = QString("module '%1'[%2]").arg(QString::fromStdString(m->get_name()), m->get_id());
         }
 
@@ -1700,9 +1701,9 @@ namespace hal
             if (ggv)
             {
                 if (mPickSuccessor)
-                    ggv->handleShortestPath(mOrigin,Node(pickedGate,Node::Gate));
+                    ggv->handleShortestPathToGrouping(mOrigin,Node(pickedGate,Node::Gate),true);
                 else
-                    ggv->handleShortestPath(pickedGate,Node(mOrigin,Node::Gate));
+                    ggv->handleShortestPathToGrouping(pickedGate,Node(mOrigin,Node::Gate),true);
             }
         }
         this->deleteLater();

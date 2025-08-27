@@ -318,6 +318,7 @@ namespace hal
             return;
         }
         gNetlistRelay->registerNetlistCallbacks();
+        gFileStatusManager->netlistOpened();
         gFileStatusManager->netlistChanged();
         if (pm->serialize_project(gNetlist))
             gFileStatusManager->netlistSaved();
@@ -485,6 +486,7 @@ namespace hal
         QString filename = QString::fromStdString(pm->get_netlist_filename());
         projectSuccessfullyLoaded(projPath, filename);
         gNetlistRelay->registerNetlistCallbacks();
+        gFileStatusManager->netlistOpened();
 
         std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
         LogManager::get_instance()->set_file_name(lpath);
@@ -536,6 +538,7 @@ namespace hal
                     gNetlist       = gNetlistOwner.get();
                     gNetlistRelay->registerNetlistCallbacks();
                     fileSuccessfullyLoaded(logical_file_name);
+                    gFileStatusManager->netlistOpened();
                     return true;
                 }
                 else
@@ -568,6 +571,7 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
+                gFileStatusManager->netlistOpened();
                 return true;
             }
             else
@@ -595,6 +599,7 @@ namespace hal
                 gNetlist       = gNetlistOwner.get();
                 gNetlistRelay->registerNetlistCallbacks();
                 fileSuccessfullyLoaded(logical_file_name);
+                gFileStatusManager->netlistOpened();
                 return true;
             }
             else
@@ -624,6 +629,7 @@ namespace hal
             gNetlistOwner = std::move(netlists.at(0));
             gNetlist       = gNetlistOwner.get();
             gNetlistRelay->registerNetlistCallbacks();
+            gFileStatusManager->netlistOpened();
         }
         else
         {
@@ -652,6 +658,7 @@ namespace hal
                         gNetlistOwner = std::move(n);
                         gNetlist       = gNetlistOwner.get();
                         gNetlistRelay->registerNetlistCallbacks();
+                        gFileStatusManager->netlistOpened();
                     }
                 }
             }

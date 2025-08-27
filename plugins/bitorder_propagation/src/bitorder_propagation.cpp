@@ -1509,7 +1509,7 @@ namespace hal
                 }
 
                 word_definitions.insert({std::to_string(words.size()), nets_str});
-                mpg_to_idx.insert({{m, pg}, mpg_to_idx.size()});
+                mpg_to_idx.insert({{m, pg}, (unsigned int) mpg_to_idx.size()});
                 mpgs.push_back({m, pg});
                 words.push_back(nets);
             }
