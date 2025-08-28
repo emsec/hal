@@ -5,7 +5,7 @@ var classhal_1_1_pin_tree_item =
       [ "Pin", "classhal_1_1_pin_tree_item.html#a1059ef95849a0782e0e4b443f2256302aae895f33c55e01a4852aa44288b3d9ae", null ],
       [ "Group", "classhal_1_1_pin_tree_item.html#a1059ef95849a0782e0e4b443f2256302ab09cae61892325750ed0c93b51525e9c", null ]
     ] ],
-    [ "PinTreeItem", "classhal_1_1_pin_tree_item.html#a52a89e9d5f09892643d6f9044197e7fe", null ],
+    [ "PinTreeItem", "classhal_1_1_pin_tree_item.html#a1fb469b515542223c11f49ff09fa8f20", null ],
     [ "PinTreeItem", "classhal_1_1_pin_tree_item.html#ac7da9f1a5bc030861ca199bb91d20033", null ],
     [ "appendData", "classhal_1_1_pin_tree_item.html#abab6bc0fb9a8746bab846ab49f4d1574", null ],
     [ "getColumnCount", "classhal_1_1_pin_tree_item.html#a3e2988af1643d1db7819235afc364ac0", null ],
