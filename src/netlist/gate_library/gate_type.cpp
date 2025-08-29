@@ -402,7 +402,7 @@ namespace hal
             {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
-                    assert(delete_pin_group(pin_group));
+                    delete_pin_group(pin_group);
                     return ERR(res.get_error());
                 }
             }
@@ -413,7 +413,7 @@ namespace hal
             {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
-                    assert(delete_pin_group(pin_group));
+                    delete_pin_group(pin_group);
                     return ERR(res.get_error());
                 }
             }
