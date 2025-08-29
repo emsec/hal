@@ -490,7 +490,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            {</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;                {</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                    assert(delete_pin_group(pin_group));</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                    delete_pin_group(pin_group);</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(res.get_error());</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                }</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;            }</div>
@@ -501,7 +501,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            {</div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;                {</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;                    assert(delete_pin_group(pin_group));</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;                    delete_pin_group(pin_group);</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                    <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(res.get_error());</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;                }</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            }</div>
@@ -852,7 +852,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="ttc" id="aclasshal_1_1_gate_type_html_a915e963632c94eec513e895da5ecef4a"><div class="ttname"><a href="classhal_1_1_gate_type.html#a915e963632c94eec513e895da5ecef4a">hal::GateType::to_string</a></div><div class="ttdeci">std::string to_string() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__type_8cpp_source.html#l00111">gate_type.cpp:111</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_html_ad72821321f4c0394d735b4862a66ad9d"><div class="ttname"><a href="classhal_1_1_gate_type.html#ad72821321f4c0394d735b4862a66ad9d">hal::GateType::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__type_8cpp_source.html#l00059">gate_type.cpp:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00050">pin_group.h:51</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_group_html_a1c73cbc250f9ff59f81b5441cca0704f"><div class="ttname"><a href="classhal_1_1_pin_group.html#a1c73cbc250f9ff59f81b5441cca0704f">hal::PinGroup::assign_pin</a></div><div class="ttdeci">bool assign_pin(T *pin)</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00341">pin_group.h:341</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_group_html_a1c73cbc250f9ff59f81b5441cca0704f"><div class="ttname"><a href="classhal_1_1_pin_group.html#a1c73cbc250f9ff59f81b5441cca0704f">hal::PinGroup::assign_pin</a></div><div class="ttdeci">bool assign_pin(T *pin)</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00370">pin_group.h:370</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_group_html_a3dc360efb49afc0a66597fc1f9845456"><div class="ttname"><a href="classhal_1_1_pin_group.html#a3dc360efb49afc0a66597fc1f9845456">hal::PinGroup::get_pins</a></div><div class="ttdeci">std::vector&lt; T * &gt; get_pins(const std::function&lt; bool(T *)&gt; &amp;filter=nullptr) const</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00202">pin_group.h:202</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_group_html_a4711d3f3d1da8d2722a9b809c80dcddf"><div class="ttname"><a href="classhal_1_1_pin_group.html#a4711d3f3d1da8d2722a9b809c80dcddf">hal::PinGroup::set_direction</a></div><div class="ttdeci">void set_direction(PinDirection direction)</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00180">pin_group.h:180</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_group_html_a6a4bef72226eb6232a603ebd17ac52f7"><div class="ttname"><a href="classhal_1_1_pin_group.html#a6a4bef72226eb6232a603ebd17ac52f7">hal::PinGroup::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00130">pin_group.h:130</a></div></div>
@@ -890,7 +890,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_ff3bf91c1fe6286d1ab9e3da0ed2d8ad.html">gate_library</a></li><li class="navelem"><a class="el" href="netlist_2gate__library_2gate__type_8cpp.html">gate_type.cpp</a></li>
-    <li class="footer">Generated on Thu Aug 28 2025 13:10:14 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Aug 29 2025 21:00:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

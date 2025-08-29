@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boolean Function Decorator &mdash; hal_py v4.4.1-312-gf5844cdd5 documentation</title>
+  <title>Boolean Function Decorator &mdash; hal_py v4.4.1-320-gca741f2ad documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.4.1-312-gf5844cdd5
+                v4.4.1-320-gca741f2ad
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -123,7 +123,7 @@
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_boolean_function_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunctionDecorator.get_boolean_function_from" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p>get_boolean_function_from(functions: List[hal_py.BooleanFunction], extend_to_size: int = 0, sign_extend: bool = False) -&gt; Optional[hal_py.BooleanFunction]</p>
+<li><p>get_boolean_function_from(functions: List[hal_py.BooleanFunction], extend_to_size: int = 0, sign_extend: bool = False, ascending: bool = True) -&gt; Optional[hal_py.BooleanFunction]</p>
 <blockquote>
 <div><p>Get the Boolean function that is the concatenation of Boolean functions.
 The Boolean function can optionally be extended to any desired size greater the size of the given net vector.</p>
@@ -137,16 +137,19 @@ The Boolean function can optionally be extended to any desired size greater the 
 <dt class="field-odd">param bool sign_extend</dt>
 <dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to sign extend, <code class="docutils literal notranslate"><span class="pre">False</span></code> to zero extend. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dt class="field-even">param bool ascending</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to concatenate in ascending order (from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">n-1</span></code>), <code class="docutils literal notranslate"><span class="pre">False</span></code> for descending order (from <code class="docutils literal notranslate"><span class="pre">n-1</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.BooleanFunction or None</p>
 </dd>
 </dl>
 </div></blockquote>
 </li>
-<li><p>get_boolean_function_from(nets: List[hal_py.Net], extend_to_size: int = 0, sign_extend: bool = False) -&gt; Optional[hal_py.BooleanFunction]</p>
+<li><p>get_boolean_function_from(nets: List[hal_py.Net], extend_to_size: int = 0, sign_extend: bool = False, ascending: bool = True) -&gt; Optional[hal_py.BooleanFunction]</p>
 <blockquote>
 <div><p>Get the Boolean function that is the concatenation of variable names corresponding to nets of a netlist.
 The Boolean function can optionally be extended to any desired size greater the size of the given net vector.</p>
@@ -160,11 +163,14 @@ The Boolean function can optionally be extended to any desired size greater the 
 <dt class="field-odd">param bool sign_extend</dt>
 <dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to sign extend, <code class="docutils literal notranslate"><span class="pre">False</span></code> to zero extend. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dt class="field-even">param bool ascending</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to concatenate in ascending order (from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">n-1</span></code>), <code class="docutils literal notranslate"><span class="pre">False</span></code> for descending order (from <code class="docutils literal notranslate"><span class="pre">n-1</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or None</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.BooleanFunction or None</p>
 </dd>
 </dl>
 </div></blockquote>
