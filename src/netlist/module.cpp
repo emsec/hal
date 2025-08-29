@@ -161,7 +161,9 @@ namespace hal
         int retval      = 0;
         const Module* p = this;
         while ((p = p->get_parent_module()))
+        {
             ++retval;
+        }
         return retval;
     }
 
@@ -1266,10 +1268,10 @@ namespace hal
         }
 
         PinGroup<ModulePin>* pin_group;
+
         if (!ascending && !pins.empty())
         {
-            // compensate for shifting the start index
-            start_index -= (pins.size() - 1);
+            start_index = start_index - (pins.size() - 1);
         }
 
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index, force_name); res.is_error())
@@ -1284,20 +1286,24 @@ namespace hal
         if (ascending)
         {
             for (auto it = pins.begin(); it != pins.end(); ++it)
+            {
                 if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR("Assign pin to group failed.");
                 }
+            }
         }
         else
         {
             for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+            {
                 if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR("Assign pin to group failed.");
                 }
+            }
         }
 
         PinChangedEvent(this, PinEvent::GroupCreate, pin_group->get_id()).send();
@@ -1671,7 +1677,9 @@ namespace hal
                 return false;
             }
             else
+            {
                 PinChangedEvent(this, PinEvent::PinAssignToGroup, pin->get_id()).send();
+            }
         }
 
         scope.send_events();
