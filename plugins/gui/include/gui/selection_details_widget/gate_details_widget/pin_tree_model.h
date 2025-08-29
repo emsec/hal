@@ -48,9 +48,10 @@ namespace hal
             QString mPinDirection;
             QString mPinType;
             QString mNetName;
+            int mIndex;
         public:
 
-            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName);
+            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName, int inx);
             PinTreeItem();
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;

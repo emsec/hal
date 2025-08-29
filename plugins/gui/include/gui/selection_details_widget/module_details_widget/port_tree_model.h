@@ -50,10 +50,11 @@ namespace hal
             PinDirection mPinDirection;
             PinType mPinType;
             QString mNetName;
+            int mIndex;
 
         public:
 
-            PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, QString netName = QString());
+            PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, int inx, QString netName = QString());
             PortTreeItem() : mItemType(None), mId(0) {;}
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
