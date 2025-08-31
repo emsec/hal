@@ -1046,7 +1046,7 @@ namespace hal
             return it->second;
         }
 
-        log_warning("module", "could not get pin group by ID for module '{}' with ID {}: no pin with ID {} exists", m_name, m_id, id);
+        log_warning("module", "could not get pin group by ID for module '{}' with ID {}: no pin group with ID {} exists", m_name, m_id, id);
         return nullptr;
     }
 

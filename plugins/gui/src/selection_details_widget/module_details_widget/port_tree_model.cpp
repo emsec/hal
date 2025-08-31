@@ -209,8 +209,17 @@ namespace hal
             }
             else
             {
+                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(parentItem);
+                if (pitem && pitem->itemType() == PortTreeItem::Pin)
+                {
+// debug pingroup                qDebug() << "pin was dropped on a pin...";
+                    PortTreeItem* ppitem = static_cast<PortTreeItem*>(pitem->getParent());
+                    row = getIndexFromItem(pitem).row();
+                    dndPinBetweenPin(droppedItem, ppitem, row);
+                }
+                else
 // debug pingroup                qDebug() << "pin was dropped on a group...";
-                dndPinOnGroup(droppedItem, parentItem);
+                    dndPinOnGroup(droppedItem, parentItem);
             }
         }
 
@@ -256,8 +265,10 @@ namespace hal
             // perhaps check here that a pin can only be dropped between groups if its own group has size > 1?
             // otherwise it does not make much sense...perhaps change this check
             auto item = mIdToPinItem[id];
-            if((!parentItem && item->getParent()->getChildCount() == 1) || (item->getParent() == parentItem && row == -1) || item == parentItem
-                || (parentItem && (parentItem->itemType() == PortTreeItem::Pin)))
+            if((!parentItem && item->getParent()->getChildCount() == 1)
+                || (item->getParent() == parentItem && row == -1)
+                || item == parentItem )
+               // || (parentItem && (parentItem->itemType() == PortTreeItem::Pin)))
                 return false;
             // case if one wants to drop between pins in same group, check if its not adjacent row (other cases are handled on case above
             if(item->getParent() == parentItem)
@@ -515,6 +526,7 @@ namespace hal
                                    netName);
             mIdToPinItem.insert(ptiPin->id(), ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
+            updateGroupIndex(ptiGroup);
             break;
         }
         case PinEvent::PinReorder:
@@ -526,6 +538,7 @@ namespace hal
             }
             removeItem(ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
+            updateGroupIndex(ptiGroup);
             break;
         }
         case PinEvent::PinAssignToGroup:
@@ -537,6 +550,7 @@ namespace hal
             }
             removeItem(ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
+            updateGroupIndex(ptiGroup);
             break;
         }
         case PinEvent::PinRename:
@@ -641,6 +655,23 @@ namespace hal
         act->exec();
     }
 
+    void ModulePinsTreeModel::updateGroupIndex(PortTreeItem* groupItem)
+    {
+        PinGroup<ModulePin>* pg = mModule->get_pin_group_by_id(groupItem->id());
+        Q_ASSERT(pg);
+        for (ModulePin* pin : pg->get_pins())
+        {
+            int inx = pg->get_index(pin).get();
+            PortTreeItem* pinItem = mIdToPinItem.value(pin->get_id());
+            Q_ASSERT(pinItem);
+            pinItem->setIndex(inx);
+        }
+        QModelIndex pi = getIndexFromItem(groupItem);
+        QModelIndex i0 = index(0,0,pi);
+        QModelIndex i1 = index(groupItem->getChildCount()-1,4,pi);
+        Q_EMIT dataChanged(i0,i1);
+    }
+
     void ModulePinsTreeModel::insertItem(PortTreeItem* item, BaseTreeItem* parent, int index)
     {
         // fun fact: if an item is inserted above an item that is expanded, the tree collapses all indeces
@@ -651,6 +682,7 @@ namespace hal
         item->itemType() == PortTreeItem::Pin ? mIdToPinItem.insert(item->id(), item) : mIdToGroupItem.insert(item->id(), item);
         //mIdToPinItem.insert(getIdOfItem(item), item);
     }
+
     void ModulePinsTreeModel::removeItem(PortTreeItem* item)
     {
         beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());

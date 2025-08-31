@@ -567,6 +567,16 @@ namespace hal
                  //< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
                 PinEvent pev = (PinEvent) (associated_data&0xF);
                 u32 id = (associated_data >> 4);
+
+                std::cerr << "Pin Event <" << enum_to_string<PinEvent>(pev) << "> ID=" << id << "\n";
+                for (PinGroup<ModulePin>* pg : mod->get_pin_groups())
+                {
+                    std::cerr << "  " << pg->get_start_index() << " " << pg->get_name() << " [" << pg->get_id() << "]"
+                              << (pg->is_ascending() ? " asc\n" : " desc\n");
+                    for (ModulePin* pin : pg->get_pins())
+                        std::cerr << "    " << pg->get_index(pin).get() << " " << pin->get_name() << "\n";
+                }
+                std::cerr << "---------------------" << std::endl;
                 gGraphContextManager->handleModulePortsChanged(mod,pev,id);
 
                 Q_EMIT modulePortsChanged(mod,pev,id);

@@ -1,10 +1,9 @@
 #include "gui/user_action/action_pingroup.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
-#include "gui/grouping/grouping_manager_widget.h"
-#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layout_locker.h"
 #include <QMetaEnum>
+#include <QUuid>
 
 namespace hal
 {
@@ -561,6 +560,36 @@ namespace hal
             retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pinId,"",vid));
             --vid;
         }
+        retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
+    ActionPingroup* ActionPingroup::toggleAscendingGroup(const Module* m, u32 grpId)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        bool toAscending = ! pinGroup->is_ascending();
+        std::vector<ModulePin*> pins = pinGroup->get_pins();
+        QString tempName = QUuid::createUuid().toString();
+        QString grpName = QString::fromStdString(pinGroup->get_name());
+        static int vid = -9;
+
+        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,toAscending ? 0 : -1);
+        if (toAscending)
+        {
+            for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup, (*it)->get_id(), QString(), vid));
+        }
+        else
+        {
+            for (auto it = pins.begin(); it != pins.end(); ++it)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup, (*it)->get_id(), QString(), vid));
+        }
+
+        // note: old group gets deleted after last pin gets moved. If that behavior changes insert following line:
+        //    retval->mPinActions.append(AtomicAction(PinActionType::GroupDelete, grpId));
+
+        retval->mPinActions.append(AtomicAction(PinActionType::GroupRename, vid, grpName));
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }

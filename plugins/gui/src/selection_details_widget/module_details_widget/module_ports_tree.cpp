@@ -6,15 +6,7 @@
 #include "gui/input_dialog/pingroup_selector_dialog.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
-#include "gui/user_action/action_add_items_to_object.h"
-#include "gui/user_action/action_create_object.h"
-#include "gui/user_action/action_delete_object.h"
-#include "gui/user_action/action_remove_items_from_object.h"
-#include "gui/user_action/action_rename_object.h"
-#include "gui/user_action/action_set_object_type.h"
 #include "gui/user_action/action_pingroup.h"
-#include "gui/user_action/user_action_compound.h"
-#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/utilities/enums.h"
 
@@ -156,6 +148,10 @@ namespace hal
                         act->exec();
                     }
                 }
+            });
+            menu.addAction("Toggle ascending/descending", [itemId, mod](){
+                ActionPingroup* act = ActionPingroup::toggleAscendingGroup(mod, itemId);
+                if (act) act->exec();
             });
             menu.addAction("Delete pin group", [itemId, mod]() {
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
