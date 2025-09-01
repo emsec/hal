@@ -134,19 +134,37 @@ namespace hal
 
         if (clickedItem->itemType() == PortTreeItem::Group)    //group specific context, own helper function? (returns at the end)
         {
-            menu.addAction("Change name", [name, modId, itemId]() {
+            menu.addAction("Change name", [itemId, mod, name]() {
+                PinGroup<ModulePin>*  pg = mod->get_pin_group_by_id(itemId);
+                if (pg == nullptr) return;
+
                 InputDialog ipd("Change pin group name", "New group name", name);
                 if (ipd.exec() == QDialog::Accepted)
                 {
                     if (ipd.textValue().isEmpty())
                         return;
-                    auto* group = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
-                    if (group != nullptr)
-                    {
-                        ActionPingroup* act = new ActionPingroup(PinActionType::GroupRename,itemId,ipd.textValue());
-                        act->setObject(UserActionObject(modId, UserActionObjectType::Module));
-                        act->exec();
-                    }
+
+                    ActionPingroup* act = new ActionPingroup(PinActionType::GroupRename,itemId,ipd.textValue());
+                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    act->exec();
+                }
+            });
+
+            menu.addAction("Change type", [itemId, mod, name]() {
+                PinGroup<ModulePin>* pg = mod->get_pin_group_by_id(itemId);
+                if (pg == nullptr) return;
+
+                QStringList types;
+                for (auto const& [k, v] : EnumStrings<PinType>::data)
+                    types << QString::fromStdString(v);
+
+                ComboboxDialog cbd("Change type", "Select type for pin group " + name, types);
+
+                if (cbd.exec() == QDialog::Accepted)
+                {
+                    PinType ptype = enum_from_string<PinType>(cbd.textValue().toStdString(),PinType::none);
+                    ActionPingroup* act = ActionPingroup::changePinGroupType(mod,itemId,(int)ptype);
+                    if (act) act->exec();
                 }
             });
             menu.addAction("Toggle ascending/descending", [itemId, mod](){

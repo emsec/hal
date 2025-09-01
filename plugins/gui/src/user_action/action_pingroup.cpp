@@ -266,7 +266,7 @@ namespace hal
         if (mUndoAction) mUndoAction->setObject(object());
     }
 
-    int ActionPingroup::pinGroupRow(Module *m, PinGroup<ModulePin>* pgroup)
+    int ActionPingroup::pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup)
     {
         int inx = 0;
         for (PinGroup<ModulePin>* testgroup : m->get_pin_groups())
@@ -572,6 +572,7 @@ namespace hal
         std::vector<ModulePin*> pins = pinGroup->get_pins();
         QString tempName = QUuid::createUuid().toString();
         QString grpName = QString::fromStdString(pinGroup->get_name());
+        int grpRow = pinGroupRow(m, pinGroup);
         static int vid = -9;
 
         ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,toAscending ? 0 : -1);
@@ -590,7 +591,21 @@ namespace hal
         //    retval->mPinActions.append(AtomicAction(PinActionType::GroupDelete, grpId));
 
         retval->mPinActions.append(AtomicAction(PinActionType::GroupRename, vid, grpName));
+        retval->mPinActions.append(AtomicAction(PinActionType::GroupMoveToRow, vid, QString(), grpRow));
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
+    ActionPingroup* ActionPingroup::changePinGroupType(const Module* m, u32 grpId, int ptype)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        std::vector<ModulePin*> pins = pinGroup->get_pins();
+
+        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupTypeChange, pinGroup->get_id(), "", ptype);
+        for (ModulePin* pin : pins)
+            retval->mPinActions.append(AtomicAction(PinActionType::PinTypeChange,pin->get_id(),"",ptype));
+        retval->setObject(UserActionObject(m->get_id(), UserActionObjectType::Module));
         return retval;
     }
 
