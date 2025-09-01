@@ -1849,6 +1849,7 @@ namespace hal
                 {
                     ctr++;
                 }
+                PinChangedEvent(this, PinEvent::GroupRename, pin_group_it->second->get_id()).send();
             }
             else
             {
