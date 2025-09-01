@@ -443,7 +443,8 @@ namespace hal
             if (pinRow >= 0)
                 retval->mPinActions.append(AtomicAction(PinActionType::PinMoveToRow,pinId,"",pinRow++));
         }
-        retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        if (retval)
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }
 
@@ -560,7 +561,8 @@ namespace hal
             retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pinId,"",vid));
             --vid;
         }
-        retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        if (retval)
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }
 

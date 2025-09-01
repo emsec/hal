@@ -44,8 +44,6 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_utils.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "gui/module_context_menu/module_context_menu.h"
 
 #include <QAction>
