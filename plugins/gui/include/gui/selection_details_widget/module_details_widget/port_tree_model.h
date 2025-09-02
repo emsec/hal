@@ -170,7 +170,7 @@ namespace hal
         void updateGroupIndex(PortTreeItem* groupItem);
 
         // helper functions for dnd for more clarity
-        void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup);
+        void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup, int row=-1);
         void dndGroupBetweenGroup(PortTreeItem* droppedGroup, int row);
         void dndPinOnGroup(PortTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
         void dndPinBetweenPin(PortTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
