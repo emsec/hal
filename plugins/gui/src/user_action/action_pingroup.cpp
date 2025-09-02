@@ -1,10 +1,9 @@
 #include "gui/user_action/action_pingroup.h"
 #include "gui/gui_globals.h"
 #include "hal_core/netlist/grouping.h"
-#include "gui/grouping/grouping_manager_widget.h"
-#include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/layout_locker.h"
 #include <QMetaEnum>
+#include <QUuid>
 
 namespace hal
 {
@@ -267,7 +266,7 @@ namespace hal
         if (mUndoAction) mUndoAction->setObject(object());
     }
 
-    int ActionPingroup::pinGroupRow(Module *m, PinGroup<ModulePin>* pgroup)
+    int ActionPingroup::pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup)
     {
         int inx = 0;
         for (PinGroup<ModulePin>* testgroup : m->get_pin_groups())
@@ -444,7 +443,8 @@ namespace hal
             if (pinRow >= 0)
                 retval->mPinActions.append(AtomicAction(PinActionType::PinMoveToRow,pinId,"",pinRow++));
         }
-        retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        if (retval)
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }
 
@@ -561,7 +561,53 @@ namespace hal
             retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pinId,"",vid));
             --vid;
         }
+        if (retval)
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
+    ActionPingroup* ActionPingroup::toggleAscendingGroup(const Module* m, u32 grpId)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        bool toAscending = ! pinGroup->is_ascending();
+        std::vector<ModulePin*> pins = pinGroup->get_pins();
+        QString tempName = QUuid::createUuid().toString();
+        QString grpName = QString::fromStdString(pinGroup->get_name());
+        int grpRow = pinGroupRow(m, pinGroup);
+        static int vid = -9;
+
+        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,toAscending ? 0 : -1);
+        if (toAscending)
+        {
+            for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup, (*it)->get_id(), QString(), vid));
+        }
+        else
+        {
+            for (auto it = pins.begin(); it != pins.end(); ++it)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup, (*it)->get_id(), QString(), vid));
+        }
+
+        // note: old group gets deleted after last pin gets moved. If that behavior changes insert following line:
+        //    retval->mPinActions.append(AtomicAction(PinActionType::GroupDelete, grpId));
+
+        retval->mPinActions.append(AtomicAction(PinActionType::GroupRename, vid, grpName));
+        retval->mPinActions.append(AtomicAction(PinActionType::GroupMoveToRow, vid, QString(), grpRow));
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
+    ActionPingroup* ActionPingroup::changePinGroupType(const Module* m, u32 grpId, int ptype)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        std::vector<ModulePin*> pins = pinGroup->get_pins();
+
+        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupTypeChange, pinGroup->get_id(), "", ptype);
+        for (ModulePin* pin : pins)
+            retval->mPinActions.append(AtomicAction(PinActionType::PinTypeChange,pin->get_id(),"",ptype));
+        retval->setObject(UserActionObject(m->get_id(), UserActionObjectType::Module));
         return retval;
     }
 

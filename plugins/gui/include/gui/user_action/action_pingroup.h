@@ -145,7 +145,7 @@ namespace hal
         void prepareUndoAction();
         void finalizeUndoAction();
         void addUndoAction(PinActionType::Type tp, int id = 0, const QString& name=QString(), int value=0);
-        static int pinGroupRow(Module* m, PinGroup<ModulePin>* pgroup);
+        static int pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup);
     public:
         ActionPingroup(PinActionType::Type tp = PinActionType::None, int id = 0, const QString& name=QString(), int value=0);
         ActionPingroup(const QList<AtomicAction>& aaList);
@@ -161,6 +161,8 @@ namespace hal
         static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId, int grpRow = -1);
         static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
         static ActionPingroup* deletePinGroup(const Module* m, u32 grpId);
+        static ActionPingroup* toggleAscendingGroup(const Module* m, u32 grpId);
+        static ActionPingroup* changePinGroupType(const Module* m, u32 grpId, int ptype);
     };
 
     /**

@@ -67,6 +67,7 @@ namespace hal
             void setName(const QString& nam) { mPinName = nam; }
             void setPinType(PinType ptype) { mPinType = ptype; }
             void setPinDirection(PinDirection dir) { mPinDirection = dir; }
+            void setIndex(int inx) { mIndex = inx; }
 
             /**
              * Returns the pin-id if the item represents a pin or the pingroup-id
@@ -166,6 +167,7 @@ namespace hal
 
         void insertItem(PortTreeItem* item, BaseTreeItem* parent, int index);
         void removeItem(PortTreeItem* item);
+        void updateGroupIndex(PortTreeItem* groupItem);
 
         // helper functions for dnd for more clarity
         void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup);
