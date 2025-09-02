@@ -50,6 +50,7 @@ namespace hal
         if (!m)
             return;
 
+        mPortModel->clear();
         mPortModel->setModule(m);
         mModuleID = moduleID;
     }

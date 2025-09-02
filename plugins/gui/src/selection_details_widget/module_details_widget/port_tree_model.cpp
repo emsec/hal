@@ -168,7 +168,7 @@ namespace hal
 
         auto droppedItem = (type == "group") ?  static_cast<PortTreeItem*>(mIdToGroupItem.value(id)) :  static_cast<PortTreeItem*>(mIdToPinItem.value(id));
         //auto droppedParentItem = droppedItem->getParent();
-        auto parentItem = getItemFromIndex(parent);
+        auto dropPositionItem = getItemFromIndex(parent);
 
         // perhaps helper functions?
         // 1. group on group (between group)
@@ -180,20 +180,29 @@ namespace hal
 
         if(type == "group")
         {
-            if(!parentItem)
+            if(!dropPositionItem)
             {
 // debug pingroup                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
                 dndGroupBetweenGroup(droppedItem, row);
             }
             else
             {
-// debug pingroup                qDebug() << "group was dropped on a group?";
-                dndGroupOnGroup(droppedItem, parentItem);
+                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(dropPositionItem);
+                if (pitem && pitem->itemType() == PortTreeItem::Pin)
+                {
+                    // debug pingroup                qDebug() << "group was dropped on a pin...";
+                    PortTreeItem* parentGroupItem = static_cast<PortTreeItem*>(pitem->getParent());
+                    row = getIndexFromItem(pitem).row();
+                    dndGroupOnGroup(droppedItem, parentGroupItem, row);
+                }
+                else
+                    // debug pingroup                qDebug() << "group was dropped on a group?";
+                    dndGroupOnGroup(droppedItem, dropPositionItem);
             }
         }
         else
         {
-            if(!parentItem)
+            if(!dropPositionItem)
             {
 // debug pingroup                qDebug() << "pin was dropped between groups on row " << row;
                 dndPinBetweenGroup(droppedItem, row);
@@ -201,21 +210,21 @@ namespace hal
             else if(row != -1)
             {
 // debug pingroup                qDebug() << "pin was dropped between pins";
-                dndPinBetweenPin(droppedItem, parentItem, row);
+                dndPinBetweenPin(droppedItem, dropPositionItem, row);
             }
             else
             {
-                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(parentItem);
+                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(dropPositionItem);
                 if (pitem && pitem->itemType() == PortTreeItem::Pin)
                 {
 // debug pingroup                qDebug() << "pin was dropped on a pin...";
-                    PortTreeItem* ppitem = static_cast<PortTreeItem*>(pitem->getParent());
+                    PortTreeItem* parentGroupItem = static_cast<PortTreeItem*>(pitem->getParent());
                     row = getIndexFromItem(pitem).row();
-                    dndPinBetweenPin(droppedItem, ppitem, row);
+                    dndPinBetweenPin(droppedItem, parentGroupItem, row);
                 }
                 else
 // debug pingroup                qDebug() << "pin was dropped on a group...";
-                    dndPinOnGroup(droppedItem, parentItem);
+                    dndPinOnGroup(droppedItem, dropPositionItem);
             }
         }
 
@@ -288,7 +297,6 @@ namespace hal
 
     void ModulePinsTreeModel::setModule(Module* m)
     {
-        clear();
         mModule = m;
         beginResetModel();
 
@@ -576,7 +584,7 @@ namespace hal
         }
     }
 
-    void ModulePinsTreeModel::dndGroupOnGroup(BaseTreeItem *droppedGroup, BaseTreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndGroupOnGroup(BaseTreeItem *droppedGroup, BaseTreeItem *onDroppedGroup, int row)
     {
         // SPECIFY: 1) create completely new group, all pins in that, delete old 2 groups
         // 2) just add all pins from dropped group to "ondroppedgroup", then rename?
@@ -590,8 +598,7 @@ namespace hal
 
         auto tgtgroup = mModule->get_pin_group_by_id(static_cast<PortTreeItem*>(onDroppedGroup)->id());
 
-        ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins);
-        act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
+        ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins,row);
         if (act) act->exec();
 
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
