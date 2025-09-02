@@ -1134,7 +1134,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;            <span class="keywordflow">return</span> it-&gt;second;</div>
 <div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160;        }</div>
 <div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160; </div>
-<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;        <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not get pin group by ID for module &#39;{}&#39; with ID {}: no pin with ID {} exists&quot;</span>, m_name, m_id, <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;        <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not get pin group by ID for module &#39;{}&#39; with ID {}: no pin group with ID {} exists&quot;</span>, m_name, m_id, <span class="keywordtype">id</span>);</div>
 <div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l01051"></a><span class="lineno"> 1051</span>&#160;    }</div>
 <div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160; </div>
@@ -1937,66 +1937,67 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div class="line"><a name="l01849"></a><span class="lineno"> 1849</span>&#160;                {</div>
 <div class="line"><a name="l01850"></a><span class="lineno"> 1850</span>&#160;                    ctr++;</div>
 <div class="line"><a name="l01851"></a><span class="lineno"> 1851</span>&#160;                }</div>
-<div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160;            }</div>
-<div class="line"><a name="l01853"></a><span class="lineno"> 1853</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01854"></a><span class="lineno"> 1854</span>&#160;            {</div>
-<div class="line"><a name="l01855"></a><span class="lineno"> 1855</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create pin group &#39;&quot;</span> + <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;&#39; for module &#39;&quot;</span> + m_name + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(m_id) + <span class="stringliteral">&quot;: name &#39;&quot;</span> + <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;&#39; is already taken&quot;</span>);</div>
-<div class="line"><a name="l01856"></a><span class="lineno"> 1856</span>&#160;            }</div>
-<div class="line"><a name="l01857"></a><span class="lineno"> 1857</span>&#160;        }</div>
-<div class="line"><a name="l01858"></a><span class="lineno"> 1858</span>&#160; </div>
-<div class="line"><a name="l01859"></a><span class="lineno"> 1859</span>&#160;        <span class="comment">// create pin group</span></div>
-<div class="line"><a name="l01860"></a><span class="lineno"> 1860</span>&#160;        std::unique_ptr&lt;PinGroup&lt;ModulePin&gt;&gt; pin_group_owner = std::make_unique&lt;PinGroup&lt;ModulePin&gt;&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a8ea27602bf4d3ec3850549a2d313ad0c">ascending</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a75c5aaa50f6193870be97c566b274281">start_index</a>);</div>
-<div class="line"><a name="l01861"></a><span class="lineno"> 1861</span>&#160;        m_pin_groups.push_back(std::move(pin_group_owner));</div>
-<div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;        PinGroup&lt;ModulePin&gt;* pin_group = m_pin_groups.back().get();</div>
-<div class="line"><a name="l01863"></a><span class="lineno"> 1863</span>&#160;        m_pin_groups_ordered.push_back(pin_group);</div>
-<div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;        m_pin_groups_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>]        = pin_group;</div>
-<div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;        m_pin_group_names_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>] = pin_group;</div>
-<div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160; </div>
-<div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160;        <span class="comment">// mark pin group ID as used</span></div>
-<div class="line"><a name="l01868"></a><span class="lineno"> 1868</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> free_id_it = m_free_pin_group_ids.find(<span class="keywordtype">id</span>); free_id_it != m_free_pin_group_ids.end())</div>
-<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;        {</div>
-<div class="line"><a name="l01870"></a><span class="lineno"> 1870</span>&#160;            m_free_pin_group_ids.erase(free_id_it);</div>
-<div class="line"><a name="l01871"></a><span class="lineno"> 1871</span>&#160;        }</div>
-<div class="line"><a name="l01872"></a><span class="lineno"> 1872</span>&#160;        m_used_pin_group_ids.insert(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l01873"></a><span class="lineno"> 1873</span>&#160; </div>
-<div class="line"><a name="l01874"></a><span class="lineno"> 1874</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(pin_group);</div>
-<div class="line"><a name="l01875"></a><span class="lineno"> 1875</span>&#160;    }</div>
-<div class="line"><a name="l01876"></a><span class="lineno"> 1876</span>&#160; </div>
-<div class="line"><a name="l01877"></a><span class="lineno"> 1877</span>&#160;    <span class="keywordtype">bool</span> Module::delete_pin_group_internal(PinGroup&lt;ModulePin&gt;* pin_group)</div>
-<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;    {</div>
-<div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160;        <span class="comment">// some sanity checks</span></div>
-<div class="line"><a name="l01880"></a><span class="lineno"> 1880</span>&#160;        <span class="keywordflow">if</span> (pin_group == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l01881"></a><span class="lineno"> 1881</span>&#160;        {</div>
-<div class="line"><a name="l01882"></a><span class="lineno"> 1882</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not delete pin group of module &#39;{}&#39; with ID {}: pin group is a &#39;nullptr&#39;&quot;</span>, m_name, m_id);</div>
-<div class="line"><a name="l01883"></a><span class="lineno"> 1883</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01884"></a><span class="lineno"> 1884</span>&#160;        }</div>
-<div class="line"><a name="l01885"></a><span class="lineno"> 1885</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_pin_groups_map.find(pin_group-&gt;get_id()); it == m_pin_groups_map.end() || it-&gt;second != pin_group)</div>
-<div class="line"><a name="l01886"></a><span class="lineno"> 1886</span>&#160;        {</div>
-<div class="line"><a name="l01887"></a><span class="lineno"> 1887</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(</div>
-<div class="line"><a name="l01888"></a><span class="lineno"> 1888</span>&#160;                <span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not delete pin group &#39;{}&#39; with ID {} of module &#39;{}&#39; with ID {}: pin group does not belong to module&quot;</span>, pin_group-&gt;get_name(), pin_group-&gt;get_id(), m_name, m_id);</div>
-<div class="line"><a name="l01889"></a><span class="lineno"> 1889</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01890"></a><span class="lineno"> 1890</span>&#160;        }</div>
-<div class="line"><a name="l01891"></a><span class="lineno"> 1891</span>&#160; </div>
-<div class="line"><a name="l01892"></a><span class="lineno"> 1892</span>&#160;        <span class="comment">// erase pin group</span></div>
-<div class="line"><a name="l01893"></a><span class="lineno"> 1893</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> del_id                  = pin_group-&gt;get_id();</div>
-<div class="line"><a name="l01894"></a><span class="lineno"> 1894</span>&#160;        <span class="keyword">const</span> std::string&amp; del_name = pin_group-&gt;get_name();</div>
-<div class="line"><a name="l01895"></a><span class="lineno"> 1895</span>&#160;        m_pin_groups_map.erase(del_id);</div>
-<div class="line"><a name="l01896"></a><span class="lineno"> 1896</span>&#160;        m_pin_group_names_map.erase(del_name);</div>
-<div class="line"><a name="l01897"></a><span class="lineno"> 1897</span>&#160;        m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));</div>
-<div class="line"><a name="l01898"></a><span class="lineno"> 1898</span>&#160;        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pg) { return pg.get() == pin_group; }));</div>
-<div class="line"><a name="l01899"></a><span class="lineno"> 1899</span>&#160; </div>
-<div class="line"><a name="l01900"></a><span class="lineno"> 1900</span>&#160;        <span class="comment">// free pin group ID</span></div>
-<div class="line"><a name="l01901"></a><span class="lineno"> 1901</span>&#160;        m_free_pin_group_ids.insert(del_id);</div>
-<div class="line"><a name="l01902"></a><span class="lineno"> 1902</span>&#160;        m_used_pin_group_ids.erase(del_id);</div>
-<div class="line"><a name="l01903"></a><span class="lineno"> 1903</span>&#160; </div>
-<div class="line"><a name="l01904"></a><span class="lineno"> 1904</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01905"></a><span class="lineno"> 1905</span>&#160;    }</div>
-<div class="line"><a name="l01906"></a><span class="lineno"> 1906</span>&#160; </div>
-<div class="line"><a name="l01907"></a><span class="lineno"><a class="line" href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621"> 1907</a></span>&#160;    <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* <a class="code" href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621">Module::get_event_handler</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l01908"></a><span class="lineno"> 1908</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l01909"></a><span class="lineno"> 1909</span>&#160;        <span class="keywordflow">return</span> m_event_handler;</div>
-<div class="line"><a name="l01910"></a><span class="lineno"> 1910</span>&#160;    }</div>
-<div class="line"><a name="l01911"></a><span class="lineno"> 1911</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160;                PinChangedEvent(<span class="keyword">this</span>, <a class="code" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a75303991d2134c0efe5015a010659dcb">PinEvent::GroupRename</a>, pin_group_it-&gt;second-&gt;get_id()).send();</div>
+<div class="line"><a name="l01853"></a><span class="lineno"> 1853</span>&#160;            }</div>
+<div class="line"><a name="l01854"></a><span class="lineno"> 1854</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01855"></a><span class="lineno"> 1855</span>&#160;            {</div>
+<div class="line"><a name="l01856"></a><span class="lineno"> 1856</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;could not create pin group &#39;&quot;</span> + <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;&#39; for module &#39;&quot;</span> + m_name + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(m_id) + <span class="stringliteral">&quot;: name &#39;&quot;</span> + <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;&#39; is already taken&quot;</span>);</div>
+<div class="line"><a name="l01857"></a><span class="lineno"> 1857</span>&#160;            }</div>
+<div class="line"><a name="l01858"></a><span class="lineno"> 1858</span>&#160;        }</div>
+<div class="line"><a name="l01859"></a><span class="lineno"> 1859</span>&#160; </div>
+<div class="line"><a name="l01860"></a><span class="lineno"> 1860</span>&#160;        <span class="comment">// create pin group</span></div>
+<div class="line"><a name="l01861"></a><span class="lineno"> 1861</span>&#160;        std::unique_ptr&lt;PinGroup&lt;ModulePin&gt;&gt; pin_group_owner = std::make_unique&lt;PinGroup&lt;ModulePin&gt;&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a8ea27602bf4d3ec3850549a2d313ad0c">ascending</a>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a75c5aaa50f6193870be97c566b274281">start_index</a>);</div>
+<div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;        m_pin_groups.push_back(std::move(pin_group_owner));</div>
+<div class="line"><a name="l01863"></a><span class="lineno"> 1863</span>&#160;        PinGroup&lt;ModulePin&gt;* pin_group = m_pin_groups.back().get();</div>
+<div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;        m_pin_groups_ordered.push_back(pin_group);</div>
+<div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;        m_pin_groups_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>]        = pin_group;</div>
+<div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160;        m_pin_group_names_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>] = pin_group;</div>
+<div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160; </div>
+<div class="line"><a name="l01868"></a><span class="lineno"> 1868</span>&#160;        <span class="comment">// mark pin group ID as used</span></div>
+<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> free_id_it = m_free_pin_group_ids.find(<span class="keywordtype">id</span>); free_id_it != m_free_pin_group_ids.end())</div>
+<div class="line"><a name="l01870"></a><span class="lineno"> 1870</span>&#160;        {</div>
+<div class="line"><a name="l01871"></a><span class="lineno"> 1871</span>&#160;            m_free_pin_group_ids.erase(free_id_it);</div>
+<div class="line"><a name="l01872"></a><span class="lineno"> 1872</span>&#160;        }</div>
+<div class="line"><a name="l01873"></a><span class="lineno"> 1873</span>&#160;        m_used_pin_group_ids.insert(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01874"></a><span class="lineno"> 1874</span>&#160; </div>
+<div class="line"><a name="l01875"></a><span class="lineno"> 1875</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(pin_group);</div>
+<div class="line"><a name="l01876"></a><span class="lineno"> 1876</span>&#160;    }</div>
+<div class="line"><a name="l01877"></a><span class="lineno"> 1877</span>&#160; </div>
+<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;    <span class="keywordtype">bool</span> Module::delete_pin_group_internal(PinGroup&lt;ModulePin&gt;* pin_group)</div>
+<div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160;    {</div>
+<div class="line"><a name="l01880"></a><span class="lineno"> 1880</span>&#160;        <span class="comment">// some sanity checks</span></div>
+<div class="line"><a name="l01881"></a><span class="lineno"> 1881</span>&#160;        <span class="keywordflow">if</span> (pin_group == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01882"></a><span class="lineno"> 1882</span>&#160;        {</div>
+<div class="line"><a name="l01883"></a><span class="lineno"> 1883</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not delete pin group of module &#39;{}&#39; with ID {}: pin group is a &#39;nullptr&#39;&quot;</span>, m_name, m_id);</div>
+<div class="line"><a name="l01884"></a><span class="lineno"> 1884</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01885"></a><span class="lineno"> 1885</span>&#160;        }</div>
+<div class="line"><a name="l01886"></a><span class="lineno"> 1886</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = m_pin_groups_map.find(pin_group-&gt;get_id()); it == m_pin_groups_map.end() || it-&gt;second != pin_group)</div>
+<div class="line"><a name="l01887"></a><span class="lineno"> 1887</span>&#160;        {</div>
+<div class="line"><a name="l01888"></a><span class="lineno"> 1888</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(</div>
+<div class="line"><a name="l01889"></a><span class="lineno"> 1889</span>&#160;                <span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;could not delete pin group &#39;{}&#39; with ID {} of module &#39;{}&#39; with ID {}: pin group does not belong to module&quot;</span>, pin_group-&gt;get_name(), pin_group-&gt;get_id(), m_name, m_id);</div>
+<div class="line"><a name="l01890"></a><span class="lineno"> 1890</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01891"></a><span class="lineno"> 1891</span>&#160;        }</div>
+<div class="line"><a name="l01892"></a><span class="lineno"> 1892</span>&#160; </div>
+<div class="line"><a name="l01893"></a><span class="lineno"> 1893</span>&#160;        <span class="comment">// erase pin group</span></div>
+<div class="line"><a name="l01894"></a><span class="lineno"> 1894</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> del_id                  = pin_group-&gt;get_id();</div>
+<div class="line"><a name="l01895"></a><span class="lineno"> 1895</span>&#160;        <span class="keyword">const</span> std::string&amp; del_name = pin_group-&gt;get_name();</div>
+<div class="line"><a name="l01896"></a><span class="lineno"> 1896</span>&#160;        m_pin_groups_map.erase(del_id);</div>
+<div class="line"><a name="l01897"></a><span class="lineno"> 1897</span>&#160;        m_pin_group_names_map.erase(del_name);</div>
+<div class="line"><a name="l01898"></a><span class="lineno"> 1898</span>&#160;        m_pin_groups_ordered.erase(std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group));</div>
+<div class="line"><a name="l01899"></a><span class="lineno"> 1899</span>&#160;        m_pin_groups.erase(std::find_if(m_pin_groups.begin(), m_pin_groups.end(), [pin_group](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pg) { return pg.get() == pin_group; }));</div>
+<div class="line"><a name="l01900"></a><span class="lineno"> 1900</span>&#160; </div>
+<div class="line"><a name="l01901"></a><span class="lineno"> 1901</span>&#160;        <span class="comment">// free pin group ID</span></div>
+<div class="line"><a name="l01902"></a><span class="lineno"> 1902</span>&#160;        m_free_pin_group_ids.insert(del_id);</div>
+<div class="line"><a name="l01903"></a><span class="lineno"> 1903</span>&#160;        m_used_pin_group_ids.erase(del_id);</div>
+<div class="line"><a name="l01904"></a><span class="lineno"> 1904</span>&#160; </div>
+<div class="line"><a name="l01905"></a><span class="lineno"> 1905</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01906"></a><span class="lineno"> 1906</span>&#160;    }</div>
+<div class="line"><a name="l01907"></a><span class="lineno"> 1907</span>&#160; </div>
+<div class="line"><a name="l01908"></a><span class="lineno"><a class="line" href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621"> 1908</a></span>&#160;    <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* <a class="code" href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621">Module::get_event_handler</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l01909"></a><span class="lineno"> 1909</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l01910"></a><span class="lineno"> 1910</span>&#160;        <span class="keywordflow">return</span> m_event_handler;</div>
+<div class="line"><a name="l01911"></a><span class="lineno"> 1911</span>&#160;    }</div>
+<div class="line"><a name="l01912"></a><span class="lineno"> 1912</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a0794ef86c5e6c2dc285d9f0ee16d847a"><div class="ttname"><a href="classhal_1_1_base_pin.html#a0794ef86c5e6c2dc285d9f0ee16d847a">hal::BasePin::set_name</a></div><div class="ttdeci">void set_name(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00098">base_pin.h:98</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a16eadf80d27bfe48d2d667f2180ae960"><div class="ttname"><a href="classhal_1_1_base_pin.html#a16eadf80d27bfe48d2d667f2180ae960">hal::BasePin::get_name</a></div><div class="ttdeci">const std::string &amp; get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00108">base_pin.h:108</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_pin_html_a2029526481170f40ec67e8268a6db869"><div class="ttname"><a href="classhal_1_1_base_pin.html#a2029526481170f40ec67e8268a6db869">hal::BasePin::set_type</a></div><div class="ttdeci">void set_type(PinType type)</div><div class="ttdef"><b>Definition:</b> <a href="base__pin_8h_source.html#l00138">base_pin.h:138</a></div></div>
@@ -2063,7 +2064,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div class="ttc" id="aclasshal_1_1_module_html_ab7ad37f7e5b0982c387ec6c33651a25f"><div class="ttname"><a href="classhal_1_1_module.html#ab7ad37f7e5b0982c387ec6c33651a25f">hal::Module::get_netlist</a></div><div class="ttdeci">Netlist * get_netlist() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00319">module.cpp:319</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_ab8cd2075036048e2fb55b1e62828a865"><div class="ttname"><a href="classhal_1_1_module.html#ab8cd2075036048e2fb55b1e62828a865">hal::Module::get_pin_by_net</a></div><div class="ttdeci">ModulePin * get_pin_by_net(Net *net) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l01019">module.cpp:1019</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_acab4a10c20a9f0f23befd4a3f6028418"><div class="ttname"><a href="classhal_1_1_module.html#acab4a10c20a9f0f23befd4a3f6028418">hal::Module::set_pin_group_name</a></div><div class="ttdeci">bool set_pin_group_name(PinGroup&lt; ModulePin &gt; *pin_group, const std::string &amp;new_name, bool force_name=false)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l01147">module.cpp:1147</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_html_aceeb47293e56ff3ed6ea7d2023319621"><div class="ttname"><a href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621">hal::Module::get_event_handler</a></div><div class="ttdeci">EventHandler * get_event_handler() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l01907">module.cpp:1907</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_html_aceeb47293e56ff3ed6ea7d2023319621"><div class="ttname"><a href="classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621">hal::Module::get_event_handler</a></div><div class="ttdeci">EventHandler * get_event_handler() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l01908">module.cpp:1908</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_acf36f1449ccad8eadd31678f7edcb41a"><div class="ttname"><a href="classhal_1_1_module.html#acf36f1449ccad8eadd31678f7edcb41a">hal::Module::get_pin_groups</a></div><div class="ttdeci">std::vector&lt; PinGroup&lt; ModulePin &gt; * &gt; get_pin_groups(const std::function&lt; bool(PinGroup&lt; ModulePin &gt; *)&gt; &amp;filter=nullptr) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00964">module.cpp:964</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_ad35559b823f388e85241716ef8189fc9"><div class="ttname"><a href="classhal_1_1_module.html#ad35559b823f388e85241716ef8189fc9">hal::Module::create_pin</a></div><div class="ttdeci">Result&lt; ModulePin * &gt; create_pin(const u32 id, const std::string &amp;name, Net *net, PinType type=PinType::none, bool create_group=true, bool force_name=false)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00789">module.cpp:789</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_ae3b92fb9a9cf888b0350f2fb287cb46a"><div class="ttname"><a href="classhal_1_1_module.html#ae3b92fb9a9cf888b0350f2fb287cb46a">hal::Module::get_pin_group_by_id</a></div><div class="ttdeci">PinGroup&lt; ModulePin &gt; * get_pin_group_by_id(const u32 id) const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l01036">module.cpp:1036</a></div></div>
@@ -2111,7 +2112,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_af20e293cf442ddedc129f87bbb6a69e9"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a></div><div class="ttdeci">#define ERR_APPEND(prev_error, message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00057">result.h:57</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00753">graph_graphics_view.cpp:753</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a3b3244bd8945cb61cfa299c32686a601"><div class="ttname"><a href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim</a></div><div class="ttdeci">CORE_API T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00358">utils.h:358</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
 <div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8ec"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">hal::PinDirection</a></div><div class="ttdeci">PinDirection</div><div class="ttdef"><b>Definition:</b> <a href="pin__direction_8h_source.html#l00035">pin_direction.h:36</a></div></div>
@@ -2153,7 +2154,7 @@ $(document).ready(function(){initNavTree('netlist_2module_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2module_8cpp.html">module.cpp</a></li>
-    <li class="footer">Generated on Fri Aug 29 2025 21:00:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Sep 2 2025 07:50:56 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

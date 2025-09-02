@@ -1,5 +1,6 @@
 var NAVTREEINDEX41 =
 {
+"split__by__successor__predecessor__known__groups_8cpp_source.html":[7,0,1,1,3,4,0,8],
 "split__by__successor__predecessor__known__groups_8h.html":[7,0,1,1,0,0,4,0,8],
 "split__by__successor__predecessor__known__groups_8h.html#a0376b9811cb1ceb42f83938dbfc18112":[7,0,1,1,0,0,4,0,8,0],
 "split__by__successor__predecessor__known__groups_8h_source.html":[7,0,1,1,0,0,4,0,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX41 =
 "struct_hop___man__t__.html#a19b85489e74b80c7959eb10005535b59":[6,0,5,0],
 "struct_hop___man__t__.html#a301df7539ed8e2ebf995c4b10e37c5fa":[6,0,5,8],
 "struct_hop___man__t__.html#a3dca97d3d05e978a296e72f4a65a19c4":[6,0,5,14],
-"struct_hop___man__t__.html#a5de81756a360556c6b5898c9b6dd29a9":[6,0,5,2],
-"struct_hop___man__t__.html#a6d8d84d0011fe23ac465a462d7308811":[6,0,5,10]
+"struct_hop___man__t__.html#a5de81756a360556c6b5898c9b6dd29a9":[6,0,5,2]
 };

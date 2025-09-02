@@ -15,6 +15,7 @@ var classhal_1_1_port_tree_item =
     [ "name", "classhal_1_1_port_tree_item.html#a561d17408ab8f546a1fb99bc15e542f1", null ],
     [ "setData", "classhal_1_1_port_tree_item.html#a727f37e8122bb5cd8ba2d0b5f0222ac7", null ],
     [ "setDataAtIndex", "classhal_1_1_port_tree_item.html#a7104f6a890b5498b2952fbc37693a9ad", null ],
+    [ "setIndex", "classhal_1_1_port_tree_item.html#a1e9a6477ccac73e173b36e45027810ae", null ],
     [ "setItemType", "classhal_1_1_port_tree_item.html#ae46b870ced7e64c1758511c0cb0ca4c4", null ],
     [ "setName", "classhal_1_1_port_tree_item.html#acf3bbee11bd3f320b547ae2511cbea21", null ],
     [ "setPinDirection", "classhal_1_1_port_tree_item.html#a1e54653149972545fb38e62ddd9576ad", null ],
