@@ -686,8 +686,8 @@ namespace hal
 #ifdef __AVX2__
                     a = _mm256_shuffle_epi32(a, _MM_SHUFFLE(2, 3, 0, 1));
 #elif defined(__ARM_NEON)
-                    a.val[0] = vrev64q_u32(a.val[0]);
-                    a.val[1] = vrev64q_u32(a.val[1]);
+                    a.val[0] = (uint64x2_t) vrev64q_u32((uint32x4_t) a.val[0]);
+                    a.val[1] = (uint64x2_t) vrev64q_u32((uint32x4_t) a.val[1]);
 
 #endif
                 }
@@ -697,10 +697,10 @@ namespace hal
                     a = _mm256_shufflelo_epi16(a, _MM_SHUFFLE(2, 3, 0, 1));
                     a = _mm256_shufflehi_epi16(a, _MM_SHUFFLE(2, 3, 0, 1));
 #elif defined(__ARM_NEON)
-                    a.val[0] = vrev64q_u16(a.val[0]);
-                    a.val[0] = vrev64q_u32(a.val[0]);
-                    a.val[1] = vrev64q_u16(a.val[1]);
-                    a.val[1] = vrev64q_u32(a.val[1]);
+                    a.val[0] = (uint64x2_t) vrev64q_u16((uint16x8_t) a.val[0]);
+                    a.val[0] = (uint64x2_t) vrev64q_u32((uint32x4_t) a.val[0]);
+                    a.val[1] = (uint64x2_t) vrev64q_u16((uint16x8_t) a.val[1]);
+                    a.val[1] = (uint64x2_t) vrev64q_u32((uint32x4_t) a.val[1]);
 #endif
                 }
                 if ((shift >> 3) & 0x1)
@@ -709,10 +709,10 @@ namespace hal
                     const __m256i mask = _mm256_set_epi8(14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 2, 3, 0, 1, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 2, 3, 0, 1);
                     a                  = _mm256_shuffle_epi8(a, mask);
 #elif defined(__ARM_NEON)
-                    a.val[0] = vrev64q_u8(a.val[0]);
-                    a.val[0] = vrev64q_u16(a.val[0]);
-                    a.val[1] = vrev64q_u8(a.val[1]);
-                    a.val[1] = vrev64q_u16(a.val[1]);
+                    a.val[0] = (uint64x2_t) vrev64q_u8 ((uint8x16_t) a.val[0]);
+                    a.val[0] = (uint64x2_t) vrev64q_u16((uint16x8_t) a.val[0]);
+                    a.val[1] = (uint64x2_t) vrev64q_u8 ((uint8x16_t) a.val[1]);
+                    a.val[1] = (uint64x2_t) vrev64q_u16((uint16x8_t) a.val[1]);
 #endif
                 }
                 if ((shift >> 2) & 0x1)
@@ -865,7 +865,7 @@ namespace hal
                     return _mm256_set_epi64x(0, 0, 0, 0xFFFFFFFF);
 #elif defined(__ARM_NEON)
                     auto tmp = vdupq_n_u64(0);
-                    return {vsetq_lane_u32(0xFFFFFFFF, tmp, 0), vdupq_n_u64(0)};
+                    return {(uint64x2_t)vsetq_lane_u32(0xFFFFFFFF, (uint32x4_t)tmp, 0), vdupq_n_u64(0)};
 #endif
                 }
                 else if (len == 16)
@@ -874,7 +874,7 @@ namespace hal
                     return _mm256_set_epi64x(0, 0, 0, 0xFFFF);
 #elif defined(__ARM_NEON)
                     auto tmp = vdupq_n_u64(0);
-                    return {vsetq_lane_u16(0xFFFF, tmp, 0), vdupq_n_u64(0)};
+                    return {(uint64x2_t)vsetq_lane_u16(0xFFFF, (uint16x8_t)tmp, 0), vdupq_n_u64(0)};
 #endif
                 }
                 else if (len == 8)
@@ -883,7 +883,7 @@ namespace hal
                     return _mm256_set_epi64x(0, 0, 0, 0xFF);
 #elif defined(__ARM_NEON)
                     auto tmp = vdupq_n_u64(0);
-                    return {vsetq_lane_u8(0xFF, tmp, 0), vdupq_n_u64(0)};
+                    return {(uint64x2_t)vsetq_lane_u8(0xFF, (uint8x16_t)tmp, 0), vdupq_n_u64(0)};
 #endif
                 }
                 else
