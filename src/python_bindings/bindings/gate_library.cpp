@@ -68,14 +68,59 @@ namespace hal
             :rtype: tuple(str,str)
         )");
 
-        // py_gate_library.def("create_gate_type", &GateLibrary::create_gate_type, py::arg("name"), py::arg("properties") = std::set<GateTypeProperty>(), R"(
-        //     Create a new gate type, add it to the gate library, and return it.
+        py_gate_library.def(
+            "create_gate_type",
+            [](GateLibrary& self, const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}) -> GateType* { return self.create_gate_type(name, properties); },
+            py::arg("name"),
+            py::arg("properties") = std::set({GateTypeProperty::combinational}),
+            R"(
+            Create a new gate type, add it to the gate library, and return it.
 
-        //     :param str name: The name of the gate type.
-        //     :param set[hal_py.GateTypeProperty] properties: The properties of the gate type.
-        //     :returns: The new gate type instance on success, None otherwise.
-        //     :rtype: hal_py.GateType
-        // )");
+            :param str name: The name of the gate type.
+            :param set[hal_py.GateTypeProperty] properties: The properties of the gate type. Defaults to ``hal_py.GateTypeProperty.combinational``.
+            :returns: The new gate type instance on success, None otherwise.
+            :rtype: hal_py.GateType or None
+        )");
+
+        py_gate_library.def(
+            "create_ff_gate_type",
+            [](GateLibrary& self,
+               const std::string& name,
+               const std::string& state_identifier,
+               const std::string& neg_state_identifier,
+               const BooleanFunction& next_state_bf,
+               const BooleanFunction& clock_bf,
+               const std::string& init_category   = "",
+               const std::string& init_identifier = "") -> GateType* {
+                std::unique_ptr<GateTypeComponent> init_component = nullptr;
+                if (!init_category.empty() && !init_identifier.empty())
+                {
+                    init_component = GateTypeComponent::create_init_component(init_category, {init_identifier});
+                }
+                std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(std::move(init_component), state_identifier, neg_state_identifier);
+                std::unique_ptr<GateTypeComponent> ff_component    = GateTypeComponent::create_ff_component(std::move(state_component), next_state_bf, clock_bf);
+                return self.create_gate_type(name, {GateTypeProperty::sequential, GateTypeProperty::ff}, std::move(ff_component));
+            },
+            py::arg("name"),
+            py::arg("state_identifier"),
+            py::arg("neg_state_identifier"),
+            py::arg("next_state_bf"),
+            py::arg("clock_bf"),
+            py::arg("init_category")   = "",
+            py::arg("init_identifier") = "",
+            R"(
+            Create a new gate type, add it to the gate library, and return it.
+
+            :param str name: The name of the gate type.
+            :param str state_identifier: The identifier of the internal state.
+            :param str neg_state_identifier: The identifier of the negated internal state.
+            :param hal_py.BooleanFunction next_state_bf: The function describing the internal state.
+            :param hal_py.BooleanFunction clock_bf: The function describing the clock input.
+            :param str init_category: The initialization data category. Defaults to an empty string.
+            :param str init_identifier: The initialization data identifier. Defaults to an empty string.
+            :returns: The new flip-flop gate type instance on success, None otherwise.
+            :rtype: hal_py.GateType or None
+        )");
 
         py_gate_library.def("contains_gate_type", &GateLibrary::contains_gate_type, py::arg("gate_type"), R"(
             Check whether the given gate type is contained in this library.
