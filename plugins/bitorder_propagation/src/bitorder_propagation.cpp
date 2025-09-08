@@ -1250,6 +1250,8 @@ namespace hal
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
                                                                                                            const std::pair<Module*, PinGroup<ModulePin>*>& dst)
         {
+            if (!src.second) return ERR("cannot propagate bitorder: no source given");
+            if (!dst.second) return ERR("cannot propagate bitorder: no destination given");
             const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> src_vec = {src};
             const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> dst_vec = {dst};
             return propagate_bitorder(src_vec, dst_vec);
