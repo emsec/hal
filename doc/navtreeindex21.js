@@ -1,6 +1,5 @@
 var NAVTREEINDEX21 =
 {
-"classhal_1_1_standard_graph_layouter.html#a0d2161029c00222c9a890b27b8266824":[4,0,0,2,21,0],
 "classhal_1_1_standard_graph_layouter.html#a4509682aefe2211500fa3d0316b5cc24":[4,0,0,2,21,1],
 "classhal_1_1_standard_graph_layouter.html#a4cf996c723d93e20bb6e3e84935eb893":[4,0,0,2,21,5],
 "classhal_1_1_standard_graph_layouter.html#a5bbd0af55777094721cde2c47c46e433":[4,0,0,2,21,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX21 =
 "classhal_1_1_verilog_writer_plugin.html":[6,0,0,406],
 "classhal_1_1_verilog_writer_plugin.html#a0702d629c91733f44e80294d714933b4":[6,0,0,406,3],
 "classhal_1_1_verilog_writer_plugin.html#a41b3e8fed5c21333b87acc44ef3cd864":[6,0,0,406,1],
-"classhal_1_1_verilog_writer_plugin.html#a6be0f561c80ca0c8dd3c8aee6103905a":[6,0,0,406,0]
+"classhal_1_1_verilog_writer_plugin.html#a6be0f561c80ca0c8dd3c8aee6103905a":[6,0,0,406,0],
+"classhal_1_1_verilog_writer_plugin.html#a80a9d1b4d9d0154892a45e79ae27388d":[6,0,0,406,4]
 };
