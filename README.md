@@ -6,7 +6,16 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 
 ![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")
 
-
+HAL GUI screenshot
+1. [Graph View](#gui-graph-view)
+2. [Modules Hierarchy](#gui-modules)
+3. [View Management](#gui-views)
+4. [Groupings](#gui-groupins)
+5. [Selection Details](#gui-selection-details)
+6. [Python Editor](#gui-python-editor)
+7. [Waveform Viewer](#gui-waveform-viewer)
+8. [Python Console](#gui-python-console)
+9. [Log Messages](#gui-log-messages)
 
 
 # Navigation
