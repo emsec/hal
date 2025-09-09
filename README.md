@@ -4,23 +4,10 @@
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
 
-<p float="left">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" width="14%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" width="57%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png" width="29%"></p>
-<p float="left">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" width="14%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" width="57%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png" width="29%"></p>
-<p float="left">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" width="14%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" width="57%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png" width="29%"></p>
-<p float="left">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png" width="45%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png" width="37.5%">
-<img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png" width="17.5%"></p>
-</table>
+<p float="left"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png" width="29%"></p>
+<p float="left"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png" width="29%"></p>
+<p float="left"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png" width="29%"></p>
+<p float="left"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png" width="45%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png" width="37.5%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png" width="17.5%"></p>
 
 HAL GUI screenshot
 1. [Graph View](#gui-graph-view)
