@@ -7,7 +7,7 @@
    version="1.1" >
    <a href="gui-modules" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png"
          id="rect00"
          width="361"
          height="395"
@@ -16,7 +16,7 @@
    </a>
    <a href="gui-graph-view" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png"
          id="rect01"
          width="1456"
          height="395"
@@ -25,7 +25,7 @@
    </a>
    <a href="gui-python-editor" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png"
          id="rect02"
          width="743"
          height="395"
@@ -34,7 +34,7 @@
    </a>
    <a href="gui-views" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png"
          id="rect10"
          width="361"
          height="348"
@@ -43,7 +43,7 @@
    </a>
    <a href="gui-graph-view" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png"
          id="rect11"
          width="1456"
          height="348"
@@ -52,7 +52,7 @@
    </a>
    <a href="gui-python-editor" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png"
          id="rect12"
          width="743"
          height="348"
@@ -61,7 +61,7 @@
    </a>
    <a href="gui-groupings" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png"
          id="rect20"
          width="361"
          height="339"
@@ -70,7 +70,7 @@
    </a>
    <a href="gui-graph-view" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png"
          id="rect21"
          width="1456"
          height="339"
@@ -79,7 +79,7 @@
    </a>
    <a href="gui-waveform-viewer" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png"
          id="rect22"
          width="743"
          height="339"
@@ -88,7 +88,7 @@
    </a>
    <a href="gui-selection-details" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png"
          id="rect30"
          width="1152"
          height="261"
@@ -97,7 +97,7 @@
    </a>
    <a href="gui-logs" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png"
          id="rect31"
          width="959"
          height="261"
@@ -106,7 +106,7 @@
    </a>
    <a href="gui-python-console" target="_blank">
       <image 
-         href="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png"
+         href="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png"
          id="rect32"
          width="449"
          height="261"
