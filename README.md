@@ -8,12 +8,28 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 |----|----|
 | C  |  D |
 
-<table>
-<tr><td style="padding:0; margin:0;"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" style="display:block;" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" style="display:block;" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png" style="display:block;" width="29%"></td></tr>
-<tr><td style="padding:0; margin:0;"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" style="display:block;" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" style="display:block;" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png" style="display:block;" width="29%"></td></tr>
-<tr><td style="padding:0; margin:0;"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" style="display:block;" width="14%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" style="display:block;" width="57%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png" style="display:block;" width="29%"></td></tr>
-<tr><td style="padding:0; margin:0;"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png" style="display:block;" width="45%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png" style="display:block;" width="37.5%"><img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png" style="display:block;" width="17.5%"></td></tr>
-</table>
+<div style="display:flex; flex-direction:column; gap:0; margin:0; padding:0;">
+  <div style="display:flex; gap:0; margin:0; padding:0;">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" style="display:block; margin:0; padding:0;" width="14%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" style="display:block; margin:0; padding:0;" width="57%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png" style="display:block; margin:0; padding:0;" width="29%">
+  </div>
+  <div style="display:flex; gap:0; margin:0; padding:0;">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" style="display:block; margin:0; padding:0;" width="14%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" style="display:block; margin:0; padding:0;" width="57%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png" style="display:block; margin:0; padding:0;" width="29%">
+  </div>
+  <div style="display:flex; gap:0; margin:0; padding:0;">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" style="display:block; margin:0; padding:0;" width="14%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" style="display:block; margin:0; padding:0;" width="57%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png" style="display:block; margin:0; padding:0;" width="29%">
+  </div>
+  <div style="display:flex; gap:0; margin:0; padding:0;">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_30.png" style="display:block; margin:0; padding:0;" width="45%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_31.png" style="display:block; margin:0; padding:0;" width="37.5%">
+    <img src="https://github.com/emsec/hal/blob/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_32.png" style="display:block; margin:0; padding:0;" width="17.5%">
+  </div>
+</div>
 
 HAL GUI screenshot
 1. [Graph View](#gui-graph-view)
