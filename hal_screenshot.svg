@@ -5,7 +5,7 @@
    width="2560"
    height="1343"
    version="1.1" >
-   <a href="gui-modules" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-modules" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWkAAAGLCAYAAAAF92PHAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -555,7 +555,7 @@ IFUyNzIxREUdKNJzAAAAAElFTkSuQmCC
          x="0"
          y="0" />
    </a>
-   <a href="gui-graph-view" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-graph-view" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABbAAAAGLCAYAAAAWKrTGAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -3042,7 +3042,7 @@ PwAAABx0RVh0aWNjOmRlc2NyaXB0aW9uAERFTEwgVTI3MjFERR0o0nMAAAAASUVORK5CYII=
          x="361"
          y="0" />
    </a>
-   <a href="gui-python-editor" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-python-editor" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAucAAAGLCAYAAABk2Tx0AAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -4009,7 +4009,7 @@ Y2M6ZGVzY3JpcHRpb24AREVMTCBVMjcyMURFHSjScwAAAABJRU5ErkJggg==
          x="1817"
          y="0" />
    </a>
-   <a href="gui-views" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-views" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWkAAAFcCAYAAAAKzE9QAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -4415,7 +4415,7 @@ SUVORK5CYII=
          x="0"
          y="395" />
    </a>
-   <a href="gui-graph-view" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-graph-view" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABbAAAAFcCAYAAAAZEZhRAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -6116,7 +6116,7 @@ TCBVMjcyMURFHSjScwAAAABJRU5ErkJggg==
          x="361"
          y="395" />
    </a>
-   <a href="gui-python-editor" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-python-editor" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAucAAAFcCAYAAABr4hDjAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -7159,7 +7159,7 @@ cHRpb24AREVMTCBVMjcyMURFHSjScwAAAABJRU5ErkJggg==
          x="1817"
          y="395" />
    </a>
-   <a href="gui-groupings" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-groupings" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWkAAAFTCAYAAAD7mv2FAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -7472,7 +7472,7 @@ MURFHSjScwAAAABJRU5ErkJggg==
          x="0"
          y="743" />
    </a>
-   <a href="gui-graph-view" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-graph-view" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABbAAAAFTCAYAAADoRyqEAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -8934,7 +8934,7 @@ cmlwdGlvbgBERUxMIFUyNzIxREUdKNJzAAAAAElFTkSuQmCC
          x="361"
          y="743" />
    </a>
-   <a href="gui-waveform-viewer" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-waveform-viewer" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAucAAAFTCAYAAACatKI2AAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -9639,7 +9639,7 @@ gg==
          x="1817"
          y="743" />
    </a>
-   <a href="gui-selection-details" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-selection-details" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABIAAAAEFCAYAAACb7ZyWAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -10349,7 +10349,7 @@ YzpkZXNjcmlwdGlvbgBERUxMIFUyNzIxREUdKNJzAAAAAElFTkSuQmCC
          x="0"
          y="1082" />
    </a>
-   <a href="gui-logs" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-logs" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA78AAAEFCAYAAAArLlCgAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
@@ -11642,7 +11642,7 @@ AAAcdEVYdGljYzpkZXNjcmlwdGlvbgBERUxMIFUyNzIxREUdKNJzAAAAAElFTkSuQmCC
          x="1152"
          y="1082" />
    </a>
-   <a href="gui-python-console" target="_blank">
+   <a href="https://github.com/emsec/hal/wiki/gui-python-console" target="_blank">
       <image 
          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcEAAAEFCAYAAACbwlxKAAABV2lDQ1BpY2MAACiRdZA/S8NQFMVP
 NBKVgh0cijgUFKeqtVbq2lYRoUOoFvwzpa8xFZo0JBFx0kEHJwu6uEld/AS6OKgfQAXBQUTcxFna
