@@ -4,7 +4,8 @@
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
 
-<table style="clear: both; border-collapse: collapse; width: 100%; background-color: #313131;">
+<style>table {clear: both; border-collapse: collapse; width: 100%; background-color: #313131;}</style>
+<table>
     <tr style="padding:0;"><td style="padding:0;"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" width="56.9%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_02.png" width="29%"></td></tr>
     <tr style="padding:0;"><td style="padding:0;"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" width="56.9%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_12.png" width="29%"></td></tr>
     <tr style="padding:0;"><td style="padding:0;"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" width="56.9%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_22.png" width="29%"></td></tr>
