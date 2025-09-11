@@ -13,11 +13,8 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 | head |
 |------|
 | <img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_00.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_01.png" width="56.9%"> |
-|------|
 | <img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_10.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_11.png" width="56.9%"> |
-|------|
 | <img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_20.png" width="14.1%"><img src="https://raw.githubusercontent.com/emsec/hal/refs/heads/feature/interactive_screenshot/wiki_images/screenshot/hal_screenshot_21.png" width="56.9%"> |
-|------|
 
 HAL GUI screenshot
 1. [Graph View](#gui-graph-view)
