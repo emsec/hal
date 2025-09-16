@@ -1,11 +1,11 @@
-#include "gui/selection_details_widget/module_details_widget/module_ports_tree.h"
+#include "gui/selection_details_widget/module_details_widget/module_pins_tree.h"
 
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/combobox_dialog.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/input_dialog/pingroup_selector_dialog.h"
 #include "gui/python/py_code_provider.h"
-#include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
+#include "gui/selection_details_widget/module_details_widget/module_pins_tree_model.h"
 #include "gui/user_action/action_pingroup.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/utilities/enums.h"
@@ -81,7 +81,7 @@ namespace hal
             return;
 
         //all relevant information
-        PortTreeItem* clickedItem          =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
+        ModulePinsTreeItem* clickedItem          =  static_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
         Net* n                             = mPortModel->getNetFromItem(clickedItem);
         QString name                       = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
         u32 modId                          = mPortModel->getRepresentedModuleId();
@@ -122,7 +122,7 @@ namespace hal
                         return;
                     for (auto item : selectedPins)
                     {
-                        auto* pin = mod->get_pin_by_id(static_cast<PortTreeItem*>(item)->id());
+                        auto* pin = mod->get_pin_by_id(static_cast<ModulePinsTreeItem*>(item)->id());
                         if (pin == nullptr)
                             return;
                         pins.append(pin->get_id());
@@ -133,7 +133,7 @@ namespace hal
             });
         }
 
-        if (clickedItem->itemType() == PortTreeItem::Group)    //group specific context, own helper function? (returns at the end)
+        if (clickedItem->itemType() == ModulePinsTreeItem::Group)    //group specific context, own helper function? (returns at the end)
         {
             menu.addAction("Change name", [itemId, mod, name]() {
                 PinGroup<ModulePin>*  pg = mod->get_pin_group_by_id(itemId);
@@ -246,7 +246,7 @@ namespace hal
             menu.addAction("Remove selection from group", [selectedPins, mod /*, sameGroup*/]() {
                 QList<u32> pins;
                 for (auto item : selectedPins)
-                    pins.append(static_cast<PortTreeItem*>(item)->id());
+                    pins.append(static_cast<ModulePinsTreeItem*>(item)->id());
 
                 ActionPingroup* act = ActionPingroup::removePinsFromGroup(mod, pins);
                 if (act) act->exec();
@@ -258,7 +258,7 @@ namespace hal
             appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
-        if(clickedItem->itemType()==PortTreeItem::Pin)
+        if(clickedItem->itemType()==ModulePinsTreeItem::Pin)
             menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId)); });
         else
             menu.addAction(QIcon(":/icons/python"), "Get group", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, itemId)); });
@@ -288,7 +288,7 @@ namespace hal
                     Module* mod = gNetlist->get_module_by_id(modId);
                     for (auto item : selectedPins)
                     {
-                        auto* pin = mod->get_pin_by_id(static_cast<PortTreeItem*>(item)->id());
+                        auto* pin = mod->get_pin_by_id(static_cast<ModulePinsTreeItem*>(item)->id());
                         if (pin == nullptr)
                             return;
                         pins.append(pin->get_id());
@@ -310,8 +310,8 @@ namespace hal
         int groupId    = -1;
         for (auto index : selectionModel()->selectedRows())
         {
-            PortTreeItem* item =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(index));
-            if (item->itemType() == PortTreeItem::Pin)
+            ModulePinsTreeItem* item =  static_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(index));
+            if (item->itemType() == ModulePinsTreeItem::Pin)
             {
                 if (!alreadyProcessedPins.contains(item))
                 {
@@ -319,7 +319,7 @@ namespace hal
                     alreadyProcessedPins.insert(item);
                 }
             }
-            else if (item->itemType() == PortTreeItem::Group)
+            else if (item->itemType() == ModulePinsTreeItem::Group)
             {
                 onlyPins = false;
                 for (auto pinItem : item->getChildren())
@@ -336,11 +336,11 @@ namespace hal
         if (!selectedPins.isEmpty())
         {
             auto mod       = gNetlist->get_module_by_id(mModuleID);
-            auto* firstPin = mod->get_pin_by_id(static_cast<PortTreeItem*>(selectedPins.front())->id());
+            auto* firstPin = mod->get_pin_by_id(static_cast<ModulePinsTreeItem*>(selectedPins.front())->id());
             groupId        = firstPin->get_group().first->get_id();
             for (auto pinTreeItem : selectedPins)
             {
-                auto pin = mod->get_pin_by_id(static_cast<PortTreeItem*>(pinTreeItem)->id());
+                auto pin = mod->get_pin_by_id(static_cast<ModulePinsTreeItem*>(pinTreeItem)->id());
                 if (groupId != (int)pin->get_group().first->get_id())
                 {
                     sameGroup = false;
