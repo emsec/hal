@@ -46,14 +46,6 @@ namespace hal
         static bool useExistingPin(Type tp);
     };
 
-    int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
-
-    int pinIndex2Row(const ModulePin* pin, int index);
-
-    int pinRow2Index(const ModulePin* pin, int row);
-
-    QString generateGroupName(const Module* mod, const ModulePin* pin);
-
     void dumpPingroups(Module* m = nullptr);
     /**
      * @ingroup user_action
@@ -163,6 +155,11 @@ namespace hal
         static ActionPingroup* deletePinGroup(const Module* m, u32 grpId);
         static ActionPingroup* toggleAscendingGroup(const Module* m, u32 grpId);
         static ActionPingroup* changePinGroupType(const Module* m, u32 grpId, int ptype);
+
+        static int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
+        static int pinIndex2Row(const ModulePin* pin, int index);
+        static int pinRow2Index(const ModulePin* pin, int row);
+        static QString generateGroupName(const Module* mod, const ModulePin* pin);
     };
 
     /**

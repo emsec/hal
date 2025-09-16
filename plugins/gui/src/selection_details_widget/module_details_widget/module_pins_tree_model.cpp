@@ -465,7 +465,7 @@ namespace hal
                 }
                 auto pgPair = pin->get_group();
                 pgroup = pgPair.first;
-                pinRow = pinIndex2Row(pin,pgPair.second);
+                pinRow = ActionPingroup::pinIndex2Row(pin,pgPair.second);
                 if (pgroup)
                     ptiGroup = mIdToGroupItem.value(pgroup->get_id());
             }
@@ -484,13 +484,13 @@ namespace hal
                                     pgroup->get_type(),
                                     pgroup->is_ascending()?0:1);
             mIdToGroupItem.insert(ptiGroup->id(), ptiGroup);
-            int inx = pinGroupIndex(m,pgroup);
+            int inx = ActionPingroup::pinGroupIndex(m,pgroup);
             insertItem(ptiGroup, mRootItem, inx);
             break;
         }
         case PinEvent::GroupReorder:
         {
-            int inx = pinGroupIndex(m,pgroup);
+            int inx = ActionPingroup::pinGroupIndex(m,pgroup);
             removeItem(ptiGroup);
             insertItem(ptiGroup, mRootItem, inx);
             break;
@@ -652,7 +652,7 @@ namespace hal
         auto pinToMove = mModule->get_pin_by_id(droppedPin->id());
         if (!pinToMove) return;
 
-        QString groupName = generateGroupName(mModule,pinToMove);
+        QString groupName = ActionPingroup::generateGroupName(mModule,pinToMove);
 
         ActionPingroup* act = ActionPingroup::addPinToNewGroup(mModule, groupName, droppedPin->id(),row);
         act->exec();

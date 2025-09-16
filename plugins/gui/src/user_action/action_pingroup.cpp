@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp)
+    int ActionPingroup::pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp)
     {
         if (!mod || !pgrp) return -1;
         int inx = 0;
@@ -29,14 +29,14 @@ namespace hal
                       << " <" << pg->get_name() << ">\n";
             for (ModulePin* pin : pg->get_pins())
                 std::cerr << "     pin: " << pin->get_id() << " inx:" << pin->get_group().second << " row:"
-                          << pinIndex2Row(pin,pin->get_group().second) << " <" << pin->get_name() << ">\n";
+                          << ActionPingroup::pinIndex2Row(pin,pin->get_group().second) << " <" << pin->get_name() << ">\n";
         }
         std::cerr << "-------------" << std::endl;
         for (Module* sm : m->get_submodules())
             dumpPingroups(sm);
     }
 
-    int pinIndex2Row(const ModulePin* pin, int index)
+    int ActionPingroup::pinIndex2Row(const ModulePin* pin, int index)
     {
         auto pg = pin->get_group();
         if (pg.first->is_ascending())
@@ -44,7 +44,7 @@ namespace hal
         return pg.first->get_start_index() - index;
     }
 
-    int pinRow2Index(const ModulePin* pin, int row)
+    int ActionPingroup::pinRow2Index(const ModulePin* pin, int row)
     {
         auto pg = pin->get_group();
         if (pg.first->is_ascending())
@@ -57,7 +57,7 @@ namespace hal
         return (uint) pev;
     }
 
-    QString generateGroupName(const Module* mod, const ModulePin* pin)
+    QString ActionPingroup::generateGroupName(const Module* mod, const ModulePin* pin)
     {
         QString baseName = QString::fromStdString(pin->get_name());
         QSet<QString> existingGroups;
@@ -396,7 +396,7 @@ namespace hal
                 break;
             case PinActionType::PinAsignToGroup:
                 addUndoAction(PinActionType::PinAsignToGroup,aa.mId,"",pin->get_group().first->get_id());
-                addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",pinIndex2Row(pin,pin->get_group().second));
+                addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second));
                 mPinsMoved.insert(aa.mId);
                 pgroup = getGroup(aa.mValue);
                 if (!pgroup) return false;
@@ -419,9 +419,9 @@ namespace hal
                 break;
             case PinActionType::PinMoveToRow:
                 if (!mPinsMoved.contains(aa.mId))
-                    addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",pinIndex2Row(pin,pin->get_group().second));
+                    addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second));
                 pgroup = pin->get_group().first;
-                if (!mParentModule->move_pin_within_group(pgroup,pin,pinRow2Index(pin,aa.mValue)))
+                if (!mParentModule->move_pin_within_group(pgroup,pin,ActionPingroup::pinRow2Index(pin,aa.mValue)))
                 {
                     qDebug() << "move_pin_within_group failed";
                     return false;
