@@ -304,7 +304,14 @@ namespace hal
                 if (it == mPinGroups.end())
                 {
                     pgroup = mParentModule->get_pin_group_by_id(aa.mId);
-                    if (!pgroup) return false;
+                    if (!pgroup)
+                    {
+                        // special case : the group delete command cannot be executed since the
+                        //                group was already deleted when re-assigning its last pin
+                        if (aa.mType == PinActionType::GroupDelete)
+                            continue;
+                        return false;
+                    }
                     mPinGroups.insert(aa.mId,pgroup);
                 }
                 else
