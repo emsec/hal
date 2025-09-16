@@ -184,22 +184,6 @@ namespace hal
         return mParentModule->get_pin_group_by_id(grpId);
     }
 
-    void ActionPingroup::addUndoAction(PinActionType::Type tp, int id, const QString& name, int value)
-    {
-        ActionPingroup* undo = nullptr;
-        if (mUndoAction)
-        {
-            undo = static_cast<ActionPingroup*>(mUndoAction);
-            undo->mPinActions.append(AtomicAction(tp,id,name,value));
-        }
-        else
-        {
-            undo = new ActionPingroup(tp,id,name,value);
-            undo->setObject(object());
-        }
-        mUndoAction = undo;
-    }
-
 
     void ActionPingroup::prepareUndoAction()
     {
@@ -238,32 +222,23 @@ namespace hal
             if (gr.mDirection != PinDirection::none)
                 restoreActions.append(AtomicAction(PinActionType::GroupDirChange,gr.mId,"",(int)gr.mDirection));
         }
-        if (!restoreActions.isEmpty())
+
+        for (auto it = mTempUndoActions.rbegin(); it != mTempUndoActions.rend(); ++it)
         {
-            if (mUndoAction)
-            {
-                ActionPingroup* act = static_cast<ActionPingroup*>(mUndoAction);
-                restoreActions += act->mPinActions;
-                act->mPinActions = restoreActions;
-            }
-            else
-            {
-                mUndoAction = new ActionPingroup(restoreActions);
-            }
+            for (const AtomicAction& aa : (*it))
+                restoreActions.append(aa);
         }
 
         for (u32 grpId : mGroupToRemove)
         {
-            if (mUndoAction)
-            {
-                ActionPingroup* act = static_cast<ActionPingroup*>(mUndoAction);
-                act->mPinActions.append(AtomicAction(PinActionType::GroupDelete,grpId));
-            }
-            else
-                mUndoAction = new ActionPingroup(PinActionType::GroupDelete,grpId);
+            restoreActions.append(AtomicAction(PinActionType::GroupDelete,grpId));
         }
 
-        if (mUndoAction) mUndoAction->setObject(object());
+        if (!restoreActions.isEmpty())
+        {
+            mUndoAction = new ActionPingroup(restoreActions);
+            mUndoAction->setObject(object());
+        }
     }
 
     int ActionPingroup::pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup)
@@ -283,6 +258,7 @@ namespace hal
         mGroupRestore.clear();
         mPinsMoved.clear();
         mGroupToRemove.clear();
+        mTempUndoActions.clear();
         if (mObject.type() != UserActionObjectType::Module)
             return false;
 
@@ -365,38 +341,44 @@ namespace hal
                 QString name = QString::fromStdString(pgroup->get_name());
                 if (!mParentModule->delete_pin_group(pgroup))
                     return false;
-                addUndoAction(PinActionType::GroupCreate,id,name,v);
-                addUndoAction(PinActionType::GroupTypeChange,id,"",ptype);
-                addUndoAction(PinActionType::GroupDirChange,id,"",pdir);
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::GroupCreate,id,name,v),
+                    AtomicAction(PinActionType::GroupTypeChange,id,"",ptype),
+                    AtomicAction(PinActionType::GroupDirChange,id,"",pdir)}));
                 break;
             }
             case PinActionType::GroupMoveToRow:
             {
                 int inx = pinGroupRow(mParentModule,pgroup);
                 if (inx < 0) return false;
-                addUndoAction(PinActionType::GroupMoveToRow,pgroup->get_id(),"",inx);
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::GroupMoveToRow,pgroup->get_id(),"",inx)}));
                 if (!mParentModule->move_pin_group(pgroup,aa.mValue))
                     return false;
                 break;
             }
             case PinActionType::GroupRename:
-                addUndoAction(PinActionType::GroupRename,pgroup->get_id(),QString::fromStdString(pgroup->get_name()));
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::GroupRename,pgroup->get_id(),QString::fromStdString(pgroup->get_name()))}));
                 if (!mParentModule->set_pin_group_name(pgroup,aa.mName.toStdString()))
                     return false;
                 break;
             case PinActionType::GroupTypeChange:
-                addUndoAction(PinActionType::GroupTypeChange,pgroup->get_id(),"",(int)pgroup->get_type());
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::GroupTypeChange,pgroup->get_id(),"",(int)pgroup->get_type())}));
                 if (!mParentModule->set_pin_group_type(pgroup, (PinType) aa.mValue))
                     return false;
                 break;
             case PinActionType::GroupDirChange:
-                addUndoAction(PinActionType::GroupDirChange,pgroup->get_id(),"",(int)pgroup->get_direction());
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::GroupDirChange,pgroup->get_id(),"",(int)pgroup->get_direction())}));
                 if (!mParentModule->set_pin_group_direction(pgroup, (PinDirection) aa.mValue))
                     return false;
                 break;
             case PinActionType::PinAsignToGroup:
-                addUndoAction(PinActionType::PinAsignToGroup,aa.mId,"",pin->get_group().first->get_id());
-                addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second));
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::PinAsignToGroup,aa.mId,"",pin->get_group().first->get_id()),
+                    AtomicAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second))}));
                 mPinsMoved.insert(aa.mId);
                 pgroup = getGroup(aa.mValue);
                 if (!pgroup) return false;
@@ -408,18 +390,21 @@ namespace hal
                 // dumpPingroups();
                 break;
             case PinActionType::PinRename:
-                addUndoAction(PinActionType::PinRename,aa.mId, QString::fromStdString(pin->get_name()));
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::PinRename,aa.mId, QString::fromStdString(pin->get_name()))}));
                 if (!mParentModule->set_pin_name(pin, aa.mName.toStdString()))
                     return false;
                 break;
             case PinActionType::PinTypeChange:
-                addUndoAction(PinActionType::PinTypeChange,aa.mId,"",(int)pin->get_type());
+                mTempUndoActions.append(QList<AtomicAction>({
+                    AtomicAction(PinActionType::PinTypeChange,aa.mId,"",(int)pin->get_type())}));
                 if (!mParentModule->set_pin_type(pin, (PinType) aa.mValue))
                     return false;
                 break;
             case PinActionType::PinMoveToRow:
                 if (!mPinsMoved.contains(aa.mId))
-                    addUndoAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second));
+                    mTempUndoActions.append(QList<AtomicAction>({
+                        AtomicAction(PinActionType::PinMoveToRow,aa.mId,"",ActionPingroup::pinIndex2Row(pin,pin->get_group().second))}));
                 pgroup = pin->get_group().first;
                 if (!mParentModule->move_pin_within_group(pgroup,pin,ActionPingroup::pinRow2Index(pin,aa.mValue)))
                 {
@@ -505,7 +490,11 @@ namespace hal
         bool doNotDelete = false; // if there is a pin with the same name as the
         int vid = -1;
 
-        for (ModulePin* pin : groupToDelete->get_pins())
+        std::vector<ModulePin*> orderedPins = groupToDelete->get_pins();
+        if (groupToDelete->is_descending())
+            std::reverse(orderedPins.begin(), orderedPins.end());
+
+        for (ModulePin* pin : orderedPins)
         {
             if (pin->get_name() == groupToDelete->get_name())
                 doNotDelete = true;

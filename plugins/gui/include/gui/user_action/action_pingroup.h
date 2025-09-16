@@ -127,6 +127,7 @@ namespace hal
 
         QHash<int,PinGroup<ModulePin>*> mPinGroups;
         QList<AtomicAction> mPinActions;
+        QList<QList<AtomicAction> > mTempUndoActions;
         Module* mParentModule;
         QMap<int,GroupRestore> mGroupRestore;
         QSet<u32> mPinsMoved;
@@ -136,7 +137,6 @@ namespace hal
         PinGroup<ModulePin>* getGroup(int grpId) const;
         void prepareUndoAction();
         void finalizeUndoAction();
-        void addUndoAction(PinActionType::Type tp, int id = 0, const QString& name=QString(), int value=0);
         static int pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup);
     public:
         ActionPingroup(PinActionType::Type tp = PinActionType::None, int id = 0, const QString& name=QString(), int value=0);
