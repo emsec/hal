@@ -58,8 +58,7 @@ namespace hal
      *                   negative ID: call constructor without ID, however,
      *                   ID will be used internally for subsequent commands related to crated group
      *     name     : name of group
-     *     value    : start index, assume ascending
-     *                   negative value: descending order starting with (-value-1)
+     *     value    : start index * 2, LSB : 0=descending 1=ascending
      *
      * GroupDelete
      *     ID       : ID of group to delete

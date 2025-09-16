@@ -303,13 +303,8 @@ namespace hal
             {
             case PinActionType::GroupCreate:
             {
-                int startIndex = aa.mValue;
-                bool ascending = true;
-                if (aa.mValue < 0)
-                {
-                    ascending = false;
-                    startIndex = -aa.mValue-1;
-                }
+                int startIndex = aa.mValue >> 1;
+                bool ascending = (aa.mValue & 1) > 0;
                 if (aa.mId > 0)
                 {
                     if (auto res = mParentModule->create_pin_group(aa.mId, aa.mName.toStdString(), {}, PinDirection::none, PinType::none,ascending,startIndex); res.is_ok())
@@ -333,8 +328,7 @@ namespace hal
             }
             case PinActionType::GroupDelete:
             {
-                int v = pgroup->get_start_index();
-                if (!pgroup->is_ascending()) v = -v-1;
+                int v = (pgroup->get_lowest_index() << 1) | (pgroup->is_ascending() ? 1 : 0);
                 u32 id = pgroup->get_id();
                 int ptype = (int) pgroup->get_type();
                 int pdir  = (int) pgroup->get_direction();
@@ -567,13 +561,14 @@ namespace hal
         PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
         if (!pinGroup) return nullptr;
         bool toAscending = ! pinGroup->is_ascending();
+        int val = (pinGroup->get_lowest_index() << 1) | (toAscending ? 1 : 0);
         std::vector<ModulePin*> pins = pinGroup->get_pins();
         QString tempName = QUuid::createUuid().toString();
         QString grpName = QString::fromStdString(pinGroup->get_name());
         int grpRow = pinGroupRow(m, pinGroup);
         static int vid = -9;
 
-        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,toAscending ? 0 : -1);
+        ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,val);
         if (toAscending)
         {
             for (auto it = pins.rbegin(); it != pins.rend(); ++it)
@@ -611,10 +606,8 @@ namespace hal
         : mId(pgroup->get_id()),
           mName(QString::fromStdString(pgroup->get_name())),
           mRow(pinGroupRow(m,pgroup)),
-          mStartIndex(pgroup->get_start_index()),
+          mStartIndex( (pgroup->get_lowest_index() << 1) | (pgroup->is_ascending() ? 1 : 0)),
           mDirection(pgroup->get_direction()),
           mType(pgroup->get_type())
-    {
-        if (!pgroup->is_ascending()) mStartIndex = -mStartIndex-1;
-    }
+    {;}
 }
