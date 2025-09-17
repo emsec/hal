@@ -49,9 +49,9 @@ namespace hal
         mIndex        = data[4].toInt();
     }
 
-    void ModulePinsTreeItem::setDataAtIndex(int index, QVariant &data)
+    void ModulePinsTreeItem::setDataAtColumn(int column, QVariant &data)
     {
-        switch (index)
+        switch (column)
         {
         case 0:
             mPinName = data.toString();
@@ -326,6 +326,8 @@ namespace hal
             mRootItem->appendChild(pinGroupItem);
         }
 
+//        Keep old code for the time being to review whether all cases are covered
+//
 //        for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
 //        {
 //            //ignore empty pingroups
@@ -350,7 +352,7 @@ namespace hal
 
 //            if (pinGroup->size() == 1)
 //            {
-//                pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
+//                pinGroupItem->setDataAtColumn(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
 //                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 //                //since a single-pin pingroup represents the pin itself, take the pinid
 //                pinGroupItem->setAdditionalData(keyId, firstPin->get_id());
