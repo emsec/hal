@@ -40,6 +40,24 @@ namespace hal
                 std::string to_string() const override;
             };
 
+            class GateTypeIndices : public EdgeFeature
+            {
+            public:
+                GateTypeIndices(){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Endpoint* source, const Endpoint* destination) const override;
+                std::string to_string() const override;
+            };
+
+            class PinIndices : public EdgeFeature
+            {
+            public:
+                PinIndices(){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Endpoint* source, const Endpoint* destination) const override;
+                std::string to_string() const override;
+            };
+
             Result<std::vector<FEATURE_TYPE>> build_feature_vec(Context& ctx, const std::vector<const EdgeFeature*>& features, const Endpoint* source, const Endpoint* destination);
 
         }    // namespace edge_feature

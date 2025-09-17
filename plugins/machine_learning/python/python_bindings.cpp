@@ -2452,6 +2452,93 @@ Get a string representation.
 :rtype: str
 )");
 
+        py::class_<machine_learning::edge_feature::PinIndices, RawPtrWrapper<machine_learning::edge_feature::PinIndices>, machine_learning::edge_feature::EdgeFeature> py_pin_indices(py_edge_feature,
+                                                                                                                                                                                      "PinIndices",
+                                                                                                                                                                                      R"(
+)");
+
+        py_pin_indices.def(py::init<>(), R"(
+Construct a PinIndices feature.
+)");
+
+        py_pin_indices.def(
+            "calculate_feature",
+            [](machine_learning::edge_feature::PinIndices& self, machine_learning::Context& ctx, const Endpoint* source, const Endpoint* destination) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, source, destination);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error in PinIndices::calculate_feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("source"),
+            py::arg("destination"),
+            R"(
+:param hal_py.Context ctx: The context.
+:param hal_py.Endpoint source: The source endpoint.
+:param hal_py.Endpoint destination: The destination endpoint.
+:returns: The feature vector or None.
+:rtype: list[hal_py.FEATURE_TYPE] or None
+)");
+
+        py_pin_indices.def("to_string",
+                           &machine_learning::edge_feature::PinIndices::to_string,
+                           R"(
+Get a string representation.
+
+:returns: A string.
+:rtype: str
+)");
+
+        py::class_<machine_learning::edge_feature::GateTypeIndices, RawPtrWrapper<machine_learning::edge_feature::GateTypeIndices>, machine_learning::edge_feature::EdgeFeature> py_gate_type_indices(
+            py_edge_feature,
+            "GateTypeIndices",
+            R"(
+)");
+
+        py_gate_type_indices.def(py::init<>(), R"(
+Construct a GateTypeIndices feature.
+)");
+
+        py_gate_type_indices.def(
+            "calculate_feature",
+            [](machine_learning::edge_feature::GateTypeIndices& self, machine_learning::Context& ctx, const Endpoint* source, const Endpoint* destination) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, source, destination);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error in GateTypeIndices::calculate_feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("source"),
+            py::arg("destination"),
+            R"(
+:param hal_py.Context ctx: The context.
+:param hal_py.Endpoint source: The source endpoint.
+:param hal_py.Endpoint destination: The destination endpoint.
+:returns: The feature vector or None.
+:rtype: list[hal_py.FEATURE_TYPE] or None
+)");
+
+        py_gate_type_indices.def("to_string",
+                                 &machine_learning::edge_feature::GateTypeIndices::to_string,
+                                 R"(
+Get a string representation.
+
+:returns: A string.
+:rtype: str
+)");
+
         py_edge_feature.def(
             "build_feature_vec",
             [](machine_learning::Context& ctx, const std::vector<const machine_learning::edge_feature::EdgeFeature*>& features, const Endpoint* source, const Endpoint* destination)

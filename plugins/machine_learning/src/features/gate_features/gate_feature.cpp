@@ -17,9 +17,12 @@ namespace hal
         {
             Result<std::vector<FEATURE_TYPE>> GateFeature::calculate_feature(Context& ctx, const Gate* gate) const
             {
+                UNUSED(ctx);
+                UNUSED(gate);
+
                 return ERR("The calculation for a single gate has to be implemented by each feature class that does not implement the bulk method.");
             }
-            
+
             Result<std::vector<std::vector<FEATURE_TYPE>>> GateFeature::calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const
             {
                 // Preallocate the feature vectors
@@ -113,5 +116,5 @@ namespace hal
                 return OK(feature_vecs);
             }
         }    // namespace gate_feature
-    }    // namespace machine_learning
+    }        // namespace machine_learning
 }    // namespace hal

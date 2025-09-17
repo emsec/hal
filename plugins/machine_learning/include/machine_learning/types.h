@@ -57,6 +57,27 @@ namespace hal
 
                 m_sequential_gates = netlist->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
                 std::sort(m_sequential_gates.begin(), m_sequential_gates.end(), [](const auto* g_a, const auto* g_b) { return g_a->get_id() < g_b->get_id(); });
+
+                const auto gate_types_unordered                           = netlist->get_gate_library()->get_gate_types();
+                const std::map<std::string, GateType*> gate_types_ordered = {gate_types_unordered.begin(), gate_types_unordered.end()};
+
+                u32 gt_index = 0;
+                for (const auto& [_gt_name, gt] : gate_types_ordered)
+                {
+                    m_gate_type_indices.insert({gt, gt_index});
+                    gt_index++;
+
+                    const auto pins                          = gt->get_pins();
+                    std::vector<const GatePin*> pins_ordered = {pins.begin(), pins.end()};
+                    std::sort(pins_ordered.begin(), pins_ordered.end(), [](const auto& p_a, const auto& p_b) { return p_a->get_name() < p_b->get_name(); });
+
+                    u32 gt_pin_index = 0;
+                    for (const auto& pin : pins_ordered)
+                    {
+                        m_gate_pin_indices[gt].insert({pin, gt_pin_index});
+                        gt_pin_index++;
+                    }
+                }
             };
 
             const Result<NetlistAbstraction*> get_sequential_abstraction();
@@ -74,12 +95,18 @@ namespace hal
             const std::vector<Gate*>& get_gates() const;
             const std::vector<Gate*>& get_sequential_gates() const;
 
+            u32 get_gate_type_index(const GateType* gt) const;
+            u32 get_gate_pin_index(const GateType* gt, const GatePin* gp) const;
+
             const Netlist* nl;
             const u32 num_threads;
 
         private:
             std::vector<Gate*> m_gates;
             std::vector<Gate*> m_sequential_gates;
+
+            std::map<const GateType*, u32> m_gate_type_indices;
+            std::map<const GateType*, std::map<const GatePin*, u32>> m_gate_pin_indices;
 
             std::shared_ptr<NetlistAbstraction> m_original_abstraction{nullptr};
             std::shared_ptr<NetlistAbstraction> m_sequential_abstraction{nullptr};

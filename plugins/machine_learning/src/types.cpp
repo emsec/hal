@@ -642,5 +642,15 @@ namespace hal
             return m_sequential_gates;
         }
 
+        u32 Context::get_gate_type_index(const GateType* gt) const
+        {
+            return m_gate_type_indices.at(gt);
+        }
+
+        u32 Context::get_gate_pin_index(const GateType* gt, const GatePin* gp) const
+        {
+            return m_gate_pin_indices.at(gt).at(gp);
+        }
+
     }    // namespace machine_learning
 }    // namespace hal
