@@ -8,9 +8,9 @@ var dir_d2e4e54da30ebce6aa0f44e5dbbf2c5c =
     [ "gate_pin_tree.h", "gate__pin__tree_8h.html", [
       [ "GatePinTree", "classhal_1_1_gate_pin_tree.html", "classhal_1_1_gate_pin_tree" ]
     ] ],
+    [ "gate_pins_tree_model.h", "gate__pins__tree__model_8h.html", [
+      [ "GatePinsTreeItem", "classhal_1_1_gate_pins_tree_item.html", "classhal_1_1_gate_pins_tree_item" ]
+    ] ],
     [ "lut_table_model.h", "lut__table__model_8h.html", null ],
-    [ "lut_table_widget.h", "lut__table__widget_8h.html", null ],
-    [ "pin_tree_model.h", "pin__tree__model_8h.html", [
-      [ "PinTreeItem", "classhal_1_1_pin_tree_item.html", "classhal_1_1_pin_tree_item" ]
-    ] ]
+    [ "lut_table_widget.h", "lut__table__widget_8h.html", null ]
 ];

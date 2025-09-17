@@ -14,5 +14,5 @@ var classhal_1_1_context_tree_item =
     [ "isDirectory", "classhal_1_1_context_tree_item.html#a1da29bf442c73029718996f65dea9488", null ],
     [ "row", "classhal_1_1_context_tree_item.html#a6b93aa3277befe2f95028ddb02ad0eaa", null ],
     [ "setData", "classhal_1_1_context_tree_item.html#a758f2f586cda3fa32248429fffcf12cd", null ],
-    [ "setDataAtIndex", "classhal_1_1_context_tree_item.html#a89fa1b3d582197f0696763a5135d27f3", null ]
+    [ "setDataAtColumn", "classhal_1_1_context_tree_item.html#ac9efdd77983ae4af6aea9113ced02c15", null ]
 ];

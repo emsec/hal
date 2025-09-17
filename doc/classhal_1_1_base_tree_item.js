@@ -17,7 +17,7 @@ var classhal_1_1_base_tree_item =
     [ "removeChild", "classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122", null ],
     [ "removeChildAtPos", "classhal_1_1_base_tree_item.html#a6c2cffc3bda3bce36ce7ae795252aff6", null ],
     [ "setData", "classhal_1_1_base_tree_item.html#aeaa705372e25642a718cebc1afef3dde", null ],
-    [ "setDataAtIndex", "classhal_1_1_base_tree_item.html#ae1d5d4723997d5cc2c39596e1aa8bf2e", null ],
+    [ "setDataAtColumn", "classhal_1_1_base_tree_item.html#a7088f6498cbef04b31905bdbb4d00f0f", null ],
     [ "setParent", "classhal_1_1_base_tree_item.html#a822d876a5ce069f3c0599ac680283065", null ],
     [ "mChildren", "classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a", null ],
     [ "mParent", "classhal_1_1_base_tree_item.html#a0e4db421623cb5c1d48828b0a5b6583d", null ]

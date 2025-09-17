@@ -50,10 +50,10 @@ var hierarchy =
     ] ],
     [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
       [ "hal::ContextTreeItem", "classhal_1_1_context_tree_item.html", null ],
+      [ "hal::GatePinsTreeItem", "classhal_1_1_gate_pins_tree_item.html", null ],
       [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
+      [ "hal::ModulePinsTreeItem", "classhal_1_1_module_pins_tree_item.html", null ],
       [ "hal::PinItem", "classhal_1_1_pin_item.html", null ],
-      [ "hal::PinTreeItem", "classhal_1_1_pin_tree_item.html", null ],
-      [ "hal::PortTreeItem", "classhal_1_1_port_tree_item.html", null ],
       [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
     ] ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],

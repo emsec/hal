@@ -21,7 +21,7 @@ var classhal_1_1_pin_item =
     [ "getPinTypeAsText", "classhal_1_1_pin_item.html#a088cabd8c181dee6dcab975f00d2e6ad", null ],
     [ "row", "classhal_1_1_pin_item.html#a38149f7f9faeb43fb4796d89b6586b62", null ],
     [ "setData", "classhal_1_1_pin_item.html#a81e107c124ee4e9e10bb08b677523514", null ],
-    [ "setDataAtIndex", "classhal_1_1_pin_item.html#a2f3ae83628527195ebb1764a267cc2b9", null ],
+    [ "setDataAtColumn", "classhal_1_1_pin_item.html#a82eff399afd1a3a9fff149f8500030e5", null ],
     [ "setDirection", "classhal_1_1_pin_item.html#ac87fc7cca98d9db5118f8663cf325832", null ],
     [ "setDirection", "classhal_1_1_pin_item.html#a75d3a12974fdc9fcf9e5b267cb7aa41a", null ],
     [ "setFields", "classhal_1_1_pin_item.html#a069431d8d173526317f85cc49976dfc7", null ],

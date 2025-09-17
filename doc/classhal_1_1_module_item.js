@@ -17,7 +17,7 @@ var classhal_1_1_module_item =
     [ "isToplevelItem", "classhal_1_1_module_item.html#a8edd3b37443b316e260f6e338313be66", null ],
     [ "name", "classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece", null ],
     [ "setData", "classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18", null ],
-    [ "setDataAtIndex", "classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460", null ],
+    [ "setDataAtColumn", "classhal_1_1_module_item.html#aceb3871d3bd45f125262c5e72f7e5576", null ],
     [ "setHighlighted", "classhal_1_1_module_item.html#a412ccb69f5b0198e097ba37b609de924", null ],
     [ "setModuleType", "classhal_1_1_module_item.html#ae574669618b1420e7bd03712a845a502", null ],
     [ "setName", "classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060", null ]

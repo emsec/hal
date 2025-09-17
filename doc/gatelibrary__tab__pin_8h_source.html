@@ -114,71 +114,67 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8h_source.html',
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gatelibrary__tab__interface_8h.html">gatelibrary_tab_interface.h</a>&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="pin__tree__model_8h.html">gui/selection_details_widget/gate_details_widget/pin_tree_model.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;QGridLayout&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;QLabel&gt;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;QTreeView&gt;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="pin__model_8h.html">gui/pin_model/pin_model.h</a>&gt;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_pin_tree_view.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_pin_tree_view.html">PinTreeView</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">/* controll tree navigation using arrow keys</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">    protected:</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">        QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">handleEditNewDone</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_pin_tree_view.html#ad5bd3da5cedb1103c32813e8e10d433b">PinTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    };</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_tab_pin.html">   59</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_gate_library_tab_pin.html">GateLibraryTabPin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_library_tab_interface.html">GateLibraryTabInterface</a></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_gate_library_tab_pin.html#a7f9fb68fcdc240fea99e67e8bd7f5067">GateLibraryTabPin</a>(<span class="keywordtype">bool</span> editable = <span class="keyword">false</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>* <a class="code" href="classhal_1_1_gate_library_tab_pin.html#ace7d9b4014fe724cbffaedb398e39cc4">getTreeView</a>();</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* <a class="code" href="classhal_1_1_gate_library_tab_pin.html#aca10daff0a4ee16e3acfa5a83d405394">getPinModel</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__type_8h.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QGridLayout&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QLabel&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;QTreeView&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="pin__model_8h.html">gui/pin_model/pin_model.h</a>&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_pin_tree_view.html">   38</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_pin_tree_view.html">PinTreeView</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">/* controll tree navigation using arrow keys</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">    protected:</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">        QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">handleEditNewDone</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_pin_tree_view.html#ad5bd3da5cedb1103c32813e8e10d433b">PinTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    };</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_tab_pin.html">   57</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_gate_library_tab_pin.html">GateLibraryTabPin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_library_tab_interface.html">GateLibraryTabInterface</a></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classhal_1_1_gate_library_tab_pin.html#a7f9fb68fcdc240fea99e67e8bd7f5067">GateLibraryTabPin</a>(<span class="keywordtype">bool</span> editable = <span class="keyword">false</span>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>* <a class="code" href="classhal_1_1_gate_library_tab_pin.html#ace7d9b4014fe724cbffaedb398e39cc4">getTreeView</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* <a class="code" href="classhal_1_1_gate_library_tab_pin.html#aca10daff0a4ee16e3acfa5a83d405394">getPinModel</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">void</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">void</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* mPinModel;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="classhal_1_1_pin_tree_view.html">PinTreeView</a>* mTreeView;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* mPinModel;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classhal_1_1_pin_tree_view.html">PinTreeView</a>* mTreeView;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a>* mGridLayout;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a>* mGridLayout;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    };</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_interface_html"><div class="ttname"><a href="classhal_1_1_gate_library_tab_interface.html">hal::GateLibraryTabInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__interface_8h_source.html#l00038">gatelibrary_tab_interface.h:39</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html">hal::GateLibraryTabPin</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00059">gatelibrary_tab_pin.h:60</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html">hal::GateLibraryTabPin</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00057">gatelibrary_tab_pin.h:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html_a7f9fb68fcdc240fea99e67e8bd7f5067"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html#a7f9fb68fcdc240fea99e67e8bd7f5067">hal::GateLibraryTabPin::GateLibraryTabPin</a></div><div class="ttdeci">GateLibraryTabPin(bool editable=false, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00054">gatelibrary_tab_pin.cpp:54</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html_aca10daff0a4ee16e3acfa5a83d405394"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html#aca10daff0a4ee16e3acfa5a83d405394">hal::GateLibraryTabPin::getPinModel</a></div><div class="ttdeci">PinModel * getPinModel()</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00094">gatelibrary_tab_pin.cpp:94</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html_ace7d9b4014fe724cbffaedb398e39cc4"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html#ace7d9b4014fe724cbffaedb398e39cc4">hal::GateLibraryTabPin::getTreeView</a></div><div class="ttdeci">QTreeView * getTreeView()</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00089">gatelibrary_tab_pin.cpp:89</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00051">gate_type.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_model_html"><div class="ttname"><a href="classhal_1_1_pin_model.html">hal::PinModel</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8h_source.html#l00049">pin_model.h:50</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_tree_view_html"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html">hal::PinTreeView</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00040">gatelibrary_tab_pin.h:41</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_tree_view_html"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html">hal::PinTreeView</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00038">gatelibrary_tab_pin.h:39</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_tree_view_html_a15ac3ef83af83e4868c663e99c1cb5a7"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">hal::PinTreeView::handleEditNewDone</a></div><div class="ttdeci">void handleEditNewDone(const QModelIndex &amp;index)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00040">gatelibrary_tab_pin.cpp:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_tree_view_html_ad5bd3da5cedb1103c32813e8e10d433b"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html#ad5bd3da5cedb1103c32813e8e10d433b">hal::PinTreeView::PinTreeView</a></div><div class="ttdeci">PinTreeView(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00013">gatelibrary_tab_pin.cpp:13</a></div></div>
-<div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__type_8h_html"><div class="ttname"><a href="gate__type_8h.html">gate_type.h</a></div></div>
 <div class="ttc" id="agatelibrary__tab__interface_8h_html"><div class="ttname"><a href="gatelibrary__tab__interface_8h.html">gatelibrary_tab_interface.h</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
 <div class="ttc" id="apin__model_8h_html"><div class="ttname"><a href="pin__model_8h.html">pin_model.h</a></div></div>
-<div class="ttc" id="apin__tree__model_8h_html"><div class="ttname"><a href="pin__tree__model_8h.html">pin_tree_model.h</a></div></div>
 <div class="ttc" id="aqgridlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a></div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -193,7 +189,7 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8h_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_4252469b3ac735c304362e15e3ea1050.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="dir_773af700bb5ca3bdc8d963527e2a9885.html">gatelibrary_tab_widgets</a></li><li class="navelem"><a class="el" href="gatelibrary__tab__pin_8h.html">gatelibrary_tab_pin.h</a></li>
-    <li class="footer">Generated on Tue Sep 9 2025 12:55:08 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Sep 17 2025 16:53:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

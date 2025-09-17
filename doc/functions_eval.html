@@ -277,8 +277,8 @@ $(document).ready(function(){initNavTree('functions_eval.html',''); initResizabl
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
 </li>
 <li>Group
-: <a class="el" href="classhal_1_1_pin_tree_item.html#a1059ef95849a0782e0e4b443f2256302ab09cae61892325750ed0c93b51525e9c">hal::PinTreeItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#a9f77814ff4cea9af56fdc1a88ee45e42ab74df6b0a7627f968b5d123cc65ec542">hal::PortTreeItem</a>
+: <a class="el" href="classhal_1_1_gate_pins_tree_item.html#afd1c930c8f5350d067b5597c379db722aeb07d6212dc240d1316a7dee07842240">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109ba67a4ad0c8b1c1c77779ca725976f1c63">hal::ModulePinsTreeItem</a>
 </li>
 <li>GroupCreate
 : <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a4b1a3ecd322c77048742296111066048">hal::PinActionType</a>
@@ -425,11 +425,11 @@ $(document).ready(function(){initNavTree('functions_eval.html',''); initResizabl
 : <a class="el" href="classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17ab55e5ec7f9b9af33c231ae558d6673a0">hal::ImportProjectDialog</a>
 </li>
 <li>None
-: <a class="el" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fdad25025ec34c6f41952edc565e6458f9b">hal::GraphicsScene</a>
+: <a class="el" href="classhal_1_1_gate_pins_tree_item.html#afd1c930c8f5350d067b5597c379db722adeb4cbb36c1311fd4d55d7be8093625c">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_graphics_scene.html#a389c6d75b6d7acbb83523ba1a62637fdad25025ec34c6f41952edc565e6458f9b">hal::GraphicsScene</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109ba4af7b4dd770332e19e139f3d6076b670">hal::ModulePinsTreeItem</a>
 , <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">hal::Node</a>
 , <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a10140f5f339ad5ac8b4ba7f524107a4c">hal::PinActionType</a>
-, <a class="el" href="classhal_1_1_pin_tree_item.html#a1059ef95849a0782e0e4b443f2256302aae2e29e74adcfde7ff2f094c1ad769de">hal::PinTreeItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#a9f77814ff4cea9af56fdc1a88ee45e42a00b97c961f1318c622a04c23596ee4aa">hal::PortTreeItem</a>
 </li>
 <li>NONE
 : <a class="el" href="classhal_1_1_project_manager.html#a4149a3813ef19d7236afad54ec4469bfa3bf233b90a22e289c515af9c8dcd2032">hal::ProjectManager</a>
@@ -494,8 +494,8 @@ $(document).ready(function(){initNavTree('functions_eval.html',''); initResizabl
 </li>
 <li>Pin
 : <a class="el" href="classhal_1_1_gate_library_wizard.html#afc5ddfbb681daf58d7999f9173e62777ab86c974dbe73232a97a495f639e4cc4a">hal::GateLibraryWizard</a>
-, <a class="el" href="classhal_1_1_pin_tree_item.html#a1059ef95849a0782e0e4b443f2256302aae895f33c55e01a4852aa44288b3d9ae">hal::PinTreeItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#a9f77814ff4cea9af56fdc1a88ee45e42abe2a0c0969a82e460232ca86d0167c76">hal::PortTreeItem</a>
+, <a class="el" href="classhal_1_1_gate_pins_tree_item.html#afd1c930c8f5350d067b5597c379db722afbdf92228cf39b54e042002b097c6017">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109ba1b665e897778a34a607247a864db7918">hal::ModulePinsTreeItem</a>
 </li>
 <li>PinAsignToGroup
 : <a class="el" href="classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a173dce598f1790da8792f87bdb1d66d8">hal::PinActionType</a>
@@ -671,7 +671,7 @@ $(document).ready(function(){initNavTree('functions_eval.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2025 12:55:15 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Sep 17 2025 16:53:56 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

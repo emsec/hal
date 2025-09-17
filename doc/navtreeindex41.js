@@ -1,16 +1,5 @@
 var NAVTREEINDEX41 =
 {
-"split__by__successor__predecessor__known__groups_8h.html":[7,0,1,1,0,0,4,0,8],
-"split__by__successor__predecessor__known__groups_8h.html#a0376b9811cb1ceb42f83938dbfc18112":[7,0,1,1,0,0,4,0,8,0],
-"split__by__successor__predecessor__known__groups_8h_source.html":[7,0,1,1,0,0,4,0,8],
-"split__by__successors__predecessors_8cpp.html":[7,0,1,1,3,4,0,9],
-"split__by__successors__predecessors_8cpp.html#aaaccc4618b6713b6f87282dd0da84d25":[7,0,1,1,3,4,0,9,0],
-"split__by__successors__predecessors_8cpp_source.html":[7,0,1,1,3,4,0,9],
-"split__by__successors__predecessors_8h.html":[7,0,1,1,0,0,4,0,9],
-"split__by__successors__predecessors_8h.html#aaaccc4618b6713b6f87282dd0da84d25":[7,0,1,1,0,0,4,0,9,0],
-"split__by__successors__predecessors_8h_source.html":[7,0,1,1,0,0,4,0,9],
-"splitter_8cpp.html":[7,0,1,3,2,44,0],
-"splitter_8cpp_source.html":[7,0,1,3,2,44,0],
 "splitter_8h.html":[7,0,1,3,0,0,47,0],
 "splitter_8h_source.html":[7,0,1,3,0,0,47,0],
 "splitter__anchor_8cpp.html":[7,0,1,3,2,10,4],
@@ -249,5 +238,16 @@ var NAVTREEINDEX41 =
 "struct_hop___man__t__.html#a301df7539ed8e2ebf995c4b10e37c5fa":[6,0,5,8],
 "struct_hop___man__t__.html#a3dca97d3d05e978a296e72f4a65a19c4":[6,0,5,14],
 "struct_hop___man__t__.html#a5de81756a360556c6b5898c9b6dd29a9":[6,0,5,2],
-"struct_hop___man__t__.html#a6d8d84d0011fe23ac465a462d7308811":[6,0,5,10]
+"struct_hop___man__t__.html#a6d8d84d0011fe23ac465a462d7308811":[6,0,5,10],
+"struct_hop___man__t__.html#a79b9e5b90414fbdad6431123abaaf0b0":[6,0,5,11],
+"struct_hop___man__t__.html#a7ceec0775f160146e1d08cff4c3e0f38":[6,0,5,9],
+"struct_hop___man__t__.html#a87cb31c6a9a5ca6ad19d516f6ee6b4cb":[6,0,5,3],
+"struct_hop___man__t__.html#a88ffb749bb7beec49eda0467340decc9":[6,0,5,4],
+"struct_hop___man__t__.html#ab4079cb03f6c0240a6e10ff8be2b3791":[6,0,5,12],
+"struct_hop___man__t__.html#ac8660c826ca93bf79e864132a105473c":[6,0,5,18],
+"struct_hop___man__t__.html#ad0373486d82985bb5fd3f348e7b11bae":[6,0,5,5],
+"struct_hop___man__t__.html#ad0f4996f0624f878541e2291d7fddaec":[6,0,5,6],
+"struct_hop___man__t__.html#ae126b9a36f062c940ad7c85d2ae383eb":[6,0,5,7],
+"struct_hop___man__t__.html#af124f1174516cc7c14734eb7e45345b3":[6,0,5,15],
+"struct_hop___man__t__.html#af6c5f2dfd561ce7de4e3a304dc5dbe1e":[6,0,5,17]
 };

@@ -748,6 +748,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classhal_1_1_context_tree_item.html#a758f2f586cda3fa32248429fffcf12cd">hal::ContextTreeItem</a>
 , <a class="el" href="classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48">hal::DataTableModel</a>
 , <a class="el" href="classhal_1_1_flip_flop_wizard_page.html#ae6e390d45b3793b9064c9e8d7ec57ea6">hal::FlipFlopWizardPage</a>
+, <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a36a0772320f1a6527736f1aba17b5d0c">hal::GatePinsTreeItem</a>
 , <a class="el" href="classhal_1_1_general_info_wizard_page.html#afe9e07730ed1646c3cf854e0a1a4d39d">hal::GeneralInfoWizardPage</a>
 , <a class="el" href="classhal_1_1_groupings_of_item_model.html#aaf7d3d21aba2ab75706509b948106b45">hal::GroupingsOfItemModel</a>
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a69161eb9824a78e3ace0f25bb7f80bbd">hal::GroupingTableModel</a>
@@ -756,22 +757,21 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classhal_1_1_l_u_t_table_model.html#a02c45ce59047b30c38f5bbc002a7dbaf">hal::LUTTableModel</a>
 , <a class="el" href="classhal_1_1_l_u_t_wizard_page.html#a8a712a9621d10a427db7009ad8783b00">hal::LUTWizardPage</a>
 , <a class="el" href="classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18">hal::ModuleItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#abdb41067c2f24d7c1611ab512d0c158a">hal::ModulePinsTreeItem</a>
 , <a class="el" href="classhal_1_1_pin_item.html#a81e107c124ee4e9e10bb08b677523514">hal::PinItem</a>
-, <a class="el" href="classhal_1_1_pin_tree_item.html#ac3c467fb4e1211139c4102743591a353">hal::PinTreeItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#a727f37e8122bb5cd8ba2d0b5f0222ac7">hal::PortTreeItem</a>
 , <a class="el" href="classhal_1_1_r_a_m_port_wizard_page.html#adf444d4eabb8a82dd578558defd4d476">hal::RAMPortWizardPage</a>
 , <a class="el" href="classhal_1_1_r_a_m_wizard_page.html#af8a8eeb3cbde03474cf1bbbea549826c">hal::RAMWizardPage</a>
 , <a class="el" href="classhal_1_1_root_tree_item.html#ac6e354b8b9d650ae73c7c22657782260">hal::RootTreeItem</a>
 , <a class="el" href="classhal_1_1_state_wizard_page.html#a8230e67c22c07023b681b64ab45e9472">hal::StateWizardPage</a>
 </li>
-<li>setDataAtIndex()
-: <a class="el" href="classhal_1_1_base_tree_item.html#ae1d5d4723997d5cc2c39596e1aa8bf2e">hal::BaseTreeItem</a>
-, <a class="el" href="classhal_1_1_context_tree_item.html#a89fa1b3d582197f0696763a5135d27f3">hal::ContextTreeItem</a>
-, <a class="el" href="classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460">hal::ModuleItem</a>
-, <a class="el" href="classhal_1_1_pin_item.html#a2f3ae83628527195ebb1764a267cc2b9">hal::PinItem</a>
-, <a class="el" href="classhal_1_1_pin_tree_item.html#a5c777ded502e03c0f4ee4dfc0e97b4e8">hal::PinTreeItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#a7104f6a890b5498b2952fbc37693a9ad">hal::PortTreeItem</a>
-, <a class="el" href="classhal_1_1_root_tree_item.html#a5849920e4403331043c0e8b6675e6660">hal::RootTreeItem</a>
+<li>setDataAtColumn()
+: <a class="el" href="classhal_1_1_base_tree_item.html#a7088f6498cbef04b31905bdbb4d00f0f">hal::BaseTreeItem</a>
+, <a class="el" href="classhal_1_1_context_tree_item.html#ac9efdd77983ae4af6aea9113ced02c15">hal::ContextTreeItem</a>
+, <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a2e5ef973db89172769fd6a8830251f2e">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_module_item.html#aceb3871d3bd45f125262c5e72f7e5576">hal::ModuleItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#ac1fc4ed237b24ddec9d803e5ad445e52">hal::ModulePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_pin_item.html#a82eff399afd1a3a9fff149f8500030e5">hal::PinItem</a>
+, <a class="el" href="classhal_1_1_root_tree_item.html#a431ce51e01e7397db6657e07630d728d">hal::RootTreeItem</a>
 </li>
 <li>setDebugColor()
 : <a class="el" href="classhal_1_1_logger_qss_adapter.html#a343a2174a20abe931b224b9a92ff310c">hal::LoggerQssAdapter</a>
@@ -1099,7 +1099,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classhal_1_1_pin_item.html#a34893b26c2c081b3bba32b7713db8bf4">hal::PinItem</a>
 </li>
 <li>setIndex()
-: <a class="el" href="classhal_1_1_port_tree_item.html#a1e9a6477ccac73e173b36e45027810ae">hal::PortTreeItem</a>
+: <a class="el" href="classhal_1_1_module_pins_tree_item.html#a3bbc4711bb09d1179db1f5d4abb926b7">hal::ModulePinsTreeItem</a>
 </li>
 <li>setInfoColor()
 : <a class="el" href="classhal_1_1_logger_qss_adapter.html#a3fbc584618c7ca589bd079e575bfe78e">hal::LoggerQssAdapter</a>
@@ -1139,8 +1139,8 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_combobox_dialog.html#acde4390baa043a860bf46d8a16cfffee">hal::ComboboxDialog</a>
 </li>
 <li>setItemType()
-: <a class="el" href="classhal_1_1_pin_item.html#a88dd46ba1766e943f3675105d1cce63e">hal::PinItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#ae46b870ced7e64c1758511c0cb0ca4c4">hal::PortTreeItem</a>
+: <a class="el" href="classhal_1_1_module_pins_tree_item.html#a7278c4c81f48ba8135ff3aabf7f7b607">hal::ModulePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_pin_item.html#a88dd46ba1766e943f3675105d1cce63e">hal::PinItem</a>
 </li>
 <li>setJson()
 : <a class="el" href="classhal_1_1_key_value_table.html#a0b19fc0cd3aa8a2ff06e29fa888653c9">hal::KeyValueTable</a>
@@ -1259,8 +1259,8 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classhal_1_1_grouping_table_entry.html#ae5d68c30467306fbc0e948e34eb04402">hal::GroupingTableEntry</a>
 , <a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a77bea69a913f9e10c13a35cf0b223a77">hal::GuiApiClasses::View</a>
 , <a class="el" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">hal::ModuleItem</a>
+, <a class="el" href="classhal_1_1_module_pins_tree_item.html#a6febfb1cf2f06399ebaca61a41fb80a7">hal::ModulePinsTreeItem</a>
 , <a class="el" href="classhal_1_1_pin_item.html#a59225eb586543a00432c7a85f63bf590">hal::PinItem</a>
-, <a class="el" href="classhal_1_1_port_tree_item.html#acf3bbee11bd3f320b547ae2511cbea21">hal::PortTreeItem</a>
 </li>
 <li>setNeGateIconPath()
 : <a class="el" href="classhal_1_1_main_window.html#a82474870eb5ee63f80d24331e58d8e9f">hal::MainWindow</a>
@@ -1286,7 +1286,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a389ae6a8b275e8c38502fcd8324f455a">hal::GraphicsQssAdapter</a>
 </li>
 <li>setNetIds()
-: <a class="el" href="classhal_1_1_pin_tree_item.html#a3209ff81d0beb7e928843943431f0e2d">hal::PinTreeItem</a>
+: <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a7a0c7cfcb06e90d425e1a8820f365a60">hal::GatePinsTreeItem</a>
 </li>
 <li>setNetSelectionColor()
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a3f99f5c0357302eccc361324447c8fb7">hal::GraphicsQssAdapter</a>
@@ -1402,10 +1402,10 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_net_layout_junction_net.html#a26f7903c0cb811aac2ad63d418f26cba">hal::NetLayoutJunctionNet</a>
 </li>
 <li>setPinDirection()
-: <a class="el" href="classhal_1_1_port_tree_item.html#a1e54653149972545fb38e62ddd9576ad">hal::PortTreeItem</a>
+: <a class="el" href="classhal_1_1_module_pins_tree_item.html#a7df331edba34137a5e099b6269dda533">hal::ModulePinsTreeItem</a>
 </li>
 <li>setPinType()
-: <a class="el" href="classhal_1_1_port_tree_item.html#a2ad90241695dcba2581af8889bab78d7">hal::PortTreeItem</a>
+: <a class="el" href="classhal_1_1_module_pins_tree_item.html#a25488c627a54992bb20b375381a4ae90">hal::ModulePinsTreeItem</a>
 </li>
 <li>setPlaced()
 : <a class="el" href="classhal_1_1_net_layout_junction_net.html#a4c03053e37c743943d6cbeb50f2709e1">hal::NetLayoutJunctionNet</a>
@@ -1739,8 +1739,8 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_logger_qss_adapter.html#a04a6744513f38aa566af6843e6b47e67">hal::LoggerQssAdapter</a>
 </li>
 <li>setType()
-: <a class="el" href="classhal_1_1_pin_item.html#a681bfefe718a82344d003d5a43a5734b">hal::PinItem</a>
-, <a class="el" href="classhal_1_1_pin_tree_item.html#aba20d9bfcbdb72d66beaaa729c4829a8">hal::PinTreeItem</a>
+: <a class="el" href="classhal_1_1_gate_pins_tree_item.html#a5b627f6b31f89e929f523feae1963094">hal::GatePinsTreeItem</a>
+, <a class="el" href="classhal_1_1_pin_item.html#a681bfefe718a82344d003d5a43a5734b">hal::PinItem</a>
 </li>
 <li>setUndoIconPath()
 : <a class="el" href="classhal_1_1_main_window.html#a8ec86ce0e0f70b0530e959a2d35e6323">hal::MainWindow</a>
@@ -1756,7 +1756,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 </li>
 <li>setup()
 : <a class="el" href="classhal_1_1_file_actions.html#a3859b500a0fa4af8306558ed503de5f0">hal::FileActions</a>
-, <a class="el" href="classhal_1_1_graph_navigation_widget.html#a04fda6f124caad2f4de7de28346228c8">hal::GraphNavigationWidget</a>
+, <a class="el" href="classhal_1_1_graph_navigation_widget.html#ac45afc7eb5bbd2b73533ac5127c5bcf9">hal::GraphNavigationWidget</a>
 </li>
 <li>SetUp()
 : <a class="el" href="classhal_1_1_h_g_l_parser_test.html#a477f0ec338eb9d072a8deb1f36782187">hal::HGLParserTest</a>
@@ -2272,7 +2272,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 9 2025 12:55:15 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Sep 17 2025 16:53:56 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

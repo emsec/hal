@@ -1,12 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classhal_1_1_combobox_dialog.html#aeb5f109ece8401822ff8101102d4f113":[6,0,0,191,11],
-"classhal_1_1_combobox_dialog.html#aee0a169d0a55f3ce4069791d702b8e7a":[6,0,0,191,8],
-"classhal_1_1_combobox_dialog.html#aef5a01748be0256a86b6192c6be087e0":[6,0,0,191,5],
-"classhal_1_1_comment_color_picker.html":[6,0,0,29],
-"classhal_1_1_comment_color_picker.html#a23fa8983fe70c13c6079091d12cb9e47":[6,0,0,29,1],
-"classhal_1_1_comment_color_picker.html#ab368cb5b1eb89cf385a9f478a2d9568c":[6,0,0,29,3],
-"classhal_1_1_comment_color_picker.html#ae90ca7b1d9680525b5b41ed4c53e608d":[6,0,0,29,2],
 "classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8":[6,0,0,29,0],
 "classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8a51e6cd92b6c45f9affdc158ecca2b8b8":[6,0,0,29,0,2],
 "classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8a7a1920d61156abc05a60135aefe8bc67":[6,0,0,29,0,0],
@@ -249,5 +242,12 @@ var NAVTREEINDEX3 =
 "classhal_1_1_context_manager_widget.html#abfcaa5b5894c47e93512cadc39b4aed0":[4,0,7,0,0,39],
 "classhal_1_1_context_manager_widget.html#ac34c10cff49a8d665b5bb9ad57721358":[4,0,7,0,0,20],
 "classhal_1_1_context_manager_widget.html#ac9131de65378f64c8be9119168a9e974":[4,0,7,0,0,27],
-"classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024":[4,0,7,0,0,41]
+"classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024":[4,0,7,0,0,41],
+"classhal_1_1_context_manager_widget.html#ad458cd90596e426b2753b31187ad68fc":[4,0,7,0,0,46],
+"classhal_1_1_context_manager_widget.html#ad5de3693a4678c2b3f981d7f4e266f74":[4,0,7,0,0,24],
+"classhal_1_1_context_manager_widget.html#ad697005c27e0e8de830815e20779dbc0":[4,0,7,0,0,42],
+"classhal_1_1_context_manager_widget.html#ad7ee2f2e138cb106acd738a891c6e954":[4,0,7,0,0,52],
+"classhal_1_1_context_manager_widget.html#ad9f49e537206c90bea7cfe4a6d223db4":[4,0,7,0,0,13],
+"classhal_1_1_context_manager_widget.html#ade2f546e541b5095dd8e317922c007a0":[4,0,7,0,0,6],
+"classhal_1_1_context_manager_widget.html#ade979819a43b9e51d41aa0286495cca7":[4,0,7,0,0,23]
 };

@@ -1,9 +1,9 @@
 <map id="hal::BaseTreeItem" name="hal::BaseTreeItem">
-<area shape="rect" id="node1" title="(Future) Base class for all tree models related to the details widget." alt="" coords="461,5,607,171"/>
-<area shape="rect" id="node2" href="$classhal_1_1_context_tree_item.html" title=" " alt="" coords="5,219,164,369"/>
-<area shape="rect" id="node3" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="188,219,344,369"/>
-<area shape="rect" id="node4" href="$classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="368,219,524,369"/>
-<area shape="rect" id="node5" href="$classhal_1_1_pin_tree_item.html" title=" " alt="" coords="548,219,696,369"/>
-<area shape="rect" id="node6" href="$classhal_1_1_port_tree_item.html" title=" " alt="" coords="720,219,868,369"/>
-<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="892,219,1048,369"/>
+<area shape="rect" id="node1" title="(Future) Base class for all tree models related to the details widget." alt="" coords="488,5,635,171"/>
+<area shape="rect" id="node2" href="$classhal_1_1_context_tree_item.html" title=" " alt="" coords="5,219,168,369"/>
+<area shape="rect" id="node3" href="$classhal_1_1_gate_pins_tree_item.html" title=" " alt="" coords="192,219,357,369"/>
+<area shape="rect" id="node4" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="381,219,544,369"/>
+<area shape="rect" id="node5" href="$classhal_1_1_module_pins_tree_item.html" title=" " alt="" coords="569,219,751,369"/>
+<area shape="rect" id="node6" href="$classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="776,219,939,369"/>
+<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="963,219,1125,369"/>
 </map>

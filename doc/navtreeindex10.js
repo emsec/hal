@@ -1,5 +1,14 @@
 var NAVTREEINDEX10 =
 {
+"classhal_1_1_grouping_manager_widget.html#a9b65007000880a6084c1c5d0a45f58f1":[4,0,7,2,2,22],
+"classhal_1_1_grouping_manager_widget.html#aa85690118217c20a6d9b0db28c709af4":[4,0,7,2,2,71],
+"classhal_1_1_grouping_manager_widget.html#aa9ed2ca35ee8afb1d0e41cb8a0720e4d":[4,0,7,2,2,37],
+"classhal_1_1_grouping_manager_widget.html#aae28563e5626e3e9cf6f9b86f61e88cd":[4,0,7,2,2,19],
+"classhal_1_1_grouping_manager_widget.html#ab82b0180b54fe9ef46cbaa91fdbac87c":[4,0,7,2,2,65],
+"classhal_1_1_grouping_manager_widget.html#ab925e6c87c337bb07390cc41a9f72dc1":[4,0,7,2,2,41],
+"classhal_1_1_grouping_manager_widget.html#ad50eb84af35d1cdb539bc9bc9f44aab1":[4,0,7,2,2,32],
+"classhal_1_1_grouping_manager_widget.html#ad5946591c2622561936395bf59ec55a0":[4,0,7,2,2,57],
+"classhal_1_1_grouping_manager_widget.html#ad8e81acbef2d4be7bb06540c5ded97d2":[4,0,7,2,2,67],
 "classhal_1_1_grouping_manager_widget.html#ade75c06f3f7e2a3c01282376c6fc4a38":[4,0,7,2,2,49],
 "classhal_1_1_grouping_manager_widget.html#adecd36035cf3a093196b47871c462775":[4,0,7,2,2,17],
 "classhal_1_1_grouping_manager_widget.html#ae42fe7b136c08c79566b0ce59b1a3b79":[4,0,7,2,2,45],
@@ -240,14 +249,5 @@ var NAVTREEINDEX10 =
 "classhal_1_1_gui_plugin_manager.html#acbdfccb300509b745e4b7c391198927e":[6,0,0,246,6],
 "classhal_1_1_gui_plugin_manager.html#acedae3ffd2b47c669703fb82bee40e54":[6,0,0,246,43],
 "classhal_1_1_gui_plugin_manager.html#adf7eee7b729d423e616373674396472a":[6,0,0,246,30],
-"classhal_1_1_gui_plugin_manager.html#adff7e5f42132b436599a16c2fa404b60":[6,0,0,246,35],
-"classhal_1_1_gui_plugin_manager.html#ae17fb2424826db135d1623fda854b76f":[6,0,0,246,21],
-"classhal_1_1_gui_plugin_manager.html#ae53e56945788e5a950b6ccd5059110c3":[6,0,0,246,37],
-"classhal_1_1_gui_plugin_manager.html#aeb9e1565e15e6fdc78321e3b0ca46230":[6,0,0,246,29],
-"classhal_1_1_gui_plugin_manager.html#af28ec6aca8e1ccbfa3061be946ba04f4":[6,0,0,246,7],
-"classhal_1_1_gui_plugin_manager.html#af3f505b2cbffe82feeeea83e9217aaab":[6,0,0,246,33],
-"classhal_1_1_gui_plugin_table.html":[6,0,0,244],
-"classhal_1_1_gui_plugin_table.html#a0f9ce6bec0f82edc49d3e56cbb5ea488":[6,0,0,244,5],
-"classhal_1_1_gui_plugin_table.html#a1240edccf31a2aaf98116ce021c18d3b":[6,0,0,244,15],
-"classhal_1_1_gui_plugin_table.html#a17003723a4eb28d969cb72e8a8161845":[6,0,0,244,13]
+"classhal_1_1_gui_plugin_manager.html#adff7e5f42132b436599a16c2fa404b60":[6,0,0,246,35]
 };
