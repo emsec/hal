@@ -16,9 +16,10 @@ All notable changes to this project will be documented in this file.
 
 * pin groups
   * added getter for lowest and highest index of pin group
-  * added column for pin index in pin tree shown in selection details
-  * added context menu entry to toggle between ascending and descending
-  * changed drag&drop behavior, allowing to drop pin on pin when ordering
+  * added column for pin index in GUI module pin tree
+  * added GUI module pin tree context menu entry to toggle between ascending and descending
+  * fixed GUI undo function for group delete
+  * changed GUI module pin tree drag'n drop behavior, allow drop pin(-group) on pin
    
 * fixed availability of "save as" so that does not required modifications to be enabaled
 * added feature to unzip and open hal project by dropping zipped file on welcome screen
