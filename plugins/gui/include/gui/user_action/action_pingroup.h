@@ -46,14 +46,6 @@ namespace hal
         static bool useExistingPin(Type tp);
     };
 
-    int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
-
-    int pinIndex2Row(const ModulePin* pin, int index);
-
-    int pinRow2Index(const ModulePin* pin, int row);
-
-    QString generateGroupName(const Module* mod, const ModulePin* pin);
-
     void dumpPingroups(Module* m = nullptr);
     /**
      * @ingroup user_action
@@ -66,8 +58,7 @@ namespace hal
      *                   negative ID: call constructor without ID, however,
      *                   ID will be used internally for subsequent commands related to crated group
      *     name     : name of group
-     *     value    : start index, assume ascending
-     *                   negative value: descending order starting with (-value-1)
+     *     value    : start index * 2, LSB : 0=descending 1=ascending
      *
      * GroupDelete
      *     ID       : ID of group to delete
@@ -135,6 +126,7 @@ namespace hal
 
         QHash<int,PinGroup<ModulePin>*> mPinGroups;
         QList<AtomicAction> mPinActions;
+        QList<QList<AtomicAction> > mTempUndoActions;
         Module* mParentModule;
         QMap<int,GroupRestore> mGroupRestore;
         QSet<u32> mPinsMoved;
@@ -144,8 +136,7 @@ namespace hal
         PinGroup<ModulePin>* getGroup(int grpId) const;
         void prepareUndoAction();
         void finalizeUndoAction();
-        void addUndoAction(PinActionType::Type tp, int id = 0, const QString& name=QString(), int value=0);
-        static int pinGroupRow(Module* m, PinGroup<ModulePin>* pgroup);
+        static int pinGroupRow(const Module *m, PinGroup<ModulePin>* pgroup);
     public:
         ActionPingroup(PinActionType::Type tp = PinActionType::None, int id = 0, const QString& name=QString(), int value=0);
         ActionPingroup(const QList<AtomicAction>& aaList);
@@ -161,6 +152,13 @@ namespace hal
         static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId, int grpRow = -1);
         static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
         static ActionPingroup* deletePinGroup(const Module* m, u32 grpId);
+        static ActionPingroup* toggleAscendingGroup(const Module* m, u32 grpId);
+        static ActionPingroup* changePinGroupType(const Module* m, u32 grpId, int ptype);
+
+        static int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
+        static int pinIndex2Row(const ModulePin* pin, int index);
+        static int pinRow2Index(const ModulePin* pin, int row);
+        static QString generateGroupName(const Module* mod, const ModulePin* pin);
     };
 
     /**

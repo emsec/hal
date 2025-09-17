@@ -151,30 +151,69 @@ namespace hal
         )");
 
         py_gate_pin_group.def_property_readonly("ascending", &PinGroup<GatePin>::is_ascending, R"(
-            ``True`` if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), ``False`` if it is descending (from n-1 to 0).
+            ``True`` if the pin order of a pin group comprising n pins is ascending, e.g., from index ``0`` to ``n-1``, ``False`` otherwise.
 
             :type: bool
         )");
 
         py_gate_pin_group.def("is_ascending", &PinGroup<GatePin>::is_ascending, R"(
-            Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).
+            Check whether the pin order of a pin group comprising n pins is ascending, e.g., from index ``0`` to ``n-1``.
 
             :returns: ``True`` for ascending bit order, ``False`` otherwise.
             :rtype: bool
         )");
 
+        py_gate_pin_group.def_property_readonly("descending", &PinGroup<GatePin>::is_descending, R"(
+            ``True`` if the pin order of a pin group comprising n pins is descending, e.g., from index ``n-1`` to ``0``, ``False`` otherwise.
+
+            :type: bool
+        )");
+
+        py_gate_pin_group.def("is_descending", &PinGroup<GatePin>::is_descending, R"(
+            Check whether the pin order of a pin group comprising n pins is descending, e.g., from index ``n-1`` to ``0``.
+
+            :returns: ``True`` for descending bit order, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_pin_group.def_property_readonly("lowest_index", &PinGroup<GatePin>::get_lowest_index, R"(
+            The numerically lowest index of the pin group.
+
+            :type: int
+        )");
+
+        py_gate_pin_group.def("get_lowest_index", &PinGroup<GatePin>::get_lowest_index, R"(
+            Get the numerically lowest index of the pin group.
+
+            :returns: The lowest index. 
+            :rtype: int
+        )");
+
+        py_gate_pin_group.def_property_readonly("highest_index", &PinGroup<GatePin>::get_highest_index, R"(
+            The numerically highest index of the pin group.
+
+            :type: int
+        )");
+
+        py_gate_pin_group.def("get_highest_index", &PinGroup<GatePin>::get_highest_index, R"(
+            Get the numerically highest index of the pin group.
+
+            :returns: The highest index. 
+            :rtype: int
+        )");
+
         py_gate_pin_group.def_property_readonly("start_index", &PinGroup<GatePin>::get_start_index, R"(
             The start index of the pin group.
-            Commonly, pin groups start at index 0, but this may not always be the case.
-            Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.
+            For ascending pin groups, this index equals the lowest index of the pin group.
+            For descending pin groups, it is equal to the highest index of the pin group.
 
             :type: int
         )");
 
         py_gate_pin_group.def("get_start_index", &PinGroup<GatePin>::get_start_index, R"(
             Get the start index of the pin group.
-            Commonly, pin groups start at index 0, but this may not always be the case.
-            Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.
+            For ascending pin groups, this index equals the lowest index of the pin group.
+            For descending pin groups, it is equal to the highest index of the pin group.
 
             :returns: The start index. 
             :rtype: int

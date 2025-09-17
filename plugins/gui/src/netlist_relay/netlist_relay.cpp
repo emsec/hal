@@ -2,10 +2,8 @@
 
 #include "gui/file_manager/file_manager.h"
 #include "gui/gui_globals.h"
-#include "gui/gui_utils/graphics.h"
 #include "gui/gui_utils/netlist.h"
 #include "gui/module_model/module_item.h"
-#include "gui/module_model/module_model.h"
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
@@ -22,7 +20,6 @@
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/utilities/log.h"
 
 #include <QApplication>
 #include <QColorDialog>
@@ -567,6 +564,19 @@ namespace hal
                  //< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
                 PinEvent pev = (PinEvent) (associated_data&0xF);
                 u32 id = (associated_data >> 4);
+
+                /* Dump pin event for debugging
+                std::cerr << "Pin Event <" << enum_to_string<PinEvent>(pev) << "> ID=" << id << "\n";
+                for (PinGroup<ModulePin>* pg : mod->get_pin_groups())
+                {
+                    std::cerr << "  " << pg->get_start_index() << " " << pg->get_name() << " [" << pg->get_id() << "]"
+                              << (pg->is_ascending() ? " asc\n" : " desc\n");
+                    for (ModulePin* pin : pg->get_pins())
+                        std::cerr << "    " << pg->get_index(pin).get() << " " << pin->get_name() << "\n";
+                }
+                std::cerr << "---------------------" << std::endl;
+                */
+
                 gGraphContextManager->handleModulePortsChanged(mod,pev,id);
 
                 Q_EMIT modulePortsChanged(mod,pev,id);

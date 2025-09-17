@@ -22,8 +22,14 @@ target_compile_options(core
     INTERFACE ${COMPILE_OPTIONS_INTERFACE})
 set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 
+# use cmake setup from boost library if provided
+if (POLICY CMP0167)
+  cmake_policy (SET CMP0167 NEW)
+endif ()
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost REQUIRED COMPONENTS system)
+#find_package(Boost REQUIRED COMPONENTS system)
+set (BOOST_REQUIRED_COMPONENTS system)
+find_package(Boost REQUIRED)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})

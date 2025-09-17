@@ -1,12 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 *
 !README.md
-!fsm
-!fsm/**
-!uart
-!uart/**
-!simple_alu
-!simple_alu/**
-!toy_cipher
-!toy_cipher/**
-/**/*.log
+!fsm.zip
+!uart.zip
+!simple_alu.zip
+!toy_cipher.zip

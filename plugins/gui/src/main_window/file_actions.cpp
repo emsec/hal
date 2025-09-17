@@ -48,6 +48,7 @@ namespace hal {
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave,   &QAction::trigger);
 
         connect(gFileStatusManager, &FileStatusManager::status_changed, this, &FileActions::handleFileStatusChanged);
+        connect(gFileStatusManager, &FileStatusManager::open_changed, this, &FileActions::handleFileOpenChanged);
         setup();
         hide();
     }
@@ -60,13 +61,19 @@ namespace hal {
         s->polish(this);
     }
 
-    void FileActions::handleFileStatusChanged(bool gateLibrary, bool isDirty)
+    void FileActions::handleFileStatusChanged(bool gateLibraryAffected, bool isDirty)
     {
-        if (gateLibrary == (mGatelibReference==nullptr)) return;
-
+        Q_UNUSED(gateLibraryAffected);
         mActionSave->setEnabled(isDirty);
-        mActionSaveAs->setEnabled(isDirty);
     }
+
+
+    void FileActions::handleFileOpenChanged(bool gateLibraryAffected, bool isOpen)
+    {
+        Q_UNUSED(gateLibraryAffected);
+        mActionSaveAs->setEnabled(isOpen);
+    }
+
 
     void FileActions::setup(GateLibraryManager *glcw, GuiPluginManager *plmgr)
     {
@@ -92,7 +99,6 @@ namespace hal {
             mActionCreate->setEnabled(!mGatelibReference->isReadOnly());
             mActionOpen->setEnabled(!mGatelibReference->isReadOnly());
             mActionSave->setEnabled(gFileStatusManager->isGatelibModified());
-            mActionSaveAs->setEnabled(gFileStatusManager->isGatelibModified());
         }
         else if (mGuiPluginReference)
         {
