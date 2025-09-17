@@ -1,4 +1,4 @@
-#include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
+#include "gui/selection_details_widget/module_details_widget/module_pins_tree_model.h"
 
 #include "gui/basic_tree_model/base_tree_item.h"
 #include "gui/gui_globals.h"
@@ -15,11 +15,11 @@
 
 namespace hal
 {
-    PortTreeItem::PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, int inx, QString netName)
+    ModulePinsTreeItem::ModulePinsTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, int inx, QString netName)
         : mItemType(itype), mId(id_), mPinName(pinName), mPinDirection(dir), mPinType(ptype), mNetName(netName), mIndex(inx)
     {;}
 
-    QVariant PortTreeItem::getData(int index) const
+    QVariant ModulePinsTreeItem::getData(int index) const
     {
         switch (index)
         {
@@ -32,14 +32,14 @@ namespace hal
         case 3:
             return mNetName;
         case 4:
-            if (mItemType==PortTreeItem::Group)
+            if (mItemType==ModulePinsTreeItem::Group)
                 return ( mIndex ? "descending" : "ascending");
             return mIndex;
         }
         return QVariant();
     }
 
-    void PortTreeItem::setData(QList<QVariant> data)
+    void ModulePinsTreeItem::setData(QList<QVariant> data)
     {
         Q_ASSERT(data.size() >= 5);
         mPinName      = data[0].toString();
@@ -49,9 +49,9 @@ namespace hal
         mIndex        = data[4].toInt();
     }
 
-    void PortTreeItem::setDataAtIndex(int index, QVariant &data)
+    void ModulePinsTreeItem::setDataAtColumn(int column, QVariant &data)
     {
-        switch (index)
+        switch (column)
         {
         case 0:
             mPinName = data.toString();
@@ -71,12 +71,12 @@ namespace hal
         }
     }
 
-    void PortTreeItem::appendData(QVariant data)
+    void ModulePinsTreeItem::appendData(QVariant data)
     {
         Q_UNUSED(data)
     }
 
-    int PortTreeItem::getColumnCount() const
+    int ModulePinsTreeItem::getColumnCount() const
     {
         return 5;
     }
@@ -142,12 +142,12 @@ namespace hal
             return new QMimeData();
 
         QMimeData* data = new QMimeData();
-        PortTreeItem* item = static_cast<PortTreeItem*>(getItemFromIndex(indexes.at(0)));
+        ModulePinsTreeItem* item = static_cast<ModulePinsTreeItem*>(getItemFromIndex(indexes.at(0)));
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
-        QString type = item->itemType() == PortTreeItem::Pin ? "pin" : "group";
+        QString type = item->itemType() == ModulePinsTreeItem::Pin ? "pin" : "group";
         stream << type << item->id();
-        data->setText(item->itemType() == PortTreeItem::Pin
+        data->setText(item->itemType() == ModulePinsTreeItem::Pin
                         ? PyCodeProvider::pyCodeModulePinById(mModule->get_id(),item->id())
                         : PyCodeProvider::pyCodeModulePinGroup(mModule->get_id(),item->id()));
         data->setData("pintreemodel/item", encodedData);
@@ -166,7 +166,7 @@ namespace hal
 // debug pingroup        qDebug() << "dropMimeData" << encItem << row << column;
         dataStream >> type >> id;
 
-        auto droppedItem = (type == "group") ?  static_cast<PortTreeItem*>(mIdToGroupItem.value(id)) :  static_cast<PortTreeItem*>(mIdToPinItem.value(id));
+        auto droppedItem = (type == "group") ?  static_cast<ModulePinsTreeItem*>(mIdToGroupItem.value(id)) :  static_cast<ModulePinsTreeItem*>(mIdToPinItem.value(id));
         //auto droppedParentItem = droppedItem->getParent();
         auto dropPositionItem = getItemFromIndex(parent);
 
@@ -187,11 +187,11 @@ namespace hal
             }
             else
             {
-                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(dropPositionItem);
-                if (pitem && pitem->itemType() == PortTreeItem::Pin)
+                ModulePinsTreeItem* pitem = dynamic_cast<ModulePinsTreeItem*>(dropPositionItem);
+                if (pitem && pitem->itemType() == ModulePinsTreeItem::Pin)
                 {
                     // debug pingroup                qDebug() << "group was dropped on a pin...";
-                    PortTreeItem* parentGroupItem = static_cast<PortTreeItem*>(pitem->getParent());
+                    ModulePinsTreeItem* parentGroupItem = static_cast<ModulePinsTreeItem*>(pitem->getParent());
                     row = getIndexFromItem(pitem).row();
                     dndGroupOnGroup(droppedItem, parentGroupItem, row);
                 }
@@ -214,11 +214,11 @@ namespace hal
             }
             else
             {
-                PortTreeItem* pitem = dynamic_cast<PortTreeItem*>(dropPositionItem);
-                if (pitem && pitem->itemType() == PortTreeItem::Pin)
+                ModulePinsTreeItem* pitem = dynamic_cast<ModulePinsTreeItem*>(dropPositionItem);
+                if (pitem && pitem->itemType() == ModulePinsTreeItem::Pin)
                 {
 // debug pingroup                qDebug() << "pin was dropped on a pin...";
-                    PortTreeItem* parentGroupItem = static_cast<PortTreeItem*>(pitem->getParent());
+                    ModulePinsTreeItem* parentGroupItem = static_cast<ModulePinsTreeItem*>(pitem->getParent());
                     row = getIndexFromItem(pitem).row();
                     dndPinBetweenPin(droppedItem, parentGroupItem, row);
                 }
@@ -242,7 +242,7 @@ namespace hal
         auto encItem = data->data("pintreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
         dataStream >> type >> id;
-        auto parentItem = static_cast<PortTreeItem*>(getItemFromIndex(parent));
+        auto parentItem = static_cast<ModulePinsTreeItem*>(getItemFromIndex(parent));
      //   qDebug() << "type: " << type << ", id" << id << ", row: " << row;
 
         // construct a "drop-matrix" here, but only 4(5) things are NOT allowed (so check for these):
@@ -252,10 +252,10 @@ namespace hal
         // 5: drop adjecent index to itself, must be at least 1 item apart
         if(type == "group")
         {
-            auto item = static_cast<PortTreeItem*>(mIdToGroupItem[id]);
+            auto item = static_cast<ModulePinsTreeItem*>(mIdToGroupItem[id]);
             if(parentItem)
             {
-                if(item->itemType() == PortTreeItem::Pin || (item->itemType() == PortTreeItem::Group && row != -1) || item == parentItem)
+                if(item->itemType() == ModulePinsTreeItem::Pin || (item->itemType() == ModulePinsTreeItem::Group && row != -1) || item == parentItem)
                     return false;
             }
             else // here, only check for adjacent rows
@@ -306,12 +306,12 @@ namespace hal
                 continue;
 
             auto pinGroupName = QString::fromStdString(pinGroup->get_name());
-            PortTreeItem* pinGroupItem = new PortTreeItem(PortTreeItem::Group, pinGroup->get_id(), pinGroupName, pinGroup->get_direction(),
+            ModulePinsTreeItem* pinGroupItem = new ModulePinsTreeItem(ModulePinsTreeItem::Group, pinGroup->get_id(), pinGroupName, pinGroup->get_direction(),
                                                           pinGroup->get_type(), pinGroup->is_ascending() ? 0 : 1);
             mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
             for(ModulePin* pin : pinGroup->get_pins())
             {
-                PortTreeItem* pinItem = new PortTreeItem(PortTreeItem::Pin,
+                ModulePinsTreeItem* pinItem = new ModulePinsTreeItem(ModulePinsTreeItem::Pin,
                                                          pin->get_id(),
                                                          QString::fromStdString(pin->get_name()),
                                                          pin->get_direction(),
@@ -326,6 +326,8 @@ namespace hal
             mRootItem->appendChild(pinGroupItem);
         }
 
+//        Keep old code for the time being to review whether all cases are covered
+//
 //        for (PinGroup<ModulePin>* pinGroup : m->get_pin_groups())
 //        {
 //            //ignore empty pingroups
@@ -350,7 +352,7 @@ namespace hal
 
 //            if (pinGroup->size() == 1)
 //            {
-//                pinGroupItem->setDataAtIndex(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
+//                pinGroupItem->setDataAtColumn(sNetColumn, QString::fromStdString(firstPin->get_net()->get_name()));
 //                pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
 //                //since a single-pin pingroup represents the pin itself, take the pinid
 //                pinGroupItem->setAdditionalData(keyId, firstPin->get_id());
@@ -380,12 +382,12 @@ namespace hal
         Q_EMIT numberOfPortsChanged(m->get_pins().size());
     }
 
-    Net* ModulePinsTreeModel::getNetFromItem(PortTreeItem* item)
+    Net* ModulePinsTreeModel::getNetFromItem(ModulePinsTreeItem* item)
     {
         if (!mModule)    //no current module = no represented net
             return nullptr;
 
-        if (item->itemType() == PortTreeItem::Group && item->getChildCount() > 1)
+        if (item->itemType() == ModulePinsTreeItem::Group && item->getChildCount() > 1)
             return nullptr;
 
         Module* m = gNetlist->get_module_by_id(mModule->get_id());
@@ -420,8 +422,8 @@ namespace hal
         if (m != mModule) return;
 
         // debug pingroups  log_info("gui", "Handle pin_changed event {} ID={}", enum_to_string<PinEvent>(pev), pgid);
-        PortTreeItem* ptiPin = nullptr;
-        PortTreeItem* ptiGroup = nullptr;
+        ModulePinsTreeItem* ptiPin = nullptr;
+        ModulePinsTreeItem* ptiGroup = nullptr;
         const PinGroup<ModulePin>* pgroup = nullptr;
         const ModulePin* pin = nullptr;
         int pinRow = -1;
@@ -465,7 +467,7 @@ namespace hal
                 }
                 auto pgPair = pin->get_group();
                 pgroup = pgPair.first;
-                pinRow = pinIndex2Row(pin,pgPair.second);
+                pinRow = ActionPingroup::pinIndex2Row(pin,pgPair.second);
                 if (pgroup)
                     ptiGroup = mIdToGroupItem.value(pgroup->get_id());
             }
@@ -477,20 +479,20 @@ namespace hal
         {
         case PinEvent::GroupCreate:
         {
-            ptiGroup = new PortTreeItem(PortTreeItem::Group,
+            ptiGroup = new ModulePinsTreeItem(ModulePinsTreeItem::Group,
                                         pgroup->get_id(),
                                     QString::fromStdString(pgroup->get_name()),
                                     pgroup->get_direction(),
                                     pgroup->get_type(),
                                     pgroup->is_ascending()?0:1);
             mIdToGroupItem.insert(ptiGroup->id(), ptiGroup);
-            int inx = pinGroupIndex(m,pgroup);
+            int inx = ActionPingroup::pinGroupIndex(m,pgroup);
             insertItem(ptiGroup, mRootItem, inx);
             break;
         }
         case PinEvent::GroupReorder:
         {
-            int inx = pinGroupIndex(m,pgroup);
+            int inx = ActionPingroup::pinGroupIndex(m,pgroup);
             removeItem(ptiGroup);
             insertItem(ptiGroup, mRootItem, inx);
             break;
@@ -521,7 +523,7 @@ namespace hal
             QString netName;
             if (pin->get_net())
                 netName = QString::fromStdString(pin->get_net()->get_name());
-            ptiPin = new PortTreeItem(PortTreeItem::Pin,
+            ptiPin = new ModulePinsTreeItem(ModulePinsTreeItem::Pin,
                                       pin->get_id(),
                                    QString::fromStdString(pin->get_name()),
                                    pin->get_direction(),
@@ -554,7 +556,15 @@ namespace hal
             }
             removeItem(ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
-            updateGroupIndex(ptiGroup);
+
+            // Unfortunately the event does not tell us where the pin was assigned previously. We have to update all group indices.
+            for (BaseTreeItem* bti : mRootItem->getChildren())
+            {
+                ModulePinsTreeItem* grpItem = static_cast<ModulePinsTreeItem*>(bti);
+                // check whether group still exists (might have been deleted when moving last pin)
+                if (mModule->get_pin_group_by_id(grpItem->id()))
+                    updateGroupIndex(static_cast<ModulePinsTreeItem*>(grpItem));
+            }
             break;
         }
         case PinEvent::PinRename:
@@ -591,12 +601,12 @@ namespace hal
 //        InputDialog ipd("Name of new group", "Name of new group:", onDroppedGroup->getData(sNameColumn).toString());
 //        if(ipd.exec() == QDialog::Rejected) return false;
         QList<u32> pins;
-        auto srcgroup = mModule->get_pin_group_by_id(static_cast<PortTreeItem*>(droppedGroup)->id());
+        auto srcgroup = mModule->get_pin_group_by_id(static_cast<ModulePinsTreeItem*>(droppedGroup)->id());
         for(const auto &pin : srcgroup->get_pins())
             pins.append(pin->get_id());
         if (pins.isEmpty()) return;  // no pins to move
 
-        auto tgtgroup = mModule->get_pin_group_by_id(static_cast<PortTreeItem*>(onDroppedGroup)->id());
+        auto tgtgroup = mModule->get_pin_group_by_id(static_cast<ModulePinsTreeItem*>(onDroppedGroup)->id());
 
         ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins,row);
         if (act) act->exec();
@@ -605,7 +615,7 @@ namespace hal
         // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
     }
 
-    void ModulePinsTreeModel::dndGroupBetweenGroup(PortTreeItem *droppedGroup, int row)
+    void ModulePinsTreeModel::dndGroupBetweenGroup(ModulePinsTreeItem *droppedGroup, int row)
     {
         int ownRow = droppedGroup->getOwnRow();
         bool bottomEdge = row == mRootItem->getChildCount();
@@ -616,14 +626,14 @@ namespace hal
         act->exec();
     }
 
-    void ModulePinsTreeModel::dndPinOnGroup(PortTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndPinOnGroup(ModulePinsTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
     {
-        ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignToGroup,droppedPin->id(),"",static_cast<PortTreeItem*>(onDroppedGroup)->id());
+        ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignToGroup,droppedPin->id(),"",static_cast<ModulePinsTreeItem*>(onDroppedGroup)->id());
         act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         act->exec();
     }
 
-    void ModulePinsTreeModel::dndPinBetweenPin(PortTreeItem *droppedPin, BaseTreeItem *onDroppedParent, int row)
+    void ModulePinsTreeModel::dndPinBetweenPin(ModulePinsTreeItem *droppedPin, BaseTreeItem *onDroppedParent, int row)
     {
         int desiredIdx = row;
         ActionPingroup* act = nullptr;
@@ -637,14 +647,14 @@ namespace hal
         }
         else
         {
-            act = ActionPingroup::addPinToExistingGroup(mModule,static_cast<PortTreeItem*>(onDroppedParent)->id(),droppedPin->id(),desiredIdx);
+            act = ActionPingroup::addPinToExistingGroup(mModule,static_cast<ModulePinsTreeItem*>(onDroppedParent)->id(),droppedPin->id(),desiredIdx);
             if (!act) return;
         }
         act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
         act->exec();
     }
 
-    void ModulePinsTreeModel::dndPinBetweenGroup(PortTreeItem *droppedPin, int row)
+    void ModulePinsTreeModel::dndPinBetweenGroup(ModulePinsTreeItem *droppedPin, int row)
     {
         // row is needed for when groups can change its order within the module
         Q_UNUSED(row)
@@ -652,20 +662,20 @@ namespace hal
         auto pinToMove = mModule->get_pin_by_id(droppedPin->id());
         if (!pinToMove) return;
 
-        QString groupName = generateGroupName(mModule,pinToMove);
+        QString groupName = ActionPingroup::generateGroupName(mModule,pinToMove);
 
         ActionPingroup* act = ActionPingroup::addPinToNewGroup(mModule, groupName, droppedPin->id(),row);
         act->exec();
     }
 
-    void ModulePinsTreeModel::updateGroupIndex(PortTreeItem* groupItem)
+    void ModulePinsTreeModel::updateGroupIndex(ModulePinsTreeItem* groupItem)
     {
         PinGroup<ModulePin>* pg = mModule->get_pin_group_by_id(groupItem->id());
         Q_ASSERT(pg);
         for (ModulePin* pin : pg->get_pins())
         {
             int inx = pg->get_index(pin).get();
-            PortTreeItem* pinItem = mIdToPinItem.value(pin->get_id());
+            ModulePinsTreeItem* pinItem = mIdToPinItem.value(pin->get_id());
             Q_ASSERT(pinItem);
             pinItem->setIndex(inx);
         }
@@ -675,25 +685,25 @@ namespace hal
         Q_EMIT dataChanged(i0,i1);
     }
 
-    void ModulePinsTreeModel::insertItem(PortTreeItem* item, BaseTreeItem* parent, int index)
+    void ModulePinsTreeModel::insertItem(ModulePinsTreeItem* item, BaseTreeItem* parent, int index)
     {
         // fun fact: if an item is inserted above an item that is expanded, the tree collapses all indeces
         beginInsertRows(getIndexFromItem(parent), index, index);
         parent->insertChild(index, item);
         endInsertRows();
         //mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
-        item->itemType() == PortTreeItem::Pin ? mIdToPinItem.insert(item->id(), item) : mIdToGroupItem.insert(item->id(), item);
+        item->itemType() == ModulePinsTreeItem::Pin ? mIdToPinItem.insert(item->id(), item) : mIdToGroupItem.insert(item->id(), item);
         //mIdToPinItem.insert(getIdOfItem(item), item);
     }
 
-    void ModulePinsTreeModel::removeItem(PortTreeItem* item)
+    void ModulePinsTreeModel::removeItem(ModulePinsTreeItem* item)
     {
         beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
         item->getParent()->removeChild(item);
         endRemoveRows();
         //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
         //for now, only ids of pin-items (since these functions are only relevant for dnd)
-        item->itemType() == PortTreeItem::Pin ? mIdToPinItem.remove(item->id()) : mIdToGroupItem.remove(item->id());
+        item->itemType() == ModulePinsTreeItem::Pin ? mIdToPinItem.remove(item->id()) : mIdToGroupItem.remove(item->id());
         //mIdToPinItem.remove(getIdOfItem(item));
         //delete item;
     }

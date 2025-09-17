@@ -66,7 +66,7 @@ namespace hal
          * @param index - The column to set the new data. Either 0 (name) or 2(type). Other columns will be ignored.
          * @param data - The new column data.
          */
-        void setDataAtIndex(int index, QVariant& data) override;
+        void setDataAtColumn(int column, QVariant& data) override;
         /**
          * Unused dummy function overwritten from parent class.
          */

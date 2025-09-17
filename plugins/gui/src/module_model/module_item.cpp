@@ -106,9 +106,9 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type, ModuleModel *model
             setModuleType(data.at(2).toString());
     }
 
-    void ModuleItem::setDataAtIndex(int index, QVariant &data)
+    void ModuleItem::setDataAtColumn(int column, QVariant &data)
     {
-        switch (index) {
+        switch (column) {
         case 0:
             setName(data.toString());
             return;

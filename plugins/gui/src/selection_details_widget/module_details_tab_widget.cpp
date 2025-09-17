@@ -2,7 +2,7 @@
 
 #include "gui/selection_details_widget/details_frame_widget.h"
 #include "gui/selection_details_widget/module_details_widget/module_info_table.h"
-#include "gui/selection_details_widget/module_details_widget/module_ports_tree.h"
+#include "gui/selection_details_widget/module_details_widget/module_pins_tree.h"
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
 #include "gui/comment_system/widgets/comment_widget.h"
 

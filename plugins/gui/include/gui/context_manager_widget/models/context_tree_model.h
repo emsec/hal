@@ -71,7 +71,7 @@ namespace hal
             ContextTreeItem(ContextDirectory* directory);
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
-            void setDataAtIndex(int index, QVariant& data) override;
+            void setDataAtColumn(int column, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
             int row() const;

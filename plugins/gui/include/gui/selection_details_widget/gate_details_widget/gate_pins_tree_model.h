@@ -36,7 +36,7 @@ namespace hal
 
     class Gate;
 
-    class PinTreeItem : public BaseTreeItem
+    class GatePinsTreeItem : public BaseTreeItem
     {
     public:
         enum Type {None, Pin, Group};
@@ -51,11 +51,11 @@ namespace hal
             int mIndex;
         public:
 
-            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName, int inx);
-            PinTreeItem();
+            GatePinsTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName, int inx);
+            GatePinsTreeItem();
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
-            void setDataAtIndex(int index, QVariant& data) override;
+            void setDataAtColumn(int column, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
             void setType(Type tp) { mType = tp; }

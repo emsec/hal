@@ -38,7 +38,7 @@ namespace hal
     class Net;
 
 
-    class PortTreeItem : public BaseTreeItem
+    class ModulePinsTreeItem : public BaseTreeItem
     {
     public:
         enum Type {None, Pin, Group};
@@ -54,11 +54,11 @@ namespace hal
 
         public:
 
-            PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, int inx, QString netName = QString());
-            PortTreeItem() : mItemType(None), mId(0) {;}
+            ModulePinsTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, int inx, QString netName = QString());
+            ModulePinsTreeItem() : mItemType(None), mId(0) {;}
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
-            void setDataAtIndex(int index, QVariant& data) override;
+            void setDataAtColumn(int column, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
             void setItemType(Type tp) { mItemType = tp; }
@@ -127,7 +127,7 @@ namespace hal
          * @param item - The (port) item.
          * @return The net or nullptr.
          */
-        Net* getNetFromItem(PortTreeItem* item);
+        Net* getNetFromItem(ModulePinsTreeItem* item);
 
         /**
          * Get the id of the module that is currently represented.
@@ -162,18 +162,18 @@ namespace hal
         Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, BaseTreeItem*> mNameToTreeItem;
-        QMap<int, PortTreeItem*> mIdToPinItem;
-        QMap<int, PortTreeItem*> mIdToGroupItem;
+        QMap<int, ModulePinsTreeItem*> mIdToPinItem;
+        QMap<int, ModulePinsTreeItem*> mIdToGroupItem;
 
-        void insertItem(PortTreeItem* item, BaseTreeItem* parent, int index);
-        void removeItem(PortTreeItem* item);
-        void updateGroupIndex(PortTreeItem* groupItem);
+        void insertItem(ModulePinsTreeItem* item, BaseTreeItem* parent, int index);
+        void removeItem(ModulePinsTreeItem* item);
+        void updateGroupIndex(ModulePinsTreeItem* groupItem);
 
         // helper functions for dnd for more clarity
         void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup, int row=-1);
-        void dndGroupBetweenGroup(PortTreeItem* droppedGroup, int row);
-        void dndPinOnGroup(PortTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
-        void dndPinBetweenPin(PortTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
-        void dndPinBetweenGroup(PortTreeItem* droppedPin, int row);
+        void dndGroupBetweenGroup(ModulePinsTreeItem* droppedGroup, int row);
+        void dndPinOnGroup(ModulePinsTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
+        void dndPinBetweenPin(ModulePinsTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
+        void dndPinBetweenGroup(ModulePinsTreeItem* droppedPin, int row);
     };
 }
