@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file.
   * fixed bug in load simulation data for selected nets in graph view
   * changed waveform event handling so that duplicate events get blocked
 
+* plugins
+  * extended the `module_identification` plugin 
+    * added the type `addition_offset` that can detect an addition of inputs with an added constant offset
+    * added the type `constant_multiplication_offset` that can detect constant multiplication with an added constant offset
+    * added a more human readable description of identified functionaliyt to the data container of created modules
+    * fixed segfault that occurs when the plugin tries to construct an operand with size 1
+
+  * extended the `resynthesis` plugin
+    * added an additional search step for a required `yosys` binary, that also searches locations in the `PATH` environment variable of the user
+
 * build process
   * fixed `make install` by updating RPATH on installation
   * fixed required minimum cmake version, demanding at least version 3.5
@@ -22,6 +32,11 @@ All notable changes to this project will be documented in this file.
 * changed and unified context menus for all widgets related to netlist elements
 * fixed module colors not updating on creation of modules with previously used ids
 * added python bindings `gui.View` for management of contexts and directories
+* changed the naming convention of ununsed signals in the verilog writer to include an index
+* added feature to `BooleanFunctionDecorator` that allows substituting of net variables to single bit extracts of pin groups
+* added a python binding that allows to create a `BooleanFunction` from a list of `Nodes`
+* added a python binding that allows simplifying a `hal.BooleanFunction` with simplifiaction rules for `z3` expressions  
+* added shift and rotate operations to the constant propagation for simplification 
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
 * fixed `hal_py.GateLibrary.gate_types` pybind
