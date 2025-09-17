@@ -556,9 +556,15 @@ namespace hal
             }
             removeItem(ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
+
             // Unfortunately the event does not tell us where the pin was assigned previously. We have to update all group indices.
-            for (BaseTreeItem* grp : mRootItem->getChildren())
-                updateGroupIndex(static_cast<ModulePinsTreeItem*>(grp));
+            for (BaseTreeItem* bti : mRootItem->getChildren())
+            {
+                ModulePinsTreeItem* grpItem = static_cast<ModulePinsTreeItem*>(bti);
+                // check whether group still exists (might have been deleted when moving last pin)
+                if (mModule->get_pin_group_by_id(grpItem->id()))
+                    updateGroupIndex(static_cast<ModulePinsTreeItem*>(grpItem));
+            }
             break;
         }
         case PinEvent::PinRename:
