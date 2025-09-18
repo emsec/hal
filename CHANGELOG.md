@@ -3,10 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * simulation
+  * added simulation engine property `timeout_after_sec`
   * fixed load simulation input data from previous simulation in setup wizard
   * changed selection behavior in load simulation results allowing a range selection with single click
   * fixed bug in load simulation data for selected nets in graph view
+  * fixed bug in external tool (saleae) to export waveform data resulting from simulation
   * changed waveform event handling so that duplicate events get blocked
+  * changed waveform group value evaluation policy, first = MSB ... last = LSB 
 
 * plugins
   * extended the `module_identification` plugin 
@@ -20,6 +23,10 @@ All notable changes to this project will be documented in this file.
 
   * updated `gate_libraries` plugin
     * updated the hgl format version for the provided `.hgl` libraries and added the `ordered` attribute to all pin groups, which defaults to false
+  
+  * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
+  * added feature to import precompiled binary plugins in GUI plugin manager
+  * added switch to GUI plugin manager to activate/deactivate menu contribution for plugin
 
 * build process
   * fixed `make install` by updating RPATH on installation
@@ -30,25 +37,45 @@ All notable changes to this project will be documented in this file.
 * pin groups
   * added getter for lowest and highest index of pin group
   * added column for pin index in GUI module pin tree
-  * added GUI module pin tree context menu entry to toggle between ascending and descending
+  * added features to pin group context menu (change type, toggle ascending/descending)
   * fixed GUI undo function for group delete
   * changed GUI module pin tree drag'n drop behavior, allow drop pin(-group) on pin
+  * changed policy when creating new pin groups, default is now descending
    
+* gate library manager
+  * added browser to list all gate types from gate library and show details for selected type
+  * added wizard to create new gate types or modify existing ones
+  * added wizard pages for each functional component to define gate type
+  * added graphic view to preview an instance of selected or created gate type
+
+* python
+  * added python bindings `gui.View` for management of graph view contexts and directories
+  * added a python binding that allows to create a `BooleanFunction` from a list of `Nodes`
+  * added a python binding that allows simplifying a `hal.BooleanFunction` with simplifiaction rules for `z3` expressions  
+  * added drag'n drop feature to drop elements from module tree in python editor thus generating code to access element
+
+* added user setting to suppress layout rendering upon change of module name, type, or color
 * fixed availability of "save as" so that does not required modifications to be enabaled
+* added warning message upon attempt to export project without saving recent modifications
+* added example project that comprises a AES encryption netlist with hardware trojan
 * added feature to unzip and open hal project by dropping zipped file on welcome screen
-* added `get_shortest_path` overload to find shortest path from gate to module
+* added `get_shortest_path` overload to find shortest path from gate to module successor/predecessor
 * fixed left/right arrow navigation issues when starting from selected net
 * fixed bug in node placement via GUI API
-* added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
 * changed and unified context menus for all widgets related to netlist elements
+* added `Utilities` (plugin- or gate library management) and `Plugins` (callable actions from plugins) to main menu
 * fixed module colors not updating on creation of modules with previously used ids
-* added python bindings `gui.View` for management of contexts and directories
 * changed the naming convention of ununsed signals in the verilog writer to include an index
 * added feature to `BooleanFunctionDecorator` that allows substituting of net variables to single bit extracts of pin groups
+<<<<<<< HEAD
 * added a python binding that allows to create a `BooleanFunction` from a list of `Nodes`
 * added a python binding that allows simplifying a `hal.BooleanFunction` with simplifiaction rules for `z3` expressions  
 * added shift and rotate operations to the constant propagation for simplification 
 * added `get_shortest_path` and `get_shortest_path_distance` to the NetlistTraversalDecorator
+=======
+* added shift and rotate operations to the constant propagation for simplification
+* added interactive hal screenshot to documentation wiki
+>>>>>>> cc23752f49fe909c4bd7a3a19398e3fbe836bcc8
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
 * fixed `hal_py.GateLibrary.gate_types` pybind
