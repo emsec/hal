@@ -1,6 +1,5 @@
 var NAVTREEINDEX27 =
 {
-"group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c":[4,1,3,0],
 "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c":[5,0,2,510],
 "group__pybind.html#ga99c6b86dabda84a9ccb3b6612557f10f":[5,0,2,546],
 "group__pybind.html#ga99c6b86dabda84a9ccb3b6612557f10f":[4,1,3,20],
@@ -249,5 +248,6 @@ var NAVTREEINDEX27 =
 "line__number__area_8h_source.html":[7,0,1,3,0,0,3,4],
 "log_8h.html":[7,0,0,0,4,4],
 "log_8h.html#a27b3249db8d77bd236109bda307bc263":[7,0,0,0,4,4,3],
-"log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7":[7,0,0,0,4,4,11]
+"log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7":[7,0,0,0,4,4,11],
+"log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2":[7,0,0,0,4,4,4]
 };
