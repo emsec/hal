@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"namespacenetlist__serializer.html":[5,0,4],
 "namespaces.html":[5,0],
 "namespacestd.html":[5,0,6],
 "namespacetest.html":[5,0,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "netlist__serializer_8h.html#adab393c4f4d35b9a8d00ab719239a377":[7,0,0,0,1,6,1,1],
 "netlist__serializer_8h.html#af3335bf7ed9163c5fd585811fa213ab2":[7,0,0,0,1,6,1,0],
 "netlist__serializer_8h_source.html":[7,0,0,0,1,6,1],
-"netlist__traversal__decorator_8h.html":[7,0,0,0,1,1,3],
-"netlist__traversal__decorator_8h_source.html":[7,0,0,0,1,1,3]
+"netlist__traversal__decorator_8h.html":[7,0,0,0,1,1,3]
 };
