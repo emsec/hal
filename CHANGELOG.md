@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file.
   * extended the `resynthesis` plugin
     * added an additional search step for a required `yosys` binary, that also searches locations in the `PATH` environment variable of the user
 
+  * updated `gate_libraries` plugin
+    * updated the hgl format version for the provided `.hgl` libraries and added the `ordered` attribute to all pin groups, which defaults to false
+
 * build process
   * fixed `make install` by updating RPATH on installation
   * fixed required minimum cmake version, demanding at least version 3.5
@@ -45,11 +48,11 @@ All notable changes to this project will be documented in this file.
 * added a python binding that allows to create a `BooleanFunction` from a list of `Nodes`
 * added a python binding that allows simplifying a `hal.BooleanFunction` with simplifiaction rules for `z3` expressions  
 * added shift and rotate operations to the constant propagation for simplification 
+* added `get_shortest_path` and `get_shortest_path_distance` to the NetlistTraversalDecorator
 
 ## [4.4.1](v4.4.1) - 2024-07-29 14:21:42+02:00 (urgency: medium)
 * fixed `hal_py.GateLibrary.gate_types` pybind
 * fixed `hal_py.NetlistFactory.load_netlist` pybind
-* added `get_shortest_path` and `get_shortest_path_distance` to the NetlistTraversalDecorator
 * plugins
   * updated `bitorder_propagation_plugin`
     * added functionality to export collected bitorder information as a `.json` file to use external tools for propgating and solving conflicts, like SMT solvers 
