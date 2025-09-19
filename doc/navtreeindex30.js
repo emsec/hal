@@ -1,6 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"namespacehal_1_1dataflow_1_1utils.html":[5,0,2,3,14],
 "namespacehal_1_1dataflow_1_1utils.html#a1c8c3f83d4fa236d57b063689edf3766":[5,0,2,3,14,0],
 "namespacehal_1_1dataflow_1_1utils.html#ab81c0d6bee88316c3cf43d529ffcff95":[5,0,2,3,14,1],
 "namespacehal_1_1dataflow_1_1utils.html#aeec0f355eead905f79b0271f40cda609":[5,0,2,3,14,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX30 =
 "namespacemembers_w.html":[5,1,0,21],
 "namespacemembers_x.html":[5,1,0,22],
 "namespacemembers_z.html":[5,1,0,23],
-"namespacenetlist__factory.html":[5,0,3]
+"namespacenetlist__factory.html":[5,0,3],
+"namespacenetlist__serializer.html":[5,0,4]
 };
