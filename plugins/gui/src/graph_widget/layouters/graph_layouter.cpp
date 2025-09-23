@@ -1,10 +1,8 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
-#include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_arrow_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"

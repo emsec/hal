@@ -10,6 +10,7 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QCheckBox>
 #include <QLabel>
 #include <QStyle>
@@ -20,6 +21,8 @@
 #include <QTemporaryFile>
 #include <QDebug>
 #include <QSpacerItem>
+#include <QScrollArea>
+#include <QScrollBar>
 
 namespace hal {
 
@@ -40,16 +43,21 @@ namespace hal {
             close();
         }
 
+        QWidget* mainWidget = new QWidget;
+
         mSimulationInput->add_gates(gates);
         mSimulationInput->compute_net_groups();
 
         calculateEvaluationOrder();
-        QHBoxLayout* topLayout = new QHBoxLayout(this);
+        QHBoxLayout* topLayout = new QHBoxLayout(mainWidget);
+        topLayout->setSizeConstraint(QLayout::SetMinimumSize);
         topLayout->setSpacing(0);
         QVBoxLayout* inpLayout = new QVBoxLayout;
+        inpLayout->setSizeConstraint(QLayout::SetMinimumSize);
         inpLayout->setSpacing(4);
         QVBoxLayout* outLayout = new QVBoxLayout;
         outLayout->setSpacing(4);
+        outLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
         // input pingroups
         std::unordered_set<const Net*> inputNets =  mSimulationInput->get_input_nets();
@@ -62,7 +70,7 @@ namespace hal {
                 auto it = inputNets.find(n);
                 if (it != inputNets.end()) inputNets.erase(it);
             }
-            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), false, QString::fromStdString(grp.get_name()), this);
+            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), false, QString::fromStdString(grp.get_name()), mainWidget);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mInputs.append(lep);
             inpLayout->addWidget(lep);
@@ -71,7 +79,7 @@ namespace hal {
         // input single pins
         for (const Net* n : inputNets)
         {
-            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(n, false, this);
+            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(n, false, mainWidget);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mInputs.append(lep);
             inpLayout->addWidget(lep);
@@ -106,7 +114,7 @@ namespace hal {
                     outputNets.insert(n);
                 continue;
             }
-            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), true, QString::fromStdString(grp.get_name()), this);
+            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(grp.get_nets(), true, QString::fromStdString(grp.get_name()), mainWidget);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mOutputs.append(lep);
             outLayout->addWidget(lep);
@@ -117,13 +125,13 @@ namespace hal {
         {
             QStringList netName;
             netName.append(QString::fromStdString(n->get_name()));
-            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(n, true, this);
+            LogicEvaluatorPingroup* lep = new LogicEvaluatorPingroup(n, true, mainWidget);
             connect(lep, &LogicEvaluatorPingroup::triggerRecalc, this, &LogicEvaluatorDialog::recalc);
             mOutputs.append(lep);
             outLayout->addWidget(lep);
         }
 
-        QTreeView* tview = new QTreeView(this);
+        QTreeView* tview = new QTreeView;
         ModuleModel* tmodel = new ModuleModel(this);
         tmodel->populateFromGatelist(gates);
         tview->setModel(tmodel);
@@ -150,11 +158,22 @@ namespace hal {
         inpLayout->addStretch();
         outLayout->addStretch();
         topLayout->addLayout(inpLayout);
+        tview->setMinimumWidth(400);
         topLayout->addWidget(tview);
         topLayout->addLayout(outLayout);
         topLayout->setMenuBar(mMenuBar);
 
-        tview->setMinimumWidth(400);
+
+        QScrollArea* mainScroll = new QScrollArea;
+        mainScroll->setWidget(mainWidget);
+        mainScroll->setWidgetResizable(false);
+        mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        mainScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        mainScroll->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+        QVBoxLayout* mainLayout = new QVBoxLayout(this);
+
+        mainLayout->addWidget(mainScroll);
 
         if (!skipCompile)
         {
@@ -167,6 +186,11 @@ namespace hal {
         s->polish(this);
 
         recalc();
+
+        QSize minSize = mainScroll->minimumSize();                      // remember minimum size assigned from system
+        mainScroll->setMinimumWidth(mainWidget->sizeHint().width()+16); // set minimum with to content + scrollbar
+        adjustSize();                                                   // adjust dialog size
+        mainScroll->setMinimumSize(minSize);                            // reset minimum size so user can shrink if needed
     }
 
     LogicEvaluatorDialog::~LogicEvaluatorDialog()

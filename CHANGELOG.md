@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
     * added an additional search step for a required `yosys` binary, that also searches locations in the `PATH` environment variable of the user
   * updated `gate_libraries` plugin
     * updated the hgl format version for the provided `.hgl` libraries and added the `ordered` attribute to all pin groups, which defaults to false
+  * added scrollbar in `logic evaluator` plugin
   * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
   * added feature to import precompiled binary plugins in GUI plugin manager
   * added switch to GUI plugin manager to activate/deactivate menu contribution for plugin
@@ -54,13 +55,12 @@ All notable changes to this project will be documented in this file.
   * added `get_shortest_path` overload to find shortest path from gate to module successor/predecessor
   * fixed left/right arrow navigation issues when starting from selected net
   * fixed bug in node placement via GUI API
+  * fixed bug in net junction routing
   * changed and unified context menus for all widgets related to netlist elements
   * added `Utilities` (plugin- or gate library management) and `Plugins` (callable actions from plugins) to main menu
   * fixed module colors not updating on creation of modules with previously used ids
   * changed the naming convention of ununsed signals in the verilog writer to include an index
   * added feature to `BooleanFunctionDecorator` that allows substituting of net variables to single bit extracts of pin groups
-  * added a python binding that allows to create a `BooleanFunction` from a list of `Nodes`
-  * added a python binding that allows simplifying a `hal.BooleanFunction` with simplifiaction rules for `z3` expressions  
   * added shift and rotate operations to the constant propagation for simplification 
   * added `get_shortest_path` and `get_shortest_path_distance` to the NetlistTraversalDecorator
   * added interactive hal screenshot to documentation wiki
