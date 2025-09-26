@@ -102,6 +102,7 @@ namespace hal
     void ActionMoveNode::writeToXml(QXmlStreamWriter& xmlOut) const
     {
         xmlOut.writeTextElement("to", QString("%1,%2").arg(mTo.x()).arg(mTo.y()));
+        xmlOut.writeTextElement("context", QString("%1").arg(mContextId));
     }
 
     void ActionMoveNode::readFromXml(QXmlStreamReader& xmlIn)
@@ -110,6 +111,8 @@ namespace hal
         {
             if (xmlIn.name() == "to")
                 mTo = parseFromString(xmlIn.readElementText());
+            if (xmlIn.name() == "context")
+                mContextId = xmlIn.readElementText().toInt();
         }
     }
 

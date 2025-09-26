@@ -3,6 +3,8 @@
 !bitorder_propagation/**/*
 !boolean_influence*
 !boolean_influence/**/*
+!cross_probing*
+!cross_probing/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
 !gate_libraries*
