@@ -49,16 +49,6 @@ qreal StandardGraphicsGate::sPinYStride;
 const int StandardGraphicsGate::sIconPadding = 3;
 const QSize StandardGraphicsGate::sIconSize(sColorBarHeight - 2 * sIconPadding,
                                               sColorBarHeight - 2 * sIconPadding);
-QPixmap* StandardGraphicsGate::sIconInstance = nullptr;
-
-const QPixmap& StandardGraphicsGate::iconPixmap()
-{
-    if (!sIconInstance) sIconInstance
-            = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_gate").scaled(sIconSize)));
-    return *sIconInstance;
-}
-
-
 void StandardGraphicsGate::loadSettings()
 {
     sPen.setCosmetic(true);
@@ -97,6 +87,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 {
     Q_UNUSED(widget);
 
+//  --- rect shape on zoom out ---
     if (sLod < graph_widget_constants::sGateMinLod)
     {
         painter->fillRect(QRectF(0, 0, mWidth, mHeight), penColor(option->state));
@@ -104,15 +95,26 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
     }
     else
     {
-        QList<u32> inpNets = inputNets();
-        QList<u32> outNets = outputNets();
 
-        painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
-        painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), GraphicsQssAdapter::instance()->nodeBackgroundColor());
+//      --- filled color bar and background rect ---
+
+        if (mShapeType == StandardShape)
+        {
+            painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
+            painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), GraphicsQssAdapter::instance()->nodeBackgroundColor());
+        }
+        else
+        {
+            painter->setPen(QPen(mColor,12));
+            painter->setBrush(GraphicsQssAdapter::instance()->nodeBackgroundColor());
+            painter->drawPath(mPath);
+        }
+
+//        --- added icon to box ---
 //        QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
 //        painter->fillRect(iconRect,Qt::black);
-//        painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());
 
+//      --- draw text ---
         sPen.setColor(penColor(option->state,sTextColor));
         painter->setPen(sPen);
 
@@ -122,98 +124,46 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             painter->drawText(mTextPosition[iline], mNodeText[iline]);
         }
 
+//      --- prepare focus variable ---
         bool gateHasFocus =
                 gSelectionRelay->focusType() == SelectionRelay::ItemType::Gate
                 && gSelectionRelay->focusId() == mId;
         int subFocusIndex = static_cast<int>(gSelectionRelay->subfocusIndex());
 
+//      --- pin text color ---
         painter->setFont(sPinFont);
         sPen.setColor(sTextColor);
         painter->setPen(sPen);
 
         int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
-        for (int i = 0; i < mInputPins.size(); ++i)
+        for (const struct GraphicsGatePin& inpPin : mInputPinStruct)
         {
-            Q_ASSERT(i < inpNets.size());
-            u32 inpNetId = inpNets.at(i);
-            int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
-
+            FocusType focusType = NoFocus;
             if (gateHasFocus)
-                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left
-                        && i == subFocusIndex)
-                    sPen.setColor(selectionColor());
-                else
-                    sPen.setColor(sTextColor);
-            else
             {
-                QColor pinTextColor = penColor(option->state,sTextColor);
-                if (inpNetId)
-                {
-                    if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
-                    {
-                        QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, inpNetId);
-                        if (pinBackground.isValid())
-                        {
-                            float wbox = mInputPinTextWidth.at(i) > sPinFontHeight ? mInputPinTextWidth.at(i) : sPinFontHeight;
-                            QBrush lastBrush = painter->brush();
-                            painter->setBrush(pinBackground);
-                            painter->setPen(QPen(pinBackground,0));
-                            painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
-                            painter->setBrush(lastBrush);
-                            pinTextColor = legibleColor(pinBackground);
-                        }
-                    }
-                }
-                sPen.setColor(pinTextColor);
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Left && inpPin.index == subFocusIndex)
+                    focusType = PinFocus;
+                else
+                    focusType = GateFocus;
             }
-            painter->setPen(sPen);
-            painter->drawText(QPointF(sPinOuterHorizontalSpacing,yText), mInputPins.at(i));
+            paintPin(painter, option->state, inpPin, focusType);
         }
 
-        for (int i = 0; i < mOutputPins.size(); ++i)
+        for (const struct GraphicsGatePin& outPin : mOutputPinStruct)
         {
-            Q_ASSERT(i < outNets.size());
-            u32 outNetId = outNets.at(i);
-            int yText = yFirstTextline + i * (sPinFontHeight + sPinInnerVerticalSpacing);
+            FocusType focusType = NoFocus;
             if (gateHasFocus)
-                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right
-                        && i == subFocusIndex)
-                    sPen.setColor(selectionColor());
-                else
-                    sPen.setColor(sTextColor);
-            else
             {
-                QColor pinTextColor = penColor(option->state,sTextColor);
-                if (outNetId)
-                {
-                    if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
-                    {
-                        QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, outNets.at(i));
-                        if (pinBackground.isValid())
-                        {
-                            QBrush lastBrush = painter->brush();
-                            painter->setBrush(pinBackground);
-                            painter->setPen(QPen(pinBackground,0));
-                            float wbox = sPinFontHeight;
-                            float xbox = mWidth - sPinOuterHorizontalSpacing - sPinFontHeight;
-                            if (mOutputPinTextWidth.at(i) > wbox)
-                            {
-                                xbox -= (mOutputPinTextWidth.at(i) - wbox);
-                                wbox = mOutputPinTextWidth.at(i);
-                            }
-                            painter->drawRoundRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
-                            painter->setBrush(lastBrush);
-                            pinTextColor = legibleColor(pinBackground);
-                        }
-                    }
-                }
-                sPen.setColor(pinTextColor);
+                if (gSelectionRelay->subfocus() == SelectionRelay::Subfocus::Right && outPin.index == subFocusIndex)
+                    focusType = PinFocus;
+                else
+                    focusType = GateFocus;
             }
-            painter->setPen(sPen);
-            painter->drawText(QPointF(mWidth - sPinOuterHorizontalSpacing - mOutputPinTextWidth.at(i), yText), mOutputPins.at(i));
+            paintPin(painter, option->state, outPin, focusType);
         }
 
+//      --- fade on zoom out ---
         if (sLod < graph_widget_constants::sGateMaxLod)
         {
             QColor fade = mColor;
@@ -221,6 +171,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
             painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), fade);
         }
 
+//      --- box around ---
         if (option->state & QStyle::State_Selected)
         {
             sPen.setColor(selectionColor());
@@ -247,6 +198,49 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
     }
 }
 
+void StandardGraphicsGate::paintPin(QPainter* painter, QStyle::State state, const GraphicsGatePin& pin, FocusType focusType)
+{
+    int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
+
+    float yText = yFirstTextline + pin.index * (sPinFontHeight + sPinInnerVerticalSpacing);
+    float xText = pin.isInput ? sPinOuterHorizontalSpacing : mWidth - sPinOuterHorizontalSpacing - pin.textWidth;
+
+    QPen storeCurrentPen = painter->pen();
+
+    switch (focusType) {
+        case PinFocus:
+            sPen.setColor(selectionColor());
+            break;
+        case GateFocus:
+            sPen.setColor(sTextColor);
+            break;
+        default:
+            QColor pinTextColor = penColor(state,sTextColor);
+            if (pin.netId)
+            {
+                if (gGraphContextManager->sSettingNetGroupingToPins->value().toBool())
+                {
+                    QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, pin.netId);
+                    if (pinBackground.isValid())
+                    {
+                        QBrush storeCurrentBrush = painter->brush();
+                        painter->setBrush(pinBackground);
+                        painter->setPen(QPen(pinBackground,0));
+                        float wbox = pin.textWidth > sPinFontHeight ? pin.textWidth : sPinFontHeight;
+                        float xbox = pin.isInput ? sPinOuterHorizontalSpacing : mWidth - sPinOuterHorizontalSpacing - wbox;
+                        painter->drawRoundRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
+                        painter->setBrush(storeCurrentBrush);
+                        pinTextColor = legibleColor(pinBackground);
+                    }
+                }
+            }
+            sPen.setColor(pinTextColor);
+    }
+    painter->setPen(sPen);
+    painter->drawText(QPointF(xText, yText), pin.name);
+    painter->setPen(storeCurrentPen);
+}
+
 QColor StandardGraphicsGate::legibleColor(const QColor& bgColor)
 {
     // brightness of color according to YUV color scheme
@@ -256,26 +250,6 @@ QColor StandardGraphicsGate::legibleColor(const QColor& bgColor)
 
     if (y > 127.5) return QColor(Qt::black);
     return QColor(Qt::white);
-}
-
-QPointF StandardGraphicsGate::getInputScenePosition(const u32 mNetId, const QString& pin_type) const
-{
-    Q_UNUSED(mNetId)
-
-    int index = mInputPins.indexOf(pin_type);
-    assert(index != -1);
-
-    return endpointPositionByIndex(index,true);
-}
-
-QPointF StandardGraphicsGate::getOutputScenePosition(const u32 mNetId, const QString& pin_type) const
-{
-    Q_UNUSED(mNetId)
-
-    int index = mOutputPins.indexOf(pin_type);
-    assert(index != -1);
-
-    return endpointPositionByIndex(index,false);
 }
 
 float StandardGraphicsGate::yEndpointDistance() const
@@ -299,32 +273,34 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     QFontMetricsF pin_fm(sPinFont);
     qreal max_pin_width = 0;
 
-    for (const QString& input_pin : mInputPins)
+    for (auto it = mInputPinStruct.begin(); it != mInputPinStruct.end(); ++it)
     {
-        qreal width = pin_fm.width(input_pin);
+        qreal width = pin_fm.size(0, it->name).rwidth();
+        it->textWidth = width;
         if (width > max_pin_width)
             max_pin_width = width;
     }
 
-    for (const QString& output_pin : mOutputPins)
+    for (auto it = mOutputPinStruct.begin(); it != mOutputPinStruct.end(); ++it)
     {
-        qreal width = pin_fm.width(output_pin);
+        qreal width = pin_fm.size(0, it->name).rwidth();
+        it->textWidth = width;
         if (width > max_pin_width)
             max_pin_width = width;
     }
 
-    qreal total_input_pin_height = 0;
-
-    if (!mInputPins.isEmpty())
-        total_input_pin_height = mInputPins.size() * sPinFontHeight +
-                                (mInputPins.size() - 1) * sPinInnerVerticalSpacing +
+    qreal total_input_pin_height = 0;    
+    int ni = mInputPinStruct.size();
+    if (ni)
+        total_input_pin_height = ni * sPinFontHeight +
+                                (ni - 1) * sPinInnerVerticalSpacing +
                                  sPinUpperVerticalSpacing + sPinLowerVerticalSpacing;
 
     qreal total_output_pin_height = 0;
-
-    if (!mOutputPins.isEmpty())
-        total_output_pin_height = mOutputPins.size() * sPinFontHeight +
-                                 (mOutputPins.size() - 1) * sPinInnerVerticalSpacing +
+    int no = mOutputPinStruct.size();
+    if (no)
+        total_output_pin_height = no * sPinFontHeight +
+                                 (no - 1) * sPinInnerVerticalSpacing +
                                   sPinUpperVerticalSpacing + sPinLowerVerticalSpacing;
 
     qreal max_pin_height = std::max(total_input_pin_height, total_output_pin_height);
@@ -338,6 +314,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 
     mWidth = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
     mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
+    if (mShapeType == StandardShape)
+        mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
+    else
+        mHeight = max_pin_height + 2*sColorBarHeight;
 
     if (adjust_size_to_grid)
     {
@@ -355,16 +335,61 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     }
 
     // reproduce formatting, sTextFontHeight[0] will be added befor placing line
-    qreal y0 = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2,
+    qreal ytext0 = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2,
                           sColorBarHeight + sOuterNameTypeSpacing);
-    initTextPosition(y0, sInnerNameTypeSpacing);
+    initTextPosition(ytext0, sInnerNameTypeSpacing);
 
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
-    for (const QString& input_pin : mInputPins)
-        mInputPinTextWidth.append(pin_fm.size(0, input_pin).rwidth());
 
-    for (const QString& output_pin : mOutputPins)
-        mOutputPinTextWidth.append(pin_fm.size(0, output_pin).rwidth());
+    int mLineWidth = 12;
+    int x0 = mLineWidth/2;
+    int y0 = mLineWidth/2;
+    int x1 = mWidth  - mLineWidth/2;
+    int y1 = mHeight - mLineWidth/2;
+
+    mPath.clear();
+    switch (mShapeType)
+    {
+        case InverterShape:
+        {
+            float top = (y1-y0)/2.;
+            float diam = top/3;
+            mPath.moveTo(x0,y0);
+            mPath.lineTo(x0+top+diam,y0+top);
+            mPath.arcTo(x0+top+diam,y0+top-diam/2,diam,diam,-180,360);
+            mPath.lineTo(x0,y1);
+            mPath.closeSubpath();
+            break;
+        }
+
+        case AndShape:
+        {
+            int diam = y1-y0;
+            mPath.moveTo(x0,y0);
+            mPath.lineTo(x1-diam/2,y0);
+            mPath.arcTo(x1-diam,y0,diam,diam,90,-180);
+            mPath.lineTo(x0,y1);
+            mPath.closeSubpath();
+            break;
+        }
+
+        case OrShape:
+        {
+            float diam = (y1-y0)*2;
+            float x60deg = sqrt(3)/2*diam/2;
+            mPath.moveTo(x0,y0);
+            mPath.lineTo(x1-x60deg,y0);
+            mPath.arcTo(x1-x60deg-diam/2,y0,diam,diam,90,-60);
+            mPath.arcTo(x1-x60deg-diam/2,y1-diam,diam,diam,-30,-60);
+            mPath.lineTo(x0,y1);
+            mPath.arcTo(x0-x60deg-diam/2,y0-diam/4,diam,diam,-30,60);
+            break;
+        }
+
+        default:
+            break;
+    }
+
 }
 }

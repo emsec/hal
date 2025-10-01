@@ -42,14 +42,6 @@ namespace hal
 
     const int StandardGraphicsModule::sIconPadding = 3;
     const QSize StandardGraphicsModule::sIconSize(sColorBarHeight - 2 * sIconPadding, sColorBarHeight - 2 * sIconPadding);
-    QPixmap* StandardGraphicsModule::sIconInstance = nullptr;
-
-    const QPixmap& StandardGraphicsModule::iconPixmap()
-    {
-        if (!sIconInstance)
-            sIconInstance = new QPixmap(QPixmap::fromImage(QImage(":/icons/sel_module").scaled(sIconSize)));
-        return *sIconInstance;
-    }
 
     void StandardGraphicsModule::loadSettings()
     {
@@ -102,7 +94,6 @@ namespace hal
             painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), GraphicsQssAdapter::instance()->nodeBackgroundColor());
             //            QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
             //            painter->fillRect(iconRect,Qt::black);
-            //            painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());
 
             // draw center text
             sPen.setColor(penColor(option->state, sTextColor));
@@ -179,36 +170,6 @@ namespace hal
                 }
             }
         }
-    }
-
-    QPointF StandardGraphicsModule::getInputScenePosition(const u32 mNetId, const QString& pin_type) const
-    {
-        Q_UNUSED(pin_type)
-
-        int index = 0;
-
-        for (; index < mInputPins.size(); ++index)
-            if (mInputPins.at(index).mNetId == mNetId)
-                break;
-
-        assert(index < mInputPins.size());
-
-        return endpointPositionByIndex(index,true);
-    }
-
-    QPointF StandardGraphicsModule::getOutputScenePosition(const u32 mNetId, const QString& pin_type) const
-    {
-        Q_UNUSED(pin_type)
-
-        int index = 0;
-
-        for (; index < mOutputPins.size(); ++index)
-            if (mOutputPins.at(index).mNetId == mNetId)
-                break;
-
-        assert(index < mOutputPins.size());
-
-        return endpointPositionByIndex(index,false);
     }
 
     float StandardGraphicsModule::yEndpointDistance() const

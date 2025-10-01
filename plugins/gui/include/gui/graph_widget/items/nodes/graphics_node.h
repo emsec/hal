@@ -83,26 +83,6 @@ namespace hal
         virtual QPainterPath shape() const override;
 
         /**
-         * Given the id of a net and the type of the pin of one of its destinations, this function returns
-         * the position of the input pin in the scene.
-         *
-         * @param mNetId - The net id
-         * @param pin_type - The input pin type
-         * @returns The pin's position in the scene
-         */
-        virtual QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
-
-        /**
-         * Given the id of a net and the type of the pin of one of its sources, this function returns
-         * the position of the output pin in the scene.
-         *
-         * @param mNetId - The net id
-         * @param pin_type - The output pin type
-         * @returns The pin's position in the scene
-         */
-        virtual QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const = 0;
-
-        /**
          * Given the index of an input/output pin, this function returns the position of this pin in the scene. <br>
          * (Pins are positioned from top (idx=0) to bottom (idx=maxIdx))
          *

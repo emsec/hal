@@ -26,9 +26,10 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 
 #include <memory>
-#include <QHash>
+#include <QPainterPath>
 
 namespace hal
 {
@@ -56,6 +57,17 @@ namespace hal
 
     protected:
 
+        struct GraphicsGatePin
+        {
+            QString name;
+            float textWidth;
+            u32 netId;
+            int index;
+            bool isInput;
+        };
+
+        enum ShapeType { StandardShape, InverterShape, AndShape, OrShape };
+
         /**
          * Pointer to gate in hal core
          */
@@ -66,14 +78,18 @@ namespace hal
          */
         QString mType;
 
+        ShapeType mShapeType;
+
+        QPainterPath mPath;
+
         /**
          * The input pin type identifiers of the underlying gate (from top to bottom)
          */
-        QVector<QString> mInputPins;
+        QVector<struct GraphicsGatePin> mInputPinStruct;
 
         /**
          * The output pin type identifiers of the underlying gate (from top to bottom)
          */
-        QVector<QString> mOutputPins;
+        QVector<struct GraphicsGatePin> mOutputPinStruct;
     };
 }

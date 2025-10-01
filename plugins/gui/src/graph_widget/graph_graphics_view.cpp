@@ -333,7 +333,6 @@ namespace hal
                 // TODO set MIME type and icon
                 mimeData->setText("dragTest");
                 drag->setMimeData(mimeData);
-                // drag->setPixmap(iconPixmap);
 
                 // enable DragMoveEvents until mouse released
                 drag->exec(Qt::MoveAction);

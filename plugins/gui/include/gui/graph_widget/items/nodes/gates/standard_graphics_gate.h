@@ -67,26 +67,6 @@ namespace hal
         void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
         /**
-         * Given the id of a net and the type of the pin of one of its destinations, this function returns
-         * the position of the input pin in the scene.
-         *
-         * @param mNetId - The net id
-         * @param pin_type - The input pin type
-         * @returns The pin's position in the scene
-         */
-        QPointF getInputScenePosition(const u32 mNetId, const QString& pin_type) const override;
-
-        /**
-         * Given the id of a net and the type of the pin of one of its sources, this function returns
-         * the position of the output pin in the scene.
-         *
-         * @param mNetId - The net id
-         * @param pin_type - The output pin type
-         * @returns The pin's position in the scene
-         */
-        QPointF getOutputScenePosition(const u32 mNetId, const QString& pin_type) const override;
-
-        /**
          * Given the index of an input/output pin, this function returns the position of this pin in the scene. <br>
          * (Pins are positioned from top (idx=0) to bottom (idx=maxIdx))
          *
@@ -142,14 +122,13 @@ namespace hal
 
         void format(const bool& adjust_size_to_grid);
 
-        QVector<float> mInputPinTextWidth;
-        QVector<float> mOutputPinTextWidth;
         static const int sIconPadding;
         static const QSize sIconSize;
 
-        static QPixmap* sIconInstance;
-        static const QPixmap& iconPixmap();
         static QColor legibleColor(const QColor& bgColor);
 
+        enum FocusType { NoFocus, GateFocus, PinFocus };
+
+        void paintPin(QPainter* painter, QStyle::State state, const GraphicsGatePin& pin, FocusType focusType);
     };
 }
