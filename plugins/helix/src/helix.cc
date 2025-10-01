@@ -25,6 +25,7 @@
 #include <hiredis/async.h>
 #include <hiredis/hiredis.h>
 #include <hiredis/read.h>
+#include <mutex>
 #include <ostream>
 #include <qnamespace.h>
 #include <qobjectdefs.h>
@@ -387,6 +388,7 @@ namespace hal
                            const u16 port,
                            const std::vector<std::string> &channels )
         {
+            std::lock_guard<std::mutex> lock( m_is_running_mtx );
             if( m_is_running )
             {
                 log_warning( "helix", "helix is already running" );
@@ -458,6 +460,7 @@ namespace hal
 
         void Helix::stop()
         {
+            std::lock_guard<std::mutex> lock( m_is_running_mtx );
             if( !m_is_running )
             {
                 log_info( "helix", "helix is not running" );
@@ -502,6 +505,7 @@ namespace hal
 
         const bool Helix::is_running() const
         {
+            std::lock_guard<std::mutex> lock( m_is_running_mtx );
             return m_is_running;
         }
     }  // namespace helix
