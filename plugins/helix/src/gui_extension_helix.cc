@@ -1,6 +1,7 @@
 #include "helix/gui_extension_helix.h"
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/plugin_system/plugin_parameter.h"
 #include "hal_core/utilities/log.h"
@@ -101,13 +102,16 @@ namespace hal
                                               const std::vector<u32> &gats,
                                               const std::vector<u32> &nets )
     {
+        if( tag == "start" || tag == "stop" )
+        {
+            return;
+        }
+
         if( nl == nullptr )
         {
             log_error( "helix", "no netlist provided" );
             return;
         }
-
-        // What is the tag for start up/shut down?
 
         if( !this->m_parent->get_helix()->is_running() )
         {
@@ -115,7 +119,31 @@ namespace hal
             return;
         }
 
-        std::vector<std::string> identifiers;
+        if( mods.empty() && gats.empty() )
+        {
+            log_warning( "helix", "{}: no gates provided", tag );
+            return;
+        }
+
+        std::set<std::string> identifiers;
+        for( const u32 module_id : mods )
+        {
+            Module *module = nl->get_module_by_id( module_id );
+
+            if( module == nullptr )
+            {
+                log_warning( "helix", "no module with id {} found in netlist", module_id );
+                continue;
+            }
+
+            const std::vector<Gate *> &gates = module->get_gates( []( Gate *g ) { return true; }, true );
+
+            for( const Gate *gate : gates )
+            {
+                identifiers.insert( gate->get_name() );
+            }
+        }
+
         for( const auto gate_id : gats )
         {
             Gate *gate = nl->get_gate_by_id( gate_id );
@@ -126,11 +154,17 @@ namespace hal
                 continue;
             }
 
-            identifiers.push_back( gate->get_name() );
+            identifiers.insert( gate->get_name() );
+        }
+
+        if( identifiers.empty() )
+        {
+            log_warning( "helix", "no valid gates provided" );
+            return;
         }
 
         Message msg;
-        static u64 sqn = 0;
+        static u64 sqn = 1;
         msg.set_sequence_number( sqn++ );
         msg.set_application( "hal" );
         if( tag == "gate_action_zoom" )

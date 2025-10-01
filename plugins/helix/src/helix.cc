@@ -128,26 +128,6 @@ namespace hal
     {
         namespace
         {
-            QSet<u32> strings_to_set( const std::vector<std::string> &strings )
-            {
-                QSet<u32> gate_ids;
-                for( const std::string &string : strings )
-                {
-                    bool ok;
-                    QString qstring = QString::fromStdString( string );
-                    u32 gate_id = qstring.toUInt( &ok );
-                    if( ok )
-                    {
-                        gate_ids.insert( gate_id );
-                    }
-                    else
-                    {
-                        log_error( "helix", "could not convert {} to u32", string );
-                    }
-                }
-                return gate_ids;
-            }
-
             void handle_gate_action_isolate( const Netlist *netlist, const GateActionIsolate &msg )
             {
                 if( netlist == nullptr )
