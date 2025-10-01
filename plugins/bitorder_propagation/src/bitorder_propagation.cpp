@@ -1,5 +1,4 @@
 #include "bitorder_propagation/bitorder_propagation.h"
-
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -138,14 +137,14 @@ namespace hal
             /**
              * This function gathers neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
              * 
-             * @param[in] n - TODO
-             * @param[in] successors - TODO
-             * @param[in] relevant_pin_groups - TODO
-             * @param[in] guarantee_propagation - TODO
-             * @param[in] inwards_module - TODO
-             * @param[in] visited - TODO
-             * @param[in] cache - TODO
-             * @returns TODO
+             * @param[in] n - The net to start propagation from.
+             * @param[in] successors - Set to `true` to propagate forwards, `false` to propagate backwards.
+             * @param[in] relevant_pin_groups - All pingroups that either already have a known bitorder or that are currently unknown but might get one.
+             * @param[in] guarantee_propagation - Set to `true` to gurantee that the very first gate is always traversed, even if we reached it via a relevant pin group. This is important if starting propagation into a module via a known (relevant) pin group. 
+             * @param[in] inwards_module - If propagation is started at a module border pin and we propagate into the moduel, this parameter should be set to the module that is being entered. This ensures that we do not leave the module again during propagation.
+             * @param[in] visited - Set of already visited endpoints to avoid recursive cycles.
+             * @param[in] cache - The cache stores already computed results for specific endpoints to avoid recomputation.
+             * @returns A map from module pin groups to all nets that have been reached via that pin group.
              */
             Result<std::map<MPG, std::set<Net*>>> gather_connected_neighbors(Net* n,
                                                                              bool successors,
@@ -159,7 +158,7 @@ namespace hal
 
 #ifdef PRINT_CONNECTIVITY_BUILDING
                 std::cout << "Gathering bit index for net " << n->get_id() << " with" << (guarantee_propagation ? "" : "out") << " guaranteed propagation "
-                          << " in direction: " << (successors ? "forwards" : "backwards") << std::endl;
+                          << "in direction: " << (successors ? "forwards" : "backwards") << std::endl;
 #endif
 
                 // check whether the net is a global input or global output net (has no sources or destinations, but might have a bitorder annotated at the top module)
@@ -208,6 +207,10 @@ namespace hal
 
                     if ((inwards_module != nullptr) && !inwards_module->contains_gate(g, true))
                     {
+#ifdef PRINT_CONNECTIVITY_BUILDING
+                        std::cout << "Ended propagation at gate " << g->get_id() << " as it is not contained in the currently entered module " << inwards_module->get_name() << std::endl;
+#endif
+
                         continue;
                     }
 
@@ -233,6 +236,9 @@ namespace hal
                                 // only consider relevant pin groups that already have a known bitorder or that are currently unknown but might get one
                                 if (relevant_pin_groups.find({m, border_pg}) == relevant_pin_groups.end())
                                 {
+#ifdef PRINT_CONNECTIVITY_BUILDING
+                                    std::cout << "Skipping border pin " << border_pin->get_name() << " of module " << m->get_name() << " as it is not relevant." << std::endl;
+#endif
                                     continue;
                                 }
 
@@ -244,6 +250,9 @@ namespace hal
                         // stop the propagation at the gate when we reached it via at least one relevant pin group
                         if (found_relevant_pin_group)
                         {
+#ifdef PRINT_CONNECTIVITY_BUILDING
+                            std::cout << "Ended propagation at gate " << g->get_id() << " as we reached it via a relevant pin group." << std::endl;
+#endif
                             continue;
                         }
                     }
@@ -883,7 +892,42 @@ namespace hal
             // Build connectivity
             for (const auto& [m, pg] : unknown_bitorders)
             {
-                bool successors = pg->get_direction() == PinDirection::output;
+                // determine the pin groups direction
+                PinDirection pg_direction = pg->get_direction();
+
+                if (pg_direction != PinDirection::input && pg_direction != PinDirection::output && pg_direction != PinDirection::none)
+                {
+                    return ERR("cannot propagate bitorder: pin group " + pg->get_name() + " of module " + m->get_name() + " has direction other than input, output or none.");
+                }
+
+                if (pg_direction == PinDirection::none)
+                {
+                    // Check whether all pins in the pin group have the same direction and assume it to be the pin groups direction but print a warning
+                    std::set<PinDirection> pin_directions;
+                    for (const auto& p : pg->get_pins())
+                    {
+                        pin_directions.insert(p->get_direction());
+                        if (pin_directions.size() > 1)
+                        {
+                            break;
+                        }
+                    }
+
+                    pg_direction = *(pin_directions.begin());
+                    log_warning("bitorder_propagation",
+                                "Pin group {} of module {} has no set direction, but all pins have the same direction {}. Assuming this to be the pin groups direction.",
+                                pg->get_name(),
+                                m->get_name(),
+                                enum_to_string(pg_direction));
+                }
+
+                if (pg_direction != PinDirection::input && pg_direction != PinDirection::output)
+                {
+                    return ERR("cannot propagate bitorder: pin group " + pg->get_name() + " of module " + m->get_name()
+                               + " has direction other than input or output and contains pins of different or other directions, such that we cannot deduce a pin group order.");
+                }
+
+                bool successors = (pg_direction == PinDirection::output);
 
                 for (const auto& p : pg->get_pins())
                 {
@@ -905,7 +949,7 @@ namespace hal
                     if (res_inwards.is_error())
                     {
                         return ERR_APPEND(res_inwards.get_error(),
-                                          "cannot porpagate bitorder: failed to gather bit indices inwwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
+                                          "cannot porpagate bitorder: failed to gather bit indices inwards starting from the module with ID " + std::to_string(m->get_id()) + " and pin group "
                                               + pg->get_name());
                     }
                     const auto connected_inwards = res_inwards.get();
@@ -1250,8 +1294,14 @@ namespace hal
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
                                                                                                            const std::pair<Module*, PinGroup<ModulePin>*>& dst)
         {
-            if (!src.second) return ERR("cannot propagate bitorder: no source given");
-            if (!dst.second) return ERR("cannot propagate bitorder: no destination given");
+            if (!src.second)
+            {
+                return ERR("cannot propagate bitorder: no source given");
+            }
+            if (!dst.second)
+            {
+                return ERR("cannot propagate bitorder: no destination given");
+            }
             const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> src_vec = {src};
             const std::vector<std::pair<Module*, PinGroup<ModulePin>*>> dst_vec = {dst};
             return propagate_bitorder(src_vec, dst_vec);
@@ -1511,7 +1561,7 @@ namespace hal
                 }
 
                 word_definitions.insert({std::to_string(words.size()), nets_str});
-                mpg_to_idx.insert({{m, pg}, (unsigned int) mpg_to_idx.size()});
+                mpg_to_idx.insert({{m, pg}, (unsigned int)mpg_to_idx.size()});
                 mpgs.push_back({m, pg});
                 words.push_back(nets);
             }
