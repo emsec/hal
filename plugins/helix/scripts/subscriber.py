@@ -1,12 +1,6 @@
 import sys
 import redis
 
-try:
-    import helix_pb2 as hx
-except ImportError:
-    sys.stderr.write("Error: Missing generated Python code. Please compile 'helix.proto' using 'protoc' before running this script.\n")
-    sys.exit(1)
-
 
 CHANNELS: list[str] = ["hal", "application1", "application2"]
 
@@ -24,9 +18,7 @@ def main() -> None:
         if msg.get("type") != "message":
             continue
 
-        message: hx.Message = hx.Message()
-        message.ParseFromString(msg.get("data"))
-        print(f"{message}")
+        print("")
 
 
 if __name__ == "__main__":

@@ -7,9 +7,7 @@
 #include "hal_core/utilities/log.h"
 #include "helix/helix.h"
 #include "helix/plugin_helix.h"
-#include "protocol/helix.pb.h"
 
-#include <google/protobuf/repeated_ptr_field.h>
 #include <istream>
 #include <string>
 #include <vector>
@@ -163,30 +161,17 @@ namespace hal
             return;
         }
 
-        Message msg;
-        static u64 sqn = 1;
-        msg.set_sequence_number( sqn++ );
-        msg.set_application( "hal" );
         if( tag == "gate_action_zoom" )
         {
-            msg.mutable_gate_action_zoom()->mutable_identifiers()->Assign( identifiers.begin(), identifiers.end() );
         }
         else if( tag == "gate_action_select" )
         {
-            msg.mutable_gate_action_select()->mutable_identifiers()->Assign( identifiers.begin(), identifiers.end() );
         }
         else if( tag == "gate_action_isolate" )
         {
-            msg.mutable_gate_action_isolate()->mutable_identifiers()->Assign( identifiers.begin(), identifiers.end() );
         }
 
         std::string payload;
-        if( !msg.SerializeToString( &payload ) )
-        {
-            log_error( "helix", "could not serialize message" );
-            return;
-        }
-
         this->m_parent->get_helix()->publish( helix::Helix::channel, payload );
     }
 }  // namespace hal

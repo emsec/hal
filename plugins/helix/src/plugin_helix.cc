@@ -38,7 +38,7 @@ namespace hal
     std::string HelixPlugin::get_description() const
     {
         return "Helix is a plugin that enables inter-process communication by sending and receiving commands via Redis "
-               "Pub/Sub using a well-defined Protobuf protocol.";
+               "Pub/Sub.";
     }
 
     void HelixPlugin::on_load()
