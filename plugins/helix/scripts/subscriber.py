@@ -1,4 +1,4 @@
-import sys
+import json
 import redis
 
 
@@ -18,7 +18,11 @@ def main() -> None:
         if msg.get("type") != "message":
             continue
 
-        print("")
+        channel: str = msg.get("channel").decode("utf-8")
+        payload: dict = json.loads(msg.get("data").decode("utf-8"))
+        payload["channel"]: str = channel
+
+        print(json.dumps(payload, indent=4), "\n")
 
 
 if __name__ == "__main__":

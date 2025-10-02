@@ -8,6 +8,9 @@
 #include "helix/helix.h"
 #include "helix/plugin_helix.h"
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <istream>
 #include <string>
 #include <vector>
@@ -28,6 +31,43 @@ namespace hal
 
             return retval;
         }
+
+        QJsonArray get_instances( const Netlist *nl, const std::vector<u32> &mods, const std::vector<u32> &gats )
+        {
+            QJsonArray instances;
+            for( const u32 module_id : mods )
+            {
+                const Module *module = nl->get_module_by_id( module_id );
+
+                if( module == nullptr )
+                {
+                    log_warning( "helix", "no module with id {} found in netlist", module_id );
+                    continue;
+                }
+
+                const std::vector<Gate *> &gates = module->get_gates( []( Gate *g ) { return true; }, true );
+
+                for( const Gate *gate : gates )
+                {
+                    instances.append( QString::fromStdString( gate->get_name() ) );
+                }
+            }
+
+            for( const u32 gate_id : gats )
+            {
+                const Gate *gate = nl->get_gate_by_id( gate_id );
+
+                if( gate == nullptr )
+                {
+                    log_warning( "helix", "no gate with id {} found in netlist", gate_id );
+                    continue;
+                }
+
+                instances.append( QString::fromStdString( gate->get_name() ) );
+            }
+
+            return instances;
+        }
     }  // namespace
 
     GuiExtensionHelix::GuiExtensionHelix()
@@ -41,9 +81,9 @@ namespace hal
     {
         std::vector<ContextMenuContribution> additions;
 
-        additions.push_back( { this, "gate_action_zoom", "Zoom gates" } );
-        additions.push_back( { this, "gate_action_select", "Select gates" } );
-        additions.push_back( { this, "gate_action_isolate", "Isolate gates" } );
+        additions.push_back( { this, "GateActionZoom", "Zoom gates" } );
+        additions.push_back( { this, "GateActionSelect", "Select gates" } );
+        additions.push_back( { this, "GateActionIsolate", "Isolate gates" } );
 
         return additions;
     }
@@ -123,55 +163,16 @@ namespace hal
             return;
         }
 
-        std::set<std::string> identifiers;
-        for( const u32 module_id : mods )
-        {
-            Module *module = nl->get_module_by_id( module_id );
+        static qint64 sqn = 0;
+        QJsonObject payload;
 
-            if( module == nullptr )
-            {
-                log_warning( "helix", "no module with id {} found in netlist", module_id );
-                continue;
-            }
+        payload["sequence_number"] = sqn++;
+        payload["command"] = QString::fromStdString( tag );
+        payload["instances"] = get_instances( nl, mods, gats );
 
-            const std::vector<Gate *> &gates = module->get_gates( []( Gate *g ) { return true; }, true );
+        const QJsonDocument payload_json( payload );
+        const std::string payload_json_str = payload_json.toJson( QJsonDocument::Compact ).toStdString();
 
-            for( const Gate *gate : gates )
-            {
-                identifiers.insert( gate->get_name() );
-            }
-        }
-
-        for( const auto gate_id : gats )
-        {
-            Gate *gate = nl->get_gate_by_id( gate_id );
-
-            if( gate == nullptr )
-            {
-                log_warning( "helix", "no gate with id {} found in netlist", gate_id );
-                continue;
-            }
-
-            identifiers.insert( gate->get_name() );
-        }
-
-        if( identifiers.empty() )
-        {
-            log_warning( "helix", "no valid gates provided" );
-            return;
-        }
-
-        if( tag == "gate_action_zoom" )
-        {
-        }
-        else if( tag == "gate_action_select" )
-        {
-        }
-        else if( tag == "gate_action_isolate" )
-        {
-        }
-
-        std::string payload;
-        this->m_parent->get_helix()->publish( helix::Helix::channel, payload );
+        this->m_parent->get_helix()->publish( helix::Helix::channel, payload_json_str );
     }
 }  // namespace hal
