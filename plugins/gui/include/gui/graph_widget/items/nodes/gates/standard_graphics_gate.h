@@ -130,5 +130,6 @@ namespace hal
         enum FocusType { NoFocus, GateFocus, PinFocus };
 
         void paintPin(QPainter* painter, QStyle::State state, const GraphicsGatePin& pin, FocusType focusType);
+        void setPinPosition();
     };
 }

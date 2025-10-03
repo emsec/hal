@@ -105,7 +105,10 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         }
         else
         {
-            painter->setPen(QPen(mColor,12));
+            QPen pathPen(mColor,mPathWidth);
+            pathPen.setJoinStyle(Qt::MiterJoin);
+            pathPen.setMiterLimit(20);
+            painter->setPen(pathPen);
             painter->setBrush(GraphicsQssAdapter::instance()->nodeBackgroundColor());
             painter->drawPath(mPath);
         }
@@ -135,7 +138,6 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         sPen.setColor(sTextColor);
         painter->setPen(sPen);
 
-        int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
         for (const struct GraphicsGatePin& inpPin : mInputPinStruct)
         {
@@ -200,12 +202,13 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 void StandardGraphicsGate::paintPin(QPainter* painter, QStyle::State state, const GraphicsGatePin& pin, FocusType focusType)
 {
-    int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
-
-    float yText = yFirstTextline + pin.index * (sPinFontHeight + sPinInnerVerticalSpacing);
-    float xText = pin.isInput ? sPinOuterHorizontalSpacing : mWidth - sPinOuterHorizontalSpacing - pin.textWidth;
+    float xText = pin.isInput ? pin.x : pin.x - pin.textWidth;
 
     QPen storeCurrentPen = painter->pen();
+    QBrush storeCurrentBrush = painter->brush();
+
+    float wbox = pin.textWidth > sPinFontHeight ? pin.textWidth : sPinFontHeight;
+    float xbox = pin.isInput ? pin.x : pin.x - wbox;
 
     switch (focusType) {
         case PinFocus:
@@ -223,22 +226,27 @@ void StandardGraphicsGate::paintPin(QPainter* painter, QStyle::State state, cons
                     QColor pinBackground = gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(ItemType::Net, pin.netId);
                     if (pinBackground.isValid())
                     {
-                        QBrush storeCurrentBrush = painter->brush();
                         painter->setBrush(pinBackground);
                         painter->setPen(QPen(pinBackground,0));
-                        float wbox = pin.textWidth > sPinFontHeight ? pin.textWidth : sPinFontHeight;
-                        float xbox = pin.isInput ? sPinOuterHorizontalSpacing : mWidth - sPinOuterHorizontalSpacing - wbox;
-                        painter->drawRoundRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
-                        painter->setBrush(storeCurrentBrush);
+                        painter->drawRoundRect(xbox,pin.y-sPinFontAscent,wbox,sPinFontHeight,35,35);
                         pinTextColor = legibleColor(pinBackground);
                     }
                 }
             }
             sPen.setColor(pinTextColor);
     }
+
+    if (mShapeType != StandardShape)
+    {
+        painter->setPen(QPen(mColor,1));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRoundRect(xbox,pin.y-sPinFontAscent,wbox,sPinFontHeight,35,35);
+    }
+
     painter->setPen(sPen);
-    painter->drawText(QPointF(xText, yText), pin.name);
+    painter->drawText(QPointF(xText, pin.y), pin.name);
     painter->setPen(storeCurrentPen);
+    painter->setBrush(storeCurrentBrush);
 }
 
 QColor StandardGraphicsGate::legibleColor(const QColor& bgColor)
@@ -271,22 +279,21 @@ QPointF StandardGraphicsGate::endpointPositionByIndex(int index, bool isInput) c
 void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 {
     QFontMetricsF pin_fm(sPinFont);
-    qreal max_pin_width = 0;
 
     for (auto it = mInputPinStruct.begin(); it != mInputPinStruct.end(); ++it)
     {
         qreal width = pin_fm.size(0, it->name).rwidth();
         it->textWidth = width;
-        if (width > max_pin_width)
-            max_pin_width = width;
+        if (width > mMaxInputPinWidth)
+            mMaxInputPinWidth = width;
     }
 
     for (auto it = mOutputPinStruct.begin(); it != mOutputPinStruct.end(); ++it)
     {
         qreal width = pin_fm.size(0, it->name).rwidth();
         it->textWidth = width;
-        if (width > max_pin_width)
-            max_pin_width = width;
+        if (width > mMaxOutputPinWidth)
+            mMaxOutputPinWidth = width;
     }
 
     qreal total_input_pin_height = 0;    
@@ -312,7 +319,7 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     }
 
 
-    mWidth = max_pin_width * 2 + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
+    mWidth = mMaxInputPinWidth + mMaxOutputPinWidth + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
     mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
     if (mShapeType == StandardShape)
         mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
@@ -342,11 +349,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
 
-    int mLineWidth = 12;
-    int x0 = mLineWidth/2;
-    int y0 = mLineWidth/2;
-    int x1 = mWidth  - mLineWidth/2;
-    int y1 = mHeight - mLineWidth/2;
+    int x0 = mPathWidth/2 + mMaxInputPinWidth + sPinOuterHorizontalSpacing;
+    int y0 = mPathWidth/2;
+    int x1 = mWidth  - mPathWidth/2;
+    int y1 = mHeight - mPathWidth/2;
 
     mPath.clear();
     switch (mShapeType)
@@ -354,10 +360,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
         case InverterShape:
         {
             float top = (y1-y0)/2.;
-            float diam = top/3;
+            float diam = top/2;
             mPath.moveTo(x0,y0);
             mPath.lineTo(x0+top+diam,y0+top);
-            mPath.arcTo(x0+top+diam,y0+top-diam/2,diam,diam,-180,360);
+            mPath.arcTo(x0+top+diam,y0+top-diam/3,diam,diam,-180,360);
             mPath.lineTo(x0,y1);
             mPath.closeSubpath();
             break;
@@ -383,7 +389,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
             mPath.arcTo(x1-x60deg-diam/2,y0,diam,diam,90,-60);
             mPath.arcTo(x1-x60deg-diam/2,y1-diam,diam,diam,-30,-60);
             mPath.lineTo(x0,y1);
-            mPath.arcTo(x0-x60deg-diam/2,y0-diam/4,diam,diam,-30,60);
+            mPath.lineTo(x0+mPathWidth/4,y1-mPathWidth/2); // line in arc direction for pointy corner
+            double arcSpan = sin((diam/2-mPathWidth)/diam)*180./M_PI;
+            mPath.arcTo(x0-x60deg-diam/2,y0-diam/4,diam,diam,-arcSpan,2*arcSpan);
+            mPath.closeSubpath();
             break;
         }
 
@@ -391,5 +400,31 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
             break;
     }
 
+    setPinPosition();
+}
+
+void StandardGraphicsGate::setPinPosition()
+{
+    int yFirstTextline = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
+
+    for (auto it = mInputPinStruct.begin(); it != mInputPinStruct.end(); ++it)
+    {
+        it->x = sPinOuterHorizontalSpacing;
+        it->y = yFirstTextline + it->index * (sPinFontHeight + sPinInnerVerticalSpacing);
+    }
+
+    if (mShapeType != StandardShape && mOutputPinStruct.size() == 1)
+    {
+        mOutputPinStruct[0].x = mShapeType == InverterShape ? mWidth + mPathWidth/2 : mWidth - mPathWidth;
+        mOutputPinStruct[0].y = (mHeight + sPinFontAscent) / 2;
+    }
+    else
+    {
+        for (auto it = mOutputPinStruct.begin(); it != mOutputPinStruct.end(); ++it)
+        {
+            it->x = mWidth - sPinOuterHorizontalSpacing;
+            it->y = yFirstTextline + it->index * (sPinFontHeight + sPinInnerVerticalSpacing);
+        }
+    }
 }
 }

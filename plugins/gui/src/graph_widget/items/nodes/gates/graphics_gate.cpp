@@ -10,7 +10,10 @@ namespace hal
         : GraphicsNode(ItemType::Gate, g->get_id()),
           mGate(g),
           mType(QString::fromStdString(g->get_type()->get_name())),
-          mShapeType(StandardShape)
+          mShapeType(StandardShape),
+          mPathWidth(0),
+          mMaxInputPinWidth(0),
+          mMaxOutputPinWidth(0)
     {
         QString textLines[3];
         textLines[0] = QString::fromStdString(g->get_name());
@@ -36,6 +39,9 @@ namespace hal
                     break;
             }
         }
+
+        if (mShapeType != StandardShape)
+            mPathWidth = 12;
 
         for (const GatePin* input_pin : gt->get_input_pins())
         {

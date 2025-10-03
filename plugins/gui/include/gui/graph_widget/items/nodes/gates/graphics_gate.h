@@ -64,6 +64,8 @@ namespace hal
             u32 netId;
             int index;
             bool isInput;
+            float x;
+            float y;
         };
 
         enum ShapeType { StandardShape, InverterShape, AndShape, OrShape };
@@ -81,6 +83,12 @@ namespace hal
         ShapeType mShapeType;
 
         QPainterPath mPath;
+
+        int mPathWidth;
+
+        float mMaxInputPinWidth;
+
+        float mMaxOutputPinWidth;
 
         /**
          * The input pin type identifiers of the underlying gate (from top to bottom)
