@@ -48,7 +48,7 @@ namespace hal
         class Helix
         {
           public:
-            static std::string channel;
+            static const std::string channel;
 
             Helix();
 

@@ -66,7 +66,7 @@ namespace hal
         return retval;
     }
 
-    helix::Helix *HelixPlugin::get_helix()
+    helix::Helix *HelixPlugin::get_helix() const
     {
         return m_helix;
     }

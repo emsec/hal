@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <event2/event.h>
 #include <event2/thread.h>
+#include <future>
 #include <hiredis/adapters/libevent.h>
 #include <hiredis/async.h>
 #include <hiredis/hiredis.h>
@@ -31,7 +32,7 @@ namespace hal
                 log_error( "helix", "could not connect to redis instance (async): {}", ctx->errstr );
                 return;
             }
-            log_debug( "helix", "connected to redis instance (async)" );
+            log_info( "helix", "connected to redis instance (async)" );
         }
 
         void disconnect_callback( const redisAsyncContext *ctx, int status )
@@ -42,7 +43,7 @@ namespace hal
             }
             else
             {
-                log_debug( "helix", "disconnected from redis instance (async)" );
+                log_info( "helix", "disconnected from redis instance (async)" );
             }
         }
 
@@ -116,23 +117,27 @@ namespace hal
             void subscriber( const Netlist *netlist,
                              redisAsyncContext *ctx,
                              const std::vector<std::string> &channels,
-                             struct event_base *base )
+                             struct event_base *base,
+                             std::promise<bool> subscribe_promise )
             {
                 if( netlist == nullptr )
                 {
                     log_error( "helix", "no netlist provided" );
+                    subscribe_promise.set_value( false );
                     return;
                 }
 
                 if( ctx == nullptr )
                 {
                     log_error( "helix", "no redis context provided" );
+                    subscribe_promise.set_value( false );
                     return;
                 }
 
                 if( base == nullptr )
                 {
                     log_error( "helix", "no event base provided" );
+                    subscribe_promise.set_value( false );
                     return;
                 }
 
@@ -142,10 +147,13 @@ namespace hal
                     != REDIS_OK )
                 {
                     log_error( "helix", "async subscribe to channels {} failed", subscribe_command.substr( 10 ) );
+                    subscribe_promise.set_value( false );
                     return;
                 }
 
-                // TODO: signal main thread to cleanup resources if errors occurr
+                // I just assume that the dispath won't fail
+                subscribe_promise.set_value( true );
+
                 if( event_base_dispatch( base ) != 0 )
                 {
                     char *errstr = strerror( errno );
@@ -156,7 +164,7 @@ namespace hal
         }  // namespace
 
         Helix *Helix::inst = nullptr;
-        std::string Helix::channel = "hal";
+        const std::string Helix::channel = "hal";
 
         Helix *Helix::instance()
         {
@@ -223,7 +231,9 @@ namespace hal
             {
                 log_error(
                     "helix", "redisAsyncConnect: {}", ( m_sctx ? m_sctx->errstr : "context allocation failed" ) );
-                goto error;
+                redisAsyncDisconnect( m_sctx );
+                event_base_free( m_base );
+                return;
             }
 
             redisAsyncSetConnectCallback( m_sctx, connect_callback );
@@ -233,7 +243,10 @@ namespace hal
             if( m_pctx == nullptr || m_pctx->err )
             {
                 log_error( "helix", "redisConnect: {}", ( m_pctx ? m_pctx->errstr : "context allocation failed" ) );
-                goto error;
+                redisAsyncDisconnect( m_sctx );
+                event_base_free( m_base );
+                redisFree( m_pctx );
+                return;
             }
 
             log_info( "helix", "connected to redis instance at {}:{}", host, port );
@@ -241,19 +254,29 @@ namespace hal
             if( redisLibeventAttach( m_sctx, m_base ) != REDIS_OK )
             {
                 log_error( "helix", "redisLibeventAttach: {}", m_sctx->errstr );
-                goto error;
+                redisAsyncDisconnect( m_sctx );
+                event_base_free( m_base );
+                redisFree( m_pctx );
+                return;
             }
 
-            m_subscriber = std::thread( subscriber, netlist, m_sctx, channels, m_base );
+            std::promise<bool> subscribe_promise;
+            std::future<bool> subscribe_future = subscribe_promise.get_future();
+
+            m_subscriber = std::thread( subscriber, netlist, m_sctx, channels, m_base, std::move( subscribe_promise ) );
+
+            const bool success = subscribe_future.get();
+            if( !success )
+            {
+                redisAsyncDisconnect( m_sctx );
+                event_base_free( m_base );
+                redisFree( m_pctx );
+                return;
+            }
+
             m_is_running = true;
 
             log_info( "helix", "started subscriber thread" );
-            return;
-
-        error:
-            redisAsyncDisconnect( m_sctx );
-            event_base_free( m_base );
-            redisFree( m_pctx );
         }
 
         void Helix::stop()

@@ -73,7 +73,7 @@ namespace hal
 
         void on_unload() override;
 
-        helix::Helix *get_helix();
+        helix::Helix *get_helix() const;
 
       private:
         GuiExtensionHelix *m_gui_extension;
