@@ -52,7 +52,7 @@ namespace hal
     void HelixPlugin::on_unload()
     {
         delete_extension( m_gui_extension );
-        // delete m_helix;
+        delete m_helix;
     }
 
     void HelixPlugin::initialize()

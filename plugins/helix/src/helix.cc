@@ -1,20 +1,10 @@
 #include "helix/helix.h"
 
-#include "gui/content_manager/content_manager.h"
-#include "gui/graph_tab_widget/graph_tab_widget.h"
-#include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/graph_widget/graph_context_manager.h"
-#include "gui/graph_widget/layouters/net_layout_point.h"
 #include "gui/gui_globals.h"
-#include "gui/user_action/action_add_items_to_object.h"
-#include "gui/user_action/action_create_object.h"
-#include "gui/user_action/user_action_compound.h"
-#include "gui/user_action/user_action_object.h"
-#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
-#include <algorithm>
+#include <assert.h>
 #include <cstring>
 #include <errno.h>
 #include <event2/event.h>
@@ -25,15 +15,10 @@
 #include <hiredis/read.h>
 #include <mutex>
 #include <ostream>
-#include <qnamespace.h>
-#include <qobjectdefs.h>
-#include <qset.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
+#include <qjsonvalue.h>
 #include <qstring.h>
-#include <stdexcept>
-#include <unordered_set>
-#include <utility>
-
-#define MAX_HOST_SIZE 1024LLU
 
 namespace hal
 {
@@ -41,26 +26,33 @@ namespace hal
     {
         void connect_callback( const redisAsyncContext *ctx, int status )
         {
-            u16 port = 0;
-            char host[MAX_HOST_SIZE] = { 0 };
-
             if( status != REDIS_OK )
             {
                 log_error( "helix", "could not connect to redis instance (async): {}", ctx->errstr );
                 return;
             }
+            log_debug( "helix", "connected to redis instance (async)" );
         }
 
         void disconnect_callback( const redisAsyncContext *ctx, int status )
         {
             if( status != REDIS_OK )
             {
-                log_error( "helix", "disconnected from redis instance with error: {}", ctx->errstr );
+                log_error( "helix", "disconnected from redis instance (async) with error: {}", ctx->errstr );
             }
             else
             {
-                log_info( "helix", "disconnected from redis instance" );
+                log_debug( "helix", "disconnected from redis instance (async)" );
             }
+        }
+
+        std::string build_subscribe_command( const std::vector<std::string> &channels )
+        {
+            std::ostringstream oss;
+            oss << "";
+            for( auto &ch : channels )
+                oss << " " << ch;
+            return "SUBSCRIBE " + oss.str();
         }
     }  // namespace
 
@@ -91,12 +83,34 @@ namespace hal
                     return;
                 }
 
-                if( strcmp( msg->element[0]->str, "message" ) != 0 )
+                std::string msg_type{ msg->element[0]->str };
+                std::string channel{ msg->element[1]->str };
+
+                if( msg_type != "message" )
                 {
                     return;
                 }
 
-                log_info( "helix", "received message {} on channel {}", msg->element[2]->str, msg->element[1]->str );
+                std::string payload_json_str{ msg->element[2]->str };
+
+                QJsonParseError parse_error;
+                QString payload_json_qstr = QString::fromStdString( payload_json_str );
+                QJsonDocument payload_json = QJsonDocument::fromJson( payload_json_qstr.toUtf8(), &parse_error );
+
+                if( parse_error.error != QJsonParseError::NoError )
+                {
+                    log_error( "helix", "QJsonDocument::fromJson: {}", parse_error.errorString().toStdString() );
+                    return;
+                }
+
+                assert( payload_json.isObject() );
+
+                QJsonObject payload = payload_json.object();
+
+                log_info( "helix",
+                          "received command '{}' on channel '{}'",
+                          payload["command"].toString().toStdString(),
+                          channel );
             }
 
             void subscriber( const Netlist *netlist,
@@ -110,21 +124,24 @@ namespace hal
                     return;
                 }
 
+                if( ctx == nullptr )
+                {
+                    log_error( "helix", "no redis context provided" );
+                    return;
+                }
+
                 if( base == nullptr )
                 {
                     log_error( "helix", "no event base provided" );
                     return;
                 }
 
-                std::ostringstream oss;
-                oss << "";
-                for( auto &ch : channels )
-                    oss << " " << ch;
-                std::string cmd = "SUBSCRIBE " + oss.str();
+                std::string subscribe_command = build_subscribe_command( channels );
 
-                if( redisAsyncCommand( ctx, subscriber_callback, (void *) netlist, cmd.c_str() ) != REDIS_OK )
+                if( redisAsyncCommand( ctx, subscriber_callback, (void *) netlist, subscribe_command.c_str() )
+                    != REDIS_OK )
                 {
-                    log_error( "helix", "TODO" );
+                    log_error( "helix", "async subscribe to channels {} failed", subscribe_command.substr( 10 ) );
                     return;
                 }
 
@@ -157,6 +174,11 @@ namespace hal
             m_base = nullptr;
             m_sctx = nullptr;
             m_pctx = nullptr;
+        }
+
+        Helix::~Helix()
+        {
+            this->stop();
         }
 
         void Helix::start( const Netlist *netlist,

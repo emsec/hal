@@ -38,10 +38,6 @@ namespace hal
 }
 namespace hal
 {
-    class Module;
-}
-namespace hal
-{
     class Netlist;
 }
 namespace hal

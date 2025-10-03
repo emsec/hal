@@ -52,7 +52,7 @@ namespace hal
 
             Helix();
 
-            ~Helix() = default;
+            ~Helix();
 
             static Helix *instance();
 

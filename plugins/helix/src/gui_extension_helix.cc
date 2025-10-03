@@ -8,10 +8,14 @@
 #include "helix/helix.h"
 #include "helix/plugin_helix.h"
 
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <istream>
+#include <qbytearray.h>
+#include <qglobal.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
+#include <qjsonobject.h>
+#include <qjsonvalue.h>
+#include <qstring.h>
 #include <string>
 #include <vector>
 
