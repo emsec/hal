@@ -1,5 +1,11 @@
+import sys
 import json
-import redis
+
+try:
+    import redis
+except ImportError:
+    print("Error: Missing Python module. Please install 'redis' before running this script.")
+    sys.exit(1)
 
 
 CHANNELS: list[str] = ["hal", "application1", "application2"]
