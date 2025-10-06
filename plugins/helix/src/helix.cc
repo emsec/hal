@@ -1,9 +1,22 @@
 #include "helix/helix.h"
 
+#include "gui/content_manager/content_manager.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/graph_context_manager.h"
+#include "gui/graph_widget/layouters/net_layout_point.h"
+#include "gui/gui_api/gui_api.h"
 #include "gui/gui_globals.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/user_action_object.h"
+#include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
+#include "qjsonarray.h"
 
+#include <algorithm>
 #include <assert.h>
 #include <cstring>
 #include <errno.h>
@@ -19,7 +32,12 @@
 #include <qjsondocument.h>
 #include <qjsonobject.h>
 #include <qjsonvalue.h>
+#include <qnamespace.h>
+#include <qobjectdefs.h>
+#include <qset.h>
 #include <qstring.h>
+#include <unordered_set>
+#include <utility>
 
 namespace hal
 {
@@ -47,13 +65,62 @@ namespace hal
             }
         }
 
-        std::string build_subscribe_command( const std::vector<std::string> &channels )
+        const std::string build_subscribe_command( const std::vector<std::string> &channels )
         {
             std::ostringstream oss;
             oss << "";
-            for( auto &ch : channels )
+            for( const std::string &ch : channels )
                 oss << " " << ch;
             return "SUBSCRIBE " + oss.str();
+        }
+
+        const std::vector<u32> get_instance_ids( const Netlist *netlist, const QJsonArray &instances )
+        {
+            std::vector<u32> instance_ids;
+            std::unordered_set<std::string> instance_names;
+
+            for( const QJsonValue &value : instances )
+            {
+                instance_names.insert( value.toString().toStdString() );
+            }
+
+            for( const Gate *gate : netlist->get_gates() )
+            {
+                if( std::find( instance_names.begin(), instance_names.end(), gate->get_name() )
+                    != instance_names.end() )
+                {
+                    instance_ids.push_back( gate->get_id() );
+                }
+            }
+
+            return instance_ids;
+        }
+
+        void handle_gate_action_isolate( const std::vector<u32> instance_ids )
+        {
+            const QSet<u32> instance_ids_qset( instance_ids.begin(), instance_ids.end() );
+            QMetaObject::invokeMethod(
+                gGraphContextManager,
+                [instance_ids_qset]() {
+                    QString name = gGraphContextManager->nextViewName( "Helix View" );
+                    UserActionCompound *act = new UserActionCompound;
+                    act->setUseCreatedObject();
+                    act->addAction( new ActionCreateObject( UserActionObjectType::ContextView, name ) );
+                    act->addAction( new ActionAddItemsToObject( QSet<u32>(), instance_ids_qset ) );
+                    act->exec();
+                    GraphContext *context = gGraphContextManager->getContextById( act->object().id() );
+                    if( context )
+                        context->setDirty( false );
+                },
+                Qt::QueuedConnection );
+        }
+
+        void handle_gate_action_zoom( const u32 instance_id )
+        {
+            QMetaObject::invokeMethod(
+                gContentManager,
+                [instance_id]() { gContentManager->getGraphTabWidget()->handleGateFocus( instance_id ); },
+                Qt::QueuedConnection );
         }
     }  // namespace
 
@@ -66,6 +133,7 @@ namespace hal
                 (void) ctx;
                 Netlist *netlist = (Netlist *) privdata;
                 redisReply *msg = (redisReply *) reply;
+                static GuiApi gui_api;
 
                 if( reply == nullptr )
                 {
@@ -106,12 +174,34 @@ namespace hal
 
                 assert( payload_json.isObject() );
 
-                QJsonObject payload = payload_json.object();
+                const QJsonObject payload = payload_json.object();
+                const std::string command = payload["command"].toString().toStdString();
 
-                log_info( "helix",
-                          "received command '{}' on channel '{}'",
-                          payload["command"].toString().toStdString(),
-                          channel );
+                log_info( "helix", "received command '{}' on channel '{}'", command, channel );
+
+                const std::vector<u32> instances = get_instance_ids( netlist, payload["instances"].toArray() );
+
+                if( instances.size() == 0 )
+                {
+                    log_warning( "helix", "no instances found" );
+                    return;
+                }
+
+                if( command == "GateActionZoom" && instances.size() == 1 )
+                {
+                    handle_gate_action_zoom( *instances.begin() );
+                    gui_api.selectGate( *instances.begin(), true, false );
+                }
+                else if( command == "GateActionIsolate" || command == "GateActionZoom" && instances.size() > 1 )
+                {
+                    handle_gate_action_isolate( instances );
+                    // Why does it not clear the current selection?
+                    gui_api.selectGate( instances, true, false );
+                }
+                else
+                {
+                    log_warning( "helix", "received invalid command '{}'", command );
+                }
             }
 
             void subscriber( const Netlist *netlist,
