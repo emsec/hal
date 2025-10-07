@@ -319,12 +319,17 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     }
 
 
-    mWidth = mMaxInputPinWidth + mMaxOutputPinWidth + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
-    mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
     if (mShapeType == StandardShape)
+    {
         mHeight = std::max(max_pin_height, min_body_height) + sColorBarHeight;
+        mWidth = mMaxInputPinWidth + mMaxOutputPinWidth + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
+    }
     else
+    {
         mHeight = max_pin_height + 2*sColorBarHeight;
+        mWidth = (sPinFontHeight + sPinInnerHorizontalSpacing + sPinOuterHorizontalSpacing + mPathWidth) * 2
+                 + mMaxTextWidth;
+    }
 
     if (adjust_size_to_grid)
     {
@@ -349,9 +354,9 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 
 
-    int x0 = mPathWidth/2 + mMaxInputPinWidth + sPinOuterHorizontalSpacing;
+    int x0 = mPathWidth/2 + sPinFontHeight + sPinOuterHorizontalSpacing;
     int y0 = mPathWidth/2;
-    int x1 = mWidth  - mPathWidth/2;
+    int x1 = mWidth  - mPathWidth/2 - sPinFontHeight - sPinOuterHorizontalSpacing;
     int y1 = mHeight - mPathWidth/2;
 
     mPath.clear();
@@ -409,14 +414,25 @@ void StandardGraphicsGate::setPinPosition()
 
     for (auto it = mInputPinStruct.begin(); it != mInputPinStruct.end(); ++it)
     {
-        it->x = sPinOuterHorizontalSpacing;
+        if (mShapeType == OrShape)
+        {
+            float dx = mHeight*(1.-sqrt(3)/2.);
+            it->x = sPinOuterHorizontalSpacing + dx;
+            it->connectors.append(QLineF(0,0,dx,0));
+        }
+        else
+            it->x = sPinOuterHorizontalSpacing;
         it->y = yFirstTextline + it->index * (sPinFontHeight + sPinInnerVerticalSpacing);
     }
 
     if (mShapeType != StandardShape && mOutputPinStruct.size() == 1)
     {
-        mOutputPinStruct[0].x = mShapeType == InverterShape ? mWidth + mPathWidth/2 : mWidth - mPathWidth;
-        mOutputPinStruct[0].y = (mHeight + sPinFontAscent) / 2;
+        auto it = mOutputPinStruct.begin();
+        it->x = mWidth - sPinOuterHorizontalSpacing;
+        it->y = (mHeight + sPinFontAscent) / 2;
+        float yl = it->y-sPinFontAscent/2 - yTopPinDistance();
+        it->connectors.append(QLineF(-sPinOuterHorizontalSpacing, yl, 0, yl));
+        it->connectors.append(QLineF(0, 0, 0, yl));
     }
     else
     {

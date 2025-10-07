@@ -368,7 +368,7 @@ namespace hal
         mWireEndpoint.clear();
         mGlobalInputHash.clear();
         mGlobalOutputHash.clear();
-        mNodeBoundingBox = QRect();
+        mSceneBoundingBox = QRect();
         mViewInput.clear();
         mViewOutput.clear();
 
@@ -397,7 +397,7 @@ namespace hal
             mBoxes.addBox(i.value(), x, y);
             ++i;
         }
-        mNodeBoundingBox = QRect(xmin, ymin, xmax - xmin, ymax - ymin);
+        mSceneBoundingBox = QRect(xmin, ymin, xmax - xmin, ymax - ymin);
     }
 
     bool GraphLayouter::verifyModulePort(Net* n, const Node& modNode, bool isModInput)
@@ -505,7 +505,7 @@ namespace hal
             {
                 // global input connects to multiple boxes
                 int ypos = mGlobalInputHash.size();
-                NetLayoutPoint srcPnt(mNodeBoundingBox.left(), 2 * ypos);
+                NetLayoutPoint srcPnt(mSceneBoundingBox.left(), 2 * ypos);
                 srcPoints.insert(srcPnt);
                 mWireEndpoint[id].addSource(srcPnt);
                 mGlobalInputHash[id] = ypos;
@@ -517,7 +517,7 @@ namespace hal
             {
                 // multi-driven global output or global output back coupled to net gate
                 int ypos = mGlobalOutputHash.size();
-                NetLayoutPoint dstPnt(mNodeBoundingBox.right() + 1, 2 * ypos);
+                NetLayoutPoint dstPnt(mSceneBoundingBox.right() + 1, 2 * ypos);
                 dstPoints.insert(dstPnt);
                 mWireEndpoint[id].addDestination(dstPnt);
                 mGlobalOutputHash[id] = ypos;
@@ -602,7 +602,7 @@ namespace hal
         {
             QList<u32> netIds;
             netIds.append(itGlInp.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.left(), 2 * itGlInp.value());
+            NetLayoutPoint pnt(mSceneBoundingBox.left(), 2 * itGlInp.value());
             mJunctionEntries[pnt].mEntries[NetLayoutDirection::Left] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setOutputPins(netIds, 0, 0);
@@ -612,7 +612,7 @@ namespace hal
         {
             QList<u32> netIds;
             netIds.append(itGlOut.key());
-            NetLayoutPoint pnt(mNodeBoundingBox.right() + 1, 2 * itGlOut.value());
+            NetLayoutPoint pnt(mSceneBoundingBox.right() + 1, 2 * itGlOut.value());
             mJunctionEntries[pnt].mEntries[NetLayoutDirection::Right] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setInputPins(netIds, 0, 0);
@@ -691,10 +691,10 @@ namespace hal
         }
 
         // add topmost and leftmost coordinate entry (unless it already exists)
-        if (!mCoordX.contains(mNodeBoundingBox.left()))
-            mCoordX[mNodeBoundingBox.left()].testMinMax(0);
-        if (!mCoordY.contains(mNodeBoundingBox.top()))
-            mCoordY[mNodeBoundingBox.top()].testMinMax(0);
+        if (!mCoordX.contains(mSceneBoundingBox.left()))
+            mCoordX[mSceneBoundingBox.left()].testMinMax(0);
+        if (!mCoordY.contains(mSceneBoundingBox.top()))
+            mCoordY[mSceneBoundingBox.top()].testMinMax(0);
 
         // fill gaps in coordinate system if any
         if (!mCoordX.isEmpty())
@@ -767,7 +767,7 @@ namespace hal
                 xOutputPadding[ix] = xout;
         }
 
-        int ix0 = mNodeBoundingBox.x();
+        int ix0 = mSceneBoundingBox.x();
 
         float x0 = mCoordX[ix0].preLanes() * sLaneSpacing + sHRoadPadding;
         if (!mGlobalInputHash.isEmpty())
@@ -796,7 +796,7 @@ namespace hal
             itxLast = itNext;
         }
 
-        int iy0  = mNodeBoundingBox.y() * 2;
+        int iy0  = mSceneBoundingBox.y() * 2;
         float y0 = mCoordY[iy0].preLanes() * sLaneSpacing + sVRoadPadding;
         mCoordY[iy0].setOffset(y0);
         auto ityLast = mCoordY.begin();
@@ -822,7 +822,7 @@ namespace hal
             ityLast = itNext;
         }
 
-        iy0 = mNodeBoundingBox.y() * 2;
+        iy0 = mSceneBoundingBox.y() * 2;
         auto ity = mCoordY.find(iy0);
         while(ity != mCoordY.end())
         {
@@ -988,23 +988,23 @@ namespace hal
             case EndpointList::HasGlobalEndpoint:
                 if (epl.hasInputArrow())
                 {
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots, dnt->mConnectorLines);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
-                    QPoint pnt(mNodeBoundingBox.left(), yGridPos * 2);
+                    QPoint pnt(mSceneBoundingBox.left(), yGridPos * 2);
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),nlj?nlj->rect().left():0), epc.lanePosition(0, true)));
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mSceneBoundingBox.left(),nlj?nlj->rect().left():0), epc.lanePosition(0, true)));
                 }
                 if (epl.hasOutputArrow())
                 {
                     if (graphicsNet) mScene->addGraphItem(graphicsNet);
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots, dnt->mConnectorLines);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalOutputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
-                    QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
+                    QPoint pnt(mSceneBoundingBox.right() + 1, yGridPos * 2);
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
                     san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj?nlj->rect().right():0), epc.lanePosition(0, true)));
@@ -1012,7 +1012,7 @@ namespace hal
                 break;
             case EndpointList::SourceAndDestination:
                 if (dnt->mLines.nLines() > 0)
-                    graphicsNet = new StandardGraphicsNet(n, dnt->mLines, dnt->mKnots);
+                    graphicsNet = new StandardGraphicsNet(n, dnt->mLines, dnt->mKnots, dnt->mConnectorLines);
                 break;
             default:
                 Q_ASSERT(0 > 1);    // should never occur
@@ -1040,7 +1040,7 @@ namespace hal
             if (isInput)
             {
                 // gack hack : separated net might be connected to several ports
-                const NodeBox* nbox = mBoxes.boxForPoint(pnt.gridPoint());
+                const NodeBox* nbox = mBoxes.boxForPoint(pnt.rightGridPoint());
                 Q_ASSERT(nbox);
                 QList<u32> inpList = nbox->item()->inputNets();
                 for (int jnx = 0; jnx < inpList.size(); jnx++)
@@ -1051,14 +1051,18 @@ namespace hal
                     QPointF inpPnt(itPnt.value().xInput(), itPnt.value().lanePosition(jnx, true));
                     net_item->addInput(inpPnt);
                 }
+                net_item->setInputConnector(nbox->item()->connectors(n->get_id(),true));
             }
             else
             {
+                const NodeBox* nbox = mBoxes.boxForPoint(pnt.leftGridPoint());
+                Q_ASSERT(nbox);
                 for (int inx : itPnt.value().outputPinIndex(id))
                 {
                     QPointF outPnt(itPnt.value().xOutput(), itPnt.value().lanePosition(inx, true));
                     net_item->addOutput(outPnt);
                 }
+                net_item->setOutputConnector(nbox->item()->connectors(n->get_id(),false));
             }
         }
         net_item->finalize();
@@ -1251,10 +1255,9 @@ namespace hal
         return y0 + n * mPinDistance + (ilane - n) * sLaneSpacing;
     }
 
-    GraphLayouter::EndpointCoordinate::EndpointCoordinate() : mYoffset(0), mXoutput(0), mXinput(0), mPinDistance(0), mTopPin(0), mNumberPins(0)
-    {
-        ;
-    }
+    GraphLayouter::EndpointCoordinate::EndpointCoordinate()
+        : mYoffset(0), mXoutput(0), mXinput(0), mPinDistance(0), mTopPin(0), mNumberPins(0)
+    {;}
 
     int GraphLayouter::EndpointCoordinate::numberPins() const
     {
@@ -1498,24 +1501,42 @@ namespace hal
             float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().left():0);
             float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().right():0);
 
-            for (int inpInx : inputsById)
+            if (!inputsById.isEmpty())
             {
-                if (xjRight >= epc.xInput())
+                NodeBox* inpNodeBox = mLayouter->mBoxes.boxForPoint(it.key().rightGridPoint());
+                for (int inpInx : inputsById)
                 {
-                    // don't complain if "input" is in fact global output pin
-                    auto ityOut = mLayouter->mGlobalOutputHash.find(mId);
-                    if (ityOut == mLayouter->mGlobalOutputHash.constEnd() || QPoint(mLayouter->mNodeBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
-                        qDebug() << "cannot connect input pin" << mId << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
+                    if (xjRight >= epc.xInput())
+                    {
+                        // don't complain if "input" is in fact global output pin
+                        auto ityOut = mLayouter->mGlobalOutputHash.find(mId);
+                        if (ityOut == mLayouter->mGlobalOutputHash.constEnd() || QPoint(mLayouter->mSceneBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
+                            qDebug() << "cannot connect input pin" << mId << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
+                    }
+                    else
+                    {
+                        mLines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
+                        if (inpNodeBox && inpNodeBox->item())
+                            for (const QLineF& con : inpNodeBox->item()->connectors(mId,true))
+                                mConnectorLines.append(con.translated(epc.xInput(), epc.lanePosition(inpInx, true)));
+                    }
                 }
-                else
-                    mLines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
             }
-            for (int outInx : outputsById)
+            if (!outputsById.isEmpty())
             {
-                if (epc.xOutput() >= xjLeft)
-                    qDebug() << "cannot connect output pin" << mId << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
-                else
-                    mLines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
+                NodeBox* outNodeBox = mLayouter->mBoxes.boxForPoint(it.key().leftGridPoint());
+                for (int outInx : outputsById)
+                {
+                    if (epc.xOutput() >= xjLeft)
+                        qDebug() << "cannot connect output pin" << mId << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
+                    else
+                    {
+                        mLines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
+                        if (outNodeBox && outNodeBox->item())
+                            for (const QLineF& con : outNodeBox->item()->connectors(mId,false))
+                                mConnectorLines.append(con.translated(epc.xOutput(), epc.lanePosition(outInx, true)));
+                    }
+                }
             }
         }
     }

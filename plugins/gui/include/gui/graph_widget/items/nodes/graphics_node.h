@@ -29,6 +29,7 @@
 
 #include <QString>
 #include <QFont>
+#include <QLineF>
 
 namespace hal
 {
@@ -190,7 +191,10 @@ namespace hal
          */
         static QColor sTextColor;
 
-
+        /**
+         * Return shape connectors between external net and pin, empty list if no connector available (default)
+         */
+        virtual QList<QLineF> connectors(u32 netId, bool isInput) const;
     //    qreal xOffset() const;
     //    qreal yOffset() const;
 

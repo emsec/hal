@@ -85,10 +85,19 @@ namespace hal
          */
         virtual void finalize();
 
+        /**
+         * Add extra lines to connect wire to pin in iconic representation
+         */
+        void setInputConnector(const QList<QLineF>& con);
+        void setOutputConnector(const QList<QLineF>& con);
+
     protected:
         static qreal sAlpha;
 
         QVector<QPointF> mInputPositions;
         QVector<QPointF> mOutputPositions;
+
+        QList<QLineF> mInputConnector;
+        QList<QLineF> mOutputConnector;
     };
 }

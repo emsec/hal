@@ -124,7 +124,7 @@ namespace hal
          * @param n - The undelying net of the StandardGraphicsNet
          * @param l - The lines this GraphicsNet consists of
          */
-        StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF>& knots = QList<QPointF>());
+        StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF>& knots, const QList<QLineF>& connectors);
 
         /**
          * Draws the StandardGraphicsNet in the scene.

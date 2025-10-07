@@ -92,6 +92,10 @@ namespace hal
         {
             QPointF to(position.x() - sWireLength, position.y());
             painter->drawLine(position, to);
+            for (const QLineF& con : mInputConnector)
+            {
+                painter->drawLine(con.translated(position));
+            }
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
             sPen.setStyle(Qt::PenStyle::SolidLine);
@@ -106,6 +110,10 @@ namespace hal
         {
             QPointF to(position.x() + sWireLength, position.y());
             painter->drawLine(position, to);
+            for (const QLineF& con : mOutputConnector)
+            {
+                painter->drawLine(con.translated(position));
+            }
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
             sPen.setStyle(Qt::PenStyle::SolidLine);

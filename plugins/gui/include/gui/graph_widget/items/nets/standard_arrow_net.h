@@ -46,7 +46,7 @@ namespace hal {
          * @param n - The underlying net
          * @param l - The lines this GraphicsNet consists of
          */
-        StandardArrowNet(Net* n, const Lines& l, const QList<QPointF>& knots = QList<QPointF>());
+        StandardArrowNet(Net* n, const Lines& l, const QList<QPointF>& knots, const QList<QLineF>& connectors);
         /**
          * Adds an input position.
          *

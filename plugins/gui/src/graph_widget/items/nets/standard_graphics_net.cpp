@@ -76,7 +76,7 @@ namespace hal
             sAlpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF> &knots) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF> &knots, const QList<QLineF> &connectors) : GraphicsNet(n)
     {
         for (const QPointF& point : knots)
         {
@@ -126,6 +126,23 @@ namespace hal
             mLines.append(line);
             QRectF rect(v.x - sShapeWidth / 2, v.mSmallY - sShapeWidth / 2, sShapeWidth, v.mBigY - v.mSmallY + sShapeWidth);
             mShape.addRect(rect);
+        }
+
+        for (const QLineF& con : connectors)
+        {
+            if (con.x1() < smallest_x)
+                smallest_x = con.x1();
+
+            else if (con.x2() > biggest_x)
+                biggest_x = con.x2();
+
+            if (con.y1() < smallest_y)
+                smallest_y = con.y1();
+
+            if (con.y2() > biggest_y)
+                biggest_y = con.y2();
+
+            mLines.append(con);
         }
 
         const qreal padding = sSplitRadius + sShapeWidth;

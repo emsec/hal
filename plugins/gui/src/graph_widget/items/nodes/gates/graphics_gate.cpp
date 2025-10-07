@@ -80,4 +80,12 @@ namespace hal
         textLines[1] = QString::fromStdString(gt->get_name());
         setNodeText(textLines,true);
     }
+
+    QList<QLineF> GraphicsGate::connectors(u32 netId, bool isInput) const
+    {
+        if (!netId) return  QList<QLineF>();
+        int inx = isInput ? mInputByNet.value(netId,-1) : mOutputByNet.value(netId,-1);
+        if (inx < 0) return QList<QLineF>();
+        return isInput ? mInputPinStruct.at(inx).connectors : mOutputPinStruct.at(inx).connectors;
+    }
 }    // namespace hal

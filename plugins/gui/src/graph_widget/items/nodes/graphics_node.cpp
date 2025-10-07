@@ -83,6 +83,13 @@ namespace hal
         return QRectF(0, 0, mWidth, mHeight);
     }
 
+    QList<QLineF> GraphicsNode::connectors(u32 netId, bool isInput) const
+    {
+        Q_UNUSED(netId);
+        Q_UNUSED(isInput);
+        return QList<QLineF>();
+    }
+
     QPainterPath GraphicsNode::shape() const
     {
         QPainterPath path;

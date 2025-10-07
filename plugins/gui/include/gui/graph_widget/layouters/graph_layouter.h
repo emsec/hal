@@ -390,7 +390,7 @@ namespace hal
         bool mDone;
         int mRollbackStatus;
 
-        QRect mNodeBoundingBox;
+        QRect mSceneBoundingBox;
         NetLayoutConnectionMetric mConnectionMetric;
         QHash<NetLayoutWire, QList<u32>> mWireHash;
         QHash<NetLayoutPoint, NetLayoutJunctionEntries> mJunctionEntries;
@@ -427,6 +427,7 @@ namespace hal
     public:
         StandardGraphicsNet::Lines mLines;
         QList<QPointF> mKnots;
+        QList<QLineF> mConnectorLines;
         DrawNetThread(u32 id, GraphLayouter* parent) : QThread(parent), mId(id), mLayouter(parent) {;}
         u32 id() const { return mId; }
         void run() override;

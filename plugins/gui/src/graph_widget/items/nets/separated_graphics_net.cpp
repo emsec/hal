@@ -26,4 +26,14 @@ namespace hal
         mRect = mShape.boundingRect();
         mRect.adjust(-sLineWidth, -sLineWidth, sLineWidth, sLineWidth);
     }
+
+    void SeparatedGraphicsNet::setInputConnector(const QList<QLineF>& con)
+    {
+        mInputConnector = con;
+    }
+
+    void SeparatedGraphicsNet::setOutputConnector(const QList<QLineF>& con)
+    {
+        mOutputConnector = con;
+    }
 }

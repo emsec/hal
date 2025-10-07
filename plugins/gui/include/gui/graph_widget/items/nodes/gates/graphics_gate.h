@@ -26,9 +26,7 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
-#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 
-#include <memory>
 #include <QPainterPath>
 
 namespace hal
@@ -55,6 +53,8 @@ namespace hal
          */
         GraphicsGate(Gate* g);
 
+        virtual QList<QLineF> connectors(u32 netId, bool isInput) const;
+
     protected:
 
         struct GraphicsGatePin
@@ -66,6 +66,7 @@ namespace hal
             bool isInput;
             float x;
             float y;
+            QList<QLineF> connectors;
         };
 
         enum ShapeType { StandardShape, InverterShape, AndShape, OrShape };
