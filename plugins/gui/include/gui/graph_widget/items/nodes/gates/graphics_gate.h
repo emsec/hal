@@ -69,7 +69,7 @@ namespace hal
             QList<QLineF> connectors;
         };
 
-        enum ShapeType { StandardShape, InverterShape, AndShape, OrShape };
+        enum ShapeType { StandardShape, InverterShape, AndShape, NandShape, OrShape, NorShape, XorShape, NxorShape };
 
         /**
          * Pointer to gate in hal core

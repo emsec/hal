@@ -120,6 +120,8 @@ namespace hal
         static qreal sFirstPinY;
         static qreal sPinYStride;
 
+        static qreal sInverterCircleSize;
+
         void format(const bool& adjust_size_to_grid);
 
         static const int sIconPadding;
@@ -131,5 +133,7 @@ namespace hal
 
         void paintPin(QPainter* painter, QStyle::State state, const GraphicsGatePin& pin, FocusType focusType);
         void setPinPosition();
+
+        static bool inverterCircleShape(ShapeType shapeType);
     };
 }

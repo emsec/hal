@@ -26,14 +26,22 @@ namespace hal
                     mShapeType = InverterShape;
                     break;
                 case hal::GateTypeProperty::c_and:
-                case hal::GateTypeProperty::c_nand:
                     mShapeType = AndShape;
                     break;
+                case hal::GateTypeProperty::c_nand:
+                    mShapeType = NandShape;
+                    break;
                 case hal::GateTypeProperty::c_or:
-                case hal::GateTypeProperty::c_nor:
-                case hal::GateTypeProperty::c_xor:
-                case hal::GateTypeProperty::c_xnor:
                     mShapeType = OrShape;
+                    break;
+                case hal::GateTypeProperty::c_nor:
+                    mShapeType = NorShape;
+                    break;
+                case hal::GateTypeProperty::c_xor:
+                    mShapeType = XorShape;
+                    break;
+                case hal::GateTypeProperty::c_xnor:
+                    mShapeType = NxorShape;
                     break;
                 default:
                     break;
@@ -41,7 +49,7 @@ namespace hal
         }
 
         if (mShapeType != StandardShape)
-            mPathWidth = 12;
+            mPathWidth = 10;
 
         for (const GatePin* input_pin : gt->get_input_pins())
         {
