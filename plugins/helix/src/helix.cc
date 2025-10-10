@@ -187,12 +187,11 @@ namespace hal
                     return;
                 }
 
-                if( command == "GateActionZoom" && instances.size() == 1 )
+                if( command == "GateActionZoom" )
                 {
-                    handle_gate_action_zoom( *instances.begin() );
-                    gui_api.selectGate( *instances.begin(), true, false );
+                    gui_api.selectGate( instances, true, true );
                 }
-                else if( command == "GateActionIsolate" || command == "GateActionZoom" && instances.size() > 1 )
+                else if( command == "GateActionIsolate" )
                 {
                     handle_gate_action_isolate( instances );
                     // Why does it not clear the current selection?
