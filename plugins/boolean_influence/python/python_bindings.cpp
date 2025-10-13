@@ -1,7 +1,6 @@
-#include "hal_core/python_bindings/python_bindings.h"
-
 #include "boolean_influence/boolean_influence.h"
 #include "boolean_influence/plugin_boolean_influence.h"
+#include "hal_core/python_bindings/python_bindings.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -281,6 +280,60 @@ namespace hal
             Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
 
             :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
+            :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
+            :rtype: dict[hal_py.Net,float]
+        )");
+
+        m.def(
+            "get_boolean_influences_of_subcircuit_bitsliced",
+            [](const std::vector<Gate*>& gates, const Net* start_net, const u32 bias) -> std::optional<std::map<Net*, double>> {
+                const auto res = boolean_influence::get_boolean_influences_of_subcircuit_bitsliced(gates, start_net, bias);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "cannot get Boolean influence of subcircuit function:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gates"),
+            py::arg("start_net"),
+            py::arg("bias") = 0,
+            R"(
+            Generates the function of the net using only the given gates.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+
+            :param list[hal_py.Gate] gates: The gates of the subcircuit.
+            :param hal_py.Net start_net: The output net of the subcircuit at which to start the analysis.
+            :param int bias: A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0
+            :returns: A dict from the nets that appear in the function of the start net to their Boolean influence on said function on success, None otherwise.
+            :rtype: dict[hal_py.Net,float] or None
+        )");
+
+        m.def(
+            "get_boolean_influences_of_gate_bitsliced",
+            [](const Gate* gate, const u32 bias) -> std::optional<std::map<Net*, double>> {
+                const auto res = boolean_influence::get_boolean_influences_of_gate_bitsliced(gate, bias);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "cannot get Boolean influence of flip-flop data fan-in:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            py::arg("bias") = 0,
+            R"(
+            Generates the function of the dataport net of the given flip-flop.
+            Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.
+
+            :param hal_py.Gate gate: The flip-flop which data input net is used to build the boolean function.
+            :param int bias: A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0
             :returns: A dict from the nets that appear in the function of the data net to their Boolean influence on said function on success, None otherwise.
             :rtype: dict[hal_py.Net,float]
         )");

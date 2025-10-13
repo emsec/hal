@@ -1,10 +1,10 @@
-#include "z3_utils/z3_utils.h"
-
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
 #include "z3_api.h"
+#include "z3_utils/converter/cpp_bitsliced_converter.h"
 #include "z3_utils/converter/cpp_converter.h"
 #include "z3_utils/converter/verilog_converter.h"
+#include "z3_utils/z3_utils.h"
 
 #include <sstream>
 
@@ -463,6 +463,14 @@ namespace hal
         std::string to_cpp(const z3::expr& e)
         {
             const auto converter = Cpp_Converter();
+            const auto c_file    = converter.convert_z3_expr_to_func(e);
+
+            return c_file;
+        }
+
+        std::string to_cpp_bitsliced(const z3::expr& e)
+        {
+            const auto converter = CppBitslicedConverter();
             const auto c_file    = converter.convert_z3_expr_to_func(e);
 
             return c_file;

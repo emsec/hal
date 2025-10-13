@@ -82,6 +82,14 @@ namespace hal
         std::string to_cpp(const z3::expr& e);
 
         /**
+         * @brief Translates a z3 expression into a 64 times bitsliced c++ representation that can be used to evalute the function fast and track the influence of the variables. 
+         * 
+         * @param[in] e - The expression to translate.
+         * @returns A string containing the bitsliced c++ representation.
+         */
+        std::string to_cpp_bitsliced(const z3::expr& e);
+
+        /**
          * @brief Translates a z3 expression into a verilog network representation.
          * 
          * @param[in] e - The expression to translate.

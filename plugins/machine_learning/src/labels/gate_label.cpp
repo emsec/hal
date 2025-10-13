@@ -14,18 +14,28 @@ namespace hal
             {
                 UNUSED(ctx);
 
-                for (const auto& gtp : m_applicable_to)
+                bool is_applicable = m_applicable_to.empty();
+                if (!m_applicable_to.empty())
                 {
-                    if (g->get_type()->has_property(gtp))
+                    for (const auto& gtp : m_applicable_to)
                     {
-                        const auto& gate_name = g->get_name();
-                        if (gate_name.find(m_key_word) != std::string::npos)
+                        if (g->get_type()->has_property(gtp))
                         {
-                            return OK(MATCH);
+                            is_applicable = true;
+                            break;
                         }
-
-                        return OK(MISMATCH);
                     }
+                }
+
+                if (is_applicable)
+                {
+                    const auto& gate_name = g->get_name();
+                    if (gate_name.find(m_key_word) != std::string::npos)
+                    {
+                        return OK(MATCH);
+                    }
+
+                    return OK(MISMATCH);
                 }
 
                 return OK(NA);
@@ -176,6 +186,199 @@ namespace hal
                 return "NetNameKeyWord_" + m_key_word + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
             }
 
+            Result<std::vector<u32>> GateNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
+            {
+                UNUSED(ctx);
+
+                bool is_applicable = m_applicable_to.empty();
+                if (!m_applicable_to.empty())
+                {
+                    for (const auto& gtp : m_applicable_to)
+                    {
+                        if (g->get_type()->has_property(gtp))
+                        {
+                            is_applicable = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (is_applicable)
+                {
+                    const auto& gate_name = g->get_name();
+                    std::vector<u32> matches;
+                    for (u32 i = 0; i < m_key_words.size(); i++)
+                    {
+                        if (gate_name.find(m_key_words.at(i)) != std::string::npos)
+                        {
+                            matches.push_back(i);
+                        }
+                    }
+
+                    if (!matches.empty())
+                    {
+                        const auto match_res = make_match(matches);
+                        if (match_res.is_error())
+                        {
+                            return ERR_APPEND(match_res.get_error(), "failed to build label for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                        }
+                        return OK(match_res.get());
+                    }
+
+                    return OK(NO_MATCH);
+                }
+
+                return OK(NA);
+            }
+
+            Result<std::vector<std::vector<u32>>> GateNameKeyWords::calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const
+            {
+                std::vector<std::vector<u32>> labels;
+
+                for (const auto& g : gates)
+                {
+                    const auto new_label = calculate_label(ctx, g);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(), "Cannot caluclate label for gate  " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+
+                    labels.push_back(new_label.get());
+                }
+
+                return OK(labels);
+            }
+
+            Result<std::vector<std::vector<u32>>> GateNameKeyWords::calculate_labels(Context& ctx) const
+            {
+                const auto labels = calculate_labels(ctx, ctx.get_gates());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "Failed to calculate labels");
+                }
+
+                return OK(labels.get());
+            }
+
+            std::string GateNameKeyWords::to_string() const
+            {
+                std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
+                std::string key_words_to_str  = utils::join("_", m_key_words.begin(), m_key_words.end(), [](const std::string& s) { return s; });
+
+                return "GateNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
+            }
+
+            Result<std::vector<u32>> NetNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
+            {
+                UNUSED(ctx);
+
+                bool is_applicable = m_applicable_to.empty();
+                if (!m_applicable_to.empty())
+                {
+                    for (const auto& gtp : m_applicable_to)
+                    {
+                        if (g->get_type()->has_property(gtp))
+                        {
+                            is_applicable = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (is_applicable)
+                {
+                    std::vector<u32> matches;
+                    for (u32 i = 0; i < m_key_words.size(); i++)
+                    {
+                        std::set<Net*> nets_to_check;
+                        for (const auto& in_ep : g->get_fan_in_endpoints())
+                        {
+                            const auto pin_type = in_ep->get_pin()->get_type();
+                            if (std::find(m_pin_types.begin(), m_pin_types.end(), pin_type) != m_pin_types.end())
+                            {
+                                if (in_ep->get_net() != nullptr)
+                                {
+                                    nets_to_check.insert(in_ep->get_net());
+                                }
+                            }
+                        }
+
+                        for (const auto& out_ep : g->get_fan_out_endpoints())
+                        {
+                            const auto pin_type = out_ep->get_pin()->get_type();
+                            if (std::find(m_pin_types.begin(), m_pin_types.end(), pin_type) != m_pin_types.end())
+                            {
+                                if (out_ep->get_net() != nullptr)
+                                {
+                                    nets_to_check.insert(out_ep->get_net());
+                                }
+                            }
+                        }
+
+                        for (const auto& net : nets_to_check)
+                        {
+                            const std::string net_name = net->get_name();
+                            if (net_name.find(m_key_words.at(i)) != std::string::npos)
+                            {
+                                matches.push_back(i);
+                            }
+                        }
+                    }
+
+                    if (!matches.empty())
+                    {
+                        const auto match_res = make_match(matches);
+                        if (match_res.is_error())
+                        {
+                            return ERR_APPEND(match_res.get_error(), "failed to build label for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                        }
+                        return OK(match_res.get());
+                    }
+
+                    return OK(NO_MATCH);
+                }
+
+                return OK(NA);
+            }
+
+            Result<std::vector<std::vector<u32>>> NetNameKeyWords::calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const
+            {
+                std::vector<std::vector<u32>> labels;
+
+                for (const auto& g : gates)
+                {
+                    const auto new_label = calculate_label(ctx, g);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(), "Cannot caluclate label for gate  " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+
+                    labels.push_back(new_label.get());
+                }
+
+                return OK(labels);
+            }
+
+            Result<std::vector<std::vector<u32>>> NetNameKeyWords::calculate_labels(Context& ctx) const
+            {
+                const auto labels = calculate_labels(ctx, ctx.get_gates());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "Failed to calculate labels");
+                }
+
+                return OK(labels.get());
+            }
+
+            std::string NetNameKeyWords::to_string() const
+            {
+                std::string key_words_to_str  = utils::join("_", m_key_words.begin(), m_key_words.end(), [](const std::string& s) { return s; });
+                std::string pin_types_str     = utils::join("_", m_pin_types.begin(), m_pin_types.end(), [](const PinType& pt) { return enum_to_string(pt); });
+                std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
+
+                return "NetNameKeyWords_" + key_words_to_str + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
+            }
+
         }    // namespace gate_label
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal
