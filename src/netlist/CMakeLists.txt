@@ -30,6 +30,8 @@ set_target_properties(PROPERTIES DEFINE_SYMBOL BUILDING_CORE)
 
 target_link_libraries(netlist
                       PUBLIC
+                        gmp
+                        gmpxx
                         hal::utilities
                         std::filesystem
                         spdlog::spdlog
