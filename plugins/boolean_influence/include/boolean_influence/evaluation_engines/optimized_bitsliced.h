@@ -15,10 +15,11 @@ namespace hal
   #include <intrin.h>   // for __popcnt64
 #endif
 
+#define INPUT_SIZE  <INPUT_SIZE>
+#define K           <K>
+#define NUM_TRIALS  <NUM_TRIALS>
 
-inline uint64_t func64(const uint64_t *v) {
-    <C_FUNC>
-}
+<C_FUNCTION>
 
 // ---- small inline helper control ----
 #if defined(__GNUC__) || defined(__clang__)
@@ -76,7 +77,7 @@ static FORCE_INLINE uint64_t bernoulli_mask_or(void){
     return m;
 }
 
-static FORCE_INLINE void build_masks(uint64_t *restrict vmask){
+static FORCE_INLINE void build_masks(uint64_t *vmask){
     for (int i=0;i<INPUT_SIZE;++i) vmask[i]=bernoulli_mask_or();
 }
 

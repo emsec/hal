@@ -21,7 +21,7 @@ namespace hal
             }
             if (utils::starts_with(operand, std::string("var_")))
             {
-                return "values[" + operand.substr(4) + "]";
+                return "v[" + operand.substr(4) + "]";
             }
 
             log_error("z3_utils", "Unkown operand format for {}!", operand);

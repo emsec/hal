@@ -120,7 +120,7 @@ namespace hal
          * @param[in] bias -  A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0.
          * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
          */
-        Result<std::unordered_map<std::string, double>> get_boolean_influence_bitsliced(const z3::expr& expr, const u32 num_evaluations, const u32 bias = 0);
+        Result<std::unordered_map<std::string, double>> get_boolean_influence_bitsliced(const z3::expr& expr, const u32 num_evaluations = 32000, const u32 bias = 0);
 
         /**
          * Generates the function of the net using only the given gates.
@@ -132,7 +132,7 @@ namespace hal
          * @param[in] bias -  A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0.
          * @returns A map from the nets that appear in the function of the start net to their Boolean influence on said function on success, an error otherwise.
          */
-        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_bitsliced(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations, const u32 bias = 0);
+        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_bitsliced(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations = 32000, const u32 bias = 0);
 
         /**
          * Generates the function of the dataport net of the given flip-flop.
@@ -143,7 +143,7 @@ namespace hal
          * @param[in] bias -  A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0.
          * @returns A map from the nets that appear in the function of the data net to their Boolean influence on said function on success, an error otherwise.
          */
-        Result<std::map<Net*, double>> get_boolean_influences_of_gate_bitsliced(const Gate* gate, const u32 num_evaluations, const u32 bias = 0);
+        Result<std::map<Net*, double>> get_boolean_influences_of_gate_bitsliced(const Gate* gate, const u32 num_evaluations = 32000, const u32 bias = 0);
 
         /**
          * Get the FF dependency matrix of a netlist.

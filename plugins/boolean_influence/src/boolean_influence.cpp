@@ -89,6 +89,11 @@ namespace hal
                     return OK(influences);
                 }
 
+                if (num_evaluations == 0)
+                {
+                    return ERR("Cannot calculate boolean influence with 0 evaluations");
+                }
+
                 if (deterministic && input_vars.size() > 16)
                 {
                     return ERR("unable to generate Boolean influence: Cannot evaluate Boolean function deterministically for more than 16 variables but got " + std::to_string(input_vars.size()));
@@ -455,7 +460,6 @@ namespace hal
                     const auto res_1 = z3_bf_substitute.substitute(from_vec_var, to_vec_one).simplify();
                     if (!res_1.is_numeral())
                     {
-                        std::cout << res_1 << std::endl;
                         return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
                     }
 
@@ -463,7 +467,6 @@ namespace hal
                     const auto res_2 = z3_bf_substitute.substitute(from_vec_var, to_vec_zero).simplify();
                     if (!res_2.is_numeral())
                     {
-                        std::cout << res_2 << std::endl;
                         return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
                     }
 
@@ -534,6 +537,11 @@ namespace hal
                 return OK(influences);
             }
 
+            if (num_evaluations == 0)
+            {
+                return ERR("Cannot calculate boolean influence with 0 evaluations");
+            }
+
             if (bias > 7)
             {
                 return ERR("Cannot calculate boolean influence with a bias towards ones greate then 7");
@@ -570,6 +578,9 @@ namespace hal
 
             std::string cpp_program = optimized_bitsliced_function;
             cpp_program             = utils::replace(cpp_program, std::string("<C_FUNCTION>"), z3_utils::to_cpp_bitsliced(replaced_e));
+            cpp_program             = utils::replace(cpp_program, std::string("<INPUT_SIZE>"), std::to_string(replacement_vars.size()));
+            cpp_program             = utils::replace(cpp_program, std::string("<K>"), std::to_string(bias));
+            cpp_program             = utils::replace(cpp_program, std::string("<NUM_TRIALS>"), std::to_string(num_evaluations));
 
             // write cpp program to file
             std::ofstream ofs(file_path);
@@ -583,15 +594,7 @@ namespace hal
 
             // compile the cpp file
             const std::string program_name    = file_path.string().substr(0, file_path.string().size() - 4);
-            const std::string compile_command = "cc -O3 -march=native -DNDEBUG -std=c11 "
-                                                "-DINPUT_SIZE="
-                                                + std::to_string(replacement_vars.size())
-                                                + " "
-                                                  "-DK="
-                                                + std::to_string(bias)
-                                                + " "
-                                                  "-DNUM_TRIALS="
-                                                + std::to_string(num_evaluations) + " " + "\"" + file_path.string() + "\" -o \"" + program_name + "\"";
+            const std::string compile_command = "cc -O3 -march=native -DNDEBUG " + file_path.string() + " -o " + program_name;
 
             int res = system(compile_command.c_str());
             UNUSED(res);
@@ -637,9 +640,9 @@ namespace hal
             }
 
             // delete files and temp directory
-            std::remove(file_path.string().c_str());
-            std::remove(program_name.c_str());
-            std::filesystem::remove(directory);
+            // std::remove(file_path.string().c_str());
+            // std::remove(program_name.c_str());
+            // std::filesystem::remove(directory);
 
             return OK(influences);
         }
@@ -648,7 +651,7 @@ namespace hal
         {
             for (const auto* gate : gates)
             {
-                if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
+                if (!gate->get_type()->has_property(GateTypeProperty::combinational))
                 {
                     return ERR("unable to get Boolean influence for net " + start_net->get_name() + " with ID " + std::to_string(start_net->get_id()) + ": sub circuit gates include gate "
                                + gate->get_name() + " with ID " + std::to_string(gate->get_id()) + " that is either not a combinational gate or is a VCC / GND gate.");
