@@ -759,7 +759,7 @@ namespace hal
             std::map<Gate*, u32> gate_to_matrix_id;
             std::vector<std::vector<double>> matrix;
 
-            std::unordered_map<const Net*, std::set<Gate*>>* cache;
+            std::unordered_map<const Net*, std::set<Gate*>>* cache = {};
 
             u32 matrix_gates = 0;
             for (const auto& gate : nl->get_gates())
