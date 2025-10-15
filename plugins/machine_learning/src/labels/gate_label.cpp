@@ -1,4 +1,5 @@
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "machine_learning/labels/gate_label.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
@@ -377,6 +378,92 @@ namespace hal
                 std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
 
                 return "NetNameKeyWords_" + key_words_to_str + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
+            }
+
+            Result<std::vector<u32>> ModuleNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
+            {
+                UNUSED(ctx);
+
+                bool is_applicable = m_applicable_to.empty();
+                if (!m_applicable_to.empty())
+                {
+                    for (const auto& gtp : m_applicable_to)
+                    {
+                        if (g->get_type()->has_property(gtp))
+                        {
+                            is_applicable = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (is_applicable)
+                {
+                    const auto modules = g->get_modules(nullptr, m_recursive);
+                    std::vector<u32> matches;
+                    for (u32 i = 0; i < m_key_words.size(); i++)
+                    {
+                        for (const auto& m : modules)
+                        {
+                            const auto module_name = m->get_name();
+                            if (module_name.find(m_key_words.at(i)) != std::string::npos)
+                            {
+                                matches.push_back(i);
+                            }
+                        }
+                    }
+
+                    if (!matches.empty())
+                    {
+                        const auto match_res = make_match(matches);
+                        if (match_res.is_error())
+                        {
+                            return ERR_APPEND(match_res.get_error(), "failed to build label for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                        }
+                        return OK(match_res.get());
+                    }
+
+                    return OK(NO_MATCH);
+                }
+
+                return OK(NA);
+            }
+
+            Result<std::vector<std::vector<u32>>> ModuleNameKeyWords::calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const
+            {
+                std::vector<std::vector<u32>> labels;
+
+                for (const auto& g : gates)
+                {
+                    const auto new_label = calculate_label(ctx, g);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(), "Cannot caluclate label for gate  " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+
+                    labels.push_back(new_label.get());
+                }
+
+                return OK(labels);
+            }
+
+            Result<std::vector<std::vector<u32>>> ModuleNameKeyWords::calculate_labels(Context& ctx) const
+            {
+                const auto labels = calculate_labels(ctx, ctx.get_gates());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "Failed to calculate labels");
+                }
+
+                return OK(labels.get());
+            }
+
+            std::string ModuleNameKeyWords::to_string() const
+            {
+                std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
+                std::string key_words_to_str  = utils::join("_", m_key_words.begin(), m_key_words.end(), [](const std::string& s) { return s; });
+
+                return "ModuleNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str + "_" + (m_recursive ? "RECURSIVE" : ""));
             }
 
         }    // namespace gate_label
