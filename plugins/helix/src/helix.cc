@@ -1,7 +1,5 @@
 #include "helix/helix.h"
 
-#include "gui/content_manager/content_manager.h"
-#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/layouters/net_layout_point.h"
@@ -96,7 +94,7 @@ namespace hal
             return instance_ids;
         }
 
-        void handle_gate_action_isolate( const std::vector<u32> instance_ids )
+        void handle_gate_action_isolate( const std::vector<u32> &instance_ids )
         {
             const QSet<u32> instance_ids_qset( instance_ids.begin(), instance_ids.end() );
             QMetaObject::invokeMethod(
@@ -113,14 +111,12 @@ namespace hal
                         context->setDirty( false );
                 },
                 Qt::QueuedConnection );
+            gGuiApi->selectGate( instance_ids, true, false );
         }
 
-        void handle_gate_action_zoom( const u32 instance_id )
+        void handle_gate_action_zoom( const std::vector<u32> &instance_ids )
         {
-            QMetaObject::invokeMethod(
-                gContentManager,
-                [instance_id]() { gContentManager->getGraphTabWidget()->handleGateFocus( instance_id ); },
-                Qt::QueuedConnection );
+            gGuiApi->selectGate( instance_ids, true, true );
         }
     }  // namespace
 
@@ -133,7 +129,6 @@ namespace hal
                 (void) ctx;
                 Netlist *netlist = (Netlist *) privdata;
                 redisReply *msg = (redisReply *) reply;
-                static GuiApi gui_api;
 
                 if( reply == nullptr )
                 {
@@ -189,13 +184,11 @@ namespace hal
 
                 if( command == "GateActionZoom" )
                 {
-                    gui_api.selectGate( instances, true, true );
+                    handle_gate_action_zoom( instances );
                 }
                 else if( command == "GateActionIsolate" )
                 {
                     handle_gate_action_isolate( instances );
-                    // Why does it not clear the current selection?
-                    gui_api.selectGate( instances, true, false );
                 }
                 else
                 {
