@@ -64,14 +64,34 @@ namespace hal
         }
     }
 
-    void GraphicsNode::initTextPosition(qreal y0, qreal spacing)
+    void GraphicsNode::setMaxTextWidth(qreal maxTw)
+    {
+        mMaxTextWidth = maxTw;
+        for (int iline=0; iline<3; iline++)
+        {
+            QString shorter = mNodeText[iline];
+            QString txt = mNodeText[iline];
+            qreal textWidth = 0;
+            do {
+                textWidth = QFontMetricsF(sTextFont[iline]).width(txt);
+                if (textWidth > mMaxTextWidth)
+                {
+                    shorter.chop(1);
+                    txt = shorter + "…";
+                }
+            } while (textWidth > mMaxTextWidth);
+            mNodeText[iline] = txt;
+        }
+    }
+
+    void GraphicsNode::initTextPosition(qreal y0, qreal spacing, qreal x0)
     {
         for (int iline=0; iline<3; iline++)
         {
             QFontMetricsF fmf(sTextFont[iline]);
             qreal textWidth = fmf.width(mNodeText[iline]);
             y0 += sTextFontHeight[iline];
-            mTextPosition[iline].setX(mWidth / 2 - textWidth / 2);
+            mTextPosition[iline].setX(x0 < 0 ? mWidth / 2 - textWidth / 2 : x0);
             mTextPosition[iline].setY(y0);
             y0 += spacing;
         }

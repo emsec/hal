@@ -330,18 +330,22 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     {
         case InverterShape:
             mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 0.75 * h + 0.5 * mPathWidth;
+            setMaxTextWidth(20);
             break;
         case AndShape:
         case NandShape:
             mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 1.3 * h - 0.7 * mInputPinStruct.size() * yEndpointDistance() - mPathWidth;
+            setMaxTextWidth(60);
             break;
         case OrShape:
         case NorShape:
             mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 1.6 * h - 0.7 * mInputPinStruct.size() * yEndpointDistance() - mPathWidth;
+            setMaxTextWidth(60);
             break;
         case XorShape:
         case NxorShape:
             mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 1.6 * h - 0.7 * mInputPinStruct.size() * yEndpointDistance() + mPathWidth;
+            setMaxTextWidth(60);
             break;
         default:
             mWidth = mMaxInputPinWidth + mMaxOutputPinWidth + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
@@ -371,7 +375,28 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
     // reproduce formatting, sTextFontHeight[0] will be added befor placing line
     qreal ytext0 = std::max(mHeight / 2 - sTextFontHeight[0] * 3 / 2 - sInnerNameTypeSpacing / 2,
                           sColorBarHeight + sOuterNameTypeSpacing);
-    initTextPosition(ytext0, sInnerNameTypeSpacing);
+
+    switch (mShapeType)
+    {
+        case InverterShape:
+            initTextPosition(ytext0 - sTextFontHeight[0], sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + mPathWidth);
+            break;
+        case AndShape:
+        case NandShape:
+            initTextPosition(ytext0, sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + mPathWidth);
+            break;
+        case OrShape:
+        case NorShape:
+            initTextPosition(ytext0, sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + 2*mPathWidth);
+            break;
+        case XorShape:
+        case NxorShape:
+            initTextPosition(ytext0, sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + 4*mPathWidth);
+            break;
+        default:
+            initTextPosition(ytext0, sInnerNameTypeSpacing);
+            break;
+    }
 
     qreal y = sColorBarHeight + sPinUpperVerticalSpacing + sPinFontAscent + sBaseline;
 

@@ -256,8 +256,13 @@ namespace hal
         void setNodeText(const QString* lines, bool init);
 
         /**
-         * Init text position after box width has been calculated
+         * Set maximum text with, truncate lines if necessary
          */
-        void initTextPosition(qreal y0, qreal spacing);
+        void setMaxTextWidth(qreal maxTw);
+
+        /**
+         * Init text position after box width has been calculated, if x0 is not given text will be centered
+         */
+        void initTextPosition(qreal y0, qreal spacing, qreal x0 = -1);
     };
 }
