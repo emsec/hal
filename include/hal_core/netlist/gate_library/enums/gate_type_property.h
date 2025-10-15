@@ -55,7 +55,9 @@ namespace hal
         c_nor,          /**< NOR gate type. **/
         c_xor,          /**< XOR gate type. **/
         c_xnor,         /**< XNOR gate type. **/
+        c_ao,           /**< AO gate type. **/
         c_aoi,          /**< AOI gate type. **/
+        c_oa,           /**< OA gate type. **/
         c_oai,          /**< OAI gate type. **/
         c_mux,          /**< MUX gate type. **/
         c_carry,        /**< Carry gate type. **/
