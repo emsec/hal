@@ -109,6 +109,9 @@ namespace hal
 
         std::string CppBitslicedConverter::construct_function(const std::string& assignments, const std::string& initalization, const std::vector<std::string>& input_vars) const
         {
+            UNUSED(initalization);
+            UNUSED(input_vars);
+
             std::string func = m_function_corpus;
 
             // extract last return val
