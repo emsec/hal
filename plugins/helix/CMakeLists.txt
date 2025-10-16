@@ -3,7 +3,9 @@ option(PL_HELIX "Build the Helix plugin" ON)
 if(PL_HELIX OR BUILD_ALL_PLUGINS)
 
     # Dependencies
-    add_subdirectory(deps)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(HIREDIS REQUIRED hiredis)
+    pkg_check_modules(LIBEVENT REQUIRED libevent)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 
     # Include-What-You-Use (optional)
@@ -30,6 +32,8 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
     # --- Includes ---
     target_include_directories(helix PRIVATE
         "${PROJECT_SOURCE_DIR}/plugins/gui/include"
+        ${LIBEVENT_INCLUDE_DIRS}
+        ${HIREDIS_INCLUDE_DIRS}
     )
 
     # --- Link Libraries ---
@@ -37,9 +41,8 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
         Qt5::Core
         Qt5::Widgets
         pthread
-        event
-        event_pthreads
-        hiredis
+        ${LIBEVENT_LIBRARIES}
+        ${HIREDIS_LIBRARIES}
         gui
     )
 
