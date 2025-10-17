@@ -1,8 +1,6 @@
 #include "hal_core/python_bindings/python_bindings.h"
 #include "machine_learning/features/edge_feature.h"
 #include "machine_learning/features/gate_feature.h"
-#include "machine_learning/features/gate_feature_bulk.h"
-#include "machine_learning/features/gate_feature_single.h"
 #include "machine_learning/features/gate_pair_feature.h"
 #include "machine_learning/graph_neural_network.h"
 #include "machine_learning/labels/gate_label.h"

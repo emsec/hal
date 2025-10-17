@@ -678,5 +678,58 @@ namespace hal
                 :returns: A list of gates that connect the start with end gate on success, ``None`` otherwise.
                 :rtype: list[hal_py.Gate] or None
             )");
+
+        py_netlist_traversal_decorator.def(
+            "get_combinational_subgraphs",
+            [](NetlistTraversalDecorator& self) -> std::optional<std::vector<std::vector<Gate*>>> {
+                auto res = self.get_combinational_subgraphs();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting combinational subgraphs:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+                Find all combinational subgraphs in the netlist.
+                A combinational subgraph is defined as a connected set of gates that are all of combinational type
+
+                :rtype: list[list[hal_py.Gate]] or None
+            )");
+
+        py_netlist_traversal_decorator.def(
+            "get_matching_subgraphs",
+            [](NetlistTraversalDecorator& self,
+               const std::function<bool(const Gate*)>& gate_filter,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::vector<std::vector<Gate*>>> {
+                auto res = self.get_matching_subgraphs(gate_filter, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting matching subgraphs:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate_filter"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(
+                Find all subgraphs in the netlist where all gates match the given filter.
+                A subgraph is defined as a connected set of gates.
+                A connection between gates has to be established through pins that do not get filtered out by the `exit_endpoint_filter` and the `entry_endpoint_filter`.
+
+                :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+                :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+                :param callable gate_filter: Filter condition that must be met for all gates in the subgraph.
+                :returns: A list of subgraphs where each subgraph is represented as a list of gates on success, ``None`` otherwise.
+                :rtype: list[list[hal_py.Gate]] or None
+            )");
     }
 }    // namespace hal

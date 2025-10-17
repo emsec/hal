@@ -1,5 +1,4 @@
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
@@ -1176,6 +1175,96 @@ namespace hal
 
         return ERR("cannot get shortest path between Gate " + start_gate->get_name() + " with ID " + std::to_string(start_gate->get_id()) + " and Gate " + end_gate->get_name() + " with ID "
                    + std::to_string(end_gate->get_id()) + ": pin direction " + enum_to_string(direction) + " is not supported");
+    }
+
+    Result<std::vector<std::vector<Gate*>>> NetlistTraversalDecorator::get_combinational_subgraphs() const
+    {
+        return get_matching_subgraphs(
+            [](const Gate* g) {
+                return g->get_type()->has_property(GateTypeProperty::combinational) && !g->get_type()->has_property(GateTypeProperty::power) && !g->get_type()->has_property(GateTypeProperty::ground);
+            },
+            nullptr,
+            nullptr);
+    }
+
+    Result<std::vector<std::vector<Gate*>>> NetlistTraversalDecorator::get_matching_subgraphs(const std::function<bool(const Gate*)>& subgraph_filter,
+                                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        std::set<Gate*> visited;
+        std::vector<std::vector<Gate*>> res;
+
+        for (auto* gate : m_netlist.get_gates())
+        {
+            if (!subgraph_filter(gate))
+            {
+                continue;
+            }
+
+            if (visited.find(gate) != visited.end())
+            {
+                continue;
+            }
+            visited.insert(gate);
+
+            std::vector<Gate*> subgraph;
+            std::vector<Gate*> stack = {gate};
+
+            while (!stack.empty())
+            {
+                const auto gate_n = stack.back();
+                subgraph.push_back(gate_n);
+                stack.pop_back();
+
+                // search all successors starting from the fan out nets
+                for (const auto& n : gate_n->get_fan_out_nets())
+                {
+                    const auto matching_suc_res = this->get_next_matching_gates_until(n, true, subgraph_filter, false, exit_endpoint_filter, entry_endpoint_filter);
+                    if (matching_suc_res.is_error())
+                    {
+                        return ERR(matching_suc_res.get_error());
+                    }
+
+                    for (auto* g : matching_suc_res.get())
+                    {
+                        if (visited.find(g) != visited.end())
+                        {
+                            continue;
+                        }
+                        visited.insert(g);
+                        stack.push_back(g);
+                    }
+                }
+
+                // search all predecessors starting from the fan in nets
+                for (const auto& n : gate_n->get_fan_in_nets())
+                {
+                    const auto matching_pre_res = this->get_next_matching_gates_until(n, false, subgraph_filter, false, exit_endpoint_filter, entry_endpoint_filter);
+                    if (matching_pre_res.is_error())
+                    {
+                        return ERR(matching_pre_res.get_error());
+                    }
+
+                    for (auto* g : matching_pre_res.get())
+                    {
+                        if (visited.find(g) != visited.end())
+                        {
+                            continue;
+                        }
+                        visited.insert(g);
+                        stack.push_back(g);
+                    }
+                }
+            }
+
+            // make subgraph unique
+            std::sort(subgraph.begin(), subgraph.end(), [](Gate* a, Gate* b) { return a->get_id() < b->get_id(); });
+            subgraph.erase(std::unique(subgraph.begin(), subgraph.end()), subgraph.end());
+
+            res.push_back(subgraph);
+        }
+
+        return OK(res);
     }
 
 }    // namespace hal

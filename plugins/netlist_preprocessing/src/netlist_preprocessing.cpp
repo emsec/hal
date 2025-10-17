@@ -2,6 +2,7 @@
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
@@ -2771,6 +2772,82 @@ namespace hal
             }
 
             return OK(created_nets);
+        }
+
+        Result<bool> run_sanity_checks(const Netlist* nl)
+        {
+            // 1) Check whether any nets of the netlist have mutliple sources
+            for (const auto& n : nl->get_nets())
+            {
+                if (n->get_num_of_sources() > 1)
+                {
+                    return OK(false);
+                }
+            }
+
+            // 2) Check whether there are any combinational loops in the netlist
+            std::unordered_set<Gate*> visited;
+            std::unordered_set<Gate*> in_stack;
+            std::vector<Gate*> stack;
+
+            auto is_comb = [](const Gate* g) { return g->get_type() && g->get_type()->has_property(GateTypeProperty::combinational); };
+
+            for (auto* start : nl->get_gates(is_comb))
+            {
+                if (visited.count(start))
+                {
+                    continue;
+                }
+
+                stack.clear();
+                stack.push_back(start);
+                in_stack.insert(start);
+
+                while (!stack.empty())
+                {
+                    Gate* g_n = stack.back();
+
+                    // gather unvisited combinational successors
+                    auto succs = g_n->get_unique_successors([&](const auto& /*pin*/, const auto& ep) {
+                        Gate* dst = ep ? ep->get_gate() : nullptr;
+                        return is_comb(dst) && !visited.count(dst);
+                    });
+
+                    if (!succs.empty())
+                    {
+                        Gate* nxt = succs.front();    // depth-first: take one, others will be seen after backtracking
+
+                        // cycle if edge goes to current DFS path (GRAY)
+                        if (in_stack.count(nxt))
+                        {
+                            std::cout << "Combinational loop detected at gate " << nxt->get_name() << " with ID " << nxt->get_id() << ": " << std::endl;
+                            for (u32 i = 0;; i++)
+                            {
+                                const auto dbg_g = stack[stack.size() - 1 - i];
+                                std::cout << "\t" << dbg_g->get_name() << " - " << dbg_g->get_id() << std::endl;
+
+                                if (dbg_g == nxt)
+                                {
+                                    break;
+                                }
+                            }
+
+                            return OK(false);    // found a combinational cycle
+                        }
+
+                        stack.push_back(nxt);
+                        in_stack.insert(nxt);
+                        continue;
+                    }
+
+                    // finished exploring g_n
+                    visited.insert(g_n);    // BLACK
+                    in_stack.erase(g_n);
+                    stack.pop_back();
+                }
+            }
+
+            return OK(true);    // no cycles
         }
 
         Result<u32> unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs, GateType* inverter_type)

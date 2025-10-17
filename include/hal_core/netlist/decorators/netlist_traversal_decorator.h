@@ -368,6 +368,28 @@ namespace hal
                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
+        /**
+         * Find all combinational subgraphs in the netlist.
+         * A combinational subgraph is defined as a connected set of gates that are all of combinational type.
+         * 
+         * @returns A vector of vectors of gates representing the combinational subgraphs on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<Gate*>>> get_combinational_subgraphs() const;
+
+        /**
+         * Find all subgraphs in the netlist that match the given filter condition.
+         * A subgraph is defined as a connected set of gates for which the `subgraph_filter` evaluates to `true`.
+         * A connection between gates has to be established through pins that do not get filtered out by the `exit_endpoint_filter` and the `entry_endpoint_filter`.
+         * 
+         * @param[in] subgraph_filter - Filter condition that must be met for the gates in the subgraph.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns A vector of vectors of gates representing the matching subgraphs on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<Gate*>>> get_matching_subgraphs(const std::function<bool(const Gate*)>& subgraph_filter,
+                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
         // TODO move get_gate_chain and get_complex_gate_chain here
 
     private:

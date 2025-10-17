@@ -232,14 +232,27 @@ namespace hal
         /**
          * Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups
          * 
-         * TODO: document paramaters
+         * @param[in] concatenated_pin_groups - A map containing gate type names and their corresponding pingroups that should be created. A pingroup is a name and consist of multiple pingroups of the gate.
+         * @returns OK() and a vector the newly generated modules on success, an error otherwise.
          */
         Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups);
 
         /**
-         * TODO: document
-        */
+         * Creates unique nets at all output pins that currently have no net connected to them as some tools like simulators can not handle unconnected output pins.
+         * 
+         * @returns OK() and a vector of the newly created nets on success, an error otherwise. 
+         */
         Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl);
+
+        /**
+         * Runs basic sanity checks on a netlist to check whether some properties we assume for further analysis hold.
+         * Currently we check for:
+         *  - Absence of multi driven nets
+         *  - Absence of combinational loops
+         * 
+         * @returns OK() and a boolean flag indicating sanity of the netlist on success, an error otherwise.
+         */
+        Result<bool> run_sanity_checks(const Netlist* nl);
 
         /**
          * Iterates all flip-flops of the netlist or specified by the user.

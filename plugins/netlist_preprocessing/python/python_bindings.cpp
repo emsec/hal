@@ -489,6 +489,30 @@ namespace hal
             py::arg("nl"));
 
         m.def(
+            "run_sanity_checks",
+            [](const Netlist* nl) -> std::optional<bool> {
+                auto res = netlist_preprocessing::run_sanity_checks(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+                Runs basic sanity checks on a netlist to check whether some properties we assume for further analysis hold.
+                Currently we check for:
+                 - Absence of multi driven nets
+                 - Absence of combinational loops
+
+                :rtype: bool on success, None otherwise;
+            )");
+
+        m.def(
             "unify_ff_outputs",
             [](Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr) -> std::optional<u32> {
                 auto res = netlist_preprocessing::unify_ff_outputs(nl, ffs, inverter_type);
