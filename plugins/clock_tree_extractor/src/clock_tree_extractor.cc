@@ -3,11 +3,26 @@
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
+#include "hal_core/utilities/log.h"
 #include "hal_core/utilities/result.h"
 
+#include <algorithm>
+#include <cstddef>
 #include <fstream>
 #include <queue>
+#include <unordered_map>
+#include <unordered_set>
+
+namespace hal
+{
+    class GatePin;
+}
 
 namespace hal
 {
@@ -15,26 +30,6 @@ namespace hal
     {
         namespace
         {
-            bool continue_through_exit_ep( const Endpoint *exit_ep, const u32 current_depth )
-            {
-                if( exit_ep == nullptr )
-                {
-                    return false;
-                }
-
-                const Gate *gate = exit_ep->get_gate();
-                const GateType *gate_type = gate->get_type();
-                const GateTypeProperty ff = GateTypeProperty::ff;
-                const GatePin *gate_pin = exit_ep->get_pin();
-
-                if( gate_type->has_property( ff ) && current_depth == 0 )
-                {
-                    return gate_pin->get_direction() == PinDirection::input && gate_pin->get_type() == PinType::clock;
-                }
-
-                return !( gate_type->has_property( ff ) && current_depth > 0 );
-            }
-
             void export_clock_tree( const std::unordered_map<std::string, std::unordered_set<std::string>> &vertices,
                                     const std::vector<std::pair<std::string, std::string>> edges,
                                     const std::string &pathname )
@@ -82,7 +77,7 @@ namespace hal
                 {
                     const std::string edge_color =
                         ( vertices.at( "buffers" ).find( src ) != vertices.at( "buffers" ).end() ) ? "gold" : "green";
-                    dot_fd << "  " << src << " -> " << dst << " [color=" << edge_color << "];";
+                    dot_fd << "  " << src << " -> " << dst << " [color=" << edge_color << "];\n";
                 }
 
                 dot_fd << "}\n";
@@ -90,6 +85,14 @@ namespace hal
 
                 log_info( "clock_tree_extractor", "successfully exported clock tree to '{}'", pathname );
             }
+
+            struct GatePairHash
+            {
+                std::size_t operator()( const std::pair<const Gate *, const Gate *> &pair ) const
+                {
+                    return std::hash<const Gate *>()( pair.first ) ^ ( std::hash<const Gate *>()( pair.second ) << 1 );
+                }
+            };
         }  // namespace
 
         ClockTreeExtractor::ClockTreeExtractor( const Netlist *netlist )
@@ -104,115 +107,126 @@ namespace hal
                 return ERR( "no netlist provided" );
             }
 
-            std::queue<const Gate *> queue;
-            std::unordered_set<const Gate *> visited;
-            std::vector<std::pair<std::string, std::string>> edges;
-            std::unordered_map<std::string, std::unordered_set<std::string>> vertices;
+            std::queue<std::pair<const Gate *, const Gate *>> queue;
             NetlistTraversalDecorator ntd = NetlistTraversalDecorator( *m_netlist );
+            std::unordered_set<std::pair<const Gate *, const Gate *>, GatePairHash> visited;
+            std::vector<std::pair<std::string, std::string>> edges;  // TODO: use unordered_set
+            std::unordered_map<std::string, std::unordered_set<std::string>> vertices;
 
-            const std::vector<Gate *> start_gates = m_netlist->get_gates(
+            const std::vector<Gate *> ffs = m_netlist->get_gates(
                 []( const Gate *g ) { return g->get_type()->has_property( GateTypeProperty::ff ); } );
 
-            for( const Gate *gate : start_gates )
+            for( const Gate *ff : ffs )
             {
-                queue.push( gate );
-                const std::string gate_id = std::to_string( gate->get_id() );
-                vertices["ffs"].insert( gate_id );
+                const u32 ff_id = ff->get_id();
+                const std::string ff_name = ff->get_name();
+                const std::string ff_id_str = std::to_string( ff_id );
+
+                vertices["ffs"].insert( ff_id_str );
+
+                const std::vector<hal::GatePin *> clock_pins = ff->get_type()->get_pins( []( const auto &p ) {
+                    return ( p->get_direction() == PinDirection::input ) && ( p->get_type() == PinType::clock );
+                } );
+                if( clock_pins.size() != 1 )
+                {
+                    return ERR( "invalid number of input clock pins at gate '" + ff_name + "' with ID " + ff_id_str );
+                }
+
+                const Net *clk = ff->get_fan_in_net( clock_pins.front() );
+                if( clk == nullptr )
+                {
+                    return ERR( "no net connected to clock pin at gate '" + ff_name + "' with ID " + ff_id_str );
+                }
+
+                const u32 clk_id = clk->get_id();
+                const std::string clk_id_str = std::to_string( clk_id );
+                const std::vector<hal::Endpoint *> clk_sources = clk->get_sources();
+
+                if( clk_sources.size() > 1 )
+                {
+                    return ERR( "invalid number of sources for clock net with ID " + clk_id_str );
+                }
+                else if( clk->is_global_input_net() )
+                {
+                    const std::string clk_name = clk->get_name();
+                    vertices["global_inputs"].insert( clk_name );
+                    continue;
+                }
+
+                const Endpoint *source_ep = clk_sources.front();
+                const Gate *source_gate = source_ep->get_gate();
+
+                queue.push( { ff, source_gate } );
             }
 
             while( !queue.empty() )
             {
-                const Gate *current = queue.front();
-                const std::string current_id = std::to_string( current->get_id() );
+                const std::pair<const Gate *, const Gate *> pair = queue.front();
                 queue.pop();
 
-                if( auto it = visited.find( current ); it != visited.end() )
+                const Gate *source = pair.second;
+                Gate *reference = (Gate *) pair.first;
+
+                if( source->get_type()->has_property( GateTypeProperty::c_buffer ) )
                 {
+                    const u32 source_id = source->get_id();
+                    const u32 reference_id = reference->get_id();
+                    const std::string source_id_str = std::to_string( source_id );
+                    const std::string reference_id_str = std::to_string( reference_id );
+                    const std::pair<std::string, std::string> edge{ source_id_str, reference_id_str };
+
+                    if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
+                    {
+                        edges.push_back( edge );
+                    }
+
+                    reference = (Gate *) source;
+
+                    const u32 buffer_id = source->get_id();
+                    const std::string buffer_id_str = std::to_string( buffer_id );
+
+                    vertices["buffers"].insert( buffer_id_str );
+                }
+                else if( source->get_type()->has_property( GateTypeProperty::ff ) )
+                {
+                    // Should the FFS also be traversed? If so, which inputs should be considered? I would assume only
+                    // the data inputs.
                     continue;
                 }
 
-                visited.insert( current );
+                visited.insert( pair );
 
-                auto result = ntd.get_next_matching_gates(
-                    current,
-                    false,
-                    []( const Gate *g ) { return g->get_type()->has_property( GateTypeProperty::c_buffer ); },
-                    false,
-                    continue_through_exit_ep,
-                    nullptr );
-                if( result.is_error() )
+                for( const Net *net : source->get_fan_in_nets() )
                 {
-                    return ERR( result.get_error() );
-                }
-                const std::set<Gate *> next_matching_gates = result.get();
-
-                if( next_matching_gates.empty() )
-                {
-                    continue;
-                }
-
-                for( const Gate *predecessor : next_matching_gates )
-                {
-                    const std::string predecessor_id = std::to_string( predecessor->get_id() );
-                    std::pair<std::string, std::string> edge = std::make_pair( predecessor_id, current_id );
-                    if( std::find( edges.begin(), edges.end(), edge ) != edges.end() )
+                    if( net->is_global_input_net() )
                     {
+                        const u32 reference_id = reference->get_id();
+                        const std::string net_name = net->get_name();
+                        const std::string reference_id_str = std::to_string( reference_id );
+                        const std::pair<std::string, std::string> edge{ net_name, reference_id_str };
+
+                        if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
+                        {
+                            edges.push_back( edge );
+                        }
+
+                        vertices["global_inputs"].insert( net_name );
                         continue;
                     }
-                    edges.push_back( edge );
-                    queue.push( predecessor );
-                    vertices["buffers"].insert( predecessor_id );
+
+                    for( const Endpoint *ep : net->get_sources() )
+                    {
+                        const Gate *gate = ep->get_gate();
+                        if( auto it = visited.find( { reference, gate } ); it == visited.end() )
+                        {
+                            queue.push( { reference, gate } );
+                        }
+                    }
                 }
             }
-
-            for( const Net *net : m_netlist->get_global_input_nets() )
-            {
-                const std::string net_name = net->get_name();
-
-                auto result = ntd.get_next_matching_gates(
-                    net,
-                    true,
-                    []( const Gate *g ) { return g->get_type()->has_property( GateTypeProperty::c_buffer ); },
-                    false,
-                    continue_through_exit_ep,
-                    nullptr );
-                if( result.is_error() )
-                {
-                    return ERR( result.get_error() );
-                }
-                const std::set<Gate *> next_matching_gates = result.get();
-
-                std::size_t childs = 0;
-                for( const Gate *gate : next_matching_gates )
-                {
-                    if( auto it = visited.find( gate ); it == visited.end() )
-                    {
-                        continue;
-                    }
-
-                    const u32 gate_id = gate->get_id();
-                    const std::string gate_id_str = std::to_string( gate_id );
-
-                    const std::pair<std::string, std::string> edge = std::make_pair( net_name, gate_id_str );
-
-                    if( std::find( edges.begin(), edges.end(), edge ) != edges.end() )
-                    {
-                        continue;
-                    }
-
-                    edges.push_back( edge );
-                    childs++;
-                }
-
-                if( childs > 0 )
-                {
-                    vertices["global_inputs"].insert( net_name );
-                }
-            }
-
-            export_clock_tree( vertices, edges, pathname );
 
             m_edges = edges;
+            export_clock_tree( vertices, edges, pathname );
 
             return OK( edges.size() );
         }
