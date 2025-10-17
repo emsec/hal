@@ -2560,17 +2560,36 @@ Convert the NetNameKeyWords labeler to a string.
             Labels gates based on whether their name includes a keyword of a selection or not.
         )");
 
-        py_module_name_key_words.def(py::init<const std::vector<std::string>&, const std::vector<GateTypeProperty>&, const bool, const bool>(),
-                                     py::arg("key_words"),
-                                     py::arg("applicable_to")  = std::vector<GateTypeProperty>(),
-                                     py::arg("recursive")      = false,
-                                     py::arg("allow_multiple") = false,
-                                     R"(
-            Construct a ModuleNameKeyWords labeler.
+        py_module_name_key_words
+            .def(py::init<const std::vector<std::string>&, const std::vector<GateTypeProperty>&, bool, bool>(),
+                 py::arg("key_words"),
+                 py::arg("applicable_to")  = std::vector<GateTypeProperty>{},
+                 py::arg("recursive")      = false,
+                 py::arg("allow_multiple") = false,
+                 R"(
+Construct a ModuleNameKeyWords labeler.
 
-            :param str key_word: The keyword to check for in gate names.
-            :param list[hal_py.machine_learning.GateTypeProperty] applicable_to: The gate type properties this label applies to. Defaults to an empty list.
-        )");
+:param list[str] key_words: Keywords to check for in gate names.
+:param list[hal_py.machine_learning.GateTypeProperty] applicable_to:
+    Gate type properties this label applies to. If an empty list is provided the label is applied to all gate types. Defaults to an empty list.
+:param bool recursive: Search parent modules recursively. Defaults to False.
+:param bool allow_multiple: Allow multiple labels. Defaults to False.
+)")
+
+            .def(py::init<const std::vector<std::vector<std::string>>&, const std::vector<GateTypeProperty>&, bool, bool>(),
+                 py::arg("key_words"),
+                 py::arg("applicable_to")  = std::vector<GateTypeProperty>{},
+                 py::arg("recursive")      = false,
+                 py::arg("allow_multiple") = false,
+                 R"(
+Construct a ModuleNameKeyWords labeler.
+
+:param list[list[str]] key_words: Groups of keywords; each inner list is a group.
+:param list[hal_py.machine_learning.GateTypeProperty] applicable_to:
+    Gate type properties this label applies to. If an empty list is provided the label is applied to all gate types. Defaults to an empty list.
+:param bool recursive: Search parent module recursively. Defaults to False.
+:param bool allow_multiple: Allow multiple labels. Defaults to False.
+)");
 
         // py_module_name_key_words.def_readonly("MATCH", &machine_learning::gate_label::ModuleNameKeyWords::MATCH, R"(
         //     A label vector indicating a match.
@@ -2578,17 +2597,17 @@ Convert the NetNameKeyWords labeler to a string.
         //     :type: list[int]
         // )");
 
-        py_module_name_key_words.def_readonly("NO_MATCH", &machine_learning::gate_label::ModuleNameKeyWords::NO_MATCH, R"(
-            A label vector indicating no match was found.
+        // py_module_name_key_words.def_readonly("NO_MATCH", &machine_learning::gate_label::ModuleNameKeyWords::NO_MATCH, R"(
+        //     A label vector indicating no match was found.
 
-            :type: list[int]
-        )");
+        //     :type: list[int]
+        // )");
 
-        py_module_name_key_words.def_readonly("NA", &machine_learning::gate_label::ModuleNameKeyWords::NA, R"(
-            A label vector indicating not applicable.
+        // py_module_name_key_words.def_readonly("NA", &machine_learning::gate_label::ModuleNameKeyWords::NA, R"(
+        //     A label vector indicating not applicable.
 
-            :type: list[int]
-        )");
+        //     :type: list[int]
+        // )");
 
         py_module_name_key_words.def(
             "calculate_label",

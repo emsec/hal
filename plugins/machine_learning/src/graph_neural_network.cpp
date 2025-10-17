@@ -75,6 +75,18 @@ namespace hal
                 // possibly dedupe
                 dedupe_connections(connections);
 
+                if (connections.size() > 256)
+                {
+                    log_warning("machine_learning",
+                                "Generating netlist graph for netlist {} includes a very high fan out gate with name {} and ID {} adn {} destinations. This can lead to bad performance! Consider "
+                                "adding a filter for "
+                                "connections",
+                                ctx.nl->get_design_name(),
+                                g->get_name(),
+                                g->get_id(),
+                                connections.size());
+                }
+
                 for (auto& [src_g, dst_g, ef] : connections)
                 {
                     const auto src_idx = gate_to_idx.at(src_g);

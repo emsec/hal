@@ -1,6 +1,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/utilities/utils.h"
 #include "machine_learning/labels/gate_label.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
 #include "nlohmann/json.hpp"
@@ -380,6 +381,89 @@ namespace hal
                 return "NetNameKeyWords_" + key_words_to_str + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
             }
 
+            namespace
+            {
+                /**
+                 * @brief Determines which keyword groups match a given name string.
+                 * 
+                 * This function checks if the provided name contains any keyword from one or more
+                 * groups of keywords. Each keyword group is represented as a vector of strings.
+                 * 
+                 * - When `allow_multiple` is true, it returns the indices of all groups where at least
+                 *   one keyword appears in the name.
+                 * - When `allow_multiple` is false, it returns only the index of the group containing
+                 *   the longest matching keyword (with ties broken by lowest group index).
+                 * - Case sensitivity can be controlled via the `case_sensitive` parameter.
+                 * 
+                 * @param name              The input name to check.
+                 * @param key_words         A vector of groups of keywords.
+                 * @param allow_multiple    If true, returns all matching group indices; 
+                 *                          if false, returns only the group with the longest match.
+                 * @param case_sensitive    If false, the comparison ignores case.
+                 * @return std::vector<u32> List of matching keyword group indices.
+                 */
+                std::vector<u32> find_matching_keywords(const std::string& name, const std::vector<std::vector<std::string>>& key_words, const bool allow_multiple, const bool case_sensitive)
+                {
+                    std::vector<u32> result;
+                    if (name.empty() || key_words.empty())
+                    {
+                        return result;
+                    }
+
+                    const std::string name_cmp = case_sensitive ? name : utils::to_lower(name);
+
+                    size_t best_len = 0;
+                    int best_group  = -1;
+
+                    for (u32 gi = 0; gi < static_cast<u32>(key_words.size()); ++gi)
+                    {
+                        const auto& group  = key_words[gi];
+                        bool group_matched = false;
+
+                        for (const auto& kw : group)
+                        {
+                            if (kw.empty())
+                            {
+                                continue;
+                            }
+
+                            const std::string kw_cmp = case_sensitive ? kw : utils::to_lower(kw);
+                            if (name_cmp.find(kw_cmp) != std::string::npos)
+                            {
+                                group_matched = true;
+
+                                if (!allow_multiple)
+                                {
+                                    const size_t len = kw_cmp.size();
+                                    if (len > best_len || (len == best_len && (best_group < 0 || gi < static_cast<u32>(best_group))))
+                                    {
+                                        best_len   = len;
+                                        best_group = static_cast<int>(gi);
+                                    }
+                                }
+                                else
+                                {
+                                    // For multiple matches, we can stop after the first keyword found in this group
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (allow_multiple && group_matched)
+                        {
+                            result.push_back(gi);
+                        }
+                    }
+
+                    if (!allow_multiple && best_group >= 0)
+                    {
+                        result.push_back(static_cast<u32>(best_group));
+                    }
+
+                    return result;
+                }
+            }    // namespace
+
             Result<std::vector<u32>> ModuleNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
             {
                 UNUSED(ctx);
@@ -400,22 +484,17 @@ namespace hal
                 if (is_applicable)
                 {
                     const auto modules = g->get_modules(nullptr, m_recursive);
-                    std::vector<u32> matches;
-                    for (u32 i = 0; i < m_key_words.size(); i++)
+                    std::set<u32> matches;
+                    for (const auto& m : modules)
                     {
-                        for (const auto& m : modules)
-                        {
-                            const auto module_name = m->get_name();
-                            if (module_name.find(m_key_words.at(i)) != std::string::npos)
-                            {
-                                matches.push_back(i);
-                            }
-                        }
+                        const auto module_name = m->get_name();
+                        const auto m_matches   = find_matching_keywords(module_name, m_key_words, m_allow_multiple, false);
+                        matches.insert(m_matches.begin(), m_matches.end());
                     }
 
                     if (!matches.empty())
                     {
-                        const auto match_res = make_match(matches);
+                        const auto match_res = make_match(utils::to_vector(matches));
                         if (match_res.is_error())
                         {
                             return ERR_APPEND(match_res.get_error(), "failed to build label for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
@@ -461,7 +540,10 @@ namespace hal
             std::string ModuleNameKeyWords::to_string() const
             {
                 std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
-                std::string key_words_to_str  = utils::join("_", m_key_words.begin(), m_key_words.end(), [](const std::string& s) { return s; });
+                std::string key_words_to_str  = utils::join("__",    // separator between groups (double underscore for clarity)
+                                                           m_key_words.begin(),
+                                                           m_key_words.end(),
+                                                           [](const std::vector<std::string>& group) { return utils::join("_", group.begin(), group.end(), [](const std::string& s) { return s; }); });
 
                 return "ModuleNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str + "_" + (m_recursive ? "RECURSIVE" : ""));
             }

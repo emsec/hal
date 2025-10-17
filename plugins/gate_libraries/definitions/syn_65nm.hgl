@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "library": "syn_65nm - gate library from the GNN RE dataset",
+  "library": "syn_65nm",
   "gate_locations": {
     "data_category": "generic",
     "data_x_identifier": "X_COORDINATE",

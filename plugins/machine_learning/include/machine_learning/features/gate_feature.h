@@ -24,22 +24,6 @@ namespace hal
                 virtual std::string to_string() const = 0;
             };
 
-            // class GateFeatureSingle : public GateFeature
-            // {
-            // public:
-            //     virtual Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const = 0;
-            //     virtual std::string to_string() const                                                          = 0;
-
-            //     virtual Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
-            // };
-
-            // class GateFeature : public GateFeature
-            // {
-            // public:
-            //     virtual Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const = 0;
-            //     virtual std::string to_string() const                                                                                         = 0;
-            // };
-
             class ConnectedGlobalIOs : public GateFeature
             {
             public:
@@ -232,8 +216,11 @@ namespace hal
             //  - distance to nearest shift register
             //  - distance to nearest bus register
 
+            //  - number of predecessors/successors
+            //  - Graphlet Degree Vector (GDV) (possibly calculated using ORCA or gtrieScanner)
+
             Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
             Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(Context& ctx, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
         }    // namespace gate_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

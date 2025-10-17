@@ -335,6 +335,12 @@ namespace hal
                  * @brief Default constructor.
                  */
                 ModuleNameKeyWords(const std::vector<std::string>& key_words, const std::vector<GateTypeProperty>& applicable_to = {}, const bool recursive = false, const bool allow_multiple = false)
+                    : m_key_words(wrap(key_words)), m_applicable_to(applicable_to), m_recursive(recursive), m_allow_multiple(allow_multiple), NO_MATCH(make_no_match()), NA(make_na()){};
+
+                ModuleNameKeyWords(const std::vector<std::vector<std::string>>& key_words,
+                                   const std::vector<GateTypeProperty>& applicable_to = {},
+                                   const bool recursive                               = false,
+                                   const bool allow_multiple                          = false)
                     : m_key_words(key_words), m_applicable_to(applicable_to), m_recursive(recursive), m_allow_multiple(allow_multiple), NO_MATCH(make_no_match()), NA(make_na()){};
 
                 Result<std::vector<u32>> calculate_label(Context& ctx, const Gate* g) const override;
@@ -343,7 +349,7 @@ namespace hal
                 std::string to_string() const override;
 
             private:
-                const std::vector<std::string> m_key_words;
+                const std::vector<std::vector<std::string>> m_key_words;
                 const std::vector<GateTypeProperty> m_applicable_to;
                 const bool m_recursive;
                 const bool m_allow_multiple;
@@ -353,6 +359,17 @@ namespace hal
                 const std::vector<u32> NA;
 
             private:
+                static std::vector<std::vector<std::string>> wrap(const std::vector<std::string>& v)
+                {
+                    std::vector<std::vector<std::string>> result;
+                    result.reserve(v.size());
+                    for (const auto& s : v)
+                    {
+                        result.push_back({s});
+                    }
+                    return result;
+                }
+
                 std::vector<u32> make_no_match() const
                 {
                     std::vector<u32> v(m_key_words.size(), 0);
