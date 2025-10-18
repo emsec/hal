@@ -5,8 +5,6 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
     # Dependencies
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(HIREDIS REQUIRED hiredis)
-    pkg_check_modules(LIBEVENT REQUIRED libevent)
-    pkg_check_modules(LIBEVENT_PTHREADS libevent_pthreads)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 
     # Include-What-You-Use (optional)
@@ -22,18 +20,24 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE HELIX_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc")
     file(GLOB_RECURSE HELIX_PYTHON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/python/*.cc")
 
+    qt5_wrap_cpp(MOC_HDR ${HELIX_INC})
+
     # --- Plugin Target ---
     hal_add_plugin(helix
         SHARED
         HEADER  ${HELIX_INC}
-        SOURCES ${HELIX_SRC} ${HELIX_PYTHON_SRC}
+        SOURCES ${HELIX_SRC} ${HELIX_PYTHON_SRC} ${MOC_HDR}
         COMPILE_OPTIONS "-march=native"
     )
+
+target_sources(helix
+  PRIVATE
+    src/redis_communication.cpp
+)
 
     # --- Includes ---
     target_include_directories(helix PRIVATE
         "${PROJECT_SOURCE_DIR}/plugins/gui/include"
-        ${LIBEVENT_INCLUDE_DIRS}
         ${HIREDIS_INCLUDE_DIRS}
     )
 
@@ -42,8 +46,6 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
         Qt5::Core
         Qt5::Widgets
         pthread
-        ${LIBEVENT_LIBRARIES}
-        ${LIBEVENT_PTHREADS_LIBRARIES}
         ${HIREDIS_LIBRARIES}
         gui
     )

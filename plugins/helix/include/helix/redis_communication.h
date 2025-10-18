@@ -26,64 +26,41 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
-
-#include <hiredis/async.h>
-#include <hiredis/hiredis.h>
-#include <mutex>
-#include <string>
-#include <thread>
-#include <vector>
 #include <QObject>
+#include <vector>
+#include <helix/hiredis_qt.h>
 
+namespace hal {
 
-namespace hal
-{
+    void getCallback(redisAsyncContext *, void *, void *);
+
     class Netlist;
-    class RedisCommunication;
+
+    class RedisCommunication : public QObject {
+
+        Q_OBJECT
+
+    public:
+        RedisCommunication(QObject * parent = 0);
+        ~RedisCommunication();
+
+        bool subscribeToChannels(std::string host, int port, const std::vector<std::string>& channels);
+        void handleIncomingMessage(redisReply* reply);
+        void handleNoReply();
+        void publish(std::string channel, std::string msg);
+        void rememberNetlist(const Netlist* nl);
+
+        Q_SIGNALS:
+            void finished();
+            void errorMessage(QString errMsg);
+            void messageReceived(QString msg, QString channel);
+
+        private:
+            redisAsyncContext * m_ctxSubs;
+            redisAsyncContext * m_ctxPubl;
+            RedisQtAdapter* m_subscriber;
+            RedisQtAdapter* m_publisher;
+            const Netlist* m_netlist;
+
+    };
 }
-
-namespace hal
-{
-    namespace helix
-    {
-        class Helix : public QObject
-        {
-            Q_OBJECT
-          public:
-            static const std::string channel;
-
-            Helix(QObject* parent = nullptr);
-
-            ~Helix();
-
-            static Helix *instance();
-
-            void start( const Netlist *netlist,
-                        const std::string &host,
-                        const u16 port,
-                        const std::vector<std::string> &channels );
-
-            void stop();
-
-            RedisCommunication* get_redis_communication() const;
-
-            const bool is_running() const;
-
-
-        private Q_SLOTS:
-            void handle_message_received(const QString& msg, const QString& channel);
-
-            void handle_redis_error(const QString& errMsg);
-
-          private:
-            static Helix *inst;
-
-            bool m_is_running;
-
-            RedisCommunication* m_redis_communication;
-
-            mutable std::mutex m_is_running_mtx;
-        };
-    }  // namespace helix
-}  // namespace hal

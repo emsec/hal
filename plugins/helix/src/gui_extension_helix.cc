@@ -7,6 +7,7 @@
 #include "hal_core/utilities/log.h"
 #include "helix/helix.h"
 #include "helix/plugin_helix.h"
+#include "helix/redis_communication.h"
 
 #include <istream>
 #include <qbytearray.h>
@@ -177,6 +178,6 @@ namespace hal
         const QJsonDocument payload_json( payload );
         const std::string payload_json_str = payload_json.toJson( QJsonDocument::Compact ).toStdString();
 
-        this->m_parent->get_helix()->publish( helix::Helix::channel, payload_json_str );
+        this->m_parent->get_helix()->get_redis_communication()->publish( helix::Helix::channel, payload_json_str );
     }
 }  // namespace hal

@@ -120,10 +120,6 @@ namespace hal
 
     )" );
 
-        py_helix.def( "get_netlist", &helix::Helix::get_netlist, R"(
-        
-    )" );
-
         py_helix.def( "is_running", &helix::Helix::is_running, R"(
 
     )" );
