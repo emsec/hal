@@ -6,6 +6,7 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(HIREDIS REQUIRED hiredis)
     pkg_check_modules(LIBEVENT REQUIRED libevent)
+    pkg_check_modules(LIBEVENT_PTHREADS libevent_pthreads)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 
     # Include-What-You-Use (optional)
@@ -42,6 +43,7 @@ if(PL_HELIX OR BUILD_ALL_PLUGINS)
         Qt5::Widgets
         pthread
         ${LIBEVENT_LIBRARIES}
+        ${LIBEVENT_PTHREADS_LIBRARIES}
         ${HIREDIS_LIBRARIES}
         gui
     )
