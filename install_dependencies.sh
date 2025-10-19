@@ -77,7 +77,7 @@ elif [[ "$platform" == 'linux' ]]; then
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
-        libreadline-dev apport python3-dateutil \
+        libreadline-dev apport python3-dateutil libhiredis-dev \
         $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
     elif [[ "$distribution" == "Arch" ]]; then
@@ -85,7 +85,7 @@ elif [[ "$platform" == 'linux' ]]; then
         qt5-base python ccache autoconf libsodium qt5-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
         python-pip pybind11 rapidjson spdlog graphviz boost \
-        python-dateutil z3
+        python-dateutil hiredis z3
     elif [[ "$ID" == 'rhel' ]]; then
        RHEL_VERSION=`echo $VERSION_ID | cut -d. -f1`
        echo "Running experimental setup for RedHat Enterprise Linux version $RHEL_VERSION <$VERSION_ID>."
