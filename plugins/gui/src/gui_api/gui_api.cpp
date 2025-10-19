@@ -113,8 +113,8 @@ namespace hal
 
         if(clear_current_selection)
             gSelectionRelay->clear();
-
-        gate_ids.unite(gSelectionRelay->selectedGates());
+        else
+            gate_ids.unite(gSelectionRelay->selectedGates());
         gSelectionRelay->setSelectedGates(gate_ids);
         gSelectionRelay->relaySelectionChanged(this);
 
@@ -164,8 +164,8 @@ namespace hal
 
         if(clear_current_selection)
             gSelectionRelay->clear();
-
-        net_ids.unite(gSelectionRelay->selectedNets());
+        else
+            net_ids.unite(gSelectionRelay->selectedNets());
         gSelectionRelay->setSelectedNets(net_ids);
         gSelectionRelay->relaySelectionChanged(this);
 
@@ -215,8 +215,8 @@ namespace hal
 
         if(clear_current_selection)
             gSelectionRelay->clear();
-
-        module_ids.unite(gSelectionRelay->selectedModules());
+        else
+            module_ids.unite(gSelectionRelay->selectedModules());
         gSelectionRelay->setSelectedModules(module_ids);
         gSelectionRelay->relaySelectionChanged(this);
 
