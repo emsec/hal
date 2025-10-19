@@ -74,9 +74,6 @@ namespace hal {
                 case REDIS_REPLY_INTEGER:
                     elements.append(reply->element[i]->integer);
                     break;
-                case REDIS_REPLY_DOUBLE:
-                    elements.append(reply->element[i]->dval);
-                    break;
                 case REDIS_REPLY_STRING:
                     elements.append(QString(reply->element[i]->str));
                     break;
