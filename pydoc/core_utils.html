@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Core Utils &mdash; hal_py v4.5.0-3-gd0e0e8ec7 documentation</title>
+  <title>Core Utils &mdash; hal_py v4.5.0-9-ge36007edc documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-3-gd0e0e8ec7
+                v4.5.0-9-ge36007edc
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -107,7 +107,7 @@
 <p>HAL Core Utility functions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_base_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_base_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_base_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_base_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_base_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the base path to the HAL installation.
 1. Use Environment Variable HAL_BASE_PATH
 2. If current executable is hal (not e.g. python3 interpreter) use it’s path to determine base path.
@@ -117,46 +117,46 @@
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_binary_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_binary_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_binary_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_binary_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_binary_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to the executable of HAL.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_default_log_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_default_log_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_default_log_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_default_log_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_default_log_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to the default directory for log files.
 If an hdl source file is provided, the function returns the parent directory, otherwise get_user_share_directory() / “log”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>source_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)"><em>pathlib.Path</em></a>) – The hdl source file.</p>
+<dd class="field-odd"><p><strong>source_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>pathlib.Path</em></a>) – The hdl source file.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The path.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_gate_library_directories">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_gate_library_directories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_gate_library_directories" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_gate_library_directories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_gate_library_directories" title="Permalink to this definition"></a></dt>
 <dd><p>Get the paths where gate libraries are searched.
 Contains the share and user share directories.</p>
 <dl class="field-list simple">
@@ -164,14 +164,14 @@ Contains the share and user share directories.</p>
 <dd class="field-odd"><p>A list of paths.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_library_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_library_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_library_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_library_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_library_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to the shared and static libraries of HAL.
 Relative to the binary directory.</p>
 <dl class="field-list simple">
@@ -179,14 +179,14 @@ Relative to the binary directory.</p>
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_plugin_directories">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_plugin_directories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_plugin_directories" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_plugin_directories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_plugin_directories" title="Permalink to this definition"></a></dt>
 <dd><p>Get the paths where plugins are searched.
 Contains the library and user share directories.</p>
 <dl class="field-list simple">
@@ -198,7 +198,7 @@ Contains the library and user share directories.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_share_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_share_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_share_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_share_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_share_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to the sh
 Relative to the binary</p>
 <dl class="field-list simple">
@@ -206,14 +206,14 @@ Relative to the binary</p>
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_user_config_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_user_config_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_user_config_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_user_config_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_user_config_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to the configuration directory of the user.
 home/.config/hal for Unix</p>
 <dl class="field-list simple">
@@ -221,14 +221,14 @@ home/.config/hal for Unix</p>
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.CoreUtils.get_user_share_directory">
-<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_user_share_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.13)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_user_share_directory" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.CoreUtils.</span></span><span class="sig-name descname"><span class="pre">get_user_share_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.CoreUtils.get_user_share_directory" title="Permalink to this definition"></a></dt>
 <dd><p>Get the path to shared objects and files provided by the user.
 home/.local/share for Unix</p>
 <dl class="field-list simple">
@@ -236,7 +236,7 @@ home/.local/share for Unix</p>
 <dd class="field-odd"><p>The path.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.13)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
