@@ -101,10 +101,13 @@ jobs:
           df -h
 
           echo "==> Largest top-level directories (human-readable)"
-          sudo du -h -d1 / | sort -hr | head -n 20
+          sudo du -h -d1 / 2>/dev/null | sort -hr | head -n 20 || true
 
           echo "==> Hosted toolcache size"
-          sudo du -h -d1 /opt/hostedtoolcache | sort -hr | head -n 20cd build
+          sudo du -h -d1 /opt/hostedtoolcache / 2>/dev/null | sort -hr | head -n 20 || true
+
+          cd build
+          df -h .
 
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
