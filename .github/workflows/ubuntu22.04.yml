@@ -97,22 +97,14 @@ jobs:
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
-          echo "==> Disk usage overview"
-          df -h
-
-          echo "==> Largest top-level directories (human-readable)"
-          sudo du -h -d1 / 2>/dev/null | sort -hr | head -n 20 || true
-
-          echo "==> Hosted toolcache size"
-          sudo du -h -d1 /opt/hostedtoolcache / 2>/dev/null | sort -hr | head -n 20 || true
-
-          cd build
+          echo "==> Disk usage before clean"
           df -h .
-
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/lib/android
           sudo rm -rf /opt/hostedtoolcache
+          echo "==> Disk usage after clean"
+          df -h .
           ninja
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
