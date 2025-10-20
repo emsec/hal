@@ -98,6 +98,14 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          echo "===ROOT==="
+          du -sk /
+          echo "===usr==="
+          du -sk /usr
+          echo "===share==="
+          du -sk /usr/share
+          echo "===works==="
+          du -sk ${{runner.workspace}}
           ninja
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
