@@ -97,6 +97,7 @@ jobs:
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
+          cd build
           echo "==> Disk usage before clean"
           df -h .
           sudo rm -rf /usr/share/dotnet
