@@ -129,13 +129,16 @@ namespace hal
                 } );
                 if( clock_pins.size() != 1 )
                 {
-                    return ERR( "invalid number of input clock pins at gate '" + ff_name + "' with ID " + ff_id_str );
+                    log_error( "clock_tree_extractor", "invalid number of input clock pins at gate '" + ff_name + "' with ID " + ff_id_str );
+                    continue;
                 }
 
-                const Net *clk = ff->get_fan_in_net( clock_pins.front() );
+                const GatePin *clock_pin =  clock_pins.front();
+                const Net *clk = ff->get_fan_in_net( clock_pin );
                 if( clk == nullptr )
                 {
-                    return ERR( "no net connected to clock pin at gate '" + ff_name + "' with ID " + ff_id_str );
+                    log_error( "clock_tree_extractor", "no net connected to clock pin at gate '" + ff_name + "' with ID " + ff_id_str );
+                    continue;
                 }
 
                 const u32 clk_id = clk->get_id();
@@ -144,12 +147,18 @@ namespace hal
 
                 if( clk_sources.size() > 1 )
                 {
-                    return ERR( "invalid number of sources for clock net with ID " + clk_id_str );
+                    log_error( "clock_tree_extractor", "invalid number of sources for clock net with ID " + clk_id_str );
+                    continue;
                 }
                 else if( clk->is_global_input_net() )
                 {
                     const std::string clk_name = clk->get_name();
                     vertices["global_inputs"].insert( clk_name );
+                    continue;
+                }
+                else if( clk_sources.size() == 0 )
+                {
+                    // ignore unrouted nets for now
                     continue;
                 }
 
