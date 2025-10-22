@@ -205,7 +205,8 @@ namespace hal
 
                     vertices["buffers"].insert( buffer_id_str );
                 }
-                else if( source->get_type()->has_property( GateTypeProperty::ff ) )
+                else if( source->get_type()->has_property( GateTypeProperty::ff )
+                         || source->get_type()->has_property( GateTypeProperty::latch ) )
                 {
                     // Should the FFS also be traversed? If so, which inputs should be considered? I would assume only
                     // the data inputs.
