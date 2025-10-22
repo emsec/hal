@@ -93,6 +93,12 @@ namespace hal
                     return std::hash<const Gate *>()( pair.first ) ^ ( std::hash<const Gate *>()( pair.second ) << 1 );
                 }
             };
+
+            bool is_control_pin( const PinType &pin_type )
+            {
+                return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
+                    || pin_type == PinType::set || pin_type == PinType::reset;
+            }
         }  // namespace
 
         ClockTreeExtractor::ClockTreeExtractor( const Netlist *netlist )
@@ -129,15 +135,17 @@ namespace hal
                 } );
                 if( clock_pins.size() != 1 )
                 {
-                    log_error( "clock_tree_extractor", "invalid number of input clock pins at gate '" + ff_name + "' with ID " + ff_id_str );
+                    log_error( "clock_tree_extractor",
+                               "invalid number of input clock pins at gate '" + ff_name + "' with ID " + ff_id_str );
                     continue;
                 }
 
-                const GatePin *clock_pin =  clock_pins.front();
+                const GatePin *clock_pin = clock_pins.front();
                 const Net *clk = ff->get_fan_in_net( clock_pin );
                 if( clk == nullptr )
                 {
-                    log_error( "clock_tree_extractor", "no net connected to clock pin at gate '" + ff_name + "' with ID " + ff_id_str );
+                    log_error( "clock_tree_extractor",
+                               "no net connected to clock pin at gate '" + ff_name + "' with ID " + ff_id_str );
                     continue;
                 }
 
@@ -147,7 +155,8 @@ namespace hal
 
                 if( clk_sources.size() > 1 )
                 {
-                    log_error( "clock_tree_extractor", "invalid number of sources for clock net with ID " + clk_id_str );
+                    log_error( "clock_tree_extractor",
+                               "invalid number of sources for clock net with ID " + clk_id_str );
                     continue;
                 }
                 else if( clk->is_global_input_net() )
@@ -173,7 +182,7 @@ namespace hal
                 const std::pair<const Gate *, const Gate *> pair = queue.front();
                 queue.pop();
 
-                const Gate *source = pair.second;
+                Gate *source = (Gate *) pair.second;
                 Gate *reference = (Gate *) pair.first;
 
                 if( source->get_type()->has_property( GateTypeProperty::c_buffer ) )
@@ -205,8 +214,16 @@ namespace hal
 
                 visited.insert( pair );
 
-                for( const Net *net : source->get_fan_in_nets() )
+                for( const Endpoint *ep : source->get_fan_in_endpoints() )
                 {
+                    const PinType pin_type = ep->get_pin()->get_type();
+                    if( is_control_pin( pin_type ) )
+                    {
+                        // Don't traverse control signals of clock gates
+                        continue;
+                    }
+
+                    const Net *net = ep->get_net();
                     if( net->is_global_input_net() )
                     {
                         const u32 reference_id = reference->get_id();
