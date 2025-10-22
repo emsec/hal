@@ -43,6 +43,9 @@ namespace hal
                 case hal::GateTypeProperty::c_xnor:
                     mShapeType = NxorShape;
                     break;
+                case hal::GateTypeProperty::ff:
+                    mShapeType = FFShape;
+                    break;
                 default:
                     break;
             }
@@ -65,7 +68,7 @@ namespace hal
             {
                 mInputByNet.insert(0, index);
             }
-            mInputPinStruct.append({QString::fromStdString(input_pin->get_name()), 0., netId, index, true});
+            mInputPinStruct.append({QString::fromStdString(input_pin->get_name()), 0., netId, index, true, input_pin->get_type() == PinType::clock});
         }
 
         for (const GatePin* output_pin : gt->get_output_pins())
@@ -82,7 +85,7 @@ namespace hal
             {
                 mOutputByNet.insert(0, index);
             }
-            mOutputPinStruct.append({QString::fromStdString(output_pin->get_name()), 0., netId, index, false});
+            mOutputPinStruct.append({QString::fromStdString(output_pin->get_name()), 0., netId, index, false, false});
         }
 
         textLines[1] = QString::fromStdString(gt->get_name());

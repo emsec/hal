@@ -347,6 +347,10 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
             mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 1.6 * h - 0.7 * mInputPinStruct.size() * yEndpointDistance() + mPathWidth;
             setMaxTextWidth(60);
             break;
+        case FFShape:
+            mWidth = 2 * (sPinFontHeight + sPinOuterHorizontalSpacing) + 0.75 * h;
+            setMaxTextWidth(60);
+            break;
         default:
             mWidth = mMaxInputPinWidth + mMaxOutputPinWidth + sPinInnerHorizontalSpacing * 2 + sPinOuterHorizontalSpacing * 2 + mMaxTextWidth;
             break;
@@ -392,6 +396,9 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
         case XorShape:
         case NxorShape:
             initTextPosition(ytext0, sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + 4*mPathWidth);
+            break;
+        case FFShape:
+            initTextPosition(ytext0, sInnerNameTypeSpacing, sPinFontHeight + 2*sPinOuterHorizontalSpacing + mPathWidth);
             break;
         default:
             initTextPosition(ytext0, sInnerNameTypeSpacing);
@@ -461,6 +468,29 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
             mPath.lineTo(x0+mPathWidth/4,y1-mPathWidth/2); // line in arc direction for pointy corner
             mPath.arcTo(x0-x60deg-diam/2,y0-diam/4,diam,diam,-arcSpan,2*arcSpan);
             mPath.closeSubpath();
+            break;
+        }
+
+        case FFShape:
+        {
+            mPath.moveTo(0,y0);
+            mPath.lineTo(mWidth,y0);
+            mPath.moveTo(mWidth,y1);
+            mPath.lineTo(0,y1);
+            mPath.moveTo(0,y0);
+            mPath.closeSubpath();
+            for (int i=0; i<mInputPinStruct.size();i++)
+            {
+                if (mInputPinStruct.at(i).isClock)
+                {
+                    float yc = yTopPinDistance() + i * yEndpointDistance();
+                    mPath.moveTo(x0,yc-mPathWidth/2);
+                    mPath.lineTo(x0+0.8*mPathWidth,yc);
+                    mPath.lineTo(x0,yc+mPathWidth/2);
+                    mPath.lineTo(x0,yc-mPathWidth/2);
+                    mPath.closeSubpath();
+                }
+            }
             break;
         }
 

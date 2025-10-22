@@ -64,12 +64,13 @@ namespace hal
             u32 netId;
             int index;
             bool isInput;
+            bool isClock;
             float x;
             float y;
             QList<QLineF> connectors;
         };
 
-        enum ShapeType { StandardShape, InverterShape, AndShape, NandShape, OrShape, NorShape, XorShape, NxorShape };
+        enum ShapeType { StandardShape, InverterShape, AndShape, NandShape, OrShape, NorShape, XorShape, NxorShape, FFShape };
 
         /**
          * Pointer to gate in hal core
