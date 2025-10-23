@@ -68,7 +68,7 @@ namespace hal
             {
                 mInputByNet.insert(0, index);
             }
-            mInputPinStruct.append({QString::fromStdString(input_pin->get_name()), 0., netId, index, true, input_pin->get_type() == PinType::clock});
+            mInputPinStruct.append({QString::fromStdString(input_pin->get_name()), 0., netId, index, true, input_pin->get_type()});
         }
 
         for (const GatePin* output_pin : gt->get_output_pins())
@@ -85,7 +85,7 @@ namespace hal
             {
                 mOutputByNet.insert(0, index);
             }
-            mOutputPinStruct.append({QString::fromStdString(output_pin->get_name()), 0., netId, index, false, false});
+            mOutputPinStruct.append({QString::fromStdString(output_pin->get_name()), 0., netId, index, false, output_pin->get_type()});
         }
 
         textLines[1] = QString::fromStdString(gt->get_name());

@@ -107,6 +107,12 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         }
         else
         {
+            if (!mBackgroundRect.isNull())
+            {
+                painter->fillRect(mBackgroundRect, GraphicsQssAdapter::instance()->nodeBackgroundColor());
+                painter->setPen(QPen(mColor,1));
+                painter->drawRect(mBackgroundRect);
+            }
             QPen pathPen(mColor,mPathWidth);
             pathPen.setJoinStyle(Qt::MiterJoin);
             pathPen.setMiterLimit(20);
@@ -473,21 +479,24 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 
         case FFShape:
         {
-            mPath.moveTo(0,y0);
-            mPath.lineTo(mWidth,y0);
-            mPath.moveTo(mWidth,y1);
-            mPath.lineTo(0,y1);
+            y0 += mPathWidth;
+            y1 -= mPathWidth;
+            mBackgroundRect = QRectF(x0-mPathWidth/2,y0,x1-x0+mPathWidth,y1-y0);
+            mPath.moveTo(x0,y0);
+            mPath.lineTo(x1,y0);
+            mPath.moveTo(x1,y1);
+            mPath.lineTo(x0,y1);
             mPath.moveTo(0,y0);
             mPath.closeSubpath();
             for (int i=0; i<mInputPinStruct.size();i++)
             {
-                if (mInputPinStruct.at(i).isClock)
+                if (mInputPinStruct.at(i).pinType == PinType::clock)
                 {
                     float yc = yTopPinDistance() + i * yEndpointDistance();
-                    mPath.moveTo(x0,yc-mPathWidth/2);
-                    mPath.lineTo(x0+0.8*mPathWidth,yc);
-                    mPath.lineTo(x0,yc+mPathWidth/2);
-                    mPath.lineTo(x0,yc-mPathWidth/2);
+                    mPath.moveTo(x0,yc-mPathWidth*0.33);
+                    mPath.lineTo(x0+0.6*mPathWidth,yc);
+                    mPath.lineTo(x0,yc+mPathWidth*0.33);
+                    mPath.lineTo(x0,yc-mPathWidth*0.33);
                     mPath.closeSubpath();
                 }
             }
@@ -550,6 +559,32 @@ void StandardGraphicsGate::setPinPosition()
             it->x = mWidth - sPinOuterHorizontalSpacing;
             it->y = yFirstTextline + it->index * (sPinFontHeight + sPinInnerVerticalSpacing);
         }
+    }
+
+    if (mShapeType == FFShape)
+    {
+        auto it = mInputPinStruct.begin();
+        if (it->pinType == PinType::set || it->pinType == PinType::reset)
+        {
+            it->x = (mWidth - sPinFontHeight) / 2.;
+            it->y = mPathWidth + sPinFontAscent;
+            float yl = -yTopPinDistance();
+            it->connectors.append(QLineF(0,0,0,yl));
+            it->connectors.append(QLineF(0,yl,mWidth/2,yl));
+            it->connectors.append(QLineF(mWidth/2,yl,mWidth/2,yl+it->y));
+        }
+
+        auto jt = mInputPinStruct.rbegin();
+        if (jt->pinType == PinType::set || jt->pinType == PinType::reset)
+        {
+            jt->x = (mWidth - sPinFontHeight) / 2.;
+            jt->y = mHeight - mPathWidth - sPinFontHeight + sPinFontAscent;
+            float yl = mHeight - yTopPinDistance() - (mInputPinStruct.size()-1) * yEndpointDistance();
+            jt->connectors.append(QLineF(0,0,0,yl));
+            jt->connectors.append(QLineF(0,yl,mWidth/2,yl));
+            jt->connectors.append(QLineF(mWidth/2,yl,mWidth/2,yl - it->y - sPinFontHeight));
+        }
+
     }
 }
 }

@@ -26,7 +26,7 @@
 #pragma once
 
 #include "gui/graph_widget/items/nodes/graphics_node.h"
-
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QPainterPath>
 
 namespace hal
@@ -64,7 +64,7 @@ namespace hal
             u32 netId;
             int index;
             bool isInput;
-            bool isClock;
+            PinType pinType;
             float x;
             float y;
             QList<QLineF> connectors;
@@ -85,6 +85,8 @@ namespace hal
         ShapeType mShapeType;
 
         QPainterPath mPath;
+
+        QRectF mBackgroundRect;
 
         int mPathWidth;
 
