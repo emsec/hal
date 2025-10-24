@@ -217,7 +217,9 @@ namespace hal
 
                 for( const Endpoint *ep : source->get_fan_in_endpoints() )
                 {
-                    const PinType pin_type = ep->get_pin()->get_type();
+                    const GatePin *pin = ep->get_pin();
+                    const PinType pin_type = pin->get_type();
+
                     if( is_control_pin( pin_type ) )
                     {
                         // Don't traverse control signals of clock gates
@@ -225,6 +227,14 @@ namespace hal
                     }
 
                     const Net *net = ep->get_net();
+                    const u32 net_id = net->get_id();
+                    const std::string net_name = net->get_name();
+
+                    if(net_name == "'0'" || net_name == "'1'")
+                    {
+                        continue;
+                    }
+
                     if( net->is_global_input_net() )
                     {
                         const u32 reference_id = reference->get_id();
@@ -241,18 +251,30 @@ namespace hal
                         continue;
                     }
 
-                    for( const Endpoint *ep : net->get_sources() )
+                    const u32 num_net_sources = net->get_num_of_sources();
+
+                    if(num_net_sources == 0)
                     {
-                        const Gate *gate = ep->get_gate();
-                        if( auto it = visited.find( { reference, gate } ); it == visited.end() )
-                        {
-                            queue.push( { reference, gate } );
-                        }
+                        log_warning("clock_tree_extractor", "unrouted clock net with ID {} ignored", net_id);
+                        continue;
+                    }
+                    else if(num_net_sources > 1)
+                    {
+                        log_warning("clock_tree_extractor", "multi-driven clock net with ID {} ignored", net_id);
+                        continue;
+                    }
+
+                    const std::vector<Endpoint *> net_sources = net->get_sources();
+                    const Endpoint *source_ep = net_sources.front();
+                    const Gate *gate = source_ep->get_gate();
+
+                    if( auto it = visited.find( { reference, gate } ); it == visited.end() )
+                    {
+                        queue.push( { reference, gate } );
                     }
                 }
             }
 
-            m_edges = edges;
             export_clock_tree( vertices, edges, pathname );
 
             return OK( edges.size() );
