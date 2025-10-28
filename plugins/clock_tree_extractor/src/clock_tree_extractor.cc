@@ -75,8 +75,17 @@ namespace hal
 
                 for( const auto &[src, dst] : edges )
                 {
-                    const std::string edge_color =
-                        ( vertices.at( "buffers" ).find( src ) != vertices.at( "buffers" ).end() ) ? "gold" : "green";
+                    std::string edge_color = "green";
+
+                    if( vertices.at( "buffers" ).find( src ) != vertices.at( "buffers" ).end() )
+                    {
+                        edge_color = "gold";
+                    }
+                    else if( vertices.at( "ffs" ).find( src ) != vertices.at( "ffs" ).end() )
+                    {
+                        edge_color = "dodgerblue";
+                    }
+
                     dot_fd << "  " << src << " -> " << dst << " [color=" << edge_color << "];\n";
                 }
 
@@ -98,6 +107,70 @@ namespace hal
             {
                 return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
                     || pin_type == PinType::set || pin_type == PinType::reset;
+            }
+
+            void insert_edge( std::vector<std::pair<std::string, std::string>> &edges,
+                              const Gate *source,
+                              const Gate *reference )
+            {
+                const u32 source_id = source->get_id();
+                const u32 reference_id = reference->get_id();
+                const std::string source_id_str = std::to_string( source_id );
+                const std::string reference_id_str = std::to_string( reference_id );
+                const std::pair<std::string, std::string> edge{ source_id_str, reference_id_str };
+
+                if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
+                {
+                    edges.push_back( edge );
+                }
+            }
+
+            void insert_edge( std::vector<std::pair<std::string, std::string>> &edges,
+                              const Net *source,
+                              const Gate *reference )
+            {
+                const u32 reference_id = reference->get_id();
+                const std::string source_net_name = source->get_name();
+                const std::string reference_id_str = std::to_string( reference_id );
+                const std::pair<std::string, std::string> edge{ source_net_name, reference_id_str };
+
+                if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
+                {
+                    edges.push_back( edge );
+                }
+            }
+
+            const std::vector<const Gate *> get_toggle_ffs( const Netlist *netlist )
+            {
+                const std::vector<Gate *> ffs = netlist->get_gates(
+                    []( const Gate *g ) { return g->get_type()->has_property( GateTypeProperty::ff ); } );
+
+                std::vector<const Gate *> result;
+                for( const Gate *ff : ffs )
+                {
+                    const std::vector<Endpoint *> successor_endpoints = ff->get_successors();
+                    const std::size_t successor_endpoints_size = successor_endpoints.size();
+
+                    if( successor_endpoints_size == 0 )
+                    {
+                        continue;
+                    }
+
+                    std::vector<const Gate *> successors;
+                    successors.reserve( successor_endpoints_size );
+
+                    std::transform( successor_endpoints.begin(),
+                                    successor_endpoints.end(),
+                                    std::back_inserter( successors ),
+                                    []( const Endpoint *ep ) { return ep->get_gate(); } );
+
+                    if( std::find( successors.begin(), successors.end(), ff ) != successors.end() )
+                    {
+                        result.push_back( ff );
+                    }
+                }
+
+                return result;
             }
         }  // namespace
 
@@ -177,6 +250,8 @@ namespace hal
                 queue.push( { ff, source_gate } );
             }
 
+            const std::vector<const Gate *> toggle_ffs = get_toggle_ffs( m_netlist );
+
             while( !queue.empty() )
             {
                 const std::pair<const Gate *, const Gate *> pair = queue.front();
@@ -187,16 +262,7 @@ namespace hal
 
                 if( source->get_type()->has_property( GateTypeProperty::c_buffer ) )
                 {
-                    const u32 source_id = source->get_id();
-                    const u32 reference_id = reference->get_id();
-                    const std::string source_id_str = std::to_string( source_id );
-                    const std::string reference_id_str = std::to_string( reference_id );
-                    const std::pair<std::string, std::string> edge{ source_id_str, reference_id_str };
-
-                    if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
-                    {
-                        edges.push_back( edge );
-                    }
+                    insert_edge( edges, source, reference );
 
                     reference = (Gate *) source;
 
@@ -205,11 +271,17 @@ namespace hal
 
                     vertices["buffers"].insert( buffer_id_str );
                 }
-                else if( source->get_type()->has_property( GateTypeProperty::ff )
-                         || source->get_type()->has_property( GateTypeProperty::latch ) )
+                else if( source->get_type()->has_property( GateTypeProperty::ff ) )
                 {
-                    // Should the FFS also be traversed? If so, which inputs should be considered? I would assume only
-                    // the data inputs.
+                    if( std::find( toggle_ffs.begin(), toggle_ffs.end(), source ) != toggle_ffs.end() )
+                    {
+                        insert_edge( edges, source, reference );
+                    }
+
+                    continue;
+                }
+                else if( source->get_type()->has_property( GateTypeProperty::latch ) )
+                {
                     continue;
                 }
 
@@ -230,22 +302,14 @@ namespace hal
                     const u32 net_id = net->get_id();
                     const std::string net_name = net->get_name();
 
-                    if(net_name == "'0'" || net_name == "'1'")
+                    if( net_name == "'0'" || net_name == "'1'" )
                     {
                         continue;
                     }
 
                     if( net->is_global_input_net() )
                     {
-                        const u32 reference_id = reference->get_id();
-                        const std::string net_name = net->get_name();
-                        const std::string reference_id_str = std::to_string( reference_id );
-                        const std::pair<std::string, std::string> edge{ net_name, reference_id_str };
-
-                        if( auto it = std::find( edges.begin(), edges.end(), edge ); it == edges.end() )
-                        {
-                            edges.push_back( edge );
-                        }
+                        insert_edge( edges, net, reference );
 
                         vertices["global_inputs"].insert( net_name );
                         continue;
@@ -253,14 +317,14 @@ namespace hal
 
                     const u32 num_net_sources = net->get_num_of_sources();
 
-                    if(num_net_sources == 0)
+                    if( num_net_sources == 0 )
                     {
-                        log_warning("clock_tree_extractor", "unrouted clock net with ID {} ignored", net_id);
+                        log_warning( "clock_tree_extractor", "unrouted clock net with ID {} ignored", net_id );
                         continue;
                     }
-                    else if(num_net_sources > 1)
+                    else if( num_net_sources > 1 )
                     {
-                        log_warning("clock_tree_extractor", "multi-driven clock net with ID {} ignored", net_id);
+                        log_warning( "clock_tree_extractor", "multi-driven clock net with ID {} ignored", net_id );
                         continue;
                     }
 
