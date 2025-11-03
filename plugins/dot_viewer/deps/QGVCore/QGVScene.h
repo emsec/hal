@@ -41,14 +41,21 @@ private:
     static QGVStyle* inst;
 
 public:
-    enum StyleType {Dark, Light, Graphviz} mStyleType;
+    enum StyleTarget {NodeStyle, EdgeStyle};
+    enum StyleType {Dark, Light, Graphviz};
 
     static QGVStyle* instance();
 
-    void setStyle(StyleType type);
+    void setStyle(StyleTarget target, StyleType type);
+    void changeHalStyle(StyleType type);
+    StyleType getStyle(StyleTarget target) const;
+
     QColor penColor(bool selected, const QColor& graphvizColor) const;
     QColor gridColor() const;
+    QColor selectFrameColor() const;
     QBrush nodeBrush(bool selected, const QBrush& graphvizBrush) const;
+private:
+    StyleType mStyleType[2];
 };
 
 class QGVInteraction : public QObject

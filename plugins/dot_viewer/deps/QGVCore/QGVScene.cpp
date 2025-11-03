@@ -383,7 +383,11 @@ void QGVScene::drawBackground(QPainter * painter, const QRectF & rect)
 ///------------------------
 QGVStyle* QGVStyle::inst = nullptr;
 
-QGVStyle::QGVStyle() : mStyleType(Dark) {;}
+QGVStyle::QGVStyle()
+{
+    for (int i=0; i<2; i++)
+        mStyleType[i] = Dark;
+}
 
 QGVStyle* QGVStyle::instance()
 {
@@ -391,14 +395,28 @@ QGVStyle* QGVStyle::instance()
     return inst;
 }
 
-void QGVStyle::setStyle(StyleType type)
+void QGVStyle::setStyle(StyleTarget target, StyleType type)
 {
-    mStyleType = type;
+    mStyleType[target] = type;
+}
+
+QGVStyle::StyleType QGVStyle::getStyle(StyleTarget target) const
+{
+    return mStyleType[target];
+}
+
+void QGVStyle::changeHalStyle(StyleType type)
+{
+    for (int i=0; i<2; i++)
+    {
+        if (mStyleType[i] == Graphviz) continue;
+        mStyleType[i] = type;
+    }
 }
 
 QColor QGVStyle::penColor(bool selected, const QColor& graphvizColor) const
 {
-    switch (mStyleType) {
+    switch (mStyleType[EdgeStyle]) {
         case Dark:
             if (selected) return QColor(Qt::cyan);
             return QColor::fromRgb(200,200,200);
@@ -412,9 +430,22 @@ QColor QGVStyle::penColor(bool selected, const QColor& graphvizColor) const
     return QColor();
 };
 
+QColor QGVStyle::selectFrameColor() const
+{
+    switch (mStyleType[NodeStyle]) {
+        case Dark:
+            return QColor(Qt::cyan);
+        case Light:
+            return QColor(Qt::blue);
+        default:
+            return QColor(); // no selection frame in graphviz style
+    }
+    return QColor();
+}
+
 QColor QGVStyle::gridColor() const
 {
-    switch (mStyleType) {
+    switch (mStyleType[NodeStyle]) {
         case Dark:
             return QColor(Qt::black);
         case Light:
@@ -428,7 +459,7 @@ QColor QGVStyle::gridColor() const
 
 QBrush QGVStyle::nodeBrush(bool selected, const QBrush& graphvizBrush) const
 {
-    switch (mStyleType) {
+    switch (mStyleType[NodeStyle]) {
         case Dark:
             if (selected) return QBrush(Qt::white);
             return QBrush(QColor::fromRgb(160,161,164));

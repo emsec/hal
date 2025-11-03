@@ -81,9 +81,13 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
 
     if (isSelected())
     {
-        painter->setPen(QPen(QGVStyle::instance()->penColor(true,_pen.color()),2));
-        painter->setBrush(Qt::NoBrush);
-        painter->drawRect(rect);
+        QColor frameColor = QGVStyle::instance()->selectFrameColor();
+        if (frameColor.isValid())
+        {
+            painter->setPen(QPen(frameColor,2));
+            painter->setBrush(Qt::NoBrush);
+            painter->drawRect(rect);
+        }
     }
     painter->restore();
 }

@@ -66,6 +66,7 @@ namespace hal
     private Q_SLOTS:
         void handleOpenInputFileDialog();
         void handleToggleGrid();
+        void handleColorSelect();
         void handleStyleChanged(int istyle);
 
     private:
@@ -73,6 +74,7 @@ namespace hal
         DotGraphicsView* mDotGraphicsView;
         QAction* mOpenInputfileAction;
         QAction* mToggleGridAction;
+        QAction* mColorSelectAction;
         QString mFilename;
         QString mCreatorPlugin;
     };

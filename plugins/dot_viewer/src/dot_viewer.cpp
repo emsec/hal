@@ -38,6 +38,11 @@ namespace hal
             connect(mToggleGridAction, &QAction::triggered, this, &DotViewer::handleToggleGrid);
             mToggleGridAction->setIcon(gui_utility::getStyledSvgIcon("all->#ffffff", ":/icons/toggle-grid"));
 
+            mColorSelectAction = new Action(this);
+            mColorSelectAction->setToolTip("Select color style");
+            connect(mColorSelectAction, &QAction::triggered, this, &DotViewer::handleColorSelect);
+            mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon("all->#ff8040", ":/icons/color_select"));
+
             QShortcut* zoomInShortcut = new QShortcut(GraphTabWidget::sSettingZoomIn->value().toString(), this);
             QShortcut* zoomOutShortcut = new QShortcut(GraphTabWidget::sSettingZoomOut->value().toString(), this);
             connect(GraphTabWidget::sSettingZoomIn, &SettingsItemKeybind::keySequenceChanged, zoomInShortcut, &QShortcut::setKey);
@@ -59,6 +64,7 @@ namespace hal
         {
             toolbar->addAction(mOpenInputfileAction);
             toolbar->addAction(mToggleGridAction);
+            toolbar->addAction(mColorSelectAction);
         }
 
         DotViewer::~DotViewer()
@@ -77,10 +83,10 @@ namespace hal
             switch (istyle)
             {
                 case MainWindow::StyleSheetOption::Dark:
-                    QGVStyle::instance()->setStyle(QGVStyle::Dark);
+                    QGVStyle::instance()->changeHalStyle(QGVStyle::Dark);
                     break;
                 case MainWindow::StyleSheetOption::Light:
-                    QGVStyle::instance()->setStyle(QGVStyle::Light);
+                    QGVStyle::instance()->changeHalStyle(QGVStyle::Light);
                     break;
                 default:
                     return;
@@ -162,6 +168,27 @@ namespace hal
 
             // interact might be nullptr but that is OK (no interactions in this case)
             mDotScene->loadLayout(dotfileContent, interact);
+        }
+
+        void DotViewer::handleColorSelect()
+        {
+            QMenu menu;
+            const char* target[] = {"node", "edge", nullptr };
+            for (int i=0; target[i]; i++)
+            {
+                QAction* act = menu.addAction(QString("HAL color style overwrites %1 attibute").arg(target[i]));
+                act->setCheckable(true);
+                act->setChecked(QGVStyle::instance()->getStyle((QGVStyle::StyleTarget)i) != QGVStyle::Graphviz);
+                connect (act, &QAction::triggered, this, [target,i,this](bool checked){
+                    std::cerr << QString("HAL color style overwrites %1 attibute => %2").arg(target[i]).arg(checked?"true":"false").toStdString() << std::endl;
+                    if (checked)
+                        QGVStyle::instance()->setStyle((QGVStyle::StyleTarget)i, (QGVStyle::StyleType) MainWindow::sSettingStyle->value().toInt());
+                    else
+                        QGVStyle::instance()->setStyle((QGVStyle::StyleTarget)i, QGVStyle::Graphviz);
+                    this->mDotScene->update();
+                });
+            }
+            menu.exec(QCursor::pos());
         }
 
         void DotViewer::disableInteractions()
