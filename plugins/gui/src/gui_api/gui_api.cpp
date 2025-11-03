@@ -17,6 +17,7 @@
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_tree_model.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/netlist_utils.h"
 
 #include <algorithm>
 
@@ -443,6 +444,65 @@ namespace hal
     void GuiApi::deselectAllItems()
     {
         gSelectionRelay->clearAndUpdate();
+    }
+
+    int GuiApiClasses::View::isolateModuleToModulePathInNewView(u32 fromModId, u32 toModId)
+    {
+        if (!fromModId || !toModId || fromModId == toModId)
+        {
+            log_warning("gui", "Isolate path from module to module called with faulty parameters");
+            return 0;
+        }
+        Module* fromModule = gNetlist->get_module_by_id(fromModId);
+        if (!fromModule)
+        {
+            log_warning("gui", "Module ID={} to start path from not found.", fromModId);
+            return 0;
+        }
+        Module* toModule = gNetlist->get_module_by_id(toModId);
+        if (!toModule)
+        {
+            log_warning("gui", "Module ID={} to start path from not found.", toModId);
+            return 0;
+        }
+
+        std::vector<std::vector<Gate*>> pathRows = netlist_utils::get_shortest_path(fromModule,toModule);
+        if (pathRows.empty())
+        {
+            log_warning("gui", "No path found from module ID={} to module ID={}.", fromModId, toModId);
+            return 0;
+        }
+
+        GridPlacement plc;
+
+        QSet<u32> moduleIds = {fromModId, toModId};
+        QSet<u32> gateIds;
+        int nrows = pathRows.size();
+        int ncols = pathRows.at(0).size();
+        plc[Node(fromModId,Node::Module)] = QPoint(0,0);
+        plc[Node(toModId,Node::Module)] = QPoint(ncols-1,0);
+
+        for (int icol = 1; icol < ncols-1; icol++)
+        {
+            int y = 0;
+            for (int irow = 0; irow < nrows; irow++)
+            {
+                u32 gateId = pathRows.at(irow).at(icol)->get_id();
+                if (gateIds.contains(gateId)) continue;
+                gateIds.insert(gateId);
+                plc[Node(gateId,Node::Gate)] = QPoint(icol, y++);
+            }
+        }
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, QString("Path mod_%1 => mod_%2").arg(fromModId).arg(toModId)));
+        ActionAddItemsToObject* actionAddItems = new ActionAddItemsToObject(moduleIds, gateIds);
+        actionAddItems->setPlacementHint(PlacementHint(plc));
+        act->addAction(actionAddItems);
+        UserActionManager::instance()->executeActionBlockThread(act);
+
+        return act->object().id();
     }
 
 

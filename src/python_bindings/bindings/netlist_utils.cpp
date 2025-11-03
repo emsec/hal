@@ -414,5 +414,13 @@ namespace hal
             :returns: A list of gates that form a chain on success, an empty list on error.
             :rtype: list[hal_py.Gate]
         )");
+
+        py_netlist_utils.def("get_shortest_path", py::overload_cast<Module*,Module*>(&netlist_utils::get_shortest_path), py::arg("start_module"), py::arg("end_module"), R"(
+            Find (multiple) shortest path (i.e., theresult set with the lowest number of gates) that connects the module with another module.
+
+            :param hal_py.Module start_module: The module which contains a gate as start for the path
+            :param hal_py.Module end_module: The module which contains a gate as end of the path
+            :rtype: list[list[hal_py.Gate]]
+        )");
     }
 }    // namespace hal

@@ -1,0 +1,89 @@
+// MIT License
+//
+// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS").
+// All Rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#pragma once
+
+#include "hal_core/defines.h"
+#include "gui/content_manager/content_manager.h"
+
+#include <mutex>
+#include <string>
+#include <vector>
+#include <QObject>
+
+class QGVScene;
+
+namespace hal
+{
+    class Netlist;
+    class Toolbar;
+}
+
+namespace hal
+{
+    class DotGraphicsView;
+
+    class NETLIST_API DotViewer : public ExternalContentWidget
+    {
+        Q_OBJECT
+    public:
+        DotViewer(const QString &pluginName, QObject* parent = nullptr);
+
+        ~DotViewer();
+
+        void setupToolbar(Toolbar* toolbar);
+        void disableInteractions();
+        static DotViewer* getDotviewerInstance();
+        QString filename() const { return mFilename; }
+        QString creatorPlugin() const { return mCreatorPlugin; }
+
+    public Q_SLOTS:
+        void handleOpenInputFileByName(const QString& fileName, const QString& creator = QString());
+
+    private Q_SLOTS:
+        void handleOpenInputFileDialog();
+        void handleToggleGrid();
+        void handleStyleChanged(int istyle);
+
+    private:
+        QGVScene* mDotScene;
+        DotGraphicsView* mDotGraphicsView;
+        QAction* mOpenInputfileAction;
+        QAction* mToggleGridAction;
+        QString mFilename;
+        QString mCreatorPlugin;
+    };
+
+    class DotViewerCallFromTread : public QObject
+    {
+        Q_OBJECT
+    public:
+        DotViewerCallFromTread(QObject* parent = nullptr) : QObject(parent) {;}
+        void emitOpenInputFileByName(DotViewer* callee, QString filename, QString plugin);
+    Q_SIGNALS:
+        void callOpenInputFileByName(QString filename, QString plugin);
+    };
+}  // namespace hal
