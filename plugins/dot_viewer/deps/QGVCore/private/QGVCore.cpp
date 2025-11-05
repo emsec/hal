@@ -104,8 +104,7 @@ QPainterPath QGVCore::toPath(const QString& shape, const polygon_t *poly, qreal 
          shape == "hexagon"   ||
          shape == "polygon"   ||
          shape == "diamond"   ||
-         shape == "rect"      ||
-         shape ==  "triangle"       )
+         shape == "rect"      )
     {
         QPolygonF polygon = toPolygon(poly, width, height);
         polygon.append(polygon[0]);
@@ -121,6 +120,15 @@ QPainterPath QGVCore::toPath(const QString& shape, const polygon_t *poly, qreal 
     {
         QPolygonF polygon = toPolygon(poly, width, height);
         path = cylinder(polygon, width, height);
+    }
+    else if ( shape == "triangle" ||
+              shape == "invtriangle" )
+    {
+        QVector<QPointF> trianglePoints;
+        for (const QPointF& p : toPolygon(poly, width, height))
+            trianglePoints.append(QPointF(p.x(),height - p.y()));
+        trianglePoints.append(trianglePoints.at(0));
+        path.addPolygon(QPolygonF(trianglePoints));
     }
     else
     {
