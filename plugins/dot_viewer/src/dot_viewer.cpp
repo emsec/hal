@@ -2,14 +2,9 @@
 
 #include "gui/gui_utils/graphics.h"
 #include "gui/toolbar/toolbar.h"
-#include "hal_core/utilities/log.h"
 #include <QGraphicsView>
 #include <QVBoxLayout>
 #include <QInputDialog>
-#include <assert.h>
-#include <hiredis/async.h>
-#include <hiredis/hiredis.h>
-#include <hiredis/read.h>
 #include <QString>
 #include <QAction>
 #include <QFileDialog>
