@@ -3,10 +3,7 @@ option(PL_DOT_VIEWER "Build the Dot Viewer plugin" ON)
 if(PL_DOT_VIEWER OR BUILD_ALL_PLUGINS)
 
     # Dependencies
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(LIBCDT REQUIRED libcdt)
-    pkg_check_modules(LIBGVC REQUIRED libgvc)
-    pkg_check_modules(LIBCGRAPH REQUIRED libcgraph)
+    find_package(Graphviz REQUIRED)
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
 
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/QGVCore)
@@ -42,7 +39,6 @@ if(PL_DOT_VIEWER OR BUILD_ALL_PLUGINS)
     target_link_libraries(dot_viewer PRIVATE
         Qt5::Core
         Qt5::Widgets
-        ${LIBCDT_LIBRARIES}
         ${LIBGVC_LIBRARIES}
         ${LIBCGRAPH_LIBRARIES}
         gui
