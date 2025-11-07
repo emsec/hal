@@ -28,11 +28,6 @@ namespace hal {
         connect(parent, &QGraphicsScene::selectionChanged, this, &DataflowInteraction::handleQGVSelectionChanged);
     }
 
-    DataflowInteraction::~DataflowInteraction()
-    {
-        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &DataflowInteraction::handleHALSelectionChanged);
-    }
-
     void DataflowInteraction::registerEdge(QGVEdge* edge)
     {
         Q_UNUSED(edge);

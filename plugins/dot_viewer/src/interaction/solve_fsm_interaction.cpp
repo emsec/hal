@@ -32,11 +32,6 @@ namespace hal {
         connect(parent, &QGraphicsScene::changed, this, &SolveFsmInteraction::handleSceneChanged);
     }
 
-    SolveFsmInteraction::~SolveFsmInteraction()
-    {
-        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SolveFsmInteraction::handleHALSelectionChanged);
-    }
-
     void SolveFsmInteraction::handleSceneChanged(const QList<QRectF>& changedArea)
     {
         Q_UNUSED(changedArea);

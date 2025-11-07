@@ -35,7 +35,6 @@ namespace hal {
         Q_OBJECT
     public:
         ClockTreeExtractorInteraction(QGVScene* parent);
-        ~ClockTreeExtractorInteraction();
 
         void registerNode(QGVNode* node) override;
         void registerEdge(QGVEdge* scene) override;

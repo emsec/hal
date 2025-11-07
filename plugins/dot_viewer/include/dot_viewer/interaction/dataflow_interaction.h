@@ -35,7 +35,6 @@ namespace hal {
         Q_OBJECT
     public:
         DataflowInteraction(QGVScene* parent);
-        ~DataflowInteraction();
 
         void registerNode(QGVNode* node) override;
         void registerEdge(QGVEdge* scene) override;

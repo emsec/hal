@@ -27,11 +27,6 @@ namespace hal {
         connect(parent, &QGraphicsScene::selectionChanged, this, &ClockTreeExtractorInteraction::handleQGVSelectionChanged);
     }
 
-    ClockTreeExtractorInteraction::~ClockTreeExtractorInteraction()
-    {
-        disconnect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ClockTreeExtractorInteraction::handleHALSelectionChanged);
-    }
-
     void ClockTreeExtractorInteraction::registerEdge(QGVEdge* edge)
     {
         Q_UNUSED(edge);

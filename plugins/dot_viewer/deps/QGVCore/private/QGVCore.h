@@ -30,6 +30,10 @@ License along with this library.
 
 const qreal DotDefaultDPI = 72.0;
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
 /**
  * @brief GraphViz to GraphicsScene conversions
  *
@@ -81,6 +85,7 @@ public:
 
     static Agraph_t *agmemread2(const char *cp)
     {
+#ifdef HAS_AGDISK_MEM
         Agraph_t* g;
         rdr_t rdr;
         Agdisc_t disc;
@@ -98,6 +103,9 @@ public:
         disc.io = &memIoDisc;
         g = agread (&rdr, &disc);
         return g;
+#else
+        return agmemread(cp);
+#endif
     }
 
 private:

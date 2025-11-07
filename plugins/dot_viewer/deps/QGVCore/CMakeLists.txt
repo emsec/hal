@@ -4,6 +4,14 @@ SET(qgvlib_TS)
 
 SET(qgvlib_UI)
 
+check_c_source_compiles("
+#include <graphviz/cgraph.h>
+int main() {
+    Agdisc_t d;
+    d.mem = 0;
+    return 0;
+}" HAS_AGDISC_MEM)
+
 SET(TARGET_VERSION_MAJOR 0 )
 SET(TARGET_VERSION_MINOR 1 )
 

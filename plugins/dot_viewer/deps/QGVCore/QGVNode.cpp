@@ -68,7 +68,25 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
     const QRectF rect = boundingRect().adjusted(2,2,-2,-2); //Margin
     if(_icon.isNull())
     {
-        painter->drawText(rect, Qt::AlignCenter , QGVNode::label());
+        QFontMetrics fm(painter->font());
+        qreal fw = fm.horizontalAdvance(label());
+        if (fw > rect.width())
+        {
+            qreal scl = rect.width()/fw;
+            qreal tx = rect.center().x();
+            qreal ty = rect.center().y();
+            painter->save();
+            painter->translate(tx,ty);
+            painter->scale(scl, scl);
+            painter->translate(-tx/scl, -ty);
+            painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip | Qt::TextSingleLine, label());
+            painter->setPen( QPen(Qt::red,1) );
+            painter->setBrush ( Qt::NoBrush );
+            painter->drawRect(rect);
+            painter->restore();
+        }
+        else
+            painter->drawText(rect, Qt::AlignCenter , QGVNode::label());
     }
     else
     {

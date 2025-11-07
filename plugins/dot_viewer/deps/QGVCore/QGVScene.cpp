@@ -29,7 +29,6 @@ License along with this library.
 #include <QGVNodePrivate.h>
 #include <QGraphicsView>
 #include <iostream>
-#include "hal_core/utilities/log.h"
 
 int QGVScene::sCount = 0;
 
@@ -71,7 +70,9 @@ void QGVInteraction::disableHandler()
 QGVScene::QGVScene(QObject *parent)
     : QGraphicsScene(parent), _drawGrid(true)
 {
+#ifdef HAS_AGDISK_MEM
     aaglex_destroy();
+#endif
     _context = new QGVGvcPrivate(gvContext());
     QString name = QString("DotViewer%1").arg(++sCount);
     _graph = new QGVGraphPrivate(agopen(name.toLocal8Bit().data(), Agdirected, NULL));
@@ -208,14 +209,14 @@ void QGVScene::loadLayout(const QString &text, QGVInteraction *interact)
     if (!_graph->graph())
     {
         const char* err = aglasterr();
-        hal::log_warning("dot_viewer", "Error parsing file input '{}'.", (err ? err : "") );
+        qWarning() << "Error parsing file input <" << (err ? err : "") << ">" ;
         return;
     }
 
     if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
     {
         const char* err = aglasterr();
-        hal::log_warning("dot_viewer", "Layout render error {} '{}'.",  agerrors(), (err ? err : "") );
+        qWarning() << "Layout render error <" <<  (err ? err : "") << ">";
         return;
     }
 
