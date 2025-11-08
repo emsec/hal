@@ -77,7 +77,7 @@ elif [[ "$platform" == 'linux' ]]; then
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
-        libreadline-dev apport python3-dateutil \
+        libreadline-dev apport python3-dateutil libgraphviz-dev \
         $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
     elif [[ "$distribution" == "Arch" ]]; then
