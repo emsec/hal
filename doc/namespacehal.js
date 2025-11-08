@@ -111,6 +111,7 @@ var namespacehal =
       [ "get_path", "namespacehal_1_1netlist__utils.html#ad44878a824ec4f37dcc5317ddec67db3", null ],
       [ "get_shortest_path", "namespacehal_1_1netlist__utils.html#aed730c36a6fe7e185bf8b936ad7e0d6d", null ],
       [ "get_shortest_path", "namespacehal_1_1netlist__utils.html#ad4d03ec3fea021d21e9247e70d03aecc", null ],
+      [ "get_shortest_path", "namespacehal_1_1netlist__utils.html#a3eade97a6a1bad145c262e273035cec4", null ],
       [ "get_subgraph_function", "namespacehal_1_1netlist__utils.html#a77025d97353281c42b543f073de27099", null ],
       [ "get_subgraph_function", "namespacehal_1_1netlist__utils.html#ab8c3054566941b75019e3f599ec16814", null ],
       [ "remove_buffers", "namespacehal_1_1netlist__utils.html#af985cd5c5eb7aa39f151f9fc890e6005", null ],

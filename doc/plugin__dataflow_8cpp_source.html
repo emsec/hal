@@ -284,45 +284,56 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp_source.html','')
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        }</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keyword">auto</span> grouping = grouping_res.get();</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">if</span> (m_write_dot)</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        {</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.write_dot(m_output_path); res.is_error())</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            {</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not write .dot file:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            }</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">if</span> (m_write_txt)</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        {</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.write_txt(m_output_path); res.is_error())</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            {</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not write .txt file:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            }</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        }</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keywordflow">if</span> (m_create_modules)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        {</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.create_modules(); res.is_error())</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            {</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not create modules:\n{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            }</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        }</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a>)</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        {</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a>(100, <span class="stringliteral">&quot;dataflow analysis finished&quot;</span>);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        std::filesystem::path dot_graph_written_to_path;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordflow">if</span> (m_write_dot)</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        {</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.write_dot(m_output_path); res.is_error())</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not write .dot file:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            {</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                dot_graph_written_to_path = res.get();</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordflow">if</span> (m_write_txt)</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        {</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.write_txt(m_output_path); res.is_error())</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not write .txt file:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">if</span> (m_create_modules)</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = grouping.create_modules(); res.is_error())</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            {</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;could not create modules:\n{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            }</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    }</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    std::function&lt;void(<span class="keywordtype">int</span>, <span class="keyword">const</span> std::string&amp;)&gt; <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a> = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
-<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">  232</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">GuiExtensionDataflow::register_progress_indicator</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">int</span>, <span class="keyword">const</span> std::string&amp;)&gt; pif)</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    {</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">s_progress_indicator_function</a> = pif;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    }</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="comment">// open in dot viewer must be called after modules got created</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordflow">if</span> (!dot_graph_written_to_path.empty())</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            grouping.open_dot_in_viewer(dot_graph_written_to_path);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        }</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a>)</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        {</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a>(100, <span class="stringliteral">&quot;dataflow analysis finished&quot;</span>);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    std::function&lt;void(<span class="keywordtype">int</span>, <span class="keyword">const</span> std::string&amp;)&gt; <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">GuiExtensionDataflow::s_progress_indicator_function</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">  243</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">GuiExtensionDataflow::register_progress_indicator</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">int</span>, <span class="keyword">const</span> std::string&amp;)&gt; pif)</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    {</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <a class="code" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">s_progress_indicator_function</a> = pif;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    }</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a52dcfaa4f1facdebbd555034e2b7e72b"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a52dcfaa4f1facdebbd555034e2b7e72b">hal::BasePluginInterface::m_extensions</a></div><div class="ttdeci">std::vector&lt; AbstractExtensionInterface * &gt; m_extensions</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00059">plugin_interface_base.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_cli_extension_dataflow_html"><div class="ttname"><a href="classhal_1_1_cli_extension_dataflow.html">hal::CliExtensionDataflow</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8h_source.html#l00043">plugin_dataflow.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_cli_extension_dataflow_html_a0b4f2dac46ce9a475a4076d8b67e77ca"><div class="ttname"><a href="classhal_1_1_cli_extension_dataflow.html#a0b4f2dac46ce9a475a4076d8b67e77ca">hal::CliExtensionDataflow::handle_cli_call</a></div><div class="ttdeci">virtual bool handle_cli_call(Netlist *netlist, ProgramArguments &amp;args) override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00060">plugin_dataflow.cpp:60</a></div></div>
@@ -334,7 +345,7 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_dataflow_plugin_html_ab375ed4dfacb316db812fbfb7f551d33"><div class="ttname"><a href="classhal_1_1_dataflow_plugin.html#ab375ed4dfacb316db812fbfb7f551d33">hal::DataflowPlugin::get_description</a></div><div class="ttdeci">std::string get_description() const override</div><div class="ttdoc">Get a short description of the plugin.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00029">plugin_dataflow.cpp:29</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html">hal::GuiExtensionDataflow</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8h_source.html#l00053">plugin_dataflow.h:54</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_a5712e954f109aefc6a6a1a1eb833a112"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">hal::GuiExtensionDataflow::execute_function</a></div><div class="ttdeci">void execute_function(std::string tag, Netlist *nl, const std::vector&lt; u32 &gt; &amp;mods, const std::vector&lt; u32 &gt; &amp;gats, const std::vector&lt; u32 &gt; &amp;nets) override</div><div class="ttdoc">Execute the plugin on the given netlist.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00167">plugin_dataflow.cpp:167</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_a948b44344a3bdcaecbea355ab8d5a945"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">hal::GuiExtensionDataflow::register_progress_indicator</a></div><div class="ttdeci">virtual void register_progress_indicator(std::function&lt; void(int, const std::string &amp;)&gt; pif) override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00232">plugin_dataflow.cpp:232</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_a948b44344a3bdcaecbea355ab8d5a945"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">hal::GuiExtensionDataflow::register_progress_indicator</a></div><div class="ttdeci">virtual void register_progress_indicator(std::function&lt; void(int, const std::string &amp;)&gt; pif) override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00243">plugin_dataflow.cpp:243</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_ac91f739c93f0e340c729a0c40eaeaead"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">hal::GuiExtensionDataflow::get_parameter</a></div><div class="ttdeci">std::vector&lt; PluginParameter &gt; get_parameter() const override</div><div class="ttdoc">Get a vector of configurable parameters.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00109">plugin_dataflow.cpp:109</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_ad9acd8c11a5ddd357a834adb7a9444c2"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">hal::GuiExtensionDataflow::set_parameter</a></div><div class="ttdeci">void set_parameter(const std::vector&lt; PluginParameter &gt; &amp;params) override</div><div class="ttdoc">Set values for a vector of configurable parameters.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8cpp_source.html#l00123">plugin_dataflow.cpp:123</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gui_extension_dataflow_html_af81ee43abbd5c724dd2ebc631e6adab9"><div class="ttname"><a href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">hal::GuiExtensionDataflow::s_progress_indicator_function</a></div><div class="ttdeci">static std::function&lt; void(int, const std::string &amp;)&gt; s_progress_indicator_function</div><div class="ttdef"><b>Definition:</b> <a href="plugin__dataflow_8h_source.html#l00104">plugin_dataflow.h:104</a></div></div>
@@ -380,7 +391,7 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="plugin__dataflow_8cpp.html">plugin_dataflow.cpp</a></li>
-    <li class="footer">Generated on Tue Oct 21 2025 12:17:32 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Nov 8 2025 13:22:57 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -98,35 +98,37 @@ $(document).ready(function(){initNavTree('solve__fsm_8cpp.html',''); initResizab
 <code>#include &quot;<a class="el" href="gate__type_8h_source.html">hal_core/netlist/gate_library/gate_type.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ff__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/ff_component.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="state__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/state_component.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="plugin__manager_8h_source.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gui__extension__interface_8h_source.html">hal_core/plugin_system/gui_extension_interface.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
 <code>#include &lt;bitset&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
-<code>#include &lt;queue&gt;</code><br />
+<code>#include &lt;deque&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for solve_fsm.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="solve__fsm_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2solve__fsm_2src_2solve__fsm_8cpp" alt=""/></div>
 <map name="a_2home_2runner_2work_2hal_2hal_2plugins_2solve__fsm_2src_2solve__fsm_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2solve__fsm_2src_2solve__fsm_8cpp">
-<area shape="rect" title=" " alt="" coords="1058,5,1227,61"/>
-<area shape="rect" href="solve__fsm_8h.html" title="This file contains functions to generate the state transition graph of a given FSM." alt="" coords="1030,228,1202,255"/>
-<area shape="rect" href="solver_8h.html" title=" " alt="" coords="1372,117,1550,158"/>
-<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="304,221,522,262"/>
-<area shape="rect" href="net_8h.html" title=" " alt="" coords="276,325,435,351"/>
-<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="32,221,279,262"/>
-<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="547,221,762,262"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1180,124,1347,151"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1277,221,1432,262"/>
+<area shape="rect" title=" " alt="" coords="1364,5,1533,61"/>
+<area shape="rect" href="solve__fsm_8h.html" title="This file contains functions to generate the state transition graph of a given FSM." alt="" coords="1362,228,1534,255"/>
+<area shape="rect" href="solver_8h.html" title=" " alt="" coords="1660,117,1839,158"/>
+<area shape="rect" href="boolean__function__decorator_8h.html" title=" " alt="" coords="34,221,252,262"/>
+<area shape="rect" href="net_8h.html" title=" " alt="" coords="337,325,496,351"/>
+<area shape="rect" href="boolean__function__net__decorator_8h.html" title=" " alt="" coords="277,221,524,262"/>
+<area shape="rect" href="subgraph__netlist__decorator_8h.html" title=" " alt="" coords="548,221,762,262"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1190,124,1357,151"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1031,221,1186,262"/>
 <area shape="rect" href="ff__component_8h.html" title=" " alt="" coords="786,213,1006,269"/>
-<area shape="rect" href="state__component_8h.html" title=" " alt="" coords="1575,109,1795,165"/>
-<area shape="rect" title=" " alt="" coords="1820,124,1878,151"/>
-<area shape="rect" title=" " alt="" coords="1903,124,1976,151"/>
-<area shape="rect" title=" " alt="" coords="2000,124,2063,151"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="714,496,854,523"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="873,317,1052,359"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="668,407,798,448"/>
-<area shape="rect" title=" " alt="" coords="1126,414,1177,441"/>
-<area shape="rect" href="types_8h.html" title=" " alt="" coords="1506,221,1685,262"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="510,325,697,351"/>
+<area shape="rect" href="state__component_8h.html" title=" " alt="" coords="1864,109,2084,165"/>
+<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="1466,317,1642,359"/>
+<area shape="rect" href="gui__extension__interface_8h.html" title=" " alt="" coords="1564,407,1759,448"/>
+<area shape="rect" title=" " alt="" coords="2108,124,2167,151"/>
+<area shape="rect" title=" " alt="" coords="2192,124,2265,151"/>
+<area shape="rect" title=" " alt="" coords="2289,124,2352,151"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="774,496,914,523"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="807,317,986,359"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="728,407,859,448"/>
+<area shape="rect" title=" " alt="" coords="1263,414,1314,441"/>
 </map>
 </div>
 </div>
@@ -154,7 +156,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_c7a46f546be90b83c8cc2c014bc3b59b.html">solve_fsm</a></li><li class="navelem"><a class="el" href="dir_aac915d812b30dde732129b041992a94.html">src</a></li><li class="navelem"><a class="el" href="solve__fsm_8cpp.html">solve_fsm.cpp</a></li>
-    <li class="footer">Generated on Tue Oct 21 2025 12:17:35 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Nov 8 2025 13:23:01 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

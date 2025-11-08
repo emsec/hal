@@ -19,6 +19,7 @@ var netlist_2netlist__utils_8cpp =
     [ "get_path", "netlist_2netlist__utils_8cpp.html#ad44878a824ec4f37dcc5317ddec67db3", null ],
     [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#aed730c36a6fe7e185bf8b936ad7e0d6d", null ],
     [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#ad4d03ec3fea021d21e9247e70d03aecc", null ],
+    [ "get_shortest_path", "netlist_2netlist__utils_8cpp.html#a3eade97a6a1bad145c262e273035cec4", null ],
     [ "get_subgraph_function", "netlist_2netlist__utils_8cpp.html#a77025d97353281c42b543f073de27099", null ],
     [ "get_subgraph_function", "netlist_2netlist__utils_8cpp.html#ab8c3054566941b75019e3f599ec16814", null ],
     [ "remove_buffers", "netlist_2netlist__utils_8cpp.html#af985cd5c5eb7aa39f151f9fc890e6005", null ],

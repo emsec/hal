@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="1077,667,1356,1111"/>
 <area shape="rect" id="node4" href="$classhal_1_1_context_manager_widget.html" title="Provides the user with an interface to manage GraphContexts." alt="" coords="5,1188,228,1823"/>
 <area shape="rect" id="node5" href="$classhal_1_1_external_content_widget.html" title=" " alt="" coords="252,1452,461,1559"/>
-<area shape="rect" id="node6" href="$classhal_1_1_graph_tab_widget.html" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="485,1386,689,1625"/>
+<area shape="rect" id="node6" href="$classhal_1_1_graph_tab_widget.html" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="485,1379,689,1632"/>
 <area shape="rect" id="node7" href="$classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="714,1415,922,1595"/>
 <area shape="rect" id="node8" href="$classhal_1_1_grouping_manager_widget.html" title="User interface for Groupings." alt="" coords="947,1159,1209,1852"/>
 <area shape="rect" id="node9" href="$classhal_1_1_logger_widget.html" title="Displays the logs in the gui." alt="" coords="1233,1379,1480,1632"/>

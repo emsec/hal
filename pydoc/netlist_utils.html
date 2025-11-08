@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Utils &mdash; hal_py v4.5.0-13-g104bb5d4d documentation</title>
+  <title>Netlist Utils &mdash; hal_py v4.5.0-20-gc2e0591d4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-13-g104bb5d4d
+                v4.5.0-20-gc2e0591d4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -565,6 +565,22 @@ If there is no such path an empty vector is returned. If there is more than one 
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>list[hal_py.Gate]</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_shortest_path(start_module: hal::Module, end_module: hal::Module) -&gt; List[List[hal::Gate]]</p>
+<blockquote>
+<div><p>Find (multiple) shortest path (i.e., theresult set with the lowest number of gates) that connects the module with another module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Module start_module</dt>
+<dd class="field-odd"><p>The module which contains a gate as start for the path</p>
+</dd>
+<dt class="field-even">param hal_py.Module end_module</dt>
+<dd class="field-even"><p>The module which contains a gate as end of the path</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>list[list[hal_py.Gate]]</p>
 </dd>
 </dl>
 </div></blockquote>

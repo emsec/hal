@@ -17,7 +17,8 @@ var classhal_1_1dataflow_1_1_result =
     [ "get_groups_as_list", "classhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06", null ],
     [ "get_netlist", "classhal_1_1dataflow_1_1_result.html#a8de92d6b9e454ff1d0ce07c5f4b28615", null ],
     [ "merge_groups", "classhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0", null ],
+    [ "open_dot_in_viewer", "classhal_1_1dataflow_1_1_result.html#aea5b114334e0375e109d4870331a53a1", null ],
     [ "split_group", "classhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409", null ],
-    [ "write_dot", "classhal_1_1dataflow_1_1_result.html#ab236d02389418d77f1f11d646404dc80", null ],
+    [ "write_dot", "classhal_1_1dataflow_1_1_result.html#a4b76b7417b35722dcd51fbc21c88fc1a", null ],
     [ "write_txt", "classhal_1_1dataflow_1_1_result.html#a673304b1b81b995234c3321384df6e36", null ]
 ];
