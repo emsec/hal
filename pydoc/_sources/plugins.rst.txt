@@ -7,6 +7,7 @@ HAL Plugins Documentation
    bitorder_propagation
    boolean_influence
    dataflow
+   dot_viewer
    graph_algorithm
    gui
    hawkeye
