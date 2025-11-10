@@ -5,6 +5,8 @@
 !boolean_influence/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
+!dot_viewer*
+!dot_viewer/**/*
 !gate_libraries*
 !gate_libraries/**/*
 !genlib_writer*

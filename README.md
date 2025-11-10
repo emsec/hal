@@ -4,7 +4,7 @@
 
 HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation framework.
 
-[![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")](https://emsec.github.io/hal/doc/hal_screenshot.html)
+[![HAL Screenshot](https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png "HAL Screenshot")](https://emsec.github.io/hal/hal_screenshot.html)
 
 # Navigation
 1. [Introduction](#introduction)

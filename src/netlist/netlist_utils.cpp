@@ -358,6 +358,39 @@ namespace hal
             return spi.get_path();
         }
 
+        std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module)
+        {
+            std::unordered_set<Gate*> start_gates;
+            for (Gate* g : start_module->get_gates(nullptr, true))
+            {
+                start_gates.insert(g);
+            }
+
+            int shortest_length = -1;
+            std::vector<std::vector<Gate*> > retval;
+            for (Gate* end_gate : end_module->get_gates(nullptr,true))
+            {
+                ShortestPathInternal spi_reverse(end_gate, start_gates, false);
+                std::vector<Gate*> path_reverse = spi_reverse.get_path();
+                int len = path_reverse.size();
+                if (!len) continue;
+                if (shortest_length < 0) shortest_length = len;
+                if (len > shortest_length) continue;
+                if (len < shortest_length) shortest_length = len;
+                retval.push_back(path_reverse);
+            }
+
+            auto it = retval.begin();
+            while (it != retval.end())
+            {
+                if (it->size() > shortest_length)
+                    it = retval.erase(it);
+                else
+                    ++it;
+            }
+            return retval;
+        }
+
         std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions)
         {
             std::unordered_set<Gate*> end_gates_forward;

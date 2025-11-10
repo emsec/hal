@@ -234,8 +234,6 @@ namespace hal
         static SettingsItemDropdown* sSettingDragModifier;
         static SettingsItemDropdown* sSettingPanModifier;
 
-        static SettingsItemKeybind* sSettingZoomIn;
-        static SettingsItemKeybind* sSettingZoomOut;
         static SettingsItemKeybind* sSettingFoldModule;
         static SettingsItemKeybind* sSettingUnfoldModule;
         static SettingsItemKeybind* sSettingRemoveNode;
@@ -246,5 +244,9 @@ namespace hal
 
         QMap<KeyboardModifier, Qt::KeyboardModifier> mKeyModifierMap;
         GraphCursor mSelectCursor;
+
+    public:
+        static SettingsItemKeybind* sSettingZoomIn;
+        static SettingsItemKeybind* sSettingZoomOut;
     };
 }

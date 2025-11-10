@@ -113,6 +113,12 @@ namespace hal
 
     void ContentManager::deleteContent()
     {
+        auto it = ExternalContent::instance()->openWidgets.begin();
+        while (it != ExternalContent::instance()->openWidgets.end())
+        {
+            it.value()->deleteLater();
+            it = ExternalContent::instance()->openWidgets.erase(it);
+        }
         for (auto content : mContent)
             delete content;
 
