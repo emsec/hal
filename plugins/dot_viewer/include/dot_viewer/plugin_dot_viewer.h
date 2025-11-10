@@ -3,8 +3,7 @@
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
-// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS").
-// All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,28 +32,58 @@
 
 namespace hal
 {
+    /* forward declaration */
     class Netlist;
     class DotViewer;
     class DotViewerSerializer;
-}
 
-namespace hal
-{
-    extern Netlist *gNetlist;
+    extern Netlist* gNetlist;
 
+    /**
+     * @class DotViewerPlugin
+     * @brief Plugin interface for the DotViewerPlugin.
+     * 
+     * This class provides an interface to integrate a .dot viewer as a plugin within the HAL framework.
+     */
     class PLUGIN_API DotViewerPlugin : public BasePluginInterface
     {
-      public:
+    public:
+        /** 
+         * @brief Default constructor for `DotViewerPlugin`.
+         */
         DotViewerPlugin();
 
+        /** 
+         * @brief Default destructor for `DotViewerPlugin`.
+         */
         ~DotViewerPlugin() = default;
 
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
 
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
+        /**
+         * @brief Get a short description of the plugin.
+         *
+         * @returns The short description of the plugin.
+         */
         std::string get_description() const override;
 
+        /**
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
+         */
         std::set<std::string> get_dependencies() const override;
 
         void initialize() override;
@@ -62,6 +91,5 @@ namespace hal
         void on_load() override;
 
         void on_unload() override;
-
     };
-}  // namespace hal
+}    // namespace hal

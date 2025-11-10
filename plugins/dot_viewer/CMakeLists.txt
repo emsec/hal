@@ -22,6 +22,7 @@ if(PL_DOT_VIEWER OR BUILD_ALL_PLUGINS)
         HEADER  ${DOT_VIEWER_INC}
         SOURCES ${DOT_VIEWER_SRC} ${DOT_VIEWER_PYTHON_SRC} ${MOC_HDR}
         COMPILE_OPTIONS "-march=native"
+        PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/dot_viewer.rst
     )
 
     target_sources(dot_viewer

@@ -1,11 +1,11 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "dot_viewer/dot_viewer.h"
+#include "dot_viewer/plugin_dot_viewer.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "dot_viewer/plugin_dot_viewer.h"
-#include "dot_viewer/dot_viewer.h"
 
 namespace py = pybind11;
 
@@ -18,15 +18,15 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(dot_viewer, m)
     {
-        m.doc() = "Provides access to graphviz dot viewer plugin.";
+        m.doc() = "Plugin to visualize .dot graphs within the HAL GUI.";
 #else
     PYBIND11_PLUGIN(dot_viewer)
     {
-        py::module m("dot_viewer", "Provides access to graphviz dot viewer plugin.");
+        py::module m("dot_viewer", "Plugin to visualize .dot graphs within the HAL GUI.");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<DotViewerPlugin, RawPtrWrapper<DotViewerPlugin>, BasePluginInterface> py_dotviewer_plugin(
-            m, "DotViewerPlugin", R"(This class provides a dot viewer as a plugin within the HAL framework.)");
+            m, "DotViewerPlugin", R"(This class provides an interface to integrate a .dot viewer as a plugin within the HAL framework.)");
 
         py_dotviewer_plugin.def_property_readonly("name", &DotViewerPlugin::get_name, R"(
             The name of the plugin.
@@ -82,14 +82,13 @@ namespace hal
 
         m.def(
             "load_dot_file",
-            [](const std::string& filename,
-               const std::string& creator_plugin = "") {
+            [](const std::string& filename, const std::string& creator_plugin = "") {
                 QString qfilename = QString::fromStdString(filename);
-                QString qcreator = QString::fromStdString(creator_plugin);
-                DotViewer* dv = DotViewer::getDotviewerInstance();
+                QString qcreator  = QString::fromStdString(creator_plugin);
+                DotViewer* dv     = DotViewer::getDotviewerInstance();
                 if (dv)
                 {
-                    dv->handleOpenInputFileByName(qfilename,qcreator);
+                    dv->handleOpenInputFileByName(qfilename, qcreator);
                 }
                 else
                 {
@@ -97,7 +96,7 @@ namespace hal
                 }
             },
             py::arg("filename"),
-            py::arg("creator_plugin")           = std::string(),
+            py::arg("creator_plugin") = std::string(),
             R"(
             Loads a dot file in the graphic viewer provided by dot_viewer plugin.
 
