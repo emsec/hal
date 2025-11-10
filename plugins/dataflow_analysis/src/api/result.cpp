@@ -4,10 +4,10 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
-#include "hal_core/plugin_system/plugin_manager.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <fstream>
 
@@ -547,10 +547,8 @@ namespace hal
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
                             {
-                                auto* pin_group    = pin->get_group().first;
-                                pin_groups[pg_key] = pin_group;
-                                new_mod->set_pin_group_name(pin_group, prefix);
-                                new_mod->set_pin_group_type(pin_group, pin_type);
+                                auto pin_group     = new_mod->create_pin_group(prefix, {pin}, PinDirection::input, pin_type, false, 0, true, true);
+                                pin_groups[pg_key] = pin_group.get();
                             }
                             else
                             {
@@ -587,10 +585,8 @@ namespace hal
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
                             {
-                                auto* pin_group    = pin->get_group().first;
-                                pin_groups[pg_key] = pin_group;
-                                new_mod->set_pin_group_name(pin_group, prefix);
-                                new_mod->set_pin_group_type(pin_group, pin_type);
+                                auto pin_group     = new_mod->create_pin_group(prefix, {pin}, PinDirection::output, pin_type, false, 0, true, true);
+                                pin_groups[pg_key] = pin_group.get();
                             }
                             else
                             {
