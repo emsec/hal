@@ -196,12 +196,17 @@ namespace hal
             return;
         }
         auto grouping = grouping_res.get();
+        std::filesystem::path dot_graph_written_to_path;
 
         if (m_write_dot)
         {
             if (const auto res = grouping.write_dot(m_output_path); res.is_error())
             {
                 log_error("dataflow", "could not write .dot file:\n{}", res.get_error().get());
+            }
+            else
+            {
+                dot_graph_written_to_path = res.get();
             }
         }
 
@@ -219,6 +224,12 @@ namespace hal
             {
                 log_error("dataflow", "could not create modules:\n{}", res.get_error().get());
             }
+        }
+
+        // open in dot viewer must be called after modules got created
+        if (!dot_graph_written_to_path.empty())
+        {
+            grouping.open_dot_in_viewer(dot_graph_written_to_path);
         }
 
         if (GuiExtensionDataflow::s_progress_indicator_function)

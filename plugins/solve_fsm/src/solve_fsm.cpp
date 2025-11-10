@@ -8,11 +8,13 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/netlist/net.h"
 
 #include <bitset>
 #include <fstream>
-#include <queue>
+#include <deque>
 
 namespace hal
 {
@@ -279,6 +281,29 @@ namespace hal
                 return OK(conditional_transitions);
             }
 
+
+            void open_dot_in_viewer(const std::filesystem::path& out_path)
+            {
+                BasePluginInterface* bpif = plugin_manager::get_plugin_instance("dot_viewer");
+                if (!bpif)
+                {
+                    log_info("solve_fsm", "Cannot find 'dot_viewer' plugin, dot graph not displayed.");
+                    return;
+                }
+                GuiExtensionInterface* geif = bpif->get_first_extension<GuiExtensionInterface>();
+                if (!geif)
+                {
+                    log_info("solve_fsm", "Cannot find dot_viewer GUI interface, dot graph not displayed.");
+                    return;
+                }
+                std::vector<PluginParameter> params;
+                params.push_back(PluginParameter(PluginParameter::ExistingFile, "filename", "", out_path.string()));
+                params.push_back(PluginParameter(PluginParameter::String, "plugin", "", "solve_fsm"));
+                params.push_back(PluginParameter(PluginParameter::PushButton, "exec", "", "clicked"));
+                geif->set_parameter(params);
+                log_info("solve_fsm", "Request to display graph '{}' send to dot viewer.", out_path.string());
+            }
+
         }    // namespace
 
         Result<std::map<u64, std::map<u64, BooleanFunction>>>
@@ -530,13 +555,14 @@ namespace hal
             return OK(conditional_transitions);
         }
 
+
         Result<std::string> generate_dot_graph(const std::vector<Gate*>& state_reg,
                                                const std::map<u64, std::map<u64, BooleanFunction>>& transitions,
                                                const std::filesystem::path& graph_path,
                                                const u32 max_condition_length,
                                                const u32 base)
         {
-            std::string graph_str = "digraph {\n";
+            std::string graph_str = "digraph {\ncomment=\"created by HAL plugin solve_fsm\"\n";
 
             for (const auto& [org, successors] : transitions)
             {
@@ -578,6 +604,8 @@ namespace hal
                 ofs << graph_str;
                 ofs.close();
             }
+
+            open_dot_in_viewer(graph_path);
 
             return OK(graph_str);
         }
