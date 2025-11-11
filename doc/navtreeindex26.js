@@ -1,6 +1,5 @@
 var NAVTREEINDEX26 =
 {
-"general__table__widget_8h.html":[7,0,1,3,0,0,42,10],
 "general__table__widget_8h_source.html":[7,0,1,3,0,0,42,10],
 "generalinfo__wizardpage_8cpp.html":[7,0,1,3,2,17,1,2],
 "generalinfo__wizardpage_8cpp_source.html":[7,0,1,3,2,17,1,2],
@@ -247,7 +246,8 @@ var NAVTREEINDEX26 =
 "group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1":[4,1,3,28],
 "group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9":[5,0,2,528],
 "group__pybind.html#ga6d7aa3afc74611d7f65294808436eac9":[4,1,3,7],
-"group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[4,1,3,33],
 "group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[5,0,2,577],
-"group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[5,0,2,519]
+"group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[4,1,3,33],
+"group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[5,0,2,519],
+"group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[4,1,3,1]
 };
