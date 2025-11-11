@@ -174,6 +174,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a5734d58f01d1e8285e56b0bbb5c8c049"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1707921610b3fea1bb935f252bedffc"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_action_pingroup.html">ActionPingroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_action_pingroup.html#aa1707921610b3fea1bb935f252bedffc">toggleAscendingGroup</a> (const <a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> grpId)</td></tr>
 <tr class="separator:aa1707921610b3fea1bb935f252bedffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72fac0381f90190aabcbe2042ca65fc5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_action_pingroup.html">ActionPingroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_action_pingroup.html#a72fac0381f90190aabcbe2042ca65fc5">automaticallyRenamePins</a> (const <a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> grpId)</td></tr>
+<tr class="separator:a72fac0381f90190aabcbe2042ca65fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe80fe5cd26f6bdbd2f477b876122e97"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_action_pingroup.html">ActionPingroup</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_action_pingroup.html#afe80fe5cd26f6bdbd2f477b876122e97">changePinGroupType</a> (const <a class="el" href="classhal_1_1_module.html">Module</a> *m, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> grpId, int ptype)</td></tr>
 <tr class="separator:afe80fe5cd26f6bdbd2f477b876122e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74d1cbf334676fa52a88de28a0e6f1b0"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_action_pingroup.html#a74d1cbf334676fa52a88de28a0e6f1b0">pinGroupIndex</a> (const <a class="el" href="classhal_1_1_module.html">Module</a> *mod, const <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_module_pin.html">ModulePin</a> &gt; *pgrp)</td></tr>
@@ -550,6 +552,48 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a72fac0381f90190aabcbe2042ca65fc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72fac0381f90190aabcbe2042ca65fc5">&#9670;&nbsp;</a></span>automaticallyRenamePins()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_action_pingroup.html">ActionPingroup</a> * hal::ActionPingroup::automaticallyRenamePins </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_module.html">Module</a> *&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>grpId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00559">559</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#createUuid">QUuid::createUuid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00150">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01036">hal::Module::get_pin_group_by_id()</a>, <a class="el" href="pin__group_8h_source.html#l00202">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#StringFormat-enum">QUuid::Id128</a>, <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#toString">QUuid::toString()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00077">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+
+</div>
+</div>
 <a id="afe80fe5cd26f6bdbd2f477b876122e97"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe80fe5cd26f6bdbd2f477b876122e97">&#9670;&nbsp;</a></span>changePinGroupType()</h2>
 
@@ -590,7 +634,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00592">592</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00623">623</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00130">hal::PinGroup&lt; T &gt;::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01036">hal::Module::get_pin_group_by_id()</a>, <a class="el" href="pin__group_8h_source.html#l00202">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">pins</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
 
@@ -951,7 +995,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00112">112</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="action__pingroup_8h_source.html#l00173">hal::ActionPingroupFactory::sFactory</a>, and <a class="el" href="user__action_8h_source.html#l00242">hal::UserActionFactory::tagname()</a>.</p>
+<p class="reference">References <a class="el" href="action__pingroup_8h_source.html#l00174">hal::ActionPingroupFactory::sFactory</a>, and <a class="el" href="user__action_8h_source.html#l00242">hal::UserActionFactory::tagname()</a>.</p>
 
 </div>
 </div>
@@ -989,7 +1033,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00559">559</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="action__pingroup_8cpp_source.html#l00590">590</a> of file <a class="el" href="action__pingroup_8cpp_source.html">action_pingroup.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#createUuid">QUuid::createUuid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00293">hal::PinGroup&lt; T &gt;::get_lowest_index()</a>, <a class="el" href="pin__group_8h_source.html#l00150">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01036">hal::Module::get_pin_group_by_id()</a>, <a class="el" href="pin__group_8h_source.html#l00202">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="pin__group_8h_source.html#l00273">hal::PinGroup&lt; T &gt;::is_ascending()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00066">pins</a>, <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#toString">QUuid::toString()</a>.</p>
 
@@ -1046,7 +1090,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_action_pingroup.html">ActionPingroup</a></li>
-    <li class="footer">Generated on Mon Nov 10 2025 11:40:19 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 11 2025 01:04:30 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
