@@ -592,7 +592,7 @@ namespace hal
                         operand_pins.push_back(pin);
                     }
 
-                    auto res = mod->create_pin_group(name, operand_pins, hal::PinDirection::input, hal::PinType::data, true, 0, true);
+                    auto res = mod->create_pin_group(name, operand_pins, hal::PinDirection::input, hal::PinType::data, false, 0, true);
                     if (res.is_error())
                     {
                         log_error("module_identification", "could not create input pin group: {}", res.get_error().get());
@@ -616,7 +616,7 @@ namespace hal
                     output_pins.push_back(pin);
                 }
 
-                auto output_res = mod->create_pin_group("OUT", output_pins, hal::PinDirection::output, hal::PinType::data, true, 0, true);
+                auto output_res = mod->create_pin_group("OUT", output_pins, hal::PinDirection::output, hal::PinType::data, false, 0, true);
                 if (output_res.is_error())
                 {
                     hal::log_error("module_identification", "could not create output pin group: {}", output_res.get_error().get());
@@ -640,7 +640,7 @@ namespace hal
                 }
                 if (!ctrl_pins.empty())
                 {
-                    auto ctrl_res = mod->create_pin_group("CTRL", ctrl_pins, hal::PinDirection::input, hal::PinType::enable, true, 0, true);
+                    auto ctrl_res = mod->create_pin_group("CTRL", ctrl_pins, hal::PinDirection::input, hal::PinType::control, false, 0, true);
                     if (ctrl_res.is_error())
                     {
                         log_info("module_identification", "could not create ctrl pin group: {}", ctrl_res.get_error().get());
