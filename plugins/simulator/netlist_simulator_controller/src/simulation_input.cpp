@@ -313,6 +313,7 @@ namespace hal {
                    NetGroup group;
                    group.module_pin_group = pg;
                    group.direction = groupType;
+                   group.ascending = pg->is_ascending();
                    for (ModulePin* mp : pg->get_pins())
                    {
                        Net* n = mp->get_net();
@@ -382,6 +383,7 @@ namespace hal {
                     group.gate = g;
                     group.gate_pin_group = pg;
                     group.direction = groupType;
+                    group.ascending = pg->is_ascending();
                     for (const Net* n : connectedNets)
                         ungrouped_nets.erase(n);
                     m_netgroups.push_back(group);

@@ -556,6 +556,37 @@ namespace hal
         return retval;
     }
 
+    ActionPingroup* ActionPingroup::automaticallyRenamePins(const Module* m, u32 grpId)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        QString baseName = QString::fromStdString(pinGroup->get_name());
+        QHash<u32,QString> assignedNameHash;
+        ActionPingroup* retval = nullptr;
+
+        QList<AtomicAction> renameActions;
+        for (ModulePin* pin : pinGroup->get_pins())
+        {
+            QString designatedName = QString("%1(%2)").arg(baseName).arg(pin->get_group().second);
+            if (pin->get_name() == designatedName.toStdString()) continue; // nothing to do
+
+            renameActions.append(AtomicAction(PinActionType::PinRename, pin->get_id(), designatedName));
+            if (retval)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinRename,pin->get_id(),"temp_" + QUuid::createUuid().toString(QUuid::Id128)));
+            else
+                retval = new ActionPingroup(PinActionType::PinRename,pin->get_id(),"temp_" + QUuid::createUuid().toString(QUuid::Id128));
+        }
+
+        if (retval)
+        {
+            for (const AtomicAction& aa : renameActions)
+                retval->mPinActions.append(aa);
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        }
+
+        return retval;
+    }
+
     ActionPingroup* ActionPingroup::toggleAscendingGroup(const Module* m, u32 grpId)
     {
         PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);

@@ -1154,9 +1154,11 @@ namespace hal
             InputColumnHeader ipc;
             ipc.name     = ng.get_name();
             ipc.is_clock = false;
-            for (const Net* n : ng.get_nets())
+
+            std::vector<const Net*> temp_nets = ng.get_nets();
+            ipc.nets = ng.ascending ? temp_nets : std::vector<const Net*>(temp_nets.rbegin(),temp_nets.rend());
+            for (const Net* n : temp_nets)
             {
-                ipc.nets.push_back(n);
                 if (clkNets.find(n) != clkNets.end())
                 {
                     ipc.is_clock = true;

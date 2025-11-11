@@ -172,6 +172,10 @@ namespace hal
                 ActionPingroup* act = ActionPingroup::toggleAscendingGroup(mod, itemId);
                 if (act) act->exec();
             });
+            menu.addAction("Autmatically rename pins", [itemId, mod](){
+                ActionPingroup* act = ActionPingroup::automaticallyRenamePins(mod, itemId);
+                if (act) act->exec();
+            });
             menu.addAction("Delete pin group", [itemId, mod]() {
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
