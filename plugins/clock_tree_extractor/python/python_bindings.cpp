@@ -1,9 +1,10 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
-#include "clock_tree_extractor/clock_tree_extractor.h"
+#include "clock_tree_extractor/clock_tree.h"
 #include "clock_tree_extractor/plugin_clock_tree_extractor.h"
 #include "pybind11/pybind11.h"
 
+#include <igraph/igraph.h>
 #include <pybind11/detail/descr.h>
 #include <pybind11/pytypes.h>
 #include <set>
@@ -95,33 +96,36 @@ namespace hal
     :rtype: set[str]
     )" );
 
-        py::class_<cte::ClockTreeExtractor, RawPtrWrapper<cte::ClockTreeExtractor>> py_clock_tree_extractor(
-            m, "ClockTreeExtractor", R"(
+        py::class_<cte::ClockTree, RawPtrWrapper<cte::ClockTree>>( m, "ClockTree", R"()" )
+            .def_static(
+                "from_netlist",
+                []( const Netlist *netlist ) -> std::unique_ptr<cte::ClockTree> {
+                    auto result = cte::ClockTree::from_netlist( netlist );
+                    if( result.is_ok() )
+                    {
+                        return result.get();
+                    }
 
-    )" );
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return nullptr;
+                },
+                py::arg( "netlist" ),
+                R"()" )
+            .def(
+                "export",
+                []( const cte::ClockTree &self, const std::string &pathname ) -> bool {
+                    auto result = self.export_dot( pathname );
+                    if( result.is_ok() )
+                    {
+                        return true;
+                    }
 
-        py_clock_tree_extractor.def( py::init<const Netlist *>(), py::arg( "netlist" ), R"(
-
-    )" );
-
-        py_clock_tree_extractor.def(
-            "analyze",
-            []( cte::ClockTreeExtractor &self, const std::string &pathname ) -> std::optional<u32> {
-                auto res = self.analyze( pathname );
-                if( res.is_ok() )
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error( "python_context", "{}", res.get_error().get() );
-                    return std::nullopt;
-                }
-            },
-            py::arg( "pathname" ),
-            R"(
-
-    )" );
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return false;
+                },
+                py::arg( "pathname" ),
+                R"()" )
+            .def( "get_netlist", &cte::ClockTree::get_netlist, R"()" );
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

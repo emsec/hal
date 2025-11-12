@@ -29,8 +29,12 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 
+#include <igraph/igraph.h>
+#include <memory>
 #include <string>
-#include <utility>
+#include <unordered_map>
+#include <unordered_set>
+#include <variant>
 #include <vector>
 
 namespace hal
@@ -45,35 +49,52 @@ namespace hal
 
 namespace hal
 {
-    class GateType;
-}
-
-namespace hal
-{
-    class Endpoint;
+    class Net;
 }
 
 namespace hal
 {
     namespace cte
     {
-        class ClockTreeExtractor
+        class ClockTree
         {
           public:
-            ClockTreeExtractor() = default;
+            ~ClockTree();
 
-            ClockTreeExtractor( const Netlist *netlist );
+            static Result<std::unique_ptr<ClockTree>> from_netlist( const Netlist *netlist );
 
-            ~ClockTreeExtractor() = default;
+            Result<std::monostate> export_dot( const std::string &pathname ) const;
 
-            Result<u32> analyze( const std::string &pathname );
+            const Gate *get_gate_from_vertex( igraph_integer_t vertex ) const;
 
-            const std::vector<std::pair<std::string, std::string>> get_edges() const;
+            const igraph_integer_t get_vertex_from_gate( const Gate *gate ) const;
+
+            const Net *get_net_from_vertex( igraph_integer_t vertex ) const;
+
+            const igraph_integer_t get_vertex_from_net( const Net *net ) const;
+
+            const Netlist *get_netlist() const;
+
+            const igraph_t *get_igraph() const;
 
           private:
+            ClockTree() = delete;
+
+            ClockTree( const Netlist *netlist );
+
             const Netlist *m_netlist;
 
-            std::vector<std::pair<std::string, std::string>> m_edges;
+            igraph_t m_igraph;
+
+            igraph_t *m_igraph_ptr;
+
+            std::unordered_set<igraph_integer_t> m_roots;
+
+            std::unordered_map<igraph_integer_t, const void *> m_vertices_to_ptrs;
+
+            std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
+
+            std::unordered_map<const void *, std::string> m_ptrs_to_types;
         };
     }  // namespace cte
 }  // namespace hal
