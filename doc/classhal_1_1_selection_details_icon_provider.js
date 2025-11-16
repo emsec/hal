@@ -13,5 +13,6 @@ var classhal_1_1_selection_details_icon_provider =
       [ "BigIcon", "classhal_1_1_selection_details_icon_provider.html#a2dc2f5f1be67bbc7c31462f906ae1851a49bbcf6a1272ba7e4adab77f39dee3a1", null ]
     ] ],
     [ "getIcon", "classhal_1_1_selection_details_icon_provider.html#a568aeba4f554deb9d93ee593d9225322", null ],
-    [ "handleModuleColorChanged", "classhal_1_1_selection_details_icon_provider.html#ab296625b14f3038f60bcc239e55aa470", null ]
+    [ "handleModuleColorChanged", "classhal_1_1_selection_details_icon_provider.html#ab296625b14f3038f60bcc239e55aa470", null ],
+    [ "handleModuleRemoved", "classhal_1_1_selection_details_icon_provider.html#a641c0918f93a651b2a4616b1f2732c54", null ]
 ];

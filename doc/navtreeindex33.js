@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"plugin__manager_8h.html#a01b664fe781926cb67034f778e5242b1":[7,0,0,0,2,6,1],
 "plugin__manager_8h.html#a09fe50a3d6651ef3eebbfcfb2f36cea8":[7,0,0,0,2,6,2],
 "plugin__manager_8h.html#a2963a3d18f0df7fa6bb9030810a058c3":[7,0,0,0,2,6,12],
 "plugin__manager_8h.html#a40872f349c9b1e60bae16f76017e074b":[7,0,0,0,2,6,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX33 =
 "python__bindings_8h.html#ga60d7e2dfe01bc847292f5473e2b849d1":[7,0,0,0,3,0,28],
 "python__bindings_8h.html#ga6d7aa3afc74611d7f65294808436eac9":[7,0,0,0,3,0,7],
 "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380":[7,0,0,0,3,0,33],
-"python__bindings_8h.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[7,0,0,0,3,0,1],
-"python__bindings_8h.html#ga81181bacca930bfda574ce3a51a01e9c":[7,0,0,0,3,0,0]
+"python__bindings_8h.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[7,0,0,0,3,0,1]
 };
