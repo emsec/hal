@@ -71,6 +71,14 @@ namespace hal
         const QIcon *getIcon(IconCategory catg, u32 itemId);
 
         /**
+         * Since module icons get cached the appropriate icon
+         * needs to be removed when the module gets removed
+         *
+         * @param moduleId - The id of the module removed
+         */
+        void handleModuleRemoved(u32 moduleId);
+
+        /**
          * Get the singleton instance of the SettingsManager.
          *
          * @return The singleton instance.

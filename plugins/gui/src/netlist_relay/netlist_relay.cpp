@@ -16,6 +16,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -510,7 +511,7 @@ namespace hal
 
                 gGraphContextManager->handleModuleRemoved(mod);
                 gSelectionRelay->handleModuleRemoved(mod->get_id());
-
+                SelectionDetailsIconProvider::instance()->handleModuleRemoved(mod->get_id());
                 Q_EMIT moduleRemoved(mod);
                 break;
             }
