@@ -1245,7 +1245,7 @@ namespace hal
         if (pin_group->get_direction() != new_direction)
         {
             pin_group->set_direction(new_direction);
-            PinChangedEvent(this, PinEvent::GroupTypeChange, pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupDirChange, pin_group->get_id()).send();
         }
         return true;
     }
