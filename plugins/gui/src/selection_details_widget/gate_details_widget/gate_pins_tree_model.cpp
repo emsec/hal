@@ -32,7 +32,7 @@ namespace hal
             return mNetName;
         case 4:
             if (mType == GatePinsTreeItem::Group)
-                return (mIndex ? "descending" : "ascending");
+                return (QString("[%1] %2").arg(getChildCount()).arg(mIndex ? "desc" : "asc"));
             return mIndex;
         }
         return QVariant();
