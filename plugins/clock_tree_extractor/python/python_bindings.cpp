@@ -125,6 +125,43 @@ namespace hal
                 },
                 py::arg( "pathname" ),
                 R"()" )
+            .def(
+                "get_subtree",
+                []( const cte::ClockTree &self, const void *ptr ) -> std::unique_ptr<cte::ClockTree> {
+                    auto result = self.get_subtree( ptr );
+                    if( result.is_ok() )
+                    {
+                        return result.get();
+                    }
+
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return nullptr;
+                },
+                py::arg( "ptr" ),
+                py::return_value_policy::move,
+                R"()" )
+            .def(
+                "get_all",
+                []( const cte::ClockTree &self ) -> py::list {
+                    py::list result;
+                    const auto &map = self.get_all();
+                    for( auto &[ptr, type] : map )
+                    {
+                        if( type == cte::PtrType::GATE )
+                        {
+                            result.append( py::cast( (const Gate *) ptr ) );
+                        }
+                        else if( type == cte::PtrType::NET )
+                        {
+                            result.append( py::cast( (const Net *) ptr ) );
+                        }
+                    }
+                    return result;
+                },
+                R"()" )
+            .def( "get_vertex_from_ptr", &cte::ClockTree::get_vertex_from_ptr, R"()" )
+            .def( "get_gates", &cte::ClockTree::get_gates, R"()" )
+            .def( "get_nets", &cte::ClockTree::get_nets, R"()" )
             .def( "get_netlist", &cte::ClockTree::get_netlist, R"()" );
 
 #ifndef PYBIND11_MODULE

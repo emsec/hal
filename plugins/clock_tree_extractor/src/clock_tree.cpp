@@ -105,12 +105,37 @@ namespace hal
 
                 return result;
             }
+
+            igraph_error_t
+            in_callback( const igraph_t *graph, igraph_integer_t vid, igraph_integer_t dist, void *extra )
+            {
+                return igraph_vector_int_push_back( (igraph_vector_int_t *) extra, vid );
+            }
         }  // namespace
 
         ClockTree::ClockTree( const Netlist *netlist )
             : m_netlist( netlist )
             , m_igraph_ptr( &m_igraph )
         {
+        }
+
+        ClockTree::ClockTree( const Netlist *netlist,
+                              igraph_t &&igraph,
+                              std::unordered_set<igraph_integer_t> &&roots,
+                              std::unordered_map<igraph_integer_t, const void *> &&vertices_to_ptrs,
+                              std::unordered_map<const void *, PtrType> &&ptrs_to_types )
+            : m_netlist( netlist )
+            , m_igraph( std::move( igraph ) )
+            , m_roots( std::move( roots ) )
+            , m_vertices_to_ptrs( std::move( vertices_to_ptrs ) )
+            , m_ptrs_to_types( std::move( ptrs_to_types ) )
+        {
+            m_igraph_ptr = &m_igraph;
+
+            for( const auto &[vertex, ptr] : m_vertices_to_ptrs )
+            {
+                m_ptrs_to_vertices[ptr] = vertex;
+            }
         }
 
         ClockTree::~ClockTree()
@@ -127,7 +152,7 @@ namespace hal
 
             std::unordered_set<void *> vertices;
             std::unordered_set<std::pair<void *, void *>, VoidPtrHash> edges;
-            std::unordered_map<const void *, std::string> ptrs_to_type;
+            std::unordered_map<const void *, PtrType> ptrs_to_type;
 
             std::queue<std::pair<const Gate *, const Gate *>> queue;
             NetlistTraversalDecorator ntd = NetlistTraversalDecorator( *netlist );
@@ -165,7 +190,7 @@ namespace hal
                 else if( clk->is_global_input_net() )
                 {
                     vertices.insert( (void *) clk );
-                    ptrs_to_type[(void *) clk] = "net";
+                    ptrs_to_type[(void *) clk] = PtrType::NET;
                     continue;
                 }
                 else if( clk->get_num_of_sources() == 0 )
@@ -176,7 +201,7 @@ namespace hal
                 queue.push( { ff, clk->get_sources().front()->get_gate() } );
 
                 vertices.insert( (void *) ff );
-                ptrs_to_type[(void *) ff] = "gate";
+                ptrs_to_type[(void *) ff] = PtrType::GATE;
             }
 
             const std::unordered_set<const Gate *> toggle_ffs = get_toggle_ffs( netlist );
@@ -205,8 +230,8 @@ namespace hal
                     vertices.insert( (void *) source );
                     vertices.insert( (void *) reference );
 
-                    ptrs_to_type[(void *) source] = "gate";
-                    ptrs_to_type[(void *) reference] = "gate";
+                    ptrs_to_type[(void *) source] = PtrType::GATE;
+                    ptrs_to_type[(void *) reference] = PtrType::GATE;
 
                     edges.insert( { (void *) source, (void *) reference } );
 
@@ -240,8 +265,8 @@ namespace hal
                         vertices.insert( (void *) net );
                         vertices.insert( (void *) reference );
 
-                        ptrs_to_type[(void *) net] = "net";
-                        ptrs_to_type[(void *) reference] = "gate";
+                        ptrs_to_type[(void *) net] = PtrType::NET;
+                        ptrs_to_type[(void *) reference] = PtrType::GATE;
 
                         edges.insert( { (void *) net, (void *) reference } );
                         continue;
@@ -347,7 +372,7 @@ namespace hal
 
             for( const auto &[ptr, vertex] : m_ptrs_to_vertices )
             {
-                if( m_ptrs_to_types.at( ptr ) == "net" )
+                if( m_ptrs_to_types.at( ptr ) == PtrType::NET )
                 {
                     dot_fd << "  " << ( (Net *) ptr )->get_name() << " [shape=circle];\n";
                     continue;
@@ -400,9 +425,9 @@ namespace hal
                 visited.insert( vertex );
 
                 const void *sptr = m_vertices_to_ptrs.at( vertex );
-                const std::string stype = m_ptrs_to_types.at( sptr );
+                const PtrType stype = m_ptrs_to_types.at( sptr );
 
-                if( stype == "gate" && is_inverter( (Gate *) sptr ) )
+                if( stype == PtrType::GATE && is_inverter( (Gate *) sptr ) )
                 {
                     edge_color = edge_color == "red" ? "blue" : "red";
                 }
@@ -423,13 +448,13 @@ namespace hal
 
                 for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
                 {
-                    const std::string src_id =
-                        stype == "gate" ? std::to_string( ( (Gate *) sptr )->get_id() ) : ( (Net *) sptr )->get_name();
+                    const std::string src_id = stype == PtrType::GATE ? std::to_string( ( (Gate *) sptr )->get_id() )
+                                                                      : ( (Net *) sptr )->get_name();
 
                     const void *dptr = m_vertices_to_ptrs.at( VECTOR( neighbors )[idx] );
-                    const std::string dtype = m_ptrs_to_types.at( dptr );
-                    const std::string dst_id =
-                        dtype == "gate" ? std::to_string( ( (Gate *) dptr )->get_id() ) : ( (Net *) dptr )->get_name();
+                    const PtrType dtype = m_ptrs_to_types.at( dptr );
+                    const std::string dst_id = dtype == PtrType::GATE ? std::to_string( ( (Gate *) dptr )->get_id() )
+                                                                      : ( (Net *) dptr )->get_name();
 
                     dot_fd << "  " << src_id << " -> " << dst_id << " [color=" << edge_color << "];\n";
                     queue.push( { VECTOR( neighbors )[idx], edge_color } );
@@ -442,6 +467,164 @@ namespace hal
             dot_fd.close();
 
             return OK( {} );
+        }
+
+        Result<std::unique_ptr<ClockTree>> ClockTree::get_subtree( const void *ptr ) const
+        {
+            auto it = m_ptrs_to_vertices.find( ptr );
+            if( it == m_ptrs_to_vertices.end() )
+            {
+                return ERR( "object is not part of clock tree" );
+            }
+
+            const igraph_integer_t root = it->second;
+
+            igraph_error_t ierror;
+            igraph_vector_int_t vertices;
+            if( ( ierror = igraph_vector_int_init( &vertices, 0 ) ) != IGRAPH_SUCCESS )
+            {
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            if( ( ierror = igraph_dfs( m_igraph_ptr,
+                                       root,
+                                       IGRAPH_OUT,
+                                       false,
+                                       nullptr,
+                                       nullptr,
+                                       nullptr,
+                                       nullptr,
+                                       in_callback,
+                                       nullptr,
+                                       &vertices ) )
+                != IGRAPH_SUCCESS )
+            {
+                igraph_vector_int_destroy( &vertices );
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            igraph_vs_t vs;
+            if( ( ierror = igraph_vs_vector( &vs, &vertices ) ) != IGRAPH_SUCCESS )
+            {
+                igraph_vector_int_destroy( &vertices );
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            igraph_vector_int_t map;
+            if( ( ierror = igraph_vector_int_init( &map, igraph_vcount( m_igraph_ptr ) ) ) != IGRAPH_SUCCESS )
+            {
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            igraph_t igraph;
+            if( ( ierror =
+                      igraph_induced_subgraph_map( m_igraph_ptr, &igraph, vs, IGRAPH_SUBGRAPH_AUTO, &map, nullptr ) )
+                != IGRAPH_SUCCESS )
+            {
+                igraph_vs_destroy( &vs );
+                igraph_vector_int_destroy( &map );
+                igraph_vector_int_destroy( &vertices );
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            igraph_vs_destroy( &vs );
+            igraph_vector_int_destroy( &vertices );
+
+            std::unordered_set<igraph_integer_t> roots;
+            std::unordered_map<const void *, PtrType> ptrs_to_types;
+            std::unordered_map<igraph_integer_t, const void *> vertices_to_ptrs;
+
+            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &map ); idx++ )
+            {
+                const igraph_integer_t vertex = VECTOR( map )[idx];
+                if( vertex == 0 )
+                {
+                    continue;
+                }
+
+                const void *ptr = m_vertices_to_ptrs.at( idx );
+
+                vertices_to_ptrs[vertex - 1] = ptr;
+                ptrs_to_types[ptr] = m_ptrs_to_types.at( ptr );
+            }
+
+            igraph_vector_int_destroy( &map );
+
+            igraph_vector_int_t indegrees;
+            if( ( ierror = igraph_vector_int_init( &indegrees, igraph_vcount( &igraph ) ) ) != IGRAPH_SUCCESS )
+            {
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            if( ( ierror = igraph_degree( &igraph, &indegrees, igraph_vss_all(), IGRAPH_IN, IGRAPH_NO_LOOPS ) )
+                != IGRAPH_SUCCESS )
+            {
+                igraph_vector_int_destroy( &indegrees );
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &indegrees ); idx++ )
+            {
+                if( VECTOR( indegrees )[idx] != 0 )
+                {
+                    continue;
+                }
+                roots.insert( idx );
+            }
+
+            igraph_vector_int_destroy( &indegrees );
+
+            return OK( std::make_unique<ClockTree>( m_netlist,
+                                                    std::move( igraph ),
+                                                    std::move( roots ),
+                                                    std::move( vertices_to_ptrs ),
+                                                    std::move( ptrs_to_types ) ) );
+        }
+
+        Result<igraph_integer_t> ClockTree::get_vertex_from_ptr( const void *ptr ) const
+        {
+            auto it = m_ptrs_to_vertices.find( ptr );
+            if( it == m_ptrs_to_vertices.end() )
+            {
+                return ERR( "object is not part of clock tree" );
+            }
+
+            return OK( it->second );
+        }
+
+        const std::vector<const Gate *> ClockTree::get_gates() const
+        {
+            std::vector<const Gate *> result;
+
+            for( const auto &[ptr, type] : m_ptrs_to_types )
+            {
+                if( type == PtrType::GATE )
+                {
+                    result.push_back( (const Gate *) ptr );
+                }
+            }
+
+            return result;
+        }
+
+        const std::vector<const Net *> ClockTree::get_nets() const
+        {
+            std::vector<const Net *> result;
+
+            for( const auto &[ptr, type] : m_ptrs_to_types )
+            {
+                if( type == PtrType::NET )
+                {
+                    result.push_back( (const Net *) ptr );
+                }
+            }
+
+            return result;
+        }
+
+        const std::unordered_map<const void *, PtrType> ClockTree::get_all() const
+        {
+            return m_ptrs_to_types;
         }
 
         const Netlist *ClockTree::get_netlist() const
@@ -458,3 +641,6 @@ namespace hal
 
 // BUG: looks like ~20 vertices plus their edges are missing in benchmark
 // TODO: investigate possible BUG
+
+// BUG: subtree is wrong
+// TODO: investigate why? Probably mapping is broken

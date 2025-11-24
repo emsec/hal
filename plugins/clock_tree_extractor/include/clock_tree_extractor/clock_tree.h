@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "graph_algorithm/netlist_graph.h"
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 
@@ -56,22 +57,32 @@ namespace hal
 {
     namespace cte
     {
+        enum PtrType { UNKNOWN, GATE, NET };
+
         class ClockTree
         {
           public:
+            ClockTree( const Netlist *netlist,
+                       igraph_t &&graph,
+                       std::unordered_set<igraph_integer_t> &&roots,
+                       std::unordered_map<igraph_integer_t, const void *> &&m_vertices_to_ptrs,
+                       std::unordered_map<const void *, PtrType> &&m_ptrs_to_types );
+
             ~ClockTree();
 
             static Result<std::unique_ptr<ClockTree>> from_netlist( const Netlist *netlist );
 
             Result<std::monostate> export_dot( const std::string &pathname ) const;
 
-            const Gate *get_gate_from_vertex( igraph_integer_t vertex ) const;
+            Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr ) const;
 
-            const igraph_integer_t get_vertex_from_gate( const Gate *gate ) const;
+            Result<igraph_integer_t> get_vertex_from_ptr( const void *ptr ) const;
 
-            const Net *get_net_from_vertex( igraph_integer_t vertex ) const;
+            const std::vector<const Gate *> get_gates() const;
 
-            const igraph_integer_t get_vertex_from_net( const Net *net ) const;
+            const std::vector<const Net *> get_nets() const;
+
+            const std::unordered_map<const void *, PtrType> get_all() const;
 
             const Netlist *get_netlist() const;
 
@@ -94,7 +105,7 @@ namespace hal
 
             std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
 
-            std::unordered_map<const void *, std::string> m_ptrs_to_types;
+            std::unordered_map<const void *, PtrType> m_ptrs_to_types;
         };
     }  // namespace cte
 }  // namespace hal
