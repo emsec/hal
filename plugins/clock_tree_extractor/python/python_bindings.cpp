@@ -127,8 +127,10 @@ namespace hal
                 R"()" )
             .def(
                 "get_subtree",
-                []( const cte::ClockTree &self, const void *ptr ) -> std::unique_ptr<cte::ClockTree> {
-                    auto result = self.get_subtree( ptr );
+                []( const cte::ClockTree &self,
+                    const void *ptr,
+                    const bool parent ) -> std::unique_ptr<cte::ClockTree> {
+                    auto result = self.get_subtree( ptr, parent );
                     if( result.is_ok() )
                     {
                         return result.get();
@@ -138,6 +140,7 @@ namespace hal
                     return nullptr;
                 },
                 py::arg( "ptr" ),
+                py::arg( "parent" ) = false,
                 py::return_value_policy::move,
                 R"()" )
             .def(

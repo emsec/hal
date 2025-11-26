@@ -469,7 +469,7 @@ namespace hal
             return OK( {} );
         }
 
-        Result<std::unique_ptr<ClockTree>> ClockTree::get_subtree( const void *ptr ) const
+        Result<std::unique_ptr<ClockTree>> ClockTree::get_subtree( const void *ptr, const bool parent ) const
         {
             auto it = m_ptrs_to_vertices.find( ptr );
             if( it == m_ptrs_to_vertices.end() )
@@ -477,9 +477,31 @@ namespace hal
                 return ERR( "object is not part of clock tree" );
             }
 
-            const igraph_integer_t root = it->second;
-
             igraph_error_t ierror;
+            igraph_integer_t root = it->second;
+            if( parent )
+            {
+                igraph_vector_int_t parents;
+                if( ( ierror = igraph_vector_int_init( &parents, 0 ) ) != IGRAPH_SUCCESS )
+                {
+                    return ERR( igraph_strerror( ierror ) );
+                }
+
+                if( ( ierror = igraph_neighbors( m_igraph_ptr, &parents, root, IGRAPH_IN ) ) != IGRAPH_SUCCESS )
+                {
+                    igraph_vector_int_destroy( &parents );
+                    return ERR( igraph_strerror( ierror ) );
+                }
+
+                // Only accept, if there is only one parent vertex for now.
+                if( igraph_vector_int_size( &parents ) == 1 )
+                {
+                    root = VECTOR( parents )[0];
+                }
+
+                igraph_vector_int_destroy( &parents );
+            }
+
             igraph_vector_int_t vertices;
             if( ( ierror = igraph_vector_int_init( &vertices, 0 ) ) != IGRAPH_SUCCESS )
             {
@@ -638,9 +660,3 @@ namespace hal
         }
     }  // namespace cte
 }  // namespace hal
-
-// BUG: looks like ~20 vertices plus their edges are missing in benchmark
-// TODO: investigate possible BUG
-
-// BUG: subtree is wrong
-// TODO: investigate why? Probably mapping is broken

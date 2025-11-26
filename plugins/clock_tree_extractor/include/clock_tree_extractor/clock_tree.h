@@ -74,7 +74,7 @@ namespace hal
 
             Result<std::monostate> export_dot( const std::string &pathname ) const;
 
-            Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr ) const;
+            Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr, const bool parent ) const;
 
             Result<igraph_integer_t> get_vertex_from_ptr( const void *ptr ) const;
 
