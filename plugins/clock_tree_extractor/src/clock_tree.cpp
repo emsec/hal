@@ -195,6 +195,9 @@ namespace hal
                 }
                 else if( clk->get_num_of_sources() == 0 )
                 {
+                    log_warning( "clock_tree_extractor",
+                                 "unrouted clock net with ID {} ignored",
+                                 std::to_string( clk->get_id() ) );
                     continue;
                 }
 
@@ -612,6 +615,55 @@ namespace hal
             }
 
             return OK( it->second );
+        }
+
+        Result<std::pair<const void *, PtrType>> ClockTree::get_ptr_from_vertex( const igraph_integer_t vertex ) const
+        {
+            auto it = m_vertices_to_ptrs.find( vertex );
+            if( it == m_vertices_to_ptrs.end() )
+            {
+                return ERR( "object is not part of clock tree" );
+            }
+
+            return OK( std::make_pair( it->second, m_ptrs_to_types.at( it->second ) ) );
+        }
+
+        Result<std::vector<igraph_integer_t>>
+        ClockTree::get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const
+        {
+            std::vector<igraph_integer_t> result;
+
+            for( const void *ptr : ptrs )
+            {
+                auto res = get_vertex_from_ptr( ptr );
+                if( res.is_error() )
+                {
+                    return ERR( res.get_error().get() );
+                }
+
+                result.push_back( res.get() );
+            }
+
+            return OK( result );
+        }
+
+        Result<std::vector<std::pair<const void *, PtrType>>>
+        ClockTree::get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const
+        {
+            std::vector<std::pair<const void *, PtrType>> result;
+
+            for( const igraph_integer_t vertex : vertices )
+            {
+                auto res = get_ptr_from_vertex( vertex );
+                if( res.is_error() )
+                {
+                    return ERR( res.get_error().get() );
+                }
+
+                result.push_back( res.get() );
+            }
+
+            return OK( result );
         }
 
         const std::vector<const Gate *> ClockTree::get_gates() const

@@ -78,6 +78,13 @@ namespace hal
 
             Result<igraph_integer_t> get_vertex_from_ptr( const void *ptr ) const;
 
+            Result<std::pair<const void *, PtrType>> get_ptr_from_vertex( const igraph_integer_t vertex ) const;
+
+            Result<std::vector<igraph_integer_t>> get_vertices_from_ptrs( const std::vector<const void *> &ptrs ) const;
+
+            Result<std::vector<std::pair<const void *, PtrType>>>
+            get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const;
+
             const std::vector<const Gate *> get_gates() const;
 
             const std::vector<const Net *> get_nets() const;

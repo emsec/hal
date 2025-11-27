@@ -162,7 +162,84 @@ namespace hal
                     return result;
                 },
                 R"()" )
-            .def( "get_vertex_from_ptr", &cte::ClockTree::get_vertex_from_ptr, R"()" )
+            .def(
+                "get_vertex_from_ptr",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::object {
+                    auto result = self.get_vertex_from_ptr( ptr );
+                    if( result.is_ok() )
+                    {
+                        return py::int_( result.get() );
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                R"()" )
+            .def(
+                "get_ptr_from_vertex",
+                []( const cte::ClockTree &self, const igraph_integer_t vertex ) -> py::object {
+                    auto result = self.get_ptr_from_vertex( vertex );
+                    if( result.is_ok() )
+                    {
+                        auto [ptr, type] = result.get();
+                        if( type == cte::PtrType::GATE )
+                        {
+                            return py::cast( (const Gate *) ptr );
+                        }
+                        else if( type == cte::PtrType::NET )
+                        {
+                            return py::cast( (const Net *) ptr );
+                        }
+                        return py::none();
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "vertex" ),
+                R"()" )
+            .def(
+                "get_vertices_from_ptrs",
+                []( const cte::ClockTree &self, const std::vector<const void *> &ptrs ) -> py::list {
+                    auto result = self.get_vertices_from_ptrs( ptrs );
+                    if( result.is_ok() )
+                    {
+                        return py::cast( result.get() );
+                    }
+                    log_error( "clock_tree_extractor", "{}", result.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptrs" ),
+                R"()" )
+            .def(
+                "get_ptrs_from_vertices",
+                []( const cte::ClockTree &self, const std::vector<igraph_integer_t> &vertices ) -> py::list {
+                    auto res = self.get_ptrs_from_vertices( vertices );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "vertices" ),
+                R"()" )
             .def( "get_gates", &cte::ClockTree::get_gates, R"()" )
             .def( "get_nets", &cte::ClockTree::get_nets, R"()" )
             .def( "get_netlist", &cte::ClockTree::get_netlist, R"()" );
