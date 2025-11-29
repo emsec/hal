@@ -75,6 +75,7 @@ namespace hal {
         m_input_nets.clear();
         m_output_nets.clear();
         m_partial_nets.clear();
+        m_netgroups.clear();
     }
 
     bool SimulationInput::is_ready() const

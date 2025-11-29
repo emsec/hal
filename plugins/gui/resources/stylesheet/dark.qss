@@ -1612,6 +1612,30 @@ hal--Overlay
     background : rgba(0, 0, 0, 150);
 }
 
+hal--PageInputData QTableWidget:disabled
+hal--PageInputData QTableWidgetItem:disabled,
+hal--PageInputData QHeaderView:disabled,
+hal--PageInputData QFrame:disabled,
+hal--PageInputData QLineEdit:disabled,
+hal--PageInputData QCheckBox:disabled,
+hal--PageInputData QPushButton:disabled
+{
+    background : #404142;
+    color : #808081;
+}
+
+hal--PageInputData QTableView::item:selected:active
+{
+    background-color: #0D293E;
+    color : white;
+}
+
+hal--PageInputData QTableView::item:selected:!active
+{
+    background-color : #404142;
+    color : #808081;
+}
+
 hal--LogicEvaluatorDialog
 {
     font-size                  : 14px;
