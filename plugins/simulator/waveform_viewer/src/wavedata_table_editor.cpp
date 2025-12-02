@@ -260,50 +260,58 @@ namespace hal {
         }
 
         // txt size at least 2
-        int apos = txt.indexOf('\'');
-        if (apos < 0)
+        if (txt.at(0) == '"')
         {
-            if (txt.at(0) == '0')
-            {
-                switch (txt.at(1).toUpper().unicode())
-                {
-                case 'X':
-                    tempValue = txt.mid(2).toInt(&numberOk, 16);
-                    break;
-                case 'O':
-                    tempValue = txt.mid(2).toInt(&numberOk, 8);
-                    break;
-                case 'B':
-                    tempValue = txt.mid(2).toInt(&numberOk, 2);
-                    break;
-                default:
-                    tempValue = txt.toInt(&numberOk, 10);
-                    break;
-                }
-            }
-            else
-                tempValue = txt.toInt(&numberOk, 10);
+            // enter ASCII character, eg. "A -> 0x41 (65)
+            tempValue = txt.at(1).unicode();
         }
         else
         {
-            if (apos + 2 >= txt.size())
-                return sIllegalValue;
-            switch (txt.at(apos+1).toUpper().unicode())
+            int apos = txt.indexOf('\'');
+            if (apos < 0)
             {
-            case 'H':
-                tempValue = txt.mid(apos+2).toInt(&numberOk, 16);
-                break;
-            case 'O':
-                tempValue = txt.mid(apos+2).toInt(&numberOk, 8);
-                break;
-            case 'B':
-                tempValue = txt.mid(apos+2).toInt(&numberOk, 2);
-                break;
-            case 'D':
-                tempValue = txt.mid(apos+2).toInt(&numberOk, 10);
-                break;
-            default:
-                return sIllegalValue;
+                if (txt.at(0) == '0')
+                {
+                    switch (txt.at(1).toUpper().unicode())
+                    {
+                    case 'X':
+                        tempValue = txt.mid(2).toInt(&numberOk, 16);
+                        break;
+                    case 'O':
+                        tempValue = txt.mid(2).toInt(&numberOk, 8);
+                        break;
+                    case 'B':
+                        tempValue = txt.mid(2).toInt(&numberOk, 2);
+                        break;
+                    default:
+                        tempValue = txt.toInt(&numberOk, 10);
+                        break;
+                    }
+                }
+                else
+                    tempValue = txt.toInt(&numberOk, 10);
+            }
+            else
+            {
+                if (apos + 2 >= txt.size())
+                    return sIllegalValue;
+                switch (txt.at(apos+1).toUpper().unicode())
+                {
+                case 'H':
+                    tempValue = txt.mid(apos+2).toInt(&numberOk, 16);
+                    break;
+                case 'O':
+                    tempValue = txt.mid(apos+2).toInt(&numberOk, 8);
+                    break;
+                case 'B':
+                    tempValue = txt.mid(apos+2).toInt(&numberOk, 2);
+                    break;
+                case 'D':
+                    tempValue = txt.mid(apos+2).toInt(&numberOk, 10);
+                    break;
+                default:
+                    return sIllegalValue;
+                }
             }
         }
 

@@ -36,7 +36,7 @@ namespace hal
             mColorSelectAction = new Action(this);
             mColorSelectAction->setToolTip("Select color style");
             connect(mColorSelectAction, &QAction::triggered, this, &DotViewer::handleColorSelect);
-            mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon("all->#ff8040", ":/icons/color_select"));
+            mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon("all->#ffffff", ":/icons/color_select"));
 
             QShortcut* zoomInShortcut = new QShortcut(GraphTabWidget::sSettingZoomIn->value().toString(), this);
             QShortcut* zoomOutShortcut = new QShortcut(GraphTabWidget::sSettingZoomOut->value().toString(), this);
