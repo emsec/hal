@@ -114,15 +114,15 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">case</span> 0:</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordflow">return</span> mPinName;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(mPinDirection));</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(mPinType));</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keywordflow">return</span> mNetName;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">case</span> 4:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">if</span> (mItemType==<a class="code" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109ba67a4ad0c8b1c1c77779ca725976f1c63">ModulePinsTreeItem::Group</a>)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                <span class="keywordflow">return</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;[%1] %2&quot;</span>).arg(<a class="code" href="classhal_1_1_base_tree_item.html#a1d8acb06aac9fab1f781fecd0ce021ee">getChildCount</a>()).arg(mIndex ? <span class="stringliteral">&quot;desc&quot;</span> : <span class="stringliteral">&quot;asc&quot;</span>));</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">return</span> mIndex;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">if</span> (mItemType==<a class="code" href="classhal_1_1_module_pins_tree_item.html#a8033a5382fc80c4d6527db151d8e109ba67a4ad0c8b1c1c77779ca725976f1c63">ModulePinsTreeItem::Group</a>)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keywordflow">return</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;[%1] %2&quot;</span>).arg(<a class="code" href="classhal_1_1_base_tree_item.html#a1d8acb06aac9fab1f781fecd0ce021ee">getChildCount</a>()).arg(mIndex ? <a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(0x2193) : <a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(0x2191)));</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            <span class="keywordflow">return</span> mIndex;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">case</span> 2:</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(mPinDirection));</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">case</span> 3:</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(mPinType));</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">case</span> 4:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">return</span> mNetName;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        }</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>();</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
@@ -131,10 +131,10 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.size() &gt;= 5);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        mPinName      = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[0].toString();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        mPinDirection = enum_from_string&lt;PinDirection&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[1].toString().toStdString());</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        mPinType      = enum_from_string&lt;PinType&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[2].toString().toStdString());</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        mNetName      = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[3].toString();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        mIndex        = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[4].toInt();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        mIndex        = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[1].toInt();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        mPinDirection = enum_from_string&lt;PinDirection&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[2].toString().toStdString());</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        mPinType      = enum_from_string&lt;PinType&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[3].toString().toStdString());</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        mNetName      = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>[4].toString();</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classhal_1_1_module_pins_tree_item.html#ac1fc4ed237b24ddec9d803e5ad445e52">   52</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_pins_tree_item.html#ac1fc4ed237b24ddec9d803e5ad445e52">ModulePinsTreeItem::setDataAtColumn</a>(<span class="keywordtype">int</span> column, <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;data)</div>
@@ -145,16 +145,16 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            mPinName = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString();</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            mPinDirection = enum_from_string&lt;PinDirection&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString().toStdString());</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            mIndex = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toInt();</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">case</span> 2:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            mPinType = enum_from_string&lt;PinType&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString().toStdString());</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            mPinDirection = enum_from_string&lt;PinDirection&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString().toStdString());</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">case</span> 3:</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            mNetName = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            mPinType = enum_from_string&lt;PinType&gt;(<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString().toStdString());</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">case</span> 4:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            mIndex = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toInt();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            mNetName = <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">data</a>.toString();</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
@@ -171,11 +171,11 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classhal_1_1_module_pins_tree_model.html#a249a63fb6d2f540c2defe7f45ac92780">   84</a></span>&#160;    <a class="code" href="classhal_1_1_module_pins_tree_model.html#a249a63fb6d2f540c2defe7f45ac92780">ModulePinsTreeModel::ModulePinsTreeModel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* parent) : <a class="code" href="classhal_1_1_base_tree_model.html">BaseTreeModel</a>(parent)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="code" href="classhal_1_1_base_tree_model.html#aaf15cf12eb98fff6201d6127a4df380f">setHeaderLabels</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>() &lt;&lt; <span class="stringliteral">&quot;Name&quot;</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Direction&quot;</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Type&quot;</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Connected Net&quot;</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Index&quot;</span>);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="code" href="classhal_1_1_base_tree_model.html#aaf15cf12eb98fff6201d6127a4df380f">setHeaderLabels</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>() &lt;&lt; <span class="stringliteral">&quot;Name             &quot;</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Size/Index&quot;</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Direction&quot;</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Type&quot;</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                                      &lt;&lt; <span class="stringliteral">&quot;Connected Net&quot;</span>);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="classhal_1_1_module_pins_tree_model.html#ae02c26a5fdd9dca1bcd29f5d671bdd5f">setModule</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(1));</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="comment">//connections</span></div>
@@ -926,6 +926,7 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div class="ttc" id="aqabstractitemmodel_html_endRemoveRows"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">QAbstractItemModel::endRemoveRows</a></div><div class="ttdeci">void endRemoveRows()</div></div>
 <div class="ttc" id="aqabstractitemmodel_html_endResetModel"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel</a></div><div class="ttdeci">void endResetModel()</div></div>
 <div class="ttc" id="aqbytearray_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a></div></div>
+<div class="ttc" id="aqchar_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html">QChar</a></div></div>
 <div class="ttc" id="aqdatastream_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdatastream.html">QDataStream</a></div></div>
 <div class="ttc" id="aqiodevice_html_OpenModeFlag-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a></div><div class="ttdeci">WriteOnly</div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
@@ -952,7 +953,7 @@ $(document).ready(function(){initNavTree('module__pins__tree__model_8cpp_source.
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="dir_29703ed93360dbc259961a9c5ee9cd0d.html">module_details_widget</a></li><li class="navelem"><a class="el" href="module__pins__tree__model_8cpp.html">module_pins_tree_model.cpp</a></li>
-    <li class="footer">Generated on Tue Dec 2 2025 11:33:05 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 2 2025 13:24:06 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
