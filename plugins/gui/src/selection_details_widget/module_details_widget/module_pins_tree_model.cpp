@@ -26,15 +26,15 @@ namespace hal
         case 0:
             return mPinName;
         case 1:
-            return QString::fromStdString(enum_to_string(mPinDirection));
-        case 2:
-            return QString::fromStdString(enum_to_string(mPinType));
-        case 3:
-            return mNetName;
-        case 4:
             if (mItemType==ModulePinsTreeItem::Group)
-                return (QString("[%1] %2").arg(getChildCount()).arg(mIndex ? "desc" : "asc"));
+                return (QString("[%1] %2").arg(getChildCount()).arg(mIndex ? QChar(0x2193) : QChar(0x2191)));
             return mIndex;
+        case 2:
+            return QString::fromStdString(enum_to_string(mPinDirection));
+        case 3:
+            return QString::fromStdString(enum_to_string(mPinType));
+        case 4:
+            return mNetName;
         }
         return QVariant();
     }
@@ -43,10 +43,10 @@ namespace hal
     {
         Q_ASSERT(data.size() >= 5);
         mPinName      = data[0].toString();
-        mPinDirection = enum_from_string<PinDirection>(data[1].toString().toStdString());
-        mPinType      = enum_from_string<PinType>(data[2].toString().toStdString());
-        mNetName      = data[3].toString();
-        mIndex        = data[4].toInt();
+        mIndex        = data[1].toInt();
+        mPinDirection = enum_from_string<PinDirection>(data[2].toString().toStdString());
+        mPinType      = enum_from_string<PinType>(data[3].toString().toStdString());
+        mNetName      = data[4].toString();
     }
 
     void ModulePinsTreeItem::setDataAtColumn(int column, QVariant &data)
@@ -57,16 +57,16 @@ namespace hal
             mPinName = data.toString();
             break;
         case 1:
-            mPinDirection = enum_from_string<PinDirection>(data.toString().toStdString());
+            mIndex = data.toInt();
             break;
         case 2:
-            mPinType = enum_from_string<PinType>(data.toString().toStdString());
+            mPinDirection = enum_from_string<PinDirection>(data.toString().toStdString());
             break;
         case 3:
-            mNetName = data.toString();
+            mPinType = enum_from_string<PinType>(data.toString().toStdString());
             break;
         case 4:
-            mIndex = data.toInt();
+            mNetName = data.toString();
             break;
         }
     }
@@ -83,11 +83,11 @@ namespace hal
 
     ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent)
     {
-        setHeaderLabels(QStringList() << "Name"
+        setHeaderLabels(QStringList() << "Name             "
+                                      << "Size/Index"
                                       << "Direction"
                                       << "Type"
-                                      << "Connected Net"
-                                      << "Index");
+                                      << "Connected Net");
         setModule(gNetlist->get_module_by_id(1));
 
         //connections
