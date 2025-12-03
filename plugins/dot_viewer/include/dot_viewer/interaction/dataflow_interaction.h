@@ -31,6 +31,8 @@
 #include <QHash>
 
 namespace hal {
+    class Module;
+
     class DataflowInteraction : public QGVInteraction {
         Q_OBJECT
     public:
@@ -41,6 +43,7 @@ namespace hal {
 
     private Q_SLOTS:
         void handleHALSelectionChanged(void* sender);
+        void handleHALModuleNameChanged(Module* m);
         void handleQGVSelectionChanged();
         void handleEdgeContextMenu(QGVEdge* edge);
 
