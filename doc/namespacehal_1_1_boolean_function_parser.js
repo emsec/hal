@@ -3,7 +3,8 @@ var namespacehal_1_1_boolean_function_parser =
     [ "Token", "structhal_1_1_boolean_function_parser_1_1_token.html", "structhal_1_1_boolean_function_parser_1_1_token" ],
     [ "ParserType", "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78e", [
       [ "Liberty", "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923", null ],
-      [ "Standard", "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b", null ]
+      [ "Standard", "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b", null ],
+      [ "LibertyNoSpace", "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eadad98bcb089a8a36aeaa6ca292cc2929", null ]
     ] ],
     [ "TokenType", "namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55", [
       [ "And", "namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b", null ],

@@ -101,6 +101,7 @@ Classes</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:a5015360f0b18254fcc1ec7beba60c78e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78e">ParserType</a> { <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923">Liberty</a>
 , <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b">Standard</a>
+, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eadad98bcb089a8a36aeaa6ca292cc2929">LibertyNoSpace</a>
  }</td></tr>
 <tr class="memdesc:a5015360f0b18254fcc1ec7beba60c78e"><td class="mdescLeft">&#160;</td><td class="mdescRight">ParserType refers to the parser identifier.  <a href="namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78e">More...</a><br /></td></tr>
 <tr class="separator:a5015360f0b18254fcc1ec7beba60c78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +162,8 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b"></a>Standard&#160;</td><td class="fielddoc"><p>refers to the 'Standard' Boolean function parser </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a5015360f0b18254fcc1ec7beba60c78eadad98bcb089a8a36aeaa6ca292cc2929"></a>LibertyNoSpace&#160;</td><td class="fielddoc"><p>as 'Liberty' above, but removing space first </p>
+</td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00035">35</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
@@ -208,7 +211,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00044">44</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parser_8h_source.html#l00046">46</a> of file <a class="el" href="parser_8h_source.html">parser.h</a>.</p>
 
 </div>
 </div>
@@ -404,7 +407,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="parser__types_8cpp_source.html#l00214">214</a> of file <a class="el" href="parser__types_8cpp_source.html">parser_types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01224">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">And</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">hal::BooleanFunction::build()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01614">hal::BooleanFunction::Node::Constant()</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55acb17869fe51048b5a5c4c6106551a255">Constant</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="boolean__function_8h_source.html#l01226">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">Not</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01609">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01225">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">Or</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01624">hal::BooleanFunction::Node::Variable()</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a47c14840d8e15331fa420b9b2f757cd9">Variable</a>, <a class="el" href="boolean__function_8h_source.html#l01227">hal::BooleanFunction::NodeType::Xor</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">Xor</a>.</p>
+<p class="reference">References <a class="el" href="boolean__function_8h_source.html#l01224">hal::BooleanFunction::NodeType::And</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b">And</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00239">hal::BooleanFunction::build()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01627">hal::BooleanFunction::Node::Constant()</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55acb17869fe51048b5a5c4c6106551a255">Constant</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="boolean__function_8h_source.html#l01226">hal::BooleanFunction::NodeType::Not</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55aa74c05d080620f087c4e523977230666">Not</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01622">hal::BooleanFunction::Node::Operation()</a>, <a class="el" href="boolean__function_8h_source.html#l01225">hal::BooleanFunction::NodeType::Or</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a3a2d5fe857d8f9541136a124c2edec6c">Or</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01637">hal::BooleanFunction::Node::Variable()</a>, <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a47c14840d8e15331fa420b9b2f757cd9">Variable</a>, <a class="el" href="boolean__function_8h_source.html#l01227">hal::BooleanFunction::NodeType::Xor</a>, and <a class="el" href="namespacehal_1_1_boolean_function_parser.html#ab7792aeb2f619d1832ed2115e3780b55a76feb79109026728a20736a8c6504548">Xor</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01047">hal::BooleanFunction::from_string()</a>.</p>
 
@@ -416,7 +419,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_boolean_function_parser.html">BooleanFunctionParser</a></li>
-    <li class="footer">Generated on Wed Dec 3 2025 11:19:34 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Dec 7 2025 09:31:44 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -3,7 +3,8 @@ var parser_8h =
     [ "Token", "structhal_1_1_boolean_function_parser_1_1_token.html", "structhal_1_1_boolean_function_parser_1_1_token" ],
     [ "ParserType", "parser_8h.html#a5015360f0b18254fcc1ec7beba60c78e", [
       [ "Liberty", "parser_8h.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923", null ],
-      [ "Standard", "parser_8h.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b", null ]
+      [ "Standard", "parser_8h.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b", null ],
+      [ "LibertyNoSpace", "parser_8h.html#a5015360f0b18254fcc1ec7beba60c78eadad98bcb089a8a36aeaa6ca292cc2929", null ]
     ] ],
     [ "TokenType", "parser_8h.html#ab7792aeb2f619d1832ed2115e3780b55", [
       [ "And", "parser_8h.html#ab7792aeb2f619d1832ed2115e3780b55ac33315685a0cba3ce53be378b3c7874b", null ],

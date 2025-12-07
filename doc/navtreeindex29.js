@@ -100,6 +100,7 @@ var NAVTREEINDEX29 =
 "namespacehal_1_1_boolean_function_parser.html#a3f360ba1cc4e149de02216cde46d8847":[5,0,2,1,4],
 "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78e":[5,0,2,1,1],
 "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78ea84e1da9e55480128662cfdfe79cb8923":[5,0,2,1,1,0],
+"namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eadad98bcb089a8a36aeaa6ca292cc2929":[5,0,2,1,1,2],
 "namespacehal_1_1_boolean_function_parser.html#a5015360f0b18254fcc1ec7beba60c78eaeb6d8ae6f20283755b339c0dc273988b":[5,0,2,1,1,1],
 "namespacehal_1_1_boolean_function_parser.html#a697d3a807ff088aef4bbfa177d49acb0":[5,0,2,1,3],
 "namespacehal_1_1_boolean_function_parser.html#a69bb408c7174d7884f64f706bf890537":[5,0,2,1,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX29 =
 "namespacehal_1_1dataflow_1_1scoring.html":[5,0,2,3,11],
 "namespacehal_1_1dataflow_1_1scoring.html#a262b009f44196cf6daa977f6b673c831":[5,0,2,3,11,0],
 "namespacehal_1_1dataflow_1_1split__by__successor__predecessor__known__groups.html":[5,0,2,3,12],
-"namespacehal_1_1dataflow_1_1split__by__successor__predecessor__known__groups.html#a0376b9811cb1ceb42f83938dbfc18112":[5,0,2,3,12,0],
-"namespacehal_1_1dataflow_1_1split__by__successors__predecessors.html":[5,0,2,3,13]
+"namespacehal_1_1dataflow_1_1split__by__successor__predecessor__known__groups.html#a0376b9811cb1ceb42f83938dbfc18112":[5,0,2,3,12,0]
 };
