@@ -68,6 +68,7 @@ namespace hal
         ExternalContent() {;}
     public:
         static ExternalContent* instance();
+        void removePlugin(const QString& pluginName);
         QMap<QString,ExternalContentWidget*> openWidgets;
     };
 

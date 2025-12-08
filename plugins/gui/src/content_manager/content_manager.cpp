@@ -48,16 +48,33 @@ namespace hal
         return inst;
     }
 
+    void ExternalContent::removePlugin(const QString& pluginName)
+    {
+        auto it = begin();
+        while (it != end())
+            if ((*it)->name() == pluginName)
+                it = erase(it);
+            else
+                ++it;
+
+        for (;;)
+        {
+            auto itw = openWidgets.find(pluginName);
+            if (itw == openWidgets.end()) break;
+
+            itw.value()->remove();
+            itw.value()->deleteLater();
+            openWidgets.erase(itw);
+        }
+    }
+
     ExternalContentWidget::ExternalContentWidget(const QString& pluginName, const QString& windowName, QWidget* parent)
         : ContentWidget(windowName,parent), mPluginName(pluginName)
     {
         ExternalContent::instance()->openWidgets.insert(mPluginName,this);
     }
 
-    ExternalContentWidget::~ExternalContentWidget()
-    {
-        ExternalContent::instance()->openWidgets.remove(mPluginName);
-    }
+    ExternalContentWidget::~ExternalContentWidget() {;}
 
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
