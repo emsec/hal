@@ -1,6 +1,5 @@
 var NAVTREEINDEX31 =
 {
-"namespacemembers_vars.html":[5,1,2],
 "namespacemembers_w.html":[5,1,0,21],
 "namespacemembers_x.html":[5,1,0,22],
 "namespacemembers_z.html":[5,1,0,23],
@@ -249,5 +248,6 @@ var NAVTREEINDEX31 =
 "netlist__relay_8cpp.html":[7,0,1,3,2,34,0],
 "netlist__relay_8cpp_source.html":[7,0,1,3,2,34,0],
 "netlist__relay_8h.html":[7,0,1,3,0,0,36,0],
-"netlist__relay_8h_source.html":[7,0,1,3,0,0,36,0]
+"netlist__relay_8h_source.html":[7,0,1,3,0,0,36,0],
+"netlist__serializer_8h.html":[7,0,0,0,1,6,1]
 };

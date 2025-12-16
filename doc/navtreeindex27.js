@@ -1,6 +1,5 @@
 var NAVTREEINDEX27 =
 {
-"group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380":[4,1,3,33],
 "group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[5,0,2,519],
 "group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c":[4,1,3,1],
 "group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c":[5,0,2,510],
@@ -21,8 +20,8 @@ var NAVTREEINDEX27 =
 "group__pybind.html#gab35847badbf935ed3e01dbcaad19205c":[4,1,3,4],
 "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d":[5,0,2,564],
 "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d":[4,1,3,32],
-"group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[5,0,2,578],
 "group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[4,1,3,34],
+"group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c":[5,0,2,578],
 "group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa":[5,0,2,544],
 "group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa":[4,1,3,18],
 "group__pybind.html#gacd94e2b9ac19cb0a128446c71673aabf":[5,0,2,534],
@@ -64,8 +63,8 @@ var NAVTREEINDEX27 =
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,2,7],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,2,12],
-"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,2,11],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
+"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,2,11],
 "group__utility__widgets-context.html":[4,0,7,0],
 "group__utility__widgets-grouping.html":[4,0,7,2],
 "group__utility__widgets-module.html":[4,0,7,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX27 =
 "line__number__area_8cpp.html":[7,0,1,3,2,3,4],
 "line__number__area_8cpp_source.html":[7,0,1,3,2,3,4],
 "line__number__area_8h.html":[7,0,1,3,0,0,3,4],
-"line__number__area_8h_source.html":[7,0,1,3,0,0,3,4]
+"line__number__area_8h_source.html":[7,0,1,3,0,0,3,4],
+"log_8h.html":[7,0,0,0,4,4]
 };
