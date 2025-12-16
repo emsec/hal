@@ -32,6 +32,12 @@ namespace hal {
         connect(parent, &QGraphicsScene::changed, this, &SolveFsmInteraction::handleSceneChanged);
     }
 
+    SolveFsmInteraction::~SolveFsmInteraction()
+    {
+        std::cerr << "SolveFsmInteraction::~SolveFsmInteraction()" << std::endl;
+    }
+
+
     void SolveFsmInteraction::handleSceneChanged(const QList<QRectF>& changedArea)
     {
         Q_UNUSED(changedArea);

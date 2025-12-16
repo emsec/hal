@@ -81,6 +81,8 @@ QGVScene::QGVScene(QObject *parent)
 
 QGVScene::~QGVScene()
 {
+    for (QGraphicsItem* item : items())
+        item->setSelected(false);
     gvFreeLayout(_context->context(), _graph->graph());
     agclose(_graph->graph());
     gvFreeContext(_context->context());

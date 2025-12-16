@@ -97,21 +97,25 @@ namespace hal
         void DotViewer::handleOpenInputFileDialog()
         {
             QString filename = QFileDialog::getOpenFileName(this, "Open dot file", ".", "Dot files (*.dot);;All files (*)");
-            if (!filename.isEmpty()) handleOpenInputFileByName(filename);
+            if (!filename.isEmpty()) loadDotFile(filename);
         }
 
         void DotViewer::handleOpenInputFileByName(const QString& fileName, const QString &creator)
+        {
+            loadDotFile(fileName,creator);
+        }
+
+        bool DotViewer::loadDotFile(const QString& fileName, const QString &creator)
         {
             if (dynamic_cast<PythonThread*>(QThread::currentThread()))
             {
                 // call from differnt thread, we cannot create GUI objects directly
                 DotViewerCallFromTread* dvcft = new DotViewerCallFromTread;
-                dvcft->emitOpenInputFileByName(this, fileName, creator);
+                bool retval = dvcft->openInputFileByName(this, fileName, creator);
                 delete dvcft;
-                return;
+                return retval;
             }
 
-            mFilename = fileName;
             mCreatorPlugin = creator;
 
             const char* halComment = "\"created by HAL plugin ";
@@ -121,9 +125,17 @@ namespace hal
             mDotGraphicsView->setScene(mDotScene);
             toDispose->deleteLater();
 
-            if (fileName.isEmpty()) return;
+            if (fileName.isEmpty()) {
+                log_warning("dot_viewer", "Cannot load dot file, no file name provided");
+                return false;
+            }
             QFile ff(fileName);
-            if (!ff.open(QIODevice::ReadOnly)) return;
+            if (!ff.open(QIODevice::ReadOnly)) {
+                log_warning("dot_viewer", "An error occurred loading dot file '{}'", fileName.toStdString());
+                return false;
+            }
+
+            mFilename = fileName;
             QByteArray dotfileContent = ff.readAll();
 
             // Determine plugin name to construct correct interaction class
@@ -163,6 +175,7 @@ namespace hal
 
             // interact might be nullptr but that is OK (no interactions in this case)
             mDotScene->loadLayout(dotfileContent, interact);
+            return true;
         }
 
         void DotViewer::handleColorSelect()
@@ -195,11 +208,12 @@ namespace hal
             }
         }
 
-        void DotViewerCallFromTread::emitOpenInputFileByName(DotViewer* callee, QString filename, QString plugin)
+        bool DotViewerCallFromTread::openInputFileByName(DotViewer* callee, QString filename, QString plugin)
         {
-            if (!callee) return;
+            if (!callee) return false;
             connect(this, &DotViewerCallFromTread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName, Qt::BlockingQueuedConnection);
             Q_EMIT callOpenInputFileByName(filename, plugin);
             disconnect(this, &DotViewerCallFromTread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName);
+            return (callee->filename() == filename); // callee will not store filename upon load error
         }
 }  // namespace hal

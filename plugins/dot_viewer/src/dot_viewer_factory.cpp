@@ -20,7 +20,7 @@ namespace hal {
     ExternalContentWidget* DotViewerFactory::contentFactory() const
     {
         DotViewer* dv = new DotViewer(name());
-        if (!mFilename.isEmpty()) dv->handleOpenInputFileByName(mFilename, mCreator);
+        if (!mFilename.isEmpty()) dv->loadDotFile(mFilename, mCreator);
         return dv;
     }
 
@@ -85,6 +85,6 @@ namespace hal {
         if (!dv) return;
 
         if (!mFilename.isEmpty())
-            dv->handleOpenInputFileByName(mFilename, mCreator);
+            dv->loadDotFile(mFilename, mCreator);
     }
 }
