@@ -1,3 +1,5 @@
 <map id="hal::ContentAnchor" name="hal::ContentAnchor">
-<area shape="rect" id="node1" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="5,5,152,156"/>
+<area shape="rect" id="node1" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="14,668,161,819"/>
+<area shape="rect" id="node2" href="$classhal_1_1_dock_bar.html" title="Contains and handles DockButtons." alt="" coords="5,425,169,605"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="15,5,159,376"/>
 </map>

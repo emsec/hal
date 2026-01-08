@@ -92,6 +92,7 @@ var hierarchy =
       [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
     ] ],
     [ "hal::ContentFactory", "classhal_1_1_content_factory.html", null ],
+    [ "hal::ContentWidgetPlacement", "structhal_1_1_content_widget_placement.html", null ],
     [ "hal::dataflow::evaluation::Context", "structhal_1_1dataflow_1_1evaluation_1_1_context.html", null ],
     [ "hal::dataflow::processing::Context", "structhal_1_1dataflow_1_1processing_1_1_context.html", null ],
     [ "hal::ContextDirectory", "classhal_1_1_context_directory.html", null ],

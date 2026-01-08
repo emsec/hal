@@ -1,9 +1,10 @@
 <map id="hal::ModuleWidget" name="hal::ModuleWidget">
-<area shape="rect" id="node1" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="286,829,521,1493"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="264,395,543,780"/>
+<area shape="rect" id="node1" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="381,815,615,1479"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="423,395,573,765"/>
 <area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,108,113,229"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="138,115,285,222"/>
 <area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="309,5,498,332"/>
 <area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qkeysequence.html" title=" " alt="" coords="522,20,666,317"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qshortcut.html" title=" " alt="" coords="706,64,829,273"/>
+<area shape="rect" id="node7" href="$classhal_1_1_content_frame.html" title="Wraps the ContentWidget class." alt="" coords="690,93,877,244"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qshortcut.html" title=" " alt="" coords="901,64,1023,273"/>
 </map>

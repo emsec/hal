@@ -4,7 +4,7 @@ var classhal_1_1_main_window =
       [ "Dark", "classhal_1_1_main_window.html#ae3e170bb9748ea88f10c6e3ef04af329aead9b69223731c1eb18da04d9638256a", null ],
       [ "Light", "classhal_1_1_main_window.html#ae3e170bb9748ea88f10c6e3ef04af329aa8f6310d82e943c5eeb8aec719bc8fc1", null ]
     ] ],
-    [ "addContent", "classhal_1_1_main_window.html#aaf8aedbcf266bd411e01163a9dd20947", null ],
+    [ "addContent", "classhal_1_1_main_window.html#a7f25413537ffc0fd8cefb2bc83d6b3b0", null ],
     [ "clear", "classhal_1_1_main_window.html#a0c8a2886b9c72b402cc7394dce3e3e29", null ],
     [ "closeGateLibraryManager", "classhal_1_1_main_window.html#a04e3c2e080e2271b5dc099d558c99a0f", null ],
     [ "closePluginManager", "classhal_1_1_main_window.html#a328059b7931181be6e375c4cabbd2f9a", null ],
@@ -28,6 +28,7 @@ var classhal_1_1_main_window =
     [ "handleProjectOpened", "classhal_1_1_main_window.html#a7c360e2b5e3c13872311b205fd1d2d7d", null ],
     [ "handleSaveAsTriggered", "classhal_1_1_main_window.html#a2c8497b3a5179617c83e8d01bd0a6020", null ],
     [ "handleSaveTriggered", "classhal_1_1_main_window.html#acf671deb01bbf6cac6ea1eeb20345fe5", null ],
+    [ "layoutArea", "classhal_1_1_main_window.html#a6f14ab7fd6a64555aafa5e7fb1105aea", null ],
     [ "neGateIconPath", "classhal_1_1_main_window.html#ae3dd5d7eb3c30e6615a5b1d928736853", null ],
     [ "neGateIconStyle", "classhal_1_1_main_window.html#a1ec79b0fb9258ce3400898e3f72dc8b3", null ],
     [ "onActionCloseDocumentTriggered", "classhal_1_1_main_window.html#acf29b461b6f9b62ad6387f527a7aa246", null ],

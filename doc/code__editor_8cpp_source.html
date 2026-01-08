@@ -181,10 +181,10 @@ $(document).ready(function(){initNavTree('code__editor_8cpp_source.html',''); in
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtextblock.html">QTextBlock</a> block = <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#firstVisibleBlock">firstVisibleBlock</a>();</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">int</span> block_number = block.<a class="codeRef" href="https://doc.qt.io/qt-5/qtextblock.html#blockNumber">blockNumber</a>();</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        qreal top        = <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#blockBoundingGeometry">blockBoundingGeometry</a>(block).<a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html#translated">translated</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#contentOffset">contentOffset</a>()).<a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html#top">top</a>();</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">bottom</a>       = <span class="keyword">event</span>-&gt;rect().bottom();</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">int</span> bottom       = <span class="keyword">event</span>-&gt;rect().bottom();</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">width</a>        = mLineNumberArea-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#width-prop">width</a>() - mLineNumberArea-&gt;<a class="code" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">rightOffset</a>();</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">while</span> (block.<a class="codeRef" href="https://doc.qt.io/qt-5/qtextblock.html#isValid">isValid</a>() &amp;&amp; top &lt;= <a class="code" href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">bottom</a>)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">while</span> (block.<a class="codeRef" href="https://doc.qt.io/qt-5/qtextblock.html#isValid">isValid</a>() &amp;&amp; top &lt;= bottom)</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            block_number++;    <span class="comment">// INCREMENT HERE SO FIRST BLOCK HAS INDEX 1 INSTEAD OF 0</span></div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
@@ -560,7 +560,6 @@ $(document).ready(function(){initNavTree('code__editor_8cpp_source.html',''); in
 <div class="ttc" id="aline__number__area_8h_html"><div class="ttname"><a href="line__number__area_8h.html">line_number_area.h</a></div></div>
 <div class="ttc" id="aminimap__scrollbar_8h_html"><div class="ttname"><a href="minimap__scrollbar_8h.html">minimap_scrollbar.h</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacehal_html_a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f"><div class="ttname"><a href="namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f">hal::content_anchor::bottom</a></div><div class="ttdeci">@ bottom</div></div>
 <div class="ttc" id="aqabstractanimation_html_State-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#State-enum">QAbstractAnimation::Running</a></div><div class="ttdeci">Running</div></div>
 <div class="ttc" id="aqabstractanimation_html_start"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#start">QAbstractAnimation::start</a></div><div class="ttdeci">void start(QAbstractAnimation::DeletionPolicy policy)</div></div>
 <div class="ttc" id="aqabstractanimation_html_state-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#state-prop">QAbstractAnimation::state</a></div><div class="ttdeci">state</div></div>
@@ -671,7 +670,7 @@ $(document).ready(function(){initNavTree('code__editor_8cpp_source.html',''); in
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_d682b865f6e24072e0afcf2c833a6af5.html">code_editor</a></li><li class="navelem"><a class="el" href="code__editor_8cpp.html">code_editor.cpp</a></li>
-    <li class="footer">Generated on Tue Dec 16 2025 17:26:25 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jan 8 2026 16:01:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

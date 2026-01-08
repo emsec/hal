@@ -91,98 +91,98 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__widget_8h.html">gui/content_widget/content_widget.h</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__drag__relay_8h.html">gui/docking_system/content_drag_relay.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dock__mime__data_8h.html">gui/docking_system/dock_mime_data.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gui__globals_8h.html">gui/gui_globals.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__anchor_8h.html">gui/content_anchor/content_anchor.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QDrag&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QDragEnterEvent&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QDropEvent&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QListIterator&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QMimeData&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QMouseEvent&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QPainter&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;QPropertyAnimation&gt;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> DockBar::sDragStartPosition;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    DockButton* DockBar::sDragButton = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordtype">int</span> DockBar::sBeginDropRange     = 0;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> DockBar::sEndDropRange       = 0;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">int</span> DockBar::sDropSpacing        = 0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    DockButton* DockBar::sMoveMarker = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">   28</a></span>&#160;    <a class="code" href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">DockBar::DockBar</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Orientation</a> orientation, <a class="code" href="group__docking.html#ga96c899c45d7192341d04caf575c7f02c">button_orientation</a> b_orientation, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>(parent), mButtonOrientation(b_orientation)</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        mOrientation = orientation;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#acceptDrops-prop">setAcceptDrops</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">   35</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">DockBar::mouseMoveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a>* event)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">if</span> (!(<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;buttons() &amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::LeftButton</a>))</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span> (!sDragButton)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">if</span> ((<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;pos() - sDragStartPosition).manhattanLength() &lt; <a class="codeRef" href="https://doc.qt.io/qt-5/qapplication.html#startDragDistance-prop">QApplication::startDragDistance</a>())</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html">QDrag</a>* drag              = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html">QDrag</a>(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>* mimeData = <span class="keyword">new</span> <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>(sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2">widget</a>());</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setPixmap">setPixmap</a>(sDragButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#grab">grab</a>());</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setHotSpot">setHotSpot</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#pixmap">pixmap</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html#width">width</a>() / 2, drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#pixmap">pixmap</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html#height">height</a>() / 2));</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a41dafc3b058ad6c8caf7739902b8071b">hide</a>();</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        sDragButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">setChecked</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2">widget</a>()-&gt;<a class="code" href="classhal_1_1_content_widget.html#aefb3ae2d63b1a1cd08c4280cec503b4d">close</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95">setAvailable</a>(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        sDropSpacing = sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a45a5ff92f5310ed48e31093e4d2258f4">relativeWidth</a>();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setMimeData">setMimeData</a>(mimeData);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html#afda6f5e577c507ec61f02d86a344e54a">collapseButtons</a>();</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_content_drag_relay.html#a60547214ee4b07e830bfbd09ff7b13b7">ContentDragRelay::instance</a>()-&gt;<a class="code" href="classhal_1_1_content_drag_relay.html#a561c07b5247a2f14972803cc1f3be4a0">relayDragStart</a>();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::DropAction</a> dropAction = drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#exec">exec</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::MoveAction</a>);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (!(dropAction &amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::MoveAction</a>))</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_dock_bar.html#ac7ae24497457a458c831a51aab8b2c92">stopAnimations</a>();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95">setAvailable</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a7536247e6a82798c519814ecf907ad79">show</a>();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_content_drag_relay.html#a60547214ee4b07e830bfbd09ff7b13b7">ContentDragRelay::instance</a>()-&gt;<a class="code" href="classhal_1_1_content_drag_relay.html#a3caaf3a7ed45298de28483db823564da">relayDragEnd</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        sDragButton = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">   68</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">DockBar::dragEnterEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qdragenterevent.html">QDragEnterEvent</a>* event)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">const</span> <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>* mime_data = qobject_cast&lt;const DockMimeData*&gt;(<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;mimeData());</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">if</span> (mime_data)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keyword">event</span>-&gt;acceptProposedAction();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            sBeginDropRange = 0;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            sEndDropRange   = 0;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            sMoveMarker      = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">   80</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">DockBar::dragMoveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qdragmoveevent.html">QDragMoveEvent</a>* event)</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">int</span> cursor_position;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">if</span> (mButtonOrientation == <a class="code" href="group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f">button_orientation::horizontal</a>)</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            cursor_position = <span class="keyword">event</span>-&gt;pos().x();</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            cursor_position = <span class="keyword">event</span>-&gt;pos().y();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">if</span> (cursor_position &lt; sBeginDropRange || cursor_position &gt; sEndDropRange)</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordtype">int</span> button_position = mButtonOffset;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlist-iterator.html">QList&lt;DockButton*&gt;::iterator</a> button_iterator;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QPropertyAnimation*&gt;</a> animations;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordtype">bool</span> already_executed    = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordtype">bool</span> move_marker_reached = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">for</span> (button_iterator = mButtons.begin(); button_iterator != mButtons.end(); ++button_iterator)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="content__anchor_8h.html">gui/content_anchor/content_anchor.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QApplication&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QDrag&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QDragEnterEvent&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;QDropEvent&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;QListIterator&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;QMimeData&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;QMouseEvent&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;QPainter&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;QPropertyAnimation&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> DockBar::sDragStartPosition;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    DockButton* DockBar::sDragButton = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">int</span> DockBar::sBeginDropRange     = 0;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordtype">int</span> DockBar::sEndDropRange       = 0;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> DockBar::sDropSpacing        = 0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    DockButton* DockBar::sMoveMarker = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">   27</a></span>&#160;    <a class="code" href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">DockBar::DockBar</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Orientation</a> orientation, <a class="code" href="group__docking.html#ga96c899c45d7192341d04caf575c7f02c">button_orientation</a> b_orientation, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>(parent), mButtonOrientation(b_orientation)</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        mOrientation = orientation;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#acceptDrops-prop">setAcceptDrops</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">   34</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">DockBar::mouseMoveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a>* event)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">if</span> (!(<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;buttons() &amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::LeftButton</a>))</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">if</span> (!sDragButton)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">if</span> ((<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;pos() - sDragStartPosition).manhattanLength() &lt; <a class="codeRef" href="https://doc.qt.io/qt-5/qapplication.html#startDragDistance-prop">QApplication::startDragDistance</a>())</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html">QDrag</a>* drag              = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html">QDrag</a>(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>* mimeData = <span class="keyword">new</span> <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>(sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2">widget</a>());</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setPixmap">setPixmap</a>(sDragButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#grab">grab</a>());</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setHotSpot">setHotSpot</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#pixmap">pixmap</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html#width">width</a>() / 2, drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#pixmap">pixmap</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qpixmap.html#height">height</a>() / 2));</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a41dafc3b058ad6c8caf7739902b8071b">hide</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        sDragButton-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">setChecked</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2">widget</a>()-&gt;<a class="code" href="classhal_1_1_content_widget.html#aefb3ae2d63b1a1cd08c4280cec503b4d">close</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95">setAvailable</a>(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        sDropSpacing = sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a45a5ff92f5310ed48e31093e4d2258f4">relativeWidth</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#setMimeData">setMimeData</a>(mimeData);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html#afda6f5e577c507ec61f02d86a344e54a">collapseButtons</a>();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classhal_1_1_content_drag_relay.html#a60547214ee4b07e830bfbd09ff7b13b7">ContentDragRelay::instance</a>()-&gt;<a class="code" href="classhal_1_1_content_drag_relay.html#a561c07b5247a2f14972803cc1f3be4a0">relayDragStart</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::DropAction</a> dropAction = drag-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qdrag.html#exec">exec</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::MoveAction</a>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">if</span> (!(dropAction &amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#DropAction-enum">Qt::MoveAction</a>))</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_dock_bar.html#ac7ae24497457a458c831a51aab8b2c92">stopAnimations</a>();</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95">setAvailable</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            sDragButton-&gt;<a class="code" href="classhal_1_1_dock_button.html#a7536247e6a82798c519814ecf907ad79">show</a>();</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="classhal_1_1_content_drag_relay.html#a60547214ee4b07e830bfbd09ff7b13b7">ContentDragRelay::instance</a>()-&gt;<a class="code" href="classhal_1_1_content_drag_relay.html#a3caaf3a7ed45298de28483db823564da">relayDragEnd</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        sDragButton = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">   67</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">DockBar::dragEnterEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qdragenterevent.html">QDragEnterEvent</a>* event)</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">const</span> <a class="code" href="classhal_1_1_dock_mime_data.html">DockMimeData</a>* mime_data = qobject_cast&lt;const DockMimeData*&gt;(<a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html#event">event</a>-&gt;mimeData());</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">if</span> (mime_data)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keyword">event</span>-&gt;acceptProposedAction();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            sBeginDropRange = 0;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            sEndDropRange   = 0;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            sMoveMarker      = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">   79</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">DockBar::dragMoveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qdragmoveevent.html">QDragMoveEvent</a>* event)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">int</span> cursor_position;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">if</span> (mButtonOrientation == <a class="code" href="group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f">button_orientation::horizontal</a>)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            cursor_position = <span class="keyword">event</span>-&gt;pos().x();</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            cursor_position = <span class="keyword">event</span>-&gt;pos().y();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">if</span> (cursor_position &lt; sBeginDropRange || cursor_position &gt; sEndDropRange)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordtype">int</span> button_position = mButtonOffset;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlist-iterator.html">QList&lt;DockButton*&gt;::iterator</a> button_iterator;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QPropertyAnimation*&gt;</a> animations;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordtype">bool</span> already_executed    = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordtype">bool</span> move_marker_reached = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">for</span> (button_iterator = mButtons.begin(); button_iterator != mButtons.end(); ++button_iterator)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* dbut = *button_iterator;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                <span class="keywordflow">if</span> ((*button_iterator)-&gt;available())</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                {</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordflow">if</span> (button_position + (*button_iterator)-&gt;relativeWidth() &lt; cursor_position)</div>
@@ -464,188 +464,198 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
-<div class="line"><a name="l00379"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#adc2fb001432e3849fadfbfb5abfb7b9e">  379</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">DockBar::removeButton</a>(<span class="keywordtype">int</span> index)</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    {</div>
+<div class="line"><a name="l00379"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a21963ee3bbcf3adf7e5161e225d72804">  379</a></span>&#160;    <span class="keywordtype">bool</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">DockBar::isHidden</a>(<span class="keywordtype">int</span> index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button = mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>);</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            button-&gt;<a class="code" href="classhal_1_1_dock_button.html#a41dafc3b058ad6c8caf7739902b8071b">hide</a>();</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            mButtons.removeAt(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>);</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            button-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#close">close</a>();</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;            <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#updateGeometry">updateGeometry</a>();</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        }</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    }</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">  396</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">DockBar::detachButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    {</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        {</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            {</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                button-&gt;hide();</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                button-&gt;setAvailable(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;                button-&gt;setChecked(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;                <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;                <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            }</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        }</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    }</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
-<div class="line"><a name="l00414"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">  414</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">DockBar::reattachButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    {</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        {</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            {</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;                button-&gt;setAvailable(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;                <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;                button-&gt;show();</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#show">show</a>();</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;            }</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        }</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    }</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
-<div class="line"><a name="l00429"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">  429</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">DockBar::checkButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    {</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        {</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;            {</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;                button-&gt;setChecked(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;            }</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        }</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    }</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
-<div class="line"><a name="l00441"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">  441</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">DockBar::uncheckButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    {</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        {</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;            {</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                button-&gt;setChecked(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;            }</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        }</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    }</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
-<div class="line"><a name="l00453"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">  453</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">DockBar::widgetAt</a>(<span class="keywordtype">int</span> index)</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    {</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;            <span class="keywordflow">return</span> mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)-&gt;widget();</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    }</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
-<div class="line"><a name="l00460"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">  460</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">DockBar::nextAvailableWidget</a>(<span class="keywordtype">int</span> index)</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    {</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; 0)</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        {</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            {</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                <span class="keywordflow">if</span> (!button-&gt;hidden())</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;                    <span class="keywordflow">return</span> button-&gt;widget();</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            }</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        }</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &gt;= mButtons.size())</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        {</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;            <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <span class="keywordflow">return</span> mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)-&gt;hidden();</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        }</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
+<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#adc2fb001432e3849fadfbfb5abfb7b9e">  389</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">DockBar::removeButton</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    {</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        {</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button = mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>);</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            button-&gt;<a class="code" href="classhal_1_1_dock_button.html#a41dafc3b058ad6c8caf7739902b8071b">hide</a>();</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            mButtons.removeAt(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>);</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            button-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#close">close</a>();</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#updateGeometry">updateGeometry</a>();</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        }</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
+<div class="line"><a name="l00406"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">  406</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">DockBar::detachButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    {</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        {</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;                button-&gt;hide();</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;                button-&gt;setAvailable(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;                button-&gt;setChecked(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;                <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;                <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            }</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        }</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    }</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">  424</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">DockBar::reattachButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        {</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            {</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                button-&gt;setAvailable(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;                <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;                button-&gt;show();</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#show">show</a>();</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            }</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        }</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    }</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
+<div class="line"><a name="l00439"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">  439</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">DockBar::checkButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    {</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            {</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;                button-&gt;setChecked(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;            }</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        }</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    }</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
+<div class="line"><a name="l00451"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">  451</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">DockBar::uncheckButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget)</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    {</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        {</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;            <span class="keywordflow">if</span> (button-&gt;widget() == widget)</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;            {</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;                button-&gt;setChecked(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            }</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        }</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    }</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
+<div class="line"><a name="l00463"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">  463</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">DockBar::widgetAt</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    {</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            <span class="keywordflow">return</span> mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)-&gt;widget();</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    }</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160; </div>
+<div class="line"><a name="l00470"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">  470</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">DockBar::nextAvailableWidget</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    {</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; 0)</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        {</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            {</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;                <span class="keywordflow">if</span> (!button-&gt;hidden())</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;                    widget = button-&gt;widget();</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;                    <span class="keywordflow">return</span> button-&gt;widget();</div>
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;            }</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            <span class="keywordflow">return</span> widget;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        }</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <span class="keywordtype">int</span> current_index      = 0;</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        {</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;            <span class="keywordflow">if</span> (!button-&gt;hidden())</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;            {</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;                widget = button-&gt;widget();</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;                <span class="keywordflow">if</span> (current_index &gt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;                    <span class="keywordflow">return</span> widget;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;            }</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            current_index++;</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        }</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <span class="keywordflow">return</span> widget;</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    }</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160; </div>
-<div class="line"><a name="l00496"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">  496</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">DockBar::clear</a>()</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    {</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;        {</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            button-&gt;widget()-&gt;hide();</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            button-&gt;widget()-&gt;setParent(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            button-&gt;hide();</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            button-&gt;setParent(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;            <span class="keyword">delete</span> button;</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        }</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160; </div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        mButtons.clear();</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>();</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    }</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">  515</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">DockBar::handleDragStart</a>()</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    {</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#show">show</a>();</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;    }</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &gt;= mButtons.size())</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        {</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;            <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;            {</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;                <span class="keywordflow">if</span> (!button-&gt;hidden())</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;                    widget = button-&gt;widget();</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            }</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            <span class="keywordflow">return</span> widget;</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        }</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <span class="keywordtype">int</span> current_index      = 0;</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;        {</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            <span class="keywordflow">if</span> (!button-&gt;hidden())</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;            {</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                widget = button-&gt;widget();</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                <span class="keywordflow">if</span> (current_index &gt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                    <span class="keywordflow">return</span> widget;</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            }</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            current_index++;</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;        }</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        <span class="keywordflow">return</span> widget;</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;    }</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">  506</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">DockBar::clear</a>()</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    {</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button : mButtons)</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        {</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            button-&gt;widget()-&gt;hide();</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            button-&gt;widget()-&gt;setParent(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            button-&gt;hide();</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;            button-&gt;setParent(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            <span class="keyword">delete</span> button;</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        }</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        mButtons.clear();</div>
 <div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
-<div class="line"><a name="l00520"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">  520</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">DockBar::handleDragEnd</a>()</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    {</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    }</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00037">content_anchor.h:38</a></div></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">rearrangeButtons</a>();</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160; </div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>();</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    }</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160; </div>
+<div class="line"><a name="l00525"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">  525</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">DockBar::handleDragStart</a>()</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    {</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#show">show</a>();</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    }</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160; </div>
+<div class="line"><a name="l00530"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">  530</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">DockBar::handleDragEnd</a>()</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    {</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <span class="keywordflow">if</span> (mAutohide &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    }</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00053">content_anchor.h:54</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_anchor_html_a122685a9eb05e3a34b8ede51f5f81a49"><div class="ttname"><a href="classhal_1_1_content_anchor.html#a122685a9eb05e3a34b8ede51f5f81a49">hal::ContentAnchor::add</a></div><div class="ttdeci">virtual void add(ContentWidget *widget, int index)=0</div></div>
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a3caaf3a7ed45298de28483db823564da"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a3caaf3a7ed45298de28483db823564da">hal::ContentDragRelay::relayDragEnd</a></div><div class="ttdeci">void relayDragEnd()</div><div class="ttdef"><b>Definition:</b> <a href="content__drag__relay_8cpp_source.html#l00016">content_drag_relay.cpp:16</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a561c07b5247a2f14972803cc1f3be4a0"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a561c07b5247a2f14972803cc1f3be4a0">hal::ContentDragRelay::relayDragStart</a></div><div class="ttdeci">void relayDragStart()</div><div class="ttdef"><b>Definition:</b> <a href="content__drag__relay_8cpp_source.html#l00011">content_drag_relay.cpp:11</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a60547214ee4b07e830bfbd09ff7b13b7"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a60547214ee4b07e830bfbd09ff7b13b7">hal::ContentDragRelay::instance</a></div><div class="ttdeci">static ContentDragRelay * instance()</div><div class="ttdef"><b>Definition:</b> <a href="content__drag__relay_8cpp_source.html#l00005">content_drag_relay.cpp:5</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00049">content_widget.h:50</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_widget_html_a710c4f22b31bec0e46b1183fbd8b5778"><div class="ttname"><a href="classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778">hal::ContentWidget::remove</a></div><div class="ttdeci">void remove()</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8cpp_source.html#l00029">content_widget.cpp:29</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_widget_html_aefb3ae2d63b1a1cd08c4280cec503b4d"><div class="ttname"><a href="classhal_1_1_content_widget.html#aefb3ae2d63b1a1cd08c4280cec503b4d">hal::ContentWidget::close</a></div><div class="ttdeci">void close()</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8cpp_source.html#l00065">content_widget.cpp:65</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a0269dc1433dcb659dc5e1bf585dd31ec"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">hal::DockBar::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00496">dock_bar.cpp:496</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a03347d7bde11b4406ce5edaba444691e"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">hal::DockBar::mouseMoveEvent</a></div><div class="ttdeci">void mouseMoveEvent(QMouseEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00035">dock_bar.cpp:35</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00050">content_widget.h:51</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_widget_html_a710c4f22b31bec0e46b1183fbd8b5778"><div class="ttname"><a href="classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778">hal::ContentWidget::remove</a></div><div class="ttdeci">void remove()</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8cpp_source.html#l00030">content_widget.cpp:30</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_widget_html_aefb3ae2d63b1a1cd08c4280cec503b4d"><div class="ttname"><a href="classhal_1_1_content_widget.html#aefb3ae2d63b1a1cd08c4280cec503b4d">hal::ContentWidget::close</a></div><div class="ttdeci">void close()</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8cpp_source.html#l00068">content_widget.cpp:68</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a0269dc1433dcb659dc5e1bf585dd31ec"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a0269dc1433dcb659dc5e1bf585dd31ec">hal::DockBar::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00506">dock_bar.cpp:506</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a03347d7bde11b4406ce5edaba444691e"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e">hal::DockBar::mouseMoveEvent</a></div><div class="ttdeci">void mouseMoveEvent(QMouseEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00034">dock_bar.cpp:34</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a035f262da88bc408cc76fe37ed4f8105"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a035f262da88bc408cc76fe37ed4f8105">hal::DockBar::dropEvent</a></div><div class="ttdeci">void dropEvent(QDropEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00166">dock_bar.cpp:166</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a03d8bd985c7d9f05c035b6fff8200cac"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a03d8bd985c7d9f05c035b6fff8200cac">hal::DockBar::sizeHint</a></div><div class="ttdeci">QSize sizeHint() const override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00208">dock_bar.cpp:208</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a045c002dc78e519983522b55d19cac38"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">hal::DockBar::dragEnterEvent</a></div><div class="ttdeci">void dragEnterEvent(QDragEnterEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00068">dock_bar.cpp:68</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a045c002dc78e519983522b55d19cac38"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a045c002dc78e519983522b55d19cac38">hal::DockBar::dragEnterEvent</a></div><div class="ttdeci">void dragEnterEvent(QDragEnterEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00067">dock_bar.cpp:67</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a0e224001ed07b05a8b4e5ed9ed782f58"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">hal::DockBar::removeButton</a></div><div class="ttdeci">bool removeButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00359">dock_bar.cpp:359</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a1a156536406fab3653e97296cb87e348"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a1a156536406fab3653e97296cb87e348">hal::DockBar::setAnchor</a></div><div class="ttdeci">void setAnchor(ContentAnchor *anchor)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00253">dock_bar.cpp:253</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a1f29836fd8f4fc64b6aa42889b941ea8"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a1f29836fd8f4fc64b6aa42889b941ea8">hal::DockBar::minimumSizeHint</a></div><div class="ttdeci">QSize minimumSizeHint() const override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00231">dock_bar.cpp:231</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a2a445867ad85250a3f1650298acac8bf"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a2a445867ad85250a3f1650298acac8bf">hal::DockBar::rearrangeButtons</a></div><div class="ttdeci">void rearrangeButtons()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00296">dock_bar.cpp:296</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a43cda23224cf8c376b67fc1ca93474ce"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">hal::DockBar::index</a></div><div class="ttdeci">int index(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00284">dock_bar.cpp:284</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a497545fee703e4b50f42362206c08c5b"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">hal::DockBar::checkButton</a></div><div class="ttdeci">void checkButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00429">dock_bar.cpp:429</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a497545fee703e4b50f42362206c08c5b"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a497545fee703e4b50f42362206c08c5b">hal::DockBar::checkButton</a></div><div class="ttdeci">void checkButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00439">dock_bar.cpp:439</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a681224f3b81ce93a4230dd13230a53d8"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a681224f3b81ce93a4230dd13230a53d8">hal::DockBar::eventFilter</a></div><div class="ttdeci">bool eventFilter(QObject *watched, QEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00194">dock_bar.cpp:194</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_a726f3f9acbe3ffd67a009db4fa7a2761"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a726f3f9acbe3ffd67a009db4fa7a2761">hal::DockBar::setAutohide</a></div><div class="ttdeci">void setAutohide(bool autohide)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00258">dock_bar.cpp:258</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a73435370114794dfe9e8ff31b898cdf8"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">hal::DockBar::reattachButton</a></div><div class="ttdeci">void reattachButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00414">dock_bar.cpp:414</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_a7916e78c642b524fa20fffbf6b28bdfe"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">hal::DockBar::DockBar</a></div><div class="ttdeci">DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00028">dock_bar.cpp:28</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_aa459f3af6f385a73ae80d1441ef92437"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">hal::DockBar::uncheckButton</a></div><div class="ttdeci">void uncheckButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00441">dock_bar.cpp:441</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a73435370114794dfe9e8ff31b898cdf8"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a73435370114794dfe9e8ff31b898cdf8">hal::DockBar::reattachButton</a></div><div class="ttdeci">void reattachButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00424">dock_bar.cpp:424</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_a7916e78c642b524fa20fffbf6b28bdfe"><div class="ttname"><a href="classhal_1_1_dock_bar.html#a7916e78c642b524fa20fffbf6b28bdfe">hal::DockBar::DockBar</a></div><div class="ttdeci">DockBar(Qt::Orientation orientation, button_orientation b_orientation, QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00027">dock_bar.cpp:27</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_aa459f3af6f385a73ae80d1441ef92437"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">hal::DockBar::uncheckButton</a></div><div class="ttdeci">void uncheckButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00451">dock_bar.cpp:451</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_ab33787edc8aa1cca25b42a7072c3f219"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ab33787edc8aa1cca25b42a7072c3f219">hal::DockBar::dragLeaveEvent</a></div><div class="ttdeci">void dragLeaveEvent(QDragLeaveEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00160">dock_bar.cpp:160</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_ab35e53a657477bf605c490f28ca66d52"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">hal::DockBar::handleDragEnd</a></div><div class="ttdeci">void handleDragEnd()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00520">dock_bar.cpp:520</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_ab35e53a657477bf605c490f28ca66d52"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52">hal::DockBar::handleDragEnd</a></div><div class="ttdeci">void handleDragEnd()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00530">dock_bar.cpp:530</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_aba73ba2b60878f4b1f21fc601c539d78"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aba73ba2b60878f4b1f21fc601c539d78">hal::DockBar::count</a></div><div class="ttdeci">int count()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00279">dock_bar.cpp:279</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_ac692239114f6137af698f788f3a1a083"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">hal::DockBar::unused</a></div><div class="ttdeci">bool unused()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00263">dock_bar.cpp:263</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_ac7ae24497457a458c831a51aab8b2c92"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ac7ae24497457a458c831a51aab8b2c92">hal::DockBar::stopAnimations</a></div><div class="ttdeci">void stopAnimations()</div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_aca9c3635fd18322a6dfe4496c13170e4"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">hal::DockBar::nextAvailableWidget</a></div><div class="ttdeci">ContentWidget * nextAvailableWidget(int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00460">dock_bar.cpp:460</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_acafc385cdf323d371f424d32a5fcaaf3"><div class="ttname"><a href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">hal::DockBar::detachButton</a></div><div class="ttdeci">void detachButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00396">dock_bar.cpp:396</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_ad66811a7a674c3a88984a9043ba37f2d"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">hal::DockBar::handleDragStart</a></div><div class="ttdeci">void handleDragStart()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00515">dock_bar.cpp:515</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_ae876a9af86edbf76a36654fd57e45240"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">hal::DockBar::dragMoveEvent</a></div><div class="ttdeci">void dragMoveEvent(QDragMoveEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00080">dock_bar.cpp:80</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_aca9c3635fd18322a6dfe4496c13170e4"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">hal::DockBar::nextAvailableWidget</a></div><div class="ttdeci">ContentWidget * nextAvailableWidget(int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00470">dock_bar.cpp:470</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_acafc385cdf323d371f424d32a5fcaaf3"><div class="ttname"><a href="classhal_1_1_dock_bar.html#acafc385cdf323d371f424d32a5fcaaf3">hal::DockBar::detachButton</a></div><div class="ttdeci">void detachButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00406">dock_bar.cpp:406</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_ad66811a7a674c3a88984a9043ba37f2d"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d">hal::DockBar::handleDragStart</a></div><div class="ttdeci">void handleDragStart()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00525">dock_bar.cpp:525</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_ae876a9af86edbf76a36654fd57e45240"><div class="ttname"><a href="classhal_1_1_dock_bar.html#ae876a9af86edbf76a36654fd57e45240">hal::DockBar::dragMoveEvent</a></div><div class="ttdeci">void dragMoveEvent(QDragMoveEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00079">dock_bar.cpp:79</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_af88b40845191433e2a8ef2c97c356900"><div class="ttname"><a href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">hal::DockBar::addButton</a></div><div class="ttdeci">void addButton(ContentWidget *widget, int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00343">dock_bar.cpp:343</a></div></div>
-<div class="ttc" id="aclasshal_1_1_dock_bar_html_af9648756ec5da646c07e45994c654c70"><div class="ttname"><a href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">hal::DockBar::widgetAt</a></div><div class="ttdeci">ContentWidget * widgetAt(int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00453">dock_bar.cpp:453</a></div></div>
+<div class="ttc" id="aclasshal_1_1_dock_bar_html_af9648756ec5da646c07e45994c654c70"><div class="ttname"><a href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">hal::DockBar::widgetAt</a></div><div class="ttdeci">ContentWidget * widgetAt(int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00463">dock_bar.cpp:463</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_afda6f5e577c507ec61f02d86a344e54a"><div class="ttname"><a href="classhal_1_1_dock_bar.html#afda6f5e577c507ec61f02d86a344e54a">hal::DockBar::collapseButtons</a></div><div class="ttdeci">void collapseButtons()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00317">dock_bar.cpp:317</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_button_html"><div class="ttname"><a href="classhal_1_1_dock_button.html">hal::DockButton</a></div><div class="ttdoc">A button of in the DockerBar.</div><div class="ttdef"><b>Definition:</b> <a href="dock__button_8h_source.html#l00055">dock_button.h:56</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_button_html_a1f35abe89b48969286d6fc0a33c37b95"><div class="ttname"><a href="classhal_1_1_dock_button.html#a1f35abe89b48969286d6fc0a33c37b95">hal::DockButton::setAvailable</a></div><div class="ttdeci">void setAvailable(bool available)</div><div class="ttdef"><b>Definition:</b> <a href="dock__button_8cpp_source.html#l00156">dock_button.cpp:156</a></div></div>
@@ -664,7 +674,6 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="ttc" id="adock__mime__data_8h_html"><div class="ttname"><a href="dock__mime__data_8h.html">dock_mime_data.h</a></div></div>
 <div class="ttc" id="agroup__docking_html_ga96c899c45d7192341d04caf575c7f02c"><div class="ttname"><a href="group__docking.html#ga96c899c45d7192341d04caf575c7f02c">hal::button_orientation</a></div><div class="ttdeci">button_orientation</div><div class="ttdef"><b>Definition:</b> <a href="dock__button_8h_source.html#l00040">dock_button.h:41</a></div></div>
 <div class="ttc" id="agroup__docking_html_gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f"><div class="ttname"><a href="group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f">hal::button_orientation::horizontal</a></div><div class="ttdeci">@ horizontal</div></div>
-<div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
 <div class="ttc" id="aqabstractanimation_html_DeletionPolicy-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#DeletionPolicy-enum">QAbstractAnimation::DeleteWhenStopped</a></div><div class="ttdeci">DeleteWhenStopped</div></div>
 <div class="ttc" id="aqabstractanimation_html_start"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#start">QAbstractAnimation::start</a></div><div class="ttdeci">void start(QAbstractAnimation::DeletionPolicy policy)</div></div>
@@ -710,6 +719,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="ttc" id="aqwidget_html_grab"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#grab">QWidget::grab</a></div><div class="ttdeci">QPixmap grab(const QRect &amp;rectangle)</div></div>
 <div class="ttc" id="aqwidget_html_height-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#height-prop">QWidget::height</a></div><div class="ttdeci">height</div></div>
 <div class="ttc" id="aqwidget_html_hide"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide</a></div><div class="ttdeci">void hide()</div></div>
+<div class="ttc" id="aqwidget_html_isHidden"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#isHidden">QWidget::isHidden</a></div><div class="ttdeci">bool isHidden() const const</div></div>
 <div class="ttc" id="aqwidget_html_mapFromGlobal"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#mapFromGlobal">QWidget::mapFromGlobal</a></div><div class="ttdeci">QPoint mapFromGlobal(const QPoint &amp;pos) const const</div></div>
 <div class="ttc" id="aqwidget_html_setParent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#setParent">QWidget::setParent</a></div><div class="ttdeci">void setParent(QWidget *parent)</div></div>
 <div class="ttc" id="aqwidget_html_show"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show</a></div><div class="ttdeci">void show()</div></div>
@@ -722,7 +732,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_723f710d3e1503255229013675f4a73b.html">docking_system</a></li><li class="navelem"><a class="el" href="dock__bar_8cpp.html">dock_bar.cpp</a></li>
-    <li class="footer">Generated on Tue Dec 16 2025 17:26:25 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jan 8 2026 16:01:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

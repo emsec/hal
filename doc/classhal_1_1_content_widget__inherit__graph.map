@@ -1,5 +1,5 @@
 <map id="hal::ContentWidget" name="hal::ContentWidget">
-<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="1077,667,1356,1111"/>
+<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="1127,667,1307,1111"/>
 <area shape="rect" id="node4" href="$classhal_1_1_context_manager_widget.html" title="Provides the user with an interface to manage GraphContexts." alt="" coords="5,1188,228,1823"/>
 <area shape="rect" id="node5" href="$classhal_1_1_external_content_widget.html" title=" " alt="" coords="252,1452,461,1559"/>
 <area shape="rect" id="node6" href="$classhal_1_1_graph_tab_widget.html" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="485,1379,689,1632"/>

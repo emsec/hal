@@ -1,13 +1,15 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/content_manager/content_manager.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/content_manager/content_manager.h">
-<area shape="rect" id="node1" title=" " alt="" coords="247,5,465,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="463,5,681,76"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,131,133,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="260,213,335,240"/>
-<area shape="rect" id="node4" title=" " alt="" coords="208,131,301,158"/>
-<area shape="rect" id="node5" title=" " alt="" coords="326,131,386,158"/>
-<area shape="rect" id="node6" href="$special__log__content__manager_8h.html" title=" " alt="" coords="411,124,592,165"/>
-<area shape="rect" id="node7" href="$content__widget_8h.html" title=" " alt="" coords="616,124,763,165"/>
-<area shape="rect" id="node11" title=" " alt="" coords="787,131,887,158"/>
-<area shape="rect" id="node8" href="$widget_8h.html" title=" " alt="" coords="485,213,635,240"/>
-<area shape="rect" id="node9" title=" " alt="" coords="660,213,719,240"/>
-<area shape="rect" id="node10" title=" " alt="" coords="743,213,798,240"/>
+<area shape="rect" id="node3" title=" " alt="" coords="261,213,336,240"/>
+<area shape="rect" id="node4" title=" " alt="" coords="755,131,848,158"/>
+<area shape="rect" id="node5" title=" " alt="" coords="873,131,933,158"/>
+<area shape="rect" id="node6" href="$special__log__content__manager_8h.html" title=" " alt="" coords="208,124,389,165"/>
+<area shape="rect" id="node7" href="$content__widget_8h.html" title=" " alt="" coords="584,124,731,165"/>
+<area shape="rect" id="node11" href="$content__anchor_8h.html" title=" " alt="" coords="413,124,560,165"/>
+<area shape="rect" id="node13" title=" " alt="" coords="957,131,1057,158"/>
+<area shape="rect" id="node8" href="$widget_8h.html" title=" " alt="" coords="582,213,733,240"/>
+<area shape="rect" id="node9" title=" " alt="" coords="757,213,816,240"/>
+<area shape="rect" id="node10" title=" " alt="" coords="503,213,558,240"/>
+<area shape="rect" id="node12" title=" " alt="" coords="377,213,479,240"/>
 </map>

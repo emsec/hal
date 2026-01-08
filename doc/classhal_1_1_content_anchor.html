@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_content_anchor.html','');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhal_1_1_content_anchor-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hal::ContentAnchor Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__gui.html">HAL Gui</a> &raquo; <a class="el" href="group__docking.html">Docking System</a></div></div>  </div>
@@ -99,9 +100,9 @@ Inheritance diagram for hal::ContentAnchor:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_content_anchor__inherit__graph.png" border="0" usemap="#ahal_1_1_content_anchor_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_content_anchor_inherit__map" id="ahal_1_1_content_anchor_inherit__map">
-<area shape="rect" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="97,5,243,156"/>
-<area shape="rect" href="classhal_1_1_splitter_anchor.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="5,226,148,377"/>
-<area shape="rect" href="classhal_1_1_tab_widget.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="172,204,357,399"/>
+<area shape="rect" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="97,5,243,171"/>
+<area shape="rect" href="classhal_1_1_splitter_anchor.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="5,241,148,391"/>
+<area shape="rect" href="classhal_1_1_tab_widget.html" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="172,219,357,413"/>
 </map>
 </div>
 <div class="dynheader">
@@ -109,7 +110,9 @@ Collaboration diagram for hal::ContentAnchor:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_content_anchor__coll__graph.png" border="0" usemap="#ahal_1_1_content_anchor_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_content_anchor_coll__map" id="ahal_1_1_content_anchor_coll__map">
-<area shape="rect" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="5,5,152,156"/>
+<area shape="rect" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="14,668,161,819"/>
+<area shape="rect" href="classhal_1_1_dock_bar.html" title="Contains and handles DockButtons." alt="" coords="5,425,169,605"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qframe.html" title=" " alt="" coords="15,5,159,376"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -119,26 +122,35 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a122685a9eb05e3a34b8ede51f5f81a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a850d7c8d3cdad50d4b135246aebd2c71"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a850d7c8d3cdad50d4b135246aebd2c71">remove</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
 <tr class="separator:a850d7c8d3cdad50d4b135246aebd2c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4af161894ff9b1834dcb6d95f4c2d1d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#ac4af161894ff9b1834dcb6d95f4c2d1d">detach</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
-<tr class="separator:ac4af161894ff9b1834dcb6d95f4c2d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99b725a175f02628b4e038246bbbf1de"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a99b725a175f02628b4e038246bbbf1de">detach</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
+<tr class="separator:a99b725a175f02628b4e038246bbbf1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a063bb055da54fa4ffd3689e813cf6067"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a063bb055da54fa4ffd3689e813cf6067">reattach</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
 <tr class="separator:a063bb055da54fa4ffd3689e813cf6067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4c6d92e189efdfcc470dbe61d1a6d23"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#aa4c6d92e189efdfcc470dbe61d1a6d23">open</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
 <tr class="separator:aa4c6d92e189efdfcc470dbe61d1a6d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a496d11b75abd78806245592ad9c247c9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9">close</a> (<a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *widget)=0</td></tr>
 <tr class="separator:a496d11b75abd78806245592ad9c247c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab0281280c629b6523d074db05dcbbfa"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#aab0281280c629b6523d074db05dcbbfa">~ContentAnchor</a> ()=0</td></tr>
-<tr class="separator:aab0281280c629b6523d074db05dcbbfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bb1757f3ee35f59162cc951220bdf70"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a0bb1757f3ee35f59162cc951220bdf70">count</a> () const =0</td></tr>
-<tr class="separator:a0bb1757f3ee35f59162cc951220bdf70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6795ce3aba539f341970c66861bf4fdf"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a6795ce3aba539f341970c66861bf4fdf">~ContentAnchor</a> ()</td></tr>
+<tr class="separator:a6795ce3aba539f341970c66861bf4fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada3413738b4fc1e834e5335e94e3afe6"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#ada3413738b4fc1e834e5335e94e3afe6">count</a> () const</td></tr>
+<tr class="separator:ada3413738b4fc1e834e5335e94e3afe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2253e49fb6ee22a041ca96233c9823c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a2253e49fb6ee22a041ca96233c9823c2">saveState</a> () const</td></tr>
+<tr class="separator:a2253e49fb6ee22a041ca96233c9823c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:abb87593762fc6c012370901dadb97ad0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_dock_bar.html">DockBar</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#abb87593762fc6c012370901dadb97ad0">mDockBar</a></td></tr>
+<tr class="separator:abb87593762fc6c012370901dadb97ad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30b069b3ccd762a1284bdb96203d52a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">ContentLayout::Position</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_anchor.html#a30b069b3ccd762a1284bdb96203d52a5">mAnchorPosition</a></td></tr>
+<tr class="separator:a30b069b3ccd762a1284bdb96203d52a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An abstract class that provides the interface for specific anchors (see <a class="el" href="classhal_1_1_splitter_anchor.html" title="Adds specific ContentWidgets to HALs main content area.">SplitterAnchor</a> or <a class="el" href="classhal_1_1_tab_widget.html" title="Adds specific ContentWidgets to HALs main content area.">TabWidget</a> ). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00037">37</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00053">53</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aab0281280c629b6523d074db05dcbbfa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab0281280c629b6523d074db05dcbbfa">&#9670;&nbsp;</a></span>~ContentAnchor()</h2>
+<a id="a6795ce3aba539f341970c66861bf4fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6795ce3aba539f341970c66861bf4fdf">&#9670;&nbsp;</a></span>~ContentAnchor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +159,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">hal::ContentAnchor::~ContentAnchor </td>
+          <td class="memname">virtual hal::ContentAnchor::~ContentAnchor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -155,13 +167,13 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Destructor that has to be overriden. </p>
+<p>Destructor </p>
 
-<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00094">94</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00108">108</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
 
 </div>
 </div>
@@ -247,12 +259,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#a30f23ce9feff8559abbbff432bfe124e">hal::TabWidget</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00065">hal::ContentWidget::close()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00068">hal::ContentWidget::close()</a>.</p>
 
 </div>
 </div>
-<a id="a0bb1757f3ee35f59162cc951220bdf70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0bb1757f3ee35f59162cc951220bdf70">&#9670;&nbsp;</a></span>count()</h2>
+<a id="ada3413738b4fc1e834e5335e94e3afe6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada3413738b4fc1e834e5335e94e3afe6">&#9670;&nbsp;</a></span>count()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +273,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int hal::ContentAnchor::count </td>
+          <td class="memname">int hal::ContentAnchor::count </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -269,18 +281,22 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the number of widgets / buttons as of mDockBar-&gt;<a class="el" href="classhal_1_1_content_anchor.html#a0bb1757f3ee35f59162cc951220bdf70">count()</a> </p>
+<p>Returns the number of widgets / buttons as of mDockBar-&gt;<a class="el" href="classhal_1_1_content_anchor.html#ada3413738b4fc1e834e5335e94e3afe6">count()</a> </p>
 
-<p>Implemented in <a class="el" href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">hal::TabWidget</a>, and <a class="el" href="classhal_1_1_splitter_anchor.html#a0b98740e8434f3f2c758f09eb43f25a8">hal::SplitterAnchor</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__anchor_8cpp_source.html#l00008">8</a> of file <a class="el" href="content__anchor_8cpp_source.html">content_anchor.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="dock__bar_8cpp_source.html#l00279">hal::DockBar::count()</a>, and <a class="el" href="content__anchor_8h_source.html#l00057">mDockBar</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00123">hal::ContentLayoutArea::addContent()</a>.</p>
 
 </div>
 </div>
-<a id="ac4af161894ff9b1834dcb6d95f4c2d1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4af161894ff9b1834dcb6d95f4c2d1d">&#9670;&nbsp;</a></span>detach()</h2>
+<a id="a99b725a175f02628b4e038246bbbf1de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99b725a175f02628b4e038246bbbf1de">&#9670;&nbsp;</a></span>detach()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -289,7 +305,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void hal::ContentAnchor::detach </td>
+          <td class="memname">virtual <a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a>* hal::ContentAnchor::detach </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a> *&#160;</td>
           <td class="paramname"><em>widget</em></td><td>)</td>
@@ -309,10 +325,11 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>the enclosing frame of the detached widget </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#ad36265c03bb7b96e1f5aeff8ae5adc33">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#a78521bcdfd7d838219763496c36745eb">hal::TabWidget</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#a5b286d203386526beb021e9ee86f5c36">hal::TabWidget</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00038">hal::ContentWidget::detach()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00039">hal::ContentWidget::detach()</a>.</p>
 
 </div>
 </div>
@@ -349,7 +366,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#ae02de948a566f428334c51c2788a06b1">hal::TabWidget</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00056">hal::ContentWidget::open()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00059">hal::ContentWidget::open()</a>.</p>
 
 </div>
 </div>
@@ -386,7 +403,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#a3b134235e20afb30c03d9cb7e91b4c80">hal::TabWidget</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00047">hal::ContentWidget::reattach()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00049">hal::ContentWidget::reattach()</a>.</p>
 
 </div>
 </div>
@@ -423,12 +440,90 @@ Public Member Functions</h2></td></tr>
 
 <p>Implemented in <a class="el" href="classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1">hal::SplitterAnchor</a>, and <a class="el" href="classhal_1_1_tab_widget.html#ab6400bdb142ec2b9149d4cd1668152d4">hal::TabWidget</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00029">hal::ContentWidget::remove()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00030">hal::ContentWidget::remove()</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a id="a2253e49fb6ee22a041ca96233c9823c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2253e49fb6ee22a041ca96233c9823c2">&#9670;&nbsp;</a></span>saveState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::ContentAnchor::saveState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Save state of widgets using anchor tag </p>
+
+<p class="definition">Definition at line <a class="el" href="content__anchor_8cpp_source.html#l00013">13</a> of file <a class="el" href="content__anchor_8cpp_source.html">content_anchor.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="dock__bar_8cpp_source.html#l00279">hal::DockBar::count()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00015">hal::SettingsManager::instance()</a>, <a class="el" href="content__anchor_8h_source.html#l00058">mAnchorPosition</a>, <a class="el" href="content__anchor_8h_source.html#l00057">mDockBar</a>, <a class="el" href="dock__bar_8cpp_source.html#l00463">hal::DockBar::widgetAt()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00142">hal::SettingsManager::widgetsSaveGeometry()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00244">hal::ContentLayoutArea::saveState()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a30b069b3ccd762a1284bdb96203d52a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30b069b3ccd762a1284bdb96203d52a5">&#9670;&nbsp;</a></span>mAnchorPosition</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">ContentLayout::Position</a> hal::ContentAnchor::mAnchorPosition</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00058">58</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="content__anchor_8cpp_source.html#l00013">saveState()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00013">hal::SplitterAnchor::SplitterAnchor()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00013">hal::TabWidget::TabWidget()</a>.</p>
+
+</div>
+</div>
+<a id="abb87593762fc6c012370901dadb97ad0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb87593762fc6c012370901dadb97ad0">&#9670;&nbsp;</a></span>mDockBar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_dock_bar.html">DockBar</a>* hal::ContentAnchor::mDockBar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="content__anchor_8h_source.html#l00057">57</a> of file <a class="el" href="content__anchor_8h_source.html">content_anchor.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tab__widget_8cpp_source.html#l00060">hal::TabWidget::add()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00023">hal::SplitterAnchor::add()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00106">hal::SplitterAnchor::clear()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00175">hal::TabWidget::clear()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00156">hal::TabWidget::close()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00091">hal::SplitterAnchor::close()</a>, <a class="el" href="content__anchor_8cpp_source.html#l00008">count()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00087">hal::TabWidget::detach()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00049">hal::SplitterAnchor::detach()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00197">hal::TabWidget::handleDragEnd()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00162">hal::TabWidget::handleNoCurrentWidget()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00121">hal::TabWidget::open()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00077">hal::SplitterAnchor::open()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00108">hal::TabWidget::reattach()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00066">hal::SplitterAnchor::reattach()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00069">hal::TabWidget::remove()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00039">hal::SplitterAnchor::remove()</a>, <a class="el" href="content__anchor_8cpp_source.html#l00013">saveState()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00013">hal::SplitterAnchor::SplitterAnchor()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00013">hal::TabWidget::TabWidget()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/hal/hal/plugins/gui/include/gui/content_anchor/<a class="el" href="content__anchor_8h_source.html">content_anchor.h</a></li>
+<li>/home/runner/work/hal/hal/plugins/gui/src/content_anchor/<a class="el" href="content__anchor_8cpp_source.html">content_anchor.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -436,7 +531,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_content_anchor.html">ContentAnchor</a></li>
-    <li class="footer">Generated on Tue Dec 16 2025 17:26:27 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jan 8 2026 16:01:54 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

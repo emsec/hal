@@ -14,6 +14,16 @@ var namespacehal =
       [ "get_ff_dependency_matrix", "namespacehal_1_1boolean__influence.html#a9eec5e7e81501ef10aec207a7ef75e2c", null ]
     ] ],
     [ "BooleanFunctionParser", "namespacehal_1_1_boolean_function_parser.html", "namespacehal_1_1_boolean_function_parser" ],
+    [ "ContentLayout", "namespacehal_1_1_content_layout.html", [
+      [ "Position", "namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c", [
+        [ "Center", "namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca3d0079bd80ffa5333f8413e967892ed6", null ],
+        [ "Left", "namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca03f83b4f1390dbf98b77fe8cc5dc7f74", null ],
+        [ "Right", "namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca34cdb089f401df3ed11900f8658f00a5", null ],
+        [ "Bottom", "namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca824968d9d9768b7d071f173f1cbdbbdd", null ]
+      ] ],
+      [ "positionFromString", "namespacehal_1_1_content_layout.html#a85162361ddf93adbe2a7328a717a9716", null ],
+      [ "Q_ENUM_NS", "namespacehal_1_1_content_layout.html#afe0fdb942f5ec57bf178f8ea937eb2f6", null ]
+    ] ],
     [ "core_strings", "namespacehal_1_1core__strings.html", "namespacehal_1_1core__strings" ],
     [ "dataflow", "namespacehal_1_1dataflow.html", "namespacehal_1_1dataflow" ],
     [ "event_log", "namespacehal_1_1event__log.html", [
@@ -174,6 +184,7 @@ var namespacehal =
     [ "ContentFrame", "classhal_1_1_content_frame.html", "classhal_1_1_content_frame" ],
     [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html", "classhal_1_1_content_layout_area" ],
     [ "ContentFactory", "classhal_1_1_content_factory.html", "classhal_1_1_content_factory" ],
+    [ "ContentWidgetPlacement", "structhal_1_1_content_widget_placement.html", "structhal_1_1_content_widget_placement" ],
     [ "ExternalContent", "classhal_1_1_external_content.html", "classhal_1_1_external_content" ],
     [ "ExternalContentWidget", "classhal_1_1_external_content_widget.html", "classhal_1_1_external_content_widget" ],
     [ "ContentManager", "classhal_1_1_content_manager.html", "classhal_1_1_content_manager" ],
@@ -643,12 +654,6 @@ var namespacehal =
       [ "horizontal", "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f", null ],
       [ "vertical_up", "group__docking.html#gga96c899c45d7192341d04caf575c7f02ca6f50993948b855a8efa011b6915164d6", null ],
       [ "vertical_down", "group__docking.html#gga96c899c45d7192341d04caf575c7f02cae2a44fa65a0cf99e723e1887fc5eda0a", null ]
-    ] ],
-    [ "content_anchor", "namespacehal.html#a5183c9d870930c09f0bff0a061797b45", [
-      [ "center", "namespacehal.html#a5183c9d870930c09f0bff0a061797b45aadb115059e28d960fa8badfac5516667", null ],
-      [ "left", "namespacehal.html#a5183c9d870930c09f0bff0a061797b45a811882fecd5c7618d7099ebbd39ea254", null ],
-      [ "right", "namespacehal.html#a5183c9d870930c09f0bff0a061797b45a7c4f29407893c334a6cb7a87bf045c0d", null ],
-      [ "bottom", "namespacehal.html#a5183c9d870930c09f0bff0a061797b45a71f262d796bed1ab30e8a2d5a8ddee6f", null ]
     ] ],
     [ "GateTypeProperty", "namespacehal.html#adb8da04d2161f277bd489e806a2721ca", [
       [ "combinational", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638", null ],

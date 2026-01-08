@@ -1,14 +1,17 @@
 var group__docking =
 [
     [ "ContentAnchor", "classhal_1_1_content_anchor.html", [
-      [ "~ContentAnchor", "classhal_1_1_content_anchor.html#aab0281280c629b6523d074db05dcbbfa", null ],
+      [ "~ContentAnchor", "classhal_1_1_content_anchor.html#a6795ce3aba539f341970c66861bf4fdf", null ],
       [ "add", "classhal_1_1_content_anchor.html#a122685a9eb05e3a34b8ede51f5f81a49", null ],
       [ "close", "classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9", null ],
-      [ "count", "classhal_1_1_content_anchor.html#a0bb1757f3ee35f59162cc951220bdf70", null ],
-      [ "detach", "classhal_1_1_content_anchor.html#ac4af161894ff9b1834dcb6d95f4c2d1d", null ],
+      [ "count", "classhal_1_1_content_anchor.html#ada3413738b4fc1e834e5335e94e3afe6", null ],
+      [ "detach", "classhal_1_1_content_anchor.html#a99b725a175f02628b4e038246bbbf1de", null ],
       [ "open", "classhal_1_1_content_anchor.html#aa4c6d92e189efdfcc470dbe61d1a6d23", null ],
       [ "reattach", "classhal_1_1_content_anchor.html#a063bb055da54fa4ffd3689e813cf6067", null ],
-      [ "remove", "classhal_1_1_content_anchor.html#a850d7c8d3cdad50d4b135246aebd2c71", null ]
+      [ "remove", "classhal_1_1_content_anchor.html#a850d7c8d3cdad50d4b135246aebd2c71", null ],
+      [ "saveState", "classhal_1_1_content_anchor.html#a2253e49fb6ee22a041ca96233c9823c2", null ],
+      [ "mAnchorPosition", "classhal_1_1_content_anchor.html#a30b069b3ccd762a1284bdb96203d52a5", null ],
+      [ "mDockBar", "classhal_1_1_content_anchor.html#abb87593762fc6c012370901dadb97ad0", null ]
     ] ],
     [ "ContentFrame", "classhal_1_1_content_frame.html", [
       [ "ContentFrame", "classhal_1_1_content_frame.html#acec9c0993ffb1fd6a9d79aefb7739486", null ],
@@ -40,6 +43,7 @@ var group__docking =
       [ "handleDragEnd", "classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52", null ],
       [ "handleDragStart", "classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d", null ],
       [ "index", "classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce", null ],
+      [ "isHidden", "classhal_1_1_dock_bar.html#a21963ee3bbcf3adf7e5161e225d72804", null ],
       [ "minimumSizeHint", "classhal_1_1_dock_bar.html#a1f29836fd8f4fc64b6aa42889b941ea8", null ],
       [ "mouseMoveEvent", "classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e", null ],
       [ "nextAvailableWidget", "classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4", null ],
@@ -83,13 +87,12 @@ var group__docking =
       [ "widget", "classhal_1_1_dock_mime_data.html#afeb85263afda21684adf719c4451c36e", null ]
     ] ],
     [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html", [
-      [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html#a913d050c07582f0d6195aa2696f37a93", null ],
+      [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html#a084a08cbd22e9b43d3cb7698d2f9aefd", null ],
       [ "add", "classhal_1_1_splitter_anchor.html#a4d2651b9f557d4e64854f731bafbfae9", null ],
       [ "clear", "classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49", null ],
       [ "close", "classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6", null ],
       [ "contentChanged", "classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4", null ],
-      [ "count", "classhal_1_1_splitter_anchor.html#a0b98740e8434f3f2c758f09eb43f25a8", null ],
-      [ "detach", "classhal_1_1_splitter_anchor.html#ad36265c03bb7b96e1f5aeff8ae5adc33", null ],
+      [ "detach", "classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4", null ],
       [ "open", "classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b", null ],
       [ "reattach", "classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5", null ],
       [ "remove", "classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1", null ]
@@ -99,8 +102,7 @@ var group__docking =
       [ "add", "classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f", null ],
       [ "clear", "classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743", null ],
       [ "close", "classhal_1_1_tab_widget.html#a30f23ce9feff8559abbbff432bfe124e", null ],
-      [ "count", "classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d", null ],
-      [ "detach", "classhal_1_1_tab_widget.html#a78521bcdfd7d838219763496c36745eb", null ],
+      [ "detach", "classhal_1_1_tab_widget.html#a5b286d203386526beb021e9ee86f5c36", null ],
       [ "detachCurrentWidget", "classhal_1_1_tab_widget.html#a18563303f9b1c45ffad958dc578bcde0", null ],
       [ "handleDragEnd", "classhal_1_1_tab_widget.html#aa54adb84139bdb5b80bc94563889df9f", null ],
       [ "handleDragStart", "classhal_1_1_tab_widget.html#a561969c197ed97474257c40ec7d35a79", null ],

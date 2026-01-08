@@ -1,6 +1,6 @@
 <map id="hal::PythonEditor" name="hal::PythonEditor">
-<area shape="rect" id="node1" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="203,667,355,979"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,619"/>
-<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
-<area shape="rect" id="node4" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="308,343,523,450"/>
+<area shape="rect" id="node1" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="130,667,282,979"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,185,619"/>
+<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="41,5,149,127"/>
+<area shape="rect" id="node4" href="$classhal_1_1_python_context_subscriber.html" title="Interface for handling python outputs." alt="" coords="209,343,424,450"/>
 </map>

@@ -87,6 +87,7 @@ var annotated_dup =
       [ "ContentFrame", "classhal_1_1_content_frame.html", "classhal_1_1_content_frame" ],
       [ "ContentLayoutArea", "classhal_1_1_content_layout_area.html", "classhal_1_1_content_layout_area" ],
       [ "ContentFactory", "classhal_1_1_content_factory.html", "classhal_1_1_content_factory" ],
+      [ "ContentWidgetPlacement", "structhal_1_1_content_widget_placement.html", "structhal_1_1_content_widget_placement" ],
       [ "ExternalContent", "classhal_1_1_external_content.html", "classhal_1_1_external_content" ],
       [ "ExternalContentWidget", "classhal_1_1_external_content_widget.html", "classhal_1_1_external_content_widget" ],
       [ "ContentManager", "classhal_1_1_content_manager.html", "classhal_1_1_content_manager" ],

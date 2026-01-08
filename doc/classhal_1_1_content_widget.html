@@ -103,7 +103,7 @@ Inheritance diagram for hal::ContentWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_content_widget__inherit__graph.png" border="0" usemap="#ahal_1_1_content_widget_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_content_widget_inherit__map" id="ahal_1_1_content_widget_inherit__map">
-<area shape="rect" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="1077,667,1356,1111"/>
+<area shape="rect" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="1127,667,1307,1111"/>
 <area shape="rect" href="classhal_1_1_context_manager_widget.html" title="Provides the user with an interface to manage GraphContexts." alt="" coords="5,1188,228,1823"/>
 <area shape="rect" href="classhal_1_1_external_content_widget.html" title=" " alt="" coords="252,1452,461,1559"/>
 <area shape="rect" href="classhal_1_1_graph_tab_widget.html" title="A ContentWidget that holds all GraphWidget objects (GraphView) as tabs of a QTabWidget." alt="" coords="485,1379,689,1632"/>
@@ -123,15 +123,16 @@ Collaboration diagram for hal::ContentWidget:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_content_widget__coll__graph.png" border="0" usemap="#ahal_1_1_content_widget_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_content_widget_coll__map" id="ahal_1_1_content_widget_coll__map">
-<area shape="rect" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="245,1575,524,1960"/>
-<area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="61,1303,169,1424"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="5,396,212,840"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="167,5,333,347"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qaction.html" title=" " alt="" coords="129,864,318,1191"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qshortcut.html" title=" " alt="" coords="325,923,447,1132"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qvboxlayout.html" title=" " alt="" coords="535,1310,682,1417"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qboxlayout.html" title=" " alt="" coords="540,506,677,730"/>
-<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qkeysequence.html" title=" " alt="" coords="706,1215,850,1512"/>
+<area shape="rect" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="378,1575,527,1945"/>
+<area shape="rect" href="classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,1303,113,1424"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="127,396,333,840"/>
+<area shape="rect" href="classhal_1_1_content_frame.html" title="Wraps the ContentWidget class." alt="" coords="138,1288,325,1439"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="288,5,455,347"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qaction.html" title=" " alt="" coords="277,864,466,1191"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qshortcut.html" title=" " alt="" coords="473,923,595,1132"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qvboxlayout.html" title=" " alt="" coords="685,1310,831,1417"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qboxlayout.html" title=" " alt="" coords="689,506,827,730"/>
+<area shape="rect" target="_parent" href="https://doc.qt.io/qt-5/qkeysequence.html" title=" " alt="" coords="855,1215,999,1512"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -151,6 +152,10 @@ Public Slots</h2></td></tr>
 <tr class="separator:aa90888b283295d5a5c665c3f75fe878d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a264a3fb7fa07e2722272366e39974144"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a264a3fb7fa07e2722272366e39974144">restoreFromProject</a> ()</td></tr>
 <tr class="separator:a264a3fb7fa07e2722272366e39974144"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70decb33d7fd19600678caecfafcba1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af70decb33d7fd19600678caecfafcba1">detachedFrame</a> () const</td></tr>
+<tr class="separator:af70decb33d7fd19600678caecfafcba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af04370878c4217ef409b343832b6157d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af04370878c4217ef409b343832b6157d">setDetachedFrame</a> (<a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> *df)</td></tr>
+<tr class="separator:af04370878c4217ef409b343832b6157d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classhal_1_1_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classhal_1_1_widget')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classhal_1_1_widget.html">hal::Widget</a></td></tr>
 <tr class="memitem:a4c519723792aa2638567d9cc73121853 inherit pub_slots_classhal_1_1_widget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_widget.html#a4c519723792aa2638567d9cc73121853">hide</a> ()</td></tr>
 <tr class="separator:a4c519723792aa2638567d9cc73121853 inherit pub_slots_classhal_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +174,7 @@ Signals</h2></td></tr>
 <tr class="separator:a78278df05cea6a3903bda378f2d0e84b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7cd3e086ea57aa9e1bcc15b7b5eb79e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#ae7cd3e086ea57aa9e1bcc15b7b5eb79e">closed</a> ()</td></tr>
 <tr class="separator:ae7cd3e086ea57aa9e1bcc15b7b5eb79e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4b2e0e8c067b51bab780dfdbe345ac6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#aa4b2e0e8c067b51bab780dfdbe345ac6">name_changed</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a>)</td></tr>
+<tr class="memitem:aa4b2e0e8c067b51bab780dfdbe345ac6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#aa4b2e0e8c067b51bab780dfdbe345ac6">name_changed</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_content_widget.html#a23da38240acece4cf72de0c1d91c5285">name</a>)</td></tr>
 <tr class="separator:aa4b2e0e8c067b51bab780dfdbe345ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header signals_classhal_1_1_widget"><td colspan="2" onclick="javascript:toggleInherit('signals_classhal_1_1_widget')"><img src="closed.png" alt="-"/>&#160;Signals inherited from <a class="el" href="classhal_1_1_widget.html">hal::Widget</a></td></tr>
 <tr class="memitem:ae06e3246c0be546b600ca10595ee8ba0 inherit signals_classhal_1_1_widget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_widget.html#ae06e3246c0be546b600ca10595ee8ba0">parentSetTo</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>)</td></tr>
@@ -181,7 +186,7 @@ Signals</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af68367a14bc24cff90ccc5d55dfd213b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af68367a14bc24cff90ccc5d55dfd213b">ContentWidget</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
+<tr class="memitem:af68367a14bc24cff90ccc5d55dfd213b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af68367a14bc24cff90ccc5d55dfd213b">ContentWidget</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="el" href="classhal_1_1_content_widget.html#a23da38240acece4cf72de0c1d91c5285">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:af68367a14bc24cff90ccc5d55dfd213b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08d76ceb8080776f6b87af4a3bd6e6d8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a08d76ceb8080776f6b87af4a3bd6e6d8">setupToolbar</a> (<a class="el" href="classhal_1_1_toolbar.html">Toolbar</a> *<a class="el" href="classhal_1_1_toolbar.html">Toolbar</a>)</td></tr>
 <tr class="separator:a08d76ceb8080776f6b87af4a3bd6e6d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,15 +194,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afd4e83b53eaa23def77bebf872e5fe8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcce27bb3fdc3734c38a9f92802170b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#abcce27bb3fdc3734c38a9f92802170b9">repolish</a> ()</td></tr>
 <tr class="separator:abcce27bb3fdc3734c38a9f92802170b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac99228c611d75a8b5f459f77254258f6"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a> ()</td></tr>
-<tr class="separator:ac99228c611d75a8b5f459f77254258f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f35c56e055977451d4bad8c11716589"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a3f35c56e055977451d4bad8c11716589">icon</a> ()</td></tr>
-<tr class="separator:a3f35c56e055977451d4bad8c11716589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23da38240acece4cf72de0c1d91c5285"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a23da38240acece4cf72de0c1d91c5285">name</a> () const</td></tr>
+<tr class="separator:a23da38240acece4cf72de0c1d91c5285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9663ae72248e9c072ca407fed07e923a"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a9663ae72248e9c072ca407fed07e923a">icon</a> () const</td></tr>
+<tr class="separator:a9663ae72248e9c072ca407fed07e923a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95a6d6699dade8d1256d3b308b796b0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a95a6d6699dade8d1256d3b308b796b0d">setAnchor</a> (<a class="el" href="classhal_1_1_content_anchor.html">ContentAnchor</a> *anchor)</td></tr>
 <tr class="separator:a95a6d6699dade8d1256d3b308b796b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af94adef57e874fab4af873ad5f866b8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af94adef57e874fab4af873ad5f866b8e">setIcon</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="el" href="classhal_1_1_content_widget.html#a3f35c56e055977451d4bad8c11716589">icon</a>)</td></tr>
+<tr class="memitem:af94adef57e874fab4af873ad5f866b8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#af94adef57e874fab4af873ad5f866b8e">setIcon</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> <a class="el" href="classhal_1_1_content_widget.html#a9663ae72248e9c072ca407fed07e923a">icon</a>)</td></tr>
 <tr class="separator:af94adef57e874fab4af873ad5f866b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a534c1681313a2a2d05c550cbc6bb17fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a534c1681313a2a2d05c550cbc6bb17fe">set_name</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_content_widget.html#ac99228c611d75a8b5f459f77254258f6">name</a>)</td></tr>
+<tr class="memitem:a534c1681313a2a2d05c550cbc6bb17fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a534c1681313a2a2d05c550cbc6bb17fe">set_name</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_content_widget.html#a23da38240acece4cf72de0c1d91c5285">name</a>)</td></tr>
 <tr class="separator:a534c1681313a2a2d05c550cbc6bb17fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Q_PROPERTY READ Functions</div></td></tr>
 <tr class="memitem:a53d853218de31b9fdb923f2773c6656f"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a53d853218de31b9fdb923f2773c6656f">iconStyle</a> ()</td></tr>
@@ -884,6 +889,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a967488363abaed7b1509455c8bd4be21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fe07a490c09775afe6b10a4476f6c07"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qkeysequence.html">QKeySequence</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a0fe07a490c09775afe6b10a4476f6c07">mSearchKeysequence</a></td></tr>
 <tr class="separator:a0fe07a490c09775afe6b10a4476f6c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89b63431c6f7956a5cc04579bb2ae922"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a89b63431c6f7956a5cc04579bb2ae922">mDetachedFrame</a></td></tr>
+<tr class="separator:a89b63431c6f7956a5cc04579bb2ae922"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
@@ -1193,7 +1200,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Abstract class for <a class="el" href="classhal_1_1_widget.html" title="A QWidget customized for hal.">Widget</a>s within HAL's ContentArea. </p>
 <p>The <a class="el" href="classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea.">ContentWidget</a> class is the base class that has to be derived from in order to be put in hal's ContentArea. It provides the necessary interface for the docking system as well as functions that can be overwritten to configure its shortcuts and toolbar. </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00049">49</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00050">50</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af68367a14bc24cff90ccc5d55dfd213b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af68367a14bc24cff90ccc5d55dfd213b">&#9670;&nbsp;</a></span>ContentWidget()</h2>
@@ -1239,7 +1246,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00013">13</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#addFile">QIcon::addFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="el" href="content__widget_8h_source.html#l00246">mContentLayout</a>, <a class="el" href="content__widget_8cpp_source.html#l00076">name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#Mode-enum">QIcon::Normal</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#State-enum">QIcon::Off</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="el" href="content__widget_8cpp_source.html#l00091">setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSize-prop">QWidget::setMinimumSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">QWidget::setWindowTitle()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#addFile">QIcon::addFile()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="el" href="content__widget_8h_source.html#l00258">mContentLayout</a>, <a class="el" href="content__widget_8cpp_source.html#l00080">name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#Mode-enum">QIcon::Normal</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qicon.html#State-enum">QIcon::Off</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#setContentsMargins">QLayout::setContentsMargins()</a>, <a class="el" href="content__widget_8cpp_source.html#l00105">setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setLayout">QWidget::setLayout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#minimumSize-prop">QWidget::setMinimumSize()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#setSpacing">QBoxLayout::setSpacing()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">QWidget::setWindowTitle()</a>.</p>
 
 </div>
 </div>
@@ -1268,11 +1275,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Closes (hides) the widget in its anchor (related to the docking system). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00065">65</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00068">68</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9">hal::ContentAnchor::close()</a>, <a class="el" href="classhal_1_1_content_widget.html#ae7cd3e086ea57aa9e1bcc15b7b5eb79e">closed()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_content_anchor.html#a496d11b75abd78806245592ad9c247c9">hal::ContentAnchor::close()</a>, <a class="el" href="classhal_1_1_content_widget.html#ae7cd3e086ea57aa9e1bcc15b7b5eb79e">closed()</a>, <a class="el" href="content__widget_8h_source.html#l00262">mDetachedFrame</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dock__button_8cpp_source.html#l00121">hal::DockButton::handleClicked()</a>, and <a class="el" href="dock__bar_8cpp_source.html#l00035">hal::DockBar::mouseMoveEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dock__button_8cpp_source.html#l00121">hal::DockButton::handleClicked()</a>, and <a class="el" href="dock__bar_8cpp_source.html#l00034">hal::DockBar::mouseMoveEvent()</a>.</p>
 
 </div>
 </div>
@@ -1300,7 +1307,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted when the widget is closed (hidden in the anchor) (related to the docking system). </p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00065">close()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00068">close()</a>.</p>
 
 </div>
 </div>
@@ -1331,9 +1338,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_python_editor.html#a31ecbe738cd82651fb8ee75773a5bdc5">hal::PythonEditor</a>, <a class="el" href="classhal_1_1_python_console_widget.html#a9b2dfe3a99a9ad14e7c41cb4fca79ff9">hal::PythonConsoleWidget</a>, <a class="el" href="classhal_1_1_module_widget.html#a798ad3e1c0200a711fbce9fbdb8f6c4b">hal::ModuleWidget</a>, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a50579b43f210408c9da1b484e22c89ba">hal::GroupingManagerWidget</a>, and <a class="el" href="classhal_1_1_graph_tab_widget.html#a5c8b215c5d93a71a77f26106ebc63f5c">hal::GraphTabWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00104">104</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00118">118</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00122">hal::TabWidget::open()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00121">hal::TabWidget::open()</a>.</p>
 
 </div>
 </div>
@@ -1361,11 +1368,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Detaches the widget from its anchor (related to the docking system). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00038">38</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00039">39</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_content_anchor.html#ac4af161894ff9b1834dcb6d95f4c2d1d">hal::ContentAnchor::detach()</a>, <a class="el" href="classhal_1_1_content_widget.html#a4c6a567e4b2c6b1bab14e328999f8bce">detached()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_content_anchor.html#a99b725a175f02628b4e038246bbbf1de">hal::ContentAnchor::detach()</a>, <a class="el" href="classhal_1_1_content_widget.html#a4c6a567e4b2c6b1bab14e328999f8bce">detached()</a>, <a class="el" href="content__widget_8h_source.html#l00262">mDetachedFrame</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00085">hal::ContentFrame::detachWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00085">hal::ContentFrame::detachWidget()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00115">hal::SettingsManager::widgetDetach()</a>.</p>
 
 </div>
 </div>
@@ -1393,7 +1400,39 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted when the widget is detached from its anchor (related to the docking system). </p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00038">detach()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00039">detach()</a>.</p>
+
+</div>
+</div>
+<a id="af70decb33d7fd19600678caecfafcba1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af70decb33d7fd19600678caecfafcba1">&#9670;&nbsp;</a></span>detachedFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> * hal::ContentWidget::detachedFrame </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Detached frame if widget is detached, nullptr otherwise </p>
+
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00090">90</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="content__widget_8h_source.html#l00262">mDetachedFrame</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="settings__manager_8cpp_source.html#l00115">hal::SettingsManager::widgetDetach()</a>.</p>
 
 </div>
 </div>
@@ -1428,16 +1467,16 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00148">148</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00162">162</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="content__widget_8h_source.html#l00249">mSearchKeysequence</a>, <a class="el" href="content__widget_8h_source.html#l00248">mSearchShortcut</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qshortcut.html#key-prop">QShortcut::setKey()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8h_source.html#l00261">mSearchKeysequence</a>, <a class="el" href="content__widget_8h_source.html#l00260">mSearchShortcut</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qshortcut.html#key-prop">QShortcut::setKey()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00187">hal::ContentManager::handleOpenDocument()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00190">hal::ContentManager::handleOpenDocument()</a>.</p>
 
 </div>
 </div>
-<a id="a3f35c56e055977451d4bad8c11716589"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f35c56e055977451d4bad8c11716589">&#9670;&nbsp;</a></span>icon()</h2>
+<a id="a9663ae72248e9c072ca407fed07e923a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9663ae72248e9c072ca407fed07e923a">&#9670;&nbsp;</a></span>icon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1446,16 +1485,16 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qicon.html">QIcon</a> hal::ContentWidget::icon </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Get the loaded and processed icon that can be set in the stylesheet.</p>
 <dl class="section return"><dt>Returns</dt><dd>The icon. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00081">81</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00085">85</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00091">setIcon()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00105">setIcon()</a>.</p>
 
 </div>
 </div>
@@ -1497,8 +1536,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ac99228c611d75a8b5f459f77254258f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac99228c611d75a8b5f459f77254258f6">&#9670;&nbsp;</a></span>name()</h2>
+<a id="a23da38240acece4cf72de0c1d91c5285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23da38240acece4cf72de0c1d91c5285">&#9670;&nbsp;</a></span>name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1507,16 +1546,16 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::ContentWidget::name </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Get the widget's displayed name (actually displayed within the <a class="el" href="classhal_1_1_content_frame.html" title="Wraps the ContentWidget class.">ContentFrame</a>'s area).</p>
 <dl class="section return"><dt>Returns</dt><dd>The name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00076">76</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00080">80</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00111">hal::ContentLayoutArea::addContent()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00162">hal::GraphTabWidget::addTab()</a>, <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, <a class="el" href="module__widget_8cpp_source.html#l00034">hal::ModuleWidget::ModuleWidget()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00096">set_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__layout__area_8cpp_source.html#l00123">hal::ContentLayoutArea::addContent()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00162">hal::GraphTabWidget::addTab()</a>, <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="dock__button_8cpp_source.html#l00012">hal::DockButton::DockButton()</a>, <a class="el" href="module__widget_8cpp_source.html#l00034">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="content__widget_8cpp_source.html#l00110">set_name()</a>, <a class="el" href="settings__manager_8cpp_source.html#l00115">hal::SettingsManager::widgetDetach()</a>, and <a class="el" href="settings__manager_8cpp_source.html#l00127">hal::SettingsManager::widgetPlacement()</a>.</p>
 
 </div>
 </div>
@@ -1551,7 +1590,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00096">set_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00110">set_name()</a>.</p>
 
 </div>
 </div>
@@ -1579,11 +1618,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Opens (displays) the widget in its anchor (related to the docking system). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00056">56</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00059">59</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_content_anchor.html#aa4c6d92e189efdfcc470dbe61d1a6d23">hal::ContentAnchor::open()</a>, <a class="el" href="classhal_1_1_content_widget.html#a78278df05cea6a3903bda378f2d0e84b">opened()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00308">hal::ContentManager::addExternalWidget()</a>, <a class="el" href="dock__button_8cpp_source.html#l00121">hal::DockButton::handleClicked()</a>, and <a class="el" href="content__manager_8cpp_source.html#l00187">hal::ContentManager::handleOpenDocument()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00299">hal::ContentManager::addExternalWidget()</a>, and <a class="el" href="dock__button_8cpp_source.html#l00121">hal::DockButton::handleClicked()</a>.</p>
 
 </div>
 </div>
@@ -1611,7 +1650,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted when the widget is opened (displayed in the anchor) (related to the docking system). </p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00056">open()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00059">open()</a>.</p>
 
 </div>
 </div>
@@ -1639,9 +1678,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Reattaches the widget to its anchor (related to the docking system). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00047">47</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00049">49</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="classhal_1_1_content_anchor.html#a063bb055da54fa4ffd3689e813cf6067">hal::ContentAnchor::reattach()</a>, and <a class="el" href="classhal_1_1_content_widget.html#afe433e3bfe0effe6ddc5de6a2a81e4fb">reattached()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8h_source.html#l00262">mDetachedFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="classhal_1_1_content_anchor.html#a063bb055da54fa4ffd3689e813cf6067">hal::ContentAnchor::reattach()</a>, and <a class="el" href="classhal_1_1_content_widget.html#afe433e3bfe0effe6ddc5de6a2a81e4fb">reattached()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00091">hal::ContentFrame::reattachWidget()</a>.</p>
 
@@ -1671,7 +1710,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted when the widget is reattached to its anchor (related to the docking system). </p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00047">reattach()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00049">reattach()</a>.</p>
 
 </div>
 </div>
@@ -1699,7 +1738,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Removes the widget from its anchor (related to the docking system). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00029">29</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00030">30</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="classhal_1_1_content_anchor.html#a850d7c8d3cdad50d4b135246aebd2c71">hal::ContentAnchor::remove()</a>, and <a class="el" href="classhal_1_1_content_widget.html#a90ba2df3b6f51f27a41dece20a350d29">removed()</a>.</p>
 
@@ -1731,7 +1770,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted when the widget is removed from its anchor (related to the docking system). </p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00029">remove()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00030">remove()</a>.</p>
 
 </div>
 </div>
@@ -1751,11 +1790,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Reapplies the current Stylesheet by using the <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html">QStyle</a>'s unpolish and polish functions. It is necessary because certain aspects of a widgets are not automatically set and rendered just by calling setStylesheet() when switched to a new one (for example when a new theme wants to be applied at runtime). </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00109">109</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00123">123</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#polish">QStyle::polish()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstyle.html#unpolish">QStyle::unpolish()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00139">setIconPath()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00130">setIconStyle()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00153">setIconPath()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00144">setIconStyle()</a>.</p>
 
 </div>
 </div>
@@ -1783,9 +1822,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Derived classes might want to restore content from project directory. </p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00233">233</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00234">234</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00308">hal::ContentManager::addExternalWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00299">hal::ContentManager::addExternalWidget()</a>, and <a class="el" href="content__manager_8cpp_source.html#l00190">hal::ContentManager::handleOpenDocument()</a>.</p>
 
 </div>
 </div>
@@ -1812,9 +1851,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00096">96</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00110">110</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00076">name()</a>, <a class="el" href="classhal_1_1_content_widget.html#aa4b2e0e8c067b51bab780dfdbe345ac6">name_changed()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00080">name()</a>, <a class="el" href="classhal_1_1_content_widget.html#aa4b2e0e8c067b51bab780dfdbe345ac6">name_changed()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
 </div>
 </div>
@@ -1841,9 +1880,47 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00086">86</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00100">100</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="tab__widget_8cpp_source.html#l00058">hal::TabWidget::add()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00021">hal::SplitterAnchor::add()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00067">hal::TabWidget::remove()</a>, and <a class="el" href="splitter__anchor_8cpp_source.html#l00032">hal::SplitterAnchor::remove()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="tab__widget_8cpp_source.html#l00060">hal::TabWidget::add()</a>, <a class="el" href="splitter__anchor_8cpp_source.html#l00023">hal::SplitterAnchor::add()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00069">hal::TabWidget::remove()</a>, and <a class="el" href="splitter__anchor_8cpp_source.html#l00039">hal::SplitterAnchor::remove()</a>.</p>
+
+</div>
+</div>
+<a id="af04370878c4217ef409b343832b6157d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af04370878c4217ef409b343832b6157d">&#9670;&nbsp;</a></span>setDetachedFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::ContentWidget::setDetachedFrame </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a> *&#160;</td>
+          <td class="paramname"><em>df</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set pointer to frame when detached, to nullptr when reattached </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">df</td><td>- pointer to frame </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00095">95</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="content__widget_8h_source.html#l00262">mDetachedFrame</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="tab__widget_8cpp_source.html#l00156">hal::TabWidget::close()</a>, <a class="el" href="tab__widget_8cpp_source.html#l00087">hal::TabWidget::detach()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00108">hal::TabWidget::reattach()</a>.</p>
 
 </div>
 </div>
@@ -1870,9 +1947,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00091">91</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00105">105</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00081">icon()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00085">icon()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>.</p>
 
@@ -1901,9 +1978,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00139">139</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00153">153</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00109">repolish()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00123">repolish()</a>.</p>
 
 </div>
 </div>
@@ -1930,9 +2007,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00130">130</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00144">144</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00109">repolish()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
+<p class="reference">References <a class="el" href="content__widget_8cpp_source.html#l00123">repolish()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
 </div>
 </div>
@@ -1969,9 +2046,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_selection_details_widget.html#ac9fce7b5132c6322acb670e39e7631a5">hal::SelectionDetailsWidget</a>, <a class="el" href="classhal_1_1_python_editor.html#a798358bbbc28d11a1e36ed505fbf9255">hal::PythonEditor</a>, <a class="el" href="classhal_1_1_python_console_widget.html#ae3dd67a328353a6247319741346741ab">hal::PythonConsoleWidget</a>, <a class="el" href="classhal_1_1_module_widget.html#af3288d2d2b62b819dcade360f5b82db9">hal::ModuleWidget</a>, <a class="el" href="classhal_1_1_logger_widget.html#a1d261def9cb41c2b0d82d2b4626a6708">hal::LoggerWidget</a>, <a class="el" href="classhal_1_1_grouping_manager_widget.html#a2246dddd6c1526899bc5701555b2ccad">hal::GroupingManagerWidget</a>, and <a class="el" href="classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024">hal::ContextManagerWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00102">102</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8cpp_source.html#l00116">116</a> of file <a class="el" href="content__widget_8cpp_source.html">content_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00122">hal::TabWidget::open()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="content__frame_8cpp_source.html#l00013">hal::ContentFrame::ContentFrame()</a>, and <a class="el" href="tab__widget_8cpp_source.html#l00121">hal::TabWidget::open()</a>.</p>
 
 </div>
 </div>
@@ -1996,9 +2073,35 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00246">246</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00258">258</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00013">ContentWidget()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00041">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00107">hal::GraphTabWidget::GraphTabWidget()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00058">hal::GraphWidget::GraphWidget()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00039">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00026">hal::LoggerWidget::LoggerWidget()</a>, <a class="el" href="module__widget_8cpp_source.html#l00034">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__console__widget_8cpp_source.html#l00009">hal::PythonConsoleWidget::PythonConsoleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00207">hal::PythonEditor::PythonEditor()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
+
+</div>
+</div>
+<a id="a89b63431c6f7956a5cc04579bb2ae922"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b63431c6f7956a5cc04579bb2ae922">&#9670;&nbsp;</a></span>mDetachedFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_content_frame.html">ContentFrame</a>* hal::ContentWidget::mDetachedFrame</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00262">262</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="content__widget_8cpp_source.html#l00068">close()</a>, <a class="el" href="content__widget_8cpp_source.html#l00039">detach()</a>, <a class="el" href="content__widget_8cpp_source.html#l00090">detachedFrame()</a>, <a class="el" href="content__widget_8cpp_source.html#l00049">reattach()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00095">setDetachedFrame()</a>.</p>
 
 </div>
 </div>
@@ -2022,7 +2125,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00247">247</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00259">259</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="context__manager__widget_8cpp_source.html#l00041">hal::ContextManagerWidget::ContextManagerWidget()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00131">hal::GroupingManagerWidget::createShortcuts()</a>, <a class="el" href="module__widget_8cpp_source.html#l00179">hal::ModuleWidget::createShortcuts()</a>, <a class="el" href="python__editor_8cpp_source.html#l00481">hal::PythonEditor::createShortcuts()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00423">hal::SelectionDetailsWidget::createShortcuts()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00433">hal::ContextManagerWidget::enableSearchbar()</a>, <a class="el" href="grouping__manager__widget_8cpp_source.html#l00039">hal::GroupingManagerWidget::GroupingManagerWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00426">hal::PythonEditor::handleCurrentTabChanged()</a>, <a class="el" href="python__editor_8cpp_source.html#l00415">hal::PythonEditor::handleSearchbarTextEdited()</a>, <a class="el" href="module__widget_8cpp_source.html#l00034">hal::ModuleWidget::ModuleWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00207">hal::PythonEditor::PythonEditor()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00820">hal::PythonEditor::setToolbarButtonsEnabled()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00422">hal::ContextManagerWidget::setupToolbar()</a>, <a class="el" href="module__widget_8cpp_source.html#l00169">hal::ModuleWidget::setupToolbar()</a>, <a class="el" href="python__editor_8cpp_source.html#l00470">hal::PythonEditor::setupToolbar()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00459">hal::SelectionDetailsWidget::setupToolbar()</a>, <a class="el" href="module__widget_8cpp_source.html#l00190">hal::ModuleWidget::toggleSearchbar()</a>, <a class="el" href="python__editor_8cpp_source.html#l01615">hal::PythonEditor::toggleSearchbar()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00372">hal::ContextManagerWidget::updateSearchIcon()</a>, <a class="el" href="module__widget_8cpp_source.html#l00358">hal::ModuleWidget::updateSearchIcon()</a>, and <a class="el" href="python__editor_8cpp_source.html#l01146">hal::PythonEditor::updateSearchIcon()</a>.</p>
 
@@ -2048,9 +2151,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00249">249</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00261">261</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="grouping__manager__widget_8cpp_source.html#l00131">hal::GroupingManagerWidget::createShortcuts()</a>, <a class="el" href="module__widget_8cpp_source.html#l00179">hal::ModuleWidget::createShortcuts()</a>, <a class="el" href="python__editor_8cpp_source.html#l00481">hal::PythonEditor::createShortcuts()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00423">hal::SelectionDetailsWidget::createShortcuts()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00148">handleSearchKeysequenceChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__manager__widget_8cpp_source.html#l00131">hal::GroupingManagerWidget::createShortcuts()</a>, <a class="el" href="module__widget_8cpp_source.html#l00179">hal::ModuleWidget::createShortcuts()</a>, <a class="el" href="python__editor_8cpp_source.html#l00481">hal::PythonEditor::createShortcuts()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00423">hal::SelectionDetailsWidget::createShortcuts()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00162">handleSearchKeysequenceChanged()</a>.</p>
 
 </div>
 </div>
@@ -2074,9 +2177,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00248">248</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__widget_8h_source.html#l00260">260</a> of file <a class="el" href="content__widget_8h_source.html">content_widget.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="grouping__manager__widget_8cpp_source.html#l00131">hal::GroupingManagerWidget::createShortcuts()</a>, <a class="el" href="module__widget_8cpp_source.html#l00179">hal::ModuleWidget::createShortcuts()</a>, <a class="el" href="python__editor_8cpp_source.html#l00481">hal::PythonEditor::createShortcuts()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00423">hal::SelectionDetailsWidget::createShortcuts()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00148">handleSearchKeysequenceChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__manager__widget_8cpp_source.html#l00131">hal::GroupingManagerWidget::createShortcuts()</a>, <a class="el" href="module__widget_8cpp_source.html#l00179">hal::ModuleWidget::createShortcuts()</a>, <a class="el" href="python__editor_8cpp_source.html#l00481">hal::PythonEditor::createShortcuts()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00423">hal::SelectionDetailsWidget::createShortcuts()</a>, and <a class="el" href="content__widget_8cpp_source.html#l00162">handleSearchKeysequenceChanged()</a>.</p>
 
 </div>
 </div>
@@ -2143,7 +2246,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_content_widget.html">ContentWidget</a></li>
-    <li class="footer">Generated on Tue Dec 16 2025 17:26:27 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jan 8 2026 16:01:54 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

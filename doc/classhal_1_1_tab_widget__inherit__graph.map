@@ -1,6 +1,6 @@
 <map id="hal::TabWidget" name="hal::TabWidget">
-<area shape="rect" id="node1" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="92,696,277,891"/>
-<area shape="rect" id="node2" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="55,512,163,633"/>
+<area shape="rect" id="node1" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="92,711,277,905"/>
+<area shape="rect" id="node2" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="55,519,163,641"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,5,212,449"/>
-<area shape="rect" id="node4" href="$classhal_1_1_content_anchor.html" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="187,497,334,648"/>
+<area shape="rect" id="node4" href="$classhal_1_1_content_anchor.html" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="187,497,334,663"/>
 </map>

@@ -15,6 +15,7 @@ var classhal_1_1_dock_bar =
     [ "handleDragEnd", "classhal_1_1_dock_bar.html#ab35e53a657477bf605c490f28ca66d52", null ],
     [ "handleDragStart", "classhal_1_1_dock_bar.html#ad66811a7a674c3a88984a9043ba37f2d", null ],
     [ "index", "classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce", null ],
+    [ "isHidden", "classhal_1_1_dock_bar.html#a21963ee3bbcf3adf7e5161e225d72804", null ],
     [ "minimumSizeHint", "classhal_1_1_dock_bar.html#a1f29836fd8f4fc64b6aa42889b941ea8", null ],
     [ "mouseMoveEvent", "classhal_1_1_dock_bar.html#a03347d7bde11b4406ce5edaba444691e", null ],
     [ "nextAvailableWidget", "classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4", null ],

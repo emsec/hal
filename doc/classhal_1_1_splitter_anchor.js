@@ -1,12 +1,11 @@
 var classhal_1_1_splitter_anchor =
 [
-    [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html#a913d050c07582f0d6195aa2696f37a93", null ],
+    [ "SplitterAnchor", "classhal_1_1_splitter_anchor.html#a084a08cbd22e9b43d3cb7698d2f9aefd", null ],
     [ "add", "classhal_1_1_splitter_anchor.html#a4d2651b9f557d4e64854f731bafbfae9", null ],
     [ "clear", "classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49", null ],
     [ "close", "classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6", null ],
     [ "contentChanged", "classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4", null ],
-    [ "count", "classhal_1_1_splitter_anchor.html#a0b98740e8434f3f2c758f09eb43f25a8", null ],
-    [ "detach", "classhal_1_1_splitter_anchor.html#ad36265c03bb7b96e1f5aeff8ae5adc33", null ],
+    [ "detach", "classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4", null ],
     [ "open", "classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b", null ],
     [ "reattach", "classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5", null ],
     [ "remove", "classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1", null ]

@@ -1,11 +1,12 @@
 <map id="hal::ContentWidget" name="hal::ContentWidget">
-<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="245,1575,524,1960"/>
-<area shape="rect" id="node2" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="61,1303,169,1424"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,396,212,840"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="167,5,333,347"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="129,864,318,1191"/>
-<area shape="rect" id="node9" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qshortcut.html" title=" " alt="" coords="325,923,447,1132"/>
-<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="535,1310,682,1417"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qboxlayout.html" title=" " alt="" coords="540,506,677,730"/>
-<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qkeysequence.html" title=" " alt="" coords="706,1215,850,1512"/>
+<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="378,1575,527,1945"/>
+<area shape="rect" id="node2" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,1303,113,1424"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="127,396,333,840"/>
+<area shape="rect" id="node9" href="$classhal_1_1_content_frame.html" title="Wraps the ContentWidget class." alt="" coords="138,1288,325,1439"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="288,5,455,347"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qaction.html" title=" " alt="" coords="277,864,466,1191"/>
+<area shape="rect" id="node10" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qshortcut.html" title=" " alt="" coords="473,923,595,1132"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="685,1310,831,1417"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qboxlayout.html" title=" " alt="" coords="689,506,827,730"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qkeysequence.html" title=" " alt="" coords="855,1215,999,1512"/>
 </map>
