@@ -250,6 +250,13 @@ namespace hal
          */
         void clear();
 
+        /**
+         * Returns the 'hidden' property for index button
+         * @param index - The index for the content widget.
+         * @return true if the button is hidden (the widget detached)
+         */
+        bool isHidden(int index) const;
+
     Q_SIGNALS:
 
         /**

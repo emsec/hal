@@ -1,6 +1,5 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
-#include "gui/content_layout_area/content_layout_area.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/docking_system/tab_widget.h"
@@ -8,12 +7,10 @@
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/graph_widget/graph_context_serializer.h"
-#include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_proxy_model.h"
 #include "gui/gui_globals.h"
-#include "gui/gui_utils/graphics.h"
 #include "gui/gui_utils/sort.h"
 #include "gui/gui_utils/special_log_content_manager.h"
 #include "gui/logger/logger_widget.h"
@@ -24,14 +21,19 @@
 #include "gui/python/python_editor.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/settings/settings_manager.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+/*
+#include "gui/content_layout_area/content_layout_area.h"
+#include "gui/graph_widget/graph_graphics_view.h"
+#include "gui/gui_utils/graphics.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/plugin_manager.h"
-
+*/
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
@@ -104,7 +106,6 @@ namespace hal
     }
 
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
-        mExternalIndex(0),
         mPythonConsoleWidget(nullptr),
         mPythonWidget(nullptr),
         mGraphTabWidget(nullptr),
@@ -136,20 +137,22 @@ namespace hal
             it.value()->deleteLater();
             it = ExternalContent::instance()->openWidgets.erase(it);
         }
-        for (auto content : mContent)
-            delete content;
 
-        mContent.clear();
+        //mPythonWidget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
-        //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
-
+        mPythonConsoleWidget->deleteLater();
         mPythonConsoleWidget    = nullptr;
-//        mPythonWidget           = nullptr;
+        mGraphTabWidget->deleteLater();
         mGraphTabWidget         = nullptr;
+        mModuleWidget->deleteLater();
         mModuleWidget           = nullptr;
+        mContextManagerWidget->deleteLater();
         mContextManagerWidget   = nullptr;
+        mGroupingManagerWidget->deleteLater();
         mGroupingManagerWidget  = nullptr;
+        mSelectionDetailsWidget->deleteLater();
         mSelectionDetailsWidget = nullptr;
+        mLoggerWidget->deleteLater();
         mLoggerWidget           = nullptr;
         if (mContextSerializer) delete mContextSerializer;
     }
@@ -186,67 +189,59 @@ namespace hal
 
     void ContentManager::handleOpenDocument(const QString& fileName)
     {
-        mExternalIndex = 1;
+        int rightIndex = 1;
 
-        mGraphTabWidget = new GraphTabWidget();
-        mMainWindow->addContent(mGraphTabWidget, 0, content_anchor::center);
+        mGraphTabWidget         = new GraphTabWidget;
+        mModuleWidget           = new ModuleWidget;
+        mContextManagerWidget   = new ContextManagerWidget(mGraphTabWidget);
+        mGroupingManagerWidget  = new GroupingManagerWidget;
+        mSelectionDetailsWidget = new SelectionDetailsWidget;
+        mLoggerWidget           = new LoggerWidget;
+        mPythonConsoleWidget    = new PythonConsoleWidget;
 
-        mModuleWidget = new ModuleWidget();
-        mMainWindow->addContent(mModuleWidget, 0, content_anchor::left);
-        mModuleWidget->open();
+        QList<ContentWidgetPlacement> contentPlaceList;
+        contentPlaceList.append({mGraphTabWidget,         0, ContentLayout::Position::Center, true});
+        contentPlaceList.append({mModuleWidget,           0, ContentLayout::Position::Left,   true});
+        contentPlaceList.append({mContextManagerWidget,   1, ContentLayout::Position::Left,   true});
+        contentPlaceList.append({mGroupingManagerWidget,  2, ContentLayout::Position::Left,   true});
+        contentPlaceList.append({mSelectionDetailsWidget, 0, ContentLayout::Position::Bottom, true});
+        contentPlaceList.append({mLoggerWidget,           1, ContentLayout::Position::Bottom, false});
+        contentPlaceList.append({mPythonConsoleWidget,    2, ContentLayout::Position::Bottom, true});
+        contentPlaceList.append({mPythonWidget,           0, ContentLayout::Position::Right,  true});
 
-        mContextManagerWidget = new ContextManagerWidget(mGraphTabWidget);
-        mMainWindow->addContent(mContextManagerWidget, 1, content_anchor::left);
-        mContextManagerWidget->open();
+        for (ContentFactory* cf : *ExternalContent::instance())
+        {
+            ContentWidget* cw = cf->contentFactory();
+            cw->restoreFromProject();
+            contentPlaceList.append({cw, rightIndex++, ContentLayout::Position::Right, true});
+        }
 
-        mGroupingManagerWidget = new GroupingManagerWidget();
-        mMainWindow->addContent(mGroupingManagerWidget, 2, content_anchor::left);
-        mGroupingManagerWidget->open();
+        for (ContentWidgetPlacement& cwp : contentPlaceList)
+        {
+            ContentWidgetPlacement settingPlacement = SettingsManager::instance()->widgetPlacement(cwp.widget);
+            if (settingPlacement.index >= 0)
+                cwp = settingPlacement;
+        }
 
-        //we should probably document somewhere why we need this timer and why we have some sort of racing condition(?) here?
-        //QTimer::singleShot(50, [this]() { this->mContextManagerWid->handleCreateContextClicked(); });
+        int placeIndex = 0;
+        while (!contentPlaceList.isEmpty())
+        {
+            auto it = contentPlaceList.begin();
+            while (it != contentPlaceList.end())
+            {
+                if (it->index == placeIndex)
+                {
+                    mMainWindow->addContent(it->widget, it->index, it->anchorPos);
+                    if (it->visible) it->widget->open();
 
-        //executes same code as found in 'create_context_clicked' from the context manager widget but allows to keep its method private
-        /*
-        QTimer::singleShot(50, [this]() {
-
-            GraphContext* new_context = nullptr;
-            new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-            new_context->add({gNetlist->get_top_module()->get_id()}, {});
-
-            mContextManagerWidget->selectViewContext(new_context);
-            gGraphContextManager->restoreFromFile();
-            new_context->setDirty(false);
-        });
-*/
-        //why does this segfault without a timer?
-        //GraphContext* new_context = nullptr;
-        //new_context = gGraphContextManager->createNewContext(QString::fromStdString(gNetlist->get_top_module()->get_name()));
-        //new_context->add({gNetlist->get_top_module()->get_id()}, {});
-        //mContextManagerWid->selectViewContext(new_context);
-
-        mSelectionDetailsWidget = new SelectionDetailsWidget();
-        mMainWindow->addContent(mSelectionDetailsWidget, 0, content_anchor::bottom);
-        mSelectionDetailsWidget->open();
-
-        mLoggerWidget = new LoggerWidget();
-        mMainWindow->addContent(mLoggerWidget, 1, content_anchor::bottom);
-
-        mMainWindow->addContent(mPythonWidget, 3, content_anchor::right);
-        mPythonWidget->open();
-
-        mPythonConsoleWidget = new PythonConsoleWidget();
-        mMainWindow->addContent(mPythonConsoleWidget, 2, content_anchor::bottom);
-        mPythonConsoleWidget->open();
-
-        mContent.append(mGraphTabWidget);
-        mContent.append(mModuleWidget);
-        mContent.append(mContextManagerWidget);
-        mContent.append(mGroupingManagerWidget);
-        mContent.append(mSelectionDetailsWidget);
-        mContent.append(mLoggerWidget);
-        //mContent.append(mPythonWidget); // DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
-        mContent.append(mPythonConsoleWidget);
+                    SettingsManager::instance()->widgetDetach(it->widget);
+                    it = contentPlaceList.erase(it);
+                }
+                else
+                    ++it;
+            }
+            ++placeIndex;
+        }
 
         setWindowTitle(fileName);
 
@@ -291,11 +286,6 @@ namespace hal
             gGraphContextManager->restoreFromFile(fileName + "v");
         }
 
-        for (ContentFactory* cf : *ExternalContent::instance())
-        {
-            addExternalWidget(cf);
-        }
-
         if (selectedContext)
             mContextManagerWidget->selectViewContext(selectedContext);
         mContextManagerWidget->handleOpenContextClicked();
@@ -303,12 +293,13 @@ namespace hal
         for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
             geif->netlist_loaded(gNetlist);
 
+        mMainWindow->layoutArea()->restoreSplitter();
     }
 
     void ContentManager::addExternalWidget(ContentFactory* factory)
     {
         ContentWidget* cw = factory->contentFactory();
-        mMainWindow->addContent(cw, mExternalIndex++, content_anchor::right);
+        mMainWindow->addContent(cw, 1, ContentLayout::Position::Right);
         cw->open();
         cw->restoreFromProject();
     }

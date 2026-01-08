@@ -36,6 +36,7 @@ class QVBoxLayout;
 namespace hal
 {
     class ContentAnchor;
+    class ContentFrame;
     class Toolbar;
 
     /**
@@ -89,14 +90,14 @@ namespace hal
          *
          * @return The name.
          */
-        QString name();
+        QString name() const;
 
         /**
          * Get the loaded and processed icon that can be set in the stylesheet.
          *
          * @return The icon.
          */
-        QIcon icon();
+        QIcon icon() const;
 
         /**
          * Sets the anchor of the content widget. This function is used by the docking system.
@@ -232,6 +233,17 @@ namespace hal
          */
         virtual void restoreFromProject() {;}
 
+        /**
+         * Detached frame if widget is detached, nullptr otherwise
+         */
+        ContentFrame* detachedFrame() const;
+
+        /**
+         * Set pointer to frame when detached, to nullptr when reattached
+         * @param df - pointer to frame
+         */
+        void setDetachedFrame(ContentFrame* df);
+
     private:
         void closeEvent(QCloseEvent* event);
 
@@ -247,5 +259,6 @@ namespace hal
         QAction* mSearchAction;
         QShortcut* mSearchShortcut;
         QKeySequence mSearchKeysequence;
+        ContentFrame* mDetachedFrame;
     };
 }

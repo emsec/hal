@@ -288,7 +288,7 @@ namespace hal
          * @param index - The position index within the anchor, the widget should be put in
          * @param anchor - The anchor, the widget should be assigned to
          */
-        void addContent(ContentWidget* widget, int index, content_anchor anchor);
+        void addContent(ContentWidget* widget, int index, ContentLayout::Position anchor);
 
         /**
          * Remove a content widget from the layout area.
@@ -426,6 +426,11 @@ namespace hal
         void enableUndo(bool enable=true);
 
         void reloadStylsheet(int istyle);
+
+        /**
+         * Getter for content layout area, needed to restore gui settings by content manager
+         */
+        ContentLayoutArea* layoutArea() const;
 
     private Q_SLOTS:
         /**

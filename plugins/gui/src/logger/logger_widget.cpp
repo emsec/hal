@@ -52,6 +52,15 @@ namespace hal
 
         ChannelModel* model = ChannelModel::instance();
         connect(model, SIGNAL(updated(spdlog::level::level_enum, std::string, std::string)), this, SLOT(handleChannelUpdated(spdlog::level::level_enum, std::string, std::string)));
+
+        mSearchAction = new QAction(this);
+        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+
+        mChannelLabel = new QLabel(this);
+        mChannelLabel->setText("all");
+
+        mSelector = new ChannelSelector(this);
+        mSelector->setEditable(true);
     }
 
     LoggerWidget::~LoggerWidget()
@@ -62,18 +71,12 @@ namespace hal
     void LoggerWidget::setupToolbar(Toolbar* toolbar)
     {
         // Action button to activate Searchbar
-        mSearchAction = new QAction(this);
-        mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         toolbar->addAction(mSearchAction);
 
         // Show current channel
-        mChannelLabel = new QLabel(this);
-        mChannelLabel->setText("all");
         toolbar->addWidget(mChannelLabel);
 
         // ChannelSelector
-        mSelector = new ChannelSelector(this);
-        mSelector->setEditable(true);
         connect(mSelector->lineEdit(), SIGNAL(editingFinished()), this, SLOT(handleCustomChannel()));
         connect(mSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(handleCurrentFilterChanged(int)));
 //        mSelector->setStyleSheet("QCombobox {background-color : rgb(32, 43, 63); border-radius: 2px;}");
