@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* added information to GUI setting file so that widgets position and size from previous session gets restored
+* plugins
+  * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
+  * fixed a bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
+
+## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins
   * simulation
     * added simulation engine property `timeout_after_sec`
@@ -22,7 +28,6 @@ All notable changes to this project will be documented in this file.
     * updated the hgl format version for the provided `.hgl` libraries and added the `ordered` attribute to all pin groups, which defaults to false
   * added scrollbar in `logic evaluator` plugin
   * added `dataflow::Result::create_modules` function that takes nothing but group IDs for easier module creation
-  * fixed a bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
   * added feature to import precompiled binary plugins in GUI plugin manager
   * added switch to GUI plugin manager to activate/deactivate menu contribution for plugin
 * build process
