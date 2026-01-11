@@ -29,6 +29,8 @@
 !liberty_parser/**/*
 !logic_evaluator*
 !logic_evaluator/**/*
+!media_viewer*
+!media_viewer/**/*
 !module_identification*
 !module_identification/**/*
 !netlist_preprocessing*
