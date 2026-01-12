@@ -14,16 +14,16 @@ option(QUAZIP_USE_QT_ZLIB "" OFF)
 option(QUAZIP_ENABLE_TESTS "Build QuaZip tests" OFF)
 
 # Set the default value of `${QUAZIP_QT_MAJOR_VERSION}`.
-# We search quietly for Qt5 and Qt4 in that order.
-# Qt5 provides config files for CMake.
+# We search quietly for Qt6 and Qt4 in that order.
+# Qt6 provides config files for CMake.
 # Qt4 relies on `FindQt4.cmake`.
 find_package(
-  QT NAMES Qt5
+  QT NAMES Qt6
   QUIET COMPONENTS Core
 )
-set(QT_VERSION_MAJOR 5)
+set(QT_VERSION_MAJOR 6)
 
-set(QUAZIP_QT_MAJOR_VERSION ${QT_VERSION_MAJOR} CACHE STRING "Qt version to use 5, defaults to ${QT_VERSION_MAJOR}")
+set(QUAZIP_QT_MAJOR_VERSION ${QT_VERSION_MAJOR} CACHE STRING "Qt version to use 6, defaults to ${QT_VERSION_MAJOR}")
 
 if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE RELEASE)
@@ -40,12 +40,12 @@ set(QUAZIP_LIB_TARGET_NAME QuaZip)
 set(QUAZIP_DIR_NAME QuaZip-Qt${QUAZIP_QT_MAJOR_VERSION}-${QUAZIP_LIB_VERSION})
 set(QUAZIP_PACKAGE_NAME QuaZip-Qt${QUAZIP_QT_MAJOR_VERSION})
 
-if(QUAZIP_QT_MAJOR_VERSION EQUAL 5)
-	find_package(Qt5 REQUIRED COMPONENTS Core
+if(QUAZIP_QT_MAJOR_VERSION EQUAL 6)
+	find_package(Qt6 REQUIRED COMPONENTS Core
                          OPTIONAL_COMPONENTS Network Test)
-	set(QUAZIP_LIB_LIBRARIES Qt5::Core)
-	set(QUAZIP_TEST_QT_LIBRARIES Qt5::Core Qt5::Network Qt5::Test)
-	set(QUAZIP_PKGCONFIG_REQUIRES "zlib, Qt5Core")
+	set(QUAZIP_LIB_LIBRARIES Qt6::Core)
+	set(QUAZIP_TEST_QT_LIBRARIES Qt6::Core Qt6::Network Qt6::Test)
+	set(QUAZIP_PKGCONFIG_REQUIRES "zlib, Qt6Core")
 else()
 	message(FATAL_ERROR "Qt version ${QUAZIP_QT_MAJOR_VERSION} is not supported")
 endif()

@@ -22,9 +22,9 @@ if [[ "$platform" == 'macOS' ]]; then
     pip3 install -r requirements.txt
     BREW_PREFIX=$(brew --prefix)
     if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.zshrc
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' ~/.zshrc
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+            echo 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' >> ~/.zshrc
         fi
 
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.zshrc
@@ -43,9 +43,9 @@ if [[ "$platform" == 'macOS' ]]; then
         fi
         source ~/.zshrc
     elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
-        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' ~/.bash_profile
+        grep -Fxq 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' ~/.bash_profile
         if ! [[ $? -eq 0 ]]; then
-            echo 'export PATH="$BREW_PREFIX/opt/qt@5/bin:$PATH"' >> ~/.bash_profile
+            echo 'export PATH="$BREW_PREFIX/opt/qt/bin:$PATH"' >> ~/.bash_profile
         fi
 
         grep -Fxq 'export PATH="$BREW_PREFIX/opt/llvm@14/bin:$PATH"' ~/.bash_profile
@@ -72,9 +72,9 @@ elif [[ "$platform" == 'linux' ]]; then
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
 
         sudo apt-get update && sudo apt-get install -y build-essential verilator \
-        lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
+        lsb-release git cmake pkgconf libboost-all-dev qtbase6-dev \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev \
-        libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
+        libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
         libreadline-dev apport python3-dateutil libgraphviz-dev \
@@ -82,7 +82,7 @@ elif [[ "$platform" == 'linux' ]]; then
         graphviz libomp-dev libsuitesparse-dev # For documentation
     elif [[ "$distribution" == "Arch" ]]; then
         yay -S --needed base-devel lsb-release git verilator cmake boost-libs pkgconf \
-        qt5-base python ccache autoconf libsodium qt5-svg ninja lcov \
+        qt6-base python ccache autoconf libsodium qt6-svg ninja lcov \
         gcovr python-sphinx doxygen python-sphinx_rtd_theme python-jedi \
         python-pip pybind11 rapidjson spdlog graphviz boost \
         python-dateutil z3
@@ -99,7 +99,7 @@ elif [[ "$platform" == 'linux' ]]; then
        done
        sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-$RHEL_VERSION.noarch.rpm
        sudo yum update -y
-       for pkg in boost-devel z3 rapidjson-devel qt5-qtbase-devel qt5-qtsvg-devel z3-devel python-devel verilator; do
+       for pkg in boost-devel z3 rapidjson-devel qt6-qtbase-devel qt6-qtsvg-devel z3-devel python-devel verilator; do
 	       sudo yum install -y $pkg
        done
        exit 255
@@ -110,9 +110,9 @@ elif [[ "$platform" == 'linux' ]]; then
 elif [[ "$platform" == 'docker' ]]; then
     # We can assume that we are in a ubuntu container, because of the official Dockerfile in the hal project
     apt-get update && apt-get install -y build-essential verilator \
-    lsb-release git cmake pkgconf libboost-all-dev qtbase5-dev \
+    lsb-release git cmake pkgconf libboost-all-dev qtbase6-dev \
     libpython3-dev ccache autoconf autotools-dev libsodium-dev \
-    libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
+    libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
     pybind11-dev python3-pybind11 python3-dateutil rapidjson-dev \
     libspdlog-dev libz3-dev libreadline-dev \

@@ -8,7 +8,7 @@ project(
 
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/plugins/simulator/netlist_simulator_controller/include)
 
-find_package(Qt5 COMPONENTS Core REQUIRED )
+find_package(Qt6 COMPONENTS Core REQUIRED )
 
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/plugins/simulator/netlist-simulator-controller/include)
 

@@ -16,7 +16,7 @@ SET(TARGET_VERSION_MAJOR 0 )
 SET(TARGET_VERSION_MINOR 1 )
 
 # all files which may be mocced
-qt5_wrap_cpp(MOC_SCENE ${CMAKE_CURRENT_SOURCE_DIR}/QGVScene.h)
+qt6_wrap_cpp(MOC_SCENE ${CMAKE_CURRENT_SOURCE_DIR}/QGVScene.h)
 
 SET(QGVLIB_CPP
 	private/QGVCore.cpp
@@ -34,7 +34,7 @@ SET(QGVLIB_CPP
 SET(TARGET_NAME "QGVCore")
 
 # include with QT_USE selected library parts
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 
 INCLUDE_DIRECTORIES(
 	${GRAPHVIZ_INCLUDE_DIR}
@@ -50,8 +50,8 @@ ADD_DEFINITIONS(-DQGVCORE_LIB -D_PACKAGE_ast -D_dll_import -D_BLD_cdt -D_DLL_BLD
 
 ADD_DEFINITIONS(-DQVGCORE_LIB)
 
-        QT5_WRAP_UI(QGVLIB_UI_H ${qgvlib_UI})
-	QT5_ADD_RESOURCES(qgvlib_RCCS ${qgvlib_QRC})
+  QT6_WRAP_UI(QGVLIB_UI_H ${qgvlib_UI})
+	QT6_ADD_RESOURCES(qgvlib_RCCS ${qgvlib_QRC})
 
 ADD_LIBRARY(qgvcore SHARED
   ${QGVLIB_CPP}
@@ -64,8 +64,8 @@ TARGET_LINK_LIBRARIES(qgvcore
 	${GRAPHVIZ_GVC_LIBRARY}
   ${GRAPHVIZ_CGRAPH_LIBRARY}
   ${GRAPHVIZ_CDT_LIBRARY}
-  Qt5::Core 
-  Qt5::Widgets
+  Qt6::Core 
+  Qt6::Widgets
 )
 
 string(TOUPPER ${CMAKE_BUILD_TYPE} CFG)
