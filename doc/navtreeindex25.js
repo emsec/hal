@@ -1,6 +1,5 @@
 var NAVTREEINDEX25 =
 {
-"functions_g.html":[6,3,0,6],
 "functions_h.html":[6,3,0,7],
 "functions_i.html":[6,3,0,8],
 "functions_j.html":[6,3,0,9],
@@ -249,5 +248,6 @@ var NAVTREEINDEX25 =
 "gatelibrary__tab__interface_8h_source.html":[7,0,1,3,0,0,18,2,1],
 "gatelibrary__tab__pin_8cpp.html":[7,0,1,3,2,18,2,1],
 "gatelibrary__tab__pin_8cpp_source.html":[7,0,1,3,2,18,2,1],
-"gatelibrary__tab__pin_8h.html":[7,0,1,3,0,0,18,2,2]
+"gatelibrary__tab__pin_8h.html":[7,0,1,3,0,0,18,2,2],
+"gatelibrary__tab__pin_8h_source.html":[7,0,1,3,0,0,18,2,2]
 };

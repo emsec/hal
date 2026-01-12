@@ -1,6 +1,5 @@
 var NAVTREEINDEX26 =
 {
-"gatelibrary__tab__pin_8h_source.html":[7,0,1,3,0,0,18,2,2],
 "gatelibrary__tab__truth__table_8cpp.html":[7,0,1,3,2,18,2,2],
 "gatelibrary__tab__truth__table_8cpp_source.html":[7,0,1,3,2,18,2,2],
 "gatelibrary__tab__truth__table_8h.html":[7,0,1,3,0,0,18,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX26 =
 "group__pybind.html#ga23445061a41678f413471f3459e241d4":[4,1,3,16],
 "group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[5,0,2,548],
 "group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[4,1,3,21],
-"group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[5,0,2,557]
+"group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[5,0,2,557],
+"group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[4,1,3,29]
 };

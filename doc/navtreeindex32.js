@@ -1,6 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"netlist__parser__manager_8cpp.html#a72dbc0b71389a49406b62b83ca90ff79":[7,0,2,0,4,0,0],
 "netlist__parser__manager_8cpp.html#a8a4ff1e425ebe75804844cf22c96dca7":[7,0,2,0,4,0,6],
 "netlist__parser__manager_8cpp.html#a9ff28049722e4a8532867f675aad614e":[7,0,2,0,4,0,4],
 "netlist__parser__manager_8cpp.html#af1c82137bddfd220906ff6e8a2366b2d":[7,0,2,0,4,0,5],
@@ -249,5 +248,6 @@ var NAVTREEINDEX32 =
 "plugin__gui_8h.html":[7,0,1,3,0,0,58],
 "plugin__gui_8h_source.html":[7,0,1,3,0,0,58],
 "plugin__hgl__parser_8cpp.html":[7,0,1,4,1,1],
-"plugin__hgl__parser_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,4,1,1,0]
+"plugin__hgl__parser_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,4,1,1,0],
+"plugin__hgl__parser_8cpp_source.html":[7,0,1,4,1,1]
 };

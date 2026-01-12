@@ -1,6 +1,5 @@
 var NAVTREEINDEX10 =
 {
-"classhal_1_1_grouping_manager_widget.html#a85d39ec7dc82b0f3ce1beaa67f8919a5":[4,0,7,2,2,10],
 "classhal_1_1_grouping_manager_widget.html#a8637e623b66fdf456236841cb00055f3":[4,0,7,2,2,13],
 "classhal_1_1_grouping_manager_widget.html#a872d03dc32127ab70a7e6c776c8d66fe":[4,0,7,2,2,18],
 "classhal_1_1_grouping_manager_widget.html#a8fb9741ed8fec72b7fa14a4e82a9a427":[4,0,7,2,2,33],
@@ -249,5 +248,6 @@ var NAVTREEINDEX10 =
 "classhal_1_1_gui_plugin_manager.html#a7e8260431dce616fe29cea690918993f":[6,0,0,247,3],
 "classhal_1_1_gui_plugin_manager.html#a825b08d94f56a644c286211023f14143":[6,0,0,247,38],
 "classhal_1_1_gui_plugin_manager.html#a82d54e8cb092eac9cc11e5aae936d019":[6,0,0,247,26],
-"classhal_1_1_gui_plugin_manager.html#a8559dfe83ca49255ec3ab3e8bacf941e":[6,0,0,247,5]
+"classhal_1_1_gui_plugin_manager.html#a8559dfe83ca49255ec3ab3e8bacf941e":[6,0,0,247,5],
+"classhal_1_1_gui_plugin_manager.html#a87138a2013e28361b17d60d1e883543e":[6,0,0,247,23]
 };
