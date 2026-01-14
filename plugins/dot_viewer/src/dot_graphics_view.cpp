@@ -11,7 +11,7 @@ namespace hal {
 
     void DotGraphicsView::wheelEvent(QWheelEvent* event)
     {
-        qreal scaleFactor = qPow(2.0, event->delta() / 240.0); //How fast we zoom
+        qreal scaleFactor = qPow(2.0, event->angleDelta().y() / 240.0); //How fast we zoom
         scaleWithinLimits(scaleFactor);
 
     }

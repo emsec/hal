@@ -71,7 +71,7 @@ namespace hal
             QWheelEvent* wheel = static_cast<QWheelEvent*>(event);
             if (wheel->modifiers() == Qt::ControlModifier)
             {
-                if (wheel->delta() > 0)
+                if (wheel->angleDelta().y() > 0)
                     zoomIn(2);
                 else
                     zoomOut(2);
