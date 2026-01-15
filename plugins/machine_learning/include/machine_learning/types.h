@@ -4,43 +4,62 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 
+#include <algorithm>
 #include <atomic>
+#include <limits>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <string>
+#include <tuple>
 #include <vector>
 
 #define FEATURE_TYPE float
 
 namespace hal
 {
-    /* Forward declaration */
     class Gate;
     class Netlist;
 
     namespace machine_learning
     {
-        /**
-         * @struct MultiBitInformation
-         * @brief Holds mappings between word labels and gates, and gates and word labels.
-         *
-         * This struct provides a bi-directional mapping between specific word pairs and their corresponding gates, 
-         * as well as between gates and associated word pairs.
-         */
+        // Describes the netlist's originating "flavor" (vendor/synth/backend/architecture encoding style).
+        enum class NetlistFlavor
+        {
+            Default,
+            Yosys,
+            Vivado,
+        };
+
+        enum class MultiBitProcessingPolicy
+        {
+            Default,    // current behavior: lowest avg distance wins
+            Yosys,      // output-pin word wins if ambiguous; else like Default
+            Vivado      // gate-name encoding wins if ambiguous; else like Default
+        };
+
+        // Central mapping: flavor -> multibit policy
+        constexpr MultiBitProcessingPolicy policy_from_flavor(const NetlistFlavor f) noexcept
+        {
+            switch (f)
+            {
+                case NetlistFlavor::Yosys:
+                    return MultiBitProcessingPolicy::Yosys;
+                case NetlistFlavor::Vivado:
+                    return MultiBitProcessingPolicy::Vivado;
+                default:
+                    return MultiBitProcessingPolicy::Default;
+            }
+        }
+
         struct MultiBitInformation
         {
         public:
             bool are_gates_considered_a_pair(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const;
             std::optional<bool> is_index_a_smaller_index_b(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const;
 
-            /**
-             * @brief Maps word pairs to corresponding gates.
-             */
             std::map<std::tuple<std::string, PinDirection, std::string>, std::vector<Gate*>> word_to_gates;
-
-            /**
-             * @brief Maps gates to associated word pairs.
-             */
             std::map<const Gate*, std::vector<std::tuple<std::string, PinDirection, std::string>>> gate_to_words;
 
             std::map<std::pair<const Gate*, std::tuple<std::string, PinDirection, std::string>>, u32> gate_word_to_index;
@@ -50,7 +69,11 @@ namespace hal
         {
         public:
             Context() = delete;
-            Context(const Netlist* netlist, const u32 _num_threads = 1) : nl(netlist), num_threads(_num_threads)
+
+            // If you ever want to override policy independently, you can add an optional policy parameter.
+            // For now: policy is derived from flavor.
+            Context(const Netlist* netlist, const NetlistFlavor flavor, const u32 _num_threads = 1)
+                : nl(netlist), num_threads(_num_threads), m_netlist_flavor(flavor), m_mbi_policy(policy_from_flavor(flavor))
             {
                 m_gates = netlist->get_gates();
                 std::sort(m_gates.begin(), m_gates.end(), [](const auto* g_a, const auto* g_b) { return g_a->get_id() < g_b->get_id(); });
@@ -98,10 +121,23 @@ namespace hal
             u32 get_gate_type_index(const GateType* gt) const;
             u32 get_gate_pin_index(const GateType* gt, const GatePin* gp) const;
 
+            // Expose if you want to inspect behavior.
+            NetlistFlavor get_netlist_flavor() const
+            {
+                return m_netlist_flavor;
+            }
+            MultiBitProcessingPolicy get_multi_bit_processing_policy() const
+            {
+                return m_mbi_policy;
+            }
+
             const Netlist* nl;
             const u32 num_threads;
 
         private:
+            NetlistFlavor m_netlist_flavor        = NetlistFlavor::Default;
+            MultiBitProcessingPolicy m_mbi_policy = MultiBitProcessingPolicy::Default;
+
             std::vector<Gate*> m_gates;
             std::vector<Gate*> m_sequential_gates;
 

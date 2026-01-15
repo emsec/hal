@@ -143,5 +143,5 @@ namespace hal
                 std::string to_string() const override;
             };
         }    // namespace gate_pair_label
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

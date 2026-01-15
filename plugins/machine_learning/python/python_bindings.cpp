@@ -5,6 +5,7 @@
 #include "machine_learning/graph_neural_network.h"
 #include "machine_learning/labels/gate_label.h"
 #include "machine_learning/labels/gate_pair_label.h"
+#include "machine_learning/labels/subgraph_label.h"
 #include "machine_learning/plugin_machine_learning.h"
 #include "machine_learning/types.h"
 #include "pybind11/operators.h"
@@ -33,6 +34,7 @@ namespace hal
         py::module py_gate_pair_feature = m.def_submodule("gate_pair_feature");
         py::module py_gate_pair_label   = m.def_submodule("gate_pair_label");
         py::module py_gate_label        = m.def_submodule("gate_label");
+        py::module py_subgraph_label    = m.def_submodule("subgraph_label");
 
         py::class_<MachineLearningPlugin, RawPtrWrapper<MachineLearningPlugin>, BasePluginInterface> py_machine_learning_plugin(
             m, "MachineLearningPlugin", R"(Provides machine learning functionality as a plugin within the HAL framework.)");
@@ -137,15 +139,45 @@ Maps a (gate, word) pair to an index.
 :type: dict[(hal_py.Gate,(str, hal_py.PinDirection, str)), int]
 )");
 
+        py::enum_<machine_learning::NetlistFlavor>(m, "NetlistFlavor", R"(
+Describes the netlist's originating flavor (vendor/synthesizer/backend/encoding style).
+)")
+            .value("Default", machine_learning::NetlistFlavor::Default, R"(
+Default / default behavior.
+)")
+            .value("Yosys", machine_learning::NetlistFlavor::Yosys, R"(
+Yosys-style netlist encoding.
+)")
+            .value("Vivado", machine_learning::NetlistFlavor::Vivado, R"(
+Vivado-style netlist encoding.
+)")
+            .export_values();
+
+        py::enum_<machine_learning::MultiBitProcessingPolicy>(m, "MultiBitProcessingPolicy", R"(
+Specifies how multi-bit word candidates are deduplicated/selected.
+)")
+            .value("Default", machine_learning::MultiBitProcessingPolicy::Default, R"(
+Lowest average distance wins (current behavior).
+)")
+            .value("Yosys", machine_learning::MultiBitProcessingPolicy::Yosys, R"(
+Prefer output-pin word if ambiguous; otherwise like Default.
+)")
+            .value("Vivado", machine_learning::MultiBitProcessingPolicy::Vivado, R"(
+Prefer gate-name encoding (PinDirection::none, distance 0) if ambiguous; otherwise like Default.
+)")
+            .export_values();
+
         py::class_<machine_learning::Context> py_context(m, "Context", R"()");
 
-        py_context.def(py::init<const Netlist*, const u32>(),
+        py_context.def(py::init<const Netlist*, const machine_learning::NetlistFlavor, const u32>(),
                        py::arg("netlist"),
+                       py::arg("flavor")       = machine_learning::NetlistFlavor::Default,
                        py::arg("_num_threads") = 1,
                        R"(
-Construct a Context object with the given netlist and number of threads.
+Construct a Context object with the given netlist, netlist flavor, and number of threads.
 
 :param hal_py.Netlist netlist: The netlist.
+:param machine_learning.NetlistFlavor flavor: Netlist flavor (affects multi-bit processing policy).
 :param int _num_threads: The number of threads. Defaults to 1.
 )");
 
@@ -266,6 +298,24 @@ Get the gates of the context.
 
 :returns: A list of gates.
 :rtype: list[hal_py.Gate]
+)");
+
+        py_context.def("get_netlist_flavor",
+                       &machine_learning::Context::get_netlist_flavor,
+                       R"(
+Get the netlist flavor configured for this context.
+
+:returns: The netlist flavor.
+:rtype: machine_learning.NetlistFlavor
+)");
+
+        py_context.def("get_multi_bit_processing_policy",
+                       &machine_learning::Context::get_multi_bit_processing_policy,
+                       R"(
+Get the multi-bit processing policy derived from the configured netlist flavor.
+
+:returns: The policy used for multi-bit processing.
+:rtype: machine_learning.MultiBitProcessingPolicy
 )");
 
         // Bindings for NetlistGraph
@@ -2683,6 +2733,163 @@ Construct a ModuleNameKeyWords labeler.
         py_module_name_key_words.def("to_string",
                                      &machine_learning::gate_label::ModuleNameKeyWords::to_string,
                                      R"(
+            Get a string representation of the gate labeler.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        py::class_<machine_learning::subgraph_label::SubgraphLabel, std::shared_ptr<machine_learning::subgraph_label::SubgraphLabel>> py_subgraph_label_class(py_subgraph_label, "SubgraphLabel", R"(
+            Base class for calculating labels for machine learning models.
+
+            This abstract class provides methods for calculating labels based on various criteria.
+        )");
+
+        py_subgraph_label_class.def(
+            "calculate_subgraphs",
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<Gate*>>> {
+                auto res = self.calculate_subgraphs(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating subgraphs: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+            Calculate subgraphs for a given machine learning context.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :returns: A list of subgraphs, consisting of a list of gates
+            :rtype: list[list[hal_py.Gate]] or None
+        )");
+
+        py_subgraph_label_class.def(
+            "calculate_labels",
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, subgraphs);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("subgraphs"),
+            R"(
+            Calculate labels for multiple subgraphs.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param list[list[hal_py.Gate]] subgraphs: The subgraphs to label.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_subgraph_label_class.def("to_string",
+                                    &machine_learning::subgraph_label::SubgraphLabel::to_string,
+                                    R"(
+            Get a string representation of the gate label.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        py::class_<machine_learning::subgraph_label::ContainedComponents, machine_learning::subgraph_label::SubgraphLabel, std::shared_ptr<machine_learning::subgraph_label::ContainedComponents>>
+            py_contained_components(py_subgraph_label, "ContainedComponents", R"(
+            Labels gates based on whether their name includes a keyword or not.
+        )");
+
+        py_contained_components.def(py::init<>(),
+                                    R"(
+        Construct a ContainedComponents labeler.
+        )");
+
+        py_contained_components.def(
+            "calculate_subgraphs",
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<Gate*>>> {
+                auto res = self.calculate_subgraphs(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating subgraphs: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+            Calculate subgraphs for a given machine learning context.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :returns: A list of subgraphs, consisting of a list of gates
+            :rtype: list[list[hal_py.Gate]] or None
+        )");
+
+        py_contained_components.def(
+            "calculate_labels",
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, subgraphs);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("subgraphs"),
+            R"(
+            Calculate labels for multiple subgraphs.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param list[list[hal_py.Gate]] subgraphs: The subgraphs to label.
+            :returns: A list of label vectors on success, or None otherwise.
+            :rtype: list[list[int]] or None
+        )");
+
+        py_contained_components.def(
+            "annotate_from_twin_netlist",
+            [](const machine_learning::subgraph_label::ContainedComponents& self, machine_learning::Context& ctx, Netlist* nl, const Netlist* twin_nl) -> std::optional<u32> {
+                auto res = self.annotate_from_twin_netlist(ctx, nl, twin_nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error annotating from twin netlist: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("nl"),
+            py::arg("twin_nl"),
+            R"(
+            Annotate contained components to subgraphs of a flattened netlist based on an identical unflattened netlist.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :param hal_py.netlist nl:  The netlist to annotate.
+            :param hal_py.netlist twin_nl: The twin netlist to extract the annotations from.
+            :returns: The amount of annotated subgraphs, on success, otherwise None
+            :rtype: int or None
+        )");
+
+        py_contained_components.def("to_string",
+                                    &machine_learning::subgraph_label::ContainedComponents::to_string,
+                                    R"(
             Get a string representation of the gate labeler.
 
             :returns: The string representation.

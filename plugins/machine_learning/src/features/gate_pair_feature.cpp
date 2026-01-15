@@ -515,7 +515,7 @@ namespace hal
 
             Result<std::vector<FEATURE_TYPE>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
             {
-                Context ctx(g_a->get_netlist());
+                Context ctx(g_a->get_netlist(), NetlistFlavor::Default);
                 return build_feature_vec(ctx, features, g_a, g_b);
             }
 
@@ -559,7 +559,7 @@ namespace hal
                     return OK({});
                 }
 
-                Context ctx(gate_pairs.front().first->get_netlist());
+                Context ctx(gate_pairs.front().first->get_netlist(), NetlistFlavor::Default);
                 return build_feature_vecs(ctx, features, gate_pairs);
             }
 
@@ -645,5 +645,5 @@ namespace hal
             }
 
         }    // namespace gate_pair_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

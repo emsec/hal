@@ -88,7 +88,7 @@ namespace hal
                     return OK({});
                 }
 
-                Context ctx(gates.front()->get_netlist());
+                Context ctx(gates.front()->get_netlist(), NetlistFlavor::Default);
                 return build_feature_vecs(features, gates);
             }
 
@@ -116,5 +116,5 @@ namespace hal
                 return OK(feature_vecs);
             }
         }    // namespace gate_feature
-    }        // namespace machine_learning
+    }    // namespace machine_learning
 }    // namespace hal

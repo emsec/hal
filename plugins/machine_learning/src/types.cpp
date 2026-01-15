@@ -11,13 +11,90 @@ namespace hal
     {
         namespace
         {
-            MultiBitInformation calculate_multi_bit_information(const std::vector<Gate*>& gates)
+            using WordKey = std::tuple<std::string, PinDirection, std::string>;    // {word_name, pin_direction, pin_name}
+
+            struct GateEntry
+            {
+                u32 index;
+                Gate* gate;
+                u32 distance;    // minimal per-pin distance, as you already filter
+            };
+
+            struct CandidateWord
+            {
+                WordKey key;
+                std::vector<GateEntry> entries;
+
+                // Canonical gate-vector used as dedupe key (sorted by gate id for stability).
+                std::vector<Gate*> canonical_gates;
+
+                // For final output mapping (only for the selected candidate).
+                std::unordered_map<Gate*, u32> gate_to_index;
+
+                double avg_distance = std::numeric_limits<double>::infinity();
+
+                // Derived “signals” used by policies
+                bool is_output_word        = false;    // PinDirection::output
+                bool is_gate_name_encoding = false;    // (dir==none && dist==0) per your encoding
+            };
+
+            struct CandidateScore
+            {
+                // Lower is better.
+                int primary         = 0;
+                double avg_distance = std::numeric_limits<double>::infinity();
+
+                // Deterministic tie-breakers
+                size_t name_len = 0;
+                std::string name;
+                int dir = 0;
+                std::string pin;
+
+                friend bool operator<(const CandidateScore& a, const CandidateScore& b)
+                {
+                    return std::tie(a.primary, a.avg_distance, a.name_len, a.name, a.dir, a.pin) < std::tie(b.primary, b.avg_distance, b.name_len, b.name, b.dir, b.pin);
+                }
+            };
+
+            static CandidateScore score_candidate(const CandidateWord& c, MultiBitProcessingPolicy policy)
+            {
+                const auto& [name, dir, pin] = c.key;
+
+                CandidateScore s;
+                s.avg_distance = c.avg_distance;
+                s.name_len     = name.size();
+                s.name         = name;
+                s.dir          = static_cast<int>(dir);
+                s.pin          = pin;
+
+                switch (policy)
+                {
+                    case MultiBitProcessingPolicy::Default:
+                        s.primary = 0;    // just avg distance + tie-breakers
+                        break;
+
+                    case MultiBitProcessingPolicy::Yosys:
+                        // output wins if ambiguous; then avg distance
+                        s.primary = c.is_output_word ? 0 : 1;
+                        break;
+
+                    case MultiBitProcessingPolicy::Vivado:
+                        // gate-name encoding wins if ambiguous; then avg distance
+                        s.primary = c.is_gate_name_encoding ? 0 : 1;
+                        break;
+                }
+
+                return s;
+            }
+
+            MultiBitInformation calculate_multi_bit_information(const std::vector<Gate*>& gates, const MultiBitProcessingPolicy policy = MultiBitProcessingPolicy::Default)
             {
                 MultiBitInformation m_mbi;
 
-                std::map<std::tuple<std::string, PinDirection, std::string>, std::set<std::tuple<u32, Gate*>>> word_to_gates_unsorted;
+                // 1) Collect entries per WordKey (after per-pin minimal distance filtering).
+                std::map<WordKey, std::vector<GateEntry>> word_to_entries;
 
-                for (const auto g : gates)
+                for (Gate* g : gates)
                 {
                     if (!g->has_data("preprocessing_information", "multi_bit_indexed_identifiers"))
                     {
@@ -27,157 +104,167 @@ namespace hal
 
                     const std::string json_string = std::get<1>(g->get_data("preprocessing_information", "multi_bit_indexed_identifiers"));
 
-                    // TODO remove
-                    // std::cout << "Trying to parse string: " << json_string << std::endl;
-
                     // TODO catch exceptions and return result
                     nlohmann::json j                                                         = nlohmann::json::parse(json_string);
                     std::vector<netlist_preprocessing::indexed_identifier> index_information = j.get<std::vector<netlist_preprocessing::indexed_identifier>>();
 
-                    // TODO remove
-                    // if (!index_information.empty())
-                    // {
-                    //     std::cout << "For gate " << g->get_id() << " found " <<index_information.front().identifier << " - " << index_information.front().index << " - " << index_information.front().distance << std::endl;
-                    // }
+                    // --- DEBUG PRINT (same as in your current function)
+                    std::cout << "Gate: " << g->get_name() << " / " << g->get_id() << std::endl;
 
-                    // for each pin, only consider the index information with the least distance
+                    // For each pin, only consider the index information with the least distance
                     std::map<std::string, u32> pin_to_min_distance;
                     for (const auto& [_name, _index, _origin, pin, _direction, distance] : index_information)
                     {
-                        if (const auto it = pin_to_min_distance.find(pin); it == pin_to_min_distance.end())
+                        // --- DEBUG PRINT (same as in your current function)
+                        std::cout << _name << " - " << _index << " - " << _origin << " - " << pin << " - " << _direction << " - " << distance << std::endl;
+
+                        auto [it, inserted] = pin_to_min_distance.emplace(pin, distance);
+                        if (!inserted)
                         {
-                            pin_to_min_distance.insert({pin, distance});
-                        }
-                        else
-                        {
-                            pin_to_min_distance.at(pin) = std::min(it->second, distance);
+                            it->second = std::min(it->second, distance);
                         }
                     }
 
                     for (const auto& [name, index, _origin, pin, direction, distance] : index_information)
                     {
-                        if (pin_to_min_distance.at(pin) == distance)
+                        if (pin_to_min_distance.at(pin) != distance)
                         {
-                            word_to_gates_unsorted[{name, direction, pin}].insert({index, g});
+                            continue;
                         }
+
+                        const WordKey wk{name, direction, pin};
+                        word_to_entries[wk].push_back(GateEntry{index, g, distance});
                     }
                 }
 
-                // 1. Sort out words with the same name by checking whether they contain duplicate indices
-                // 2. Dedupe all words by only keeping one word/name_direction for each multi_bit_signal/vector of gates.
-                std::map<std::vector<Gate*>, std::tuple<std::string, PinDirection, std::string>> gates_to_word;
-
-                for (const auto& [name_direction, word] : word_to_gates_unsorted)
+                // --- DEBUG PRINT
+                for (const auto& [word, entries] : word_to_entries)
                 {
+                    const auto& [name, direction, pin] = word;
+                    std::cout << name << " - " << direction << " - " << pin << std::endl;
+
+                    for (const auto& e : entries)
+                    {
+                        std::cout << "\t" << e.gate->get_name() << " / " << e.gate->get_id() << std::endl;
+                    }
+                }
+
+                // 2) Build validated candidates (unique indices, unique gates, size>1), compute avg distance + policy features.
+                std::vector<CandidateWord> candidates;
+                candidates.reserve(word_to_entries.size());
+
+                for (auto& [wk, entries] : word_to_entries)
+                {
+                    if (entries.size() <= 1)
+                    {
+                        continue;
+                    }
+
                     std::set<u32> indices;
                     std::set<Gate*> unique_gates;
-                    std::vector<Gate*> gates_vec;
 
-                    // TODO remove
-                    // std::cout << "Order Word: " << std::endl;
-                    for (auto& [index, gate] : word)
+                    bool bad = false;
+                    for (const auto& e : entries)
                     {
-                        // TODO remove
-                        // std::cout << index << std::endl;
-
-                        indices.insert(index);
-                        unique_gates.insert(gate);
-
-                        gates_vec.push_back(gate);
-                        m_mbi.gate_word_to_index.insert({{gate, name_direction}, index});
-                    }
-
-                    // sanity check
-                    if (indices.size() != word.size())
-                    {
-                        // TODO return result
-                        log_error("machine_learning", "Found index double in word {}-{} - {} !", std::get<0>(name_direction), enum_to_string(std::get<1>(name_direction)), std::get<2>(name_direction));
-
-                        // TODO remove
-                        std::cout << "Insane Word: " << std::endl;
-                        for (const auto& [index, gate] : word)
+                        if (!indices.insert(e.index).second)
                         {
-                            std::cout << index << ": " << gate->get_id() << std::endl;
+                            log_error("machine_learning", "Found index double in word {}-{} - {} !", std::get<0>(wk), enum_to_string(std::get<1>(wk)), std::get<2>(wk));
+
+                            // --- DEBUG PRINT (same as in your current function)
+                            std::cout << "Insane Word: " << std::endl;
+                            for (const auto& ee : entries)
+                            {
+                                std::cout << ee.index << ": " << ee.gate->get_id() << std::endl;
+                            }
+
+                            bad = true;
+                            break;
                         }
 
-                        continue;
+                        if (!unique_gates.insert(e.gate).second)
+                        {
+                            bad = true;
+                            break;
+                        }
                     }
 
-                    if (unique_gates.size() != word.size())
+                    if (bad || unique_gates.size() <= 1)
                     {
                         continue;
                     }
 
-                    if (unique_gates.size() <= 1)
+                    CandidateWord c;
+                    c.key     = wk;
+                    c.entries = std::move(entries);
+
+                    // canonical gate group key
+                    c.canonical_gates.assign(unique_gates.begin(), unique_gates.end());
+                    std::sort(c.canonical_gates.begin(), c.canonical_gates.end(), [](Gate* a, Gate* b) { return a->get_id() < b->get_id(); });
+
+                    // avg distance
+                    u64 sum = 0;
+                    for (const auto& e : c.entries)
                     {
-                        continue;
+                        sum += e.distance;
+                    }
+                    c.avg_distance = static_cast<double>(sum) / static_cast<double>(c.entries.size());
+
+                    // gate->index map (used when emitting chosen candidate)
+                    c.gate_to_index.reserve(c.entries.size());
+                    for (const auto& e : c.entries)
+                    {
+                        c.gate_to_index.emplace(e.gate, e.index);
                     }
 
-                    // TODO remove debug print
-                    // std::cout << "Word [" << word.size() << "] " << std::get<0>(name_direction) << " - " << std::get<1>(name_direction) << " - " << std::get<2>(name_direction) << " : "
-                    //           << std::endl;
-                    // for (const auto& [index, gate] : word)
-                    // {
-                    //     std::cout << index << ": " << gate->get_id() << std::endl;
-                    // }
+                    // policy features
+                    c.is_output_word = (std::get<1>(c.key) == PinDirection::output);
 
-                    if (const auto it = gates_to_word.find(gates); it == gates_to_word.end())
-                    {
-                        gates_to_word.insert({gates_vec, name_direction});
-                    }
-                    // NOTE could think about a priorization of shorter names or something similar
+                    const bool dir_none     = (std::get<1>(c.key) == PinDirection::none);
+                    const bool all_zero     = std::all_of(c.entries.begin(), c.entries.end(), [](const GateEntry& e) { return e.distance == 0; });
+                    c.is_gate_name_encoding = dir_none && all_zero;
+
+                    candidates.push_back(std::move(c));
                 }
 
-                for (auto& [word_gates, name_direction] : gates_to_word)
+                // 3) Policy-based dedupe: for each gate-group, keep best candidate.
+                std::map<std::vector<Gate*>, CandidateWord> best_by_gates;
+
+                for (auto& c : candidates)
                 {
-                    m_mbi.word_to_gates[name_direction] = word_gates;
-                    for (const auto g : word_gates)
+                    const auto key = c.canonical_gates;    // copy for map key
+
+                    auto it = best_by_gates.find(key);
+                    if (it == best_by_gates.end())
                     {
-                        m_mbi.gate_to_words[g].push_back(name_direction);
+                        best_by_gates.emplace(key, std::move(c));
+                        continue;
+                    }
+
+                    const CandidateScore new_s  = score_candidate(c, policy);
+                    const CandidateScore prev_s = score_candidate(it->second, policy);
+
+                    if (new_s < prev_s)
+                    {
+                        it->second = std::move(c);
                     }
                 }
 
-                // filter words for each gate:
-                // 1) For each direction only take the biggest word
-                // 2) From all remaining only take the smallest word
-                // std::map<const Gate*, std::vector<const std::tuple<const std::string, const PinDirection, const std::string>>> filtered_gate_to_words;
-                // for (const auto g : gates)
-                // {
-                //     const auto it = m_mbi.gate_to_words.find(g);
-                //     if (it == m_mbi.gate_to_words.end())
-                //     {
-                //         continue;
-                //     }
+                // 4) Emit result
+                for (auto& [gate_vec, chosen] : best_by_gates)
+                {
+                    const WordKey& wk = chosen.key;
 
-                //     std::set<u32> sizes;
-                //     for (const auto& w : it->second)
-                //     {
-                //         sizes.insert(m_mbi.word_to_gates.at(w).size());
-                //     }
+                    m_mbi.word_to_gates[wk] = gate_vec;
+                    for (Gate* g : gate_vec)
+                    {
+                        m_mbi.gate_to_words[g].push_back(wk);
 
-                //     std::vector<const std::tuple<const std::string, const PinDirection, const std::string>> filtered_words;
-                //     for (const auto& w : it->second)
-                //     {
-                //         if (m_mbi.word_to_gates.at(w).size() == *(sizes.begin()))
-                //         {
-                //             filtered_words.push_back(w);
-                //         }
-                //     }
-
-                //     filtered_gate_to_words.insert({g, filtered_words});
-                // }
-
-                // std::map<const std::tuple<const std::string, const PinDirection, const std::string>, std::vector<const Gate*>> filtered_word_to_gates;
-                // for (const auto& [g, words] : filtered_gate_to_words)
-                // {
-                //     for (const auto& w : words)
-                //     {
-                //         filtered_word_to_gates[w].push_back(g);
-                //     }
-                // }
-
-                // m_mbi.gate_to_words = filtered_gate_to_words;
-                // m_mbi.word_to_gates = filtered_word_to_gates;
+                        if (auto it = chosen.gate_to_index.find(g); it != chosen.gate_to_index.end())
+                        {
+                            m_mbi.gate_word_to_index.insert({{g, wk}, it->second});
+                        }
+                    }
+                }
 
                 return m_mbi;
             }
@@ -367,7 +454,7 @@ namespace hal
 
                 auto new_mbi         = std::make_shared<MultiBitInformation>();
                 const auto seq_gates = nl->get_gates([](const auto* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
-                *new_mbi             = calculate_multi_bit_information(seq_gates);
+                *new_mbi             = calculate_multi_bit_information(seq_gates, m_mbi_policy);
 
                 std::atomic_store_explicit(&m_mbi, new_mbi, std::memory_order_release);
 

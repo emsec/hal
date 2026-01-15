@@ -211,13 +211,25 @@ namespace hal
 
             // Feature ideas:
             // - number of sequential predecessors/successors (this is somewhat encoded in the neighboring gate types)
+            // - number of predecessors/successors
 
             //  - distance to nearest type/module (e.g. RAM, DSP)
             //  - distance to nearest shift register
             //  - distance to nearest bus register
 
-            //  - number of predecessors/successors
             //  - Graphlet Degree Vector (GDV) (possibly calculated using ORCA or gtrieScanner)
+
+            // - number of self-loops of length n
+            // - number of self-loops in a sequential abstraction of length n
+            // - length of shortest self-loop
+            // - length of shortest self-loop in sequential circuit
+
+            // The following features are mostly applicable to endpoints of gates which would require an attapted version of netlist graph
+            // An excpetion would be the case where a gate only has one output pin
+            // - boolean influence (for flip flops) in all boolean functions it appears in as input (min, max, average, mean)
+            // - signal probability (simulate n input vectors and approximate possibility of output signal to be 1)
+            // - value when all inputs are 1 (highly dependent on control values)
+            // - value when all inputs are 0 (highly dependent on control values)
 
             Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
             Result<std::vector<std::vector<FEATURE_TYPE>>> build_feature_vecs(Context& ctx, const std::vector<const GateFeature*>& features, const std::vector<Gate*>& gates);
