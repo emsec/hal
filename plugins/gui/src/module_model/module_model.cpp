@@ -1,13 +1,14 @@
 #include "gui/module_model/module_model.h"
 
 #include "gui/gui_globals.h"
-
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "gui/python/py_code_provider.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include <QMimeData>
+#include <QIODevice>
 
 namespace hal
 {
@@ -137,7 +138,7 @@ namespace hal
     Qt::ItemFlags ModuleModel::flags(const QModelIndex& index) const
     {
         if (!index.isValid())
-            return 0;
+            return Qt::NoItemFlags;
 
         return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
     }
@@ -625,12 +626,7 @@ namespace hal
         QSet<const Net*> netsToAssign;
         if (gateIds.isEmpty())
         {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-            QList<const Net*> tempKeys = parentAssignment.keys();
-            netsToAssign = QSet(tempKeys.begin(),tempKeys.end());
-#else
-            netsToAssign = parentAssignment.keys().toSet();
-#endif
+            netsToAssign = QtCompat::listToSet<const Net*>(parentAssignment.keys());
         }
         else
         {

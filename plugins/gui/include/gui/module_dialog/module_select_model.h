@@ -84,8 +84,8 @@ namespace hal {
          * @return selected items as formatted string
          */
         QString selectionToString() const;
-        QSet<u32> modules() const { return QSet<u32>::fromList(mModules); }
-        QSet<u32> gates()   const { return QSet<u32>::fromList(mGates);   }
+        QSet<u32> modules() const;
+        QSet<u32> gates()   const;
     };
 
     /**

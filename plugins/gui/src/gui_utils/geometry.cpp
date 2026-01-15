@@ -1,7 +1,6 @@
 #include "gui/gui_utils/geometry.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QWidget>
 
 namespace hal

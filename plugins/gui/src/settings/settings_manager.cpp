@@ -5,7 +5,6 @@
 #include "gui/content_manager/content_manager.h"
 #include <QDir>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QRect>
 
 namespace hal

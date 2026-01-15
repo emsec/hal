@@ -1725,8 +1725,11 @@ namespace hal {
     QSet<u32> WaveDataList::toSet() const
     {
         QList<u32> keyList = mIds.keys();
-        return keyList.toSet();
-        // return QSet<u32>(keyList.begin(),keyList.end());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QSet<u32>(keyList.constBegin(),keyList.constEnd());
+#else
+        return QSet<u32>::fromList(keyList);
+#endif
     }
 
     void WaveDataList::remove(u32 id)

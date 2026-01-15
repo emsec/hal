@@ -1,6 +1,7 @@
 #include "gui/code_editor/line_number_area.h"
 
 #include "gui/code_editor/code_editor.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -42,7 +43,7 @@ namespace hal
     void LineNumberArea::paintEvent(QPaintEvent* event)
     {
         QStyleOption opt;
-        opt.init(this);
+        QtCompat::styleOptionInit(opt,this);
         QPainter p(this);
         style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
         mEditor->lineNumberAreaPaintEvent(event);

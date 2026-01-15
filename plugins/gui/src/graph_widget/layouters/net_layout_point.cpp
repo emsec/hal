@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <QDebug>
 #include <QTextStream>
+#include <QIODevice>
 
 QPointF scenePoint(const QPoint& p)
 {

@@ -1,11 +1,11 @@
-#include "gui/docking_system/splitter_anchor.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/content_drag_relay.h"
 #include "gui/docking_system/dock_bar.h"
+#include "gui/docking_system/splitter_anchor.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/splitter/splitter.h"
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QStyle>
 
 namespace hal
@@ -51,7 +51,7 @@ namespace hal
         widget->hide();
         widget->setParent(nullptr);
         ContentFrame* frame = new ContentFrame(widget, false, nullptr);
-        frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
+        frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), QtCompat::desktopGeometry()));
         frame->show();
 
         if (mSplitter->unused())

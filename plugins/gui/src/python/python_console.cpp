@@ -2,6 +2,7 @@
 
 #include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QKeyEvent>
 #include <QHBoxLayout>
@@ -474,7 +475,7 @@ namespace hal
         setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
         setLineWidth(2);
         QHBoxLayout* layout = new QHBoxLayout(this);
-        layout->setMargin(2);
+        QtCompat::setMarginWidth(layout,2);
         mLabel = new QLabel(this);
         layout->addWidget(mLabel);
         mAbortButton = new QPushButton("Abort", this);

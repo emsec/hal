@@ -60,7 +60,7 @@ namespace hal
         return retval;
     }
 
-    void ExpandingListButton::enterEvent(QEvent* event)
+    void ExpandingListButton::enterEvent(QEnterEvent *event)
     {
         Q_UNUSED(event)
 

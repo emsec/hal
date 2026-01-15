@@ -2,6 +2,7 @@
 
 #include "gui/content_manager/content_manager.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/module_dialog/module_dialog.h"
@@ -244,6 +245,16 @@ namespace hal
             }
         }
         return retval;
+    } 
+
+    QSet<u32> ModuleSelectExclude::modules() const
+    {
+        return QtCompat::listToSet<u32>(mModules);
+    }
+
+    QSet<u32> ModuleSelectExclude::gates() const
+    {
+        return QtCompat::listToSet<u32>(mGates);
     }
 
     //---------------- PICKER -----------------------------------------

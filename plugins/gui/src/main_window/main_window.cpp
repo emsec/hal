@@ -41,7 +41,6 @@
 
 #include <QApplication>
 #include <QCloseEvent>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFileDialog>
 #include <QInputDialog>

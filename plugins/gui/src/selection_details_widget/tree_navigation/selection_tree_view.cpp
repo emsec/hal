@@ -2,6 +2,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include "gui/gui_globals.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/module_context_menu/module_context_menu.h"
@@ -132,9 +133,9 @@ namespace hal
         {
             if(mVisible)
             {
-                QVector<u32> modIds = QVector<u32>::fromList(gSelectionRelay->selectedModulesList());
-                QVector<u32> gateIds = QVector<u32>::fromList(gSelectionRelay->selectedGatesList());
-                QVector<u32> netIds = QVector<u32>::fromList(gSelectionRelay->selectedNetsList());
+                QVector<u32> modIds  = QtCompat::listToVector<u32>(gSelectionRelay->selectedModulesList());
+                QVector<u32> gateIds = QtCompat::listToVector<u32>(gSelectionRelay->selectedGatesList());
+                QVector<u32> netIds  = QtCompat::listToVector<u32>(gSelectionRelay->selectedNetsList());
                 treeModel->populateTree(modIds, gateIds, netIds);
             }
             else treeModel->clear();
@@ -142,9 +143,9 @@ namespace hal
         else
         {
             Grouping* grouping = gNetlist->get_grouping_by_id(groupingId);
-            QVector<u32> modIds = QVector<u32>::fromStdVector(grouping->get_module_ids());
-            QVector<u32> gateIds = QVector<u32>::fromStdVector(grouping->get_gate_ids());
-            QVector<u32> netIds = QVector<u32>::fromStdVector(grouping->get_net_ids());
+            QVector<u32> modIds  = QtCompat::stdVectorToVector<u32>(grouping->get_module_ids());
+            QVector<u32> gateIds = QtCompat::stdVectorToVector<u32>(grouping->get_gate_ids());
+            QVector<u32> netIds  = QtCompat::stdVectorToVector<u32>(grouping->get_net_ids());
             treeModel->populateTree(modIds, gateIds, netIds);
         }
 

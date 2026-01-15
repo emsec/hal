@@ -7,7 +7,6 @@
 #include "gui/gui_globals.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QTextDocumentFragment>
 #include <QVBoxLayout>
 #include <QShortcut>

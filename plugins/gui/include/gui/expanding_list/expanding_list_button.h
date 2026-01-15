@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QEnterEvent>
 
 class QHBoxLayout;
 class QLabel;
@@ -65,7 +66,7 @@ namespace hal
          *
          * @param event - The associated event.
          */
-        void enterEvent(QEvent* event) override;
+        void enterEvent(QEnterEvent* event) override;
 
         /**
          * Overwritten qt function that is triggered when the mouse leaves the button.

@@ -1,10 +1,10 @@
+#include "gui/docking_system/content_drag_relay.h"
 #include "gui/docking_system/tab_widget.h"
 #include "gui/content_frame/content_frame.h"
 #include "gui/content_widget/content_widget.h"
-#include "gui/docking_system/content_drag_relay.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QApplication>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QShortcut>
 #include <QStyle>
 
@@ -91,7 +91,7 @@ namespace hal
         {
             mDockBar->detachButton(widget);
             ContentFrame* frame = new ContentFrame(widget, false, nullptr);
-            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), qApp->desktop()->availableGeometry()));
+            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), QtCompat::desktopGeometry()));
             frame->show();
 
             if (widget == mCurrentWidget)

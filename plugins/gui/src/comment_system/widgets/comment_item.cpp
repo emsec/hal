@@ -3,6 +3,7 @@
 #include "gui/comment_system/widgets/comment_dialog.h"
 #include "gui/searchbar/searchable_label.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QToolBar>
 #include <QVBoxLayout>
@@ -125,14 +126,14 @@ namespace hal
         // TODO: replace fixed sizes (put them in stylesheet / compute them?)
         mLayout = new QVBoxLayout(this);
         mLayout->setSpacing(0);
-        mLayout->setMargin(0);
+        QtCompat::setMarginWidth(mLayout,0);
 
         // top part
         mTopWidget = new QWidget(this);
         mTopWidget->setFixedHeight(iconSize.height()+5); // just some spacing
         mTopLayout = new QHBoxLayout(mTopWidget);
         mTopLayout->setSpacing(0);
-        mTopLayout->setMargin(0);
+        QtCompat::setMarginWidth(mTopLayout,0);
 
         mHeader = new SearchableLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");

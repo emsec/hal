@@ -84,7 +84,7 @@ namespace hal
                     delete comEntry;
                     continue;
                 }
-                mEntries.insertMulti(comEntry->getNode(),comEntry);
+                mEntries.insert(comEntry->getNode(),comEntry);
             }
         }
 
@@ -136,7 +136,7 @@ namespace hal
         for(const auto &item : mEntries.values(entry->getNode()))
             if(item == entry)  return;
 
-        mEntries.insertMulti(entry->getNode(), entry);
+        mEntries.insert(entry->getNode(), entry);
         Q_EMIT entryAdded(entry);
     }
 
