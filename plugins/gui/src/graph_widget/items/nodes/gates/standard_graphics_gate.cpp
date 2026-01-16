@@ -301,14 +301,14 @@ void StandardGraphicsGate::format(const bool& adjust_size_to_grid)
 
     for (const QString& input_pin : mInputPins)
     {
-        qreal width = pin_fm.width(input_pin);
+        qreal width = pin_fm.horizontalAdvance(input_pin);
         if (width > max_pin_width)
             max_pin_width = width;
     }
 
     for (const QString& output_pin : mOutputPins)
     {
-        qreal width = pin_fm.width(output_pin);
+        qreal width = pin_fm.horizontalAdvance(output_pin);
         if (width > max_pin_width)
             max_pin_width = width;
     }

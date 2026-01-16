@@ -27,6 +27,16 @@ namespace hal {
     }
 
     template<typename T>
+    QList<T> setToList(const QSet<T>& cset)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        return QList<T>(cset.constBegin(),cset.constEnd());
+#else
+        return QList<T>::fromset(list);
+#endif
+    }
+
+    template<typename T>
     QVector<T> QtCompat::listToVector(const QList<T>& list)
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

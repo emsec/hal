@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QEnterEvent>
 #include <QPropertyAnimation>
 #include <QStyle>
 #include <QVBoxLayout>
@@ -43,7 +44,7 @@ namespace hal
         repolish();
     }
 
-    void GetInTouchItem::enterEvent(QEvent* event)
+    void GetInTouchItem::enterEvent(QEnterEvent* event)
     {
         Q_UNUSED(event)
 

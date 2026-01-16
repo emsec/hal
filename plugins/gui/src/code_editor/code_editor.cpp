@@ -122,7 +122,7 @@ namespace hal
     {
         // WARNING FUNCTION ONLY RETURNS CORRECT VALUES FOR MONOSPACE FONTS !
         QFontMetrics fm(mLineNumberFont);
-        return mLineNumberArea->leftOffset() + fm.width(QString::number(blockCount())) + mLineNumberArea->rightOffset();
+        return mLineNumberArea->leftOffset() + fm.horizontalAdvance(QString::number(blockCount())) + mLineNumberArea->rightOffset();
     }
 
     int CodeEditor::minimapWidth()

@@ -66,7 +66,7 @@ namespace hal
          *
          * @param event - The QEvent
          */
-        void enterEvent(QEvent* event) override;
+        void enterEvent(QEnterEvent *event) override;
 
         /**
          * Handles that the mouse leaves the widget.

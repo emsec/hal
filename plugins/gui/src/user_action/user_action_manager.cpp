@@ -161,7 +161,7 @@ namespace hal
             {
                 if (xmlIn.isStartElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                         parseActions = true;
                     else if (parseActions)
                     {
@@ -171,7 +171,7 @@ namespace hal
                 }
                 else if (xmlIn.isEndElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                         parseActions = false;
                 }
              }

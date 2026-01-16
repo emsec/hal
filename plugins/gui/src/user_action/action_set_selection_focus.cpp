@@ -75,11 +75,11 @@ namespace hal
 
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name()=="modules")
+            if (xmlIn.name()==QString("modules"))
                 mModules = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name()=="gates")
+            else if (xmlIn.name()==QString("gates"))
                 mGates = setFromText(xmlIn.readElementText());
-            else if (xmlIn.name()=="nets")
+            else if (xmlIn.name()==QString("nets"))
                 mNets = setFromText(xmlIn.readElementText());
         }
     }

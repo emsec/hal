@@ -31,6 +31,7 @@
 #include <QList>
 #include <QMap>
 #include <QHash>
+#include <limits.h>
 
 class QGraphicsEllipseItem;
 class QGraphicsLineItem;

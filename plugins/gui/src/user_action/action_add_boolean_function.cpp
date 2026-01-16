@@ -51,9 +51,9 @@ namespace hal
     {
         while(xmlIn.readNextStartElement())
         {
-            if(xmlIn.name() == "name")
+            if(xmlIn.name() == QString("name"))
                 mName = xmlIn.readElementText();
-            if(xmlIn.name() == "bf")
+            if(xmlIn.name() == QString("bf"))
             {
                 auto res = BooleanFunction::from_string(xmlIn.readElementText().toStdString());
                 if(res.is_ok())

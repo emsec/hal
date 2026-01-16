@@ -64,10 +64,10 @@ namespace hal {
             {
                 if (xmlIn.isStartElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                     {
                         parseActions = true;
-                        mUseCreatedObject = (xmlIn.attributes().value("useCreatedObject")=="true");
+                        mUseCreatedObject = (xmlIn.attributes().value("useCreatedObject").toString()=="true");
                     }
                     else if (parseActions)
                     {
@@ -77,7 +77,7 @@ namespace hal {
                 }
                 else if (xmlIn.isEndElement())
                 {
-                    if (xmlIn.name() == "actions")
+                    if (xmlIn.name() == QString("actions"))
                     {
                         parseActions = false;
                         return;

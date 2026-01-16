@@ -92,20 +92,20 @@ namespace hal
     {
         while(xmlIn.readNextStartElement())
         {
-            if(xmlIn.name() == "category")
+            if(xmlIn.name() == QString("category"))
                 mCat = xmlIn.readElementText();
-            else if(xmlIn.name() == "key")
+            else if(xmlIn.name() == QString("key"))
                 mKey = xmlIn.readElementText();
-            else if(xmlIn.name() == "type")
+            else if(xmlIn.name() == QString("type"))
                 mType = xmlIn.readElementText();
-            else if(xmlIn.name() == "value")
+            else if(xmlIn.name() == QString("value"))
                 mVal = xmlIn.readElementText();
-            else if(xmlIn.name() == "oldCategory")
+            else if(xmlIn.name() == QString("oldCategory"))
             {
                 mKeyOrCatModified = true;
                 mOldCat = xmlIn.readElementText();
             }
-            else if(xmlIn.name() == "oldKey")
+            else if(xmlIn.name() == QString("oldKey"))
             {
                 mKeyOrCatModified = true;
                 mOldKey = xmlIn.readElementText();

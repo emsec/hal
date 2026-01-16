@@ -44,6 +44,8 @@ namespace hal {
 
         template<typename T> extern QSet<T> listToSet(const QList<T>& list);
 
+        template<typename T> extern QList<T> setToList(const QSet<T>& cset);
+
         template<typename T> extern QVector<T> listToVector(const QList<T>& list);
 
         template<typename T> extern QVector<T> stdVectorToVector(const std::vector<T>& vec);
