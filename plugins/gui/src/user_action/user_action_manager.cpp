@@ -208,7 +208,7 @@ namespace hal
         UserAction* retval = fac->newAction();
         if (retval)
         {
-            QStringRef compound = xmlIn.attributes().value("compound");
+            auto compound = xmlIn.attributes().value("compound");   // Qt5: QStringRef    Qt6: QStringView
             if (!compound.isNull() && !compound.isEmpty())
                 retval->setCompoundOrder(compound.toInt());
             UserActionObject actObj;

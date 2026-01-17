@@ -1,4 +1,5 @@
 #include "gui/graph_widget/layouters/net_layout_point.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 #include <QBrush>
@@ -21,7 +22,7 @@ namespace hal {
 
 uint qHash(const hal::NetLayoutPoint& p)
 {
-    return qHash(static_cast<QPoint>(p));
+    return QtCompat::qHashPoint(static_cast<QPoint>(p));
 }
 
 uint qHash(const hal::NetLayoutWire& w)

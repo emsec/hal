@@ -7,12 +7,39 @@
 #endif
 namespace hal {
 
-    QRect QtCompat::desktopGeometry()
+    QRect QtCompat::desktopAvailableGeometry()
     {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         return QGuiApplication::primaryScreen()->availableGeometry();
 #else
         return qApp->desktop()->availableGeometry();
+#endif
+    }
+
+    QRect QtCompat::desktopScreenGeometry()
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return QGuiApplication::primaryScreen()->geometry();
+#else
+        return qApp->desktop()->screenGeometry();
+#endif
+    }
+
+    QRect QtCompat::widgetAvailableGeometry(QWidget* widget)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return widget->screen()->availableGeometry();
+#else
+        return qApp->desktop()->availableGeometry(widget);
+#endif
+    }
+
+    uint QtCompat::qHashPoint(const QPoint& p)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return qHash(p,0);
+#else
+        return qHash(p);
 #endif
     }
 
@@ -71,5 +98,5 @@ namespace hal {
 #else
         opt.init(widget);
 #endif
-    }
+    }    
 }

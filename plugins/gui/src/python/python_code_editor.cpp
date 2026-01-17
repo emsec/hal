@@ -5,6 +5,7 @@
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/log.h"
 #include "gui/gui_globals.h"
+#include "gui/hal_qt_compat/hal_qt_compat.h"
 
 #include <QApplication>
 #include <QTextDocumentFragment>
@@ -154,7 +155,7 @@ namespace hal
                 auto menu_width  = dialog->width();
                 auto menu_height = dialog->height();
 
-                auto desk_rect   = QApplication::desktop()->screenGeometry();
+                auto desk_rect   = QtCompat::desktopScreenGeometry();
                 auto desk_width  = desk_rect.width();
                 auto desk_height = desk_rect.height();
                 auto anchor      = this->cursorRect().bottomRight();

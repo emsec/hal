@@ -206,7 +206,7 @@ namespace hal
     void PythonConsole::mousePressEvent(QMouseEvent* event)
     {
         //        m_position = textCursor().position();
-        //        if (event->button() == Qt::MidButton)
+        //        if (event->button() == Qt::MiddleButton)
         //        {
         //            copy();
         //            QTextCursor cursor = cursorForPosition(event->pos());

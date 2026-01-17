@@ -91,7 +91,7 @@ namespace hal
         {
             mDockBar->detachButton(widget);
             ContentFrame* frame = new ContentFrame(widget, false, nullptr);
-            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), QtCompat::desktopGeometry()));
+            frame->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, frame->size(), QtCompat::desktopAvailableGeometry()));
             frame->show();
 
             if (widget == mCurrentWidget)

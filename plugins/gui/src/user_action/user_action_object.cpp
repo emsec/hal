@@ -112,9 +112,9 @@ namespace hal {
 
     void UserActionObject::readFromXml(QXmlStreamReader& xmlIn)
     {
-        QStringRef srId = xmlIn.attributes().value("id");
+        auto srId = xmlIn.attributes().value("id");   // Qt5: QStringRef    Qt6: QStringView
         if (srId.isNull() || srId.isEmpty()) return;
-        QStringRef srTp = xmlIn.attributes().value("type");
+        auto srTp = xmlIn.attributes().value("type");
         if (srTp.isNull() || srTp.isEmpty()) return;
         bool ok = false;
         mId = srId.toInt(&ok);

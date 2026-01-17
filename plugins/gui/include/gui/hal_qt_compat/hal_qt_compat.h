@@ -33,10 +33,18 @@
 #include <QLayout>
 #include <QStyleOption>
 #include <QWidget>
+#include <QPoint>
+#include <QDateTime>
 
 namespace hal {
     namespace QtCompat {
-        QRect desktopGeometry();
+        QRect desktopAvailableGeometry();
+
+        QRect widgetAvailableGeometry(QWidget* widget);
+
+        QRect desktopScreenGeometry();
+
+        uint qHashPoint(const QPoint& p);
 
         void styleOptionInit(QStyleOption& opt, QWidget* widget);
 

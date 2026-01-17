@@ -159,7 +159,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                             QBrush lastBrush = painter->brush();
                             painter->setBrush(pinBackground);
                             painter->setPen(QPen(pinBackground,0));
-                            painter->drawRoundRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
+                            painter->drawRoundedRect(sPinOuterHorizontalSpacing,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
                             painter->setBrush(lastBrush);
                             pinTextColor = legibleColor(pinBackground);
                         }
@@ -202,7 +202,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
                                 xbox -= (mOutputPinTextWidth.at(i) - wbox);
                                 wbox = mOutputPinTextWidth.at(i);
                             }
-                            painter->drawRoundRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
+                            painter->drawRoundedRect(xbox,yText-sPinFontAscent,wbox,sPinFontHeight,35,35);
                             painter->setBrush(lastBrush);
                             pinTextColor = legibleColor(pinBackground);
                         }
