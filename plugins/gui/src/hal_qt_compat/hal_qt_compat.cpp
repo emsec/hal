@@ -98,5 +98,15 @@ namespace hal {
 #else
         opt.init(widget);
 #endif
-    }    
+    }
+
+    QString QtCompat::dateToLocaleString(const QDateTime &dt)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        return QLocale::system().toString(dt, QLocale::ShortFormat);
+#else
+        return dt.toString(Qt::SystemLocaleShortDate);
+#endif
+    }
+
 }

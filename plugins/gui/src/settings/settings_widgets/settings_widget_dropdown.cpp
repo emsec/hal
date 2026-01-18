@@ -18,7 +18,7 @@ namespace hal
     {
         mComboBox = new QComboBox(this);
         mComboBox->addItems(mOptions);
-        connect(mComboBox, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &SettingsWidgetDropdown::on_index_changed);
+        connect(mComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWidgetDropdown::on_index_changed);
 
 
         mContainer->addWidget(mComboBox);

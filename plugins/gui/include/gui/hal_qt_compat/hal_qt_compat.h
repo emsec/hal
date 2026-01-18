@@ -50,6 +50,8 @@ namespace hal {
 
         void setMarginWidth(QLayout* layout, int marginWidth);
 
+        QString dateToLocaleString(const QDateTime &dt);
+
         template<typename T> extern QSet<T> listToSet(const QList<T>& list);
 
         template<typename T> extern QList<T> setToList(const QSet<T>& cset);
