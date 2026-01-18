@@ -40,9 +40,9 @@ namespace hal
         return mComboBox->currentIndex();
     }
 
-    void SettingsWidgetDropdown::on_index_changed(QString text)
+    void SettingsWidgetDropdown::on_index_changed(int inx)
     {
-        Q_UNUSED(text);
+        Q_UNUSED(inx);
         this->trigger_setting_updated();
     }
 }

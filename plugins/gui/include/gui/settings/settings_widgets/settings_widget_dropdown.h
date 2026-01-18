@@ -66,7 +66,7 @@ namespace hal
         virtual QVariant value() override;
 
     private:
-        void on_index_changed(QString text);
+        void on_index_changed(int inx);
 
         SettingsItemDropdown* mSettingsItem;
         QStringList mOptions;

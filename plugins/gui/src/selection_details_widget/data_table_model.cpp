@@ -122,7 +122,7 @@ namespace hal
             mDataEntries.append(e);
         }
         // The data is sorted by category first and then by key. However the category generic is always displayed first.
-        qSort(mDataEntries.begin(), mDataEntries.end(), 
+        std::sort(mDataEntries.begin(), mDataEntries.end(),
             [](const DataEntry a, const DataEntry b) -> bool 
                 { 
 
@@ -145,7 +145,7 @@ namespace hal
         int rowIdx = 0;
         for(const DataEntry& entry : mDataEntries)
         {
-            mEntryToRowStyle[QPair(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
+            mEntryToRowStyle[QPair<QString,QString>(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
             rowIdx++;
         }
 
