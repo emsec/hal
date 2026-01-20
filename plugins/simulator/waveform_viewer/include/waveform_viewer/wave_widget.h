@@ -37,6 +37,7 @@
 #include "waveform_viewer/wave_item.h"
 #include "waveform_viewer/wave_selection_dialog.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
+#include "gui/module_model/module_item.h"
 
 namespace hal {
 

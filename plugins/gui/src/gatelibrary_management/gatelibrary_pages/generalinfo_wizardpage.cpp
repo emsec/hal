@@ -112,8 +112,8 @@ namespace hal
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
         connect(mName, &QLineEdit::textChanged, this, &GeneralInfoWizardPage::handleNameChanged);
 
-        QRegExp rx("[A-z]([A-z]|\\d|_)*");
-        mValidator = new QRegExpValidator(rx, this);
+        QRegularExpression rx("^[A-z]([A-z]|\\d|_)*$");
+        mValidator = new QRegularExpressionValidator(rx, this);
         mName->setValidator(mValidator);
     }
 

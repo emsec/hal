@@ -35,7 +35,7 @@ namespace hal {
     void DotGraphicsView::mousePressEvent(QMouseEvent* event)
     {
         if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) ||
-            (event->button() == Qt::MidButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+            (event->button() == Qt::MiddleButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             mMovePosition = event->pos();
         }
@@ -47,7 +47,7 @@ namespace hal {
             return;
 
         if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) ||
-            (event->buttons().testFlag(Qt::MidButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+            (event->buttons().testFlag(Qt::MiddleButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             QScrollBar* hBar  = horizontalScrollBar();
             QScrollBar* vBar  = verticalScrollBar();

@@ -8,13 +8,13 @@
 #include "waveform_viewer/wave_graphics_canvas.h"
 #include "hal_core/utilities/json_write_document.h"
 #include "rapidjson/document.h"
-#include "rapidjson/reader.h"
 #include "rapidjson/filereadstream.h"
 #include <QApplication>
 #include <QFont>
 #include <QMimeData>
 #include <QAction>
 #include <stdlib.h>
+#include <QRandomGenerator>
 
 namespace hal {
 
@@ -470,7 +470,7 @@ namespace hal {
             if (index.column() != 2) return QVariant();
             int v = valueAtCursor(index);
             if (v == SaleaeDataTuple::sReadError)
-                return QColor::fromRgb(255,255,qrand()%256);
+                return QColor::fromRgb(255,255,QRandomGenerator::global()->bounded(256));
             if (v<-1) v=-1;
             if (v>1) v=1;
             return QColor(NetlistSimulatorControllerPlugin::sSimulationSettings->color((SimulationSettings::ColorSetting) (SimulationSettings::Value0+v)));

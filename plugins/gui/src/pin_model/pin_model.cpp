@@ -379,8 +379,8 @@ namespace hal
         //TODO change pinItems name within function and not after its call
 
         QString name = newName;
-        QRegExp rx("[A-Za-z]([A-Za-z]|\\d|_|\\(|\\))*");
-        QValidator* val = new QRegExpValidator(rx, this);
+        QRegularExpression rx("^[A-Za-z]([A-Za-z]|\\d|_|\\(|\\))*$");
+        QValidator* val = new QRegularExpressionValidator(rx, this);
         int pos = 0;
         if(val->validate(name, pos) != QValidator::Acceptable) return false;
 
@@ -418,8 +418,8 @@ namespace hal
         //TODO change pinItems name within function and not after its call
 
         QString name = newName;
-        QRegExp rx("[A-Za-z]([A-Za-z]|\\d|_|\\(|\\))*");
-        QValidator* val = new QRegExpValidator(rx, this);
+        QRegularExpression rx("^[A-Za-z]([A-Za-z]|\\d|_|\\(|\\))*$");
+        QValidator* val = new QRegularExpressionValidator(rx, this);
         int pos = 0;
         if(val->validate(name, pos) != QValidator::Acceptable) return false;
         //Check if name is already in use

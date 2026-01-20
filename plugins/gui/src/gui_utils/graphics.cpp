@@ -4,6 +4,7 @@
 
 #include <QFile>
 #include <QImage>
+#include <QRegularExpression>
 
 namespace hal
 {
@@ -11,28 +12,27 @@ namespace hal
     {
         void changeSvgColor(QString& svg_data, const QColor& from, const QColor& to)
         {
-            QRegExp regex(from.name());
+            QRegularExpression regex(from.name());
             svg_data.replace(regex, to.name().toUtf8());
         }
 
         void changeAllSvgColors(QString& svg_data, const QColor& to)
         {
-            QRegExp regex("#[0-9a-f]{6}", Qt::CaseInsensitive);
+            QRegularExpression regex("#[0-9a-f]{6}",QRegularExpression::CaseInsensitiveOption);
             svg_data.replace(regex, to.name().toUtf8());
         }
 
         bool applyColorStyle(QString& svg_data, const QString& color_style)
         {
-            QRegExp color_regex("#[0-9a-f]{6}", Qt::CaseInsensitive);
-            QRegExp all_to_color_regex("\\s*all\\s*->\\s*#[0-9a-f]{6}\\s*", Qt::CaseInsensitive);
-            QRegExp color_to_color_regex("\\s*(#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*,\\s*)*#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*", Qt::CaseInsensitive);
-            if (all_to_color_regex.exactMatch(color_style))
+            QRegularExpression color_regex("#[0-9a-f]{6}", QRegularExpression::CaseInsensitiveOption);
+            QRegularExpression all_to_color_regex("\\s*all\\s*->\\s*#[0-9a-f]{6}\\s*", QRegularExpression::CaseInsensitiveOption);
+            QRegularExpression color_to_color_regex("\\s*(#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*,\\s*)*#[0-9a-f]{6}\\s*->\\s*#[0-9a-f]{6}\\s*", QRegularExpression::CaseInsensitiveOption);
+            if (all_to_color_regex.match(color_style).hasMatch())
             {
-                color_regex.indexIn(color_style);
-                QString color = color_regex.cap(0);
+                QString color = color_regex.match(color_style).captured();
                 svg_data.replace(color_regex, color.toUtf8());
             }
-            else if (color_to_color_regex.exactMatch(color_style))
+            else if (color_to_color_regex.match(color_style).hasMatch())
             {
                 QString copy = color_style;
                 copy         = copy.simplified();
@@ -45,7 +45,7 @@ namespace hal
                     QString from_color = string.left(7);
                     QString to_color   = string.right(7);
 
-                    QRegExp regex(from_color);
+                    QRegularExpression regex(from_color);
                     svg_data.replace(regex, to_color.toUtf8());
                 }
             }
