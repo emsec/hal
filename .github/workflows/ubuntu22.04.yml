@@ -1,0 +1,133 @@
+name: Ubuntu 22.04
+
+on:
+  push:
+#  create:
+#    tags:
+#      - v*
+
+jobs:
+  build_ubuntu_22_04:
+    name: Build and Test on Ubuntu 22.04
+
+    strategy:
+      matrix:
+        #        runs-on: [ ubuntu-20.04, macOS-latest]
+        runs-on: [ ubuntu-22.04 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.runs-on }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - run: |
+          git fetch --prune --unshallow
+
+      - name: Cache pip Linux
+        uses: actions/cache@v4
+        if: startsWith(runner.os, 'Linux')
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache pip macOS
+        uses: actions/cache@v4
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Caches/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: ccache cache files
+        uses: actions/cache@v4
+        with:
+          path: ${{runner.workspace}}/.ccache
+          key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: |
+            ${{ runner.OS }}-ccache-
+
+      - name: Install Dependencies
+        run: ./install_dependencies.sh
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{runner.workspace}}/build
+
+      - name: Cache CCache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.OS }}-build-ccache
+          restore-keys: |
+            ${{ runner.OS }}-build-ccache-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-ccache-
+
+      - name: Configure CMake
+        if: startsWith(runner.os, 'Linux')
+        # Use a bash shell so we can use the same syntax for environment variable
+        # access regardless of the host operating system
+        shell: bash
+        # Note the current convention is to use the -S and -B options here to specify source
+        # and build directories, but this is only available with CMake 3.13 and higher.
+        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+        run: |
+          mkdir -p build/doc
+          cd build
+          export BUILD_TYPE=Debug
+          cp $GITHUB_WORKSPACE/documentation/index.html doc/
+          $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+      - name: Build
+        if: startsWith(runner.os, 'Linux')
+        shell: bash
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: |
+          cd build
+          echo "==> Disk usage before clean"
+          df -h .
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/hostedtoolcache
+          echo "==> Disk usage after clean"
+          df -h .
+          ninja
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+
+      - name: Test
+        shell: bash
+        # Execute tests defined by the CMake configuration.
+        # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+        run: |
+          cd build
+          ctest --rerun-failed --output-on-failure
+        #  ninja -v hal_coverage
+        # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
+        env:
+          LDFLAGS: "-L/usr/local/opt/qt/lib -L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"
+          CPPFLAGS: "-I/usr/local/opt/qt/include -I/usr/local/opt/llvm/include"
+          HAL_BASE_PATH: ${{runner.workspace}}/hal/build
+          CCACHE_DIR: ${{runner.workspace}}/.ccache
+          CCACHE_COMPRESS: true
+          CCACHE_COMPRESSLEVEL: 6
+          CCACHE_MAXSIZE: 400M
