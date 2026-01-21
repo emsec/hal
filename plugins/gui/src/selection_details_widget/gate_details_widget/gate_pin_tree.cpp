@@ -159,6 +159,24 @@ namespace hal
         if(clickedItem->type() == GatePinsTreeItem::Pin)
         {
             netIds = clickedItem->netIds();
+            if (mGateID > 0 && (clickedItem->direction() == PinDirection::input || clickedItem->direction() == PinDirection::output))
+                menu.addAction("Set focus to pin", [this, clickedItem]() {
+                    const Gate* g = gNetlist->get_gate_by_id(this->mGateID);
+                    auto pins = clickedItem->direction() == PinDirection::input
+                                        ? g->get_type()->get_input_pins() : g->get_type()->get_output_pins();
+                    SelectionRelay::Subfocus sfoc = clickedItem->direction() == PinDirection::input
+                                        ? SelectionRelay::Subfocus::Left : SelectionRelay::Subfocus::Right;
+                    int cnt = 0;
+                    for (auto pin: pins)
+                    {
+                        if (clickedItem->pinName() == pin->get_name())
+                            break;
+                        ++cnt;
+                    }
+                    gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, this->mGateID, sfoc, cnt);
+                    gSelectionRelay->relaySelectionChanged(this);
+                });
+
         }
         else
         {

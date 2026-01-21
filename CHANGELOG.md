@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * added information to GUI setting file so that widgets position and size from previous session gets restored
+* added option to focus on pin in pin context menu
 * plugins
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
   * fixed a bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
