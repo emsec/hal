@@ -1,5 +1,7 @@
 var NAVTREEINDEX44 =
 {
+"test__plugin_8py.html#aa70027ccf79a6a3022ae58e8db5e5e01":[7,0,1,7,3,9],
+"test__plugin_8py.html#abd3083aec6bd8d3b9851214d6d355740":[7,0,1,7,3,2],
 "test__plugin_8py.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9":[7,0,1,7,3,5],
 "test__plugin_8py.html#ae1adf1f65b9b3fb48bbe3118597914dd":[7,0,1,7,3,7],
 "test__plugin_8py_source.html":[7,0,1,7,3],
