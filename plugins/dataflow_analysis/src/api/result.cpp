@@ -283,7 +283,7 @@ namespace hal
                 write_path /= "graph.dot";
             }
 
-            if (write_path.extension() != "dot")
+            if (write_path.extension() != ".dot")
             {
                 log_info("dataflow", "replacing invalid file extension '{}' with '.dot' ...", write_path.extension().string());
                 write_path.replace_extension("dot");
@@ -357,7 +357,7 @@ namespace hal
                 write_path /= "groups.txt";
             }
 
-            if (write_path.extension() != "txt")
+            if (write_path.extension() != ".txt")
             {
                 log_info("dataflow", "replacing invalid file extension '{}' with '.txt' ...", write_path.extension().string());
                 write_path.replace_extension("txt");

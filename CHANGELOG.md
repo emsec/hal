@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * plugins
+  * fixed broken initialization of DANA plugin when starting via CLI
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
-  * fixed a bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
+  * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins
