@@ -72,7 +72,7 @@ elif [[ "$platform" == 'linux' ]]; then
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
 
         sudo apt-get update && sudo apt-get install -y build-essential verilator \
-        lsb-release git cmake pkgconf libboost-all-dev qtbase6-dev \
+        lsb-release git cmake pkgconf libboost-all-dev qt6-base-dev \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev \
         libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
@@ -110,7 +110,7 @@ elif [[ "$platform" == 'linux' ]]; then
 elif [[ "$platform" == 'docker' ]]; then
     # We can assume that we are in a ubuntu container, because of the official Dockerfile in the hal project
     apt-get update && apt-get install -y build-essential verilator \
-    lsb-release git cmake pkgconf libboost-all-dev qtbase6-dev \
+    lsb-release git cmake pkgconf libboost-all-dev qt6-base-dev \
     libpython3-dev ccache autoconf autotools-dev libsodium-dev \
     libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
