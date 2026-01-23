@@ -417,6 +417,8 @@ namespace hal
         static SettingsItemCheckbox* sSettingNetGroupingToPins;
 
         static SettingsItemCheckbox* sSettingPanOnMiddleButton;
+
+        static SettingsItemCheckbox* sSettingLayoutOnEveryChange;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.

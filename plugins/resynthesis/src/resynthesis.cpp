@@ -1,5 +1,3 @@
-#include "resynthesis/resynthesis.h"
-
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
@@ -11,8 +9,14 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/utilities/log.h"
+#include "resynthesis/resynthesis.h"
 
+#include <array>
+#include <cstdlib>    // std::getenv
+#include <filesystem>
 #include <fstream>
+#include <string>
+#include <string_view>
 
 namespace hal
 {
@@ -182,18 +186,53 @@ namespace hal
 
         Result<std::string> query_binary_path()
         {
-            static const std::vector<std::string> yosys_binary_paths = {"/usr/bin/yosys", "/usr/local/bin/yosys", "/opt/homebrew/bin/yosys", "/opt/yosys/yosys"};
+            namespace fs = std::filesystem;
 
-            for (const auto& path : yosys_binary_paths)
+            /* 1.  Well-known locations ─ quick exit for the common cases. */
+            static constexpr std::array<const char*, 4> kKnown = {"/usr/bin/yosys",
+                                                                  "/usr/local/bin/yosys",
+                                                                  "/opt/homebrew/bin/yosys",    // Apple-silicon Homebrew
+                                                                  "/opt/yosys/yosys"};
+
+            for (const char* p : kKnown)
             {
-                if (std::filesystem::exists(path))
+                if (fs::exists(p))
                 {
-                    return OK(path);
+                    return OK(std::string{p});
                 }
             }
 
-            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
+            /* 2.  Search every directory in $PATH. */
+            const char* raw = std::getenv("PATH");
+            if (raw == nullptr || *raw == '\0')
+            {
+                return ERR("could not query binary path: PATH is empty");
+            }
+
+            std::string_view path{raw};
+            while (!path.empty())
+            {
+                std::size_t sep      = path.find(':');
+                std::string_view dir = path.substr(0, sep);
+                if (!dir.empty())
+                {
+                    fs::path candidate = fs::path(dir) / "yosys";
+                    std::error_code ec;    // avoids exceptions
+                    if (fs::exists(candidate, ec) && !ec)
+                    {
+                        return OK(candidate.string());
+                    }
+                }
+                if (sep == std::string_view::npos)
+                {
+                    break;
+                }
+                path.remove_prefix(sep + 1);    // skip the ':'
+            }
+
+            return ERR("could not query binary path: yosys not found in PATH or default locations");
         }
+
     }    // namespace yosys
 
     namespace
@@ -464,13 +503,15 @@ namespace hal
 
                 // rename top module pins to the var names.
                 // NOTE: this seems to be really depended on the order. Doing this earlier causes a crash. I did not fully understand what causes the top module pins to be created.
+
+                Module* top_mod = nl->get_top_module();
                 for (const auto& [var, in_net] : var_name_to_net)
                 {
-                    auto in_pin = nl->get_top_module()->get_pin_by_net(in_net);
-                    in_pin->set_name(var);
+                    auto in_pin = top_mod->get_pin_by_net(in_net);
+                    top_mod->set_pin_name(in_pin, var, true);
                 }
-                auto out_pin = nl->get_top_module()->get_pin_by_net(new_out_net);
-                out_pin->set_name(out_pin_name);
+                auto out_pin = top_mod->get_pin_by_net(new_out_net);
+                top_mod->set_pin_name(out_pin, out_pin_name, true);
             }
 
             return OK(std::move(nl));
@@ -1056,7 +1097,7 @@ namespace hal
             // delete the created directory and the contained files
             std::filesystem::remove_all(base_path);
 
-            return OK(subgraph.size());
+            return OK(static_cast<unsigned int>(subgraph.size()));
         }
 
         Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)

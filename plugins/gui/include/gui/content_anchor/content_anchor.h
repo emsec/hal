@@ -25,9 +25,25 @@
 
 #pragma once
 
+#include <QList>
+#include <QObject>
+#include <QMetaEnum>
+
 namespace hal
 {
+    class ContentFrame;
     class ContentWidget;
+    class DockBar;
+
+    namespace ContentLayout
+    {
+        Q_NAMESPACE
+        enum Position {Center, Left, Right, Bottom};
+        Q_ENUM_NS(Position)
+
+        QString positionToString(Position pos);
+        Position positionFromString(const QString& s);
+    }
 
     /**
      * @ingroup docking
@@ -36,6 +52,11 @@ namespace hal
      */
     class ContentAnchor
     {
+
+    protected:
+        DockBar* mDockBar;
+        ContentLayout::Position mAnchorPosition;
+
     public:
         /**
          * Adds a given ContentWidget to the anchor.
@@ -56,8 +77,9 @@ namespace hal
          * Detaches a given widget from the anchor.
          *
          * @param widget - The widget to detach.
+         * @returns the enclosing frame of the detached widget
          */
-        virtual void detach(ContentWidget* widget) = 0;
+        virtual ContentFrame* detach(ContentWidget* widget) = 0;
 
         /**
          * Reattaches a given widget to the anchor.
@@ -81,17 +103,18 @@ namespace hal
         virtual void close(ContentWidget* widget) = 0;
 
         /**
-         * Destructor that has to be overriden.
+         * Destructor
          */
-        virtual inline ~ContentAnchor() = 0;
+        virtual ~ContentAnchor() {;}
 
         /**
          * Returns the number of widgets / buttons as of mDockBar->count()
          */
-        virtual int count() const = 0;
-    };
+        virtual int count() const;
 
-    ContentAnchor::~ContentAnchor()
-    {
-    }
+        /**
+         * Save state of widgets using anchor tag
+         */
+        void saveState() const;
+    };
 }

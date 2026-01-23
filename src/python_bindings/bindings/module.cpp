@@ -118,8 +118,7 @@ namespace hal
             :rtype: hal_py.Module or None
         )");
 
-        py_module.def_property_readonly(
-            "parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, R"(
+        py_module.def_property_readonly("parent_modules", [](Module* mod) { return mod->get_parent_modules(); }, R"(
             The parent modules of this module.
 
             :type: list[hal_py.Module]
@@ -154,8 +153,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly(
-            "submodules", [](Module* mod) { return mod->get_submodules(); }, R"(
+        py_module.def_property_readonly("submodules", [](Module* mod) { return mod->get_submodules(); }, R"(
             A list of all direct submodules of this module.
 
             :type: list[hal_py.Module]
@@ -203,15 +201,13 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def_property_readonly(
-            "netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
+        py_module.def_property_readonly("netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
             The netlist this module is associated with.
 
             :type: hal_py.Netlist
         )");
 
-        py_module.def(
-            "get_netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
+        py_module.def("get_netlist", [](Module* module) { return RawPtrWrapper<Netlist>(module->get_netlist()); }, R"(
             Get the netlist this module is associated with.
 
             :returns: The netlist.
@@ -709,7 +705,7 @@ namespace hal
             },
             py::arg("id"),
             py::arg("name"),
-            py::arg("pins"),
+            py::arg("pins")                = std::vector<ModulePin*>(),
             py::arg("direction")           = PinDirection::none,
             py::arg("type")                = PinType::none,
             py::arg("ascending")           = true,
@@ -756,7 +752,7 @@ namespace hal
                 }
             },
             py::arg("name"),
-            py::arg("pins"),
+            py::arg("pins")                = std::vector<ModulePin*>(),
             py::arg("direction")           = PinDirection::none,
             py::arg("type")                = PinType::none,
             py::arg("ascending")           = true,

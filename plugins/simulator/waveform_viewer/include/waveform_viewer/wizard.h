@@ -8,7 +8,6 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <vector>
-#include <map>
 #include <QDialogButtonBox>
 #include <QTableView>
 #include <QDialogButtonBox>
@@ -143,16 +142,22 @@ namespace hal {
     private Q_SLOTS:
         void handleRadioToggled(bool checked);
         void openFileBrowser();
+        void handleFileImport();
         void updateSubtitle();
 
     private:
         NetlistSimulatorController* mController;
+        QFrame* mFrameFile;
+        QFrame* mFrameTable;
         QLineEdit* mEditFilename;
+        QCheckBox* mDisplayHexValues;
         QPushButton* mButFiledialog;
+        QPushButton* mButFileimport;
         QRadioButton* mRadFile;
         QRadioButton* mRadEditor;
         WavedataTableEditor* mTableEditor;
         bool mDisableToggleHandler;
+        static bool canFileImport(const QString& filename);
     };
 
     class SimulationProcessOutput : public SimulationLogReceiver
@@ -200,12 +205,16 @@ namespace hal {
         virtual bool validatePage() override;
         virtual void initializePage() override;
 
+    private Q_SLOTS:
+        void useGuiSelection();
+
     private:
         NetlistSimulatorController *mController;
         WaveWidget* mWaveWidget;
         WaveSelectionTable* mWaveModel;
         QSortFilterProxyModel* mProxyModel;
         QPushButton* mButAll;
+        QPushButton* mButGui;
         QPushButton* mButNone;
         QTableView* mTableView;
     };

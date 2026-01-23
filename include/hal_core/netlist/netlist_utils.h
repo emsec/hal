@@ -29,8 +29,6 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/netlist.h"
 
-#include <unordered_set>
-
 namespace hal
 {
     class Gate;
@@ -337,7 +335,6 @@ namespace hal
                                                                    const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * \deprecated
          * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
          * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
@@ -347,7 +344,31 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_shortest_path instead.")]] CORE_API std::vector<Gate*>
-            get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+
+        /**
+         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate from the given module.
+         * The gate where the search started from will be the first in the result vector, the end gate will be the last.
+         * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
+         *
+         * @param[in] start_gate - The gate to start from.
+         * @param[in] end_module - The module to connect to.
+         * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
+         * @return A vector of gates that connect the start with end gate (possibly in reverse order).
+         */
+        CORE_API std::vector<Gate*> get_shortest_path(Gate* start_gate, Module* end_module, bool forward_direction);
+
+
+        /**
+         * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start module with the target module.
+         * There might be more than one connection thus a vector of connecting gate vectors is returned. In each connecting gate vector
+         *gate where the search started from will be the first, the end gate will be the last.
+         * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
+         *
+         * @param[in] start_module - The module to start from.
+         * @param[in] end_module - The module to connect to.
+         * @return A vector of connecting vectors with gates that connect the start with end gate.
+         */
+        CORE_API std::vector<std::vector<Gate*> > get_shortest_path(Module* start_module, Module* end_module);
     }    // namespace netlist_utils
 }    // namespace hal

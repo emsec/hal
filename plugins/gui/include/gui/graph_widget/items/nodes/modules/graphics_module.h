@@ -51,6 +51,13 @@ namespace hal
          */
         explicit GraphicsModule(Module* m);
 
+        /**
+         * Set the text label for module box.
+         *
+         * @param m - The underlying module of this GraphicsModule
+         */
+        void setModuleLabel(const Module* m, bool init=false);
+
     protected:
         /**
          * Represents one pin (both input or output) of a module. It stores the pin type name and the id of the net

@@ -6,7 +6,6 @@
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
 #include "gui/gui_globals.h"
 #include "gui/graph_widget/layouters/coordinate_from_data.h"
-#include "gui/settings/settings_items/settings_item_checkbox.h"
 
 #include <QDebug>
 

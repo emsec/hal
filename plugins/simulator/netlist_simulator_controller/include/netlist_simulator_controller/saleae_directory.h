@@ -239,6 +239,9 @@ namespace hal
         /// Add net entry if not yet existing, replace existing entry otherwise
         void add_or_replace_net(SaleaeDirectoryNetEntry& sdne);
 
+        /// Remove all files and reset internal variables
+        void clearAll();
+
         /// Dump content of class instance to console for debugging purpose
         std::vector<SaleaeDirectoryNetEntry> dump() const;
 

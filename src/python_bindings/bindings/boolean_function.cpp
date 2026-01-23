@@ -20,12 +20,40 @@ namespace hal
             .value("X", BooleanFunction::Value::X, R"(Represents an undefined value.)")
             .export_values();
 
-        py_boolean_function_value.def(
-            "__str__", [](const BooleanFunction::Value& v) { return BooleanFunction::to_string(v); }, R"(
+        py_boolean_function_value.def("__str__", [](const BooleanFunction::Value& v) { return BooleanFunction::to_string(v); }, R"(
             Translates the Boolean function value into its string representation.
 
             :returns: The value as a string.
             :rtype: str
+        )");
+
+        py_boolean_function.def_static(
+            "build",
+            [](const std::vector<BooleanFunction::Node>& nodes) -> std::optional<BooleanFunction> {
+                std::vector<BooleanFunction::Node> nodes_cloned;
+                for (const auto& node : nodes)
+                {
+                    nodes_cloned.push_back(node.clone());
+                }
+
+                auto res = BooleanFunction::build(std::move(nodes_cloned));
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nodes"),
+            R"(
+            Builds a Boolean function from a list of nodes.
+
+            :param list[hal_py.BooleanFunction.Node] nodes: The nodes to build the Boolean function from.
+            :returns: The Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
         )");
 
         py_boolean_function.def_static(
@@ -1230,8 +1258,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py_boolean_function.def(
-            "__str__", [](const BooleanFunction& f) { return f.to_string(); }, R"(
+        py_boolean_function.def("__str__", [](const BooleanFunction& f) { return f.to_string(); }, R"(
             Translates the Boolean function into its string representation.
 
             :returns: The Boolean function as a string.
@@ -1263,6 +1290,13 @@ namespace hal
 
         py_boolean_function.def("simplify", &BooleanFunction::simplify, R"(
             Simplifies the Boolean function.
+
+            :returns: The simplified Boolean function.
+            :rtype: hal_py.BooleanFunction
+        )");
+
+        py_boolean_function.def("simplify_local", &BooleanFunction::simplify_local, R"(
+            Simplifies the Boolean function only with local simplification rules and not invoking ABC.
 
             :returns: The simplified Boolean function.
             :rtype: hal_py.BooleanFunction
@@ -1540,8 +1574,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction.Node
         )");
 
-        py_boolean_function_node.def(
-            "__str__", [](const BooleanFunction::Node& n) { return n.to_string(); }, R"(
+        py_boolean_function_node.def("__str__", [](const BooleanFunction::Node& n) { return n.to_string(); }, R"(
             Translates the Boolean function node into its string representation.
 
             :returns: The Boolean function node as a string.

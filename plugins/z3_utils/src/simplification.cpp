@@ -617,7 +617,7 @@ namespace hal
                     return false;
 
                 default: {
-                    log_error("z3_utils", "commutative check not implemeted for type {}!", t);
+                    log_error("z3_utils", "commutative check not implemeted for type {}!", static_cast<int>(t));
                     return false;
                 }
             }

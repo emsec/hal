@@ -94,9 +94,9 @@ namespace hal
 
     }
 
-    void ContextTreeItem::setDataAtIndex(int index, QVariant &data)
+    void ContextTreeItem::setDataAtColumn(int column, QVariant &data)
     {
-
+        // TODO: implement
     }
 
     void ContextTreeItem::appendData(QVariant data)

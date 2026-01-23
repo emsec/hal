@@ -803,12 +803,12 @@ namespace hal
         case SelectionRelay::ItemType::Net:
             switch (navigateDirection) {
             case SelectionRelay::Subfocus::Left:
-                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
-                    if (hasGate(ep->get_gate())) return true;
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
+                    if (ep->get_gate()) return true;
                 break;
             case SelectionRelay::Subfocus::Right:
-                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_sources())
-                    if (hasGate(ep->get_gate())) return true;
+                for (const Endpoint* ep : gNetlist->get_net_by_id(id)->get_destinations())
+                    if (ep->get_gate()) return true;
                 break;
             default:
                 return true;
@@ -820,20 +820,6 @@ namespace hal
             return false;
         }
         return true;
-    }
-
-    bool GraphWidget::hasGate(const Gate* g) const
-    {
-        if (!g) return false;
-        if (mContext->gates().contains(g->get_id())) return true;
-        const Module* parentModule = g->get_module();
-        while (parentModule)
-        {
-            if (mContext->modules().contains(parentModule->get_id()))
-                return true;
-            parentModule = parentModule->get_parent_module();
-        }
-        return false;
     }
 
     void GraphWidget::handleNavigationUpRequest()

@@ -114,7 +114,7 @@ namespace hal
         else
             for (int i=0; i<labels.size(); i++) {
                 QVariant qv = QVariant(labels.at(i));
-                mRootItem->setDataAtIndex(i, qv);
+                mRootItem->setDataAtColumn(i, qv);
             }
 
 

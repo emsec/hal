@@ -4,6 +4,8 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -245,7 +247,29 @@ namespace hal
             return OK({});
         }
 
-        hal::Result<std::monostate> dataflow::Result::write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids) const
+        void dataflow::Result::open_dot_in_viewer(const std::filesystem::path& out_path) const
+        {
+            BasePluginInterface* bpif = plugin_manager::get_plugin_instance("dot_viewer");
+            if (!bpif)
+            {
+                log_info("dataflow", "Cannot find 'dot_viewer' plugin, dot graph not displayed.");
+                return;
+            }
+            GuiExtensionInterface* geif = bpif->get_first_extension<GuiExtensionInterface>();
+            if (!geif)
+            {
+                log_info("dataflow", "Cannot find dot_viewer GUI interface, dot graph not displayed.");
+                return;
+            }
+            std::vector<PluginParameter> params;
+            params.push_back(PluginParameter(PluginParameter::ExistingFile, "filename", "", out_path.string()));
+            params.push_back(PluginParameter(PluginParameter::String, "plugin", "", "dataflow"));
+            params.push_back(PluginParameter(PluginParameter::PushButton, "exec", "", "clicked"));
+            geif->set_parameter(params);
+            log_info("dataflow", "Request to display graph '{}' send to dot viewer.", out_path.string());
+        }
+
+        hal::Result<std::filesystem::path> dataflow::Result::write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids) const
         {
             auto write_path = out_path;
 
@@ -259,7 +283,7 @@ namespace hal
                 write_path /= "graph.dot";
             }
 
-            if (write_path.extension() != "dot")
+            if (write_path.extension() != ".dot")
             {
                 log_info("dataflow", "replacing invalid file extension '{}' with '.dot' ...", write_path.extension().string());
                 write_path.replace_extension("dot");
@@ -270,7 +294,7 @@ namespace hal
             std::ofstream ofs(write_path, std::ofstream::out);
             if (ofs)
             {
-                ofs << "digraph {\n\tnode [shape=box fillcolor=white style=filled];\n";
+                ofs << "digraph {\n\tcomment=\"created by HAL plugin dataflow\"\n\tnode [shape=box fillcolor=white style=filled];\n";
 
                 // print node
                 for (const auto& [group_id, gates] : this->get_groups())
@@ -312,7 +336,8 @@ namespace hal
                 ofs.close();
 
                 log_info("dataflow", "successfully written dataflow graph to '{}'.", write_path.string());
-                return OK({});
+
+                return OK({write_path});
             }
 
             return ERR("failed to open file at '" + write_path.string() + "' for writing dataflow graph.");
@@ -332,7 +357,7 @@ namespace hal
                 write_path /= "groups.txt";
             }
 
-            if (write_path.extension() != "txt")
+            if (write_path.extension() != ".txt")
             {
                 log_info("dataflow", "replacing invalid file extension '{}' with '.txt' ...", write_path.extension().string());
                 write_path.replace_extension("txt");
@@ -522,10 +547,8 @@ namespace hal
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
                             {
-                                auto* pin_group    = pin->get_group().first;
-                                pin_groups[pg_key] = pin_group;
-                                new_mod->set_pin_group_name(pin_group, prefix);
-                                new_mod->set_pin_group_type(pin_group, pin_type);
+                                auto pin_group     = new_mod->create_pin_group(prefix, {pin}, PinDirection::input, pin_type, false, 0, true, true);
+                                pin_groups[pg_key] = pin_group.get();
                             }
                             else
                             {
@@ -562,10 +585,8 @@ namespace hal
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
                             {
-                                auto* pin_group    = pin->get_group().first;
-                                pin_groups[pg_key] = pin_group;
-                                new_mod->set_pin_group_name(pin_group, prefix);
-                                new_mod->set_pin_group_type(pin_group, pin_type);
+                                auto pin_group     = new_mod->create_pin_group(prefix, {pin}, PinDirection::output, pin_type, false, 0, true, true);
+                                pin_groups[pg_key] = pin_group.get();
                             }
                             else
                             {

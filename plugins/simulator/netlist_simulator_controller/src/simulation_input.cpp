@@ -75,6 +75,7 @@ namespace hal {
         m_input_nets.clear();
         m_output_nets.clear();
         m_partial_nets.clear();
+        m_netgroups.clear();
     }
 
     bool SimulationInput::is_ready() const
@@ -283,7 +284,7 @@ namespace hal {
            const Module*m = (*it);
            for (PinGroup<ModulePin>* pg : m->get_pin_groups())
            {
-               if (pg->size() < 2) continue;
+               if (pg->size() < 2 || pg->size() > 31) continue;
                bool pin_group_simulated = true;
                DirectionType groupType = Undefined;
 
@@ -313,6 +314,7 @@ namespace hal {
                    NetGroup group;
                    group.module_pin_group = pg;
                    group.direction = groupType;
+                   group.ascending = pg->is_ascending();
                    for (ModulePin* mp : pg->get_pins())
                    {
                        Net* n = mp->get_net();
@@ -335,7 +337,7 @@ namespace hal {
 
             for (PinGroup<GatePin>* pg : gt->get_pin_groups())
             {
-                if (pg->size() < 2) continue;
+                if (pg->size() < 2 || pg->size() > 31) continue;
                 bool pin_group_simulated = true;
                 DirectionType groupType = Undefined;
                 std::unordered_set<const Net*> connectedNets;
@@ -382,6 +384,7 @@ namespace hal {
                     group.gate = g;
                     group.gate_pin_group = pg;
                     group.direction = groupType;
+                    group.ascending = pg->is_ascending();
                     for (const Net* n : connectedNets)
                         ungrouped_nets.erase(n);
                     m_netgroups.push_back(group);

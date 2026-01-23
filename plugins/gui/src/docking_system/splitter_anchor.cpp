@@ -10,8 +10,10 @@
 
 namespace hal
 {
-    SplitterAnchor::SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent) : QObject(parent), mDockBar(DockBar), mSplitter(Splitter)
+    SplitterAnchor::SplitterAnchor(ContentLayout::Position apos, DockBar* dockBar, Splitter* splitter, QObject* parent) : QObject(parent), mSplitter(splitter)
     {
+        mDockBar = dockBar;
+        mAnchorPosition = apos;
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragStart, mDockBar, &DockBar::handleDragStart);
         connect(ContentDragRelay::instance(), &ContentDragRelay::dragEnd, mDockBar, &DockBar::handleDragEnd);
 
@@ -20,10 +22,15 @@ namespace hal
 
     void SplitterAnchor::add(ContentWidget* widget, int index)
     {
+        // detached widgets with hidden button are not present in splitter widget
+        int splitterIndex = index;
+        for (int i=0; i<index; i++)
+            if (mDockBar->isHidden(i))
+                --splitterIndex;
         widget->setAnchor(this);
         ContentFrame* frame = new ContentFrame(widget, true, nullptr);
         frame->hide();
-        mSplitter->insertWidget(index, frame);
+        mSplitter->insertWidget(splitterIndex, frame);
         mDockBar->addButton(widget, index);
 
         Q_EMIT contentChanged();
@@ -39,7 +46,7 @@ namespace hal
         Q_EMIT contentChanged();
     }
 
-    void SplitterAnchor::detach(ContentWidget* widget)
+    ContentFrame *SplitterAnchor::detach(ContentWidget* widget)
     {
         widget->hide();
         widget->setParent(nullptr);
@@ -53,7 +60,8 @@ namespace hal
         mDockBar->detachButton(widget);
 
         Q_EMIT contentChanged();
-    }
+        return frame;
+     }
 
     void SplitterAnchor::reattach(ContentWidget* widget)
     {
@@ -93,11 +101,6 @@ namespace hal
             }
         }
         mDockBar->uncheckButton(widget);
-    }
-
-    int SplitterAnchor::count() const
-    {
-        return mDockBar->count();
     }
 
     void SplitterAnchor::clear()

@@ -161,7 +161,9 @@ namespace hal
         int retval      = 0;
         const Module* p = this;
         while ((p = p->get_parent_module()))
+        {
             ++retval;
+        }
         return retval;
     }
 
@@ -1044,7 +1046,7 @@ namespace hal
             return it->second;
         }
 
-        log_warning("module", "could not get pin group by ID for module '{}' with ID {}: no pin with ID {} exists", m_name, m_id, id);
+        log_warning("module", "could not get pin group by ID for module '{}' with ID {}: no pin group with ID {} exists", m_name, m_id, id);
         return nullptr;
     }
 
@@ -1061,7 +1063,7 @@ namespace hal
             return it->second;
         }
 
-        log_warning("module", "could not get pin group by name for module '{}' with ID {}: no pin with name '{}' exists", m_name, m_id, name);
+        log_warning("module", "could not get pin group by name for module '{}' with ID {}: no pin group with name '{}' exists", m_name, m_id, name);
         return nullptr;
     }
 
@@ -1243,7 +1245,7 @@ namespace hal
         if (pin_group->get_direction() != new_direction)
         {
             pin_group->set_direction(new_direction);
-            PinChangedEvent(this, PinEvent::GroupTypeChange, pin_group->get_id()).send();
+            PinChangedEvent(this, PinEvent::GroupDirChange, pin_group->get_id()).send();
         }
         return true;
     }
@@ -1266,10 +1268,10 @@ namespace hal
         }
 
         PinGroup<ModulePin>* pin_group;
+
         if (!ascending && !pins.empty())
         {
-            // compensate for shifting the start index
-            start_index -= (pins.size() - 1);
+            start_index = start_index - (pins.size() - 1);
         }
 
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index, force_name); res.is_error())
@@ -1284,20 +1286,24 @@ namespace hal
         if (ascending)
         {
             for (auto it = pins.begin(); it != pins.end(); ++it)
+            {
                 if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR("Assign pin to group failed.");
                 }
+            }
         }
         else
         {
             for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+            {
                 if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR("Assign pin to group failed.");
                 }
+            }
         }
 
         PinChangedEvent(this, PinEvent::GroupCreate, pin_group->get_id()).send();
@@ -1671,7 +1677,9 @@ namespace hal
                 return false;
             }
             else
+            {
                 PinChangedEvent(this, PinEvent::PinAssignToGroup, pin->get_id()).send();
+            }
         }
 
         scope.send_events();
@@ -1841,6 +1849,7 @@ namespace hal
                 {
                     ctr++;
                 }
+                PinChangedEvent(this, PinEvent::GroupRename, pin_group_it->second->get_id()).send();
             }
             else
             {

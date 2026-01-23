@@ -26,7 +26,7 @@ namespace hal
                     {
                         lib->mark_vcc_gate_type(gt);
                     }
-                    else if (gt->has_property(GateTypeProperty::ground))
+                    if (gt->has_property(GateTypeProperty::ground))
                     {
                         lib->mark_gnd_gate_type(gt);
                     }

@@ -260,7 +260,6 @@ namespace hal
          * Does the actual layout process.
          */
         void layout();
-        void alternateLayout();
 
         /**
          * Gets the GraphicsScene the layouter works on.
@@ -284,6 +283,8 @@ namespace hal
         QPoint gridPointByItem(GraphicsNode* item) const;
 
         void dumpNodePositions(const QPoint& search) const;
+
+        void updatePlacement(const GridPlacement& plc);
 
         void setNodePosition(const Node& n, const QPoint& p);
         void swapNodePositions(const Node& n1, const Node& n2);

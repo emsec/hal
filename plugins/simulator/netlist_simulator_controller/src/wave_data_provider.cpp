@@ -183,7 +183,7 @@ namespace hal {
         for (int i=0; i<n; i++)
         {
             WaveData* wd = wdList.at(i);
-            mBitMask[i] = 1 << i;
+            mBitMask[i] = 1 << (n-i-1);
             mParser.register_callback(wd->name().toStdString(), wd->id(), [this](const void* obj, uint64_t t, int val) {
                 if (t != mCurrentTime)
                 {

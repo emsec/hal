@@ -83,8 +83,9 @@ namespace hal
          * Detaches the content widget and its corresponding dockbutton (hides it) from the dockbar
          * and displays the content widget in its own window.
          * @param widget
+         * @returns the enclosing frame of the detached widget
          */
-        virtual void detach(ContentWidget* widget);
+        virtual ContentFrame* detach(ContentWidget* widget);
 
         /**
          * Reattches the given content widget and corresponding dockbutton (shows it) to the dockbar.
@@ -117,12 +118,6 @@ namespace hal
         void handleNoCurrentWidget(int index);
 
         /**
-         * Returns the number of widgets / buttons as of mDockBar->count()
-         * @return - The number of widgets / buttons
-         */
-        int count() const override;
-
-        /**
          * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding
          * widgets are not destroyed but hidden.
          */
@@ -150,12 +145,10 @@ namespace hal
     private:
         QVBoxLayout* mVerticalLayout;
         QHBoxLayout* mHorizontalLayout;
-        DockBar* mDockBar;
         Toolbar* mLeftToolbar;
         Toolbar* mRightToolbar;
         ContentWidget* mCurrentWidget;
         QAction* mActionDetach;
-        QList<ContentFrame*> mDetachedFrames;
         QList<QShortcut*> mActiveShortcuts;
     };
 }

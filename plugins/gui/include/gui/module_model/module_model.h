@@ -252,11 +252,18 @@ namespace hal
         void updateModuleParent(const Module* module);
 
         /**
-         * Updates the ModuleItems for the specified module. The specified module MUST be contained in the item model.
+         * Updates the ModuleItems name for the specified module. The specified module MUST be contained in the item model.
          *
          * @param id - The id of the module to update
          */
         void updateModuleName(const u32 id);
+
+        /**
+         * Updates the ModuleItems type for the specified module. The specified module MUST be contained in the item model.
+         *
+         * @param id - The id of the module to update
+         */
+        void updateModuleType(const u32 id);
 
         /**
          * Updates the ModuleItems for the specified gate. The specified gate MUST be contained in the item model.
@@ -283,6 +290,8 @@ namespace hal
 
     private Q_SLOTS:
         void handleModuleNameChanged(Module* mod);
+
+        void handleModuleTypeChanged(Module* mod);
 
         void handleModuleRemoved(Module* mod);
 

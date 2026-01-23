@@ -286,7 +286,7 @@ namespace hal
             // get pin that was created automatically when connecting the net to a gate inside the module
             if (auto pin = m->get_pin_by_net(master_net); pin != nullptr)
             {
-                pin->set_name(pin_name);
+                m->set_pin_name(pin, pin_name, true);
                 pin->set_type(pin_type);
 
                 // remove pin from current pin group

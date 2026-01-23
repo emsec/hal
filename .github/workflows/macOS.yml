@@ -24,7 +24,7 @@ jobs:
 
 
       - name: Cache pip macOS
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
@@ -34,7 +34,7 @@ jobs:
 
       - name: Cache Homebrew Downloads
         if: startsWith(runner.os, 'macOS')
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/Library/Caches/Homebrew
           #        key: ${{ runner.OS }}-build-downloads-${{ hashFiles('**/package-lock.json') }}
@@ -45,7 +45,7 @@ jobs:
 
 #      - name: Cache Homebrew
 #        if: matrix.os == 'macOS-latest'
-#        uses: actions/cache@v1
+#        uses: actions/cache@v4
 #        with:
 #          path: /usr/local/Homebrew
 #          #        key: ${{ runner.OS }}-build-localbrew-${{ hashFiles('**/package-lock.json') }}
@@ -62,7 +62,7 @@ jobs:
           message("::set-output name=timestamp::${current_date}")
 
       - name: ccache cache files
-        uses: actions/cache@v1.1.0
+        uses: actions/cache@v4
         with:
           path: ${{runner.workspace}}/.ccache
           key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -90,17 +90,9 @@ jobs:
           mkdir -p build
           cd build
           export PATH="$(brew --prefix qt@5)/bin:$PATH"
-          brew ls llvm@14
-          brew --prefix llvm@14
-          ls -l /usr/local
-          ls -l /opt/homebrew/opt
-          ls -l /opt/homebrew/opt/llvm@14
-          ls -l /opt/homebrew/opt/llvm@14/bin
-          ls -l /opt/homebrew/opt/llvm@14/bin/clang
-          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=$(brew --prefix llvm@14)/bin/clang -DCMAKE_CXX_COMPILER=$(brew --prefix llvm@14)/bin/clang++
+          export LDFLAGS="-L$(brew --prefix qt@5)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
+          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -115,10 +107,10 @@ jobs:
           cd build
           export PATH="$(brew --prefix qt@5)/bin:$PATH"
           export BUILD_TYPE=Debug
+          export LDFLAGS="-L$(brew --prefix qt@5)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
+          export SDKROOT=$(xcrun --show-sdk-path)
           cmake --build . --target all --clean-first --config $BUILD_TYPE
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -134,13 +126,11 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           cd build
-          ninja
+          export LDFLAGS="-L$(brew --prefix qt@5)/lib -Wl,-rpath,$(brew --prefix llvm)/lib"
           ctest --rerun-failed --output-on-failure
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
-          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
-          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true

@@ -87,7 +87,7 @@ namespace hal
          * @param index - The column to set the new data.
          * @param data - The new column data.
          */
-        virtual void setDataAtIndex(int index, QVariant& data) = 0;
+        virtual void setDataAtColumn(int column, QVariant& data) = 0;
 
         /**
          * Appends a new column to the item.
@@ -227,7 +227,7 @@ namespace hal
          * @param index - The column to set the new data.
          * @param data - The new column data.
          */
-        void setDataAtIndex(int index, QVariant& data) override;
+        void setDataAtColumn(int column, QVariant& data) override;
 
         /**
          * Appends a new column to the item.

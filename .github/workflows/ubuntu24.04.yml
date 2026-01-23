@@ -27,7 +27,7 @@ jobs:
           git fetch --prune --unshallow
 
       - name: Cache pip Linux
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         if: startsWith(runner.os, 'Linux')
         with:
           path: ~/.cache/pip
@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Cache pip macOS
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         if: startsWith(runner.os, 'macOS')
         with:
           path: ~/Library/Caches/pip
@@ -45,7 +45,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: ccache cache files
-        uses: actions/cache@v1.1.0
+        uses: actions/cache@v4
         with:
           path: ${{runner.workspace}}/.ccache
           key: ${{ runner.OS }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -61,7 +61,7 @@ jobs:
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Cache CCache
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.ccache
           #        key: ${{ runner.OS }}-build-ccache-${{ hashFiles('**/package-lock.json') }}
@@ -98,6 +98,14 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
+          echo "==> Disk usage before clean"
+          df -h .
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/hostedtoolcache
+          echo "==> Disk usage after clean"
+          df -h .
           ninja
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache

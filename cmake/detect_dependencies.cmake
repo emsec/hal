@@ -83,6 +83,21 @@ if(APPLE AND CMAKE_HOST_APPLE)
         endif()
     endif()
 
+    # If OpenMP wasn't found, try if we can find it in the default Homebrew location (for newer homebrew setups)
+    if((NOT OPENMP_FOUND) AND(NOT OPENMP_CXX_FOUND) AND EXISTS "/opt/homebrew/opt/libomp/lib/libomp.dylib")
+        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+        set(OpenMP_CXX_LIB_NAMES omp)
+        set(OpenMP_omp_LIBRARY /opt/homebrew/opt/libomp/lib/libomp.dylib)
+
+        find_package(OpenMP)
+
+        if(OPENMP_FOUND OR OPENMP_CXX_FOUND)
+            message(VERBOSE "Found libomp in homebrew default location.")
+        else()
+            message(FATAL_ERROR "Didn't find libomp. Tried homebrew default location but also didn't find it.")
+        endif()
+    endif()
+
     set(Additional_OpenMP_Libraries_Workaround "")
 
     # Workaround because older cmake on apple doesn't support FindOpenMP

@@ -245,6 +245,7 @@ namespace hal
 
         qRegisterMetaType<u32>("u32");
         qRegisterMetaType<spdlog::level::level_enum>("spdlog::level::level_enum");
+        qRegisterMetaType<std::string>("std::string");
 
         mGSettings           = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guisettings.ini").string()), QSettings::IniFormat);
         gGuiState            = new QSettings(QString::fromStdString((utils::get_user_config_directory() / "guistate.ini").string()), QSettings::IniFormat);

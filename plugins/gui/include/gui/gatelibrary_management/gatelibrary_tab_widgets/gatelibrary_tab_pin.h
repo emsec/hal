@@ -26,8 +26,6 @@
 #pragma once
 
 #include "gatelibrary_tab_interface.h"
-#include "gui/selection_details_widget/gate_details_widget/pin_tree_model.h"
-#include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <QGridLayout>

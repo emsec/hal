@@ -14,10 +14,23 @@ namespace hal {
 
         QList<NetlistSimulatorController::InputColumnHeader> mInputColumnHeader;
         qulonglong mMaxTime;
+        bool mDisableCellParser;
+        bool mDisplayHexValues;
+
+        // member variables for load data callback
+        uint64_t mCurrentTime;
+        int mCurrentRow;
+        int* mCurrentValue;
 
         static const int sIllegalValue = -99;
+        void setValueCell(int irow, int icol, int val);
+        void setupHeader();
+
     Q_SIGNALS:
         void lineAdded();
+
+    public Q_SLOTS:
+        void setDisplayHexValues(bool hex);
 
     private Q_SLOTS:
         void handleItemChanged(QTableWidgetItem* changedItem);
@@ -34,6 +47,10 @@ namespace hal {
         int intCellValue(int irow, int icol) const;
 
         qulonglong maxTime() const { return mMaxTime; }
+
+        bool isDisplayHexValues() const { return mDisplayHexValues; }
+
+        void loadWaveData(const QString& saleaDirectoryFile);
     };
 
 }

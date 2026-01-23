@@ -32,6 +32,7 @@
 
 #include "gui/gui_utils/special_log_content_manager.h"
 #include "gui/content_widget/content_widget.h"
+#include "gui/content_anchor/content_anchor.h"
 #include "hal_config.h"
 
 namespace hal
@@ -62,12 +63,20 @@ namespace hal
         virtual ExternalContentWidget* contentFactory() const = 0;
     };
 
+    struct ContentWidgetPlacement {
+        ContentWidget* widget;
+        int index;
+        ContentLayout::Position anchorPos;
+        bool visible;
+    };
+
     class ExternalContent : public QList<ContentFactory*>
     {
         static ExternalContent* inst;
         ExternalContent() {;}
     public:
         static ExternalContent* instance();
+        void removePlugin(const QString& pluginName);
         QMap<QString,ExternalContentWidget*> openWidgets;
     };
 
@@ -173,10 +182,7 @@ namespace hal
 
     private:
         MainWindow* mMainWindow;
-        int mExternalIndex;
         QString mWindowTitle;
-
-        QList<ContentWidget*> mContent;
 
         PythonConsoleWidget* mPythonConsoleWidget;
         PythonEditor* mPythonWidget;

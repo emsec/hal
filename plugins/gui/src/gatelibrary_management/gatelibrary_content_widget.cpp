@@ -75,6 +75,58 @@ namespace hal
         mSearchbar->setColumnNames({"Name", "ID"});
     }
 
+    bool GatelibraryContentWidget::initialize(GateLibrary* gateLibrary, bool readOnly)
+    {
+        if(!gateLibrary)
+        {
+            if(gNetlist && gNetlist->get_gate_library()){
+                // readonly flag makes sure mGateLibrary does not get modified, const attribute not needed
+                mGateLibrary = const_cast<GateLibrary*>(gNetlist->get_gate_library());
+                mReadOnly = true;
+            }
+            else
+            {
+                QString title = "Load gate library";
+                QString text  = "HAL Gate Library (*.hgl *.lib)";
+                QString path  = QDir::currentPath();
+                QFile gldpath(":/path/gate_library_definitions");
+                if (gldpath.open(QIODevice::ReadOnly))
+                    path = QString::fromUtf8(gldpath.readAll());
+
+                //TODO fileDialog throws bad window error
+                QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);
+                if (fileName == nullptr)
+                    return false;
+
+                if (gPluginRelay->mGuiPluginTable)
+                    gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
+
+                auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
+
+                if(gateLibrary)
+                    mGateLibrary = gateLibrary;
+                else
+                {
+                    //extract gatelibrary name from path
+                    mGateLibrary = new GateLibrary(std::filesystem::path(fileName.toStdString()), QFileInfo(fileName).baseName().toStdString());
+                }
+
+                mReadOnly = false;
+            }
+
+        }
+        else
+        {
+            mReadOnly = readOnly;
+            mGateLibrary = gateLibrary;
+        }
+        QDir dir(QDir::home());
+        if(!gFileStatusManager->isGatelibModified()) window()->setWindowTitle(
+                QString("GateLibrary %1").arg(QDir::home().relativeFilePath(QString::fromStdString(mGateLibrary->get_path().string()))));
+        mPath = mGateLibrary->get_path().generic_string();
+        return true;
+    }
+
     void GatelibraryContentWidget::handleContextMenuRequested(const QPoint& pos)
     {
         QModelIndex idx = mTableView->indexAt(pos);
@@ -163,7 +215,13 @@ namespace hal
         if (fd.exec()) {
             filename = fd.selectedFiles().front();
         }
-        if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true))
+
+        // order of conditions important:
+        //   1. Filename for save as provided
+        //   2. Copy was saved under new filename
+        //   3. We ar *not* in readOnly Mode
+        //       => continue to work with copy
+        if (!filename.isEmpty() &&  gate_library_manager::save(filename.toStdString(),mGateLibrary,true) && !mReadOnly)
         {
             mPath = filename.toStdString();
             gFileStatusManager->gatelibSaved();

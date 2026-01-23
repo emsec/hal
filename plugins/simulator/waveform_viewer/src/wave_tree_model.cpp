@@ -22,7 +22,7 @@ namespace hal {
         : QAbstractItemModel(obj), mWaveDataList(wdlist), mWaveItemHash(wHash), mGraphicsCanvas(wgc),
           mDragCommand(None), mDragIsGroup(false),
           mCursorTime(0), mCursorXpos(0),
-          mReorderRequestWaiting(0)
+          mReorderRequestWaiting(0), mNumberEntriesChangedEvents(0)
     {
 
         mRoot = new WaveDataRoot(mWaveDataList);
@@ -312,7 +312,17 @@ namespace hal {
         WaveItem* wi = mWaveItemHash->addOrReplace(wd,tp,iwave,parentId);
         connect(wi,&WaveItem::gotCursorValue,this,&WaveTreeModel::handleUpdateValueColumn,Qt::QueuedConnection);
         int count = mWaveItemHash->size();
-        if (count != oldCount) Q_EMIT numberEntriesChanged(count);
+        if (count != oldCount)
+        {
+            ++mNumberEntriesChangedEvents;
+            Q_EMIT numberEntriesChanged(count);
+        }
+    }
+
+    int WaveTreeModel::decreaseNumberEntriesChangedEvents()
+    {
+        if (mNumberEntriesChangedEvents <= 0) return 0;
+        return --mNumberEntriesChangedEvents;
     }
 
     void WaveTreeModel::handleWaveAdded(int iwave)
@@ -494,7 +504,7 @@ namespace hal {
     int WaveTreeModel::waveIndex(const QModelIndex& index) const
     {
          WaveData* wd = item(index);
-         if (!wd) return -1;
+         if (!wd) return -99;
          if (dynamic_cast<WaveDataGroup*>(wd)) return -1;
          if (dynamic_cast<WaveDataBoolean*>(wd)) return -2;
          if (dynamic_cast<WaveDataTrigger*>(wd)) return -3;
@@ -733,7 +743,7 @@ namespace hal {
         // drop on group item
         if (dropParent.internalPointer() == mRoot)
         {
-            dropRow(dropParent,0);
+            dropRow(dropParent,row >= 0 ? row : 0);
             return true;
         }
         return false;

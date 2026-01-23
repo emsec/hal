@@ -62,6 +62,8 @@ namespace hal
         for (PinItem* pi : inputPins)
             mLegVars.insert(pi->getName().toStdString());
 
+        mLegVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
+        mLegVars.insert(mWizard->statePage->mNegStateIdentifier->text().toStdString());
         mClock->setLegalVariables(mLegVars);
         mNextState->setLegalVariables(mLegVars);
         mAReset->setLegalVariables(mLegVars);

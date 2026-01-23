@@ -1,5 +1,4 @@
 #include "hal_core/netlist/boolean_function/symbolic_execution.h"
-
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -235,6 +234,141 @@ namespace hal
                 return BooleanFunction::Const(simplified);
             }
 
+            /**
+             * Helper function to simplify a constant SHL operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Shl(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            {
+                if (p1 >= p0.size())
+                {
+                    // Shift amount is too large, result is all zeros
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO));
+                }
+
+                std::vector<BooleanFunction::Value> result(p0.size(), BooleanFunction::Value::ZERO);
+
+                // Copy bits from original position to shifted position
+                for (auto i = p1; i < p0.size(); i++)
+                {
+                    result[i] = p0[i - p1];
+                }
+
+                return BooleanFunction::Const(result);
+            }
+
+            /**
+             * Helper function to simplify a constant LSHR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Lshr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            {
+                if (p1 >= p0.size())
+                {
+                    // Shift amount is too large, result is all zeros
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO));
+                }
+
+                std::vector<BooleanFunction::Value> result(p0.size(), BooleanFunction::Value::ZERO);
+
+                // Copy bits from original position to shifted position
+                for (auto i = 0u; i < p0.size() - p1; i++)
+                {
+                    result[i] = p0[i + p1];
+                }
+
+                return BooleanFunction::Const(result);
+            }
+
+            /**
+             * Helper function to simplify a constant ASHR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Ashr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            {
+                auto sign_bit = p0.back();    // MSB is the sign bit
+
+                if (p1 >= p0.size())
+                {
+                    // Shift amount is too large, result is all sign bits
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), sign_bit));
+                }
+
+                std::vector<BooleanFunction::Value> result(p0.size(), sign_bit);
+
+                // Copy bits from original position to shifted position
+                for (auto i = 0u; i < p0.size() - p1; i++)
+                {
+                    result[i] = p0[i + p1];
+                }
+
+                return BooleanFunction::Const(result);
+            }
+
+            /**
+             * Helper function to simplify a constant ROL operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Rol(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            {
+                auto rotate_amount = p1 % p0.size();    // Modulo for rotation
+
+                if (rotate_amount == 0)
+                {
+                    return BooleanFunction::Const(p0);    // No rotation needed
+                }
+
+                std::vector<BooleanFunction::Value> result(p0.size());
+
+                // Perform the rotation
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    auto new_pos    = (i + rotate_amount) % p0.size();
+                    result[new_pos] = p0[i];
+                }
+
+                return BooleanFunction::Const(result);
+            }
+
+            /**
+             * Helper function to simplify a constant ROR operation.
+             * 
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Ror(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            {
+                auto rotate_amount = p1 % p0.size();    // Modulo for rotation
+
+                if (rotate_amount == 0)
+                {
+                    return BooleanFunction::Const(p0);    // No rotation needed
+                }
+
+                std::vector<BooleanFunction::Value> result(p0.size());
+
+                // Perform the rotation
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    auto new_pos    = (i + p0.size() - rotate_amount) % p0.size();
+                    result[new_pos] = p0[i];
+                }
+
+                return BooleanFunction::Const(result);
+            }
             /**
              * Helper function to simplify a constant SLE operation.
              * 
@@ -1288,9 +1422,19 @@ namespace hal
             }
 
             std::vector<std::vector<BooleanFunction::Value>> values;
+            std::vector<u16> indices;
+
             for (const auto& parameter : p)
             {
-                values.emplace_back(parameter.get_top_level_node().constant);
+                if (parameter.is_index())
+                {
+                    indices.push_back(parameter.get_index_value().get());
+                }
+                else
+                {
+                    const auto v = parameter.get_top_level_node().constant;
+                    values.emplace_back(v);
+                }
             }
 
             switch (node.type)
@@ -1311,14 +1455,31 @@ namespace hal
                 case BooleanFunction::NodeType::Mul:
                     return OK(ConstantPropagation::Mul(values[0], values[1]));
 
+                case BooleanFunction::NodeType::Sdiv: {
+                    // TODO implement
+                    return ERR("could not propagate constants: not implemented for given node type");
+                }
+                case BooleanFunction::NodeType::Udiv: {
+                    // TODO implement
+                    return ERR("could not propagate constants: not implemented for given node type");
+                }
+                case BooleanFunction::NodeType::Srem: {
+                    // TODO implement
+                    return ERR("could not propagate constants: not implemented for given node type");
+                }
+                case BooleanFunction::NodeType::Urem: {
+                    // TODO implement
+                    return ERR("could not propagate constants: not implemented for given node type");
+                }
+
+                case BooleanFunction::NodeType::Concat: {
+                    values[1].insert(values[1].end(), values[0].begin(), values[0].end());
+                    return OK(BooleanFunction::Const(values[1]));
+                }
                 case BooleanFunction::NodeType::Slice: {
                     auto start = p[1].get_index_value().get();
                     auto end   = p[2].get_index_value().get();
                     return OK(BooleanFunction::Const(std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end + 1)));
-                }
-                case BooleanFunction::NodeType::Concat: {
-                    values[1].insert(values[1].end(), values[0].begin(), values[0].end());
-                    return OK(BooleanFunction::Const(values[1]));
                 }
                 case BooleanFunction::NodeType::Zext: {
                     values[0].resize(node.size, BooleanFunction::Value::ZERO);
@@ -1328,6 +1489,17 @@ namespace hal
                     values[0].resize(node.size, static_cast<BooleanFunction::Value>(values[0].back()));
                     return OK(BooleanFunction::Const(values[0]));
                 }
+
+                case BooleanFunction::NodeType::Shl:
+                    return OK(ConstantPropagation::Shl(values[0], indices[0]));
+                case BooleanFunction::NodeType::Lshr:
+                    return OK(ConstantPropagation::Lshr(values[0], indices[0]));
+                case BooleanFunction::NodeType::Ashr:
+                    return OK(ConstantPropagation::Ashr(values[0], indices[0]));
+                case BooleanFunction::NodeType::Rol:
+                    return OK(ConstantPropagation::Rol(values[0], indices[0]));
+                case BooleanFunction::NodeType::Ror:
+                    return OK(ConstantPropagation::Ror(values[0], indices[0]));
 
                 case BooleanFunction::NodeType::Eq:
                     return OK((values[0] == values[1]) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1));
@@ -1342,14 +1514,6 @@ namespace hal
                 case BooleanFunction::NodeType::Ite:
                     return OK(ConstantPropagation::Ite(values[0], values[1], values[2]));
 
-                case BooleanFunction::NodeType::Sdiv:
-                    // TODO implement
-                case BooleanFunction::NodeType::Udiv:
-                    // TODO implement
-                case BooleanFunction::NodeType::Srem:
-                    // TODO implement
-                case BooleanFunction::NodeType::Urem:
-                    // TODO implement
                 default:
                     return ERR("could not propagate constants: not implemented for given node type");
             }

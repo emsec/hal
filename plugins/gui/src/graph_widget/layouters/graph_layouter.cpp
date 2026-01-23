@@ -1,10 +1,8 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/graph_widget/graphics_factory.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include "gui/graph_widget/items/nets/arrow_separated_net.h"
-#include "gui/graph_widget/items/nets/circle_separated_net.h"
 #include "gui/graph_widget/items/nets/labeled_separated_net.h"
 #include "gui/graph_widget/items/nets/standard_arrow_net.h"
 #include "gui/graph_widget/items/nets/standard_graphics_net.h"
@@ -105,6 +103,29 @@ namespace hal
     const QMap<QPoint, Node> GraphLayouter::positionToNodeMap() const
     {
         return mPositionToNodeMap;
+    }
+
+    void GraphLayouter::updatePlacement(const GridPlacement& plc)
+    {
+        // Keep track which positions are occupied by new nodes, possible values:
+        // -1 : position no longer occupied
+        //  1 : position which was not occupied before now occupied
+        //  0 : old position taken by new node
+        QHash<QPoint,int> positionOccupied;
+
+        for (auto it = plc.constBegin(); it != plc.constEnd(); ++it)
+        {
+            auto jt = mNodeToPositionMap.find(it.key());
+            if (jt == mNodeToPositionMap.end()) continue;
+            --positionOccupied[jt.value()];  // old value from mNodePositionMap
+            ++positionOccupied[it.value()];  // new value from plc
+            jt.value() = it.value();
+            mPositionToNodeMap[it.value()] = it.key();
+        }
+
+        for (auto rpit = positionOccupied.begin(); rpit != positionOccupied.end(); ++rpit)
+            if (rpit.value() < 0)
+                mPositionToNodeMap.remove(rpit.key());
     }
 
     void GraphLayouter::setNodePosition(const Node& n, const QPoint& p)

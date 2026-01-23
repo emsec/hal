@@ -50,7 +50,7 @@ namespace hal
         enum class TreeItemType {PinGroup, Pin, GroupCreator, PinCreator, InvalidPinGroup, InvalidPin};
 
         void setData(QList<QVariant> data) override;
-        void setDataAtIndex(int index, QVariant& data) override;
+        void setDataAtColumn(int column, QVariant& data) override;
         void appendData(QVariant data) override;
         int getColumnCount() const override;
 

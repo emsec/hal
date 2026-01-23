@@ -99,6 +99,7 @@ namespace hal {
         u64 mCursorTime;
         int mCursorXpos;
         int mReorderRequestWaiting;
+        int mNumberEntriesChangedEvents;
         QMap<WaveItem*,WaveValueThread*> mValueThreads;
 
         bool dropGroup(const QModelIndex& parentTo, int row);
@@ -179,5 +180,6 @@ namespace hal {
         static const char* sStateColor[3];
         bool persist() const;
         void restore();
+        int decreaseNumberEntriesChangedEvents();
     };
 }

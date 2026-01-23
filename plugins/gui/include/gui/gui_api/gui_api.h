@@ -219,6 +219,7 @@ namespace hal
              *         If the parent directory does not exist std::nullopt is returned instead.
              */
             static std::optional<std::vector<u32>> getChildDirectories(u32 directoryId);
+
             /**
              * Returns a list of child views for a given directory.
              * 
@@ -228,6 +229,16 @@ namespace hal
              *         If the parent directory does not exist std::nullopt is returned instead.
              */
             static std::optional<std::vector<u32>> getChildViews(u32 directoryId);
+
+            /**
+             * Isolates the shortest path from one module to another in a new view
+             *
+             * @param fromModId - The id of the module the path starts from
+             * @param toModId - The id of the module the path ends
+             *
+             * @return The ID of the created view if successull, 0 otherwise
+             */
+            static int isolateModuleToModulePathInNewView(u32 fromModId, u32 toModId);
         };
     }
 

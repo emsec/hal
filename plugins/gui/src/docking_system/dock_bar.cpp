@@ -3,7 +3,6 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/docking_system/content_drag_relay.h"
 #include "gui/docking_system/dock_mime_data.h"
-#include "gui/gui_globals.h"
 #include "gui/content_anchor/content_anchor.h"
 
 #include <QApplication>
@@ -95,6 +94,7 @@ namespace hal
 
             for (button_iterator = mButtons.begin(); button_iterator != mButtons.end(); ++button_iterator)
             {
+                DockButton* dbut = *button_iterator;
                 if ((*button_iterator)->available())
                 {
                     if (button_position + (*button_iterator)->relativeWidth() < cursor_position)
@@ -374,6 +374,16 @@ namespace hal
             }
         }
         return false;
+    }
+
+    bool DockBar::isHidden(int index) const
+    {
+        if (0 <= index && index < mButtons.size())
+        {
+            return mButtons.at(index)->hidden();
+        }
+
+        return true;
     }
 
     bool DockBar::removeButton(int index)

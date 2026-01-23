@@ -391,16 +391,36 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist_utils.def("get_shortest_path", &netlist_utils::get_shortest_path, py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, R"(
+        py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Gate*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, R"(
             Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
             The gate where the search started from will be the first in the result vector, the end gate will be the last. 
             If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
 
-            :param dict[hal_py.GateType,list[hal_py.GatePin]] input_pins: The input pins (of every gate type of the sequence) through which the gates must be connected.
-            :param dict[hal_py.GateType,list[hal_py.GatePin]] output_pins: The output pins (of every gate type of the sequence) through which the gates must be connected.
-            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :param hal_py.Gate start_gate: The start gate for the path (might be the end if searching both directions)
+            :param hal_py.Gate end_gate: The end gate for the path (might be the start if searching both directions)
+            :param bool search_both_directions: If true checking start <-> end, which ever direction is shorter
             :returns: A list of gates that form a chain on success, an empty list on error.
             :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Module*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_module"), py::arg("forward_direction"), R"(
+            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate for the given module.
+            The gate where the search started from will be the first in the result vector, the end gate will be the last.
+            If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
+
+            :param hal_py.Gate start_gate: The start gate for the path
+            :param hal_py.Module end_module: The module which contains the end gate for the path
+            :param bool forward_direction: Search successor module to gate if true, else search predecessor module.
+            :returns: A list of gates that form a chain on success, an empty list on error.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist_utils.def("get_shortest_path", py::overload_cast<Module*,Module*>(&netlist_utils::get_shortest_path), py::arg("start_module"), py::arg("end_module"), R"(
+            Find (multiple) shortest path (i.e., theresult set with the lowest number of gates) that connects the module with another module.
+
+            :param hal_py.Module start_module: The module which contains a gate as start for the path
+            :param hal_py.Module end_module: The module which contains a gate as end of the path
+            :rtype: list[list[hal_py.Gate]]
         )");
     }
 }    // namespace hal
