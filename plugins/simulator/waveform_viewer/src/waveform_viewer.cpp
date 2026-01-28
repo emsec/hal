@@ -361,7 +361,7 @@ namespace hal
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
             WaveWidget* ww = static_cast<WaveWidget*>(mTabWidget->widget(inx));
-            if (ww->controllerId() == controllerId)
+            if (ww->controllerId() == controllerId || ww->controllerId() == 0)
             {
                 mTabWidget->removeTab(inx);
                 ww->deleteLater();
