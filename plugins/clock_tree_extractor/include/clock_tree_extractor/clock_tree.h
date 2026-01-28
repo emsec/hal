@@ -59,6 +59,23 @@ namespace hal
     {
         enum PtrType { UNKNOWN, GATE, NET };
 
+        struct VoidPtrHash
+        {
+            std::size_t operator()( const std::pair<const void *, const void *> &pair ) const noexcept
+            {
+                return std::hash<const void *>()( pair.first ) ^ ( std::hash<const void *>()( pair.second ) << 1 );
+            }
+        };
+
+        struct PairPtrEq
+        {
+            bool operator()( const std::pair<const void *, const void *> &p1,
+                             const std::pair<const void *, const void *> &p2 ) const noexcept
+            {
+                return p1.first == p2.first && p1.second == p2.second;
+            }
+        };
+
         class ClockTree
         {
           public:
@@ -74,6 +91,9 @@ namespace hal
 
             Result<std::monostate> export_dot( const std::string &pathname ) const;
 
+            Result<std::vector<std::pair<const void *, PtrType>>> get_neighbors( const void *ptr,
+                                                                                 igraph_neimode_t direction ) const;
+
             Result<std::unique_ptr<ClockTree>> get_subtree( const void *ptr, const bool parent ) const;
 
             Result<igraph_integer_t> get_vertex_from_ptr( const void *ptr ) const;
@@ -84,6 +104,10 @@ namespace hal
 
             Result<std::vector<std::pair<const void *, PtrType>>>
             get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const;
+
+            const std::
+                unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
+                get_paths() const;
 
             const std::vector<const Gate *> get_gates() const;
 
@@ -113,6 +137,9 @@ namespace hal
             std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
 
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
+
+            std::unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
+                m_paths;
         };
     }  // namespace cte
 }  // namespace hal

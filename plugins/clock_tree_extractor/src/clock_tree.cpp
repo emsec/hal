@@ -26,23 +26,6 @@ namespace hal
     {
         namespace
         {
-            struct VoidPtrHash
-            {
-                std::size_t operator()( const std::pair<const void *, const void *> &pair ) const
-                {
-                    return std::hash<const void *>()( pair.first ) ^ ( std::hash<const void *>()( pair.second ) << 1 );
-                }
-            };
-
-            struct PairPtrEq
-            {
-                bool operator()( const std::pair<void *, void *> &p1,
-                                 const std::pair<void *, void *> &p2 ) const noexcept
-                {
-                    return p1.first == p2.first && p1.second == p2.second;
-                }
-            };
-
             inline bool is_ff( const Gate *gate )
             {
                 return gate->get_type()->has_property( GateTypeProperty::ff );
@@ -154,9 +137,12 @@ namespace hal
             std::unordered_set<std::pair<void *, void *>, VoidPtrHash> edges;
             std::unordered_map<const void *, PtrType> ptrs_to_type;
 
-            std::queue<std::pair<const Gate *, const Gate *>> queue;
+            std::queue<std::tuple<const Gate *, const Gate *, std::vector<const Gate *>>> queue;
             NetlistTraversalDecorator ntd = NetlistTraversalDecorator( *netlist );
             std::unordered_set<std::pair<const Gate *, const Gate *>, VoidPtrHash> visited;
+
+            std::unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
+                paths;
 
             for( const Gate *ff : netlist->get_gates( is_ff ) )
             {
@@ -201,7 +187,7 @@ namespace hal
                     continue;
                 }
 
-                queue.push( { ff, clk->get_sources().front()->get_gate() } );
+                queue.push( { ff, clk->get_sources().front()->get_gate(), std::vector<const Gate *>{} } );
 
                 vertices.insert( (void *) ff );
                 ptrs_to_type[(void *) ff] = PtrType::GATE;
@@ -211,11 +197,14 @@ namespace hal
 
             while( !queue.empty() )
             {
-                const std::pair<const Gate *, const Gate *> pair = queue.front();
+                const std::tuple<const Gate *, const Gate *, std::vector<const Gate *>> tuple = queue.front();
                 queue.pop();
 
-                Gate *source = (Gate *) pair.second;
-                Gate *reference = (Gate *) pair.first;
+                Gate *source = (Gate *) std::get<1>( tuple );
+                Gate *reference = (Gate *) std::get<0>( tuple );
+                std::vector<const Gate *> path = std::get<2>( tuple );
+
+                path.push_back( source );
 
                 if( is_latch( source ) )
                 {
@@ -237,6 +226,9 @@ namespace hal
                     ptrs_to_type[(void *) reference] = PtrType::GATE;
 
                     edges.insert( { (void *) source, (void *) reference } );
+                    path.push_back( reference );
+                    paths[{ (void *) source, (void *) reference }] = path;
+                    path.clear();
 
                     if( is_ff( source ) )
                     {
@@ -246,7 +238,7 @@ namespace hal
                     reference = (Gate *) source;
                 }
 
-                visited.insert( pair );
+                visited.insert( std::make_pair( reference, source ) );
 
                 for( const Endpoint *ep : source->get_fan_in_endpoints() )
                 {
@@ -272,6 +264,10 @@ namespace hal
                         ptrs_to_type[(void *) reference] = PtrType::GATE;
 
                         edges.insert( { (void *) net, (void *) reference } );
+
+                        // paths[{ (void *) net, (void *) reference }] = path;
+                        // path.clear();
+
                         continue;
                     }
 
@@ -293,7 +289,7 @@ namespace hal
                     const Gate *new_source = net->get_sources().front()->get_gate();
                     if( visited.find( { reference, new_source } ) == visited.end() )
                     {
-                        queue.push( { reference, new_source } );
+                        queue.push( { reference, new_source, path } );
                     }
                 }
             }
@@ -310,6 +306,7 @@ namespace hal
             }
 
             clock_tree->m_ptrs_to_types = ptrs_to_type;
+            clock_tree->m_paths = std::move( paths );
 
             igraph_error_t ierror;
             igraph_vector_int_t iedges;
@@ -709,6 +706,48 @@ namespace hal
         const igraph_t *ClockTree::get_igraph() const
         {
             return m_igraph_ptr;
+        }
+
+        const std::
+            unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
+            ClockTree::get_paths() const
+        {
+            return m_paths;
+        }
+
+        Result<std::vector<std::pair<const void *, PtrType>>>
+        ClockTree::get_neighbors( const void *ptr, igraph_neimode_t direction ) const
+        {
+            auto it = m_ptrs_to_vertices.find( ptr );
+            if( it == m_ptrs_to_vertices.end() )
+            {
+                return ERR( "object is not part of clock tree" );
+            }
+
+            igraph_error_t ierror;
+            igraph_vector_int_t neighbors;
+
+            if( ( ierror = igraph_vector_int_init( &neighbors, 0 ) ) != IGRAPH_SUCCESS )
+            {
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            if( ( ierror = igraph_neighbors( m_igraph_ptr, &neighbors, it->second, direction ) ) != IGRAPH_SUCCESS )
+            {
+                igraph_vector_int_destroy( &neighbors );
+                return ERR( igraph_strerror( ierror ) );
+            }
+
+            std::vector<std::pair<const void *, PtrType>> result;
+            for( igraph_integer_t idx = 0; idx < igraph_vector_int_size( &neighbors ); idx++ )
+            {
+                const void *n_ptr = m_vertices_to_ptrs.at( VECTOR( neighbors )[idx] );
+                result.push_back( std::make_pair( n_ptr, m_ptrs_to_types.at( n_ptr ) ) );
+            }
+
+            igraph_vector_int_destroy( &neighbors );
+
+            return OK( result );
         }
     }  // namespace cte
 }  // namespace hal

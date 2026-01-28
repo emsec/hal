@@ -240,6 +240,86 @@ namespace hal
                 },
                 py::arg( "vertices" ),
                 R"()" )
+            .def(
+                "get_paths",
+                []( const cte::ClockTree &self ) -> py::dict {
+                    auto res = self.get_paths();
+                    py::dict result;
+                    for( const auto &[key, val] : res )
+                    {
+                        py::tuple py_key( 2 );
+                        py_key[0] = py::cast( (const Gate *) key.first );
+                        py_key[1] = py::cast( (const Gate *) key.second );
+                        py::list py_val;
+                        for( const Gate *gate : val )
+                        {
+                            py_val.append( gate );
+                        }
+                        result[py_key] = py_val;
+                    }
+                    return result;
+                },
+                R"()" )
+            .def(
+                "get_parents",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::list {
+                    auto res = self.get_neighbors( ptr, IGRAPH_IN );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                R"()" )
+            .def(
+                "get_childs",
+                []( const cte::ClockTree &self, const void *ptr ) -> py::list {
+                    auto res = self.get_neighbors( ptr, IGRAPH_OUT );
+                    if( res.is_ok() )
+                    {
+                        py::list result;
+                        for( const auto &[ptr, type] : res.get() )
+                        {
+                            if( type == cte::PtrType::GATE )
+                            {
+                                result.append( py::cast( (const Gate *) ptr ) );
+                            }
+                            else if( type == cte::PtrType::NET )
+                            {
+                                result.append( py::cast( (const Net *) ptr ) );
+                            }
+                            else
+                            {
+                                log_error( "clock_tree_extractor", "unknown ptr type" );
+                                return py::none();
+                            }
+                        }
+                        return result;
+                    }
+                    log_error( "clock_tree_extractor", "{}", res.get_error().get() );
+                    return py::none();
+                },
+                py::arg( "ptr" ),
+                R"()" )
             .def( "get_gates", &cte::ClockTree::get_gates, R"()" )
             .def( "get_nets", &cte::ClockTree::get_nets, R"()" )
             .def( "get_netlist", &cte::ClockTree::get_netlist, R"()" );
