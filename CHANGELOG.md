@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* updated to Qt major version 6 comes with a lot of code fixes
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * plugins
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
