@@ -358,14 +358,16 @@ namespace hal
                     return false;
                 break;
             case PinActionType::GroupTypeChange:
-                mTempUndoActions.append(QList<AtomicAction>({
-                    AtomicAction(PinActionType::GroupTypeChange,pgroup->get_id(),"",(int)pgroup->get_type())}));
+                if (pgroup->get_type() != PinType::none)
+                    mTempUndoActions.append(QList<AtomicAction>({
+                        AtomicAction(PinActionType::GroupTypeChange,pgroup->get_id(),"",(int)pgroup->get_type())}));
                 if (!mParentModule->set_pin_group_type(pgroup, (PinType) aa.mValue))
                     return false;
                 break;
             case PinActionType::GroupDirChange:
-                mTempUndoActions.append(QList<AtomicAction>({
-                    AtomicAction(PinActionType::GroupDirChange,pgroup->get_id(),"",(int)pgroup->get_direction())}));
+                if (pgroup->get_direction() != PinDirection::none)
+                    mTempUndoActions.append(QList<AtomicAction>({
+                        AtomicAction(PinActionType::GroupDirChange,pgroup->get_id(),"",(int)pgroup->get_direction())}));
                 if (!mParentModule->set_pin_group_direction(pgroup, (PinDirection) aa.mValue))
                     return false;
                 break;
@@ -503,6 +505,10 @@ namespace hal
                     else
                         retval = new ActionPingroup(PinActionType::GroupCreate,vid,pinName);
                     retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pin->get_id(),"",vid));
+                    if (pin->get_direction() != PinDirection::none)
+                        retval->mPinActions.append(AtomicAction(PinActionType::GroupDirChange,vid,"",(int)pin->get_direction()));
+                    if (pin->get_type() != PinType::none)
+                        retval->mPinActions.append(AtomicAction(PinActionType::GroupTypeChange,vid,"",(int)pin->get_type()));
                     --vid;
                 }
                 else
@@ -549,10 +555,45 @@ namespace hal
             else
                 retval = new ActionPingroup(PinActionType::GroupCreate,vid,name);
             retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pinId,"",vid));
+            if (pin->get_direction() != PinDirection::none)
+                retval->mPinActions.append(AtomicAction(PinActionType::GroupDirChange,vid,"",(int)pin->get_direction()));
+            if (pin->get_type() != PinType::none)
+                retval->mPinActions.append(AtomicAction(PinActionType::GroupTypeChange,vid,"",(int)pin->get_type()));
             --vid;
         }
         if (retval)
             retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
+    ActionPingroup* ActionPingroup::automaticallyRenamePins(const Module* m, u32 grpId)
+    {
+        PinGroup<ModulePin>* pinGroup = m->get_pin_group_by_id(grpId);
+        if (!pinGroup) return nullptr;
+        QString baseName = QString::fromStdString(pinGroup->get_name());
+        QHash<u32,QString> assignedNameHash;
+        ActionPingroup* retval = nullptr;
+
+        QList<AtomicAction> renameActions;
+        for (ModulePin* pin : pinGroup->get_pins())
+        {
+            QString designatedName = QString("%1(%2)").arg(baseName).arg(pin->get_group().second);
+            if (pin->get_name() == designatedName.toStdString()) continue; // nothing to do
+
+            renameActions.append(AtomicAction(PinActionType::PinRename, pin->get_id(), designatedName));
+            if (retval)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinRename,pin->get_id(),"temp_" + QUuid::createUuid().toString(QUuid::Id128)));
+            else
+                retval = new ActionPingroup(PinActionType::PinRename,pin->get_id(),"temp_" + QUuid::createUuid().toString(QUuid::Id128));
+        }
+
+        if (retval)
+        {
+            for (const AtomicAction& aa : renameActions)
+                retval->mPinActions.append(aa);
+            retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        }
+
         return retval;
     }
 
@@ -563,12 +604,16 @@ namespace hal
         bool toAscending = ! pinGroup->is_ascending();
         int val = (pinGroup->get_lowest_index() << 1) | (toAscending ? 1 : 0);
         std::vector<ModulePin*> pins = pinGroup->get_pins();
-        QString tempName = QUuid::createUuid().toString();
+        QString tempName = "temp_" + QUuid::createUuid().toString(QUuid::Id128);
         QString grpName = QString::fromStdString(pinGroup->get_name());
         int grpRow = pinGroupRow(m, pinGroup);
         static int vid = -9;
 
         ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,tempName,val);
+        if (pinGroup->get_direction() != PinDirection::none)
+            retval->mPinActions.append(AtomicAction(PinActionType::GroupDirChange, vid, "", (int)pinGroup->get_direction()));
+        if (pinGroup->get_type() != PinType::none)
+            retval->mPinActions.append(AtomicAction(PinActionType::GroupTypeChange, vid, "", (int)pinGroup->get_type()));
         if (toAscending)
         {
             for (auto it = pins.rbegin(); it != pins.rend(); ++it)

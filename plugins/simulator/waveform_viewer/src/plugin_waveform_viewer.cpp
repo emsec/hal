@@ -48,17 +48,6 @@ namespace hal
     void WaveformViewerPlugin::on_unload()
     {
         QString pluginName = QString::fromStdString(get_name());
-        auto it = ExternalContent::instance()->begin();
-        while (it != ExternalContent::instance()->end())
-            if ((*it)->name() == pluginName)
-                it = ExternalContent::instance()->erase(it);
-            else
-                ++it;
-        auto jt = ExternalContent::instance()->openWidgets.find(pluginName);
-        if (jt != ExternalContent::instance()->openWidgets.end())
-        {
-            jt.value()->deleteLater();
-            ExternalContent::instance()->openWidgets.erase(jt);
-        }
+        ExternalContent::instance()->removePlugin(pluginName);
     }
 }    // namespace hal

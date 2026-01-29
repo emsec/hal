@@ -32,6 +32,7 @@
 #include <QMap>
 #include <QSplitter>
 #include <QFrame>
+#include <QPointer>
 
 #include <hal_core/defines.h>
 #include "waveform_viewer/wave_item.h"
@@ -88,7 +89,7 @@ namespace hal {
         void resizeEvent(QResizeEvent *event) override;
 
     private:
-        NetlistSimulatorController* mController;
+        QPointer<NetlistSimulatorController> mController;
         std::unique_ptr<NetlistSimulatorController> mControllerOwner;
 
         u32 mControllerId;

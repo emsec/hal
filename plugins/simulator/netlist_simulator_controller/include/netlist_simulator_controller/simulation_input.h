@@ -65,7 +65,8 @@ namespace hal {
             const Gate* gate;
             PinGroup<ModulePin>* module_pin_group;
             PinGroup<GatePin>* gate_pin_group;
-            NetGroup() : direction(Undefined), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
+            bool ascending;
+            NetGroup() : direction(Undefined), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr), ascending(false) {;}
             std::vector<const Net*> get_nets() const;
             std::string get_name() const;
             bool is_input() const { return direction == InputOnly; }

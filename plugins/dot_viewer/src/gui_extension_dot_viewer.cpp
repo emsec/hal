@@ -38,7 +38,7 @@ namespace hal {
         if (loadClicked)
         {
             DotViewer* dv = DotViewer::getDotviewerInstance();
-            if (dv) dv->handleOpenInputFileByName(filename,plugin);
+            if (dv) dv->loadDotFile(filename,plugin);
         }
     }
 

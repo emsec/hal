@@ -38,6 +38,8 @@ namespace hal
             Liberty,
             /// refers to the 'Standard' Boolean function parser
             Standard,
+            /// as 'Liberty' above, but removing space first
+            LibertyNoSpace
         };
 
         /// TokenType refers to a token identifier for a Boolean function string.

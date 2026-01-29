@@ -87,6 +87,11 @@ namespace hal
         mGateIcons[(int)GateTypeProperty::c_xnor]     = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate_xnor"));
     }
 
+    void SelectionDetailsIconProvider::handleModuleRemoved(u32 moduleId)
+    {
+        mModuleIcons.remove(moduleId);
+    }
+
     const QIcon* SelectionDetailsIconProvider::getIcon(IconCategory catg, u32 itemId)
     {
         Gate* g = nullptr;

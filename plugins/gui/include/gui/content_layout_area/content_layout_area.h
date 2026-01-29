@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
+#include "gui/content_anchor/content_anchor.h"
 
 #include <QWidget>
 
@@ -39,14 +40,6 @@ namespace hal
     class Splitter;
     class SplitterAnchor;
     class TabWidget;
-
-    enum class content_anchor
-    {
-        center = 0,
-        left   = 1,
-        right  = 2,
-        bottom = 3
-    };
 
     /**
      * @ingroup gui
@@ -97,7 +90,7 @@ namespace hal
          * @param anchor - The anchor the content widget should be moved to (i.e. the direction of the docker bar it
          *                 is moved to)
          */
-        void addContent(ContentWidget* widget, int index, content_anchor anchor);
+        void addContent(ContentWidget* widget, int index, ContentLayout::Position anchor);
 
         /**
          * Not yet implemented.
@@ -147,6 +140,16 @@ namespace hal
          * were temporarily shown while dragging a docker button are hidden again.
          */
         void handleDragEnd();
+
+        /**
+         * Save state of widgets (location, visibility, docking state) and splitter to guisettings
+         */
+        void saveState() const;
+
+        /**
+         * Restore splitter setting from guisettings
+         */
+        void restoreSplitter();
 
     private:
         QVBoxLayout* mTopLevelLayout;

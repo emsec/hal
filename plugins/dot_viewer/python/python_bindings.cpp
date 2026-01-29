@@ -82,26 +82,29 @@ namespace hal
 
         m.def(
             "load_dot_file",
-            [](const std::string& filename, const std::string& creator_plugin = "") {
-                QString qfilename = QString::fromStdString(filename);
+            [](const std::filesystem::path& path, const std::string& creator_plugin = "") -> bool {
+                QString qfilename = QString::fromStdString(path.string());
                 QString qcreator  = QString::fromStdString(creator_plugin);
                 DotViewer* dv     = DotViewer::getDotviewerInstance();
                 if (dv)
                 {
-                    dv->handleOpenInputFileByName(qfilename, qcreator);
+                    return dv->loadDotFile(qfilename, qcreator);
                 }
                 else
                 {
                     log_error("python_context", "Cannot find dot viewer instance.");
                 }
+                return false;
             },
-            py::arg("filename"),
+            py::arg("path"),
             py::arg("creator_plugin") = std::string(),
             R"(
             Loads a dot file in the graphic viewer provided by dot_viewer plugin.
 
-            :param str filename: Full path to dot file.
-            :param str creator_plugin: Name of plugin which created the dot file. Will try to detect from content or query by popup if empty.
+            :param pathlib.Path path: The path to the ``.dot`` file.
+            :param str creator_plugin: The name of plugin that created the ``.dot`` file. Will try to detect from content or query by popup if empty.
+            :returns: True on success, false otherwise.
+            :rtype: bool
         )");
 
 #ifndef PYBIND11_MODULE

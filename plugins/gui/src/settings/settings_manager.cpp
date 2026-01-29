@@ -1,5 +1,8 @@
 #include "gui/settings/settings_manager.h"
 #include "hal_core/utilities/utils.h"
+#include "gui/content_widget/content_widget.h"
+#include "gui/content_frame/content_frame.h"
+#include "gui/content_manager/content_manager.h"
 #include <QDir>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -85,6 +88,72 @@ namespace hal
     {
         mUserSettingsFile->setValue("MainWindow/position", pos);
         mUserSettingsFile->setValue("MainWindow/size", size);
+        mUserSettingsFile->sync();
+    }
+
+
+    void SettingsManager::saveSplitterState(const QString& tag, const QSplitter* splitter)
+    {
+        QString token = QString("splitter/%1").arg(tag);
+        QStringList temp;
+        for (int val : splitter->sizes())
+            temp.append(QString::number(val));
+        mUserSettingsFile->setValue(token, temp.join(','));
+    }
+
+    void SettingsManager::restoreSplitterState(const QString& tag, QSplitter* splitter) const
+    {
+        QString token = QString("splitter/%1").arg(tag);
+        if (!mUserSettingsFile->contains(token)) return;
+        QStringList temp = mUserSettingsFile->value(token).toString().split(',');
+        QList<int> sizes;
+        for (const QString& s : temp)
+            sizes.append(s.toInt());
+        splitter->setSizes(sizes);
+    }
+
+    void SettingsManager::widgetDetach(ContentWidget* cw) const
+    {
+        QString token    = cw->name() + "/%1";
+        if (mUserSettingsFile->contains(token.arg("detachedPosition")))
+        {
+            cw->detach();
+            ContentFrame*cf = cw->detachedFrame();
+            if (cf) cf->setGeometry(QRect(mUserSettingsFile->value(token.arg("detachedPosition")).toPoint(),
+                                      mUserSettingsFile->value(token.arg("size")).toSize()));
+        }
+    }
+
+    ContentWidgetPlacement SettingsManager::widgetPlacement(ContentWidget *cw) const
+    {
+        ContentWidgetPlacement retval;
+        QString token    = cw->name() + "/%1";
+        retval.widget    = cw;
+        retval.index     = mUserSettingsFile->value(token.arg("index"), -1).toInt();
+        retval.visible   = mUserSettingsFile->value(token.arg("visible"), true).toBool();
+        retval.anchorPos = ContentLayout::positionFromString(mUserSettingsFile->value(token.arg("anchor")).toString());
+        if (mUserSettingsFile->contains(token.arg("size")))
+            cw->setGeometry(QRect(QPoint(0,24),mUserSettingsFile->value("size").toSize()));
+        if (mUserSettingsFile->contains(token.arg("detachedPosition")))
+            retval.visible = false;
+        return retval;
+    }
+
+    void SettingsManager::widgetsSaveGeometry(ContentLayout::Position anchorPos, QList<const ContentWidget*>& widgets)
+    {
+        int index = 0;
+        for (const ContentWidget* cw : widgets)
+        {
+            QString token = cw->name() + "/%1";
+            mUserSettingsFile->setValue(token.arg("anchor"), ContentLayout::positionToString(anchorPos));
+            mUserSettingsFile->setValue(token.arg("index"), index++);
+            mUserSettingsFile->setValue(token.arg("visible"), cw->isVisible());
+            mUserSettingsFile->setValue(token.arg("size"), cw->size());
+            if (cw->detachedFrame())
+                mUserSettingsFile->setValue(token.arg("detachedPosition"), cw->detachedFrame()->pos());
+            else
+                mUserSettingsFile->remove(token.arg("detachedPosition"));
+        }
         mUserSettingsFile->sync();
     }
 

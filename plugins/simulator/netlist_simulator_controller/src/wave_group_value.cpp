@@ -5,7 +5,7 @@ namespace hal {
     {
         for (int i=0; i<nbits; i++)
         {
-            u32 mask = 1<<i;
+            u32 mask = 1<<(nbits-i-1);
             mHasTransition |= mask;
             mUndefined  |= mask;
         }

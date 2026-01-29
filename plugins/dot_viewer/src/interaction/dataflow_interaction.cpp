@@ -24,6 +24,7 @@ namespace hal {
         : QGVInteraction(parent), mScene(parent)
     {
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &DataflowInteraction::handleHALSelectionChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged, this, &DataflowInteraction::handleHALModuleNameChanged);
         connect(parent, &QGVScene::edgeContextMenu, this, &DataflowInteraction::handleEdgeContextMenu);
         connect(parent, &QGraphicsScene::selectionChanged, this, &DataflowInteraction::handleQGVSelectionChanged);
     }
@@ -82,6 +83,21 @@ namespace hal {
         QAction* act = menu.addAction(QString("Isolate path from mod_%1 to mod_%2 in new view").arg(tailModuleId).arg(headModuleId));
         connect(act, &QAction::triggered, this, [tailModuleId,headModuleId](){GuiApiClasses::View::isolateModuleToModulePathInNewView(tailModuleId,headModuleId);});
         menu.exec(QCursor::pos());
+        mDisableHandler = false;
+    }
+
+    void DataflowInteraction::handleHALModuleNameChanged(Module* m)
+    {
+        if (!mScene) return;
+        mDisableHandler = true;
+        u32 modId = m->get_id();
+        QString modName = QString::fromStdString(m->get_name());
+        QGVNode* node = mModuleHash.value(modId, nullptr);
+        if (node)
+        {
+            node->setLabel(modName);
+            node->update();
+        }
         mDisableHandler = false;
     }
 

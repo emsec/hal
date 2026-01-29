@@ -153,6 +153,7 @@ namespace hal
         static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
         static ActionPingroup* deletePinGroup(const Module* m, u32 grpId);
         static ActionPingroup* toggleAscendingGroup(const Module* m, u32 grpId);
+        static ActionPingroup* automaticallyRenamePins(const Module* m, u32 grpId);
         static ActionPingroup* changePinGroupType(const Module* m, u32 grpId, int ptype);
 
         static int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);

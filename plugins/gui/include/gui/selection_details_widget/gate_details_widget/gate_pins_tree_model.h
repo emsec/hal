@@ -28,6 +28,8 @@
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "hal_core/defines.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QMap>
 #include <QList>
 
@@ -45,13 +47,13 @@ namespace hal
             Type mType;
             QList<u32> mNetIds;
             std::string mPinName;
-            QString mPinDirection;
-            QString mPinType;
+            PinDirection mPinDirection;
+            PinType mPinType;
             QString mNetName;
             int mIndex;
         public:
 
-            GatePinsTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName, int inx);
+            GatePinsTreeItem(const std::string& pinName, PinDirection pinDirection, PinType pinTypee, QString netName, int inx);
             GatePinsTreeItem();
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
@@ -66,6 +68,8 @@ namespace hal
              * @return The item's type.
              */
             Type type() const { return mType; }
+            std::string pinName() const { return mPinName; }
+            PinDirection direction() const { return mPinDirection; }
             void setNetIds(const QList<u32>& nids) { mNetIds = nids; }
 
             /**

@@ -29,12 +29,17 @@
 #include <QList>
 #include <QSettings>
 #include "gui/settings/settings_items/settings_item.h"
+#include "gui/content_anchor/content_anchor.h"
 #include "gui/logger/logger_settings.h"
 #include <QPoint>
 #include <QSize>
+#include <QSplitter>
 
 namespace hal
 {
+    class ContentWidget;
+    struct ContentWidgetPlacement;
+
     /**
      * @ingroup settings
      * @brief Manages and persists the settings on the lowest level.
@@ -92,6 +97,28 @@ namespace hal
         void mainWindowSaveGeometry(const QPoint& pos, const QSize& size);
 
         /**
+         * Write widgets location and geometry to the user settings file.
+         * @param anchor - One of L(eft), R(ight), B(ottom), T(ab)
+         * @param widgets - List of widgets in that anchor
+         */
+        void widgetsSaveGeometry(ContentLayout::Position anchorPos, QList<const ContentWidget*>& widgets);
+
+        /**
+         * Returns placement object for widget if info found in setting file.
+         * The index -1 indicates that the info was not found.
+         *
+         * @param cw - Pointer to ContentWidget
+         * @return Placement structure
+         */
+        ContentWidgetPlacement widgetPlacement(ContentWidget* cw) const;
+
+        /**
+         * Detach widget and place at screen position if info is given in setting file.
+         * @param cw - Pointer to ContentWidget
+         */
+        void widgetDetach(ContentWidget* cw) const;
+
+        /**
          * Get the value in the user settings file for a given key.
          *
          * @param tag - The key.
@@ -107,6 +134,19 @@ namespace hal
          */
         QVariant defaultValue(const QString& tag) const;
 
+        /**
+         * Save state of splitter in setting file
+         * @param tag - tag to save parameter
+         * @param splitter - save settings for this splitter
+         */
+        void saveSplitterState(const QString& tag, const QSplitter* splitter);
+
+        /**
+         * Restore state of splitter from setting file
+         * @param tag - tag for which the splitter gets restored
+         * @param splitter - the splitter to be restored
+         */
+        void restoreSplitterState(const QString& tag, QSplitter *splitter) const;
 
         LoggerSettings loggerSettings() const;
 

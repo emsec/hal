@@ -1184,7 +1184,7 @@ namespace hal {
             }
             int ibit = it.value();
             int v = wdArray[ibit]->data().value(t0);
-            int mask = (1 << ibit);
+            int mask = (1 << (nChildren - ibit - 1));
             if (v<0)
                 undef |= mask;
             else

@@ -11,7 +11,7 @@ namespace hal
     {
         for (int i = 0; i < count(); i++)
         {
-            if (static_cast<QWidget*>(widget(i))->isVisible())
+            if (widget(i)->isVisible())
                 return false;
         }
         return true;

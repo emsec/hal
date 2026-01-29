@@ -1052,11 +1052,24 @@ namespace hal
         static const std::vector<std::tuple<ParserType, std::function<Result<std::vector<Token>>(const std::string&)>>> parsers = {
             {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
             {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
+            {ParserType::LibertyNoSpace, BooleanFunctionParser::parse_with_liberty_grammar}
         };
 
         for (const auto& [parser_type, parser] : parsers)
         {
-            auto tokens = parser(expression);
+            std::string sanitized_expression = expression;
+            ParserType used_parser_type = parser_type;
+
+            if (parser_type == ParserType::LibertyNoSpace)
+            {
+                sanitized_expression.erase(
+                    std::remove(sanitized_expression.begin(), sanitized_expression.end(), ' '),
+                    sanitized_expression.end()
+                    );
+                used_parser_type = ParserType::Liberty;
+            }
+
+            auto tokens = parser(sanitized_expression);
             // (1) skip if parser cannot translate to tokens
             if (tokens.is_error())
             {
@@ -1064,13 +1077,13 @@ namespace hal
             }
 
             // (2) skip if cannot translate to valid reverse-polish notation
-            tokens = BooleanFunctionParser::reverse_polish_notation(tokens.get(), expression, parser_type);
+            tokens = BooleanFunctionParser::reverse_polish_notation(tokens.get(), sanitized_expression, used_parser_type);
             if (tokens.is_error())
             {
                 continue;
             }
             // (3) skip if reverse-polish notation tokens are no valid Boolean function
-            auto function = BooleanFunctionParser::translate(tokens.get(), expression);
+            auto function = BooleanFunctionParser::translate(tokens.get(), sanitized_expression);
             if (function.is_error())
             {
                 continue;

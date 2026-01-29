@@ -37,6 +37,7 @@ namespace hal {
         Q_OBJECT
     public:
         SolveFsmInteraction(QGVScene* parent);
+        ~SolveFsmInteraction();
 
         void registerNode(QGVNode* node) override;
         void registerEdge(QGVEdge* edge) override;

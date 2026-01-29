@@ -500,7 +500,7 @@ namespace hal
         mDisabledIconStyle = style;
     }
 
-    void MainWindow::addContent(ContentWidget* widget, int index, content_anchor anchor)
+    void MainWindow::addContent(ContentWidget* widget, int index, ContentLayout::Position anchor)
     {
         mLayoutArea->addContent(widget, index, anchor);
     }
@@ -1046,5 +1046,8 @@ namespace hal
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
 
-
+    ContentLayoutArea* MainWindow::layoutArea() const
+    {
+        return mLayoutArea;
+    }
 }    // namespace hal

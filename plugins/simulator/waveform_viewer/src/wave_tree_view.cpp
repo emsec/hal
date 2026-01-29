@@ -33,8 +33,8 @@ namespace hal {
         setAcceptDrops(true);
         setContextMenuPolicy(Qt::CustomContextMenu);
         setItemDelegateForColumn(2,new WaveValueDelegate);
-        connect(this,&QTreeView::expanded,this,&WaveTreeView::handleExpandCollapse);
-        connect(this,&QTreeView::collapsed,this,&WaveTreeView::handleExpandCollapse);
+        connect(this,&QTreeView::expanded,this,&WaveTreeView::handleExpand);
+        connect(this,&QTreeView::collapsed,this,&WaveTreeView::handleCollapse);
         connect(this,&QTreeView::customContextMenuRequested,this,&WaveTreeView::handleContextMenuRequested);
     }
 
@@ -387,9 +387,20 @@ namespace hal {
         QAbstractItemView::startDrag(supportedActions);
     }
 
-    void WaveTreeView::handleExpandCollapse(const QModelIndex& index)
+    void WaveTreeView::handleExpand(const QModelIndex& index)
     {
-        Q_UNUSED(index);
+        const WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        int grpId = wtm->groupId(index);
+        if (grpId >= 0) mExpandedGroups.insert(grpId);
+
+        reorder();
+    }
+
+    void WaveTreeView::handleCollapse(const QModelIndex& index)
+    {
+        const WaveTreeModel* wtm = static_cast<WaveTreeModel*>(model());
+        int grpId = wtm->groupId(index);
+        if (grpId >= 0) mExpandedGroups.remove(grpId);
 
         reorder();
     }
@@ -416,10 +427,13 @@ namespace hal {
         if (nVisible != mWaveItemHash->visibleEntries())
         {
             mWaveItemHash->setVisibleEntries(nVisible);
+
+            /*   // signal not connected
             if (verticalScrollBar()->isVisible())
                 Q_EMIT numberVisibleChanged(nVisible, verticalScrollBar()->maximum(), verticalScrollBar()->value());
             else
                 Q_EMIT numberVisibleChanged(nVisible, -1, -1);
+            */
         }
         for (int i=0; i<nVisible; i++)
         {
@@ -476,6 +490,16 @@ namespace hal {
                 wi->setWaveVisible(true);
                 auto it = notPlaced.find(wii);
                 if (it != notPlaced.end()) notPlaced.erase(it);
+            }
+
+            // restore expanded or collapsed group state
+            int grpId = wtm->groupId(currentIndex);
+            if (grpId >= 0)
+            {
+                if (mExpandedGroups.contains(grpId))
+                    expand(currentIndex);
+                else
+                    collapse(currentIndex);
             }
         }
 

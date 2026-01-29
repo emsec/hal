@@ -59,6 +59,7 @@ namespace hal
         static DotViewer* getDotviewerInstance();
         QString filename() const { return mFilename; }
         QString creatorPlugin() const { return mCreatorPlugin; }
+        bool loadDotFile(const QString& fileName, const QString& creator = QString());
 
     public Q_SLOTS:
         void handleOpenInputFileByName(const QString& fileName, const QString& creator = QString());
@@ -84,7 +85,7 @@ namespace hal
         Q_OBJECT
     public:
         DotViewerCallFromTread(QObject* parent = nullptr) : QObject(parent) {;}
-        void emitOpenInputFileByName(DotViewer* callee, QString filename, QString plugin);
+        bool openInputFileByName(DotViewer* callee, QString filename, QString plugin);
     Q_SIGNALS:
         void callOpenInputFileByName(QString filename, QString plugin);
     };

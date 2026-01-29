@@ -53,11 +53,11 @@ namespace hal
         /**
          *The splitter anchor's constructor.
          *
-         * @param DockBar - The splitter ancor's dockbar.
-         * @param Splitter - The actual splitter to represent the dockbar's area.
+         * @param dockBar - The splitter ancor's dockbar.
+         * @param splitter - The actual splitter to represent the dockbar's area.
          * @param parent - The parent of the splitter anchor.
          */
-        SplitterAnchor(DockBar* DockBar, Splitter* Splitter, QObject* parent = nullptr);
+        SplitterAnchor(ContentLayout::Position apos, DockBar* dockBar, Splitter* splitter, QObject* parent = nullptr);
 
         /**
          * Adds a contentwidget at the given position to the splitter area and tells the dockbar to
@@ -82,8 +82,9 @@ namespace hal
          * frame is created and the widget is displayed on the same level as hal as a seperate window.
          *
          * @param widget - The widget to be detached.
+         * @returns the enclosing frame of the detached widget
          */
-        virtual void detach(ContentWidget* widget) override;
+        virtual ContentFrame* detach(ContentWidget* widget) override;
 
         /**
          * Reattaches the given widget back to the splitter area and dockbar (shows them again) when
@@ -109,13 +110,6 @@ namespace hal
         virtual void close(ContentWidget* widget) override;
 
         /**
-         * Get the number of widgets currently associated with the dockbar.
-         *
-         * @return The number of widgets.
-         */
-        int count() const override;
-
-        /**
          * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding
          * widgets are not destroyed but hidden.
          */
@@ -129,8 +123,6 @@ namespace hal
         void contentChanged();
 
     private:
-        DockBar* mDockBar;
         Splitter* mSplitter;
-        QList<ContentFrame*> mDetachedFrames;
     };
 }

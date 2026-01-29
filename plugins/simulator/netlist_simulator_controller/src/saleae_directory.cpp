@@ -31,6 +31,23 @@ namespace hal
         }
     }
 
+    void SaleaeDirectory::clearAll()
+    {
+        for (const SaleaeDirectoryNetEntry& sdne : mNetEntries)
+            for (const SaleaeDirectoryFileIndex& sdfi : sdne.indexes())
+            {
+                std::string dfPath = get_datafile_path(sdfi.index());
+                std::remove(dfPath.c_str());
+            }
+        mNetEntries.clear();
+        mComposedEntryMap.clear();
+        mById.clear();
+        mByName.clear();
+        mNextAvailableIndex = 0;
+        mStoreRequest = 0;
+        std::remove(mDirectoryFile.c_str());
+    }
+
     bool SaleaeDirectory::parse_json()
     {
         FILE* ff = fopen(mDirectoryFile.c_str(), "rb");

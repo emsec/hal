@@ -28,6 +28,7 @@
 
 #include <QGraphicsView>
 #include <QWheelEvent>
+#include <QMouseEvent>
 
 namespace hal
 {
@@ -42,9 +43,14 @@ namespace hal
         void handleZoomOutShortcut();
 
     protected:
-        virtual void wheelEvent(QWheelEvent* event);
+        void wheelEvent(QWheelEvent* event) override;
+        void mousePressEvent(QMouseEvent* event) override;
+        void mouseMoveEvent(QMouseEvent* event) override;
 
     private:
+        QPoint mMovePosition;
+        Qt::KeyboardModifier mPanModifier;
+
         void scaleWithinLimits(qreal scaleFactor);
     };
 }

@@ -504,7 +504,7 @@ namespace hal {
     int WaveTreeModel::waveIndex(const QModelIndex& index) const
     {
          WaveData* wd = item(index);
-         if (!wd) return -1;
+         if (!wd) return -99;
          if (dynamic_cast<WaveDataGroup*>(wd)) return -1;
          if (dynamic_cast<WaveDataBoolean*>(wd)) return -2;
          if (dynamic_cast<WaveDataTrigger*>(wd)) return -3;
@@ -743,7 +743,7 @@ namespace hal {
         // drop on group item
         if (dropParent.internalPointer() == mRoot)
         {
-            dropRow(dropParent,0);
+            dropRow(dropParent,row >= 0 ? row : 0);
             return true;
         }
         return false;

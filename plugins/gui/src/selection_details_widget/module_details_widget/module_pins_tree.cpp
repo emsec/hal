@@ -172,6 +172,10 @@ namespace hal
                 ActionPingroup* act = ActionPingroup::toggleAscendingGroup(mod, itemId);
                 if (act) act->exec();
             });
+            menu.addAction("Autmatically rename pins", [itemId, mod](){
+                ActionPingroup* act = ActionPingroup::automaticallyRenamePins(mod, itemId);
+                if (act) act->exec();
+            });
             menu.addAction("Delete pin group", [itemId, mod]() {
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
@@ -228,6 +232,26 @@ namespace hal
                     ActionPingroup* act = new ActionPingroup(PinActionType::PinTypeChange,pin->get_id(),"",(int)ptype);
                     act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
+                }
+            });
+            menu.addAction("Set focus to pin", [this, mod, itemId]() {
+                auto* pin = mod->get_pin_by_id(itemId);
+                if (pin && (pin->get_direction() == PinDirection::input || pin->get_direction() == PinDirection::output)) // TODO : what about inout?
+                {
+                    auto pins = pin->get_direction() == PinDirection::input ? mod->get_input_pins() : mod->get_output_pins();
+                    int cnt = 0;
+                    for (auto* testPin : pins)
+                    {
+                        if (testPin == pin)
+                        {
+                            SelectionRelay::Subfocus sfoc = pin->get_direction() == PinDirection::input
+                                ? SelectionRelay::Subfocus::Left : SelectionRelay::Subfocus::Right;
+                            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, mod->get_id(), sfoc, cnt);
+                            gSelectionRelay->relaySelectionChanged(this);
+                            break;
+                        }
+                        ++cnt;
+                    }
                 }
             });
             menu.addAction("Add net to current selection", [this, n]() {
