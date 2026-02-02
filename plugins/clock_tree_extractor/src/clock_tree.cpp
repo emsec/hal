@@ -187,7 +187,7 @@ namespace hal
                     continue;
                 }
 
-                queue.push( { ff, clk->get_sources().front()->get_gate(), std::vector<const Gate *>{} } );
+                queue.push( { ff, clk->get_sources().front()->get_gate(), std::vector<const Gate *>{ ff } } );
 
                 vertices.insert( (void *) ff );
                 ptrs_to_type[(void *) ff] = PtrType::GATE;
@@ -226,9 +226,9 @@ namespace hal
                     ptrs_to_type[(void *) reference] = PtrType::GATE;
 
                     edges.insert( { (void *) source, (void *) reference } );
-                    path.push_back( reference );
                     paths[{ (void *) source, (void *) reference }] = path;
                     path.clear();
+                    path.push_back( source );
 
                     if( is_ff( source ) )
                     {
