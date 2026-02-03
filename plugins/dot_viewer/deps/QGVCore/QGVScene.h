@@ -24,6 +24,7 @@ License along with this library.
 #include <QBrush>
 #include <QHash>
 #include <QString>
+#include <QMultiMap>
 
 class QGVNode;
 class QGVEdge;
@@ -50,10 +51,10 @@ public:
     void changeHalStyle(StyleType type);
     StyleType getStyle(StyleTarget target) const;
 
-    QColor penColor(bool selected, const QColor& graphvizColor) const;
+    QColor penColor(bool selected, bool hovered, const QColor& graphvizColor) const;
     QColor gridColor() const;
     QColor selectFrameColor() const;
-    QBrush nodeBrush(bool selected, const QBrush& graphvizBrush) const;
+    QBrush nodeBrush(bool selected, bool hovered, const QBrush& graphvizBrush) const;
 private:
     StyleType mStyleType[2];
 };
@@ -137,9 +138,13 @@ private:
     QGVGraphPrivate *_graph;
     //QFont _font;
 
-    QList<QGVNode*> _nodes;
-    QList<QGVEdge*> _edges;
+    QList<QGVNode*> mNodes;
+    QList<QGVEdge*> mEdges;
     QList<QGVSubGraph*> _subGraphs;
+
+    QMultiMap<QGVNode*,QGVEdge*> mAttachedEdges;
+    void hoverEnterEdges(QGVNode* node);
+    void hoverLeaveEdges();
 
     bool _drawGrid;
 

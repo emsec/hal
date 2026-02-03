@@ -23,8 +23,9 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVNode::QGVNode(QGVNodePrivate *node, QGVScene *scene): _scene(scene), _node(node)
+QGVNode::QGVNode(QGVNodePrivate *node, QGVScene *scene): _scene(scene), _node(node), mHover(false)
 {
+    setAcceptHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
@@ -55,12 +56,28 @@ QRectF QGVNode::boundingRect() const
     return _path.boundingRect();
 }
 
+void QGVNode::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{
+    Q_UNUSED(event);
+    mHover = true;
+    _scene->hoverEnterEdges(this);
+    update();
+}
+
+void QGVNode::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+{
+    Q_UNUSED(event);
+    mHover = false;
+    _scene->hoverLeaveEdges();
+    update();
+}
+
 void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 
     painter->setPen(_pen);
-    painter->setBrush(QGVStyle::instance()->nodeBrush(isSelected(), _brush));
+    painter->setBrush(QGVStyle::instance()->nodeBrush(isSelected(), mHover, _brush));
     painter->drawPath(_path);
 
     painter->setPen(QGVCore::toColor(getAttribute("labelfontcolor")));

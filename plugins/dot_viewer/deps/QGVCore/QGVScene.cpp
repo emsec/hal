@@ -116,7 +116,7 @@ QGVNode *QGVScene::addNode(const QString &label)
     QGVNode *item = new QGVNode(new QGVNodePrivate(node, _graph->graph()), this);
     item->setLabel(label);
     addItem(item);
-    _nodes.append(item);
+    mNodes.append(item);
     return item;
 }
 
@@ -132,7 +132,7 @@ QGVEdge *QGVScene::addEdge(QGVNode *source, QGVNode *target, const QString &labe
     QGVEdge *item = new QGVEdge(new QGVEdgePrivate(edge), this);
     item->setLabel(label);
     addItem(item);
-    _edges.append(item);
+    mEdges.append(item);
     return item;
 }
 
@@ -158,27 +158,36 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
 
 void QGVScene::deleteNode(QGVNode* node)
 {
-    QList<QGVNode *>::iterator it = std::find(_nodes.begin(), _nodes.end(), node);
-    if(it == _nodes.end())
+    QList<QGVNode *>::iterator it = std::find(mNodes.begin(), mNodes.end(), node);
+    if(it == mNodes.end())
     {
         std::cout << "Error, node not part of Scene" << std::endl;
         return;
     }
     std::cout << "delNode ret " << agdelnode(node->_node->graph(), node->_node->node()) << std::endl;;
-    _nodes.erase(it);
+    auto jt = mAttachedEdges.lowerBound(node);
+    while (jt != mAttachedEdges.upperBound(node))
+        jt = mAttachedEdges.erase(jt);
+    mNodes.erase(it);
     delete node;
 }
 
 void QGVScene::deleteEdge(QGVEdge* edge)
 {
     std::cout << "delEdge ret " << agdeledge(_graph->graph(), edge->_edge->edge()) << std::endl;
-    QList<QGVEdge *>::iterator it = std::find(_edges.begin(), _edges.end(), edge);
-    if(it == _edges.end())
+    QList<QGVEdge *>::iterator it = std::find(mEdges.begin(), mEdges.end(), edge);
+    if(it == mEdges.end())
     {
         std::cout << "Error, QGVEdge not part of Scene" << std::endl;
         return;
     }
-    _edges.erase(it);
+    auto jt = mAttachedEdges.begin();
+    while (jt != mAttachedEdges.end())
+        if (jt.value() == edge)
+            jt = mAttachedEdges.erase(jt);
+        else
+            ++jt;
+    mEdges.erase(it);
     delete edge;
 }
 
@@ -199,7 +208,7 @@ void QGVScene::deleteSubGraph(QGVSubGraph *subgraph)
 
 void QGVScene::setRootNode(QGVNode *node)
 {
-    Q_ASSERT(_nodes.contains(node));
+    Q_ASSERT(mNodes.contains(node));
     char root[] = "root";
     agset(_graph->graph(), root, node->label().toLocal8Bit().data());
 }
@@ -225,8 +234,10 @@ void QGVScene::loadLayout(const QString &text, QGVInteraction *interact)
     //Debug output
 		//gvRenderFilename(_context->context(), _graph->graph(), "png", "debug.png");
 
+    mAttachedEdges.clear();
+    mNodes.clear();
+    mEdges.clear();
     QHash<void*, QGVNode*> nodeHash;
-    QList<QGVEdge*> edgeList;
 
     //Read nodes and edges
     for (Agnode_t* node = agfstnode(_graph->graph()); node != NULL; node = agnxtnode(_graph->graph(), node))
@@ -236,18 +247,19 @@ void QGVScene::loadLayout(const QString &text, QGVInteraction *interact)
         inode->updateLayout();
         addItem(inode);
         nodeHash[node] = inode;
+        mNodes.append(inode);
         for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
         {
             QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
             if (interact) interact->registerEdge(iedge);
             iedge->updateLayout();
             addItem(iedge);
-            edgeList.append(iedge);
+            mEdges.append(iedge);
         }
     }
 
-    for (QGVEdge* iedge : edgeList)
-        iedge->setEndpoints(nodeHash);
+    for (QGVEdge* iedge : mEdges)
+        iedge->setEndpoints(nodeHash, mAttachedEdges);
 
     update();
 /*
@@ -277,10 +289,10 @@ void QGVScene::applyLayout()
 		//gvRenderFilename(_context->context(), _graph->graph(), "png", "debug.png");
 
     //Update items layout
-    foreach(QGVNode* node, _nodes)
+    foreach(QGVNode* node, mNodes)
         node->updateLayout();
 
-    foreach(QGVEdge* edge, _edges)
+    foreach(QGVEdge* edge, mEdges)
         edge->updateLayout();
 
     foreach(QGVSubGraph* sgraph, _subGraphs)
@@ -299,11 +311,24 @@ void QGVScene::applyLayout()
     update();
 }
 
+void QGVScene::hoverEnterEdges(QGVNode* node)
+{
+    for (auto it = mAttachedEdges.lowerBound(node); it != mAttachedEdges.upperBound(node); ++it)
+        it.value()->setHover(true);
+}
+
+void QGVScene::hoverLeaveEdges()
+{
+    for (QGVEdge* edge : mEdges)
+        edge->setHover(false);
+}
+
+
 void QGVScene::clear()
 {
     gvFreeLayout(_context->context(), _graph->graph());
-    _nodes.clear();
-    _edges.clear();
+    mNodes.clear();
+    mEdges.clear();
     _subGraphs.clear();
     QGraphicsScene::clear();
 }
@@ -417,17 +442,20 @@ void QGVStyle::changeHalStyle(StyleType type)
     }
 }
 
-QColor QGVStyle::penColor(bool selected, const QColor& graphvizColor) const
+QColor QGVStyle::penColor(bool selected, bool hovered, const QColor& graphvizColor) const
 {
     switch (mStyleType[EdgeStyle]) {
         case Dark:
             if (selected) return QColor(Qt::cyan);
+            if (hovered)  return QColor::fromRgb(255,200,200);
             return QColor::fromRgb(200,200,200);
         case Light:
             if (selected) return QColor(Qt::blue);
+            if (hovered)  return QColor(Qt::darkRed);
             return QColor(Qt::black);
         case Graphviz:
             if (selected) return graphvizColor.darker(120);
+            if (hovered) return graphvizColor.darker(110);
             return graphvizColor;
     }
     return QColor();
@@ -460,17 +488,20 @@ QColor QGVStyle::gridColor() const
 }
 
 
-QBrush QGVStyle::nodeBrush(bool selected, const QBrush& graphvizBrush) const
+QBrush QGVStyle::nodeBrush(bool selected, bool hovered, const QBrush& graphvizBrush) const
 {
     switch (mStyleType[NodeStyle]) {
         case Dark:
             if (selected) return QBrush(Qt::white);
+            if (hovered) return QBrush(QColor::fromRgb(255,200,200));
             return QBrush(QColor::fromRgb(160,161,164));
         case Light:
             if (selected) return QBrush(QColor::fromRgb(220,221,223));
+            if (hovered) return QBrush(QColor::fromRgb(220,221,255));
             return QBrush(Qt::white);
         case Graphviz:
             if (selected) return QBrush(graphvizBrush.color().darker(120));
+            if (hovered) return QBrush(graphvizBrush.color().darker(110));
             return graphvizBrush;
     }
     return QBrush();
