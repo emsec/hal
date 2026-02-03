@@ -823,7 +823,7 @@ namespace hal
     {
         for (const SaleaeDirectoryComposedEntry& sdce : sd.get_composed_list())
         {
-            sdce.dump();
+//            sdce.dump();
             QVector<WaveData*> wds;
             for (int childKey : sdce.get_children())
             {
