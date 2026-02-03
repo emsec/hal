@@ -77,7 +77,7 @@ elif [[ "$platform" == 'linux' ]]; then
         libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
-        libreadline-dev apport python3-dateutil libgraphviz-dev \
+        libreadline-dev apport python3-dateutil libgraphviz-dev libxcb-xkb-dev \
         $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
     elif [[ "$distribution" == "Arch" ]]; then
@@ -115,6 +115,6 @@ elif [[ "$platform" == 'docker' ]]; then
     libqt6svg6-dev libqt6svg6* ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
     pybind11-dev python3-pybind11 python3-dateutil rapidjson-dev \
-    libspdlog-dev libz3-dev libreadline-dev \
+    libspdlog-dev libz3-dev libreadline-dev libxcb-xkb-dev \
     graphviz libomp-dev libsuitesparse-dev # For documentation
 fi
