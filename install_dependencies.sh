@@ -15,6 +15,7 @@ elif [[ "$unamestr" == 'Linux' ]]; then
 elif [[ "$unamestr" == 'Darwin' ]]; then
    platform='macOS'
 fi
+major=${release%%.*}
 
 if [[ "$platform" == 'macOS' ]]; then
     echo "Executing brew bundle"
@@ -70,11 +71,15 @@ if [[ "$platform" == 'macOS' ]]; then
 elif [[ "$platform" == 'linux' ]]; then
     . /etc/os-release
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
-
+        if [[ "$major" -le 22 ]]; then
+            additional_deps="libqt6core5compat6-dev"
+        else
+            additional_deps="qt6-5compat-dev"
+        fi
         sudo apt-get update && sudo apt-get install -y build-essential verilator \
         lsb-release git cmake pkgconf libboost-all-dev qt6-base-dev \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev \
-        libqt6svg6-dev libqt6svg6* libqt6core5compat6 qt6-5compat-dev \
+        libqt6svg6-dev libqt6svg6*  \
         ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
