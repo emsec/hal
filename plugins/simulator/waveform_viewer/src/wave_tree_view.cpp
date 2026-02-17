@@ -14,6 +14,7 @@
 #include <QInputDialog>
 #include <QMimeData>
 #include <QPainter>
+#include "gui/gui_globals.h"
 
 namespace hal {
     WaveTreeView::WaveTreeView(WaveDataList* wdList, WaveItemHash *wHash, QWidget* parent)
@@ -517,6 +518,8 @@ namespace hal {
         mWaveItemHash->setSelected();
         for (WaveItem* wi : mWaveItemHash->values())
             wi->setWaveSelected(false);
+
+        std::vector<u32> netIds;
         for (const QModelIndex& inx : sortedSelection())
         {
             WaveItemIndex wii = wtm->hashIndex(inx);
@@ -527,7 +530,13 @@ namespace hal {
                 if (!mWaveItemHash->firstSelected())
                     mWaveItemHash->setSelected(wi);
             }
+            const WaveData* wd = wi->wavedata();
+            if (wd)
+            {
+                netIds.push_back(wd->id());
+            }
         }
+        if (!netIds.empty()) gGuiApi->selectNet(netIds,true,false);
     }
 
     void WaveTreeView::orderRecursion(const QModelIndex &parent)
