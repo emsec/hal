@@ -169,9 +169,26 @@ namespace hal
 
                 if( clk->get_num_of_sources() > 1 )
                 {
-                    log_error( "clock_tree_extractor",
-                               "invalid number of sources for clock net with ID " + std::to_string( clk->get_id() ) );
-                    continue;
+                    bool valid = true;
+                    for( const Endpoint *source_ep : clk->get_sources() )
+                    {
+                        const Gate *gate = source_ep->get_gate();
+                        if( !( is_buffer(gate) || is_inverter(gate) ) )
+                        {
+                            // In theory, it should be either all buffers or all inverters. But depending on
+                            // extraction results, e.g., it could happen that a buffer is split into two inverters.
+                            // So I just assume it is fine if all the sources are either a buffer or an inverter
+                            // without enforcing strict buffer only or inverter only.
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if( !valid )
+                    {
+                        log_error( "clock_tree_extractor",
+                                   "invalid number of sources for clock net with ID " + std::to_string( clk->get_id() ) );
+                        continue;
+                    }
                 }
                 else if( clk->is_global_input_net() )
                 {
@@ -187,7 +204,11 @@ namespace hal
                     continue;
                 }
 
-                queue.push( { ff, clk->get_sources().front()->get_gate(), std::vector<const Gate *>{ ff } } );
+                for( const Endpoint *source_ep : clk->get_sources() )
+                {
+                    const Gate *gate = source_ep->get_gate();
+                    queue.push( { ff, gate, std::vector<const Gate *>{ ff } } );
+                }
 
                 vertices.insert( (void *) ff );
                 ptrs_to_type[(void *) ff] = PtrType::GATE;
