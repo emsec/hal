@@ -33,26 +33,21 @@ namespace hal {
     }
 
     SolveFsmInteraction::~SolveFsmInteraction()
-    {
-        std::cerr << "SolveFsmInteraction::~SolveFsmInteraction()" << std::endl;
-    }
+    {;}
 
 
     void SolveFsmInteraction::handleSceneChanged(const QList<QRectF>& changedArea)
     {
         Q_UNUSED(changedArea);
 
-        std::cerr << "handleSceneChanged ";
         if (!mItemArea.isNull())
         {
             resetEdgeHighlight();
 
-            std::cerr << "item Area [" << mItemArea.top() << ":" << mItemArea.bottom() << "," << mItemArea.left() << ":" << mItemArea.right() << "]";
             for (QGraphicsView* view : mScene->views())
                 view->ensureVisible(mItemArea);
             mItemArea = QRectF(); // call ensure visible only once
         }
-        std::cerr << std::endl;
     }
 
     void SolveFsmInteraction::registerEdge(QGVEdge* edge)

@@ -7,7 +7,9 @@
 namespace hal {
     DotGraphicsView::DotGraphicsView(QWidget* parent)
         : QGraphicsView(parent), mPanModifier(Qt::KeyboardModifier::ShiftModifier)
-    {;}
+    {
+        setMouseTracking(true);
+    }
 
     void DotGraphicsView::wheelEvent(QWheelEvent* event)
     {
@@ -56,5 +58,7 @@ namespace hal {
             if (hBar) hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
             if (vBar) vBar->setValue(vBar->value() - delta_move.y());
         }
+        else
+            QGraphicsView::mouseMoveEvent(event);
     }
 }

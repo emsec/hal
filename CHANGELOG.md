@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * plugins
-  * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
+  * simulation
+    * added feature, selecting a waveform in viewer selects net in graph view as well
+    * fixed bug in waveform viewer, make sure that deleting a controller causes closing the tab
+  * added 'hover over node' feature in dot viewer
   * fixed broken initialization of DANA plugin when starting via CLI
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
   * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
