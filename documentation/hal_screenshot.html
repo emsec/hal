@@ -34,17 +34,22 @@
     counter-increment: item;
     margin-bottom: 8px;
   }
-  li:before {
-    margin-right: 10px;
+  li::before {
     content: counter(item);
+    margin-right: 10px;
+
     background: red;
-    font-weight: 900;
-    border-radius: 100%;
     color: white;
-    width: 2.2em;
-    height: 2.2em;
-    text-align: center;
-    display: inline-block;
+    font-weight: 1600;
+
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+
+    font-size: 2.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 </head>
