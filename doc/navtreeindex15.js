@@ -1,9 +1,5 @@
 var NAVTREEINDEX15 =
 {
-"classhal_1_1_net_layout_direction.html#abeda4dd68246a2bbd823d7186110601e":[4,0,0,2,10,10],
-"classhal_1_1_net_layout_direction.html#ac8c43ee40a82e5d2b5ba63a1ca270e35":[4,0,0,2,10,8],
-"classhal_1_1_net_layout_direction.html#ac9231c6ce6c60f6471177259ec4b67b3":[4,0,0,2,10,13],
-"classhal_1_1_net_layout_direction.html#adbbe99130f1c51462f5eac801c2f3feb":[4,0,0,2,10,5],
 "classhal_1_1_net_layout_junction.html":[4,0,0,2,9],
 "classhal_1_1_net_layout_junction.html#a2ac8220ebdfd2a272bb43f4596bfb31e":[4,0,0,2,9,5],
 "classhal_1_1_net_layout_junction.html#a9351544319f3865a83211a7fe2b5edae":[4,0,0,2,9,4],
@@ -105,7 +101,6 @@ var NAVTREEINDEX15 =
 "classhal_1_1_net_layout_wire.html#a3af16f47bfffe76a8242461e2ea8fdc1":[4,0,0,2,12,7],
 "classhal_1_1_net_layout_wire.html#a5d2d1c5f4024beedc9d84c70998dd516":[4,0,0,2,12,4],
 "classhal_1_1_net_layout_wire.html#a64d0688c2d49c023cd6366169ddb93a4":[4,0,0,2,12,5],
-"classhal_1_1_net_layout_wire.html#a64e7f0f13e65bf6a16ab28430dae7f0f":[4,0,0,2,12,2],
 "classhal_1_1_net_layout_wire.html#aab9de4aa1429470e0e34ef4801aeb2c4":[4,0,0,2,12,0],
 "classhal_1_1_net_layout_wire.html#aab9de4aa1429470e0e34ef4801aeb2c4a0f8c11c24f9882ff46dd06888f76c4ce":[4,0,0,2,12,0,1],
 "classhal_1_1_net_layout_wire.html#aab9de4aa1429470e0e34ef4801aeb2c4a68b118e6e3b0fbe09851049bb40f21b8":[4,0,0,2,12,0,0],
@@ -249,5 +244,10 @@ var NAVTREEINDEX15 =
 "classhal_1_1_netlist_parser.html#ac37aa566d2a1ca89be3ed078ef44d3b2":[4,1,0,2,2,2],
 "classhal_1_1_netlist_relay.html":[4,0,28],
 "classhal_1_1_netlist_relay.html#a079040f92859a52a5fabba755ae8f8a2":[4,0,28,3],
-"classhal_1_1_netlist_relay.html#a0aace5e1d0b09660b931813a834884fe":[4,0,28,44]
+"classhal_1_1_netlist_relay.html#a0aace5e1d0b09660b931813a834884fe":[4,0,28,44],
+"classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a":[4,0,28,17],
+"classhal_1_1_netlist_relay.html#a192a78f3a2a4b3dca8250c90fbc637f1":[4,0,28,32],
+"classhal_1_1_netlist_relay.html#a29ada1855be416514d0fa3a4a4cb9e01":[4,0,28,18],
+"classhal_1_1_netlist_relay.html#a2abd5096dc41a41ecb571ce8f5269951":[4,0,28,55],
+"classhal_1_1_netlist_relay.html#a3026e24a3314902f7bb0a60047ba0f89":[4,0,28,46]
 };
