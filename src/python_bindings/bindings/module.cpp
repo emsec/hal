@@ -688,10 +688,17 @@ namespace hal
                const std::vector<ModulePin*> pins = {},
                PinDirection direction             = PinDirection::none,
                PinType type                       = PinType::none,
-               bool ascending                     = true,
-               u32 start_index                    = 0,
+               bool ascending                     = false,
+               u32 start_index                    = UINT_MAX,  // placeholder for default depending on ascending <-> descending
                bool delete_empty_groups           = true,
                bool force_name                    = false) -> PinGroup<ModulePin>* {
+                if (start_index == UINT_MAX)
+                {
+                    if (ascending || pins.empty())
+                        start_index = 0;
+                    else
+                        start_index = pins.size() - 1;
+                }
                 auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index, delete_empty_groups, force_name);
                 if (res.is_ok())
                 {
@@ -708,8 +715,8 @@ namespace hal
             py::arg("pins")                = std::vector<ModulePin*>(),
             py::arg("direction")           = PinDirection::none,
             py::arg("type")                = PinType::none,
-            py::arg("ascending")           = true,
-            py::arg("start_index")         = 0,
+            py::arg("ascending")           = false,
+            py::arg("start_index")         = UINT_MAX,
             py::arg("delete_empty_groups") = true,
             py::arg("force_name")          = false,
             R"(
@@ -736,10 +743,17 @@ namespace hal
                const std::vector<ModulePin*> pins = {},
                PinDirection direction             = PinDirection::none,
                PinType type                       = PinType::none,
-               bool ascending                     = true,
-               u32 start_index                    = 0,
+               bool ascending                     = false,
+               u32 start_index                    = UINT_MAX,  // placeholder for default depending on ascending <-> descending
                bool delete_empty_groups           = true,
                bool force_name                    = false) -> PinGroup<ModulePin>* {
+                if (start_index == UINT_MAX)
+                {
+                    if (ascending || pins.empty())
+                        start_index = 0;
+                    else
+                        start_index = pins.size() - 1;
+                }
                 auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups, force_name);
                 if (res.is_ok())
                 {
@@ -755,8 +769,8 @@ namespace hal
             py::arg("pins")                = std::vector<ModulePin*>(),
             py::arg("direction")           = PinDirection::none,
             py::arg("type")                = PinType::none,
-            py::arg("ascending")           = true,
-            py::arg("start_index")         = 0,
+            py::arg("ascending")           = false,
+            py::arg("start_index")         = UINT_MAX,
             py::arg("delete_empty_groups") = true,
             py::arg("force_name")          = false,
             R"(

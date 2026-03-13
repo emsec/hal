@@ -518,7 +518,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = true,
+                                                      bool ascending                     = false,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true,
                                                       bool force_name                    = false);

@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
+* changed default order to 'descending' when creating a pin group via Python command
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
