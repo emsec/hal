@@ -8,7 +8,7 @@ var classhal_1_1_module =
     [ "contains_net", "classhal_1_1_module.html#a33023848f9c14bc36bf475be597d5747", null ],
     [ "create_pin", "classhal_1_1_module.html#a91b51c38895e814a7d66507b6e8de9fa", null ],
     [ "create_pin", "classhal_1_1_module.html#ad35559b823f388e85241716ef8189fc9", null ],
-    [ "create_pin_group", "classhal_1_1_module.html#a1f35cfad401ab712ba390d43abec615d", null ],
+    [ "create_pin_group", "classhal_1_1_module.html#a52eea387f4537aae1ebf9349b0399204", null ],
     [ "create_pin_group", "classhal_1_1_module.html#aa80d9564cd6571834b17528bb5031703", null ],
     [ "delete_pin_group", "classhal_1_1_module.html#a7609f55c575b282d28207f084b6733a5", null ],
     [ "get_event_handler", "classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621", null ],
