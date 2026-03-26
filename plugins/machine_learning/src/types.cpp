@@ -38,13 +38,82 @@ namespace hal
                 bool is_gate_name_encoding = false;    // (dir==none && dist==0) per your encoding
             };
 
+            // --- pin-type priority rules (first rule that applies to ALL gates wins)
+            using PinPriorityRule = std::pair<GateTypeProperty, std::vector<PinType>>;
+
+            static const std::vector<PinPriorityRule>& pin_priority_rules()
+            {
+                static const std::vector<PinPriorityRule> rules = {
+                    {GateTypeProperty::ff, {PinType::state, PinType::neg_state}},
+                    // Add more rules here later, in priority order.
+                };
+                return rules;
+            }
+
+            static const std::vector<PinType>* get_applicable_pin_priority(const std::vector<Gate*>& gv)
+            {
+                for (const auto& [gtp, plist] : pin_priority_rules())
+                {
+                    const bool applies_to_all = std::all_of(gv.begin(), gv.end(), [&](Gate* g) { return g != nullptr && g->get_type() != nullptr && g->get_type()->has_property(gtp); });
+
+                    if (applies_to_all)
+                    {
+                        return &plist;
+                    }
+                }
+                return nullptr;
+            }
+
+            static size_t rank_pin_one_gate(Gate* g, const std::string& pin_name, const std::vector<PinType>& plist)
+            {
+                // Lower is better. Anything unresolved is worse than any listed pin type.
+                const size_t worst = plist.size() + 2;
+
+                if (g == nullptr)
+                {
+                    return worst;
+                }
+
+                auto* ep = g->get_fan_out_endpoint(pin_name);
+                if (ep == nullptr || ep->get_pin() == nullptr)
+                {
+                    return worst;
+                }
+
+                const PinType pt = ep->get_pin()->get_type();
+                const auto it    = std::find(plist.begin(), plist.end(), pt);
+
+                if (it == plist.end())
+                {
+                    // known pin type, but not in the preferred list -> worse than preferred, better than "unresolved"
+                    return plist.size() + 1;
+                }
+
+                return static_cast<size_t>(std::distance(plist.begin(), it));
+            }
+
+            static size_t rank_pin_for_vector_worstcase(const std::vector<Gate*>& gv, const std::string& pin_name, const std::vector<PinType>& plist)
+            {
+                // If pin types differ across gates, be conservative: take the WORST rank.
+                size_t worst_rank = 0;
+                for (auto* g : gv)
+                {
+                    worst_rank = std::max(worst_rank, rank_pin_one_gate(g, pin_name, plist));
+                }
+                return worst_rank;
+            }
+
             struct CandidateScore
             {
                 // Lower is better.
                 int primary         = 0;
                 double avg_distance = std::numeric_limits<double>::infinity();
 
-                // Deterministic tie-breakers
+                // Yosys-only tie-breakers (kept neutral for other policies).
+                size_t pin_type_rank = 0;    // lower is better (only meaningful for yosys output ties)
+                size_t pin_len       = 0;    // shorter pin name wins when no rule applies (yosys output ties)
+
+                // Deterministic final tie-breakers
                 size_t name_len = 0;
                 std::string name;
                 int dir = 0;
@@ -52,7 +121,8 @@ namespace hal
 
                 friend bool operator<(const CandidateScore& a, const CandidateScore& b)
                 {
-                    return std::tie(a.primary, a.avg_distance, a.name_len, a.name, a.dir, a.pin) < std::tie(b.primary, b.avg_distance, b.name_len, b.name, b.dir, b.pin);
+                    return std::tie(a.primary, a.avg_distance, a.pin_type_rank, a.pin_len, a.name_len, a.name, a.dir, a.pin)
+                           < std::tie(b.primary, b.avg_distance, b.pin_type_rank, b.pin_len, b.name_len, b.name, b.dir, b.pin);
                 }
             };
 
@@ -67,16 +137,49 @@ namespace hal
                 s.dir          = static_cast<int>(dir);
                 s.pin          = pin;
 
+                // defaults (neutral)
+                s.pin_type_rank = 0;
+                s.pin_len       = 0;
+
                 switch (policy)
                 {
                     case MultiBitProcessingPolicy::Default:
-                        s.primary = 0;    // just avg distance + tie-breakers
+                        // just avg distance + deterministic tie-breakers
+                        s.primary = 0;
                         break;
 
-                    case MultiBitProcessingPolicy::Yosys:
-                        // output wins if ambiguous; then avg distance
+                    case MultiBitProcessingPolicy::Yosys: {
+                        // output wins if ambiguous; then avg distance;
+                        // if multiple output candidates tie, prioritize by pin type using the first
+                        // GateTypeProperty rule that applies to ALL gates in the vector.
                         s.primary = c.is_output_word ? 0 : 1;
+
+                        // Only meaningful when comparing output candidates against output candidates.
+                        if (c.is_output_word)
+                        {
+                            s.pin_len = pin.size();
+
+                            // apply first matching gate-type-property rule (if any)
+                            if (const auto* plist = get_applicable_pin_priority(c.canonical_gates); plist != nullptr)
+                            {
+                                s.pin_type_rank = rank_pin_for_vector_worstcase(c.canonical_gates, pin, *plist);
+                            }
+                            else
+                            {
+                                // No rule applies to all gates -> behave "random like currently"
+                                // but deterministic: let shorter pin name win (pin_len), then existing tie-breakers.
+                                s.pin_type_rank = std::numeric_limits<size_t>::max();
+                            }
+                        }
+                        else
+                        {
+                            // keep non-output candidates always worse on pin rank in case of any weird ties
+                            s.pin_type_rank = std::numeric_limits<size_t>::max();
+                            s.pin_len       = std::numeric_limits<size_t>::max();
+                        }
+
                         break;
+                    }
 
                     case MultiBitProcessingPolicy::Vivado:
                         // gate-name encoding wins if ambiguous; then avg distance
