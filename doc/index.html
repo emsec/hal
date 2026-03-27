@@ -140,8 +140,10 @@ Build Instructions</h1>
 <p><a class="anchor" id="quickstart"></a> </p>
 <h1><a class="anchor" id="autotoc_md33"></a>
 Quickstart Guide</h1>
-<p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example netlists in <code>examples</code> together with the implementation of the respective example gate library in <code>plugins/example_gate_library</code>. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
-<p>Load a library from the <code>examples</code> directory and start exploring the graphical representation. Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
+<p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example projects in <code>examples</code> subdirectory. To get startet with an example project you need to import it via <code>Import Project</code> from main menu or by dropping the zipped file in the <code>OPEN PROJECT</code> area of the Welcome Screen. Doing so a popup will request a directory with write permissions where HAL will create the project directory and uncompress the files. Do not use external tools for uncompress since adaptions are made so that netlist and gate library are found the next time the project gets opened.</p>
+<p>In case you want to open your own Verlog or VHDL netlist you have to run <code>Import Netlist</code> instead. This will only work if there is a matching gate library in <code>plugins/gate_libraries/definitions</code> or you provide the gate library manually. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
+<p>The following example code refers to the <code>fsm</code> example.</p>
+<p>Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
 <p>Let's list all lookup tables and print their Boolean functions: </p><div class="fragment"><div class="line">for gate in netlist.get_gates():</div>
 <div class="line">    if &quot;LUT&quot; in gate.type.name:</div>
 <div class="line">        print(&quot;{} (id {}, type {})&quot;.format(gate.name, gate.id, gate.type.name))</div>
@@ -215,7 +217,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 13 2026 11:59:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Mar 27 2026 15:00:08 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
