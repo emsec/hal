@@ -1,4 +1,4 @@
-#include "bindings/register.h"
+#include "register.h"
 
 namespace hal
 {
@@ -6,7 +6,7 @@ namespace hal
     {
         namespace python
         {
-            void bind_core(py::module& m)
+            void bind_plugin(py::module& m)
             {
         py::class_<MachineLearningPlugin, RawPtrWrapper<MachineLearningPlugin>, BasePluginInterface> py_machine_learning_plugin(
             m, "MachineLearningPlugin", R"(Provides machine learning functionality as a plugin within the HAL framework.)");

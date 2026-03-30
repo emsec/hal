@@ -27,7 +27,7 @@ namespace hal
                 return OK(subgraphs);
             };
 
-            Result<std::vector<std::vector<u32>>> ContainedComponents::calculate_labels(Context& ctx, const std::vector<Gate*>& subgraphs) const
+            Result<std::vector<std::vector<u32>>> ContainedComponents::calculate_labels(Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) const
             {
                 std::vector<std::vector<u32>> labels;
 
@@ -39,6 +39,8 @@ namespace hal
 
             Result<u32> ContainedComponents::annotate_from_twin_netlist(Context& ctx, Netlist* nl, const Netlist* twin_nl) const
             {
+                UNUSED(nl);
+
                 // find register components in twin nl
                 const std::vector<std::string> SEQ_PATTERNS = {"Register"};
                 std::vector<Module*> sequential_modules;
@@ -114,7 +116,7 @@ namespace hal
                 return OK(subgraphs);
             };
 
-            Result<std::vector<std::vector<u32>>> ContainedComponentsNetlist::calculate_labels(Context& ctx, const std::vector<Gate*>& subgraphs) const
+            Result<std::vector<std::vector<u32>>> ContainedComponentsNetlist::calculate_labels(Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) const
             {
                 UNUSED(subgraphs);    // For netlist-level labeling, the subgraph is always the full netlist
 
@@ -194,11 +196,28 @@ namespace hal
                     return ERR("failed to parse JSON metadata at '" + metadata_path + "': " + std::string(e.what()));
                 }
 
+                const std::string ROOT_KEY = "design_information";
                 const std::string CATEGORY = "ContainedComponentsNetlist";
 
-                if (!j.contains(CATEGORY))
+                if (!j.contains(ROOT_KEY))
                 {
-                    return ERR("metadata JSON does not contain the key '" + CATEGORY + "'");
+                    return ERR("metadata JSON does not contain the key '" + ROOT_KEY + "'");
+                }
+
+                const auto& design_information = j[ROOT_KEY];
+                if (!design_information.is_object())
+                {
+                    return ERR("metadata JSON key '" + ROOT_KEY + "' does not contain an object");
+                }
+                if (!design_information.contains(CATEGORY))
+                {
+                    return ERR("metadata JSON does not contain the key path '" + ROOT_KEY + "." + CATEGORY + "'");
+                }
+
+                const auto& component_metadata = design_information[CATEGORY];
+                if (!component_metadata.is_object())
+                {
+                    return ERR("metadata JSON key path '" + ROOT_KEY + "." + CATEGORY + "' does not contain an object");
                 }
 
                 Module* top_module = nl->get_top_module();
@@ -208,7 +227,7 @@ namespace hal
                 }
 
                 u32 annotated_count = 0;
-                for (auto it = j[CATEGORY].begin(); it != j[CATEGORY].end(); ++it)
+                for (auto it = component_metadata.begin(); it != component_metadata.end(); ++it)
                 {
                     const std::string& component_name = it.key();
 

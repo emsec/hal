@@ -8,6 +8,8 @@ namespace hal
         {
             void bind_edge_features(py::module& m, py::module& py_edge_feature)
             {
+        UNUSED(m);
+
         py::class_<machine_learning::edge_feature::EdgeFeature, RawPtrWrapper<machine_learning::edge_feature::EdgeFeature>> py_edge_feature_class(py_edge_feature,
                                                                                                                                                   "EdgeFeature",
                                                                                                                                                   R"(

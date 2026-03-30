@@ -28,7 +28,8 @@ namespace hal
                 // Preallocate the feature vectors
                 std::vector<std::vector<FEATURE_TYPE>> feature_vecs(gates.size());
 
-                const u32 used_threads = std::min(u32(gates.size()), ctx.num_threads);
+                // Determine the number of threads to use (at least 1, at most the number of gates)
+                const u32 used_threads = std::max(1u, std::min(u32(gates.size()), ctx.num_threads));
 
                 std::vector<Result<std::monostate>> thread_results(used_threads, ERR("uninitialized"));
 

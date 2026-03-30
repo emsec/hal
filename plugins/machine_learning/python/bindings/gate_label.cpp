@@ -8,6 +8,8 @@ namespace hal
         {
             void bind_gate_labels(py::module& m, py::module& py_gate_label)
             {
+        UNUSED(m);
+
         py::class_<machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::GateLabel>> py_gate_label_class(py_gate_label, "GateLabel", R"(
             Base class for calculating labels for machine learning models.
 

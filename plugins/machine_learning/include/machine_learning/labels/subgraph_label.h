@@ -44,7 +44,7 @@ namespace hal
                  * @param[in] ctx - The machine learning context.
                  * @returns A vector of label vectors for each pair on success, an error otherwise.
                  */
-                virtual Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& subgraphs) const = 0;
+                virtual Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) const = 0;
 
                 virtual std::string to_string() const = 0;
             };
@@ -74,7 +74,7 @@ namespace hal
                  * @param[in] ctx - The machine learning context.
                  * @returns A vector of label vectors for each pair on success, an error otherwise.
                  */
-                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& subgraphs) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) const override;
 
                 /**
                  * @brief Helper function to annotate contained components to a falttened subgraph of gates in front of a register by analyzing a unflattened twin netlist 
@@ -130,7 +130,7 @@ namespace hal
                     u32 label_size = m_key_words.size() + 1;
 
                     std::vector<u32> v(label_size, 0);
-                    for (const auto [m_idx, m_count] : matches)
+                    for (const auto& [m_idx, m_count] : matches)
                     {
                         if (m_idx >= m_key_words.size())
                         {
@@ -168,7 +168,7 @@ namespace hal
                  * @param[in] ctx - The machine learning context.
                  * @returns A vector of label vectors for each pair on success, an error otherwise.
                  */
-                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& subgraphs) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) const override;
 
                 /**
                  * @brief Helper function to annotate contained components to top module of netlöist by reading from netlist metadata at a path 
@@ -224,7 +224,7 @@ namespace hal
                     u32 label_size = m_key_words.size() + 1;
 
                     std::vector<u32> v(label_size, 0);
-                    for (const auto [m_idx, m_count] : matches)
+                    for (const auto& [m_idx, m_count] : matches)
                     {
                         if (m_idx >= m_key_words.size())
                         {

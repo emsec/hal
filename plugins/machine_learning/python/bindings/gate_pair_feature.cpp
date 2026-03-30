@@ -8,6 +8,8 @@ namespace hal
         {
             void bind_gate_pair_features(py::module& m, py::module& py_gate_pair_feature)
             {
+        UNUSED(m);
+
         // machine_learning::features::gate_pair_feature
         py::class_<machine_learning::gate_pair_feature::GatePairFeature, std::shared_ptr<machine_learning::gate_pair_feature::GatePairFeature>> py_gate_pair_feature_class(
             py_gate_pair_feature, "GatePairFeature", R"(

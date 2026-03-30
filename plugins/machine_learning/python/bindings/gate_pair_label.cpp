@@ -8,6 +8,8 @@ namespace hal
         {
             void bind_gate_pair_labels(py::module& m, py::module& py_gate_pair_label)
             {
+        UNUSED(m);
+
         py::class_<machine_learning::gate_pair_label::GatePairLabel> py_gate_pair_label_class(py_gate_pair_label,
                                                                                               "GatePairLabel",
                                                                                               R"(

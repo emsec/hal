@@ -8,6 +8,8 @@ namespace hal
         {
             void bind_subgraph_labels(py::module& m, py::module& py_subgraph_label)
             {
+        UNUSED(m);
+
         py::class_<machine_learning::subgraph_label::SubgraphLabel, std::shared_ptr<machine_learning::subgraph_label::SubgraphLabel>> py_subgraph_label_class(py_subgraph_label, "SubgraphLabel", R"(
             Base class for calculating labels for machine learning models.
 
@@ -39,7 +41,7 @@ namespace hal
 
         py_subgraph_label_class.def(
             "calculate_labels",
-            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
                 auto res = self.calculate_labels(ctx, subgraphs);
                 if (res.is_ok())
                 {
@@ -111,7 +113,7 @@ Construct a ContainedComponents labeler.
 
         py_contained_components.def(
             "calculate_labels",
-            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
                 auto res = self.calculate_labels(ctx, subgraphs);
                 if (res.is_ok())
                 {
@@ -212,7 +214,7 @@ Construct a ContainedComponentsNetlist labeler.
 
         py_contained_components_netlist.def(
             "calculate_labels",
-            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<Gate*>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
+            [](const machine_learning::subgraph_label::SubgraphLabel& self, machine_learning::Context& ctx, const std::vector<std::vector<Gate*>>& subgraphs) -> std::optional<std::vector<std::vector<u32>>> {
                 auto res = self.calculate_labels(ctx, subgraphs);
                 if (res.is_ok())
                 {
