@@ -52,12 +52,40 @@ namespace hal {
 
         QString dateToLocaleString(const QDateTime &dt);
 
-        template<typename T> extern QSet<T> listToSet(const QList<T>& list);
+        template<typename T> extern QSet<T> listToSet(const QList<T>& list)
+        {
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                    return QSet<T>(list.constBegin(),list.constEnd());
+        #else
+                    return QSet<T>::fromList(list);
+        #endif
+        }
 
-        template<typename T> extern QList<T> setToList(const QSet<T>& cset);
+        template<typename T> extern QList<T> setToList(const QSet<T>& cset)
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            return QList<T>(cset.constBegin(),cset.constEnd());
+#else
+            return QList<T>::fromset(list);
+#endif
+        }
 
-        template<typename T> extern QVector<T> listToVector(const QList<T>& list);
+        template<typename T> extern QVector<T> listToVector(const QList<T>& list)
+        {
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                    return QVector<T>(list.constBegin(),list.constEnd());
+        #else
+                    return QVector<T>::fromList(list);
+        #endif
+        }
 
-        template<typename T> extern QVector<T> stdVectorToVector(const std::vector<T>& vec);
+        template<typename T> extern QVector<T> stdVectorToVector(const std::vector<T>& vec)
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            return QVector<T>(vec.begin(),vec.end());
+#else
+            return QVector<T>::fromStdVector(vec);
+#endif
+        }
     }
 }

@@ -58,8 +58,6 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     aux_source_directory(${SRCROOT} SRC)
     file(GLOB_RECURSE RSRC ${RSRCROOT}/*.qrc)
 
-    qt6_wrap_cpp(MOC_source ${SRC})
-
     foreach(i IN ITEMS "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
         foreach(j IN ITEMS "RUNTIME" "ARCHIVE" "LIBRARY")
             set(STORE_${j}_OUTDIR${i} ${CMAKE_${j}_OUTPUT_DIRECTORY${i}})
@@ -119,6 +117,8 @@ if(PL_GUI OR BUILD_ALL_PLUGINS)
     get_property(GLDIR GLOBAL PROPERTY GATE_LIBS_DEFINITIONS)
     file(WRITE "${RSRCROOT}/path/gate_library_definitions.txt" "${GLDIR}")
     hal_plugin_documentation(gui SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/gui.rst)
+
+#    qt6_wrap_cpp(MOC_source ${SRC} TARGET gui)
 
     install(TARGETS gui
             EXPORT hal

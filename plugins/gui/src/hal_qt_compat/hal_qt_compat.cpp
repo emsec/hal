@@ -42,7 +42,7 @@ namespace hal {
         return qHash(p);
 #endif
     }
-
+/*
     template<typename T>
     QSet<T> QtCompat::listToSet(const QList<T>& list)
     {
@@ -65,6 +65,7 @@ namespace hal {
 
     template<typename T>
     QVector<T> QtCompat::listToVector(const QList<T>& list)
+
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         return QVector<T>(list.constBegin(),list.constEnd());
@@ -72,6 +73,7 @@ namespace hal {
         return QVector<T>::fromList(list);
 #endif
     }
+
 
     template<typename T> extern QVector<T> QtCompat::stdVectorToVector(const std::vector<T>& vec)
     {
@@ -81,6 +83,7 @@ namespace hal {
         return QVector<T>::fromStdVector(vec);
 #endif
     }
+    */
 
     void QtCompat::setMarginWidth(QLayout* layout, int marginWidth)
     {
