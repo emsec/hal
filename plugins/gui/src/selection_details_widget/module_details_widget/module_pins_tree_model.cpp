@@ -438,7 +438,6 @@ namespace hal
         if (pev == PinEvent::PinDelete)
         {
             ptiPin = mIdToPinItem.value(pgid);
-            std::cerr << "PinEvent::PinDelete <" << pgid << "> " << std::hex << (ptiPin ? (quintptr) ptiPin : 0) << std::dec << std::endl;
         }
 
         if (groupEvents.contains(pev))

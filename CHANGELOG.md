@@ -2,10 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* fixed bug in pin model which must not crash when deleting a non-empty pin group
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * changed default order to 'descending' when creating a pin group via Python command
+* module pin groups
+  * fixed bug in pin model which must not crash when deleting a non-empty pin group
+  * fixed bug by disallowing deletion of group comprising a single pin with same name
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
