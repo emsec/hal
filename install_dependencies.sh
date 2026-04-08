@@ -72,7 +72,7 @@ elif [[ "$platform" == 'linux' ]]; then
     . /etc/os-release
     if [ "$distribution" == 'Ubuntu' ] || [ "$distribution" == 'LinuxMint' ]; then
         if [[ "$major" -le 22 ]]; then
-            additional_deps="libqt6core5compat6-dev"
+            additional_deps="libqt6core5compat6-dev libglu1-mesa-dev"
         else
             additional_deps="qt6-5compat-dev"
         fi
