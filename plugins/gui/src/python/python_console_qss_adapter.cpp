@@ -1,5 +1,6 @@
 #include "gui/python/python_console_qss_adapter.h"
 #include <QStyle>
+#include <QHash>
 
 namespace hal
 {
