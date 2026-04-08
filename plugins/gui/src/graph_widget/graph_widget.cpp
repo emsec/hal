@@ -917,7 +917,9 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedGatesList())
         {
-            auto rect = mContext->scene()->getGateItem(id)->sceneBoundingRect();
+            const GraphicsGate* gg = mContext->scene()->getGateItem(id);
+            if (!gg) continue;
+            auto rect = gg->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
@@ -927,7 +929,9 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedNetsList())
         {
-            auto rect = mContext->scene()->getNetItem(id)->sceneBoundingRect();
+            const GraphicsNet* gn = mContext->scene()->getNetItem(id);
+            if (!gn) continue;
+            auto rect = gn->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
@@ -937,12 +941,23 @@ namespace hal
 
         for (auto id : gSelectionRelay->selectedModulesList())
         {
-            auto rect = mContext->scene()->getModuleItem(id)->sceneBoundingRect();
+            const GraphicsModule* gm = mContext->scene()->getModuleItem(id);
+            if (!gm) continue;
+            auto rect = gm->sceneBoundingRect();
 
             min_x = std::min(min_x, static_cast<int>(rect.left()));
             max_x = std::max(max_x, static_cast<int>(rect.right()));
             min_y = std::min(min_y, static_cast<int>(rect.top()));
             max_y = std::max(max_y, static_cast<int>(rect.bottom()));
+        }
+
+        if (min_x == INT_MAX ||
+            min_y == INT_MAX ||
+            max_x == INT_MIN ||
+            max_y == INT_MIN )
+        {
+            log_warning("gui", "Attempt to zoom in on graphics item before layout was rendered.");
+            return;
         }
 
         auto targetRect = QRectF(min_x, min_y, max_x - min_x, max_y - min_y).marginsAdded(QMarginsF(20, 20, 20, 20));

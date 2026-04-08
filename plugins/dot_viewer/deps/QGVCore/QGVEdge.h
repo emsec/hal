@@ -48,9 +48,11 @@ public:
 
     void updateLayout();
 
-    void setEndpoints(const QHash<void*,QGVNode*>& nodeHash);
+    void setEndpoints(const QHash<void*, QGVNode*>& nodeHash, QMultiMap<QGVNode*, QGVEdge*>& attachedEdges);
 
     void setHightlight(const QString& hilight);
+
+    void setHover(bool hover);
 
     QGVNode* headNode() const;
     QGVNode* tailNode() const;
@@ -86,6 +88,8 @@ private:
     QGVNode* _tail_node;
 
     QString _highlight_text;
+
+    bool mHover;
 };
 
 #endif // QGVEDGE_H

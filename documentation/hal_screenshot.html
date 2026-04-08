@@ -34,17 +34,22 @@
     counter-increment: item;
     margin-bottom: 8px;
   }
-  li:before {
-    margin-right: 10px;
+  li::before {
     content: counter(item);
+    margin-right: 10px;
+
     background: red;
-    font-weight: 900;
-    border-radius: 100%;
     color: white;
-    width: 2.2em;
-    height: 2.2em;
-    text-align: center;
-    display: inline-block;
+    font-weight: 1600;
+
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+
+    font-size: 2.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 </head>
@@ -69,6 +74,11 @@
     <li><a href="https://github.com/emsec/hal/wiki/waveform-viewer-widget" target="_blank">Waveform Viewer</a></li>
     <li><a href="https://github.com/emsec/hal/wiki/python-console-widget" target="_blank">Python Console</a></li>
     <li><a href="https://github.com/emsec/hal/wiki/log-widget" target="_blank">Log Messages</a></li>
+    <li><a href="https://github.com/emsec/hal/wiki/dot-graph-viewer" target="_blank">Dot Graph Viewer</a></li>
   </ol></p>
+
+  <a href="https://github.com/emsec/hal/wiki/dot-graph-viewer" target="_blank">
+    <img src="https://raw.githubusercontent.com/emsec/hal/master/wiki_images/dot_viewer/widget.png"/>
+  </a>
 </body>
 </html>

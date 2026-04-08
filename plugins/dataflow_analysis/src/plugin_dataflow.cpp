@@ -62,6 +62,9 @@ namespace hal
         UNUSED(args);
 
         dataflow::Configuration config(nl);
+        config.with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set});
+        config.with_gate_types({GateTypeProperty::ff});
+
         std::string path;
 
         if (args.is_option_set("--path"))
@@ -101,6 +104,19 @@ namespace hal
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
             return false;
+        }
+
+        if (!path.empty())
+        {
+            auto grouping = grouping_res.get();
+            if (const auto res = grouping.write_dot(path); res.is_error())
+            {
+                log_error("dataflow", "could not write .dot file:\n{}", res.get_error().get());
+            }
+            if (const auto res = grouping.write_txt(path); res.is_error())
+            {
+                log_error("dataflow", "could not write .txt file:\n{}", res.get_error().get());
+            }
         }
 
         return true;

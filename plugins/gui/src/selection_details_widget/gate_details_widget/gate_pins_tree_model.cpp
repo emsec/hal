@@ -11,7 +11,7 @@
 namespace hal
 {
 
-    GatePinsTreeItem::GatePinsTreeItem(const std::string &pinName, QString pinDirection, QString pinType, QString netName, int inx)
+    GatePinsTreeItem::GatePinsTreeItem(const std::string &pinName, PinDirection pinDirection, PinType pinType, QString netName, int inx)
         :mPinName(pinName), mPinDirection(pinDirection), mPinType(pinType), mNetName(netName), mIndex(inx)
     {;}
 
@@ -25,9 +25,9 @@ namespace hal
         case 0:
             return QString::fromStdString(mPinName);
         case 1:
-            return mPinDirection;
+            return QString::fromStdString(enum_to_string(mPinDirection));
         case 2:
-            return mPinType;
+            return QString::fromStdString(enum_to_string(mPinType));
         case 3:
             return mNetName;
         case 4:
@@ -41,11 +41,11 @@ namespace hal
     void GatePinsTreeItem::setData(QList<QVariant> data)
     {
         Q_ASSERT(data.size() >= 5);
-        mPinName = data[0].toString().toStdString();
-        mPinDirection = data[1].toString();
-        mPinType = data[2].toString();
-        mNetName = data[3].toString();
-        mIndex = data[4].toInt();
+        mPinName =                     data[0].toString().toStdString();
+        mPinDirection = (PinDirection) data[1].toInt();
+        mPinType =      (PinType)      data[2].toInt();
+        mNetName =                     data[3].toString();
+        mIndex =                       data[4].toInt();
     }
 
     void GatePinsTreeItem::setDataAtColumn(int column, QVariant &data)
@@ -56,10 +56,10 @@ namespace hal
             mPinName = data.toString().toStdString();
             break;
         case 1:
-            mPinDirection = data.toString();
+            mPinDirection = (PinDirection) data.toInt();
             break;
         case 2:
-            mPinType = data.toString();
+            mPinType = (PinType) data.toInt();
             break;
         case 3:
             mNetName = data.toString();
@@ -119,14 +119,13 @@ namespace hal
             const std::string& grpName  = pg->get_name();
             int iDescending             = pg->is_ascending() ? 0 : 1;
             int inx                     = pin->get_group().second;
-            PinDirection direction      = pin->get_direction();
-            QString pinDirection        = QString::fromStdString(enum_to_string(direction));
-            QString pinType             = QString::fromStdString(enum_to_string(pin->get_type()));
+            PinDirection pinDirection   = pin->get_direction();
+            PinType      pinType        = pin->get_type();
 
             //evaluate netname (in case of inout multiple possible nets), method depends on pindirection (kind of ugly switch)
             QString netName = "";
             QList<u32> netIDs;
-            switch (direction)
+            switch (pinDirection)
             {
                 case PinDirection::input:
                     if (g->get_fan_in_net(pin))
@@ -162,7 +161,11 @@ namespace hal
                     break;    //none and internal, dont know how to handle internal (whatever an internal pin is)
             }
 
-            pinItem->setData(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinDirection << pinType << netName << inx);
+            pinItem->setData(QList<QVariant>()
+                             << QString::fromStdString(pin->get_name())
+                             << (int) pinDirection
+                             << (int) pinType
+                             << netName << inx);
             pinItem->setType(GatePinsTreeItem::Pin);
             pinItem->setNetIds(netIDs);
             if (!grpName.empty())

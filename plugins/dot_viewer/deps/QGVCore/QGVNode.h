@@ -38,8 +38,8 @@ public:
     QString label() const;
     void setLabel(const QString &label);
 
-    QRectF boundingRect() const;
-    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    QRectF boundingRect() const override;
+    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
     void setAttribute(const QString &label, const QString &value);
     QString getAttribute(const QString &name) const;
 
@@ -47,10 +47,14 @@ public:
     QString getShape() const;
 
     enum { Type = UserType + 2 };
-    int type() const
+    int type() const override
     {
         return Type;
     }
+
+protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
 
 private:
     friend class QGVScene;
@@ -69,6 +73,7 @@ private:
 
     QGVScene *_scene;
     QGVNodePrivate* _node;
+    bool mHover;
 };
 
 

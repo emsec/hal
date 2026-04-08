@@ -23,7 +23,7 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVEdge::QGVEdge(QGVEdgePrivate *edge, QGVScene *scene) :  _scene(scene), _edge(edge), _head_node(nullptr), _tail_node(nullptr)
+QGVEdge::QGVEdge(QGVEdgePrivate *edge, QGVScene *scene) :  _scene(scene), _edge(edge), _head_node(nullptr), _tail_node(nullptr), mHover(false)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -44,12 +44,14 @@ QRectF QGVEdge::boundingRect() const
     return _path.boundingRect() | _head_arrow.boundingRect() | _tail_arrow.boundingRect() | _label_rect;
 }
 
-void QGVEdge::setEndpoints(const QHash<void*,QGVNode*>& nodeHash)
+void QGVEdge::setEndpoints(const QHash<void *, QGVNode *> &nodeHash, QMultiMap<QGVNode *, QGVEdge *>& attachedEdges)
 {
     auto agHead = _edge->endpoint(true);
     if (agHead) _head_node = nodeHash.value(agHead, nullptr);
+    attachedEdges.insert(_head_node, this);
     auto agTail = _edge->endpoint(false);
     if (agTail) _tail_node = nodeHash.value(agTail, nullptr);
+    attachedEdges.insert(_tail_node, this);
 }
 
 QGVNode* QGVEdge::headNode() const
@@ -82,6 +84,12 @@ void QGVEdge::setHightlight(const QString& hilight)
     update();
 }
 
+void QGVEdge::setHover(bool hover)
+{
+    mHover = hover;
+    update();
+}
+
 void QGVEdge::paintText(QPainter* painter)
 {
     int pos = _highlight_text.isEmpty() ? -1 : _label.indexOf(_highlight_text);
@@ -106,7 +114,7 @@ void QGVEdge::paintText(QPainter* painter)
         if (count % 2 > 0)
         {
             // highlight
-            tpen.setColor(QGVStyle::instance()->penColor(true,_pen.color()));
+            tpen.setColor(QGVStyle::instance()->penColor(true,mHover,_pen.color()));
             lastPos = pos + _highlight_text.size();
             part = _label.mid(pos, lastPos-pos);
             pos = _label.indexOf(_highlight_text, lastPos);
@@ -114,7 +122,7 @@ void QGVEdge::paintText(QPainter* painter)
         else
         {
             // normal
-            tpen.setColor(QGVStyle::instance()->penColor(false,_pen.color()));
+            tpen.setColor(QGVStyle::instance()->penColor(false,mHover,_pen.color()));
             int len = pos < 0 ? _label.size() - lastPos : pos - lastPos;
             if (len > 0) part = _label.mid(lastPos,len);
         }
@@ -134,7 +142,7 @@ void QGVEdge::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
     painter->save();
 
     QPen tpen(_pen);
-    tpen.setColor(QGVStyle::instance()->penColor(isSelected(),_pen.color()));
+    tpen.setColor(QGVStyle::instance()->penColor(isSelected(),mHover,_pen.color()));
     tpen.setWidth(isSelected() ? 2 : 1);
     painter->setPen(tpen);
 

@@ -483,7 +483,7 @@ namespace hal
         for (PinGroup<ModulePin>* pgroup : m->get_pin_groups())
             existingGroups.insert(QString::fromStdString(pgroup->get_name()),pgroup->get_id());
 
-        bool doNotDelete = false; // if there is a pin with the same name as the
+        bool doNotDelete = false; // if there is a pin with the same name as the group
         int vid = -1;
 
         std::vector<ModulePin*> orderedPins = groupToDelete->get_pins();
@@ -530,7 +530,11 @@ namespace hal
                 retval = new ActionPingroup(PinActionType::GroupDelete,groupToDelete->get_id());
         }
 
+        if (!retval) // it is not allowed to delete a pin group with a single pin which has the same name as the group
+            return nullptr;
+
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+
         return retval;
     }
 

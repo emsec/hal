@@ -234,6 +234,26 @@ namespace hal
                     act->exec();
                 }
             });
+            menu.addAction("Set focus to pin", [this, mod, itemId]() {
+                auto* pin = mod->get_pin_by_id(itemId);
+                if (pin && (pin->get_direction() == PinDirection::input || pin->get_direction() == PinDirection::output)) // TODO : what about inout?
+                {
+                    auto pins = pin->get_direction() == PinDirection::input ? mod->get_input_pins() : mod->get_output_pins();
+                    int cnt = 0;
+                    for (auto* testPin : pins)
+                    {
+                        if (testPin == pin)
+                        {
+                            SelectionRelay::Subfocus sfoc = pin->get_direction() == PinDirection::input
+                                ? SelectionRelay::Subfocus::Left : SelectionRelay::Subfocus::Right;
+                            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, mod->get_id(), sfoc, cnt);
+                            gSelectionRelay->relaySelectionChanged(this);
+                            break;
+                        }
+                        ++cnt;
+                    }
+                }
+            });
             menu.addAction("Add net to current selection", [this, n]() {
                 gSelectionRelay->addNet(n->get_id());
                 gSelectionRelay->relaySelectionChanged(this);
