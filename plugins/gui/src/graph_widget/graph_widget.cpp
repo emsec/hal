@@ -1066,7 +1066,7 @@ namespace hal
 
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
-        if (!sInstance || gPythonContext->pythonThread()) return;
+        if (!sInstance || gPythonContext->pythonThread() || QThread::currentThread() != qApp->thread()) return;
         if (percent==100)
             sInstance->handleSceneAvailable();
         else
