@@ -107,10 +107,10 @@ namespace hal
                                 }
 
                                 ctx.finished_passes++;
-                                m_progress_printer.print_progress((float)ctx.finished_passes / ctx.current_passes.size(),
-                                                                  std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
-                                                                      + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
                             }
+                            m_progress_printer.print_progress((float)ctx.finished_passes / ctx.current_passes.size(),
+                                                              std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
+                                                                  + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
                         }
                     }
                 }
