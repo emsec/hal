@@ -31,6 +31,7 @@
 #include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QMap>
+#include <QSet>
 
 namespace hal
 {
@@ -164,10 +165,13 @@ namespace hal
         QMap<QString, BaseTreeItem*> mNameToTreeItem;
         QMap<int, ModulePinsTreeItem*> mIdToPinItem;
         QMap<int, ModulePinsTreeItem*> mIdToGroupItem;
+        QSet<ModulePinsTreeItem*> mOrphanedItem;
 
         void insertItem(ModulePinsTreeItem* item, BaseTreeItem* parent, int index);
         void removeItem(ModulePinsTreeItem* item);
         void updateGroupIndex(ModulePinsTreeItem* groupItem);
+        QModelIndex getIndexFromPinsItem(ModulePinsTreeItem *item) const;
+
 
         // helper functions for dnd for more clarity
         void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup, int row=-1);
@@ -175,5 +179,6 @@ namespace hal
         void dndPinOnGroup(ModulePinsTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
         void dndPinBetweenPin(ModulePinsTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
         void dndPinBetweenGroup(ModulePinsTreeItem* droppedPin, int row);
+        void dumpModel(const char* msg) const;
     };
 }

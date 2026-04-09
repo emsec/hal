@@ -129,6 +129,13 @@ namespace hal
 //        return defaultFlags;
     }
 
+    QModelIndex ModulePinsTreeModel::getIndexFromPinsItem(ModulePinsTreeItem *item) const
+    {
+        if (mOrphanedItem.contains(item)) return QModelIndex();
+        return getIndexFromItem(item);
+    }
+
+
     QStringList ModulePinsTreeModel::mimeTypes() const
     {
         QStringList types;
@@ -177,7 +184,6 @@ namespace hal
         // 4. pin between pins
 
         // put ignore flags here? perhaps needed specifically in other places in functions..
-
         if(type == "group")
         {
             if(!dropPositionItem)
@@ -192,7 +198,7 @@ namespace hal
                 {
                     // debug pingroup                qDebug() << "group was dropped on a pin...";
                     ModulePinsTreeItem* parentGroupItem = static_cast<ModulePinsTreeItem*>(pitem->getParent());
-                    row = getIndexFromItem(pitem).row();
+                    row = getIndexFromPinsItem(pitem).row();
                     dndGroupOnGroup(droppedItem, parentGroupItem, row);
                 }
                 else
@@ -219,7 +225,7 @@ namespace hal
                 {
 // debug pingroup                qDebug() << "pin was dropped on a pin...";
                     ModulePinsTreeItem* parentGroupItem = static_cast<ModulePinsTreeItem*>(pitem->getParent());
-                    row = getIndexFromItem(pitem).row();
+                    row = getIndexFromPinsItem(pitem).row();
                     dndPinBetweenPin(droppedItem, parentGroupItem, row);
                 }
                 else
@@ -429,6 +435,11 @@ namespace hal
         int pinRow = -1;
 
 
+        if (pev == PinEvent::PinDelete)
+        {
+            ptiPin = mIdToPinItem.value(pgid);
+        }
+
         if (groupEvents.contains(pev))
         {
             // group event
@@ -499,15 +510,15 @@ namespace hal
         }
         case PinEvent::GroupRename:
             ptiGroup->setName(QString::fromStdString(pgroup->get_name()));
-            dataChangedIndex = getIndexFromItem(ptiGroup);
+            dataChangedIndex = getIndexFromPinsItem(ptiGroup);
             break;
         case PinEvent::GroupTypeChange:
             ptiGroup->setPinType(pgroup->get_type());
-            dataChangedIndex = getIndexFromItem(ptiGroup);
+            dataChangedIndex = getIndexFromPinsItem(ptiGroup);
             break;
         case PinEvent::GroupDirChange:
             ptiGroup->setPinDirection(pgroup->get_direction());
-            dataChangedIndex = getIndexFromItem(ptiGroup);
+            dataChangedIndex = getIndexFromPinsItem(ptiGroup);
             break;
         case PinEvent::GroupDelete:
             removeItem(ptiGroup);
@@ -569,15 +580,15 @@ namespace hal
         }
         case PinEvent::PinRename:
             ptiPin->setName(QString::fromStdString(pin->get_name()));
-            dataChangedIndex = getIndexFromItem(ptiPin);
+            dataChangedIndex = getIndexFromPinsItem(ptiPin);
             break;
         case PinEvent::PinTypeChange:
             ptiPin->setPinType(pin->get_type());
-            dataChangedIndex = getIndexFromItem(ptiPin);
+            dataChangedIndex = getIndexFromPinsItem(ptiPin);
             break;
         case PinEvent::PinDirChange:
             ptiPin->setPinDirection(pin->get_direction());
-            dataChangedIndex = getIndexFromItem(ptiPin);
+            dataChangedIndex = getIndexFromPinsItem(ptiPin);
             break;
         case PinEvent::PinDelete:
             removeItem(ptiPin);
@@ -679,7 +690,7 @@ namespace hal
             Q_ASSERT(pinItem);
             pinItem->setIndex(inx);
         }
-        QModelIndex pi = getIndexFromItem(groupItem);
+        QModelIndex pi = getIndexFromPinsItem(groupItem);
         QModelIndex i0 = index(0,0,pi);
         QModelIndex i1 = index(groupItem->getChildCount()-1,4,pi);
         Q_EMIT dataChanged(i0,i1);
@@ -698,16 +709,54 @@ namespace hal
 
     void ModulePinsTreeModel::removeItem(ModulePinsTreeItem* item)
     {
-        beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
-        item->getParent()->removeChild(item);
-        endRemoveRows();
+        auto itOrphan = mOrphanedItem.find(item);
+        if (itOrphan != mOrphanedItem.end())
+        {
+            // already orphaned and not part of the tree
+            mOrphanedItem.erase(itOrphan);
+        }
+        else
+        {
+            beginRemoveRows(parent(getIndexFromPinsItem(item)), item->getOwnRow(), item->getOwnRow());
+            item->getParent()->removeChild(item);
+            endRemoveRows();
+        }
         //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
         //for now, only ids of pin-items (since these functions are only relevant for dnd)
-        item->itemType() == ModulePinsTreeItem::Pin ? mIdToPinItem.remove(item->id()) : mIdToGroupItem.remove(item->id());
+        if (item->itemType() == ModulePinsTreeItem::Pin)
+            mIdToPinItem.remove(item->id());
+        else
+        {
+            for (BaseTreeItem* bti : item->getChildren())
+            {
+                mOrphanedItem.insert(static_cast<ModulePinsTreeItem*>(bti));
+                item->removeChild(bti);
+            }
+            mIdToGroupItem.remove(item->id());
+        }
         //mIdToPinItem.remove(getIdOfItem(item));
         //delete item;
     }
 
-
+    void ModulePinsTreeModel::dumpModel(const char* msg) const
+    {
+        std::cerr << msg << " \t Pins:";
+        for (int i : mIdToPinItem.keys()) std::cerr << " " << i;
+        std::cerr << " \t Grps:";
+        for (int i : mIdToGroupItem.keys()) std::cerr << " " << i;
+        std::cerr << std::endl;
+        for (const BaseTreeItem* bti : mRootItem->getChildren())
+        {
+            const ModulePinsTreeItem* mpti = static_cast<const ModulePinsTreeItem*>(bti);
+            std::cerr << mpti->id() << " <" << mpti->name().toStdString() << ">\n";
+            for (const BaseTreeItem* cti : mpti->getChildren())
+            {
+                const ModulePinsTreeItem* mptpin = static_cast<const ModulePinsTreeItem*>(cti);
+                std::cerr << "   " << mptpin->id() << " <" << mptpin->name().toStdString() << "> \t" << mptpin->getData(2).toString().toStdString() << " \t " <<
+                    mptpin->getData(4).toString().toStdString() << "\n";
+            }
+        }
+        std::cerr << "-------------" << std::endl;
+    }
 
 }    // namespace hal

@@ -60,10 +60,18 @@ For instructions on how to build HAL, please refer to the dedicated page in our 
 # Quickstart Guide 
 
 Install HAL or build HAL and start the GUI via `hal -g`. You can list all available options via `hal [--help|-h]`.
-We included some example netlists in `examples` together with the implementation of the respective example gate library in `plugins/example_gate_library`.
+We included some example projects in `examples` subdirectory. To get startet with an example project you need to import
+it via `Import Project` from main menu or by dropping the zipped file in the `OPEN PROJECT` area of the Welcome Screen.
+Doing so a popup will request a directory with write permissions where HAL will create the project directory and uncompress
+the files. Do not use external tools for uncompress since adaptions are made so that netlist and gate library
+are found the next time the project gets opened. 
+
+In case you want to open your own Verlog or VHDL netlist you have to run `Import Netlist` instead. This will only work if
+there is a matching gate library in `plugins/gate_libraries/definitions` or you provide the gate library manually.
 For instructions to create your own gate library and other useful tutorials, take a look at the [wiki](https://github.com/emsec/hal/wiki).
 
-Load a library from the `examples` directory and start exploring the graphical representation.
+The following example code refers to the `fsm` example.
+
 Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.
 
 Let's list all lookup tables and print their Boolean functions:
