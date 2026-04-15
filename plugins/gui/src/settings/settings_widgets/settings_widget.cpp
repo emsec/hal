@@ -71,12 +71,6 @@ namespace hal
         }
     }
 
-    bool SettingsWidget::matchLabel(const QString& needle)
-    {
-        if (!mSettingsItem) return false;
-        return QRegularExpression(needle).match(mSettingsItem->label()).hasMatch();
-    }
-
     QString SettingsWidget::getLabel()
     {
         return mSettingsItem->label();
