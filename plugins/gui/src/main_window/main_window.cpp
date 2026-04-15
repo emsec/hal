@@ -46,7 +46,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QShortcut>
 #include <QStringList>
 #include <QtConcurrent>
@@ -215,10 +215,11 @@ namespace hal
             if (it.second.empty()) continue; // no extensions registered
 
             QString label = QString::fromStdString(it.first);
-            QRegExp re("Default (.*) Writer", Qt::CaseInsensitive);
-            QString txt = (re.indexIn(label) < 0)
-                    ? label.remove(QChar(':'))
-                    : QString("Export as ") + re.cap(1);
+            QRegularExpression re("Default (.*) Writer", QRegularExpression::CaseInsensitiveOption);
+            QRegularExpressionMatch match = re.match(label);
+            QString txt = (match.hasMatch())
+                    ? QString("Export as ") + match.captured(1)
+                    : label.remove(QChar(':'));
 
             QStringList extensions;
             extensions.append(txt);
