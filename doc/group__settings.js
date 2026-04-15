@@ -209,7 +209,6 @@ var group__settings =
       [ "leaveEvent", "classhal_1_1_settings_widget.html#a4e2f03f1de9d7650494283b8bcd980de", null ],
       [ "load", "classhal_1_1_settings_widget.html#afd67912a344b2a4369379c182c49e8af", null ],
       [ "loadCurrentValue", "classhal_1_1_settings_widget.html#a00534a28fc3641d3ef9d6f48a66960bb", null ],
-      [ "matchLabel", "classhal_1_1_settings_widget.html#af6fe668527de262997dbe0aea34ebe25", null ],
       [ "prepare", "classhal_1_1_settings_widget.html#ab3ef1499c0ca021fff601c732b0478a0", null ],
       [ "reset_labels", "classhal_1_1_settings_widget.html#a86c7be9a22f93c0026ddec4deba56550", null ],
       [ "setDirty", "classhal_1_1_settings_widget.html#a2f4afd42c5a500e9b23ac4e0dfcd0f65", null ],
