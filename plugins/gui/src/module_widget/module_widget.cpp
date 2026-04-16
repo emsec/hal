@@ -20,14 +20,11 @@
 #include <QItemSelectionModel>
 #include <QMenu>
 #include <QModelIndex>
-#include <QRegExp>
 #include <QScrollBar>
 #include <QSet>
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include <QInputDialog>
-#include <QClipboard>
 
 namespace hal
 {
