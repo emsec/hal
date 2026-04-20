@@ -305,27 +305,53 @@ namespace hal
             return key;
         };
 
+        // Resolve the bit slice for the currently selected pin (bit_count==0 means full string)
+        u32 bit_offset = 0, bit_count = 0;
+        if (LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
+            if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(mSelectedLutPin); cfg != nullptr)
+            { bit_offset = cfg->bit_offset; bit_count = cfg->bit_count; }
+
         QMenu menu;
 
         menu.addAction("Configuration string to clipboard", [this]() { QApplication::clipboard()->setText(mLutConfigLabel->text().remove(" 0x")); });
-        menu.addAction("Change configuration string", [this, resolveInitKey]() {
-            InputDialog ipd("Change configuration string", "New configuration string", mLutConfigLabel->text().remove("0x"));
+        menu.addAction("Change configuration string", [this, resolveInitKey, bit_offset, bit_count]() {
+            // Strip leading " 0x" from the label to get the current hex digits
+            QString currentHex = mLutConfigLabel->text().trimmed();
+            if (currentHex.startsWith("0x", Qt::CaseInsensitive)) currentHex = currentHex.mid(2);
+
+            InputDialog ipd("Change configuration string", "New configuration string", currentHex);
             HexadecimalValidator hexValidator;
             ipd.addValidator(&hexValidator);
-            if (ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+            if (ipd.exec() != QDialog::Accepted || ipd.textValue().isEmpty()) return;
+
+            InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+            if (!ic) { log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id()); return; }
+
+            const std::string cat    = ic->get_init_category();
+            const std::string key    = resolveInitKey(ic);
+            QString           result = ipd.textValue().toUpper();
+
+            if (bit_count > 0)
             {
-                if (InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); ic != nullptr)
+                // Splice the edited slice back into the full INIT value at [bit_offset .. bit_offset+bit_count-1]
+                const std::string raw_str = std::get<1>(mCurrentGate->get_data(cat, key));
+                try
                 {
-                    std::string cat = ic->get_init_category();
-                    std::string key = resolveInitKey(ic);
-                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), "bit_vector", ipd.textValue().toUpper());
-                    act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
-                    act->exec();
-                    setGate(mCurrentGate);    //must update config string and data table, no signal for that
+                    const u64 full_val  = raw_str.empty() ? 0ULL : std::stoull(raw_str, nullptr, 16);
+                    const u64 new_slice = std::stoull(ipd.textValue().toStdString(), nullptr, 16);
+                    const u64 mask      = (bit_count == 64) ? UINT64_MAX : ((1ULL << bit_count) - 1);
+                    const u64 spliced   = (full_val & ~(mask << bit_offset)) | ((new_slice & mask) << bit_offset);
+                    // Preserve the original hex digit count so the full string width is unchanged
+                    const int ndigits   = raw_str.empty() ? static_cast<int>((bit_offset + bit_count + 3) / 4) : static_cast<int>(raw_str.size());
+                    result = QString::number(static_cast<qulonglong>(spliced), 16).toUpper().rightJustified(ndigits, QLatin1Char('0'));
                 }
-                else
-                    log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
+                catch (...) { /* fall through: write whatever the user typed as-is */ }
             }
+
+            ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), "bit_vector", result);
+            act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
+            act->exec();
+            setGate(mCurrentGate);    // must update config string and data table, no signal for that
         });
         menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this, resolveInitKey]() {
             if (InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); ic != nullptr)

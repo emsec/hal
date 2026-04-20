@@ -170,6 +170,11 @@ namespace hal
                 }
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
                 parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->isChecked());
+                LUTComponent* lut_component = parentComponent->convert_to<LUTComponent>();
+                for (const auto& entry : lutPage->getOutputPinConfigs())
+                    lut_component->set_output_pin_config(entry.pinName.toStdString(),
+                                                         entry.initIdentifier.toStdString(),
+                                                         entry.bitOffset, entry.bitCount);
             }
             else if(prop == GateTypeProperty::ff)
             {

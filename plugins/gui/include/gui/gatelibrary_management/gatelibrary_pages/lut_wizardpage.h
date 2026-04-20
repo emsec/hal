@@ -26,29 +26,61 @@
 #pragma once
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
-
 #include <QWizardPage>
 #include <QGridLayout>
-#include <QTabWidget>
-#include <QLineEdit>
 #include <QCheckBox>
 #include <QLabel>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QVector>
+
+#include "hal_core/defines.h"
 
 namespace hal {
-    class LUTWizardPage:public QWizardPage{
+    class LUTWizardPage : public QWizardPage {
+        Q_OBJECT
         friend class GateLibraryWizard;
     public:
+        struct OutputPinEntry {
+            QString pinName;
+            QString initIdentifier;
+            u32     bitOffset;
+            u32     bitCount;
+        };
+
         LUTWizardPage(QWidget* parent = nullptr);
-        //void initializePage() override;
-        //int nextId() const override;
         void setData(GateType* gate);
+        void initializePage() override;
+
+        QVector<OutputPinEntry> getOutputPinConfigs() const;
+
+    private Q_SLOTS:
+        void addRow();
+        void removeSelectedRow();
 
     private:
-        QGridLayout* mLayout;
+        void addTableRow(const QString& pinName, const QString& initId,
+                         u32 bitOffset, u32 bitCount,
+                         const QStringList& availablePins);
+        void updateDropdowns(const QStringList& pins);
+        QStringList getOutputPinsFromWizard() const;
 
-        QCheckBox* mAscending;
-        //QLineEdit* mAscending;
+        QGridLayout*  mLayout;
+        QCheckBox*    mAscending;
+        QLabel*       mLabAscending;
+        QTableWidget* mPinConfigTable;
+        QPushButton*  mAddBtn;
+        QPushButton*  mRemoveBtn;
 
-        QLabel* mLabAscending;
+        struct SavedConfig {
+            std::string pinName;
+            std::string initIdentifier;
+            u32 bitOffset;
+            u32 bitCount;
+        };
+        std::vector<SavedConfig> mSavedConfigs;
+        bool mTableInitialized = false;
     };
 }

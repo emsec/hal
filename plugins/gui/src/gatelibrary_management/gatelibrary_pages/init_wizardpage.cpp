@@ -1,6 +1,7 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/init_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
 
 namespace hal
 {
@@ -11,6 +12,7 @@ namespace hal
         mLayout = new QGridLayout(this);
 
         mCategory = new QLineEdit(this);
+        mCategory->setText("generic");
         mIdentifiers = new QTextEdit(this);
 
         mLabCategory = new QLabel("Category: ");
@@ -31,6 +33,16 @@ namespace hal
     {
         mWizard = static_cast<GateLibraryWizard*>(wizard());
         mWizard->mEditMode = true;
+
+        if (mWizard->generalInfoPage->getProperties().contains(GateTypeProperty::c_lut)
+            && mIdentifiers->toPlainText().trimmed().isEmpty())
+        {
+            QStringList ids;
+            for (const auto& entry : mWizard->lutPage->getOutputPinConfigs())
+                if (!ids.contains(entry.initIdentifier))
+                    ids << entry.initIdentifier;
+            mIdentifiers->setText(ids.join('\n'));
+        }
     }
 
     void InitWizardPage::setData(GateType *gate){
