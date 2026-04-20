@@ -1,5 +1,6 @@
 #include "gui/user_action/action_set_object_data.h"
 #include "gui/gui_globals.h"
+#include "gui/netlist_relay/netlist_relay.h"
 
 namespace hal
 {
@@ -66,6 +67,10 @@ namespace hal
         else //if the data does not already exists -> it is new data -> undo action deletes it (yet to come)
         {
         }
+
+        if (mObject.type() == UserActionObjectType::Gate)
+            if (Gate* gate = gNetlist->get_gate_by_id(mObject.id()))
+                Q_EMIT gNetlistRelay->gateBooleanFunctionChanged(gate);
 
         return UserAction::exec();
     }

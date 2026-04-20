@@ -128,10 +128,9 @@ namespace hal
     {
         if (g == mCurrentGate && g != nullptr)
         {
-            // Update the boolean function table and the LUT. Since we get no information about which BF changed
-            // we need to collect all BFs once again.
             GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(g);
             setupBooleanFunctionTables(g, gateTypeCategory);
+            mDataTable->setGate(g);
         }
     }
 
@@ -534,10 +533,17 @@ namespace hal
                 }
                 mLutRadioLayout->addStretch();
 
-                // Select the first pin by default; the toggled signal drives the config label and truth table
+                // Restore the previously selected pin, falling back to the first pin.
+                int pinToSelect = 0;
+                if (!mSelectedLutPin.empty())
+                {
+                    auto it = std::find(mCurrentLutPins.begin(), mCurrentLutPins.end(), mSelectedLutPin);
+                    if (it != mCurrentLutPins.end())
+                        pinToSelect = static_cast<int>(it - mCurrentLutPins.begin());
+                }
                 if (!mCurrentLutPins.empty())
-                    if (QAbstractButton* firstBtn = mLutPinButtonGroup->button(0))
-                        firstBtn->setChecked(true);
+                    if (QAbstractButton* btn = mLutPinButtonGroup->button(pinToSelect))
+                        btn->setChecked(true);
                 break;
             }
             case GateDetailsTabWidget::GateTypeCategory::ff: {
