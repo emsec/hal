@@ -3687,6 +3687,21 @@
                     ]
                 },
                 {
+                    "name": "E",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "E",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
                     "name": "R",
                     "direction": "input",
                     "type": "reset",
