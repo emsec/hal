@@ -27,14 +27,27 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <unordered_map>
+
 namespace hal
 {
     class LUTComponent : public GateTypeComponent
     {
     public:
         /**
+         * Maps an output pin to a specific slice of an INIT string.
+         * When bit_count is 0 the full INIT string is used (legacy behaviour).
+         */
+        struct LUTOutputConfig
+        {
+            std::string init_identifier;
+            u32 bit_offset = 0;
+            u32 bit_count  = 0;
+        };
+
+        /**
          * Construct a new LUTComponent with given child component and bit-order.
-         * 
+         *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] init_ascending - True if ascending bit-order, false otherwise.
          */
@@ -42,14 +55,14 @@ namespace hal
 
         /**
          * Get the type of the gate type component.
-         * 
+         *
          * @returns The type of the gate type component.
          */
         ComponentType get_type() const override;
 
         /**
          * Check whether a component is a LUTComponent.
-         * 
+         *
          * @param[in] component - The component to check.
          * @returns True if component is a LUTComponent, false otherwise.
          */
@@ -58,7 +71,7 @@ namespace hal
         /**
          * Get the sub-components of the gate type component.
          * A user-defined filter may be applied to the result vector, but is disabled by default.
-         * 
+         *
          * @param[in] filter - The user-defined filter function applied to all candidate components.
          * @returns The sub-components of the gate type component.
          */
@@ -78,10 +91,37 @@ namespace hal
          */
         void set_init_ascending(bool init_ascending = true);
 
+        /**
+         * Associate an output pin with a specific INIT identifier and an optional bit range.
+         * When bit_count is 0 the full INIT string starting at bit_offset is used.
+         *
+         * @param[in] pin_name - Name of the LUT output pin.
+         * @param[in] init_identifier - The data identifier within the INIT category.
+         * @param[in] bit_offset - First bit (LSB = 0) of the slice within the parsed INIT value.
+         * @param[in] bit_count - Number of bits in the slice; must be a power of two, or 0 for full string.
+         */
+        void set_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset = 0, u32 bit_count = 0);
+
+        /**
+         * Get the output configuration for a specific pin, or nullptr if none is set.
+         *
+         * @param[in] pin_name - Name of the LUT output pin.
+         * @returns Pointer to the LUTOutputConfig, or nullptr.
+         */
+        const LUTOutputConfig* get_output_pin_config(const std::string& pin_name) const;
+
+        /**
+         * Get all per-output-pin configurations.
+         *
+         * @returns Map from pin name to LUTOutputConfig.
+         */
+        const std::unordered_map<std::string, LUTOutputConfig>& get_output_pin_configs() const;
+
     private:
         static constexpr ComponentType m_type          = ComponentType::lut;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
         bool m_init_ascending = true;
+        std::unordered_map<std::string, LUTOutputConfig> m_output_pin_configs;
     };
 }    // namespace hal

@@ -95,8 +95,67 @@ namespace hal
 
         py_lut_component.def("set_init_ascending", &LUTComponent::set_init_ascending, py::arg("init_ascending") = true, R"(
             Set the bit-order of the initialization string.
-         
+
             :param bool init_ascending: True if ascending bit-order, False otherwise.
+        )");
+
+        py::class_<LUTComponent::LUTOutputConfig>(py_lut_component, "LUTOutputConfig", R"(
+            Per-output-pin INIT configuration for a LUT component.
+        )")
+            .def(py::init<>())
+            .def_readwrite("init_identifier", &LUTComponent::LUTOutputConfig::init_identifier, R"(
+                The data identifier within the INIT category for this output pin.
+
+                :type: str
+            )")
+            .def_readwrite("bit_offset", &LUTComponent::LUTOutputConfig::bit_offset, R"(
+                The first bit (LSB = 0) of the slice within the parsed INIT value.
+
+                :type: int
+            )")
+            .def_readwrite("bit_count", &LUTComponent::LUTOutputConfig::bit_count, R"(
+                The number of bits in the slice. 0 means the full INIT string is used.
+
+                :type: int
+            )");
+
+        py_lut_component.def("set_output_pin_config",
+                             &LUTComponent::set_output_pin_config,
+                             py::arg("pin_name"),
+                             py::arg("init_identifier"),
+                             py::arg("bit_offset") = 0,
+                             py::arg("bit_count")  = 0,
+                             R"(
+            Associate an output pin with a specific INIT identifier and an optional bit range.
+            When bit_count is 0 the full INIT string is used.
+
+            :param str pin_name: Name of the LUT output pin.
+            :param str init_identifier: The data identifier within the INIT category.
+            :param int bit_offset: First bit of the slice within the parsed INIT value. Defaults to 0.
+            :param int bit_count: Number of bits in the slice; must be a power of two, or 0 for the full string. Defaults to 0.
+        )");
+
+        py_lut_component.def(
+            "get_output_pin_config",
+            [](const LUTComponent& self, const std::string& pin_name) -> const LUTComponent::LUTOutputConfig* { return self.get_output_pin_config(pin_name); },
+            py::arg("pin_name"),
+            py::return_value_policy::reference_internal,
+            R"(
+            Get the output configuration for a specific pin, or None if none is set.
+
+            :param str pin_name: Name of the LUT output pin.
+            :returns: The output configuration or None.
+            :rtype: hal_py.LUTComponent.LUTOutputConfig or None
+        )");
+
+        py_lut_component.def(
+            "get_output_pin_configs",
+            [](const LUTComponent& self) { return self.get_output_pin_configs(); },
+            R"(
+            Get all per-output-pin configurations.
+
+            :returns: Dict mapping pin name to LUTOutputConfig.
+            :rtype: dict[str, hal_py.LUTComponent.LUTOutputConfig]
         )");
 
         py::class_<FFComponent, GateTypeComponent, RawPtrWrapper<FFComponent>> py_ff_component(m, "FFComponent", R"(

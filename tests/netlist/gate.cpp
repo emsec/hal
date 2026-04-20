@@ -1192,6 +1192,150 @@ namespace hal
             EXPECT_EQ(get_init_data.size(), 1);
             EXPECT_EQ(get_init_data.front(), "01");
         }
+        // ---- Multi-output LUT tests ----
+        {
+            // LUT6_2a: O0 reads the full 64-bit INIT, O1 reads the lower 32 bits of the same INIT.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a");
+
+            auto all_inputs = lut_type->get_input_pin_names();    // 6 inputs
+            std::vector<std::string> inputs_5(all_inputs.begin(), all_inputs.begin() + 5);
+
+            // lower 32 bits = "aaaaaaaa", upper 32 bits = "0000ffff"
+            const std::string init_str = "0000ffffaaaaaaaa";
+            ASSERT_TRUE(lut_gate->set_init_data({init_str}).is_ok());
+
+            // O0 uses all 64 bits
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init_str, 64, false));
+
+            // O1 uses bits [0, 32) = lower 32 bits
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(inputs_5).get()[0],
+                      get_truth_table_from_hex_string("aaaaaaaa", 32, false));
+
+            // Both outputs appear in get_boolean_functions()
+            auto funcs = lut_gate->get_boolean_functions();
+            EXPECT_NE(funcs.find("O0"), funcs.end());
+            EXPECT_NE(funcs.find("O1"), funcs.end());
+
+            // get_init_data returns the single INIT string unchanged
+            auto get_init_res = lut_gate->get_init_data();
+            ASSERT_TRUE(get_init_res.is_ok());
+            EXPECT_EQ(get_init_res.get(), (std::vector<std::string>{init_str}));
+        }
+        {
+            // LUT6_2b: O0 and O1 each have their own independent 64-bit INIT string.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2b");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2b");
+
+            auto all_inputs = lut_type->get_input_pin_names();
+
+            const std::string init1 = "aaaaaaaaaaaaaaaa";
+            const std::string init2 = "5555555555555555";
+            ASSERT_TRUE(lut_gate->set_init_data({init1, init2}).is_ok());
+
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init1, 64, false));
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init2, 64, false));
+
+            // get_init_data returns both INIT strings in declaration order
+            auto get_init_res = lut_gate->get_init_data();
+            ASSERT_TRUE(get_init_res.is_ok());
+            EXPECT_EQ(get_init_res.get(), (std::vector<std::string>{init1, init2}));
+        }
+        {
+            // LUT5_2c: O0 and O1 split a shared 64-bit INIT string into two 32-bit halves.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c");
+
+            auto all_inputs = lut_type->get_input_pin_names();    // 5 inputs
+
+            // lower 32 bits = "aaaaaaaa", upper 32 bits = "ffff0000"
+            const std::string init_str = "ffff0000aaaaaaaa";
+            ASSERT_TRUE(lut_gate->set_init_data({init_str}).is_ok());
+
+            // O0: bits [0, 32)
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("aaaaaaaa", 32, false));
+
+            // O1: bits [32, 32)
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("ffff0000", 32, false));
+        }
+        {
+            // add_boolean_function on LUT6_2b: writing O0 updates INIT1 only; O1 is unaffected.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2b");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2b_add");
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            const std::string init2 = "5555555555555555";
+            ASSERT_TRUE(lut_gate->set_init_data({"0000000000000000", init2}).is_ok());
+
+            BooleanFunction and_bf = BooleanFunction::from_string("((I0 & I1) & (I2 & I3) & (I4 & I5))").get();
+            EXPECT_TRUE(lut_gate->add_boolean_function("O0", and_bf));
+
+            // O0 encodes the AND function
+            EXPECT_EQ(lut_gate->get_boolean_function("O0"), and_bf);
+            EXPECT_EQ(lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string("0000000000000001", 64, false));
+
+            // std::cout << lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0] << std::endl;
+
+            // O1 still decodes to init2
+            EXPECT_EQ(lut_gate->get_boolean_function("O1").compute_truth_table(all_inputs).get()[0],
+                      get_truth_table_from_hex_string(init2, 64, false));
+        }
+        {
+            // add_boolean_function on LUT5_2c: writing O0 and O1 patches independent halves.
+            // After both writes the decoded functions must still match what was written.
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c_add");
+
+            ASSERT_TRUE(lut_gate->set_init_data({"0000000000000000"}).is_ok());
+
+            BooleanFunction bf_o0 = BooleanFunction::from_string("I0 & I1").get();
+            BooleanFunction bf_o1 = BooleanFunction::from_string("I0 | I1").get();
+            EXPECT_TRUE(lut_gate->add_boolean_function("O0", bf_o0));
+            EXPECT_TRUE(lut_gate->add_boolean_function("O1", bf_o1));
+
+            // Each output independently round-trips correctly
+            EXPECT_EQ(lut_gate->get_boolean_function("O0"), bf_o0);
+            EXPECT_EQ(lut_gate->get_boolean_function("O1"), bf_o1);
+        }
+        // ---- nullptr pin handling ----
+        {
+            // get_boolean_function(nullptr) on a multi-output LUT falls back to the first output (O0).
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a_null");
+
+            ASSERT_TRUE(lut_gate->set_init_data({"0000ffffaaaaaaaa"}).is_ok());
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            EXPECT_EQ(lut_gate->get_boolean_function(static_cast<GatePin*>(nullptr)).compute_truth_table(all_inputs).get()[0],
+                      lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0]);
+        }
+        {
+            // get_boolean_function("") on a multi-output LUT falls back to the first output (O0).
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT6_2a");
+            Gate* lut_gate = nl->create_gate(lut_type, "lut6_2a_empty");
+
+            ASSERT_TRUE(lut_gate->set_init_data({"0000ffffaaaaaaaa"}).is_ok());
+
+            auto all_inputs = lut_type->get_input_pin_names();
+            EXPECT_EQ(lut_gate->get_boolean_function("").compute_truth_table(all_inputs).get()[0],
+                      lut_gate->get_boolean_function("O0").compute_truth_table(all_inputs).get()[0]);
+        }
         // NEGATIVE
         {
             // There is an empty hex string at the config data path

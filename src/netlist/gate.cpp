@@ -367,7 +367,11 @@ namespace hal
 
     BooleanFunction Gate::get_lut_function(const GatePin* pin) const
     {
-        UNUSED(pin);
+        if (pin == nullptr)
+        {
+            log_error("gate", "could not get LUT function of gate '{}' with ID {}: pin is nullptr.", m_name, m_id);
+            return BooleanFunction();
+        }
 
         LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         if (lut_component == nullptr)
@@ -382,8 +386,24 @@ namespace hal
             return BooleanFunction();
         }
 
-        const std::string& category  = init_component->get_init_category();
-        const std::string& key       = init_component->get_init_identifiers().front();
+        const std::string& category = init_component->get_init_category();
+
+        // Determine INIT key and optional bit slice for this output pin.
+        std::string key;
+        u32 bit_offset = 0;
+        u32 bit_count  = 0;
+
+        if (const LUTComponent::LUTOutputConfig* cfg = lut_component->get_output_pin_config(pin->get_name()))
+        {
+            key        = cfg->init_identifier;
+            bit_offset = cfg->bit_offset;
+            bit_count  = cfg->bit_count;
+        }
+        if (key.empty())
+        {
+            key = init_component->get_init_identifiers().front();
+        }
+
         std::string config_str       = std::get<1>(get_data(category, key));
         auto is_ascending            = lut_component->is_init_ascending();
         std::vector<GatePin*> inputs = m_type->get_input_pins();
@@ -427,7 +447,24 @@ namespace hal
             return BooleanFunction();
         }
 
-        u32 max_config_size = 1 << inputs.size();
+        // Apply bit slice: extract bit_count bits starting at bit_offset.
+        // When bit_count > 0, trim inputs to the first log2(bit_count) pins.
+        u32 max_config_size;
+        if (bit_count > 0)
+        {
+            config = (config >> bit_offset) & ((1ULL << bit_count) - 1);
+
+            u32 effective_input_count = __builtin_ctz(bit_count);
+            if (effective_input_count < inputs.size())
+            {
+                inputs.resize(effective_input_count);
+            }
+            max_config_size = bit_count;
+        }
+        else
+        {
+            max_config_size = 1 << inputs.size();
+        }
 
         if (is_ascending)
         {
@@ -503,28 +540,54 @@ namespace hal
                 lut_component->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
             if (init_component != nullptr)
             {
-                auto output_pins = m_type->get_output_pins();
-                if (!output_pins.empty() && name == output_pins.front()->get_name())
+                auto lut_pins = m_type->get_pins([&name](const GatePin* p) { return p->get_type() == PinType::lut && p->get_name() == name; });
+                if (!lut_pins.empty())
                 {
+                    // Determine the INIT key and optional bit range for this output pin.
+                    std::string key;
+                    u32 bit_offset = 0;
+                    u32 bit_count  = 0;
+                    if (const LUTComponent::LUTOutputConfig* cfg = lut_component->get_output_pin_config(name))
+                    {
+                        key        = cfg->init_identifier;
+                        bit_offset = cfg->bit_offset;
+                        bit_count  = cfg->bit_count;
+                    }
+                    if (key.empty())
+                    {
+                        key = init_component->get_init_identifiers().front();
+                    }
+
+                    // When a bit range is set, only the first log2(bit_count) inputs feed this output.
                     auto input_pin_names = m_type->get_input_pin_names();
-                    auto tt              = func.compute_truth_table(input_pin_names);
+                    if (bit_count > 0)
+                    {
+                        u32 effective_input_count = __builtin_ctz(bit_count);
+                        if (effective_input_count < input_pin_names.size())
+                        {
+                            input_pin_names.resize(effective_input_count);
+                        }
+                    }
+
+                    auto tt = func.compute_truth_table(input_pin_names);
                     if (tt.is_error())
                     {
-                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
+                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {}.", name, func.to_string(), m_name, m_id);
                         return false;
                     }
                     auto truth_table = tt.get();
                     if (truth_table.size() > 1)
                     {
-                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size). ", name, func.to_string(), m_name, m_id);
+                        log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' with ID {} (= function is > 1-bit in output size).", name, func.to_string(), m_name, m_id);
                         return false;
                     }
 
-                    u64 config_value = 0;
                     if (!lut_component->is_init_ascending())
                     {
                         std::reverse(truth_table[0].begin(), truth_table[0].end());
                     }
+
+                    u64 new_bits = 0;
                     for (auto v : truth_table[0])
                     {
                         if (v == BooleanFunction::X)
@@ -538,16 +601,55 @@ namespace hal
                                       m_internal_manager->m_netlist->get_id());
                             return false;
                         }
-                        config_value <<= 1;
-                        config_value |= v;
+                        new_bits <<= 1;
+                        new_bits |= v;
                     }
 
                     const std::string& category = init_component->get_init_category();
-                    const std::string& key      = init_component->get_init_identifiers().front();
 
                     std::stringstream stream;
-                    u32 init_len = 1 << (input_pin_names.size() - 2);
-                    stream << std::hex << std::setfill('0') << std::setw(init_len) << config_value;
+                    if (bit_count > 0)
+                    {
+                        // Read-modify-write: patch only bits [bit_offset, bit_offset + bit_count).
+                        const std::string existing_str = std::get<1>(get_data(category, key));
+                        u64 existing                   = 0;
+                        if (!existing_str.empty())
+                        {
+                            try
+                            {
+                                existing = std::stoull(existing_str, nullptr, 16);
+                            }
+                            catch (std::invalid_argument&)
+                            {
+                                log_error("netlist",
+                                          "cannot add Boolean function '{}' to LUT gate '{}' with ID {}: existing INIT string '{}' is not a valid hex value.",
+                                          name,
+                                          m_name,
+                                          m_id,
+                                          existing_str);
+                                return false;
+                            }
+                            catch (std::out_of_range&)
+                            {
+                                log_error("netlist",
+                                          "cannot add Boolean function '{}' to LUT gate '{}' with ID {}: existing INIT string '{}' is out of range.",
+                                          name,
+                                          m_name,
+                                          m_id,
+                                          existing_str);
+                                return false;
+                            }
+                        }
+                        const u64 mask = ((1ULL << bit_count) - 1) << bit_offset;
+                        existing       = (existing & ~mask) | ((new_bits << bit_offset) & mask);
+
+                        const u32 total_inputs = m_type->get_input_pins().size();
+                        stream << std::hex << std::setfill('0') << std::setw(1 << (total_inputs - 2)) << existing;
+                    }
+                    else
+                    {
+                        stream << std::hex << std::setfill('0') << std::setw(1 << (input_pin_names.size() - 2)) << new_bits;
+                    }
                     set_data(category, key, "bit_vector", stream.str());
                 }
             }
