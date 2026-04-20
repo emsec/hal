@@ -32,6 +32,9 @@
 #include "gui/selection_details_widget/data_table_widget.h"
 #include "gui/selection_details_widget/groupings_of_item_widget.h"
 
+class QButtonGroup;
+class QVBoxLayout;
+
 namespace hal
 {
     class Gate;
@@ -75,6 +78,7 @@ namespace hal
     private Q_SLOTS:
 
         void handleGateBooleanFunctionChanged(Gate* g);
+        void handleLutPinSelectionChanged(int id);
 
 
     private:
@@ -139,8 +143,12 @@ namespace hal
         DetailsFrameWidget* mLatchFrame;
 
         //lut tab
-        BooleanFunctionTable* mLutFunctionTable;
-        DetailsFrameWidget* mLutFrame;
+        QButtonGroup*            mLutPinButtonGroup;
+        QWidget*                 mLutRadioWidget;
+        QVBoxLayout*             mLutRadioLayout;
+        std::vector<std::string> mCurrentLutPins;
+        std::string              mSelectedLutPin;
+        DetailsFrameWidget*      mLutFrame;
 
         QLabel* mLutConfigLabel;
         DetailsFrameWidget* mLutConfigurationFrame;

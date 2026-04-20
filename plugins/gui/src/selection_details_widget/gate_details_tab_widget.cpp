@@ -7,6 +7,7 @@
 #include "gui/selection_details_widget/details_frame_widget.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_info_table.h"
 #include "gui/selection_details_widget/gate_details_widget/gate_pin_tree.h"
+#include "gui/user_action/action_add_boolean_function.h"
 #include "gui/user_action/action_set_object_data.h"
 #include "gui/validator/hexadecimal_validator.h"
 #include "hal_core/netlist/gate.h"
@@ -14,9 +15,14 @@
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 
 #include <QApplication>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QRadioButton>
+#include <QVBoxLayout>
 #include <QClipboard>
 #include <QDebug>
 #include "gui/comment_system/widgets/comment_widget.h"
@@ -50,13 +56,15 @@ namespace hal
         addTab("Pins", mPinsFrame, false);
 
         //(ff / latch / lut) tab - would love to use seperate tabs, but it's a hassle to hide multiple individual tabs witouth setTabVisible() from qt 5.15
-        mFfFunctionTable    = new BooleanFunctionTable(this);
+        mFfFunctionTable   = new BooleanFunctionTable(this);
         mLatchFunctionTable = new BooleanFunctionTable(this);
-        mLutFunctionTable   = new BooleanFunctionTable(this);
-        mLutFunctionTable->setContextMenuPlainDescr(true);
-        mLutFunctionTable->setContextMenuPythonPlainDescr(true);
-        mLutFunctionTable->enableChangeBooleanFunctionOption(true);
-        mLutTable       = new LUTTableWidget(this);
+        mLutPinButtonGroup = new QButtonGroup(this);
+        mLutPinButtonGroup->setExclusive(true);
+        mLutRadioWidget    = new QWidget(this);
+        mLutRadioLayout    = new QVBoxLayout(mLutRadioWidget);
+        mLutRadioLayout->setContentsMargins(4, 4, 4, 4);
+        mLutRadioLayout->setSpacing(4);
+        mLutTable          = new LUTTableWidget(this);
         mLutConfigLabel = new QLabel("default", this);
         mLutConfigLabel->setContextMenuPolicy(Qt::CustomContextMenu);
         mLutConfigLabel->setWordWrap(true);
@@ -65,9 +73,14 @@ namespace hal
 
         mFfFrame               = new DetailsFrameWidget(mFfFunctionTable, "FF Information", this);
         mLatchFrame            = new DetailsFrameWidget(mLatchFunctionTable, "Latch Information", this);
-        mLutFrame              = new DetailsFrameWidget(mLutFunctionTable, "Boolean Function", this);
+        mLutFrame              = new DetailsFrameWidget(mLutRadioWidget, "Boolean Functions", this);
         mLutConfigurationFrame = new DetailsFrameWidget(mLutConfigLabel, "Configuration String", this);
         mTruthTableFrame       = new DetailsFrameWidget(mLutTable, "Truth Table", this);
+        // DetailsFrameWidget sets Expanding vertical policy on all content widgets, which causes the
+        // container to distribute vertical space equally. Override for the two compact LUT frames so
+        // they stay at their natural content height and the truth table gets any remaining space.
+        mLutFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        mLutConfigurationFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
         QList<DetailsFrameWidget*> framesFfLatchLutTab({mFfFrame, mLatchFrame, mLutFrame, mLutConfigurationFrame, mTruthTableFrame});
         mMultiTabIndex   = addTab("(FF / Latch / LUT)", framesFfLatchLutTab);    //save index of multi tab -> needed for show / hide
@@ -231,23 +244,81 @@ namespace hal
         }
     }
 
+    void GateDetailsTabWidget::handleLutPinSelectionChanged(int id)
+    {
+        if (mCurrentGate == nullptr || id < 0 || id >= static_cast<int>(mCurrentLutPins.size()))
+            return;
+
+        const std::string& pinName = mCurrentLutPins[id];
+        mSelectedLutPin            = pinName;
+
+        BooleanFunction bf = mCurrentGate->get_boolean_function(pinName);
+        mLutTable->setBooleanFunction(bf, QString::fromStdString(pinName));
+
+        GateType*      gt             = mCurrentGate->get_type();
+        InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+        if (init_component == nullptr)
+        {
+            mLutConfigLabel->setText(" Could not load init string.");
+            return;
+        }
+        std::string initKey    = init_component->get_init_identifiers()[0];
+        u32         bit_offset = 0;
+        u32         bit_count  = 0;
+        if (LUTComponent* lc = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
+        {
+            if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(pinName); cfg != nullptr)
+            {
+                initKey    = cfg->init_identifier;
+                bit_offset = cfg->bit_offset;
+                bit_count  = cfg->bit_count;
+            }
+        }
+        const std::string raw_str = std::get<1>(mCurrentGate->get_data(init_component->get_init_category(), initKey));
+        if (bit_count > 0 && !raw_str.empty())
+        {
+            try
+            {
+                const u64 full_val = std::stoull(raw_str, nullptr, 16);
+                const u64 mask     = (bit_count == 64) ? UINT64_MAX : ((1ULL << bit_count) - 1);
+                const u64 sliced   = (full_val >> bit_offset) & mask;
+                mLutConfigLabel->setText(" 0x" + QString::number(static_cast<qulonglong>(sliced), 16).toUpper().rightJustified(bit_count / 4, QLatin1Char('0')));
+            }
+            catch (...)
+            {
+                mLutConfigLabel->setText(" 0x" + QString::fromStdString(raw_str));
+            }
+        }
+        else
+        {
+            mLutConfigLabel->setText(" 0x" + QString::fromStdString(raw_str));
+        }
+    }
+
     void GateDetailsTabWidget::handleLutConfigContextMenuRequested(QPoint pos)
     {
+        auto resolveInitKey = [this](InitComponent* ic) -> std::string {
+            std::string key = ic->get_init_identifiers()[0];
+            if (LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
+                if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(mSelectedLutPin); cfg != nullptr)
+                    key = cfg->init_identifier;
+            return key;
+        };
+
         QMenu menu;
 
         menu.addAction("Configuration string to clipboard", [this]() { QApplication::clipboard()->setText(mLutConfigLabel->text().remove(" 0x")); });
-        menu.addAction("Change configuration string", [this]() {
+        menu.addAction("Change configuration string", [this, resolveInitKey]() {
             InputDialog ipd("Change configuration string", "New configuration string", mLutConfigLabel->text().remove("0x"));
             HexadecimalValidator hexValidator;
             ipd.addValidator(&hexValidator);
             if (ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
             {
-                if (InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                    init_component != nullptr)
+                if (InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); ic != nullptr)
                 {
-                    std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
-                    QString data_type        = "bit_vector";
-                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), data_type, ipd.textValue().toUpper());
+                    std::string cat = ic->get_init_category();
+                    std::string key = resolveInitKey(ic);
+                    ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), "bit_vector", ipd.textValue().toUpper());
                     act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
                     act->exec();
                     setGate(mCurrentGate);    //must update config string and data table, no signal for that
@@ -256,11 +327,11 @@ namespace hal
                     log_error("gui", "Could not load InitComponent from gate with id {}.", mCurrentGate->get_id());
             }
         });
-        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this]() {
-            if (InitComponent* init_component = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                init_component != nullptr)
+        menu.addAction(QIcon(":/icons/python"), "Get configuration string", [this, resolveInitKey]() {
+            if (InitComponent* ic = mCurrentGate->get_type()->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); ic != nullptr)
             {
-                std::string cat = init_component->get_init_category(), key = init_component->get_init_identifiers()[0];
+                std::string cat = ic->get_init_category();
+                std::string key = resolveInitKey(ic);
                 QApplication::clipboard()->setText(PyCodeProvider::pyCodeGateData(mCurrentGate->get_id(), QString::fromStdString(cat), QString::fromStdString(key)));
             }
             else
@@ -388,40 +459,83 @@ namespace hal
         {
             case GateDetailsTabWidget::GateTypeCategory::lut: {
                 const std::vector<std::string> lutPins = gate->get_type()->get_pin_names([](const GatePin* p) { return p->get_type() == PinType::lut; });
-                // LUT Boolean Function Table only shows the LUT function
-                QVector<QSharedPointer<BooleanFunctionTableEntry>> lutEntries;
-                for (auto bfEntry : otherFunctionList)
-                {
-                    if (std::find(lutPins.begin(), lutPins.end(), bfEntry->getEntryIdentifier().toStdString()) != lutPins.end())
-                    {
-                        lutEntries.append(bfEntry);
-                    }
-                }
 
-                mLutFunctionTable->setEntries(lutEntries);
-                mLutFunctionTable->setGateInformation(gate);
-
-                //Setup lut config (init) string
-                if (InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
+                // Clear existing radio buttons and layout
+                const auto existingButtons = mLutPinButtonGroup->buttons();
+                for (QAbstractButton* btn : existingButtons)
+                    mLutPinButtonGroup->removeButton(btn);
+                while (QLayoutItem* item = mLutRadioLayout->takeAt(0))
                 {
-                    auto typeAndValue = gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers()[0]);
-                    mLutConfigLabel->setText(" 0x" + QString::fromStdString(std::get<1>(typeAndValue)));
+                    if (QWidget* w = item->widget())
+                        w->deleteLater();
+                    delete item;
                 }
-                else
-                {
-                    mLutConfigLabel->setText(" Could not load init string.");
-                }
+                mCurrentLutPins.clear();
 
-                // The table is only updated if the gate has a LUT pin
-                if (lutPins.size() > 0)
+                // Build one radio-button row per LUT output pin
+                int idx = 0;
+                for (const std::string& pin : lutPins)
                 {
-                    // All LUT pins have the same boolean function
-                    std::basic_string<char> outPin = lutPins.front();
+                    BooleanFunction bf  = gate->get_boolean_function(pin);
+                    QString rowText     = QString::fromStdString(pin) + " = " + QString::fromStdString(bf.to_string());
 
-                    // Fill the LUL truth table
-                    BooleanFunction lutFunction = gate->get_boolean_function(outPin);
-                    mLutTable->setBooleanFunction(lutFunction, QString::fromStdString(outPin));
+                    QWidget*     row       = new QWidget(mLutRadioWidget);
+                    QHBoxLayout* rowLayout = new QHBoxLayout(row);
+                    rowLayout->setContentsMargins(0, 0, 0, 0);
+                    rowLayout->setSpacing(4);
+
+                    QRadioButton* rb = new QRadioButton(row);
+                    mLutPinButtonGroup->addButton(rb, idx);
+
+                    QLabel* fnLabel = new QLabel(rowText, row);
+                    fnLabel->setWordWrap(true);
+                    fnLabel->setContextMenuPolicy(Qt::CustomContextMenu);
+                    connect(fnLabel, &QLabel::customContextMenuRequested, this, [this, pin, fnLabel](QPoint pos) {
+                        if (!mCurrentGate) return;
+                        const BooleanFunction bf  = mCurrentGate->get_boolean_function(pin);
+                        const QString bfStr       = QString::fromStdString(bf.to_string());
+                        const u32     gateId      = mCurrentGate->get_id();
+                        const QString pinQStr     = QString::fromStdString(pin);
+                        QMenu menu;
+                        menu.addAction("Boolean function to clipboard", [bfStr]() {
+                            QApplication::clipboard()->setText(bfStr);
+                        });
+                        menu.addAction("Change Boolean function", [this, pinQStr]() {
+                            InputDialog ipd("Change Boolean function", "New function", "");
+                            if (ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
+                            {
+                                auto funcRes = BooleanFunction::from_string(ipd.textValue().toStdString());
+                                if (funcRes.is_ok())
+                                {
+                                    ActionAddBooleanFunction* act = new ActionAddBooleanFunction(pinQStr, funcRes.get(), mCurrentGate->get_id());
+                                    act->exec();
+                                }
+                            }
+                        });
+                        const QString pyCode = PyCodeProvider::pyCodeGateBooleanFunction(gateId, pinQStr);
+                        if (!pyCode.isEmpty())
+                            menu.addAction(QIcon(":/icons/python"), "Get boolean function", [pyCode]() {
+                                QApplication::clipboard()->setText(pyCode);
+                            });
+                        menu.exec(fnLabel->mapToGlobal(pos));
+                    });
+
+                    rowLayout->addWidget(rb, 0, Qt::AlignTop);
+                    rowLayout->addWidget(fnLabel, 1);
+                    mLutRadioLayout->addWidget(row);
+                    mCurrentLutPins.push_back(pin);
+
+                    connect(rb, &QRadioButton::toggled, this, [this, idx](bool checked) {
+                        if (checked) handleLutPinSelectionChanged(idx);
+                    });
+                    ++idx;
                 }
+                mLutRadioLayout->addStretch();
+
+                // Select the first pin by default; the toggled signal drives the config label and truth table
+                if (!mCurrentLutPins.empty())
+                    if (QAbstractButton* firstBtn = mLutPinButtonGroup->button(0))
+                        firstBtn->setChecked(true);
                 break;
             }
             case GateDetailsTabWidget::GateTypeCategory::ff: {
