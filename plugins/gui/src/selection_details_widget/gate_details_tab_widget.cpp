@@ -274,25 +274,10 @@ namespace hal
                 bit_count  = cfg->bit_count;
             }
         }
-        const std::string raw_str = std::get<1>(mCurrentGate->get_data(init_component->get_init_category(), initKey));
-        if (bit_count > 0 && !raw_str.empty())
-        {
-            try
-            {
-                const u64 full_val = std::stoull(raw_str, nullptr, 16);
-                const u64 mask     = (bit_count == 64) ? UINT64_MAX : ((1ULL << bit_count) - 1);
-                const u64 sliced   = (full_val >> bit_offset) & mask;
-                mLutConfigLabel->setText(" 0x" + QString::number(static_cast<qulonglong>(sliced), 16).toUpper().rightJustified(bit_count / 4, QLatin1Char('0')));
-            }
-            catch (...)
-            {
-                mLutConfigLabel->setText(" 0x" + QString::fromStdString(raw_str));
-            }
-        }
-        else
-        {
-            mLutConfigLabel->setText(" 0x" + QString::fromStdString(raw_str));
-        }
+        const std::string raw_str    = std::get<1>(mCurrentGate->get_data(init_component->get_init_category(), initKey));
+        const auto        slice_res  = LUTComponent::extract_init_slice(raw_str, bit_offset, bit_count);
+        const std::string displayHex = slice_res.is_ok() ? slice_res.get() : raw_str;
+        mLutConfigLabel->setText(" 0x" + QString::fromStdString(displayHex));
     }
 
     void GateDetailsTabWidget::handleLutConfigContextMenuRequested(QPoint pos)
@@ -333,19 +318,10 @@ namespace hal
 
             if (bit_count > 0)
             {
-                // Splice the edited slice back into the full INIT value at [bit_offset .. bit_offset+bit_count-1]
-                const std::string raw_str = std::get<1>(mCurrentGate->get_data(cat, key));
-                try
-                {
-                    const u64 full_val  = raw_str.empty() ? 0ULL : std::stoull(raw_str, nullptr, 16);
-                    const u64 new_slice = std::stoull(ipd.textValue().toStdString(), nullptr, 16);
-                    const u64 mask      = (bit_count == 64) ? UINT64_MAX : ((1ULL << bit_count) - 1);
-                    const u64 spliced   = (full_val & ~(mask << bit_offset)) | ((new_slice & mask) << bit_offset);
-                    // Preserve the original hex digit count so the full string width is unchanged
-                    const int ndigits   = raw_str.empty() ? static_cast<int>((bit_offset + bit_count + 3) / 4) : static_cast<int>(raw_str.size());
-                    result = QString::number(static_cast<qulonglong>(spliced), 16).toUpper().rightJustified(ndigits, QLatin1Char('0'));
-                }
-                catch (...) { /* fall through: write whatever the user typed as-is */ }
+                const std::string raw_str  = std::get<1>(mCurrentGate->get_data(cat, key));
+                auto              splice_r = LUTComponent::splice_init_slice(raw_str, ipd.textValue().toStdString(), bit_offset, bit_count);
+                if (splice_r.is_ok())
+                    result = QString::fromStdString(splice_r.get());
             }
 
             ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), "bit_vector", result);

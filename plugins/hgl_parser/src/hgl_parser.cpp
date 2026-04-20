@@ -505,6 +505,23 @@ namespace hal
             }
         }
 
+        // For legacy LUT configs (no output_pins in HGL): populate default per-pin configs
+        // so every LUT output pin maps to the full init string of the single identifier.
+        if (LUTComponent* lut_comp = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+            lut_comp != nullptr && lut_comp->get_output_pin_configs().empty())
+        {
+            if (const InitComponent* init_comp =
+                    lut_comp->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+                init_comp != nullptr && !init_comp->get_init_identifiers().empty())
+            {
+                const std::string& identifier = init_comp->get_init_identifiers().front();
+                for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
+                {
+                    lut_comp->set_output_pin_config(pin->get_name(), identifier, 0, 0);
+                }
+            }
+        }
+
         return OK({});
     }
 

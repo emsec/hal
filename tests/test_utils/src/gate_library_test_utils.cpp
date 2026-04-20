@@ -273,6 +273,7 @@ namespace hal
                 {
                     return nullptr;
                 }
+                lut2->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->set_output_pin_config("O", "INIT");
             }
             {
                 GateType* lut3 = lib->create_gate_type(
@@ -293,6 +294,7 @@ namespace hal
                 {
                     return nullptr;
                 }
+                lut3->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->set_output_pin_config("O", "INIT");
             }
             {
                 GateType* lut4 = lib->create_gate_type(
@@ -317,6 +319,7 @@ namespace hal
                 {
                     return nullptr;
                 }
+                lut4->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->set_output_pin_config("O", "INIT");
             }
             {
                 GateType* lut5 = lib->create_gate_type(
@@ -345,6 +348,7 @@ namespace hal
                 {
                     return nullptr;
                 }
+                lut5->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->set_output_pin_config("O", "INIT");
             }
             {
                 GateType* lut6 = lib->create_gate_type(
@@ -377,6 +381,7 @@ namespace hal
                 {
                     return nullptr;
                 }
+                lut6->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->set_output_pin_config("O", "INIT");
             }
             {
                 // LUT6_2a: 6 inputs, O0 uses the full 64-bit INIT string, O1 uses the lower 32 bits of the same string.
@@ -1514,6 +1519,22 @@ namespace hal
                 {
                     log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                     return false;
+                }
+                const auto& configs1 = lut_component1->get_output_pin_configs();
+                const auto& configs2 = lut_component2->get_output_pin_configs();
+                if (configs1.size() != configs2.size())
+                {
+                    log_info("test_utils", "unequal LUT output pin configs of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                    return false;
+                }
+                for (const auto& [pin, cfg] : configs1)
+                {
+                    const auto it = configs2.find(pin);
+                    if (it == configs2.end() || it->second.init_identifier != cfg.init_identifier || it->second.bit_offset != cfg.bit_offset || it->second.bit_count != cfg.bit_count)
+                    {
+                        log_info("test_utils", "unequal LUT output pin configs of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                        return false;
+                    }
                 }
             }
             else if (lut_component1 != nullptr || lut_component2 != nullptr)

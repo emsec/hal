@@ -2,6 +2,11 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
+#include <iomanip>
+#include <limits>
+#include <sstream>
+
 namespace hal
 {
     LUTComponent::LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending) : m_component(std::move(component)), m_init_ascending(init_ascending)
@@ -73,5 +78,84 @@ namespace hal
     const std::unordered_map<std::string, LUTComponent::LUTOutputConfig>& LUTComponent::get_output_pin_configs() const
     {
         return m_output_pin_configs;
+    }
+
+    Result<std::string> LUTComponent::extract_init_slice(const std::string& full_hex, u32 bit_offset, u32 bit_count)
+    {
+        if (bit_count == 0 || full_hex.empty())
+            return OK(full_hex);
+
+        u64 full_val = 0;
+        try
+        {
+            full_val = std::stoull(full_hex, nullptr, 16);
+        }
+        catch (const std::invalid_argument&)
+        {
+            return ERR("INIT string '" + full_hex + "' is not a valid hex value");
+        }
+        catch (const std::out_of_range&)
+        {
+            return ERR("INIT string '" + full_hex + "' is out of range for u64");
+        }
+
+        const u64 mask   = (bit_count >= 64) ? std::numeric_limits<u64>::max() : ((1ULL << bit_count) - 1);
+        const u64 sliced = (full_val >> bit_offset) & mask;
+
+        std::stringstream ss;
+        ss << std::hex << std::uppercase << std::setfill('0') << std::setw(static_cast<int>((bit_count + 3) / 4)) << sliced;
+        return OK(ss.str());
+    }
+
+    Result<std::string> LUTComponent::splice_init_slice(const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count)
+    {
+        if (bit_count == 0)
+        {
+            std::string upper = slice_hex;
+            std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+            return OK(upper);
+        }
+
+        u64 existing = 0;
+        if (!full_hex.empty())
+        {
+            try
+            {
+                existing = std::stoull(full_hex, nullptr, 16);
+            }
+            catch (const std::invalid_argument&)
+            {
+                return ERR("full INIT string '" + full_hex + "' is not a valid hex value");
+            }
+            catch (const std::out_of_range&)
+            {
+                return ERR("full INIT string '" + full_hex + "' is out of range for u64");
+            }
+        }
+
+        u64 new_slice = 0;
+        try
+        {
+            new_slice = std::stoull(slice_hex, nullptr, 16);
+        }
+        catch (const std::invalid_argument&)
+        {
+            return ERR("slice value '" + slice_hex + "' is not a valid hex value");
+        }
+        catch (const std::out_of_range&)
+        {
+            return ERR("slice value '" + slice_hex + "' is out of range for u64");
+        }
+
+        const u64 mask    = (bit_count >= 64) ? std::numeric_limits<u64>::max() : ((1ULL << bit_count) - 1);
+        const u64 spliced = (existing & ~(mask << bit_offset)) | ((new_slice & mask) << bit_offset);
+
+        const int width = full_hex.empty()
+                              ? static_cast<int>((bit_offset + bit_count + 3) / 4)
+                              : static_cast<int>(full_hex.size());
+
+        std::stringstream ss;
+        ss << std::hex << std::uppercase << std::setfill('0') << std::setw(width) << spliced;
+        return OK(ss.str());
     }
 }    // namespace hal

@@ -12,6 +12,7 @@
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 
@@ -128,16 +129,19 @@ namespace hal
                 }
                 lut_config.AddMember("data_category", init_component->get_init_category(), allocator);
 
-                // output_pins: one entry per output pin, carrying its INIT identifier and optional bit range
+                // Iterate LUT output pins in their defined order so that data_identifier
+                // order in the JSON matches the order in the InitComponent identifier list.
                 rapidjson::Value output_pins(rapidjson::kArrayType);
-
-                const auto& pin_configs = lut_component->get_output_pin_configs();
-                if (!pin_configs.empty())
+                const auto& pin_configs      = lut_component->get_output_pin_configs();
+                const std::string& fallback_id = init_component->get_init_identifiers().front();
+                for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
                 {
-                    for (const auto& [pin_name, cfg] : pin_configs)
+                    const std::string& pin_name = pin->get_name();
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    entry.AddMember("pin", rapidjson::Value{}.SetString(pin_name.c_str(), pin_name.length(), allocator), allocator);
+                    if (const auto it = pin_configs.find(pin_name); it != pin_configs.end())
                     {
-                        rapidjson::Value entry(rapidjson::kObjectType);
-                        entry.AddMember("pin", rapidjson::Value{}.SetString(pin_name.c_str(), pin_name.length(), allocator), allocator);
+                        const auto& cfg = it->second;
                         entry.AddMember("data_identifier", rapidjson::Value{}.SetString(cfg.init_identifier.c_str(), cfg.init_identifier.length(), allocator), allocator);
                         if (cfg.bit_offset != 0)
                         {
@@ -147,23 +151,13 @@ namespace hal
                         {
                             entry.AddMember("bit_count", cfg.bit_count, allocator);
                         }
-                        output_pins.PushBack(entry, allocator);
                     }
-                }
-                else
-                {
-                    // No per-pin configs set: synthesize one entry per LUT output pin using the first init identifier.
-                    const std::string& identifier = init_component->get_init_identifiers().front();
-                    for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
+                    else
                     {
-                        rapidjson::Value entry(rapidjson::kObjectType);
-                        const std::string& pin_name = pin->get_name();
-                        entry.AddMember("pin", rapidjson::Value{}.SetString(pin_name.c_str(), pin_name.length(), allocator), allocator);
-                        entry.AddMember("data_identifier", rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
-                        output_pins.PushBack(entry, allocator);
+                        entry.AddMember("data_identifier", rapidjson::Value{}.SetString(fallback_id.c_str(), fallback_id.length(), allocator), allocator);
                     }
+                    output_pins.PushBack(entry, allocator);
                 }
-
                 lut_config.AddMember("output_pins", output_pins, allocator);
                 cell.AddMember("lut_config", lut_config, allocator);
             }
