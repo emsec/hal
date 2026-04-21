@@ -209,6 +209,19 @@ namespace hal
                 const bool m_normalize;
             };
 
+            class BooleanInfluence : public GateFeature
+            {
+            public:
+                BooleanInfluence(const std::vector<StatisticalMoment>& moments = {})
+                    : m_moments(moments.empty() ? std::vector<StatisticalMoment>{StatisticalMoment::average} : moments){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+
+            private:
+                const std::vector<StatisticalMoment> m_moments;
+            };
+
             // Feature ideas:
             // - number of sequential predecessors/successors (this is somewhat encoded in the neighboring gate types)
             // - number of predecessors/successors

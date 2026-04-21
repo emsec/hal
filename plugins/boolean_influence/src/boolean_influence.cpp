@@ -844,5 +844,23 @@ namespace hal
             return OK(std::make_pair(matrix_id_to_gate, matrix));
         }
 
+        Result<std::unordered_map<Net*, double>> translate_boolean_influence_map(const Netlist* nl, const std::unordered_map<std::string, double>& influence_map)
+        {
+            std::unordered_map<Net*, double> net_to_influence;
+
+            for (const auto& [var_name, influence] : influence_map)
+            {
+                const auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, var_name);
+                if (net_res.is_error())
+                {
+                    return ERR_APPEND(net_res.get_error(), "unable to translate boolean influence map: failed to reconstruct net from variable " + var_name + ".");
+                }
+                const auto net = net_res.get();
+
+                net_to_influence.insert({net, influence});
+            }
+
+            return OK(net_to_influence);
+        }
     }    // namespace boolean_influence
 }    // namespace hal

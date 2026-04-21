@@ -1,55 +1,141 @@
+#include "boolean_influence/boolean_influence.h"
 #include "graph_algorithm/algorithms/centrality.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "machine_learning/types.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
 #include "nlohmann/json.hpp"
+#include "z3_utils/subgraph_function_generation.h"
 
 namespace hal
 {
+    template<>
+    std::map<machine_learning::StatisticalMoment, std::string> EnumStrings<machine_learning::StatisticalMoment>::data = {{machine_learning::StatisticalMoment::min, "min"},
+                                                                                                                         {machine_learning::StatisticalMoment::max, "max"},
+                                                                                                                         {machine_learning::StatisticalMoment::average, "average"},
+                                                                                                                         {machine_learning::StatisticalMoment::median, "median"},
+                                                                                                                         {machine_learning::StatisticalMoment::stddev, "stddev"}};
+
     namespace machine_learning
     {
+        Result<FEATURE_TYPE> calculate_statistical_moment(StatisticalMoment moment, std::vector<FEATURE_TYPE> data)
+        {
+            if (data.empty())
+            {
+                return ERR("calculate: empty data");
+            }
+
+            switch (moment)
+            {
+                case StatisticalMoment::min:
+                    return OK(*std::min_element(data.begin(), data.end()));
+
+                case StatisticalMoment::max:
+                    return OK(*std::max_element(data.begin(), data.end()));
+
+                case StatisticalMoment::average: {
+                    FEATURE_TYPE sum = std::accumulate(data.begin(), data.end(), static_cast<FEATURE_TYPE>(0));
+                    return OK(sum / static_cast<FEATURE_TYPE>(data.size()));
+                }
+
+                case StatisticalMoment::median: {
+                    std::sort(data.begin(), data.end());
+                    auto n = data.size();
+                    if (n % 2 == 0)
+                    {
+                        return OK((data[n / 2 - 1] + data[n / 2]) / static_cast<FEATURE_TYPE>(2));
+                    }
+                    else
+                    {
+                        return OK(data[n / 2]);
+                    }
+                }
+
+                case StatisticalMoment::stddev: {
+                    FEATURE_TYPE sum  = std::accumulate(data.begin(), data.end(), static_cast<FEATURE_TYPE>(0));
+                    FEATURE_TYPE mean = sum / static_cast<FEATURE_TYPE>(data.size());
+
+                    FEATURE_TYPE sq_sum = static_cast<FEATURE_TYPE>(0);
+                    for (const auto& v : data)
+                    {
+                        sq_sum += (v - mean) * (v - mean);
+                    }
+
+                    return OK(std::sqrt(sq_sum / static_cast<FEATURE_TYPE>(data.size())));
+                }
+            }
+
+            return ERR("calculate: unknown StatisticalMoment");
+        }
+
         namespace
         {
-            using WordKey = std::tuple<std::string, PinDirection, std::string>;    // {word_name, pin_direction, pin_name}
+            // Composite key identifying a candidate multi-bit word: (word_name, pin_direction, pin_name).
+            using WordKey = std::tuple<std::string, PinDirection, std::string>;
 
+            // One gate's membership in a candidate word.
+            //
+            // `distance` is the number of wire-assignment hops between the gate's pin and the
+            // net whose indexed name was adopted as the source of this entry. 0 means the name
+            // was taken from a net directly attached to the pin; larger values mean the name was
+            // carried across intermediate `wire = wire` assignments in the written netlist
+            // (e.g., `reg a = b; wire b = c; wire c = d` yields distances 0/1/2 for a/b/c from
+            // the register pin). Smaller distances are preferred because names closer to the
+            // gate are more likely to reflect the original signal identity. This struct holds
+            // the already-filtered minimum distance per (gate, pin).
             struct GateEntry
             {
-                u32 index;
-                Gate* gate;
-                u32 distance;    // minimal per-pin distance, as you already filter
+                u32 index;       // Bit index within the word.
+                Gate* gate;      // Contributing gate.
+                u32 distance;    // Wire-assignment hops from the gate pin to the source net (0 = adjacent, smaller is better).
             };
 
+            // A word hypothesis before policy-based deduplication.
+            //
+            // Multiple candidates can refer to the same group of gates under different WordKeys
+            // (e.g., input-side vs. output-side name reconstruction of the same register bus).
+            // The scoring step picks a single winner per gate-group.
             struct CandidateWord
             {
                 WordKey key;
                 std::vector<GateEntry> entries;
 
-                // Canonical gate-vector used as dedupe key (sorted by gate id for stability).
+                // Sorted-by-gate-id list of the candidate's gates; used as a stable dedupe key
+                // across candidates that describe the same physical group.
                 std::vector<Gate*> canonical_gates;
 
-                // For final output mapping (only for the selected candidate).
+                // Populated only for the selected candidate, used when emitting the final mapping.
                 std::unordered_map<Gate*, u32> gate_to_index;
 
                 double avg_distance = std::numeric_limits<double>::infinity();
 
-                // Derived “signals” used by policies
-                bool is_output_word        = false;    // PinDirection::output
-                bool is_gate_name_encoding = false;    // (dir==none && dist==0) per your encoding
+                // Policy signals computed once from `key` + `entries`.
+                bool is_output_word        = false;    // true iff direction == PinDirection::output
+                bool is_gate_name_encoding = false;    // true iff direction == none AND every entry's distance == 0
+                                                       // (i.e., the index was encoded directly in the gate or the net name
+                                                       // at the pin, with no intermediate wire hops).
             };
 
-            // --- pin-type priority rules (first rule that applies to ALL gates wins)
+            // Ordered preference of pin types for a given gate-type property. Used by the Yosys
+            // policy to break ties among output-pin candidates: pins earlier in the list win.
             using PinPriorityRule = std::pair<GateTypeProperty, std::vector<PinType>>;
 
+            // Ordered list of pin-type priority rules. The first rule whose GateTypeProperty is
+            // present on ALL gates of a candidate is applied; subsequent rules are ignored.
+            // Extend here (in priority order) to teach new gate families about preferred outputs.
             static const std::vector<PinPriorityRule>& pin_priority_rules()
             {
                 static const std::vector<PinPriorityRule> rules = {
                     {GateTypeProperty::ff, {PinType::state, PinType::neg_state}},
-                    // Add more rules here later, in priority order.
                 };
                 return rules;
             }
 
+            // Return the pin-priority list that applies to every gate in `gv`, or nullptr if none
+            // of the configured rules matches all gates uniformly.
             static const std::vector<PinType>* get_applicable_pin_priority(const std::vector<Gate*>& gv)
             {
                 for (const auto& [gtp, plist] : pin_priority_rules())
@@ -64,9 +150,13 @@ namespace hal
                 return nullptr;
             }
 
+            // Rank a single (gate, pin_name) against the preferred pin-type list.
+            // Lower values indicate higher priority. Ranking tiers:
+            //   [0 .. plist.size()-1]   index into plist (matched preferred pin types)
+            //   plist.size() + 1        known pin type but not in the preferred list
+            //   plist.size() + 2        pin could not be resolved on this gate
             static size_t rank_pin_one_gate(Gate* g, const std::string& pin_name, const std::vector<PinType>& plist)
             {
-                // Lower is better. Anything unresolved is worse than any listed pin type.
                 const size_t worst = plist.size() + 2;
 
                 if (g == nullptr)
@@ -92,9 +182,11 @@ namespace hal
                 return static_cast<size_t>(std::distance(plist.begin(), it));
             }
 
+            // Aggregate rank for a pin name across all gates of a candidate. Takes the worst
+            // (largest) per-gate rank so a heterogeneous candidate cannot beat a homogeneous one
+            // just because a single gate happens to have the preferred pin type.
             static size_t rank_pin_for_vector_worstcase(const std::vector<Gate*>& gv, const std::string& pin_name, const std::vector<PinType>& plist)
             {
-                // If pin types differ across gates, be conservative: take the WORST rank.
                 size_t worst_rank = 0;
                 for (auto* g : gv)
                 {
@@ -103,6 +195,14 @@ namespace hal
                 return worst_rank;
             }
 
+            // Totally-ordered score for a candidate word. Smaller values are better.
+            //
+            // Fields are compared lexicographically in the order declared below:
+            //   1. primary        - policy-specific 0/1 preference (e.g., Yosys prefers output words)
+            //   2. avg_distance   - fewer wire-assignment hops between gate pins and source nets wins
+            //   3. pin_type_rank  - Yosys-only: preferred output pin types win
+            //   4. pin_len        - Yosys-only: shorter output pin names win when no rule matched
+            //   5..8              - deterministic final tie-breakers (name length/text, direction, pin)
             struct CandidateScore
             {
                 // Lower is better.
@@ -126,6 +226,9 @@ namespace hal
                 }
             };
 
+            // Build a CandidateScore for `c` under the given multi-bit processing policy.
+            // Only the policy-specific fields differ between policies; deterministic tie-breakers
+            // are always filled so that scoring is total and reproducible.
             static CandidateScore score_candidate(const CandidateWord& c, MultiBitProcessingPolicy policy)
             {
                 const auto& [name, dir, pin] = c.key;
@@ -190,6 +293,20 @@ namespace hal
                 return s;
             }
 
+            // Reconstruct multi-bit words from the "multi_bit_indexed_identifiers" gate-data
+            // annotations previously written by the netlist preprocessing plugin.
+            //
+            // Pipeline:
+            //   1. For every gate, read its indexed-identifier entries. Per pin, keep only the
+            //      entries with the smallest wire-assignment distance — i.e., the names taken
+            //      from the nets closest to the pin in the written netlist, before any
+            //      intermediate wire-to-wire assignments.
+            //   2. Group the surviving entries by WordKey (identifier, direction, pin).
+            //   3. Turn each group into a CandidateWord, rejecting groups that have fewer than
+            //      two distinct gates, duplicate indices, or duplicate gates.
+            //   4. Deduplicate candidates that cover the same set of gates, keeping the one
+            //      with the best CandidateScore under `policy`.
+            //   5. Materialize the winners into a MultiBitInformation.
             MultiBitInformation calculate_multi_bit_information(const std::vector<Gate*>& gates, const MultiBitProcessingPolicy policy = MultiBitProcessingPolicy::Default)
             {
                 MultiBitInformation m_mbi;
@@ -373,6 +490,10 @@ namespace hal
             }
         }    // namespace
 
+        // Two gates are considered a pair iff they share at least one word with the requested
+        // direction. The match is done on the (identifier, direction) pair only; the pin name is
+        // intentionally dropped so that e.g. two flip-flops in the same bus are paired even when
+        // their words were derived through different physical pins.
         bool MultiBitInformation::are_gates_considered_a_pair(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const
         {
             const auto it_a = gate_to_words.find(g_a);
@@ -462,6 +583,10 @@ namespace hal
             return false;
         }
 
+        // Compare bit indices of two gates within a common word. If both gates participate in
+        // multiple shared words the reference word is the one with the smallest combined gate
+        // count (i.e., the most specific word), which yields stable comparisons when wider and
+        // narrower buses overlap.
         std::optional<bool> MultiBitInformation::is_index_a_smaller_index_b(const PinDirection& direction, const Gate* g_a, const Gate* g_b) const
         {
             const auto it_a = gate_to_words.find(g_a);
@@ -842,5 +967,230 @@ namespace hal
             return m_gate_pin_indices.at(gt).at(gp);
         }
 
+        const Result<std::unordered_map<const Net*, u32>*> Context::get_sequential_subgraph_function_inputs()
+        {
+            std::lock_guard<std::mutex> lock(m_functional_mutex);
+
+            if (m_sequential_subgraph_function_inputs_cache)
+            {
+                return OK(m_sequential_subgraph_function_inputs_cache.get());
+            }
+
+            // Collect data-input nets of all sequential gates; skip clock/ground/power.
+            const std::vector<PinType> excluded_types = {PinType::clock, PinType::ground, PinType::power};
+
+            std::vector<Net*> target_nets;
+            for (Gate* seq_gate : m_sequential_gates)
+            {
+                for (const auto* ep : seq_gate->get_fan_in_endpoints())
+                {
+                    if (ep->get_pin() == nullptr)
+                    {
+                        continue;
+                    }
+                    if (std::find(excluded_types.begin(), excluded_types.end(), ep->get_pin()->get_type()) != excluded_types.end())
+                    {
+                        continue;
+                    }
+                    Net* net = ep->get_net();
+                    if (net != nullptr)
+                    {
+                        target_nets.push_back(net);
+                    }
+                }
+            }
+
+            for (Net* global_output_net : nl->get_global_output_nets())
+            {
+                target_nets.push_back(global_output_net);
+            }
+
+            // Deduplicate (multiple FFs may share an input net).
+            std::sort(target_nets.begin(), target_nets.end());
+            target_nets.erase(std::unique(target_nets.begin(), target_nets.end()), target_nets.end());
+
+            SubgraphNetlistDecorator subgraph_dec(*nl);
+            auto new_cache = std::make_shared<std::unordered_map<const Net*, u32>>();
+
+            for (Net* net : target_nets)
+            {
+                const auto inputs_res = subgraph_dec.get_subgraph_function_inputs(GateTypeProperty::combinational, net);
+                if (inputs_res.is_error())
+                {
+                    return ERR_APPEND(inputs_res.get_error(),
+                                      "get_sequential_subgraph_function_inputs: failed to get inputs for net '" + net->get_name() + "' (ID " + std::to_string(net->get_id()) + ")");
+                }
+                new_cache->emplace(net, static_cast<u32>(inputs_res.get().size()));
+            }
+
+            m_sequential_subgraph_function_inputs_cache = std::move(new_cache);
+            return OK(m_sequential_subgraph_function_inputs_cache.get());
+        }
+
+        const Result<std::unordered_map<const Net*, z3::expr>*> Context::get_sequential_subgraph_functions()
+        {
+            // Ensure input counts are available first (acquires and releases m_functional_mutex).
+            auto inputs_result = get_sequential_subgraph_function_inputs();
+            if (inputs_result.is_error())
+            {
+                return ERR_APPEND(inputs_result.get_error(), "get_sequential_subgraph_functions: failed to get subgraph function inputs");
+            }
+            const auto* inputs_cache = inputs_result.get();
+
+            std::lock_guard<std::mutex> lock(m_functional_mutex);
+
+            if (m_sequential_subgraph_function_cache)
+            {
+                return OK(m_sequential_subgraph_function_cache.get());
+            }
+
+            // Collect data-input nets of all sequential gates; skip clock/ground/power.
+            const std::vector<PinType> excluded_types = {PinType::clock, PinType::ground, PinType::power};
+
+            std::vector<Net*> target_nets;
+            for (Gate* seq_gate : m_sequential_gates)
+            {
+                for (const auto* ep : seq_gate->get_fan_in_endpoints())
+                {
+                    if (ep->get_pin() == nullptr)
+                    {
+                        continue;
+                    }
+                    if (std::find(excluded_types.begin(), excluded_types.end(), ep->get_pin()->get_type()) != excluded_types.end())
+                    {
+                        continue;
+                    }
+                    Net* net = ep->get_net();
+                    if (net != nullptr)
+                    {
+                        target_nets.push_back(net);
+                    }
+                }
+            }
+
+            for (Net* global_output_net : nl->get_global_output_nets())
+            {
+                target_nets.push_back(global_output_net);
+            }
+
+            // Deduplicate (multiple FFs may share an input net).
+            std::sort(target_nets.begin(), target_nets.end());
+            target_nets.erase(std::unique(target_nets.begin(), target_nets.end()), target_nets.end());
+
+            // Filter out nets whose combinational subgraph exceeds the maximum input size.
+            if (m_max_boolean_function_input_size > 0)
+            {
+                std::vector<Net*> filtered_nets;
+                for (Net* net : target_nets)
+                {
+                    const auto it = inputs_cache->find(net);
+                    if (it == inputs_cache->end())
+                    {
+                        return ERR("get_sequential_subgraph_functions: missing input count for net '" + net->get_name() + "' (ID " + std::to_string(net->get_id()) + ")");
+                    }
+
+                    if (it->second <= m_max_boolean_function_input_size)
+                    {
+                        filtered_nets.push_back(net);
+                    }
+                }
+                target_nets = std::move(filtered_nets);
+            }
+
+            if (!m_z3_ctx)
+            {
+                m_z3_ctx = std::make_shared<z3::context>();
+            }
+
+            auto func_result = z3_utils::get_subgraph_z3_functions(GateTypeProperty::combinational, target_nets, *m_z3_ctx);
+            if (func_result.is_error())
+            {
+                return ERR_APPEND(func_result.get_error(), "get_sequential_subgraph_functions: failed to compute z3 subgraph functions");
+            }
+
+            auto new_cache    = std::make_shared<std::unordered_map<const Net*, z3::expr>>();
+            const auto& exprs = func_result.get();
+            for (u32 i = 0; i < target_nets.size(); i++)
+            {
+                new_cache->emplace(target_nets.at(i), exprs.at(i));
+            }
+
+            m_sequential_subgraph_function_cache = std::move(new_cache);
+            return OK(m_sequential_subgraph_function_cache.get());
+        }
+
+        const Result<std::unordered_map<const Net*, std::unordered_map<Net*, double>>*> Context::get_sequential_boolean_influences()
+        {
+            // Ensure subgraph functions are available first (acquires and releases m_functional_mutex).
+            auto sf_result = get_sequential_subgraph_functions();
+            if (sf_result.is_error())
+            {
+                return ERR_APPEND(sf_result.get_error(), "get_sequential_boolean_influences: failed to get subgraph functions");
+            }
+            const auto* subgraph_cache = sf_result.get();
+
+            std::lock_guard<std::mutex> lock(m_functional_mutex);
+
+            if (m_sequential_boolean_influence_cache)
+            {
+                return OK(m_sequential_boolean_influence_cache.get());
+            }
+
+            auto new_cache = std::make_shared<std::unordered_map<const Net*, std::unordered_map<Net*, double>>>();
+
+            for (const auto& [dpin_net, expr] : *subgraph_cache)
+            {
+                auto influence_result = boolean_influence::get_boolean_influence_bitsliced(expr);
+                if (influence_result.is_error())
+                {
+                    return ERR_APPEND(influence_result.get_error(),
+                                      "get_sequential_boolean_influences: failed to compute boolean influence for net '" + dpin_net->get_name() + "' (ID " + std::to_string(dpin_net->get_id()) + ")");
+                }
+                auto net_influence_map = boolean_influence::translate_boolean_influence_map(this->nl, influence_result.get());
+
+                if (net_influence_map.is_error())
+                {
+                    return ERR_APPEND(net_influence_map.get_error(),
+                                      "get_sequential_boolean_influences: failed to translate boolean influence map for net '" + dpin_net->get_name() + "' (ID " + std::to_string(dpin_net->get_id())
+                                          + ")");
+                }
+
+                new_cache->emplace(dpin_net, net_influence_map.get());
+            }
+
+            m_sequential_boolean_influence_cache = std::move(new_cache);
+            return OK(m_sequential_boolean_influence_cache.get());
+        }
+
+        const Result<std::unordered_map<const Net*, std::vector<Net*>>*> Context::get_sequential_influenced_nets()
+        {
+            // Ensure boolean influences are available first (handles its own locking chain).
+            auto bi_result = get_sequential_boolean_influences();
+            if (bi_result.is_error())
+            {
+                return ERR_APPEND(bi_result.get_error(), "get_sequential_influenced_net: failed to get boolean influences");
+            }
+            const auto* influence_cache = bi_result.get();
+
+            std::lock_guard<std::mutex> lock(m_functional_mutex);
+
+            if (m_sequential_influenced_nets_cache)
+            {
+                return OK(m_sequential_influenced_nets_cache.get());
+            }
+
+            auto new_cache = std::make_shared<std::unordered_map<const Net*, std::vector<Net*>>>();
+
+            for (const auto& [dpin_net, influence_map] : *influence_cache)
+            {
+                for (const auto& [net, _influence] : influence_map)
+                {
+                    (*new_cache)[net].push_back(const_cast<Net*>(dpin_net));
+                }
+            }
+
+            m_sequential_influenced_nets_cache = std::move(new_cache);
+            return OK(m_sequential_influenced_nets_cache.get());
+        }
     }    // namespace machine_learning
 }    // namespace hal

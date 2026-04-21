@@ -1,10 +1,13 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/utils.h"
 #include "machine_learning/labels/gate_label.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
 #include "nlohmann/json.hpp"
+
+#include <fstream>
 
 namespace hal
 {
@@ -546,6 +549,160 @@ namespace hal
                                                            [](const std::vector<std::string>& group) { return utils::join("_", group.begin(), group.end(), [](const std::string& s) { return s; }); });
 
                 return "ModuleNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str + "_" + (m_recursive ? "RECURSIVE" : ""));
+            }
+
+            Result<u32> StateFlipFlop::annotate_from_netlist_metadata(Context& ctx, Netlist* nl, const std::string& metadata_path) const
+            {
+                std::ifstream file(metadata_path);
+                if (!file.is_open())
+                {
+                    return ERR("cannot open metadata file at path: " + metadata_path);
+                }
+
+                nlohmann::json j;
+                try
+                {
+                    file >> j;
+                }
+                catch (const std::exception& e)
+                {
+                    return ERR("failed to parse JSON metadata at '" + metadata_path + "': " + std::string(e.what()));
+                }
+
+                const std::string ROOT_KEY = "design_information";
+                const std::string FSM_KEY  = "FSM_state_registers";
+
+                if (!j.contains(ROOT_KEY))
+                {
+                    return ERR("metadata JSON does not contain the key '" + ROOT_KEY + "'");
+                }
+
+                const auto& design_information = j[ROOT_KEY];
+                if (!design_information.is_object())
+                {
+                    return ERR("metadata JSON key '" + ROOT_KEY + "' does not contain an object");
+                }
+                if (!design_information.contains(FSM_KEY))
+                {
+                    return ERR("metadata JSON does not contain the key path '" + ROOT_KEY + "." + FSM_KEY + "'");
+                }
+
+                const auto& fsm_registers = design_information[FSM_KEY];
+                if (!fsm_registers.is_array())
+                {
+                    return ERR("metadata JSON key '" + ROOT_KEY + "." + FSM_KEY + "' is not an array");
+                }
+
+                std::vector<std::string> fsm_reg_names;
+                for (const auto& reg : fsm_registers)
+                {
+                    if (!reg.is_string())
+                    {
+                        return ERR("metadata JSON key '" + ROOT_KEY + "." + FSM_KEY + "' contains a non-string element");
+                    }
+                    fsm_reg_names.push_back(reg.get<std::string>());
+                }
+
+                const auto& mbi = ctx.get_multi_bit_information();
+
+                const std::string CATEGORY = "StateFlipFlop";
+                const std::string KEY      = "is_state_ff";
+
+                u32 annotated_count = 0;
+
+                for (Gate* g : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }))
+                {
+                    const auto word_it = mbi.gate_to_words.find(g);
+                    if (word_it == mbi.gate_to_words.end())
+                    {
+                        continue;
+                    }
+
+                    bool is_state_ff = false;
+                    for (const auto& word : word_it->second)
+                    {
+                        const auto& word_name = std::get<0>(word);
+                        for (const auto& fsm_name : fsm_reg_names)
+                        {
+                            if (word_name.find(fsm_name) != std::string::npos)
+                            {
+                                is_state_ff = true;
+                                break;
+                            }
+                        }
+                        if (is_state_ff)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (is_state_ff)
+                    {
+                        if (!g->set_data(CATEGORY, KEY, "boolean", "true"))
+                        {
+                            return ERR("failed to annotate gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+                        }
+                        annotated_count++;
+                    }
+                }
+
+                return OK(annotated_count);
+            }
+
+            Result<std::vector<u32>> StateFlipFlop::calculate_label(Context& ctx, const Gate* g) const
+            {
+                UNUSED(ctx);
+
+                if (!g->get_type()->has_property(GateTypeProperty::ff))
+                {
+                    return OK(NA);
+                }
+
+                const std::string CATEGORY = "StateFlipFlop";
+                const std::string KEY      = "is_state_ff";
+
+                if (g->has_data(CATEGORY, KEY))
+                {
+                    const auto [type, value] = g->get_data(CATEGORY, KEY);
+                    if (value == "true")
+                    {
+                        return OK(MATCH);
+                    }
+                }
+
+                return OK(MISMATCH);
+            }
+
+            Result<std::vector<std::vector<u32>>> StateFlipFlop::calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const
+            {
+                std::vector<std::vector<u32>> labels;
+
+                for (const auto& g : gates)
+                {
+                    const auto new_label = calculate_label(ctx, g);
+                    if (new_label.is_error())
+                    {
+                        return ERR_APPEND(new_label.get_error(), "cannot calculate label for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    }
+                    labels.push_back(new_label.get());
+                }
+
+                return OK(labels);
+            }
+
+            Result<std::vector<std::vector<u32>>> StateFlipFlop::calculate_labels(Context& ctx) const
+            {
+                const auto labels = calculate_labels(ctx, ctx.get_gates());
+                if (labels.is_error())
+                {
+                    return ERR_APPEND(labels.get_error(), "failed to calculate labels");
+                }
+                return OK(labels.get());
+            }
+
+            std::string StateFlipFlop::to_string() const
+            {
+                return "StateFlipFlop";
             }
 
         }    // namespace gate_label

@@ -712,6 +712,147 @@ Construct a ModuleNameKeyWords labeler.
             :rtype: str
         )");
 
+        py::class_<machine_learning::gate_label::StateFlipFlop, machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::StateFlipFlop>> py_state_flip_flop(
+            py_gate_label, "StateFlipFlop", R"(
+Labels flip-flop gates based on whether they belong to a control FSM state register.
+
+Annotations must be loaded first via annotate_from_netlist_metadata(), which reads the
+"FSM_state_registers" list from the design metadata and marks every FF gate whose
+reconstructed multi-bit word name contains one of those register names.
+)");
+
+        py_state_flip_flop.def(py::init<>(), R"(
+Construct a StateFlipFlop labeler.
+)");
+
+        py_state_flip_flop.def_readonly("MATCH", &machine_learning::gate_label::StateFlipFlop::MATCH, R"(
+A label vector indicating that the gate is a state flip-flop of a control FSM.
+
+:type: list[int]
+)");
+
+        py_state_flip_flop.def_readonly("MISMATCH", &machine_learning::gate_label::StateFlipFlop::MISMATCH, R"(
+A label vector indicating that the gate is not a state flip-flop of a control FSM.
+
+:type: list[int]
+)");
+
+        py_state_flip_flop.def_readonly("NA", &machine_learning::gate_label::StateFlipFlop::NA, R"(
+A label vector indicating that the label is not applicable (gate is not a flip-flop).
+
+:type: list[int]
+)");
+
+        py_state_flip_flop.def(
+            "annotate_from_netlist_metadata",
+            [](const machine_learning::gate_label::StateFlipFlop& self, machine_learning::Context& ctx, Netlist* nl, const std::string& metadata_path) -> std::optional<u32> {
+                auto res = self.annotate_from_netlist_metadata(ctx, nl, metadata_path);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error annotating from netlist metadata: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("nl"),
+            py::arg("metadata_path"),
+            R"(
+Read FSM state register names from the design metadata file and annotate each FF gate
+whose multi-bit word matches a register name.
+
+:param hal_py.machine_learning.Context ctx: The machine learning context (provides multi-bit information).
+:param hal_py.Netlist nl: The netlist whose gates are to be annotated.
+:param str metadata_path: Path to the JSON metadata file.
+:returns: The number of annotated gates on success, None otherwise.
+:rtype: int or None
+)");
+
+        py_state_flip_flop.def(
+            "calculate_label",
+            [](const machine_learning::gate_label::StateFlipFlop& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<u32>> {
+                auto res = self.calculate_label(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating label: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("g"),
+            R"(
+Calculate the StateFlipFlop label for a single gate.
+
+:param hal_py.machine_learning.Context ctx: The machine learning context.
+:param hal_py.Gate g: The gate.
+:returns: A list of labels on success, or None otherwise.
+:rtype: list[int] or None
+)");
+
+        py_state_flip_flop.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::StateFlipFlop& self, machine_learning::Context& ctx, const std::vector<Gate*>& gates) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx, gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            py::arg("gates"),
+            R"(
+Calculate StateFlipFlop labels for multiple gates.
+
+:param hal_py.machine_learning.Context ctx: The machine learning context.
+:param list[hal_py.Gate] gates: The gates to label.
+:returns: A list of label vectors on success, or None otherwise.
+:rtype: list[list[int]] or None
+)");
+
+        py_state_flip_flop.def(
+            "calculate_labels",
+            [](const machine_learning::gate_label::StateFlipFlop& self, machine_learning::Context& ctx) -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = self.calculate_labels(ctx);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "Error calculating labels: {}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("ctx"),
+            R"(
+Calculate StateFlipFlop labels for all gates in the context.
+
+:param hal_py.machine_learning.Context ctx: The machine learning context.
+:returns: A list of label vectors on success, or None otherwise.
+:rtype: list[list[int]] or None
+)");
+
+        py_state_flip_flop.def("to_string",
+                               &machine_learning::gate_label::StateFlipFlop::to_string,
+                               R"(
+Get a string representation of the StateFlipFlop labeler.
+
+:returns: The string representation.
+:rtype: str
+)");
+
             }
         }    // namespace python
     }    // namespace machine_learning

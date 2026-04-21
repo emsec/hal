@@ -16,6 +16,7 @@ namespace hal
 {
     /* Forward declarations */
     class Gate;
+    class Netlist;
     enum class GateTypeProperty : int;
     enum class PinType : int;
 
@@ -444,6 +445,44 @@ namespace hal
                     }
                     return OK(v);
                 }
+            };
+
+            /**
+             * @class StateFlipFlop
+             * @brief Labels flip-flop gates based on whether they belong to a control FSM state register.
+             *
+             * Annotations must be loaded first via annotate_from_netlist_metadata(), which reads the
+             * "FSM_state_registers" list from the design metadata and marks every FF gate whose
+             * reconstructed multi-bit word name contains one of those register names.
+             */
+            class StateFlipFlop : public GateLabel
+            {
+            public:
+                StateFlipFlop() = default;
+
+                const std::vector<u32> MATCH    = {1, 0, 0};
+                const std::vector<u32> MISMATCH = {0, 1, 0};
+                const std::vector<u32> NA       = {0, 0, 1};
+
+                Result<std::vector<u32>> calculate_label(Context& ctx, const Gate* g) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
+                Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
+                std::string to_string() const override;
+
+                /**
+                 * @brief Read FSM state register names from the design metadata file and annotate
+                 *        each FF gate whose multi-bit word matches a register name.
+                 *
+                 * Expects the JSON path: design_information.FSM_state_registers (array of strings).
+                 * The annotation is written to every matching gate's data container under the
+                 * category "StateFlipFlop", key "is_state_ff".
+                 *
+                 * @param[in] ctx           - The machine learning context (provides multi-bit information).
+                 * @param[in] nl            - The netlist whose gates are to be annotated.
+                 * @param[in] metadata_path - Path to the JSON metadata file.
+                 * @returns The number of annotated gates on success, an error otherwise.
+                 */
+                Result<u32> annotate_from_netlist_metadata(Context& ctx, Netlist* nl, const std::string& metadata_path) const;
             };
 
         }    // namespace gate_label

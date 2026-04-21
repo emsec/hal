@@ -529,6 +529,52 @@ namespace hal
             :rtype: str
             )");
 
+        // BooleanInfluence class
+        py::class_<machine_learning::gate_feature::BooleanInfluence, machine_learning::gate_feature::GateFeature> py_boolean_influence(py_gate_feature, "BooleanInfluence", R"(
+            Gate feature representing the Boolean influence of a gate's output nets on downstream sequential gate inputs.
+            Only meaningful for sequential gates; returns zero for all other gate types.
+        )");
+
+        py_boolean_influence.def(py::init<const std::vector<machine_learning::StatisticalMoment>&>(),
+                                 py::arg("moments") = std::vector<machine_learning::StatisticalMoment>(),
+                                 R"(
+            Construct a BooleanInfluence gate feature.
+
+            :param list[hal_py.machine_learning.StatisticalMoment] moments: The statistical moments to compute over the collected influences. Defaults to [average].
+        )");
+
+        py_boolean_influence.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::BooleanInfluence& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the Boolean influence feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A list of floats representing the requested statistical moments of the Boolean influence on success, None otherwise.
+                :rtype: list[float] or None
+            )");
+
+        py_boolean_influence.def("to_string", &machine_learning::gate_feature::BooleanInfluence::to_string, R"(
+            Get the string representation of the BooleanInfluence gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
         // Define build_feature_vecs functions
         py_gate_feature.def(
             "build_feature_vecs",

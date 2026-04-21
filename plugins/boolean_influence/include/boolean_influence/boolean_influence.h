@@ -117,7 +117,7 @@ namespace hal
          *
          * @param[in] e - The z3 expression representing a Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
-         * @param[in] bias -  A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0.
+         * @param[in] bias -  (Does not work as intended) A potential bias towards logical 1s instead of 0. This should help distinguish very small influences. P(1) = 1 - 2^-(bias+1). Defaults to 0.
          * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
          */
         Result<std::unordered_map<std::string, double>> get_boolean_influence_bitsliced(const z3::expr& expr, const u32 num_evaluations = 32000, const u32 bias = 0);
@@ -154,5 +154,14 @@ namespace hal
          *          IDs to the ones in the matrix, and a std::vector<std::vector<double>, which is the ff dependency matrix
          */
         Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> get_ff_dependency_matrix(const Netlist* netlist, bool with_boolean_influence);
+
+        /**
+         * @brief Translate boolean influence map of strings to a map of nets.
+         *  
+         * @param[in] nl - The netlist to extract the nets from.
+         * @param[in] influence_map - The map from variable names to boolean influence.
+         * @returns An unordered_map from nets to their boolean influence on success, an error otherwise.
+         */
+        Result<std::unordered_map<Net*, double>> translate_boolean_influence_map(const Netlist* nl, const std::unordered_map<std::string, double>& influence_map);
     }    // namespace boolean_influence
 }    // namespace hal
