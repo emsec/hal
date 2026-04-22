@@ -111,8 +111,9 @@ var NAVTREEINDEX2 =
 "classhal_1_1_boolean_influence_plugin.html#af365f3fea6fadf1cfaf84b4870588600":[6,0,0,388,2],
 "classhal_1_1_busy_animation.html":[6,0,0,170],
 "classhal_1_1_busy_animation.html#a34c8eacee82c8a800b5c2150916407f8":[6,0,0,170,0],
-"classhal_1_1_busy_animation.html#a53e25a4bf1721924d13d3ecc01a166b6":[6,0,0,170,1],
-"classhal_1_1_busy_animation.html#ad984323159c341271865837dcd3c8109":[6,0,0,170,2],
+"classhal_1_1_busy_animation.html#a53e25a4bf1721924d13d3ecc01a166b6":[6,0,0,170,2],
+"classhal_1_1_busy_animation.html#a69b788272b918f2f7392a757685586c2":[6,0,0,170,1],
+"classhal_1_1_busy_animation.html#ad984323159c341271865837dcd3c8109":[6,0,0,170,3],
 "classhal_1_1_busy_indicator.html":[6,0,0,171],
 "classhal_1_1_busy_indicator.html#a4454e4c553b89f180f45e16cf71226ad":[6,0,0,171,1],
 "classhal_1_1_busy_indicator.html#aa931f75cbabc24ceed0377189e5776f1":[6,0,0,171,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classhal_1_1_comment_color_picker.html":[6,0,0,29],
 "classhal_1_1_comment_color_picker.html#a23fa8983fe70c13c6079091d12cb9e47":[6,0,0,29,1],
 "classhal_1_1_comment_color_picker.html#ab368cb5b1eb89cf385a9f478a2d9568c":[6,0,0,29,3],
-"classhal_1_1_comment_color_picker.html#ae90ca7b1d9680525b5b41ed4c53e608d":[6,0,0,29,2],
-"classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8":[6,0,0,29,0]
+"classhal_1_1_comment_color_picker.html#ae90ca7b1d9680525b5b41ed4c53e608d":[6,0,0,29,2]
 };

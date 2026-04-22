@@ -1,5 +1,8 @@
 var NAVTREEINDEX26 =
 {
+"gatelibrary__tab__pin_8cpp.html":[7,0,1,3,2,18,2,1],
+"gatelibrary__tab__pin_8cpp_source.html":[7,0,1,3,2,18,2,1],
+"gatelibrary__tab__pin_8h.html":[7,0,1,3,0,0,18,2,2],
 "gatelibrary__tab__pin_8h_source.html":[7,0,1,3,0,0,18,2,2],
 "gatelibrary__tab__truth__table_8cpp.html":[7,0,1,3,2,18,2,2],
 "gatelibrary__tab__truth__table_8cpp_source.html":[7,0,1,3,2,18,2,2],
@@ -40,8 +43,8 @@ var NAVTREEINDEX26 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,51,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,53,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,53,1],
-"globals.html":[7,1,0,0],
 "globals.html":[7,1,0],
+"globals.html":[7,1,0,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -221,14 +224,14 @@ var NAVTREEINDEX26 =
 "group__graph-visuals.html":[4,0,0,0],
 "group__graph.html":[4,0,0],
 "group__gui.html":[4,0],
-"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,57],
 "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,58,0],
+"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,57],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[4,0,56],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[5,0,2,12,6],
 "group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[5,0,2,516],
 "group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,55],
-"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,55,3],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[5,0,2,516,3],
+"group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,55,3],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a6adf97f83acf6453d4a6a4b1070f3754":[5,0,2,516,0],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a6adf97f83acf6453d4a6a4b1070f3754":[4,0,55,0],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16":[5,0,2,516,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX26 =
 "group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[5,0,2,542],
 "group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[4,1,3,17],
 "group__pybind.html#ga23445061a41678f413471f3459e241d4":[5,0,2,541],
-"group__pybind.html#ga23445061a41678f413471f3459e241d4":[4,1,3,16],
-"group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[5,0,2,548],
-"group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4":[4,1,3,21],
-"group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d":[5,0,2,557]
+"group__pybind.html#ga23445061a41678f413471f3459e241d4":[4,1,3,16]
 };

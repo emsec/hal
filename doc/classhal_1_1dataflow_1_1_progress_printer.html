@@ -96,7 +96,7 @@ Collaboration diagram for hal::dataflow::ProgressPrinter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1dataflow_1_1_progress_printer__coll__graph.png" border="0" usemap="#ahal_1_1dataflow_1_1_progress_printer_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1dataflow_1_1_progress_printer_coll__map" id="ahal_1_1dataflow_1_1_progress_printer_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,217,127"/>
+<area shape="rect" title=" " alt="" coords="5,5,217,156"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -104,8 +104,12 @@ Collaboration diagram for hal::dataflow::ProgressPrinter:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3bf5a19ce751952365b55878adc88fa2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#a3bf5a19ce751952365b55878adc88fa2">ProgressPrinter</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> max_message_size=0)</td></tr>
 <tr class="separator:a3bf5a19ce751952365b55878adc88fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a321f9b5de0fa9ac7e788f6becb66835c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#a321f9b5de0fa9ac7e788f6becb66835c">print_progress</a> (float progress, const std::string &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>=&quot;&quot;)</td></tr>
-<tr class="separator:a321f9b5de0fa9ac7e788f6becb66835c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae5590a53dc23ae3ab31958d8643ad48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#aae5590a53dc23ae3ab31958d8643ad48">print_progress_to_stderr</a> (float progress, const std::string &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>=&quot;&quot;)</td></tr>
+<tr class="separator:aae5590a53dc23ae3ab31958d8643ad48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b53270e44186045c6c23f8a6a5d3006"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#a4b53270e44186045c6c23f8a6a5d3006">print_progress_to_gui</a> (int percent=-1)</td></tr>
+<tr class="separator:a4b53270e44186045c6c23f8a6a5d3006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b2e26afa1f3a920cac77e3984612a8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#a4b2e26afa1f3a920cac77e3984612a8f">print_message_to_gui</a> (const std::string &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>)</td></tr>
+<tr class="separator:a4b2e26afa1f3a920cac77e3984612a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4b09f8dafec9782422932c3b2b8ef07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#ac4b09f8dafec9782422932c3b2b8ef07">clear</a> ()</td></tr>
 <tr class="separator:ac4b09f8dafec9782422932c3b2b8ef07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac79ad4d15d75c87e28b0d9cca62a8990"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html#ac79ad4d15d75c87e28b0d9cca62a8990">reset</a> ()</td></tr>
@@ -133,7 +137,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00016">16</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="progress__printer_8cpp_source.html#l00112">reset()</a>.</p>
+<p class="reference">References <a class="el" href="progress__printer_8cpp_source.html#l00127">reset()</a>.</p>
 
 </div>
 </div>
@@ -153,20 +157,66 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00103">103</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00118">118</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="register__stage__identification_8cpp_source.html#l00024">hal::dataflow::pre_processing::identify_register_stages()</a>.</p>
 
 </div>
 </div>
-<a id="a321f9b5de0fa9ac7e788f6becb66835c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a321f9b5de0fa9ac7e788f6becb66835c">&#9670;&nbsp;</a></span>print_progress()</h2>
+<a id="a4b2e26afa1f3a920cac77e3984612a8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b2e26afa1f3a920cac77e3984612a8f">&#9670;&nbsp;</a></span>print_message_to_gui()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::dataflow::ProgressPrinter::print_progress </td>
+          <td class="memname">void hal::dataflow::ProgressPrinter::print_message_to_gui </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00033">33</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00015">message()</a>, and <a class="el" href="progress__printer_8cpp_source.html#l00039">print_progress_to_gui()</a>.</p>
+
+</div>
+</div>
+<a id="a4b53270e44186045c6c23f8a6a5d3006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b53270e44186045c6c23f8a6a5d3006">&#9670;&nbsp;</a></span>print_progress_to_gui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::dataflow::ProgressPrinter::print_progress_to_gui </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>percent</em> = <code>-1</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00039">39</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugin__dataflow_8h_source.html#l00104">hal::GuiExtensionDataflow::s_progress_indicator_function</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="progress__printer_8cpp_source.html#l00033">print_message_to_gui()</a>.</p>
+
+</div>
+</div>
+<a id="aae5590a53dc23ae3ab31958d8643ad48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae5590a53dc23ae3ab31958d8643ad48">&#9670;&nbsp;</a></span>print_progress_to_stderr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::dataflow::ProgressPrinter::print_progress_to_stderr </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
           <td class="paramname"><em>progress</em>, </td>
@@ -185,9 +235,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00031">31</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00050">50</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00015">message()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="plugin__dataflow_8h_source.html#l00104">hal::GuiExtensionDataflow::s_progress_indicator_function</a>, and <a class="el" href="control_8py_source.html#l00014">control::str</a>.</p>
+<p class="reference">References <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00015">message()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, and <a class="el" href="control_8py_source.html#l00014">control::str</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="register__stage__identification_8cpp_source.html#l00024">hal::dataflow::pre_processing::identify_register_stages()</a>.</p>
 
@@ -208,7 +258,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00112">112</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="progress__printer_8cpp_source.html#l00127">127</a> of file <a class="el" href="progress__printer_8cpp_source.html">progress_printer.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="progress__printer_8cpp_source.html#l00016">ProgressPrinter()</a>.</p>
 
@@ -224,7 +274,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="classhal_1_1dataflow_1_1_progress_printer.html">ProgressPrinter</a></li>
-    <li class="footer">Generated on Wed Apr 15 2026 12:29:30 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Apr 22 2026 10:34:03 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
