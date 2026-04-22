@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QImage>
 #include <QTimer>
+#include <QMutex>
 
 namespace hal {
 
@@ -64,12 +65,14 @@ namespace hal {
         Q_OBJECT
         QImage mImage;
         double mAngle;
+        QMutex* mMutex;
     public Q_SLOTS:
         void handleTimeout();
     protected:
         void paintEvent(QPaintEvent* event) override;
     public:
         BusyAnimation(QWidget* parent = nullptr);
+        ~BusyAnimation();
     };
 
     class BusyIndicator : public AbstractBusyIndicator
@@ -78,6 +81,7 @@ namespace hal {
         QTimer* mTimer;
         QLabel* mLabel;
         QProgressBar* mProgressBar;
+        QMutex* mMutex;
     public:
         BusyIndicator(QWidget* parent = nullptr);
         ~BusyIndicator();

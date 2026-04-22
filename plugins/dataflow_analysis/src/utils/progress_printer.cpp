@@ -13,7 +13,9 @@ namespace hal
 {
     namespace dataflow
     {
-        ProgressPrinter::ProgressPrinter(u32 max_message_size) : m_bar_width(0), m_max_message_size(max_message_size), m_terminal_width(get_terminal_width())
+        ProgressPrinter::ProgressPrinter(u32 max_message_size) : m_gui_message("dataflow analysis …"),
+              m_bar_width(0), m_max_message_size(max_message_size),
+              m_last_percentage(0), m_terminal_width(get_terminal_width())
         {
             if (m_terminal_width <= 8)
             {
@@ -28,14 +30,27 @@ namespace hal
             reset();
         }
 
-        void ProgressPrinter::print_progress(float progress, const std::string& message)
+        void ProgressPrinter::print_message_to_gui(const std::string& message)
+        {
+            m_gui_message = message;
+            print_progress_to_gui();
+        }
+
+        void ProgressPrinter::print_progress_to_gui(int percent)
+        {
+            if (!GuiExtensionDataflow::s_progress_indicator_function) return;
+            if (percent < 0) percent = m_last_percentage;
+            if (percent > 99) percent = 99;
+            {
+                GuiExtensionDataflow::s_progress_indicator_function(percent, m_gui_message);
+            }
+
+        }
+
+        void ProgressPrinter::print_progress_to_stderr(float progress, const std::string& message)
         {
             progress         = std::clamp(progress, 0.f, 1.f);
-            u32 int_progress = (u32)(progress * 100.0f);
-            if (GuiExtensionDataflow::s_progress_indicator_function)
-            {
-                GuiExtensionDataflow::s_progress_indicator_function(int_progress < 100 ? int_progress : 99, "dataflow analysis running ...");
-            }
+            m_last_percentage = (u32)(progress * 100.0f);
 
             if (m_terminal_width <= 8)
             {
@@ -82,7 +97,7 @@ namespace hal
             std::stringstream str;
             str << "[" << bar << "] ";
 
-            str << std::right << std::setw(3) << int_progress << '%';
+            str << std::right << std::setw(3) << m_last_percentage << '%';
 
             if (!print_message.empty())
             {
