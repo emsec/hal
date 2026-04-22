@@ -46,6 +46,7 @@ namespace hal {
     BusyIndicator::BusyIndicator(QWidget* parent)
         : AbstractBusyIndicator(parent)
     {
+        mMutex = new QMutex;
         QVBoxLayout* layout = new QVBoxLayout(this);
         layout->setAlignment(Qt::AlignHCenter);
         layout->addWidget(mLabel = new QLabel(this));
@@ -60,11 +61,17 @@ namespace hal {
     BusyIndicator::~BusyIndicator()
     {
         mTimer->stop();
+        delete mMutex;
     }
 
     BusyAnimation::BusyAnimation(QWidget* parent)
-        : QWidget(parent), mImage(QImage(":/icons/hal9000","PNG")), mAngle(0)
+        : QWidget(parent), mImage(QImage(":/icons/hal9000","PNG")), mAngle(0), mMutex(new QMutex)
     {;}
+
+    BusyAnimation::~BusyAnimation()
+    {
+        delete mMutex;
+    }
 
     void BusyAnimation::handleTimeout()
     {
@@ -76,42 +83,48 @@ namespace hal {
     void BusyAnimation::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event);
-        QPainter p(this);
-        p.setRenderHint(QPainter::Antialiasing);
+        if (mMutex->try_lock())
+        {
+            QPainter p(this);
+            p.setRenderHint(QPainter::Antialiasing);
 
-        int rw = rect().width();
-        int rh = rect().height();
+            int rw = rect().width();
+            int rh = rect().height();
 
-        int w = rw > rh ? rh : rw;
-        int h = w;
+            int w = rw > rh ? rh : rw;
+            int h = w;
 
-        QRect rimg((rw-w)/2,(rh-h)/2,w,h);
+            QRect rimg((rw-w)/2,(rh-h)/2,w,h);
 
-//        p.fillRect(rimg,QBrush(Qt::gray));
-        QImage img = mImage.scaled(w,h);
-        double xc = w / 2.;
-        double yc = h / 2.;
+    //        p.fillRect(rimg,QBrush(Qt::gray));
+            QImage img = mImage.scaled(w,h);
+            double xc = w / 2.;
+            double yc = h / 2.;
 
-        for (int y = 0; y<h; y++)
-            for (int x=0; x<w; x++)
-            {
-                QRgb col = img.pixel(x,y);
-                if (col & 0xFF000000)
+            for (int y = 0; y<h; y++)
+                for (int x=0; x<w; x++)
                 {
-                    double angle = atan2(y-yc,x-xc) / M_PI * 180.;
-                    double da = angle >= mAngle ? angle - mAngle : angle + 360. - mAngle;
-                    int opaque = floor(da / 360.*256);
-                    opaque <<= 24;
-                    col = (col & 0xFFFFFF) | opaque;
-                    img.setPixel(x,y,col);
+                    QRgb col = img.pixel(x,y);
+                    if (col & 0xFF000000)
+                    {
+                        double angle = atan2(y-yc,x-xc) / M_PI * 180.;
+                        double da = angle >= mAngle ? angle - mAngle : angle + 360. - mAngle;
+                        int opaque = floor(da / 360.*256);
+                        opaque <<= 24;
+                        col = (col & 0xFFFFFF) | opaque;
+                        img.setPixel(x,y,col);
+                    }
                 }
-            }
 
-        p.drawImage(rimg,img);
+            p.drawImage(rimg,img);
+            mMutex->unlock();
+        }
     }
 
     void BusyIndicator::setValue(int percent)
     {
+        if (mProgressBar->value() == percent) return; // nothing to do
+        QMutexLocker lock(mMutex);
         mProgressBar->setValue(percent);
         update();
         qApp->processEvents();
@@ -119,7 +132,8 @@ namespace hal {
 
     void BusyIndicator::setText(const QString &txt)
     {
-        if (mLabel->text() == txt) return;
+        if (mLabel->text() == txt) return; // nothing to do
+        QMutexLocker lock(mMutex);
         mLabel->setText(txt);
         qApp->processEvents();
     }

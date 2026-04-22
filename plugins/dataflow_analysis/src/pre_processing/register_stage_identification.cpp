@@ -53,7 +53,7 @@ namespace hal
                         for (const auto& sequential_gate : netlist_abstr.target_gates)
                         {
                             cnt++;
-                            progress_bar.print_progress(cnt / netlist_abstr.target_gates.size());
+                            progress_bar.print_progress_to_stderr(cnt / netlist_abstr.target_gates.size());
 
                             auto current = sequential_gate->get_id();
 
@@ -140,7 +140,7 @@ namespace hal
                         for (u32 i = 0; i < stages_to_split; ++i)
                         {
                             ++cnt;
-                            progress_bar.print_progress(cnt / stages_to_split);
+                            progress_bar.print_progress_to_stderr(cnt / stages_to_split);
 
                             std::unordered_map<u32, std::vector<u32>> move_out_reasons;
                             for (auto g : ctx.stages[i])
@@ -238,7 +238,7 @@ namespace hal
                         for (const auto& stage : directional_stages[i].stages)
                         {
                             cnt++;
-                            progress_bar.print_progress(cnt / (directional_stages[0].stages.size() + directional_stages[1].stages.size()));
+                            progress_bar.print_progress_to_stderr(cnt / (directional_stages[0].stages.size() + directional_stages[1].stages.size()));
                             for (auto it = directional_stages[1 - i].stages.begin(); it != directional_stages[1 - i].stages.end();)
                             {
                                 auto& other_stage = *it;
@@ -296,7 +296,7 @@ namespace hal
                     std::set<std::vector<u32>> seen;
                     for (auto& [g, stages] : netlist_abstr.gate_to_register_stages)
                     {
-                        progress_bar.print_progress(++cnt / netlist_abstr.gate_to_register_stages.size());
+                        progress_bar.print_progress_to_stderr(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         if (stages.size() > 1)
                         {
@@ -336,7 +336,7 @@ namespace hal
                     cnt = 0;
                     for (const auto& combine : spread_stages)
                     {
-                        progress_bar.print_progress(++cnt / netlist_abstr.gate_to_register_stages.size());
+                        progress_bar.print_progress_to_stderr(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         for (auto stage_id : combine)
                         {
