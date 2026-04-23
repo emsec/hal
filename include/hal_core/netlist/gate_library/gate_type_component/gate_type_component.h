@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 
 #include <functional>
 #include <set>
