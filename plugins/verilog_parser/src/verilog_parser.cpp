@@ -16,7 +16,32 @@ namespace hal
 {
     namespace
     {
-
+        // Returns true iff `s` could be a Verilog integer literal (sized or unsized).
+        // Used to disambiguate escaped identifiers from number literals after the
+        // tokenizer has stripped the leading backslash: a token like "747$func$/.../$result"
+        // starts with a digit but contains characters ($, /, :, .) that no Verilog number
+        // literal can contain, so it must be an (escaped) identifier.
+        bool is_verilog_number_literal(const std::string& s)
+        {
+            if (s.empty())
+            {
+                return false;
+            }
+            if (!(std::isdigit(static_cast<unsigned char>(s[0])) || s[0] == '\''))
+            {
+                return false;
+            }
+            for (char c : s)
+            {
+                const bool ok = std::isdigit(static_cast<unsigned char>(c)) || c == '_' || c == '\'' || c == 'b' || c == 'B' || c == 'o' || c == 'O' || c == 'd' || c == 'D' || c == 'h'
+                                || c == 'H' || c == 'x' || c == 'X' || c == 'z' || c == 'Z' || c == '?' || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+                if (!ok)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }    // namespace
 
     Result<std::monostate> VerilogParser::parse(const std::filesystem::path& file_path)
@@ -2251,7 +2276,7 @@ namespace hal
             value.first  = "string";
             value.second = value_token.string.substr(1, value_token.string.size() - 2);
         }
-        else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
+        else if (is_verilog_number_literal(value_token.string))
         {
             if (const auto res = get_hex_from_literal(value_token); res.is_error())
             {
@@ -2317,7 +2342,7 @@ namespace hal
             std::string signal_name                    = signal_name_token.string;
 
             // (3) NUMBER
-            if (isdigit(signal_name[0]) || signal_name[0] == '\'')
+            if (is_verilog_number_literal(signal_name))
             {
                 if (auto res = get_binary_vector(signal_name_token); res.is_error())
                 {
