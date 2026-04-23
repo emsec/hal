@@ -272,6 +272,20 @@ Get the gates of the context.
 :rtype: list[hal_py.Gate]
 )");
 
+        py_context.def(
+            "get_netlist",
+            [](const machine_learning::Context& self) -> const Netlist* { return self.nl; },
+            py::return_value_policy::reference,
+            R"(
+Get the netlist this context operates on.
+
+The context holds a non-owning pointer to the netlist and does not extend its lifetime;
+the returned reference is valid as long as the underlying netlist is alive.
+
+:returns: The netlist.
+:rtype: hal_py.Netlist
+)");
+
         py_context.def("get_netlist_flavor",
                        &machine_learning::Context::get_netlist_flavor,
                        R"(

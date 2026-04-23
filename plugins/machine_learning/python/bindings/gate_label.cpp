@@ -98,6 +98,20 @@ namespace hal
             :rtype: str
         )");
 
+        py_gate_label_class.def("get_legend",
+                                &machine_learning::gate_label::GateLabel::get_legend,
+                                py::arg("ctx"),
+                                R"(
+            Get one concise label per index of the label vector produced by this gate label.
+
+            The length of the returned list equals the width of the label vector produced by
+            :meth:`calculate_label` for the same context.
+
+            :param hal_py.machine_learning.Context ctx: The machine learning context.
+            :returns: One concise descriptor per index of the label vector.
+            :rtype: list[str]
+        )");
+
         py::class_<machine_learning::gate_label::GateNameKeyWord, machine_learning::gate_label::GateLabel, std::shared_ptr<machine_learning::gate_label::GateNameKeyWord>> py_gate_name_key_word(
             py_gate_label, "GateNameKeyWord", R"(
             Labels gates based on whether their name includes a keyword or not.

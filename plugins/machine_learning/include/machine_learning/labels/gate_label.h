@@ -57,6 +57,20 @@ namespace hal
                 virtual Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const = 0;
 
                 virtual std::string to_string() const = 0;
+
+                /**
+                 * @brief Concise per-index description of the label vector produced by
+                 *        calculate_label(ctx, ...).
+                 *
+                 * The returned vector's size equals the width of the label vector, and entry i
+                 * is a short label describing what the value at index i represents (typically a
+                 * one-hot class indicator such as "match", "mismatch", or a per-keyword class).
+                 * Labels are purely descriptive (no to_string() prefix).
+                 *
+                 * @param[in] ctx - The machine learning context.
+                 * @returns One concise descriptor per index of the label vector.
+                 */
+                virtual std::vector<std::string> get_legend(Context& ctx) const = 0;
             };
 
             /**
@@ -79,6 +93,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const std::string m_key_word;
@@ -106,6 +121,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const std::string m_key_word;
@@ -130,6 +146,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const std::vector<std::string> m_key_words;
@@ -237,6 +254,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const std::vector<std::string> m_key_words;
@@ -348,6 +366,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const std::vector<std::vector<std::string>> m_key_words;
@@ -468,6 +487,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<Gate*>& gates) const override;
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
                 /**
                  * @brief Read FSM state register names from the design metadata file and annotate

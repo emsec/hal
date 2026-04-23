@@ -20,7 +20,9 @@ features = [
     machine_learning.GateFeature.GateFeatureSingle.SequentialDistanceGlobalIO(hal_py.PinDirection.input, directed=True, forbidden_pin_types=[hal_py.PinType.clock, hal_py.PinType.reset, hal_py.PinType.enable]),
     machine_learning.GateFeature.GateFeatureSingle.SequentialDistanceGlobalIO(hal_py.PinDirection.input, directed=False, forbidden_pin_types=[hal_py.PinType.clock, hal_py.PinType.reset, hal_py.PinType.enable]),
 
-    machine_learning.GateFeature.GateFeatureSingle.IODegrees(),
+    machine_learning.GateFeature.GateFeatureSingle.PinCount(),
+    machine_learning.GateFeature.GateFeatureSingle.PinCount(directions=[hal_py.PinDirection.input]),
+    machine_learning.GateFeature.GateFeatureSingle.PinCount(directions=[hal_py.PinDirection.output]),
 
     machine_learning.GateFeature.GateFeatureSingle.GateTypeOneHot(),
 

@@ -10,7 +10,7 @@ fc = machine_learning.gate_feature.FeatureContext(netlist)
 connected_global_ios = machine_learning.gate_feature.ConnectedGlobalIOs()
 distance_global_io = machine_learning.gate_feature.DistanceGlobalIO(hal_py.PinDirection.output)
 sequnetial_distance_global_io = machine_learning.gate_feature.SequentialDistanceGlobalIO(hal_py.PinDirection.output)
-io_degrees = machine_learning.gate_feature.IODegrees()
+pin_count = machine_learning.gate_feature.PinCount()
 gate_type_one_hot = machine_learning.gate_feature.GateTypeOneHot()
 neighboring_gate_types = machine_learning.gate_feature.NeighboringGateTypes(2, hal_py.PinDirection.output)
 
@@ -19,7 +19,7 @@ features = [
     connected_global_ios,
     distance_global_io,
     #sequnetial_distance_global_io,
-    io_degrees,
+    pin_count,
     #gate_type_one_hot,
     #neighboring_gate_types,
 ]

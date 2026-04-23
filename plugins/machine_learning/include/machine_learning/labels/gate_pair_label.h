@@ -65,6 +65,19 @@ namespace hal
                 virtual Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(Context& ctx) const = 0;
 
                 virtual std::string to_string() const = 0;
+
+                /**
+                 * @brief Concise per-index description of the label vector produced by
+                 *        calculate_label(ctx, g_a, g_b).
+                 *
+                 * The returned vector's size equals the width of the label vector, and entry i
+                 * is a short label describing what the value at index i represents. Labels are
+                 * purely descriptive (no to_string() prefix).
+                 *
+                 * @param[in] ctx - The machine learning context.
+                 * @returns One concise descriptor per index of the label vector.
+                 */
+                virtual std::vector<std::string> get_legend(Context& ctx) const = 0;
             };
 
             /**
@@ -88,6 +101,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
                 Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const PinDirection m_direction;
@@ -117,6 +131,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
                 Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
                 const PinDirection m_direction;
@@ -141,6 +156,7 @@ namespace hal
                 Result<std::vector<std::vector<u32>>> calculate_labels(Context& ctx, const std::vector<std::pair<Gate*, Gate*>>& gate_pairs) const override;
                 Result<std::pair<std::vector<std::pair<Gate*, Gate*>>, std::vector<std::vector<u32>>>> calculate_labels(Context& ctx) const override;
                 std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
             };
         }    // namespace gate_pair_label
     }    // namespace machine_learning

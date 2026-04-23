@@ -48,19 +48,53 @@ namespace hal
                 return "ConnectedGlobalIOs";
             }
 
-            Result<std::vector<FEATURE_TYPE>> IODegrees::calculate_feature(Context& ctx, const Gate* g) const
+            std::vector<std::string> ConnectedGlobalIOs::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"connected_global_inputs", "connected_global_outputs"};
+            }
+
+            Result<std::vector<FEATURE_TYPE>> PinCount::calculate_feature(Context& ctx, const Gate* g) const
             {
                 UNUSED(ctx);
 
-                u32 input_io_degree  = g->get_fan_in_nets().size();
-                u32 output_io_degree = g->get_fan_out_nets().size();
+                const auto& directions = m_directions;
+                const auto& pin_types  = m_pin_types;
 
-                return OK({FEATURE_TYPE(input_io_degree), FEATURE_TYPE(output_io_degree)});
+                const auto matching_pins = g->get_type()->get_pins([&directions, &pin_types](const GatePin* p) {
+                    if (!directions.empty() && std::find(directions.begin(), directions.end(), p->get_direction()) == directions.end())
+                    {
+                        return false;
+                    }
+                    if (!pin_types.empty() && std::find(pin_types.begin(), pin_types.end(), p->get_type()) == pin_types.end())
+                    {
+                        return false;
+                    }
+                    return true;
+                });
+
+                return OK({FEATURE_TYPE(matching_pins.size())});
             }
 
-            std::string IODegrees::to_string() const
+            std::string PinCount::to_string() const
             {
-                return "IODegrees";
+                const std::string directions_str = utils::join("_", m_directions.begin(), m_directions.end(), [](const PinDirection& d) { return enum_to_string(d); });
+                const std::string pin_types_str  = utils::join("_", m_pin_types.begin(), m_pin_types.end(), [](const PinType& t) { return enum_to_string(t); });
+
+                return "PinCount_" + (directions_str.empty() ? "None" : directions_str) + "_" + (pin_types_str.empty() ? "None" : pin_types_str);
+            }
+
+            std::vector<std::string> PinCount::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+
+                const std::string directions_str = m_directions.empty()
+                                                       ? "any_direction"
+                                                       : utils::join("_or_", m_directions.begin(), m_directions.end(), [](const PinDirection& d) { return enum_to_string(d); });
+                const std::string pin_types_str =
+                    m_pin_types.empty() ? "any_type" : utils::join("_or_", m_pin_types.begin(), m_pin_types.end(), [](const PinType& t) { return enum_to_string(t); });
+
+                return {"pin_count_" + directions_str + "_" + pin_types_str};
             }
 
             Result<std::vector<FEATURE_TYPE>> GateTypeOneHot::calculate_feature(Context& ctx, const Gate* g) const
@@ -88,6 +122,19 @@ namespace hal
             std::string GateTypeOneHot::to_string() const
             {
                 return "GateTypeOneHot";
+            }
+
+            std::vector<std::string> GateTypeOneHot::get_legend(Context& ctx) const
+            {
+                const auto& all_properties = ctx.get_possible_gate_type_properties();
+
+                std::vector<std::string> legend;
+                legend.reserve(all_properties.size());
+                for (const auto& gtp : all_properties)
+                {
+                    legend.push_back("property_" + enum_to_string(gtp));
+                }
+                return legend;
             }
 
             Result<std::vector<FEATURE_TYPE>> NeighborCount::calculate_feature(Context& ctx, const Gate* g) const
@@ -164,6 +211,12 @@ namespace hal
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
+            std::vector<std::string> NeighborCount::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"neighbor_count"};
+            }
+
             Result<std::vector<FEATURE_TYPE>> SequentialNeighborCount::calculate_feature(Context& ctx, const Gate* g) const
             {
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_sequential_abstraction();
@@ -236,6 +289,12 @@ namespace hal
 
                 return "SequentialNeighborCount_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_"
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
+            }
+
+            std::vector<std::string> SequentialNeighborCount::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"sequential_neighbor_count"};
             }
 
             Result<std::vector<FEATURE_TYPE>> NeighboringGateTypes::calculate_feature(Context& ctx, const Gate* g) const
@@ -321,6 +380,19 @@ namespace hal
 
                 return "NeighboringGateTypes_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_"
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
+            }
+
+            std::vector<std::string> NeighboringGateTypes::get_legend(Context& ctx) const
+            {
+                const auto& all_properties = ctx.get_possible_gate_type_properties();
+
+                std::vector<std::string> legend;
+                legend.reserve(all_properties.size());
+                for (const auto& gtp : all_properties)
+                {
+                    legend.push_back("neighborhood_count_property_" + enum_to_string(gtp));
+                }
+                return legend;
             }
         }    // namespace gate_feature
     }        // namespace machine_learning

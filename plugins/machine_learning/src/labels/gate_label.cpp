@@ -82,6 +82,12 @@ namespace hal
                 return "GateNameKeyWord_" + m_key_word + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
             }
 
+            std::vector<std::string> GateNameKeyWord::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"match_" + m_key_word, "mismatch_" + m_key_word, "not_applicable"};
+            }
+
             Result<std::vector<u32>> NetNameKeyWord::calculate_label(Context& ctx, const Gate* g) const
             {
                 UNUSED(ctx);
@@ -191,6 +197,12 @@ namespace hal
                 return "NetNameKeyWord_" + m_key_word + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
             }
 
+            std::vector<std::string> NetNameKeyWord::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"net_name_match_" + m_key_word, "net_name_mismatch_" + m_key_word, "not_applicable"};
+            }
+
             Result<std::vector<u32>> GateNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
             {
                 UNUSED(ctx);
@@ -271,6 +283,23 @@ namespace hal
                 std::string key_words_to_str  = utils::join("_", m_key_words.begin(), m_key_words.end(), [](const std::string& s) { return s; });
 
                 return "GateNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
+            }
+
+            std::vector<std::string> GateNameKeyWords::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                std::vector<std::string> legend;
+                legend.reserve(m_key_words.size() + 2);
+                for (const auto& kw : m_key_words)
+                {
+                    legend.push_back("match_" + kw);
+                }
+                legend.push_back("no_match");
+                if (!m_applicable_to.empty())
+                {
+                    legend.push_back("not_applicable");
+                }
+                return legend;
             }
 
             Result<std::vector<u32>> NetNameKeyWords::calculate_label(Context& ctx, const Gate* g) const
@@ -382,6 +411,23 @@ namespace hal
                 std::string applicable_to_str = utils::join("_", m_applicable_to.begin(), m_applicable_to.end(), [](const GateTypeProperty& gtp) { return enum_to_string(gtp); });
 
                 return "NetNameKeyWords_" + key_words_to_str + "_" + pin_types_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str);
+            }
+
+            std::vector<std::string> NetNameKeyWords::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                std::vector<std::string> legend;
+                legend.reserve(m_key_words.size() + 2);
+                for (const auto& kw : m_key_words)
+                {
+                    legend.push_back("net_name_match_" + kw);
+                }
+                legend.push_back("no_match");
+                if (!m_applicable_to.empty())
+                {
+                    legend.push_back("not_applicable");
+                }
+                return legend;
             }
 
             namespace
@@ -551,6 +597,23 @@ namespace hal
                 return "ModuleNameKeyWords_" + key_words_to_str + "_" + (m_applicable_to.empty() ? "ALL" : applicable_to_str + "_" + (m_recursive ? "RECURSIVE" : ""));
             }
 
+            std::vector<std::string> ModuleNameKeyWords::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                std::vector<std::string> legend;
+                legend.reserve(m_key_words.size() + 2);
+                for (const auto& group : m_key_words)
+                {
+                    legend.push_back("module_name_match_" + utils::join("|", group.begin(), group.end(), [](const std::string& s) { return s; }));
+                }
+                legend.push_back("no_match");
+                if (!m_applicable_to.empty())
+                {
+                    legend.push_back("not_applicable");
+                }
+                return legend;
+            }
+
             Result<u32> StateFlipFlop::annotate_from_netlist_metadata(Context& ctx, Netlist* nl, const std::string& metadata_path) const
             {
                 std::ifstream file(metadata_path);
@@ -703,6 +766,12 @@ namespace hal
             std::string StateFlipFlop::to_string() const
             {
                 return "StateFlipFlop";
+            }
+
+            std::vector<std::string> StateFlipFlop::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"state_flip_flop", "non_state_flip_flop", "not_applicable"};
             }
 
         }    // namespace gate_label

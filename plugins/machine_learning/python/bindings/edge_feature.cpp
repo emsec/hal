@@ -52,6 +52,20 @@ Get a string representation of this feature.
 :rtype: str
 )");
 
+        py_edge_feature_class.def("get_legend",
+                                  &machine_learning::edge_feature::EdgeFeature::get_legend,
+                                  py::arg("feature_context"),
+                                  R"(
+Get one concise label per index of the feature vector produced by this edge feature.
+
+The length of the returned list equals the width of the feature vector produced by
+:meth:`calculate_feature` for the same context.
+
+:param hal_py.machine_learning.Context feature_context: The feature context.
+:returns: One concise label per index of the feature vector.
+:rtype: list[str]
+)");
+
         py::class_<machine_learning::edge_feature::PinTypesOnehot, RawPtrWrapper<machine_learning::edge_feature::PinTypesOnehot>, machine_learning::edge_feature::EdgeFeature> py_pin_types_onehot(
             py_edge_feature,
             "PinTypesOnehot",

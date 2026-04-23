@@ -128,6 +128,18 @@ namespace hal
                 return "BooleanInfluence_" + (moments_str.empty() ? "None" : moments_str);
             }
 
+            std::vector<std::string> BooleanInfluence::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                std::vector<std::string> legend;
+                legend.reserve(m_moments.size());
+                for (const auto& moment : m_moments)
+                {
+                    legend.push_back("boolean_influence_" + enum_to_string(moment));
+                }
+                return legend;
+            }
+
         }    // namespace gate_feature
     }    // namespace machine_learning
 }    // namespace hal

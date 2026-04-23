@@ -38,6 +38,23 @@ namespace hal
                 return "PinTypesOnehot";
             }
 
+            std::vector<std::string> PinTypesOnehot::get_legend(Context& ctx) const
+            {
+                const auto& all_pin_types = ctx.get_possible_pin_types();
+
+                std::vector<std::string> legend;
+                legend.reserve(all_pin_types.size() * 2);
+                for (const auto& pt : all_pin_types)
+                {
+                    legend.push_back("source_pin_type_" + enum_to_string(pt));
+                }
+                for (const auto& pt : all_pin_types)
+                {
+                    legend.push_back("destination_pin_type_" + enum_to_string(pt));
+                }
+                return legend;
+            }
+
             Result<std::vector<FEATURE_TYPE>> PinDirectionOnehot::calculate_feature(Context& ctx, const Endpoint* src, const Endpoint* dst) const
             {
                 const auto& all_pin_directions = ctx.get_possible_pin_directions();
@@ -65,14 +82,29 @@ namespace hal
                 return "PinDirectionOnehot";
             }
 
+            std::vector<std::string> PinDirectionOnehot::get_legend(Context& ctx) const
+            {
+                const auto& all_pin_directions = ctx.get_possible_pin_directions();
+
+                std::vector<std::string> legend;
+                legend.reserve(all_pin_directions.size() * 2);
+                for (const auto& pd : all_pin_directions)
+                {
+                    legend.push_back("source_pin_direction_" + enum_to_string(pd));
+                }
+                for (const auto& pd : all_pin_directions)
+                {
+                    legend.push_back("destination_pin_direction_" + enum_to_string(pd));
+                }
+                return legend;
+            }
+
             Result<std::vector<FEATURE_TYPE>> GateTypeIndices::calculate_feature(Context& ctx, const Endpoint* src, const Endpoint* dst) const
             {
                 const u32 src_gt_index = ctx.get_gate_type_index(src->get_gate()->get_type());
                 const u32 dst_gt_index = ctx.get_gate_type_index(dst->get_gate()->get_type());
 
-                std::vector<FEATURE_TYPE> feature = std::vector<FEATURE_TYPE>(FEATURE_TYPE(src_gt_index), FEATURE_TYPE(dst_gt_index));
-
-                return OK(feature);
+                return OK({FEATURE_TYPE(src_gt_index), FEATURE_TYPE(dst_gt_index)});
             };
 
             std::string GateTypeIndices::to_string() const
@@ -80,19 +112,29 @@ namespace hal
                 return "GateTypeIndices";
             }
 
+            std::vector<std::string> GateTypeIndices::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"source_gate_type_index", "destination_gate_type_index"};
+            }
+
             Result<std::vector<FEATURE_TYPE>> PinIndices::calculate_feature(Context& ctx, const Endpoint* src, const Endpoint* dst) const
             {
                 const u32 src_pin_index = ctx.get_gate_pin_index(src->get_gate()->get_type(), src->get_pin());
                 const u32 dst_pin_index = ctx.get_gate_pin_index(dst->get_gate()->get_type(), dst->get_pin());
 
-                std::vector<FEATURE_TYPE> feature = std::vector<FEATURE_TYPE>(FEATURE_TYPE(src_pin_index), FEATURE_TYPE(dst_pin_index));
-
-                return OK(feature);
+                return OK({FEATURE_TYPE(src_pin_index), FEATURE_TYPE(dst_pin_index)});
             };
 
             std::string PinIndices::to_string() const
             {
                 return "PinIndices";
+            }
+
+            std::vector<std::string> PinIndices::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"source_pin_index", "destination_pin_index"};
             }
 
             Result<std::vector<FEATURE_TYPE>> build_feature_vec(Context& ctx, const std::vector<const EdgeFeature*>& features, const Endpoint* source, const Endpoint* destination)

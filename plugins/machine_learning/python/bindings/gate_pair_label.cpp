@@ -133,6 +133,20 @@ namespace hal
                 :rtype: str
             )");
 
+        py_gate_pair_label_class.def("get_legend",
+                                     &machine_learning::gate_pair_label::GatePairLabel::get_legend,
+                                     py::arg("ctx"),
+                                     R"(
+                Get one concise label per index of the label vector produced by this gate pair label.
+
+                The length of the returned list equals the width of the label vector produced by
+                :meth:`calculate_label` for the same context.
+
+                :param hal_py.machine_learning.Context ctx: The machine learning context.
+                :returns: One concise descriptor per index of the label vector.
+                :rtype: list[str]
+            )");
+
         py::class_<machine_learning::gate_pair_label::SharedSignalGroup, machine_learning::gate_pair_label::GatePairLabel> py_shared_signal_group(py_gate_pair_label,
                                                                                                                                                   "SharedSignalGroup",
                                                                                                                                                   R"(

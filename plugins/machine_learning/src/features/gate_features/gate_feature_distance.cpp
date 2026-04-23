@@ -86,6 +86,13 @@ namespace hal
                 return "DistanceGlobalIO_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
+            std::vector<std::string> DistanceGlobalIO::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                const std::string io_side = (m_direction == PinDirection::output) ? "output" : "input";
+                return {"distance_to_nearest_global_" + io_side};
+            }
+
             Result<std::vector<FEATURE_TYPE>> SequentialDistanceGlobalIO::calculate_feature(Context& ctx, const Gate* g) const
             {
                 // necessary workaround to please compiler
@@ -145,6 +152,13 @@ namespace hal
                 std::string forbidden_pin_types_str = utils::join("_", m_forbidden_pin_types.begin(), m_forbidden_pin_types.end(), [](const PinType& pin_type) { return enum_to_string(pin_type); });
 
                 return "SequentialDistanceGlobalIO_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
+            }
+
+            std::vector<std::string> SequentialDistanceGlobalIO::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                const std::string io_side = (m_direction == PinDirection::output) ? "output" : "input";
+                return {"sequential_distance_to_nearest_global_" + io_side};
             }
         }    // namespace gate_feature
     }    // namespace machine_learning

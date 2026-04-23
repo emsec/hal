@@ -50,6 +50,20 @@ namespace hal
             :rtype: str
         )");
 
+        py_gate_pair_feature_class.def("get_legend",
+                                       &machine_learning::gate_pair_feature::GatePairFeature::get_legend,
+                                       py::arg("feature_context"),
+                                       R"(
+            Get one concise label per index of the feature vector produced by this gate pair feature.
+
+            The length of the returned list equals the width of the feature vector produced by
+            :meth:`calculate_feature` for the same context.
+
+            :param hal_py.machine_learning.Context feature_context: The feature context.
+            :returns: One concise label per index of the feature vector.
+            :rtype: list[str]
+        )");
+
         py::class_<machine_learning::gate_pair_feature::LogicalDistance, machine_learning::gate_pair_feature::GatePairFeature, std::shared_ptr<machine_learning::gate_pair_feature::LogicalDistance>>
             py_logical_distance(py_gate_pair_feature, "LogicalDistance", R"(
             Calculates the logical distance between two gates.

@@ -57,6 +57,12 @@ namespace hal
                 return "BetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(m_normalize);
             }
 
+            std::vector<std::string> BetweennessCentrality::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"betweenness_centrality"};
+            }
+
             Result<std::vector<std::vector<FEATURE_TYPE>>> HarmonicCentrality::calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const
             {
                 std::vector<std::vector<FEATURE_TYPE>> features;
@@ -112,6 +118,12 @@ namespace hal
                 return "HarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(m_normalize);
             }
 
+            std::vector<std::string> HarmonicCentrality::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"harmonic_centrality"};
+            }
+
             Result<std::vector<std::vector<FEATURE_TYPE>>> SequentialBetweennessCentrality::calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const
             {
                 std::vector<std::vector<FEATURE_TYPE>> features;
@@ -165,6 +177,12 @@ namespace hal
             std::string SequentialBetweennessCentrality::to_string() const
             {
                 return "SequentialBetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(m_normalize);
+            }
+
+            std::vector<std::string> SequentialBetweennessCentrality::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"sequential_betweenness_centrality"};
             }
 
             Result<std::vector<std::vector<FEATURE_TYPE>>> SequentialHarmonicCentrality::calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const
@@ -236,6 +254,12 @@ namespace hal
             std::string SequentialHarmonicCentrality::to_string() const
             {
                 return "SequentialHarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(m_normalize);
+            }
+
+            std::vector<std::string> SequentialHarmonicCentrality::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"sequential_harmonic_centrality"};
             }
 
         }    // namespace gate_feature

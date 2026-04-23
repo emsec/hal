@@ -329,14 +329,14 @@ namespace hal
                     std::vector<netlist_preprocessing::indexed_identifier> index_information = j.get<std::vector<netlist_preprocessing::indexed_identifier>>();
 
                     // --- DEBUG PRINT (same as in your current function)
-                    std::cout << "Gate: " << g->get_name() << " / " << g->get_id() << std::endl;
+                    // std::cout << "Gate: " << g->get_name() << " / " << g->get_id() << std::endl;
 
                     // For each pin, only consider the index information with the least distance
                     std::map<std::string, u32> pin_to_min_distance;
                     for (const auto& [_name, _index, _origin, pin, _direction, distance] : index_information)
                     {
                         // --- DEBUG PRINT (same as in your current function)
-                        std::cout << _name << " - " << _index << " - " << _origin << " - " << pin << " - " << _direction << " - " << distance << std::endl;
+                        // std::cout << _name << " - " << _index << " - " << _origin << " - " << pin << " - " << _direction << " - " << distance << std::endl;
 
                         auto [it, inserted] = pin_to_min_distance.emplace(pin, distance);
                         if (!inserted)
@@ -358,16 +358,16 @@ namespace hal
                 }
 
                 // --- DEBUG PRINT
-                for (const auto& [word, entries] : word_to_entries)
-                {
-                    const auto& [name, direction, pin] = word;
-                    std::cout << name << " - " << direction << " - " << pin << std::endl;
+                // for (const auto& [word, entries] : word_to_entries)
+                // {
+                //     const auto& [name, direction, pin] = word;
+                //     std::cout << name << " - " << direction << " - " << pin << std::endl;
 
-                    for (const auto& e : entries)
-                    {
-                        std::cout << "\t" << e.gate->get_name() << " / " << e.gate->get_id() << std::endl;
-                    }
-                }
+                //     for (const auto& e : entries)
+                //     {
+                //         std::cout << "\t" << e.gate->get_name() << " / " << e.gate->get_id() << std::endl;
+                //     }
+                // }
 
                 // 2) Build validated candidates (unique indices, unique gates, size>1), compute avg distance + policy features.
                 std::vector<CandidateWord> candidates;
@@ -391,11 +391,11 @@ namespace hal
                             log_error("machine_learning", "Found index double in word {}-{} - {} !", std::get<0>(wk), enum_to_string(std::get<1>(wk)), std::get<2>(wk));
 
                             // --- DEBUG PRINT (same as in your current function)
-                            std::cout << "Insane Word: " << std::endl;
-                            for (const auto& ee : entries)
-                            {
-                                std::cout << ee.index << ": " << ee.gate->get_id() << std::endl;
-                            }
+                            // std::cout << "Insane Word: " << std::endl;
+                            // for (const auto& ee : entries)
+                            // {
+                            //     std::cout << ee.index << ": " << ee.gate->get_id() << std::endl;
+                            // }
 
                             bad = true;
                             break;

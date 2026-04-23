@@ -49,6 +49,20 @@ namespace hal
                 :rtype: str
             )");
 
+        py_gate_feature_class.def("get_legend",
+                                  &machine_learning::gate_feature::GateFeature::get_legend,
+                                  py::arg("feature_context"),
+                                  R"(
+                Get one concise label per index of the feature vector produced by this gate feature.
+
+                The length of the returned list equals the width of the feature vector produced by
+                :meth:`calculate_feature` for the same context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :returns: One concise label per index of the feature vector.
+                :rtype: list[str]
+            )");
+
         // ConnectedGlobalIOs class
         py::class_<machine_learning::gate_feature::ConnectedGlobalIOs, machine_learning::gate_feature::GateFeature> py_connected_global_ios(py_gate_feature, "ConnectedGlobalIOs", R"(
             Gate feature representing connected global IOs.
@@ -195,18 +209,25 @@ namespace hal
                 :rtype: str
             )");
 
-        // IODegrees class
-        py::class_<machine_learning::gate_feature::IODegrees, machine_learning::gate_feature::GateFeature> py_io_degrees(py_gate_feature, "IODegrees", R"(
-            Gate feature representing input/output degrees.
+        // PinCount class
+        py::class_<machine_learning::gate_feature::PinCount, machine_learning::gate_feature::GateFeature> py_pin_count(py_gate_feature, "PinCount", R"(
+            Gate feature counting the pins on a gate's type that match the configured direction
+            and pin-type filters. Purely a gate-type property; does not depend on net connectivity.
         )");
 
-        py_io_degrees.def(py::init<>(), R"(
-            Construct an IODegrees gate feature.
+        py_pin_count.def(py::init<const std::vector<PinDirection>&, const std::vector<PinType>&>(),
+                         py::arg("directions") = std::vector<PinDirection>(),
+                         py::arg("pin_types")  = std::vector<PinType>(),
+                         R"(
+            Construct a PinCount gate feature.
+
+            :param list[hal_py.PinDirection] directions: Accepted pin directions. Empty means accept any direction. Defaults to empty.
+            :param list[hal_py.PinType] pin_types: Accepted pin types. Empty means accept any type. Defaults to empty.
         )");
 
-        py_io_degrees.def(
+        py_pin_count.def(
             "calculate_feature",
-            [](const machine_learning::gate_feature::IODegrees& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+            [](const machine_learning::gate_feature::PinCount& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
                 auto res = self.calculate_feature(ctx, g);
                 if (res.is_ok())
                 {
@@ -225,14 +246,14 @@ namespace hal
 
                 :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
                 :param hal_py.Gate gate: The gate.
-                :returns: A list of unsigned integers representing the feature on success, None otherwise.
+                :returns: A single-element list with the matching pin count on success, None otherwise.
                 :rtype: list[FEATURE_TYPE] or None
             )");
 
-        py_io_degrees.def("to_string",
-                          &machine_learning::gate_feature::IODegrees::to_string,
-                          R"(
-                Get the string representation of the IODegrees gate feature.
+        py_pin_count.def("to_string",
+                         &machine_learning::gate_feature::PinCount::to_string,
+                         R"(
+                Get the string representation of the PinCount gate feature.
 
                 :returns: The string representation.
                 :rtype: str
@@ -327,6 +348,119 @@ namespace hal
                                       &machine_learning::gate_feature::NeighboringGateTypes::to_string,
                                       R"(
                 Get the string representation of the NeighboringGateTypes gate feature.
+
+                :returns: The string representation.
+                :rtype: str
+            )");
+
+        // NeighborCount class
+        py::class_<machine_learning::gate_feature::NeighborCount, machine_learning::gate_feature::GateFeature> py_neighbor_count(py_gate_feature, "NeighborCount", R"(
+            Gate feature counting the gates reachable from the source gate within a bounded
+            traversal on the original netlist abstraction.
+        )");
+
+        py_neighbor_count.def(py::init<const u32, const PinDirection, const bool, const std::vector<PinType>&, const std::vector<PinType>&>(),
+                              py::arg("depth"),
+                              py::arg("direction"),
+                              py::arg("directed")            = true,
+                              py::arg("starting_pin_types")  = std::vector<PinType>(),
+                              py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                              R"(
+            Construct a NeighborCount gate feature.
+
+            :param int depth: Maximum traversal depth (in gate hops).
+            :param hal_py.PinDirection direction: Direction of traversal.
+            :param bool directed: Whether to respect signal direction. Defaults to True.
+            :param list[hal_py.PinType] starting_pin_types: If non-empty, only pins of these types on the source gate start the traversal. Defaults to empty.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are never crossed. Defaults to empty.
+        )");
+
+        py_neighbor_count.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::NeighborCount& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the neighborhood size on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_neighbor_count.def("to_string",
+                              &machine_learning::gate_feature::NeighborCount::to_string,
+                              R"(
+                Get the string representation of the NeighborCount gate feature.
+
+                :returns: The string representation.
+                :rtype: str
+            )");
+
+        // SequentialNeighborCount class
+        py::class_<machine_learning::gate_feature::SequentialNeighborCount, machine_learning::gate_feature::GateFeature> py_sequential_neighbor_count(
+            py_gate_feature, "SequentialNeighborCount", R"(
+            Gate feature counting the sequential gates reachable from the source gate within a
+            bounded traversal on the sequential netlist abstraction.
+        )");
+
+        py_sequential_neighbor_count.def(py::init<const u32, const PinDirection, const bool, const std::vector<PinType>&, const std::vector<PinType>&>(),
+                                         py::arg("depth"),
+                                         py::arg("direction"),
+                                         py::arg("directed")            = true,
+                                         py::arg("starting_pin_types")  = std::vector<PinType>(),
+                                         py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                         R"(
+            Construct a SequentialNeighborCount gate feature.
+
+            :param int depth: Maximum traversal depth (in sequential-gate hops).
+            :param hal_py.PinDirection direction: Direction of traversal.
+            :param bool directed: Whether to respect signal direction. Defaults to True.
+            :param list[hal_py.PinType] starting_pin_types: If non-empty, only pins of these types on the source gate start the traversal. Defaults to empty.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are never crossed. Defaults to empty.
+        )");
+
+        py_sequential_neighbor_count.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::SequentialNeighborCount& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.gate_feature.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the sequential neighborhood size on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_sequential_neighbor_count.def("to_string",
+                                         &machine_learning::gate_feature::SequentialNeighborCount::to_string,
+                                         R"(
+                Get the string representation of the SequentialNeighborCount gate feature.
 
                 :returns: The string representation.
                 :rtype: str

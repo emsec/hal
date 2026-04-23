@@ -137,6 +137,12 @@ namespace hal
                              .substr(0, std::to_string(static_cast<int>(m_negative_to_positive_factor * 100) / 100.0).find('.') + 3);
             }
 
+            std::vector<std::string> SharedSignalGroup::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"shared_signal_group", "independent_signal_group"};
+            }
+
             Result<std::vector<std::pair<Gate*, Gate*>>> BitIndexOrdering::calculate_gate_pairs(Context& ctx, const Netlist* nl, const std::vector<Gate*>& gates) const
             {
                 UNUSED(nl);
@@ -269,6 +275,12 @@ namespace hal
                              .substr(0, std::to_string(static_cast<int>(m_negative_to_positive_factor * 100) / 100.0).find('.') + 3);
             }
 
+            std::vector<std::string> BitIndexOrdering::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"a_bit_index_lower", "a_bit_index_higher", "not_applicable"};
+            }
+
             namespace
             {
                 std::unordered_set<Gate*> get_all_connected_gates(const Gate* g)
@@ -399,6 +411,12 @@ namespace hal
             std::string SharedConnection::to_string() const
             {
                 return "SharedConnection";
+            }
+
+            std::vector<std::string> SharedConnection::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"shared_connection"};
             }
 
         }    // namespace gate_pair_label

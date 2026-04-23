@@ -112,6 +112,16 @@ namespace hal
                 return "LogicalDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
+            std::vector<std::string> LogicalDistance::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                if (m_direction == PinDirection::inout)
+                {
+                    return {"logical_distance"};
+                }
+                return {"logical_distance_a_to_b", "logical_distance_b_to_a"};
+            }
+
             Result<std::vector<FEATURE_TYPE>> SequentialDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 if (g_a == g_b)
@@ -192,6 +202,16 @@ namespace hal
                 return "SequentialDistance_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
+            std::vector<std::string> SequentialDistance::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                if (m_direction == PinDirection::inout)
+                {
+                    return {"sequential_distance"};
+                }
+                return {"sequential_distance_a_to_b", "sequential_distance_b_to_a"};
+            }
+
             Result<std::vector<FEATURE_TYPE>> PhysicalDistance::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 UNUSED(ctx);
@@ -205,6 +225,12 @@ namespace hal
             std::string PhysicalDistance::to_string() const
             {
                 return "PhysicalDistance";
+            }
+
+            std::vector<std::string> PhysicalDistance::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {};
             }
 
             Result<std::vector<FEATURE_TYPE>> SharedControlSignals::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
@@ -243,6 +269,12 @@ namespace hal
             std::string SharedControlSignals::to_string() const
             {
                 return "SharedControlSignals";
+            }
+
+            std::vector<std::string> SharedControlSignals::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"shared_control_signal_count"};
             }
 
             Result<std::vector<FEATURE_TYPE>> SharedSequentialNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
@@ -379,6 +411,12 @@ namespace hal
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
             }
 
+            std::vector<std::string> SharedSequentialNeighbors::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"shared_sequential_neighbor_count"};
+            }
+
             Result<std::vector<FEATURE_TYPE>> SharedNeighbors::calculate_feature(Context& ctx, const Gate* g_a, const Gate* g_b) const
             {
                 const hal::Result<hal::NetlistAbstraction*> nl_abstr = ctx.get_original_abstraction();
@@ -511,6 +549,12 @@ namespace hal
 
                 return "SharedNeighbors_" + std::to_string(m_depth) + "_" + enum_to_string(m_direction) + "_" + std::to_string(m_directed) + "_"
                        + (starting_pin_types_str.empty() ? "None" : starting_pin_types_str) + "_" + (forbidden_pin_types_str.empty() ? "None" : forbidden_pin_types_str);
+            }
+
+            std::vector<std::string> SharedNeighbors::get_legend(Context& ctx) const
+            {
+                UNUSED(ctx);
+                return {"shared_neighbor_count"};
             }
 
             Result<std::vector<FEATURE_TYPE>> build_feature_vec(const std::vector<const GatePairFeature*>& features, const Gate* g_a, const Gate* g_b)
