@@ -31,7 +31,7 @@
 namespace hal
 {
     NetlistRelay::NetlistRelay(QObject* parent)
-        : QObject(parent), mModuleColorManager(new ModuleColorManager(this))
+        : QObject(parent), mNotified(false), mModuleColorManager(new ModuleColorManager(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
