@@ -39,6 +39,7 @@
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QThread>
 #include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -148,7 +149,10 @@ namespace hal
         if (!text.isEmpty())
             mProgressBar->setText(text);
         mProgressBar->setValue(percent);
-        qApp->processEvents();
+		if (QThread::currentThread() == qApp->thread())
+        {
+            qApp->processEvents();
+        }
     }
 
     void GraphWidget::showComments(const Node &nd)
@@ -1066,12 +1070,25 @@ namespace hal
 
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
-        // qDebug() << "progress" << hex << (quintptr) QThread::currentThread() << (quintptr) gPythonContext->currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
-        if (!sInstance || gPythonContext->pythonThread()) return;
-        if (percent==100)
-            sInstance->handleSceneAvailable();
+        // Qt widgets must only be touched on the GUI thread. If we're already on it,
+        // call showBusy / handleSceneAvailable directly; otherwise post the update to
+        // the main event queue.
+        QString qmsg = QString::fromStdString(msg);
+        auto apply = [percent, qmsg]() {
+            if (!sInstance) return;
+            if (percent == 100)
+                sInstance->handleSceneAvailable();
+            else
+                sInstance->showBusy(percent, qmsg);
+        };
+        if (QThread::currentThread() == qApp->thread())
+        {
+            apply();
+            qApp->processEvents();
+        }
+
         else
-            sInstance->showBusy(percent, QString::fromStdString(msg));
+            QMetaObject::invokeMethod(qApp, apply, Qt::QueuedConnection);
     }
 
 }    // namespace hal
