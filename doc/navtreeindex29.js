@@ -1,6 +1,5 @@
 var NAVTREEINDEX29 =
 {
-"namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a92b5daa6b3d58ecbe757bd80f636fb9e":[5,0,2,518,1],
 "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250aad921d60486366258809553a3db49a4a":[5,0,2,518,0],
 "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900":[5,0,2,518,13],
 "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ac102b937a778cf3fbf1bd4f1bc165336":[5,0,2,518,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX29 =
 "namespacehal_1_1dataflow_1_1group__by__control__signals.html#a87febfa7fbde31e6972f5a6920305c5a":[5,0,2,4,1,0],
 "namespacehal_1_1dataflow_1_1group__by__input__output__size.html":[5,0,2,4,2],
 "namespacehal_1_1dataflow_1_1group__by__input__output__size.html#a4fdbeb0af6e273cd017ccaa7fc1f747d":[5,0,2,4,2,0],
-"namespacehal_1_1dataflow_1_1group__by__successor__predecessor__known__groups.html":[5,0,2,4,3]
+"namespacehal_1_1dataflow_1_1group__by__successor__predecessor__known__groups.html":[5,0,2,4,3],
+"namespacehal_1_1dataflow_1_1group__by__successor__predecessor__known__groups.html#a6e99139402c94929d5940b4ae91c3caf":[5,0,2,4,3,0]
 };
