@@ -38,7 +38,7 @@ namespace hal
 
             void print_progress_to_stderr(float progress, const std::string& message = "");
 
-            // GUI calls must not be called from semaphore/mutex protected scope, otherwise threads might block each other
+            // Safe to call from any thread, any lock state: the registered indicator posts a queued event to the GUI.
             void print_progress_to_gui(int percent = -1); // use m_last_percentage if negative
 
             void print_message_to_gui(const std::string& message);

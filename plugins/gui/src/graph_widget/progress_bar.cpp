@@ -46,7 +46,6 @@ namespace hal {
     BusyIndicator::BusyIndicator(QWidget* parent)
         : AbstractBusyIndicator(parent)
     {
-        mMutex = new QMutex;
         QVBoxLayout* layout = new QVBoxLayout(this);
         layout->setAlignment(Qt::AlignHCenter);
         layout->addWidget(mLabel = new QLabel(this));
@@ -61,32 +60,23 @@ namespace hal {
     BusyIndicator::~BusyIndicator()
     {
         mTimer->stop();
-        delete mMutex;
     }
 
     BusyAnimation::BusyAnimation(QWidget* parent)
-        : QWidget(parent), mImage(QImage(":/icons/hal9000","PNG")), mAngle(0), mMutex(new QMutex)
+        : QWidget(parent), mImage(QImage(":/icons/hal9000","PNG")), mAngle(0)
     {;}
-
-    BusyAnimation::~BusyAnimation()
-    {
-        delete mMutex;
-    }
 
     void BusyAnimation::handleTimeout()
     {
         mAngle += 5;
         update();
-        qApp->processEvents();
     }
 
     void BusyAnimation::paintEvent(QPaintEvent* event)
     {
         Q_UNUSED(event);
-        if (mMutex->try_lock())
-        {
-            QPainter p(this);
-            p.setRenderHint(QPainter::Antialiasing);
+        QPainter p(this);
+        p.setRenderHint(QPainter::Antialiasing);
 
             int rw = rect().width();
             int rh = rect().height();
@@ -116,25 +106,20 @@ namespace hal {
                     }
                 }
 
-            p.drawImage(rimg,img);
-            mMutex->unlock();
-        }
+        p.drawImage(rimg,img);
     }
 
     void BusyIndicator::setValue(int percent)
     {
-        if (mProgressBar->value() == percent) return; // nothing to do
-        QMutexLocker lock(mMutex);
+        if (mProgressBar->value() == percent) return;
         mProgressBar->setValue(percent);
         update();
-        qApp->processEvents();
     }
 
     void BusyIndicator::setText(const QString &txt)
     {
-        if (mLabel->text() == txt) return; // nothing to do
-        QMutexLocker lock(mMutex);
+        if (mLabel->text() == txt) return;
         mLabel->setText(txt);
-        qApp->processEvents();
+        update();
     }
 }

@@ -41,10 +41,7 @@ namespace hal
             if (!GuiExtensionDataflow::s_progress_indicator_function) return;
             if (percent < 0) percent = m_last_percentage;
             if (percent > 99) percent = 99;
-            {
-                GuiExtensionDataflow::s_progress_indicator_function(percent, m_gui_message);
-            }
-
+            GuiExtensionDataflow::s_progress_indicator_function(percent, m_gui_message);
         }
 
         void ProgressPrinter::print_progress_to_stderr(float progress, const std::string& message)
