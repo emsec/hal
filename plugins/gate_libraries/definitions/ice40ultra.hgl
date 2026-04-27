@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "library": "ICE40ULTRA",
     "gate_locations": {
         "data_category": "generic",
@@ -1744,7 +1744,14 @@
             "lut_config": {
                 "bit_order": "descending",
                 "data_category": "generic",
-                "data_identifier": "LUT_INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "LUT_INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16
+                    }
+                ]
             },
             "pin_groups": [
                 {

@@ -404,6 +404,9 @@ namespace hal
             key = init_component->get_init_identifiers().front();
         }
 
+        // TODO enforce bit_count > 0
+        // TODO if default to old way of doing things, then set bit_count to 2^num_inputs
+
         std::string config_str       = std::get<1>(get_data(category, key));
         auto is_ascending            = lut_component->is_init_ascending();
         std::vector<GatePin*> inputs = m_type->get_input_pins();
@@ -415,14 +418,17 @@ namespace hal
             return result;
         }
 
+        // TODO will cause problems with Intel LUTs
+        // TODO check should be: is bit_count > 64? yes: abort
         if (inputs.size() > 6)
         {
             log_error("gate", "LUT gate '{}' with ID {} in netlist with ID {} has more than six input pins, which is currently not supported.", m_name, m_id, m_internal_manager->m_netlist->get_id());
             return BooleanFunction();
         }
 
-        // Extract the bit slice for this pin (no-op when bit_count == 0).
-        if (bit_count > 0 && !config_str.empty())
+        // Extract the bit slice for this pin
+        // TODO check if bit_count == max_length; if yes, then no-op
+        if (bit_count > 0)
         {
             auto res = LUTComponent::extract_init_slice(config_str, bit_offset, bit_count);
             if (res.is_error())
@@ -468,6 +474,7 @@ namespace hal
             return BooleanFunction();
         }
 
+        // TODO we should not need this anymore if we enforce bit_count > 0
         const u32 max_config_size = (bit_count > 0) ? bit_count : (1u << inputs.size());
 
         if (is_ascending)

@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "library": "lsi_10k",
     "gate_locations": {
         "data_category": "generic",

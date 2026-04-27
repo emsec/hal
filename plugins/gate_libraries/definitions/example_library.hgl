@@ -1,5 +1,5 @@
 {
-    "version": 4,
+    "version": 6,
     "library": "EXAMPLE_GATE_LIBRARY",
     "gate_locations": {
         "data_category": "generic",
@@ -1691,7 +1691,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 2
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -1735,7 +1742,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 4
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -1794,7 +1808,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 8
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -1868,7 +1889,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 16
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -1957,7 +1985,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 32
+                    }
+                ]
             },
             "pin_groups": [
                 {
@@ -2061,7 +2096,14 @@
             "lut_config": {
                 "bit_order": "ascending",
                 "data_category": "generic",
-                "data_identifier": "INIT"
+                "output_pins": [
+                    {
+                        "pin": "O",
+                        "data_identifier": "INIT",
+                        "bit_offset": 0,
+                        "bit_count": 64
+                    }
+                ]
             },
             "pin_groups": [
                 {
