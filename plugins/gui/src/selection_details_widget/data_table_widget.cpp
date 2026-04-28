@@ -1,15 +1,39 @@
 #include "gui/selection_details_widget/data_table_widget.h"
-#include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
-#include "gui/input_dialog/input_dialog.h"
 #include "gui/user_action/action_set_object_data.h"
 #include <QHeaderView>
 #include <QtWidgets/QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QFormLayout>
+#include <QDialogButtonBox>
+#include <QLineEdit>
 
 namespace hal
 {
+
+    DataEntryDialog::DataEntryDialog(const DataTableEntry *entry, QWidget* parent)
+        : QDialog(parent)
+    {
+        QFormLayout* layout = new QFormLayout(this);
+        const QString label[] = {"Category:", "Key:", "Type:", "Value:"};
+        for (int i=0; i<4; i++)
+        {
+            mLineEdit[i] = new QLineEdit(this);
+            if (entry)
+                mLineEdit[i]->setText(entry->getPropertyValueByPropType((DataTableEntry::PropertyType)i));
+            layout->addRow(label[i],mLineEdit[i]);
+        }
+        QDialogButtonBox* dbb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+        connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        layout->addWidget(dbb);
+    }
+
+    DataTableEntry DataEntryDialog::getEntry() const
+    {
+        return DataTableEntry(mLineEdit[0]->text(), mLineEdit[1]->text(), mLineEdit[2]->text(), mLineEdit[3]->text());
+    }
 
     DataTableWidget::DataTableWidget(QWidget *parent) : QTableView(parent),
     mDataTableModel(new DataTableModel(this))
@@ -17,7 +41,8 @@ namespace hal
         mCurrentContainer = nullptr;
 
         this->setModel(mDataTableModel);
-        this->setSelectionMode(QAbstractItemView::NoSelection);
+        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->setSelectionBehavior(QAbstractItemView::SelectRows);
         this->setFocusPolicy(Qt::NoFocus);
         this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -85,18 +110,20 @@ namespace hal
             return;
         }
 
-        DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
+        DataTableEntry entry = mDataTableModel->getEntryAtRow(idx.row());
         QMenu menu;
+        QAction* act;
         menu.addAction("Category to clipboard", [entry](){QApplication::clipboard()->setText(entry.category);});
         menu.addAction("Key to clipboard", [entry](){QApplication::clipboard()->setText(entry.key);});
         menu.addAction("Type to clipboard", [entry](){QApplication::clipboard()->setText(entry.dataType);});
         menu.addAction("Value to clipboard", [entry](){QApplication::clipboard()->setText(entry.value);});
 
         menu.addSection("ChangeSection");
-        menu.addAction("Change category", [this](){changePropertyRequested(DataTableModel::propertyType::category);});
-        menu.addAction("Change key", [this](){changePropertyRequested(DataTableModel::propertyType::key);});
-        menu.addAction("Change type", [this](){changePropertyRequested(DataTableModel::propertyType::type);});
-        menu.addAction("Change value", [this](){changePropertyRequested(DataTableModel::propertyType::value);});
+        menu.addAction("Add data entry", [this](){contextAction(ActionSetObjectData::CreateAction);});
+        act = menu.addAction("Change current data entry", [this](){contextAction(ActionSetObjectData::ModifyAction);});
+        act->setEnabled(currentIndex().isValid());
+        act = menu.addAction("Delete current data entry", [this](){contextAction(ActionSetObjectData::DeleteAction);});
+        act->setEnabled(currentIndex().isValid());
 
         QString pyCode = "";
         switch(mCurrentObject.type())
@@ -132,30 +159,47 @@ namespace hal
         */
     }
 
-    void DataTableWidget::changePropertyRequested(DataTableModel::propertyType prop)
+    void DataTableWidget::contextAction(ActionSetObjectData::ActionType actionType)
     {
-        if(!mCurrentContainer)
-            return;
-        const QString propertyString[] = {"category", "key", "type", "value"};
-        QModelIndex idx = currentIndex(); //could also be a parameter to be extra cautious (or the dataentry)
-        DataTableModel::DataEntry entry = mDataTableModel->getEntryAtRow(idx.row());
-        InputDialog ipd("Change " + propertyString[(int)prop], "Choose new value for the " + propertyString[(int)prop] + " field.", entry.getPropertyValueByPropType(prop));
-        if(ipd.exec() == QDialog::Accepted)
+        DataTableEntry oldEntry;
+
+        if(actionType != ActionSetObjectData::CreateAction) // current (=old) entry is requested for all actions except create
         {
-            QString oldValues[] = {entry.category, entry.key, entry.dataType, entry.value};
-            QString newValues[] = {entry.category, entry.key, entry.dataType, entry.value};
-            newValues[(int)prop] = ipd.textValue();
-            ActionSetObjectData* act = new ActionSetObjectData(newValues[0], newValues[1], newValues[2], newValues[3]);
-            act->setObject(mCurrentObject); //check if not none?
-            if(prop == DataTableModel::propertyType::category || prop == DataTableModel::propertyType::key)
-                act->setChangeKeyAndOrCategory(oldValues[0], oldValues[1]);
-            act->exec();
-
-            mDataTableModel->updateData(mCurrentContainer->get_data_map());
-            clearSelection();
-            adjustTableSizes();
+            if (!mCurrentContainer) return;
+            QModelIndex idx = currentIndex(); //could also be a parameter to be extra cautious (or the dataentry)
+            oldEntry = mDataTableModel->getEntryAtRow(idx.row());
         }
-    }
 
+        ActionSetObjectData* act = nullptr;
+
+        if (actionType == ActionSetObjectData::DeleteAction)
+        {
+            act = new ActionSetObjectData(ActionSetObjectData::DeleteAction, oldEntry);
+        }
+        else
+        {
+            DataEntryDialog ded(&oldEntry);
+            if (ded.exec() != QDialog::Accepted) return;
+
+            DataTableEntry newEntry = ded.getEntry();
+            act = new ActionSetObjectData(actionType, newEntry);
+            act->setObject(mCurrentObject); //check if not none?
+
+            // if category or key gets changed it is treated as "MoveAction" internally (delete old + create new)
+            if (actionType == ActionSetObjectData::ModifyAction &&
+                ((oldEntry.category != newEntry.category) || (oldEntry.key != newEntry.key)))
+            {
+               act->setChangeKeyAndOrCategory(oldEntry.category, oldEntry.key);
+            }
+
+        }
+
+        act->setObject(mCurrentObject); //check if not none?
+        act->exec();
+
+        mDataTableModel->updateData(mCurrentContainer->get_data_map());
+        clearSelection();
+        adjustTableSizes();
+    }
 
 } // namespace hal

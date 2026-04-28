@@ -25,14 +25,18 @@
 
 #pragma once
 #include "user_action.h"
+#include "gui/selection_details_widget/data_table_entry.h"
 
 namespace hal
 {
+    class DataContainer;
+
     class ActionSetObjectData : public UserAction
     {
 
     public:
-        ActionSetObjectData(QString category = QString(), QString key = QString(), QString type = QString(), QString val = QString());
+        enum ActionType { UnknownAction, DeleteAction, CreateAction, ModifyAction, MoveAction};
+        ActionSetObjectData(ActionType act = UnknownAction, const DataTableEntry& dataEntry = DataTableEntry());
 
         bool exec() override;
         QString tagname() const override;
@@ -52,14 +56,11 @@ namespace hal
         void setChangeKeyAndOrCategory(QString oldCategory, QString oldKey);
 
     private:
-        QString mKey;
-        QString mCat;
-        QString mType;
-        QString mVal;
+        ActionType mAct;
+        DataTableEntry mDataEntry;
 
         QString mOldKey;
         QString mOldCat;
-        bool mKeyOrCatModified;
     };
 
     /**

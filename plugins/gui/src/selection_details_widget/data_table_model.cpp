@@ -27,7 +27,7 @@ namespace hal
 
     QVariant DataTableModel::data(const QModelIndex &index, int role) const
     {
-        DataEntry entry = mDataEntries[index.row()];
+        DataTableEntry entry = mDataEntries[index.row()];
         RowStyle style = mEntryToRowStyle[QPair(entry.category, entry.key)];
 
         if(role == Qt::DisplayRole && index.column() < columnCount())
@@ -101,7 +101,7 @@ namespace hal
         return false;
     }
 
-    DataTableModel::DataEntry DataTableModel::getEntryAtRow(int row) const
+    DataTableEntry DataTableModel::getEntryAtRow(int row) const
     {
         return mDataEntries.at(row);
     }
@@ -113,17 +113,13 @@ namespace hal
         mEntryToRowStyle.clear();
         for(const auto& [key, value] : dataMap)
         {
-            DataEntry e;
-            e.category  = QString::fromStdString(std::get<0>(key));
-            e.key       = QString::fromStdString(std::get<1>(key));
-            e.dataType  = QString::fromStdString(std::get<0>(value));
-            e.value     = QString::fromStdString(std::get<1>(value));
-            
-            mDataEntries.append(e);
+            mDataEntries.append(DataTableEntry(QString::fromStdString(std::get<0>(key)), QString::fromStdString(std::get<1>(key)),
+                                               QString::fromStdString(std::get<0>(value)), QString::fromStdString(std::get<1>(value))));
         }
+
         // The data is sorted by category first and then by key. However the category generic is always displayed first.
         qSort(mDataEntries.begin(), mDataEntries.end(), 
-            [](const DataEntry a, const DataEntry b) -> bool 
+            [](const DataTableEntry a, const DataTableEntry b) -> bool
                 { 
 
                     if(a.category == b.category)
@@ -143,7 +139,7 @@ namespace hal
 
         // Compute the appearance
         int rowIdx = 0;
-        for(const DataEntry& entry : mDataEntries)
+        for(const DataTableEntry& entry : mDataEntries)
         {
             mEntryToRowStyle[QPair(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
             rowIdx++;
@@ -152,7 +148,7 @@ namespace hal
         Q_EMIT layoutChanged();
     }
 
-    DataTableModel::RowStyle DataTableModel::getRowStyleByEntry(const DataEntry& entry, int rowIdx) const
+    DataTableModel::RowStyle DataTableModel::getRowStyleByEntry(const DataTableEntry& entry, int rowIdx) const
     {
         RowStyle style;
         style.keyFont = QFont();

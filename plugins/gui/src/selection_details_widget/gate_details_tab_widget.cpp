@@ -323,7 +323,8 @@ namespace hal
                     result = QString::fromStdString(splice_r.get());
             }
 
-            ActionSetObjectData* act = new ActionSetObjectData(QString::fromStdString(cat), QString::fromStdString(key), "bit_vector", result);
+            ActionSetObjectData* act = new ActionSetObjectData(ActionSetObjectData::ModifyAction, DataTableEntry(QString::fromStdString(cat), QString::fromStdString(key),
+                                                                                                                  "bit_vector", result));
             act->setObject(UserActionObject(mCurrentGate->get_id(), UserActionObjectType::Gate));
             act->exec();
             setGate(mCurrentGate);    // must update config string and data table, no signal for that

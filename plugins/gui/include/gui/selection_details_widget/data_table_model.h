@@ -30,11 +30,7 @@
 #include <QFont>
 #include <QColor>
 
-#include "hal_core/defines.h"
-#include "hal_core/netlist/data_container.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/module.h"
+#include "gui/selection_details_widget/data_table_entry.h"
 
 namespace hal {
 
@@ -48,26 +44,6 @@ namespace hal {
     {
         Q_OBJECT
     public:
-
-        /**
-         * Helper enum that can be used to access the value of a data entry.
-         */
-        enum propertyType{category = 0, key = 1, type = 2, value = 3};
-        /**
-         * Used to store one data entry (i.e. the data in one data field).
-         */
-        struct DataEntry
-        {
-            QString category; /// The data's category
-            QString key; /// The data's key
-            QString dataType; // The data type
-            QString value; // The value of the data 
-            QString getPropertyValueByPropType(propertyType prop)//helper function to generically access a property value
-            {
-                QString val =  (prop == 0) ? category : ( (prop == 1) ? key : ( (prop == 2) ? dataType : value ) );
-                return val;
-            }
-        };
 
         /**
          * Constructor.
@@ -129,7 +105,7 @@ namespace hal {
          * @param row - The specified row
          * @returns the DataEntry at the specified row
          */
-        DataEntry getEntryAtRow(int row) const;
+        DataTableEntry getEntryAtRow(int row) const;
 
         /**
          * Fills the table with the given data in the form of key-value pairs.
@@ -148,10 +124,10 @@ namespace hal {
             QString valueToolTip;
         };
 
-        RowStyle getRowStyleByEntry(const DataEntry& entry, int rowIdx) const;
+        RowStyle getRowStyleByEntry(const DataTableEntry& entry, int rowIdx) const;
 
         // Map: [category, key] -> row style of the respective entry
         QMap<QPair<QString, QString>, RowStyle> mEntryToRowStyle;
-        QList<DataEntry> mDataEntries;
+        QList<DataTableEntry> mDataEntries;
     };
 }

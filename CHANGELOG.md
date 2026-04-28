@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
+* changed context menu for data in selections details, can now add, modify, or delete data rows
 * changed default order to 'descending' when creating a pin group via Python command
 * module pin groups
   * fixed bug in pin model which must not crash when deleting a non-empty pin group
