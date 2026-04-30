@@ -45,6 +45,10 @@ namespace hal
     void BaseTreeItem::insertChild(int index, BaseTreeItem *child)
     {
         child->setParent(this);
+        if (index > mChildren.size())
+        {
+            index = mChildren.size();
+        }
         mChildren.insert(index, child);
     }
 
