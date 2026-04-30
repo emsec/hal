@@ -206,6 +206,11 @@ namespace hal
 
     void CodeEditor::search(const QString& string, SearchOptions searchOpts)
     {
+        if (string.isEmpty())
+        {
+            setExtraSelections({});
+            return;
+        }
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         moveCursor(QTextCursor::Start);

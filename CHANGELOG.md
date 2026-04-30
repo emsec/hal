@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* fixed bug in code editor: empty search string should reset text highlight (and not cause hang up)
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * changed default order to 'descending' when creating a pin group via Python command
