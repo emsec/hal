@@ -36,7 +36,12 @@ namespace hal
         public:
             ProgressPrinter(u32 max_message_size = 0);
 
-            void print_progress(float progress, const std::string& message = "");
+            void print_progress_to_stderr(float progress, const std::string& message = "");
+
+            // Safe to call from any thread, any lock state: the registered indicator posts a queued event to the GUI.
+            void print_progress_to_gui(int percent = -1); // use m_last_percentage if negative
+
+            void print_message_to_gui(const std::string& message);
 
             void clear();
 
@@ -48,8 +53,10 @@ namespace hal
 
             u32 m_printed_progress;
             std::string m_last_message;
+            std::string m_gui_message; // not all messages are relevant for GUI
             u32 m_bar_width;
             u32 m_max_message_size;
+            int m_last_percentage;
             int m_terminal_width;    // no terminal found if negative
         };
     }    // namespace dataflow
