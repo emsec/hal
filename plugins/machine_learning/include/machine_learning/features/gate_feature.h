@@ -2,6 +2,7 @@
 
 #include "hal_core/defines.h"
 #include "machine_learning/types.h"
+#include "machine_learning/utilities/normalization.h"
 
 #include <optional>
 #include <vector>
@@ -352,8 +353,9 @@ namespace hal
              *
              * @param directed - If true, use directed shortest paths; otherwise undirected.
              * @param cutoff - Maximum path length to consider (-1 means unbounded).
-             * @param normalize - If true, min-max normalize the centrality values across the
-             *                    batch before writing them into the feature vectors.
+             * @param normalization - Normalization applied to the centrality values across the
+             *                        batch before writing them into the feature vectors. See
+             *                        NormalizationType.
              *
              * This is a batch-level feature (only the batch overload of calculate_feature is
              * implemented).
@@ -363,7 +365,8 @@ namespace hal
             class BetweennessCentrality : public GateFeature
             {
             public:
-                BetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const bool normalize = true) : m_directed(directed), m_cutoff(cutoff), m_normalize(normalize){};
+                BetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
+                    : m_directed(directed), m_cutoff(cutoff), m_normalization(normalization){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -372,7 +375,7 @@ namespace hal
             private:
                 const bool m_directed;
                 const i32 m_cutoff;
-                const bool m_normalize;
+                const NormalizationType m_normalization;
             };
 
             /**
@@ -381,8 +384,9 @@ namespace hal
              * @param direction - PinDirection::input / output selects the traversal direction;
              *                    PinDirection::inout uses both (undirected traversal).
              * @param cutoff - Maximum distance to consider (-1 means unbounded).
-             * @param normalize - If true, min-max normalize the centrality values across the
-             *                    batch before writing them into the feature vectors.
+             * @param normalization - Normalization applied to the centrality values across the
+             *                        batch before writing them into the feature vectors. See
+             *                        NormalizationType.
              *
              * This is a batch-level feature (only the batch overload of calculate_feature is
              * implemented).
@@ -392,7 +396,8 @@ namespace hal
             class HarmonicCentrality : public GateFeature
             {
             public:
-                HarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const bool normalize = true) : m_direction(direction), m_cutoff(cutoff), m_normalize(normalize){};
+                HarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
+                    : m_direction(direction), m_cutoff(cutoff), m_normalization(normalization){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -401,7 +406,7 @@ namespace hal
             private:
                 const PinDirection m_direction;
                 const i32 m_cutoff;
-                const bool m_normalize;
+                const NormalizationType m_normalization;
             };
 
             /**
@@ -413,7 +418,8 @@ namespace hal
             class SequentialBetweennessCentrality : public GateFeature
             {
             public:
-                SequentialBetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const bool normalize = true) : m_directed(directed), m_cutoff(cutoff), m_normalize(normalize){};
+                SequentialBetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
+                    : m_directed(directed), m_cutoff(cutoff), m_normalization(normalization){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -422,7 +428,7 @@ namespace hal
             private:
                 const bool m_directed;
                 const i32 m_cutoff;
-                const bool m_normalize;
+                const NormalizationType m_normalization;
             };
 
             /**
@@ -434,7 +440,8 @@ namespace hal
             class SequentialHarmonicCentrality : public GateFeature
             {
             public:
-                SequentialHarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const bool normalize = true) : m_direction(direction), m_cutoff(cutoff), m_normalize(normalize){};
+                SequentialHarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
+                    : m_direction(direction), m_cutoff(cutoff), m_normalization(normalization){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -443,7 +450,7 @@ namespace hal
             private:
                 const PinDirection m_direction;
                 const i32 m_cutoff;
-                const bool m_normalize;
+                const NormalizationType m_normalization;
             };
 
             /**
@@ -467,8 +474,7 @@ namespace hal
             class BooleanInfluence : public GateFeature
             {
             public:
-                BooleanInfluence(const std::vector<StatisticalMoment>& moments = {})
-                    : m_moments(moments.empty() ? std::vector<StatisticalMoment>{StatisticalMoment::average} : moments){};
+                BooleanInfluence(const std::vector<StatisticalMoment>& moments = {}) : m_moments(moments.empty() ? std::vector<StatisticalMoment>{StatisticalMoment::average} : moments){};
 
                 Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
                 std::string to_string() const override;
