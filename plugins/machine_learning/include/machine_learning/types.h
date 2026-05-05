@@ -5,6 +5,7 @@
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/utilities/enums.h"
+#include "netlist_preprocessing/netlist_flavor.h"
 #include "z3_utils/subgraph_function_generation.h"
 
 #include <algorithm>
@@ -39,11 +40,11 @@ namespace hal
          */
         enum class StatisticalMoment
         {
-            min,        /**< Minimum value. */
-            max,        /**< Maximum value. */
-            average,    /**< Arithmetic mean. */
-            median,     /**< Median (average of the two middle values for even-sized inputs). */
-            stddev      /**< Population standard deviation. */
+            min,     /**< Minimum value. */
+            max,     /**< Maximum value. */
+            average, /**< Arithmetic mean. */
+            median,  /**< Median (average of the two middle values for even-sized inputs). */
+            stddev   /**< Population standard deviation. */
         };
 
         /**
@@ -65,15 +66,11 @@ namespace hal
     {
         /**
          * Identifies the originating toolchain of a netlist (vendor, synthesizer, backend).
-         * Different flavors encode multi-bit signals in different ways, so downstream
-         * heuristics need to know which conventions to expect.
+         * Re-exported from netlist_preprocessing so callers of the ML plugin do not need to pull
+         * in that header explicitly. The canonical definition lives in
+         * `netlist_preprocessing/netlist_flavor.h`.
          */
-        enum class NetlistFlavor
-        {
-            Default,    /**< Unknown or generic netlist with no vendor-specific assumptions. */
-            Yosys,      /**< Open-source Yosys synthesizer output. */
-            Vivado,     /**< Xilinx Vivado synthesizer output. */
-        };
+        using NetlistFlavor = netlist_preprocessing::NetlistFlavor;
 
         /**
          * Tie-breaking policy used when multiple candidate words claim the same set of gates
@@ -81,15 +78,16 @@ namespace hal
          */
         enum class MultiBitProcessingPolicy
         {
-            Default,    /**< Lowest average wire-assignment distance wins (the closest-named source nets). */
-            Yosys,      /**< Prefer output-pin-derived words, then pin-type priority, then Default. */
-            Vivado      /**< Prefer gate-name-encoded words (direction=none, all distances 0), then Default. */
+            Default, /**< Lowest average wire-assignment distance wins (the closest-named source nets). */
+            Yosys,   /**< Prefer output-pin-derived words, then pin-type priority, then Default. */
+            Vivado   /**< Prefer gate-name-encoded words (direction=none, all distances 0), then Default. */
         };
 
         /**
          * Map a NetlistFlavor to its corresponding MultiBitProcessingPolicy.
          * This is the single source of truth for that mapping; callers should prefer this
-         * over hard-coding a policy.
+         * over hard-coding a policy. Flavors with no specialized policy fall
+         * through to MultiBitProcessingPolicy::Default.
          */
         constexpr MultiBitProcessingPolicy policy_from_flavor(const NetlistFlavor f) noexcept
         {
@@ -98,7 +96,9 @@ namespace hal
                 case NetlistFlavor::Yosys:
                     return MultiBitProcessingPolicy::Yosys;
                 case NetlistFlavor::Vivado:
+                case NetlistFlavor::SynopsysDC:    // SynopsysDC also uses gate-name-encoded indices, albeit with a different pattern
                     return MultiBitProcessingPolicy::Vivado;
+                case NetlistFlavor::Default:
                 default:
                     return MultiBitProcessingPolicy::Default;
             }
@@ -321,8 +321,8 @@ namespace hal
                 return m_mbi_policy;
             }
 
-            const Netlist* nl;       /**< Non-owning pointer to the netlist this context wraps. */
-            const u32 num_threads;   /**< Parallelism hint for feature/label computations. */
+            const Netlist* nl;     /**< Non-owning pointer to the netlist this context wraps. */
+            const u32 num_threads; /**< Parallelism hint for feature/label computations. */
 
         private:
             NetlistFlavor m_netlist_flavor        = NetlistFlavor::Default;

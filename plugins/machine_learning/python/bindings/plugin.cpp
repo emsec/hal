@@ -111,20 +111,6 @@ Maps a (gate, word) pair to an index.
 :type: dict[(hal_py.Gate,(str, hal_py.PinDirection, str)), int]
 )");
 
-        py::enum_<machine_learning::NetlistFlavor>(m, "NetlistFlavor", R"(
-Describes the netlist's originating flavor (vendor/synthesizer/backend/encoding style).
-)")
-            .value("Default", machine_learning::NetlistFlavor::Default, R"(
-Default / default behavior.
-)")
-            .value("Yosys", machine_learning::NetlistFlavor::Yosys, R"(
-Yosys-style netlist encoding.
-)")
-            .value("Vivado", machine_learning::NetlistFlavor::Vivado, R"(
-Vivado-style netlist encoding.
-)")
-            .export_values();
-
         py::enum_<machine_learning::MultiBitProcessingPolicy>(m, "MultiBitProcessingPolicy", R"(
 Specifies how multi-bit word candidates are deduplicated/selected.
 )")
@@ -141,15 +127,15 @@ Prefer gate-name encoding (PinDirection::none, distance 0) if ambiguous; otherwi
 
         py::class_<machine_learning::Context> py_context(m, "Context", R"()");
 
-        py_context.def(py::init<const Netlist*, const machine_learning::NetlistFlavor, const u32>(),
+        py_context.def(py::init<const Netlist*, const netlist_preprocessing::NetlistFlavor, const u32>(),
                        py::arg("netlist"),
-                       py::arg("flavor")       = machine_learning::NetlistFlavor::Default,
+                       py::arg("flavor")       = netlist_preprocessing::NetlistFlavor::Default,
                        py::arg("_num_threads") = 1,
                        R"(
 Construct a Context object with the given netlist, netlist flavor, and number of threads.
 
 :param hal_py.Netlist netlist: The netlist.
-:param machine_learning.NetlistFlavor flavor: Netlist flavor (affects multi-bit processing policy).
+:param hal_py.netlist_preprocessing.NetlistFlavor flavor: Netlist flavor (affects multi-bit processing policy).
 :param int _num_threads: The number of threads. Defaults to 1.
 )");
 
@@ -292,7 +278,7 @@ the returned reference is valid as long as the underlying netlist is alive.
 Get the netlist flavor configured for this context.
 
 :returns: The netlist flavor.
-:rtype: machine_learning.NetlistFlavor
+:rtype: hal_py.netlist_preprocessing.NetlistFlavor
 )");
 
         py_context.def("get_multi_bit_processing_policy",

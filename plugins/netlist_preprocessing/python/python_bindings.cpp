@@ -372,10 +372,28 @@ namespace hal
                 :rtype: int or ``None``
             )");
 
+        py::enum_<netlist_preprocessing::NetlistFlavor>(m, "NetlistFlavor", R"(
+            Identifies the originating toolchain of a netlist (vendor, synthesizer, backend).
+            Different flavors encode multi-bit signals and instance names in different ways.
+        )")
+            .value("Default", netlist_preprocessing::NetlistFlavor::Default, R"(
+                Unknown or generic netlist with no vendor-specific assumptions.
+            )")
+            .value("Yosys", netlist_preprocessing::NetlistFlavor::Yosys, R"(
+                Open-source Yosys synthesizer output.
+            )")
+            .value("Vivado", netlist_preprocessing::NetlistFlavor::Vivado, R"(
+                Xilinx Vivado synthesizer output.
+            )")
+            .value("SynopsysDC", netlist_preprocessing::NetlistFlavor::SynopsysDC, R"(
+                Synopsys Design Compiler output.
+            )")
+            .export_values();
+
         m.def(
             "reconstruct_indexed_ff_identifiers",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::reconstruct_indexed_ff_identifiers(nl);
+            [](Netlist* nl, const netlist_preprocessing::NetlistFlavor flavor) -> std::optional<u32> {
+                auto res = netlist_preprocessing::reconstruct_indexed_ff_identifiers(nl, flavor);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -387,13 +405,17 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("flavor") = netlist_preprocessing::NetlistFlavor::Default,
             R"(
                 Tries to reconstruct a name and index for each flip flop that was part of a multi-bit wire in the verilog code.
                 This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
-                This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
-                We try to reconstruct name and index for each flip flop based on the name of its output nets.
+                The exact rules used to recover the gate-name index depend on `flavor`:
 
-                :param hal_py.Netlist nl: The netlist to operate on. 
+                - ``Default`` / ``Yosys`` / ``Vivado``: gate names are expected to encode the index as ``[<int>]``.
+                - ``SynopsysDC``: gate names are expected to end with ``_<int>_``.
+
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param hal_py.netlist_preprocessing.NetlistFlavor flavor: Originating synthesizer flavor selecting the gate-name parsing rule. Defaults to ``Default``.
                 :returns: The number of reconstructed names on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");

@@ -2248,44 +2248,28 @@ namespace hal
 
         namespace
         {
-            // TODO when the verilog parser changes are merged into the master this will no longer be needed
-            const std::string hal_instance_index_pattern         = "__\\[(\\d+)\\]__";
-            const std::string hal_instance_index_pattern_reverse = "<HAL>(\\d+)<HAL>";
+            const std::string net_index_pattern              = "\\((\\d+)\\)";
+            const std::string gate_index_pattern_brackets    = "\\[(\\d+)\\]";
+            // Synopsys Design Compiler emits flip-flop instance names that end with `_<idx>_`,
+            // e.g. `block_reg_reg_31_` for a 1D register and `block_reg_reg_0__31_` for a 2D array
+            // (where `0` is the outer index, `31` the inner). The regex anchors to the end so the
+            // extracted index is always the trailing one.
+            const std::string gate_index_pattern_dc_underscore = "_(\\d+)_$";
 
-            std::string replace_hal_instance_index(const std::string& name)
+            // Selects the gate-name index pattern for the given flavor.
+            const std::string& gate_index_pattern_for(const NetlistFlavor flavor)
             {
-                std::regex re(hal_instance_index_pattern);
-
-                std::string input = name;
-                std::string index;
-                std::smatch match;
-                while (std::regex_search(input, match, re))
+                switch (flavor)
                 {
-                    index = match[1];
-                    input = utils::replace(input, match.str(), "<HAL>" + index + "<HAL>");
+                    case NetlistFlavor::SynopsysDC:
+                        return gate_index_pattern_dc_underscore;
+                    case NetlistFlavor::Default:
+                    case NetlistFlavor::Yosys:
+                    case NetlistFlavor::Vivado:
+                    default:
+                        return gate_index_pattern_brackets;
                 }
-
-                return input;
             }
-
-            std::string reconstruct_hal_instance_index(const std::string& name)
-            {
-                std::regex re(hal_instance_index_pattern_reverse);
-
-                std::string input = name;
-                std::string index;
-                std::smatch match;
-                while (std::regex_search(input, match, re))
-                {
-                    index = match[1];
-                    input = utils::replace(input, match.str(), "__[" + index + "]__");
-                }
-
-                return input;
-            }
-
-            const std::string net_index_pattern  = "\\((\\d+)\\)";
-            const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
             // Extracts an index from a string by taking the last integer enclosed by parentheses
             std::optional<indexed_identifier>
@@ -2394,21 +2378,21 @@ namespace hal
             }
         }    // namespace
 
-        Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl)
+        Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl, const NetlistFlavor flavor)
         {
+            const std::string& gate_index_pattern = gate_index_pattern_for(flavor);
+
             u32 counter = 0;
             for (auto& ff : nl->get_gates([](const auto g) { return g->get_type()->has_property(GateTypeProperty::ff); }))
             {
                 std::vector<indexed_identifier> all_identifiers;
 
                 // 1) Check whether the ff gate already has an index annotated in its gate name
-                const auto cleaned_gate_name = replace_hal_instance_index(ff->get_name());
-                const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name", "", PinDirection::none, 0);
+                const auto gate_name_index = extract_index(ff->get_name(), gate_index_pattern, "gate_name", "", PinDirection::none, 0);
 
                 if (gate_name_index.has_value())
                 {
-                    auto found_identifier       = gate_name_index.value();
-                    found_identifier.identifier = reconstruct_hal_instance_index(found_identifier.identifier);
+                    auto found_identifier = gate_name_index.value();
                     all_identifiers.push_back(found_identifier);
                 }
 

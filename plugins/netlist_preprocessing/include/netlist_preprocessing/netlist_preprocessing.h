@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
+#include "netlist_preprocessing/netlist_flavor.h"
 #include "nlohmann/json.hpp"
 
 #include <map>
@@ -199,15 +200,18 @@ namespace hal
         /**
          * Tries to reconstruct a name and index for each flip flop that was part of a multi-bit wire in the verilog code.
          * This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
-         * This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
-         * We try to reconstruct name and index for each flip flop based on the name of its output nets.
-         * 
+         * The exact rules used to recover the name and index from a flip-flop's gate name depend on the supplied `flavor`:
+         *   - `Default`, `Yosys`, `Vivado`: gate names are expected to encode the index as `[<int>]` (e.g. `block_reg[31]`).
+         *   - `SynopsysDC`: gate names are expected to end with `_<int>_` (e.g. `block_reg_reg_31_` or `block_reg_reg_0__31_` for 2D arrays).
+         * The net-name rules are flavor-independent and use HAL's normalized `(<int>)` form.
+         *
          * The reconstructed indexed identifiers get annotated to the flip flop in the gate data container.
-         * 
+         *
          * @param[in] nl - The netlist to operate on.
+         * @param[in] flavor - Originating synthesizer flavor; selects the gate-name parsing rule. Defaults to `Default`.
          * @return OK() and the number of reconstructed names on success, an error otherwise.
         */
-        Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
+        Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl, const NetlistFlavor flavor = NetlistFlavor::Default);
 
         /**
          *  Tries to reconstruct top module pin groups via indexed pin names.
