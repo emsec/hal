@@ -84,10 +84,19 @@ namespace hal
             while (mTextEdit->find(regExp, options))
             {
                 found = true; // just return if something is found, position doesnt matter
+                QTextCursor cur = mTextEdit->textCursor();
+                if (cur.anchor() == cur.position()) // zero-length match
+                {
+                    if (!cur.movePosition(QTextCursor::NextCharacter))
+                        break; // end of document reached
+                    mTextEdit->setTextCursor(cur);
+                    continue;
+                }
+
                 QTextEdit::ExtraSelection extra;
                 extra.format.setForeground(QBrush(color));
                 extra.format.setBackground(mBackgroundColor);
-                extra.cursor = mTextEdit->textCursor();
+                extra.cursor = cur;
                 extraSelections.append(extra);
             }
         }

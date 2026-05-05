@@ -6,8 +6,6 @@
 
 #include "gui/searchbar/searchoptions.h"
 
-#include "gui/gui_globals.h"
-
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
@@ -230,10 +228,18 @@ namespace hal
 #endif
             while (find(regExp, options))
             {
+                QTextCursor cur = textCursor();
+                if (cur.anchor() == cur.position()) // zero-length match
+                {
+                    if (!cur.movePosition(QTextCursor::NextCharacter))
+                        break; // end of document reached
+                    setTextCursor(cur);
+                    continue;
+                }
                 QTextEdit::ExtraSelection extra;
                 extra.format.setForeground(QBrush(color));
                 extra.format.setBackground(mBackgroundColor);
-                extra.cursor = textCursor();
+                extra.cursor = cur;
                 extraSelections.append(extra);
             }
         }
