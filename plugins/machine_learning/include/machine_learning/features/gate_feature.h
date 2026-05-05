@@ -454,6 +454,149 @@ namespace hal
             };
 
             /**
+             * Binary indicator: is the gate part of a directed cycle on the original netlist
+             * graph? Equivalent to "can the gate reach itself by following directed edges".
+             *
+             * Implementation: forward BFS from `g`'s output endpoints, returning 1 as soon as
+             * an input endpoint of `g` is reached, 0 otherwise. The BFS is bounded by `cutoff`
+             * (unbounded if negative), so a cycle longer than the cutoff is reported as 0.
+             *
+             * @param cutoff - Maximum cycle length to consider (-1 means unbounded).
+             * @param forbidden_pin_types - Endpoints on pins of these types are not crossed
+             *                              during traversal (e.g., to ignore reset / clock cones).
+             *
+             * Legend (width 1): the binary indicator.
+             */
+            class InCycle : public GateFeature
+            {
+            public:
+                InCycle(const i32 cutoff = -1, const std::vector<PinType>& forbidden_pin_types = {}) : m_cutoff(cutoff), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const i32 m_cutoff;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
+             * Length of the shortest directed cycle through the gate on the original netlist
+             * graph, clamped to 255. Gates that are not part of any cycle (within `cutoff`)
+             * receive the clamp value.
+             *
+             * @param cutoff - Maximum cycle length to consider (-1 means unbounded). Cycles
+             *                 longer than the cutoff are reported as the clamp value.
+             * @param forbidden_pin_types - Endpoints on pins of these types are not crossed
+             *                              during traversal.
+             *
+             * Legend (width 1): the cycle length.
+             */
+            class ShortestCycleLength : public GateFeature
+            {
+            public:
+                ShortestCycleLength(const i32 cutoff = -1, const std::vector<PinType>& forbidden_pin_types = {}) : m_cutoff(cutoff), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const i32 m_cutoff;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
+             * Binary indicator: is the gate part of a closed directed walk of length exactly
+             * `length` on the original netlist graph?
+             *
+             * Implementation: layer-by-layer expansion of "set of gates reachable in exactly k
+             * steps from `g`" for k = 0..length, then test `g ∈ R_length`. Walks may revisit
+             * intermediate gates; this is equivalent to A^length[g][g] > 0 on the directed
+             * adjacency matrix.
+             *
+             * @param length - The walk length to test for (number of edges).
+             * @param forbidden_pin_types - Endpoints on pins of these types are not crossed
+             *                              during traversal.
+             *
+             * Legend (width 1): the binary indicator.
+             */
+            class InCycleOfLength : public GateFeature
+            {
+            public:
+                InCycleOfLength(const u32 length, const std::vector<PinType>& forbidden_pin_types = {}) : m_length(length), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const u32 m_length;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
+             * Same as InCycle but evaluated on the sequential abstraction (combinational gates
+             * collapsed). Non-sequential gates always receive 0.
+             *
+             * Legend (width 1): the binary indicator.
+             */
+            class SequentialInCycle : public GateFeature
+            {
+            public:
+                SequentialInCycle(const i32 cutoff = -1, const std::vector<PinType>& forbidden_pin_types = {}) : m_cutoff(cutoff), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const i32 m_cutoff;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
+             * Same as ShortestCycleLength but evaluated on the sequential abstraction
+             * (combinational gates collapsed). Non-sequential gates receive the clamp value.
+             *
+             * Legend (width 1): the cycle length.
+             */
+            class SequentialShortestCycleLength : public GateFeature
+            {
+            public:
+                SequentialShortestCycleLength(const i32 cutoff = -1, const std::vector<PinType>& forbidden_pin_types = {}) : m_cutoff(cutoff), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const i32 m_cutoff;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
+             * Same as InCycleOfLength but evaluated on the sequential abstraction (combinational
+             * gates collapsed). Non-sequential gates always receive 0.
+             *
+             * Legend (width 1): the binary indicator.
+             */
+            class SequentialInCycleOfLength : public GateFeature
+            {
+            public:
+                SequentialInCycleOfLength(const u32 length, const std::vector<PinType>& forbidden_pin_types = {}) : m_length(length), m_forbidden_pin_types(forbidden_pin_types){};
+
+                Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
+                std::string to_string() const override;
+                std::vector<std::string> get_legend(Context& ctx) const override;
+
+            private:
+                const u32 m_length;
+                const std::vector<PinType> m_forbidden_pin_types;
+            };
+
+            /**
              * Boolean influence of a sequential gate's output nets on the downstream sequential
              * cone.
              *

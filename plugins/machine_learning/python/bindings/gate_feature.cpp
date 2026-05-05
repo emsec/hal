@@ -685,6 +685,297 @@ namespace hal
             :rtype: str
             )");
 
+        // InCycle class
+        py::class_<machine_learning::gate_feature::InCycle, machine_learning::gate_feature::GateFeature> py_in_cycle(py_gate_feature, "InCycle", R"(
+            Gate feature: binary indicator that the gate is part of a directed cycle on the
+            original netlist graph.
+        )");
+
+        py_in_cycle.def(py::init<const i32, const std::vector<PinType>&>(),
+                        py::arg("cutoff")              = -1,
+                        py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                        R"(
+            Construct an InCycle gate feature.
+
+            :param int cutoff: Maximum cycle length to consider. -1 means unbounded. Defaults to -1.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_in_cycle.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::InCycle& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the InCycle feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the binary indicator on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_in_cycle.def("to_string", &machine_learning::gate_feature::InCycle::to_string, R"(
+            Get the string representation of the InCycle gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        // ShortestCycleLength class
+        py::class_<machine_learning::gate_feature::ShortestCycleLength, machine_learning::gate_feature::GateFeature> py_shortest_cycle_length(py_gate_feature, "ShortestCycleLength", R"(
+            Gate feature: length of the shortest directed cycle through the gate on the original
+            netlist graph, clamped to 255.
+        )");
+
+        py_shortest_cycle_length.def(py::init<const i32, const std::vector<PinType>&>(),
+                                     py::arg("cutoff")              = -1,
+                                     py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                     R"(
+            Construct a ShortestCycleLength gate feature.
+
+            :param int cutoff: Maximum cycle length to consider. -1 means unbounded. Defaults to -1.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_shortest_cycle_length.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::ShortestCycleLength& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the ShortestCycleLength feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the cycle length on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_shortest_cycle_length.def("to_string", &machine_learning::gate_feature::ShortestCycleLength::to_string, R"(
+            Get the string representation of the ShortestCycleLength gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        // InCycleOfLength class
+        py::class_<machine_learning::gate_feature::InCycleOfLength, machine_learning::gate_feature::GateFeature> py_in_cycle_of_length(py_gate_feature, "InCycleOfLength", R"(
+            Gate feature: binary indicator that there is a closed directed walk of length exactly
+            `length` through the gate on the original netlist graph.
+        )");
+
+        py_in_cycle_of_length.def(py::init<const u32, const std::vector<PinType>&>(),
+                                  py::arg("length"),
+                                  py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                  R"(
+            Construct an InCycleOfLength gate feature.
+
+            :param int length: The walk length to test for (number of edges).
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_in_cycle_of_length.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::InCycleOfLength& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the InCycleOfLength feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the binary indicator on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_in_cycle_of_length.def("to_string", &machine_learning::gate_feature::InCycleOfLength::to_string, R"(
+            Get the string representation of the InCycleOfLength gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        // SequentialInCycle class
+        py::class_<machine_learning::gate_feature::SequentialInCycle, machine_learning::gate_feature::GateFeature> py_sequential_in_cycle(py_gate_feature, "SequentialInCycle", R"(
+            Gate feature: binary indicator that the gate is part of a directed cycle on the
+            sequential netlist abstraction. Always 0 for non-sequential gates.
+        )");
+
+        py_sequential_in_cycle.def(py::init<const i32, const std::vector<PinType>&>(),
+                                   py::arg("cutoff")              = -1,
+                                   py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                   R"(
+            Construct a SequentialInCycle gate feature.
+
+            :param int cutoff: Maximum cycle length to consider. -1 means unbounded. Defaults to -1.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_sequential_in_cycle.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::SequentialInCycle& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the SequentialInCycle feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the binary indicator on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_sequential_in_cycle.def("to_string", &machine_learning::gate_feature::SequentialInCycle::to_string, R"(
+            Get the string representation of the SequentialInCycle gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        // SequentialShortestCycleLength class
+        py::class_<machine_learning::gate_feature::SequentialShortestCycleLength, machine_learning::gate_feature::GateFeature> py_sequential_shortest_cycle_length(
+            py_gate_feature, "SequentialShortestCycleLength", R"(
+            Gate feature: length of the shortest directed cycle through the gate on the
+            sequential netlist abstraction, clamped to 255. Non-sequential gates receive the clamp value.
+        )");
+
+        py_sequential_shortest_cycle_length.def(py::init<const i32, const std::vector<PinType>&>(),
+                                                py::arg("cutoff")              = -1,
+                                                py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                                R"(
+            Construct a SequentialShortestCycleLength gate feature.
+
+            :param int cutoff: Maximum cycle length to consider. -1 means unbounded. Defaults to -1.
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_sequential_shortest_cycle_length.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::SequentialShortestCycleLength& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the SequentialShortestCycleLength feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the cycle length on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_sequential_shortest_cycle_length.def("to_string", &machine_learning::gate_feature::SequentialShortestCycleLength::to_string, R"(
+            Get the string representation of the SequentialShortestCycleLength gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
+        // SequentialInCycleOfLength class
+        py::class_<machine_learning::gate_feature::SequentialInCycleOfLength, machine_learning::gate_feature::GateFeature> py_sequential_in_cycle_of_length(
+            py_gate_feature, "SequentialInCycleOfLength", R"(
+            Gate feature: binary indicator that there is a closed directed walk of length exactly
+            `length` through the gate on the sequential netlist abstraction. Always 0 for
+            non-sequential gates.
+        )");
+
+        py_sequential_in_cycle_of_length.def(py::init<const u32, const std::vector<PinType>&>(),
+                                             py::arg("length"),
+                                             py::arg("forbidden_pin_types") = std::vector<PinType>(),
+                                             R"(
+            Construct a SequentialInCycleOfLength gate feature.
+
+            :param int length: The walk length to test for (number of edges).
+            :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
+        )");
+
+        py_sequential_in_cycle_of_length.def(
+            "calculate_feature",
+            [](const machine_learning::gate_feature::SequentialInCycleOfLength& self, machine_learning::Context& ctx, const Gate* g) -> std::optional<std::vector<FEATURE_TYPE>> {
+                auto res = self.calculate_feature(ctx, g);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while calculating feature:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("feature_context"),
+            py::arg("gate"),
+            R"(
+                Calculate the SequentialInCycleOfLength feature for the given gate in the given feature context.
+
+                :param hal_py.machine_learning.Context feature_context: The feature context.
+                :param hal_py.Gate gate: The gate.
+                :returns: A single-element list with the binary indicator on success, None otherwise.
+                :rtype: list[FEATURE_TYPE] or None
+            )");
+
+        py_sequential_in_cycle_of_length.def("to_string", &machine_learning::gate_feature::SequentialInCycleOfLength::to_string, R"(
+            Get the string representation of the SequentialInCycleOfLength gate feature.
+
+            :returns: The string representation.
+            :rtype: str
+        )");
+
         // BooleanInfluence class
         py::class_<machine_learning::gate_feature::BooleanInfluence, machine_learning::gate_feature::GateFeature> py_boolean_influence(py_gate_feature, "BooleanInfluence", R"(
             Gate feature representing the Boolean influence of a gate's output nets on downstream sequential gate inputs.
