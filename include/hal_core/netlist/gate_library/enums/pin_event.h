@@ -96,10 +96,12 @@ namespace hal
         };
 
         static std::unordered_map<Module*,EventStack*> s_event_stack;
+        static u64 s_order;
 
         Module* m_module;
         PinEvent m_event;
         u32 m_id;
+        u64 m_order;
 
     public:
         /**
