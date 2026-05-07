@@ -1,3 +1,4 @@
+#include "graph_algorithm/algorithms/centrality.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/decorators/netlist_abstraction_decorator.h"
 #include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
@@ -7,7 +8,6 @@
 #include "hal_core/utilities/progress_printer.h"
 #include "machine_learning/features/gate_feature.h"
 #include "machine_learning/utilities/normalization.h"
-#include "graph_algorithm/algorithms/centrality.h"
 
 #include <vector>
 
@@ -51,7 +51,7 @@ namespace hal
 
             std::string BetweennessCentrality::to_string() const
             {
-                return "BetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(static_cast<int>(m_normalization));
+                return "BetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + enum_to_string(m_normalization);
             }
 
             std::vector<std::string> BetweennessCentrality::get_legend(Context& ctx) const
@@ -109,7 +109,7 @@ namespace hal
 
             std::string HarmonicCentrality::to_string() const
             {
-                return "HarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(static_cast<int>(m_normalization));
+                return "HarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + enum_to_string(m_normalization);
             }
 
             std::vector<std::string> HarmonicCentrality::get_legend(Context& ctx) const
@@ -167,7 +167,7 @@ namespace hal
 
             std::string SequentialBetweennessCentrality::to_string() const
             {
-                return "SequentialBetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(static_cast<int>(m_normalization));
+                return "SequentialBetweennessCentrality" + std::to_string(m_directed) + "_" + std::to_string(m_cutoff) + "_" + enum_to_string(m_normalization);
             }
 
             std::vector<std::string> SequentialBetweennessCentrality::get_legend(Context& ctx) const
@@ -241,7 +241,7 @@ namespace hal
 
             std::string SequentialHarmonicCentrality::to_string() const
             {
-                return "SequentialHarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + std::to_string(static_cast<int>(m_normalization));
+                return "SequentialHarmonicCentrality" + enum_to_string(m_direction) + "_" + std::to_string(m_cutoff) + "_" + enum_to_string(m_normalization);
             }
 
             std::vector<std::string> SequentialHarmonicCentrality::get_legend(Context& ctx) const
