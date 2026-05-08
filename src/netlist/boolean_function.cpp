@@ -1046,10 +1046,16 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::from_string(const std::string& expression)
     {
+        return BooleanFunction::from_string(expression, {});
+    }
+
+    Result<BooleanFunction> BooleanFunction::from_string(const std::string& expression, const std::map<std::string, u16>& var_sizes)
+    {
         using BooleanFunctionParser::ParserType;
         using BooleanFunctionParser::Token;
 
-        static const std::vector<std::tuple<ParserType, std::function<Result<std::vector<Token>>(const std::string&)>>> parsers = {
+        using ParserFn = std::function<Result<std::vector<Token>>(const std::string&, const std::map<std::string, u16>&)>;
+        static const std::vector<std::tuple<ParserType, ParserFn>> parsers = {
             {ParserType::Standard, BooleanFunctionParser::parse_with_standard_grammar},
             {ParserType::Liberty, BooleanFunctionParser::parse_with_liberty_grammar},
             {ParserType::LibertyNoSpace, BooleanFunctionParser::parse_with_liberty_grammar}
@@ -1069,7 +1075,7 @@ namespace hal
                 used_parser_type = ParserType::Liberty;
             }
 
-            auto tokens = parser(sanitized_expression);
+            auto tokens = parser(sanitized_expression, var_sizes);
             // (1) skip if parser cannot translate to tokens
             if (tokens.is_error())
             {
@@ -1556,10 +1562,95 @@ namespace hal
         /// In order to validate correctness of a Boolean function, we analyze
         /// the arity of each node and whether its value matches the number of
         /// parameters and covered nodes in the abstract syntax tree.
-        if (auto coverage = function.compute_node_coverage(); coverage.back() != function.length())
+        const auto coverage = function.compute_node_coverage();
+        if (coverage.back() != function.length())
         {
             auto str = function.to_string_in_reverse_polish_notation();
             return ERR("could not validate '" + str + "': imbalanced function with coverage '" + std::to_string(coverage.back()) + " != " + std::to_string(function.length()));
+        }
+
+        // Validate that operand bit-widths are consistent with each operator's expectations.
+        // Operands of an operator at index i are stored in the implicit RPN tree: the last
+        // operand's root is at i-1, the previous one's root is i-1 - coverage[op_root], etc.
+        const auto& nodes = function.m_nodes;
+        for (size_t i = 0; i < nodes.size(); ++i)
+        {
+            const auto& n     = nodes[i];
+            const u16 arity   = n.get_arity();
+            if (arity == 0)
+            {
+                continue;
+            }
+
+            std::vector<size_t> op_idx(arity);
+            size_t cursor = i - 1;
+            for (int k = static_cast<int>(arity) - 1; k >= 0; --k)
+            {
+                op_idx[k] = cursor;
+                if (k > 0)
+                {
+                    cursor -= coverage[cursor];
+                }
+            }
+
+            const auto op_size = [&](size_t k) -> u16 { return nodes[op_idx[k]].size; };
+
+            switch (n.type)
+            {
+                // Binary operators where both operands and result share the same bit-width.
+                case NodeType::And:
+                case NodeType::Or:
+                case NodeType::Xor:
+                case NodeType::Add:
+                case NodeType::Sub:
+                case NodeType::Mul:
+                case NodeType::Sdiv:
+                case NodeType::Udiv:
+                case NodeType::Srem:
+                case NodeType::Urem:
+                    if (op_size(0) != n.size || op_size(1) != n.size)
+                    {
+                        return ERR("could not validate Boolean function: bit-size mismatch in '" + std::to_string(n.type) + "' node (operands " + std::to_string(op_size(0)) + ", "
+                                   + std::to_string(op_size(1)) + " vs result " + std::to_string(n.size) + ")");
+                    }
+                    break;
+
+                // Unary operator whose operand and result share the same bit-width.
+                case NodeType::Not:
+                    if (op_size(0) != n.size)
+                    {
+                        return ERR("could not validate Boolean function: bit-size mismatch in 'Not' node (operand " + std::to_string(op_size(0)) + " vs result " + std::to_string(n.size) + ")");
+                    }
+                    break;
+
+                // Comparison operators: both operands must share a width; result is 1-bit.
+                case NodeType::Eq:
+                case NodeType::Sle:
+                case NodeType::Slt:
+                case NodeType::Ule:
+                case NodeType::Ult:
+                    if (op_size(0) != op_size(1) || n.size != 1)
+                    {
+                        return ERR("could not validate Boolean function: bit-size mismatch in comparison node (operands " + std::to_string(op_size(0)) + ", " + std::to_string(op_size(1))
+                                   + " vs result " + std::to_string(n.size) + ")");
+                    }
+                    break;
+
+                // If-Then-Else: condition is 1-bit, then/else and result share a width.
+                case NodeType::Ite:
+                    if (op_size(0) != 1 || op_size(1) != n.size || op_size(2) != n.size)
+                    {
+                        return ERR("could not validate Boolean function: bit-size mismatch in 'Ite' node (cond " + std::to_string(op_size(0)) + ", then " + std::to_string(op_size(1)) + ", else "
+                                   + std::to_string(op_size(2)) + " vs result " + std::to_string(n.size) + ")");
+                    }
+                    break;
+
+                // Other node types (Concat, Slice, Zext, Sext, shifts, ...) have specialized
+                // size rules; their construction goes through dedicated factories that already
+                // perform the relevant checks, so we don't re-validate them here.
+                default:
+                    break;
+            }
         }
 
         return OK(std::move(function));

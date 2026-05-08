@@ -241,6 +241,446 @@ namespace hal {
         }
     }
 
+    TEST(BooleanFunction, ParserTernaryAndEq) {
+        // Single ternary
+        {
+            auto fn = BooleanFunction::from_string("a ? b : c");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), BooleanFunction::Var("b"), BooleanFunction::Var("c"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Equality with constants
+        {
+            auto fn = BooleanFunction::from_string("a == 1");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Var("a"), BooleanFunction::Const(1, 1), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Ternary whose condition is a comparison
+        {
+            auto fn = BooleanFunction::from_string("(p == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            auto cond = BooleanFunction::Eq(BooleanFunction::Var("p"), BooleanFunction::Const(1, 1), 1);
+            ASSERT_TRUE(cond.is_ok());
+            auto expected = BooleanFunction::Ite(cond.get(), BooleanFunction::Var("a"), BooleanFunction::Var("b"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Nested ternary with explicit parens — outer cond is `a`, then-branch is the inner ternary
+        {
+            auto fn = BooleanFunction::from_string("a ? (b ? c : d) : e");
+            ASSERT_TRUE(fn.is_ok());
+            auto inner = BooleanFunction::Ite(BooleanFunction::Var("b"), BooleanFunction::Var("c"), BooleanFunction::Var("d"), 1);
+            ASSERT_TRUE(inner.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), inner.get(), BooleanFunction::Var("e"), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Multi-bit binary constant
+        {
+            auto fn = BooleanFunction::from_string("0b101");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(5, 3));
+        }
+        // Multi-bit hex constant (each digit = 4 bits)
+        {
+            auto fn = BooleanFunction::from_string("0xA");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(10, 4));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0xff");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0xff, 8));
+        }
+        // Multi-bit octal constant (each digit = 3 bits)
+        {
+            auto fn = BooleanFunction::from_string("0o7");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(7, 3));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0o17");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0017, 6));
+        }
+        // Unparenthesized nested ternary parses with right-associativity:
+        // `a ? b : c ? d : e` == `a ? b : (c ? d : e)`
+        {
+            auto fn = BooleanFunction::from_string("a ? b : c ? d : e");
+            ASSERT_TRUE(fn.is_ok());
+            auto inner = BooleanFunction::Ite(BooleanFunction::Var("c"), BooleanFunction::Var("d"), BooleanFunction::Var("e"), 1);
+            ASSERT_TRUE(inner.is_ok());
+            auto expected = BooleanFunction::Ite(BooleanFunction::Var("a"), BooleanFunction::Var("b"), inner.get(), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Equality with multi-bit constants
+        {
+            auto fn = BooleanFunction::from_string("0b101 == 0b101");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Const(5, 3), BooleanFunction::Const(5, 3), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        {
+            auto fn = BooleanFunction::from_string("0xA == 0xA");
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Const(10, 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+    }
+
+    TEST(BooleanFunction, ParserTernarySimplify) {
+        // `1 ? a : b` reduces to `a`
+        {
+            auto fn = BooleanFunction::from_string("1 ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `0 ? a : b` reduces to `b`
+        {
+            auto fn = BooleanFunction::from_string("0 ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("b"));
+        }
+        // `(1 == 1) ? a : b` reduces to `a`
+        {
+            auto fn = BooleanFunction::from_string("(1 == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `(1 == 0) ? a : b` reduces to `b`
+        {
+            auto fn = BooleanFunction::from_string("(1 == 0) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("b"));
+        }
+        // Substitute a parameter, then simplify reduces the ternary to one branch.
+        {
+            auto fn = BooleanFunction::from_string("(p == 1) ? a : b");
+            ASSERT_TRUE(fn.is_ok());
+            auto subst = fn.get().substitute("p", BooleanFunction::Const(1, 1));
+            ASSERT_TRUE(subst.is_ok());
+            EXPECT_EQ(subst.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // `cond ? x : x` simplifies to `x` regardless of cond.
+        {
+            auto fn = BooleanFunction::from_string("cond ? x : x");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Var("x"));
+        }
+        // Simplification of equality between matching multi-bit constants.
+        {
+            auto fn = BooleanFunction::from_string("0b101 == 0b101");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(1, 1));
+        }
+        // Simplification of equality between non-matching multi-bit constants.
+        {
+            auto fn = BooleanFunction::from_string("0xA == 0xB");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(0, 1));
+        }
+    }
+
+    TEST(BooleanFunction, ParserWithVariableSizes) {
+        // Without a size map, A == 0xA produces a malformed BF (sizes mismatch).
+        // With the map, A is parsed as 4-bit and the comparison is well-formed.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A == 0xA", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Eq(BooleanFunction::Var("A", 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Substituting A with a matching constant + simplifying reduces fully.
+        {
+            std::map<std::string, u16> sizes = {{"mode", 2}};
+            auto fn = BooleanFunction::from_string("(mode == 0b10) ? a : b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto subst = fn.get().substitute("mode", BooleanFunction::Const(2, 2));
+            ASSERT_TRUE(subst.is_ok());
+            EXPECT_EQ(subst.get().simplify(), BooleanFunction::Var("a"));
+        }
+        // Variables not in the map default to 1 bit (preserves existing behavior).
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("(A == 0xA) & b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto eq = BooleanFunction::Eq(BooleanFunction::Var("A", 4), BooleanFunction::Const(10, 4), 1);
+            ASSERT_TRUE(eq.is_ok());
+            auto expected = eq.get() & BooleanFunction::Var("b");
+            EXPECT_EQ(fn.get(), expected);
+        }
+    }
+
+    TEST(BooleanFunction, ParserMultiBitOps) {
+        const std::map<std::string, u16> sizes = {{"A", 4}, {"B", 4}};
+
+        // AND with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A & B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) & BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // OR with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A | B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) | BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // XOR with multi-bit variables
+        {
+            auto fn = BooleanFunction::from_string("A ^ B", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Var("A", 4) ^ BooleanFunction::Var("B", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // NOT with a multi-bit variable
+        {
+            auto fn = BooleanFunction::from_string("!A", {{"A", 4}});
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), ~BooleanFunction::Var("A", 4));
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // Compound: combination of multi-bit ops
+        {
+            auto fn = BooleanFunction::from_string("(A & B) ^ !A", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            const auto a = BooleanFunction::Var("A", 4);
+            const auto b = BooleanFunction::Var("B", 4);
+            EXPECT_EQ(fn.get(), (a.clone() & b) ^ ~a);
+        }
+        // AND of two multi-bit constants (no map needed)
+        {
+            auto fn = BooleanFunction::from_string("0xA & 0xF");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get(), BooleanFunction::Const(0xA, 4) & BooleanFunction::Const(0xF, 4));
+        }
+    }
+
+    TEST(BooleanFunction, ParserSizeMismatchFailures) {
+        // Variable defaults to 1 bit but constant is 4 bit -> Eq operands differ.
+        {
+            auto fn = BooleanFunction::from_string("A == 0xA");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // 1-bit variable AND'd with 4-bit constant.
+        {
+            auto fn = BooleanFunction::from_string("A & 0xF");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // A is 4-bit, B defaults to 1-bit; bit-widths don't match in AND.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A & B", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Octal (3-bit) compared to binary 4-bit constant.
+        {
+            auto fn = BooleanFunction::from_string("0o7 == 0b1111");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Mixed sizes inside a ternary: condition is 4-bit, but Ite requires 1-bit cond.
+        {
+            std::map<std::string, u16> sizes = {{"A", 4}};
+            auto fn = BooleanFunction::from_string("A ? a : b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+    }
+
+    TEST(BooleanFunction, ParserArithmeticOps) {
+        const std::map<std::string, u16> sizes = {{"a", 4}, {"b", 4}, {"c", 4}};
+
+        // Addition with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a + b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Add(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+            EXPECT_EQ(fn.get().size(), 4);
+        }
+        // Subtraction with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a - b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Sub(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Multiplication with multi-bit variables.
+        {
+            auto fn = BooleanFunction::from_string("a * b", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto expected = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul has higher precedence than Add: `a + b * c` == `a + (b * c)`.
+        {
+            auto fn = BooleanFunction::from_string("a + b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto expected = BooleanFunction::Add(BooleanFunction::Var("a", 4), bc.get(), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul on the left of Add: `a * b + c` == `(a * b) + c`.
+        {
+            auto fn = BooleanFunction::from_string("a * b + c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Add(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul interleaved with Sub on both sides: `a - b * c - d` == `(a - (b * c)) - d`.
+        {
+            std::map<std::string, u16> sizes_d = {{"a", 4}, {"b", 4}, {"c", 4}, {"d", 4}};
+            auto fn = BooleanFunction::from_string("a - b * c - d", sizes_d);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto a_bc = BooleanFunction::Sub(BooleanFunction::Var("a", 4), bc.get(), 4);
+            ASSERT_TRUE(a_bc.is_ok());
+            auto expected = BooleanFunction::Sub(a_bc.get(), BooleanFunction::Var("d", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul is left-associative: `a * b * c` == `(a * b) * c`.
+        {
+            auto fn = BooleanFunction::from_string("a * b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Mul(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Mul(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Mul has higher precedence than the bitwise And: `a & b * c` == `a & (b * c)`.
+        {
+            auto fn = BooleanFunction::from_string("a & b * c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto bc = BooleanFunction::Mul(BooleanFunction::Var("b", 4), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(bc.is_ok());
+            auto expected = BooleanFunction::Var("a", 4) & bc.get();
+            EXPECT_EQ(fn.get(), expected);
+        }
+        // Subtraction is left-associative: `a - b - c` == `(a - b) - c`.
+        {
+            auto fn = BooleanFunction::from_string("a - b - c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Sub(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Sub(ab.get(), BooleanFunction::Var("c", 4), 4);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Addition has higher precedence than equality: `a + b == c` parses
+        // as `(a + b) == c` (Eq result is 1-bit, operands share the 4-bit width).
+        {
+            auto fn = BooleanFunction::from_string("a + b == c", sizes);
+            ASSERT_TRUE(fn.is_ok());
+            auto ab = BooleanFunction::Add(BooleanFunction::Var("a", 4), BooleanFunction::Var("b", 4), 4);
+            ASSERT_TRUE(ab.is_ok());
+            auto expected = BooleanFunction::Eq(ab.get(), BooleanFunction::Var("c", 4), 1);
+            ASSERT_TRUE(expected.is_ok());
+            EXPECT_EQ(fn.get(), expected.get());
+        }
+        // Constants only — exercises that the parser/validator accept multi-bit constant arithmetic.
+        {
+            auto fn = BooleanFunction::from_string("0b01 + 0b10");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().size(), 2);
+            // simplify reduces to the concrete sum.
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(3, 2));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0b11 * 0b10");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(6, 2));
+        }
+        {
+            auto fn = BooleanFunction::from_string("0b11 - 0b01");
+            ASSERT_TRUE(fn.is_ok());
+            EXPECT_EQ(fn.get().simplify(), BooleanFunction::Const(2, 2));
+        }
+    }
+
+    TEST(BooleanFunction, ParserArithmeticSizeMismatch) {
+        // Notes on cross-parser behavior: from_string tries Standard, then Liberty, then
+        // LibertyNoSpace. The cases here are picked so that all three parsers fail —
+        // Standard by operand-size validation, Liberty by either rejecting the operator
+        // ('-') or by ending up with the same mismatched-size structure ('+' => Or,
+        // '*' => And).
+        {
+            // 4-bit + 1-bit default in Standard (Add) and Liberty (Or).
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a + b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        {
+            // 4-bit - 1-bit default; Liberty has no '-' operator so it cannot tokenize.
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a - b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+        {
+            // 4-bit * 1-bit default in Standard (Mul) and Liberty (And).
+            std::map<std::string, u16> sizes = {{"a", 4}};
+            auto fn = BooleanFunction::from_string("a * b", sizes);
+            EXPECT_TRUE(fn.is_error());
+        }
+    }
+
+    TEST(BooleanFunction, ParserMalformedTernary) {
+        // `?` without matching `:`
+        {
+            auto fn = BooleanFunction::from_string("a ? b");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `:` without preceding `?`
+        {
+            auto fn = BooleanFunction::from_string("a : b");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `?` in isolation at the start
+        {
+            auto fn = BooleanFunction::from_string("? a");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // `:` in isolation at the start
+        {
+            auto fn = BooleanFunction::from_string(": a");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Wrong order: `:` appears before its `?`
+        {
+            auto fn = BooleanFunction::from_string("a : b ? c");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Trailing `?` with nothing after
+        {
+            auto fn = BooleanFunction::from_string("a ?");
+            EXPECT_TRUE(fn.is_error());
+        }
+        // Missing then-branch: `?:` with no operand between them
+        {
+            auto fn = BooleanFunction::from_string("a ? : b");
+            EXPECT_TRUE(fn.is_error());
+        }
+    }
+
     TEST(BooleanFunction, Parameters) {
         const auto a = BooleanFunction::Var("A"),
                    b = BooleanFunction::Var("B"),

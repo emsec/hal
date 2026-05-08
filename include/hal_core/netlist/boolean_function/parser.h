@@ -27,6 +27,8 @@
 
 #include "hal_core/netlist/boolean_function.h"
 
+#include <map>
+
 namespace hal
 {
     namespace BooleanFunctionParser
@@ -51,6 +53,12 @@ namespace hal
             NotSuffix, /** <Boolean Not operation as a expresion suffix (e.g., "'" for liberty grammar). */
             Or,        /**< Boolean Or operation (e.g., "|"). */
             Xor,       /**< Boolean Xor operation (e.g., "^"). */
+            Eq,        /**< Equality comparison operation (e.g., "=="). */
+            Question,  /**< Ternary `?` (start of conditional expression). */
+            Colon,     /**< Ternary `:` (separator between then and else branches). */
+            Add,       /**< Arithmetic addition operation (e.g., "+"). */
+            Sub,       /**< Arithmetic subtraction operation (e.g., "-"). */
+            Mul,       /**< Arithmetic multiplication operation (e.g., "*"). */
 
             Variable, /**< Boolean variable (e.g., "i0"). */
             Constant, /**< Boolean constant (e.g., "0" or "1"). */
@@ -117,10 +125,52 @@ namespace hal
 
             /**
              * Creates an `XOR` token.
-             * 
+             *
              * @returns The `XOR` token.
              */
             static Token Xor();
+
+            /**
+             * Creates an `Eq` token.
+             *
+             * @returns The `Eq` token.
+             */
+            static Token Eq();
+
+            /**
+             * Creates a `Question` token (ternary `?`).
+             *
+             * @returns The `Question` token.
+             */
+            static Token Question();
+
+            /**
+             * Creates a `Colon` token (ternary `:`).
+             *
+             * @returns The `Colon` token.
+             */
+            static Token Colon();
+
+            /**
+             * Creates an `Add` token.
+             *
+             * @returns The `Add` token.
+             */
+            static Token Add();
+
+            /**
+             * Creates a `Sub` token.
+             *
+             * @returns The `Sub` token.
+             */
+            static Token Sub();
+
+            /**
+             * Creates a `Mul` token.
+             *
+             * @returns The `Mul` token.
+             */
+            static Token Mul();
 
             /**
              * Creates an `Variable` token.
@@ -157,13 +207,22 @@ namespace hal
             // Interface
             ////////////////////////////////////////////////////////////////////////////
 
-            /** 
+            /**
              * Returns the precedence of a token.
              *
              * @param[in] type The parser type identifier.
              * @returns An unsigned predecene value between 2 and 4.
              */
             unsigned precedence(const ParserType& type) const;
+
+            /**
+             * Returns whether a token's operator is left-associative.
+             * Most operators in HAL are right-associative; arithmetic operators (`+`, `-`, `*`)
+             * follow C-style left-associativity so chains like `a - b - c` parse as `(a - b) - c`.
+             *
+             * @returns `true` for left-associative operators, `false` otherwise.
+             */
+            bool is_left_associative() const;
 
             /**
              * Short-hand implementation to check for a token type.
@@ -192,20 +251,24 @@ namespace hal
 
         /**
          * Parses a Boolean function from a string representation into its tokens.
-         * 
+         *
          * @param[in] expression - Boolean function string.
+         * @param[in] var_sizes - Optional map from variable name to bit-width;
+         *                        variables not in the map default to 1 bit.
          * @returns Ok() and the list of tokens on success, Err() otherwise.
          */
-        Result<std::vector<Token>> parse_with_standard_grammar(const std::string& expression);
+        Result<std::vector<Token>> parse_with_standard_grammar(const std::string& expression, const std::map<std::string, u16>& var_sizes = {});
 
         /**
          * Parses a Boolean function from a string representation into its tokens
          * based on the data format defined for Liberty, see Liberty user guide.
-         * 
+         *
          * @param[in] expression - Boolean function string.
+         * @param[in] var_sizes - Optional map from variable name to bit-width;
+         *                        variables not in the map default to 1 bit.
          * @returns Ok() and the list of tokens on success, Err() otherwise.
          */
-        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression);
+        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression, const std::map<std::string, u16>& var_sizes = {});
 
         /**
          * Transforms a list of tokens in infix notation (e.g., "A & B") into the

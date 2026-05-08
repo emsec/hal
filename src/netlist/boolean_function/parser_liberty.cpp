@@ -10,11 +10,20 @@ namespace hal
 {
     namespace BooleanFunctionParser
     {
-        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression)
+        Result<std::vector<Token>> parse_with_liberty_grammar(const std::string& expression, const std::map<std::string, u16>& var_sizes)
         {
             // stores the list of tokens that are generated and filled during the
             // parsing process adn the different semantic actions
             std::vector<Token> tokens;
+
+            // Looks up a variable's bit-width from the caller-supplied map; defaults to 1 when absent.
+            const auto var_size = [&var_sizes](const std::string& name) -> u16 {
+                if (auto it = var_sizes.find(name); it != var_sizes.end())
+                {
+                    return it->second;
+                }
+                return 1;
+            };
 
             ////////////////////////////////////////////////////////////////////////
             // (1) Semantic actions to generate tokens
@@ -30,19 +39,19 @@ namespace hal
             const auto BracketOpenAction  = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketOpen()); };
             const auto BracketCloseAction = [&tokens](auto& /* ctx */) { tokens.emplace_back(BooleanFunctionParser::Token::BracketClose()); };
 
-            const auto VariableAction = [&tokens](auto& ctx) {
+            const auto VariableAction = [&tokens, &var_size](auto& ctx) {
                 // combines the first matched character with the remaining string
                 std::stringstream name;
                 name << std::string(1, boost::fusion::at_c<0>(_attr(ctx))) << boost::fusion::at_c<1>(_attr(ctx));
 
-                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
+                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), var_size(name.str())));
             };
-            const auto VariableIndexAction = [&tokens](auto& ctx) {
+            const auto VariableIndexAction = [&tokens, &var_size](auto& ctx) {
                 // combines the first matched character with the remaining string
                 std::stringstream name;
                 name << std::string(1, boost::fusion::at_c<0>(_attr(ctx))) << boost::fusion::at_c<1>(_attr(ctx)) << boost::fusion::at_c<2>(_attr(ctx)) << boost::fusion::at_c<3>(_attr(ctx))
                      << boost::fusion::at_c<4>(_attr(ctx));
-                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
+                tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), var_size(name.str())));
             };
             const auto ConstantAction = [&tokens](auto& ctx) {
                 auto value = (_attr(ctx) == '0') ? BooleanFunction::Value::ZERO : BooleanFunction::Value::ONE;
