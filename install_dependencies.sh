@@ -80,6 +80,7 @@ elif [[ "$platform" == 'linux' ]]; then
         lsb-release git cmake pkgconf libboost-all-dev qt6-base-dev \
         libpython3-dev ccache autoconf autotools-dev libsodium-dev \
         libqt6svg6-dev libqt6svg6*  \
+        qt6-multimedia-dev \
         ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
@@ -119,7 +120,7 @@ elif [[ "$platform" == 'docker' ]]; then
     lsb-release git cmake pkgconf libboost-all-dev qt6-base-dev \
     libpython3-dev ccache autoconf autotools-dev libsodium-dev \
     libqt6svg6-dev libqt6svg6* libqt6core5compat6 qt6-5compat-dev \
-    ninja-build lcov gcovr python3-sphinx \
+    qt6-multimedia-dev ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
     pybind11-dev python3-pybind11 python3-dateutil rapidjson-dev \
     libspdlog-dev libz3-dev libreadline-dev libxcb-xkb-dev \
