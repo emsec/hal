@@ -97,6 +97,14 @@ namespace hal
      */
 
     /**
+     * Initializes Python bindings for the shared Parameter::Type enum and Parameter struct.
+     * Must be called before any other binding that references these types (DataContainer, GateType).
+     *
+     * @param[in] m - the python module
+     */
+    void parameter_init(py::module& m);
+
+    /**
      * Initializes Python bindings for the HAL data container in a python module.
      *
      * @param[in] m - the python module
