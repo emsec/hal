@@ -353,20 +353,22 @@ namespace hal
              *
              * @param directed - If true, use directed shortest paths; otherwise undirected.
              * @param cutoff - Maximum path length to consider (-1 means unbounded).
-             * @param normalization - Normalization applied to the centrality values across the
-             *                        batch before writing them into the feature vectors. See
-             *                        NormalizationType.
+             * @param normalizations - Normalizations applied to the centrality values across the
+             *                         batch before writing them into the feature vectors. The
+             *                         centrality is computed once and one feature column is
+             *                         produced per normalization, in the given order. Defaults
+             *                         to a single column with NormalizationType::None.
              *
              * This is a batch-level feature (only the batch overload of calculate_feature is
              * implemented).
              *
-             * Legend (width 1): the per-gate centrality.
+             * Legend (width = number of requested normalizations): one label per normalization.
              */
             class BetweennessCentrality : public GateFeature
             {
             public:
-                BetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
-                    : m_directed(directed), m_cutoff(cutoff), m_normalization(normalization){};
+                BetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const std::vector<NormalizationType>& normalizations = {NormalizationType::None})
+                    : m_directed(directed), m_cutoff(cutoff), m_normalizations(normalizations){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -375,7 +377,7 @@ namespace hal
             private:
                 const bool m_directed;
                 const i32 m_cutoff;
-                const NormalizationType m_normalization;
+                const std::vector<NormalizationType> m_normalizations;
             };
 
             /**
@@ -384,20 +386,22 @@ namespace hal
              * @param direction - PinDirection::input / output selects the traversal direction;
              *                    PinDirection::inout uses both (undirected traversal).
              * @param cutoff - Maximum distance to consider (-1 means unbounded).
-             * @param normalization - Normalization applied to the centrality values across the
-             *                        batch before writing them into the feature vectors. See
-             *                        NormalizationType.
+             * @param normalizations - Normalizations applied to the centrality values across the
+             *                         batch before writing them into the feature vectors. The
+             *                         centrality is computed once and one feature column is
+             *                         produced per normalization, in the given order. Defaults
+             *                         to a single column with NormalizationType::None.
              *
              * This is a batch-level feature (only the batch overload of calculate_feature is
              * implemented).
              *
-             * Legend (width 1): the per-gate centrality.
+             * Legend (width = number of requested normalizations): one label per normalization.
              */
             class HarmonicCentrality : public GateFeature
             {
             public:
-                HarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
-                    : m_direction(direction), m_cutoff(cutoff), m_normalization(normalization){};
+                HarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const std::vector<NormalizationType>& normalizations = {NormalizationType::None})
+                    : m_direction(direction), m_cutoff(cutoff), m_normalizations(normalizations){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -406,20 +410,28 @@ namespace hal
             private:
                 const PinDirection m_direction;
                 const i32 m_cutoff;
-                const NormalizationType m_normalization;
+                const std::vector<NormalizationType> m_normalizations;
             };
 
             /**
              * Betweenness centrality evaluated on the sequential netlist graph (combinational
              * gates collapsed). Non-sequential gates in the input batch receive a centrality of 0.
              *
-             * Legend (width 1): the per-gate centrality.
+             * @param directed - If true, use directed shortest paths; otherwise undirected.
+             * @param cutoff - Maximum path length to consider (-1 means unbounded).
+             * @param normalizations - Normalizations applied to the centrality values across the
+             *                         batch before writing them into the feature vectors. The
+             *                         centrality is computed once and one feature column is
+             *                         produced per normalization, in the given order. Defaults
+             *                         to a single column with NormalizationType::None.
+             *
+             * Legend (width = number of requested normalizations): one label per normalization.
              */
             class SequentialBetweennessCentrality : public GateFeature
             {
             public:
-                SequentialBetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
-                    : m_directed(directed), m_cutoff(cutoff), m_normalization(normalization){};
+                SequentialBetweennessCentrality(const bool directed = true, const i32 cutoff = -1, const std::vector<NormalizationType>& normalizations = {NormalizationType::None})
+                    : m_directed(directed), m_cutoff(cutoff), m_normalizations(normalizations){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -428,20 +440,29 @@ namespace hal
             private:
                 const bool m_directed;
                 const i32 m_cutoff;
-                const NormalizationType m_normalization;
+                const std::vector<NormalizationType> m_normalizations;
             };
 
             /**
              * Harmonic centrality evaluated on the sequential netlist graph (combinational gates
              * collapsed). Non-sequential gates in the input batch receive a centrality of 0.
              *
-             * Legend (width 1): the per-gate centrality.
+             * @param direction - PinDirection::input / output selects the traversal direction;
+             *                    PinDirection::inout uses both (undirected traversal).
+             * @param cutoff - Maximum distance to consider (-1 means unbounded).
+             * @param normalizations - Normalizations applied to the centrality values across the
+             *                         batch before writing them into the feature vectors. The
+             *                         centrality is computed once and one feature column is
+             *                         produced per normalization, in the given order. Defaults
+             *                         to a single column with NormalizationType::None.
+             *
+             * Legend (width = number of requested normalizations): one label per normalization.
              */
             class SequentialHarmonicCentrality : public GateFeature
             {
             public:
-                SequentialHarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const NormalizationType normalization = NormalizationType::None)
-                    : m_direction(direction), m_cutoff(cutoff), m_normalization(normalization){};
+                SequentialHarmonicCentrality(const PinDirection& direction, const i32 cutoff = -1, const std::vector<NormalizationType>& normalizations = {NormalizationType::None})
+                    : m_direction(direction), m_cutoff(cutoff), m_normalizations(normalizations){};
 
                 Result<std::vector<std::vector<FEATURE_TYPE>>> calculate_feature(Context& ctx, const std::vector<Gate*>& gates) const override;
                 std::string to_string() const override;
@@ -450,7 +471,7 @@ namespace hal
             private:
                 const PinDirection m_direction;
                 const i32 m_cutoff;
-                const NormalizationType m_normalization;
+                const std::vector<NormalizationType> m_normalizations;
             };
 
             /**
@@ -508,31 +529,34 @@ namespace hal
             };
 
             /**
-             * Binary indicator: is the gate part of a closed directed walk of length exactly
-             * `length` on the original netlist graph?
+             * Binary indicators: for each requested length L, is the gate part of a closed
+             * directed walk of length exactly L on the original netlist graph?
              *
-             * Implementation: layer-by-layer expansion of "set of gates reachable in exactly k
-             * steps from `g`" for k = 0..length, then test `g ∈ R_length`. Walks may revisit
-             * intermediate gates; this is equivalent to A^length[g][g] > 0 on the directed
-             * adjacency matrix.
+             * Implementation: a single layer-by-layer expansion of "set of gates reachable in
+             * exactly k steps from `g`" for k = 1..max(lengths). At every k that appears in
+             * `lengths` we test `g ∈ R_k` and emit the corresponding bit. Walks may revisit
+             * intermediate gates; bit i is equivalent to A^lengths[i][g][g] > 0 on the directed
+             * adjacency matrix. Computing several lengths together amortizes the shared
+             * expansion work.
              *
-             * @param length - The walk length to test for (number of edges).
+             * @param lengths - Walk lengths to test for (number of edges); one feature column
+             *                  is produced per entry, in the given order. Must be non-empty.
              * @param forbidden_pin_types - Endpoints on pins of these types are not crossed
              *                              during traversal.
              *
-             * Legend (width 1): the binary indicator.
+             * Legend (width = number of requested lengths): one label per length.
              */
             class InCycleOfLength : public GateFeature
             {
             public:
-                InCycleOfLength(const u32 length, const std::vector<PinType>& forbidden_pin_types = {}) : m_length(length), m_forbidden_pin_types(forbidden_pin_types){};
+                InCycleOfLength(const std::vector<u32>& lengths, const std::vector<PinType>& forbidden_pin_types = {}) : m_lengths(lengths), m_forbidden_pin_types(forbidden_pin_types){};
 
                 Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
                 std::string to_string() const override;
                 std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
-                const u32 m_length;
+                const std::vector<u32> m_lengths;
                 const std::vector<PinType> m_forbidden_pin_types;
             };
 
@@ -578,21 +602,27 @@ namespace hal
 
             /**
              * Same as InCycleOfLength but evaluated on the sequential abstraction (combinational
-             * gates collapsed). Non-sequential gates always receive 0.
+             * gates collapsed). Non-sequential gates receive a zero vector.
              *
-             * Legend (width 1): the binary indicator.
+             * @param lengths - Walk lengths to test for (number of edges); one feature column
+             *                  is produced per entry, in the given order. Must be non-empty.
+             * @param forbidden_pin_types - Endpoints on pins of these types are not crossed
+             *                              during traversal.
+             *
+             * Legend (width = number of requested lengths): one label per length.
              */
             class SequentialInCycleOfLength : public GateFeature
             {
             public:
-                SequentialInCycleOfLength(const u32 length, const std::vector<PinType>& forbidden_pin_types = {}) : m_length(length), m_forbidden_pin_types(forbidden_pin_types){};
+                SequentialInCycleOfLength(const std::vector<u32>& lengths, const std::vector<PinType>& forbidden_pin_types = {})
+                    : m_lengths(lengths), m_forbidden_pin_types(forbidden_pin_types){};
 
                 Result<std::vector<FEATURE_TYPE>> calculate_feature(Context& ctx, const Gate* g) const override;
                 std::string to_string() const override;
                 std::vector<std::string> get_legend(Context& ctx) const override;
 
             private:
-                const u32 m_length;
+                const std::vector<u32> m_lengths;
                 const std::vector<PinType> m_forbidden_pin_types;
             };
 

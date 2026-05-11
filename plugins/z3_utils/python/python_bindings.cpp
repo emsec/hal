@@ -161,6 +161,46 @@ namespace hal
         )");
 
         m.def(
+            "get_subgraph_functions",
+            [](const std::function<bool(const Gate*)>& subgraph_filter, const std::vector<Net*>& subgraph_outputs) -> std::optional<std::vector<BooleanFunction>> {
+                z3::context ctx;
+
+                const auto res = z3_utils::get_subgraph_z3_functions(subgraph_filter, subgraph_outputs, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+
+                std::vector<BooleanFunction> bfs;
+                bfs.reserve(res.get().size());
+                for (const auto& z : res.get())
+                {
+                    auto bf_res = z3_utils::to_bf(z);
+                    if (bf_res.is_error())
+                    {
+                        log_error("z3_utils", "{}", bf_res.get_error().get());
+                        return std::nullopt;
+                    }
+                    bfs.push_back(bf_res.get());
+                }
+
+                return bfs;
+            },
+            py::arg("subgraph_filter"),
+            py::arg("subgraph_outputs"),
+            R"(
+            Generate the combined Boolean functions for a vector of subgraph output nets.
+            For each output net, the function builds the subgraph Boolean function by considering all gates for which the provided filter returns true.
+            The variables of each resulting Boolean function are created from the subgraph input nets using BooleanFunctionNetDecorator.get_boolean_variable.
+
+            :param lambda subgraph_filter: A callable that takes a hal_py.Gate and returns True if the gate should be included in the subgraph.
+            :param list[hal_py.Net] subgraph_outputs: The output nets of the subgraph for which to generate Boolean functions.
+            :returns: A list of Boolean functions, one per output net, on success, None otherwise.
+            :rtype: list[hal_py.BooleanFunction] or None
+        )");
+
+        m.def(
             "compare_nets",
             [](const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10) -> std::optional<bool> {
                 auto res = z3_utils::compare_nets(netlist_a, netlist_b, net_a, net_b, fail_on_unknown, solver_timeout);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hal_core/utilities/enums.h"
 #include "hal_core/utilities/result.h"
 
 #include <vector>
@@ -18,52 +19,20 @@ namespace hal
             GateCount,    /**< Divide every value by the number of gates in the netlist. */
         };
 
-        template<typename T>
-        Result<std::monostate> normalize_vector_min_max(std::vector<T>& values)
-        {
-            // Ensure T is a numeric type
-            static_assert(std::is_arithmetic<T>::value, "Vector elements must be numeric.");
+        /**
+         * Min-max normalize the values in place into [0, 1].
+         *
+         * @param[in,out] values - Values to normalize in place.
+         */
+        Result<std::monostate> normalize_vector_min_max(std::vector<double>& values);
 
-            if (!values.empty())
-            {
-                const auto min_val = *std::min_element(values.begin(), values.end());
-                const auto max_val = *std::max_element(values.begin(), values.end());
-
-                // Avoid division by zero if all elements are the same
-                if (min_val == max_val)
-                {
-                    values.assign(values.size(), static_cast<T>(0.5));
-                    return OK({});
-                }
-
-                // Apply min-max normalization
-                for (auto& value : values)
-                {
-                    value = (value - min_val) / (max_val - min_val);
-                }
-            }
-
-            return OK({});
-        }
-
-        template<typename T>
-        Result<std::monostate> normalize_vector_gate_count(std::vector<T>& values, const u32 gate_count)
-        {
-            static_assert(std::is_arithmetic<T>::value, "Vector elements must be numeric.");
-
-            if (gate_count == 0)
-            {
-                return ERR("cannot normalize by gate count: gate count is 0");
-            }
-
-            const auto divisor = static_cast<T>(gate_count);
-            for (auto& value : values)
-            {
-                value = value / divisor;
-            }
-
-            return OK({});
-        }
+        /**
+         * Divide every value in place by the given gate count.
+         *
+         * @param[in,out] values - Values to normalize in place.
+         * @param[in] gate_count - Number of gates in the netlist.
+         */
+        Result<std::monostate> normalize_vector_gate_count(std::vector<double>& values, const u32 gate_count);
 
         /**
          * Dispatches to the requested normalization mode.
@@ -73,20 +42,10 @@ namespace hal
          * @param[in] gate_count - Number of gates in the netlist; only consulted when
          *                         `type == NormalizationType::GateCount`.
          */
-        template<typename T>
-        Result<std::monostate> normalize_vector(const NormalizationType type, std::vector<T>& values, const u32 gate_count = 0)
-        {
-            switch (type)
-            {
-                case NormalizationType::None:
-                    return OK({});
-                case NormalizationType::MinMax:
-                    return normalize_vector_min_max(values);
-                case NormalizationType::GateCount:
-                    return normalize_vector_gate_count(values, gate_count);
-            }
-            return ERR("unknown normalization type");
-        }
+        Result<std::monostate> normalize_vector(const NormalizationType type, std::vector<double>& values, const u32 gate_count = 0);
 
     }    // namespace machine_learning
+
+    template<>
+    std::map<machine_learning::NormalizationType, std::string> EnumStrings<machine_learning::NormalizationType>::data;
 }    // namespace hal

@@ -20,6 +20,7 @@ namespace hal
         py::module py_subgraph_label    = m.def_submodule("subgraph_label");
 
         machine_learning::python::bind_plugin(m);
+        machine_learning::python::bind_types(m);
         machine_learning::python::bind_gate_features(m, py_gate_feature);
         machine_learning::python::bind_gate_pair_features(m, py_gate_pair_feature);
         machine_learning::python::bind_gate_pair_labels(m, py_gate_pair_label);

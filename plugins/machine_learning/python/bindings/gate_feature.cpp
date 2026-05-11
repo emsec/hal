@@ -468,34 +468,20 @@ namespace hal
                 :rtype: str
             )");
 
-                py::enum_<machine_learning::NormalizationType>(m, "NormalizationType", R"(
-            Selects how a vector of feature values is normalized.
-        )")
-                    .value("None_", machine_learning::NormalizationType::None, R"(
-                Leave values untouched.
-            )")
-                    .value("MinMax", machine_learning::NormalizationType::MinMax, R"(
-                Min-max normalize across the batch into [0, 1].
-            )")
-                    .value("GateCount", machine_learning::NormalizationType::GateCount, R"(
-                Divide every value by the number of gates in the netlist.
-            )")
-                    .export_values();
-
                 py::class_<machine_learning::gate_feature::BetweennessCentrality, machine_learning::gate_feature::GateFeature> py_betweenness_centrality(py_gate_feature, "BetweennessCentrality", R"(
             A class representing the betweenness centrality feature for gates.
             )");
 
-                py_betweenness_centrality.def(py::init<bool, i32, machine_learning::NormalizationType>(),
-                                              py::arg("directed")      = true,
-                                              py::arg("cutoff")        = -1,
-                                              py::arg("normalization") = machine_learning::NormalizationType::None,
+                py_betweenness_centrality.def(py::init<bool, i32, const std::vector<machine_learning::NormalizationType>&>(),
+                                              py::arg("directed")       = true,
+                                              py::arg("cutoff")         = -1,
+                                              py::arg("normalizations") = std::vector<machine_learning::NormalizationType>{machine_learning::NormalizationType::None},
                                               R"(
             Construct a BetweennessCentrality object.
 
             :param bool directed: Whether the graph is directed. Defaults to True.
             :param int cutoff: The maximum distance to consider. Defaults to -1.
-            :param hal_py.machine_learning.NormalizationType normalization: Normalization to apply to the centrality values. Defaults to MinMax.
+            :param list[hal_py.machine_learning.NormalizationType] normalizations: Normalizations to apply to the centrality values; one feature column is produced per normalization. Defaults to [None].
             )");
 
                 py_betweenness_centrality.def(
@@ -537,16 +523,16 @@ namespace hal
             A class representing the harmonic centrality feature for gates.
             )");
 
-                py_harmonic_centrality.def(py::init<PinDirection, i32, machine_learning::NormalizationType>(),
+                py_harmonic_centrality.def(py::init<PinDirection, i32, const std::vector<machine_learning::NormalizationType>&>(),
                                            py::arg("direction"),
-                                           py::arg("cutoff")        = -1,
-                                           py::arg("normalization") = machine_learning::NormalizationType::None,
+                                           py::arg("cutoff")         = -1,
+                                           py::arg("normalizations") = std::vector<machine_learning::NormalizationType>{machine_learning::NormalizationType::None},
                                            R"(
             Construct a HarmonicCentrality object.
 
             :param hal_py.PinDirection direction: The pin direction to consider.
             :param int cutoff: The maximum distance to consider. Defaults to -1.
-            :param hal_py.machine_learning.NormalizationType normalization: Normalization to apply to the centrality values. Defaults to MinMax.
+            :param list[hal_py.machine_learning.NormalizationType] normalizations: Normalizations to apply to the centrality values; one feature column is produced per normalization. Defaults to [None].
             )");
 
                 py_harmonic_centrality.def(
@@ -589,16 +575,16 @@ namespace hal
             A class representing the sequential betweenness centrality feature for gates.
             )");
 
-                py_sequential_betweenness_centrality.def(py::init<bool, i32, machine_learning::NormalizationType>(),
-                                                         py::arg("directed")      = true,
-                                                         py::arg("cutoff")        = -1,
-                                                         py::arg("normalization") = machine_learning::NormalizationType::None,
+                py_sequential_betweenness_centrality.def(py::init<bool, i32, const std::vector<machine_learning::NormalizationType>&>(),
+                                                         py::arg("directed")       = true,
+                                                         py::arg("cutoff")         = -1,
+                                                         py::arg("normalizations") = std::vector<machine_learning::NormalizationType>{machine_learning::NormalizationType::None},
                                                          R"(
             Construct a SequentialBetweennessCentrality object.
 
             :param bool directed: Whether the graph is directed. Defaults to True.
             :param int cutoff: The maximum distance to consider. Defaults to -1.
-            :param hal_py.machine_learning.NormalizationType normalization: Normalization to apply to the centrality values. Defaults to MinMax.
+            :param list[hal_py.machine_learning.NormalizationType] normalizations: Normalizations to apply to the centrality values; one feature column is produced per normalization. Defaults to [None].
             )");
 
                 py_sequential_betweenness_centrality.def(
@@ -641,16 +627,16 @@ namespace hal
             A class representing the sequential harmonic centrality feature for gates.
             )");
 
-                py_sequential_harmonic_centrality.def(py::init<PinDirection, i32, machine_learning::NormalizationType>(),
+                py_sequential_harmonic_centrality.def(py::init<PinDirection, i32, const std::vector<machine_learning::NormalizationType>&>(),
                                                       py::arg("direction"),
-                                                      py::arg("cutoff")        = -1,
-                                                      py::arg("normalization") = machine_learning::NormalizationType::None,
+                                                      py::arg("cutoff")         = -1,
+                                                      py::arg("normalizations") = std::vector<machine_learning::NormalizationType>{machine_learning::NormalizationType::None},
                                                       R"(
             Construct a SequentialHarmonicCentrality object.
 
             :param hal_py.PinDirection direction: The pin direction to consider.
             :param int cutoff: The maximum distance to consider. Defaults to -1.
-            :param hal_py.machine_learning.NormalizationType normalization: Normalization to apply to the centrality values. Defaults to MinMax.
+            :param list[hal_py.machine_learning.NormalizationType] normalizations: Normalizations to apply to the centrality values; one feature column is produced per normalization. Defaults to [None].
             )");
 
                 py_sequential_harmonic_centrality.def(
@@ -789,13 +775,13 @@ namespace hal
             `length` through the gate on the original netlist graph.
         )");
 
-                py_in_cycle_of_length.def(py::init<const u32, const std::vector<PinType>&>(),
-                                          py::arg("length"),
+                py_in_cycle_of_length.def(py::init<const std::vector<u32>&, const std::vector<PinType>&>(),
+                                          py::arg("lengths"),
                                           py::arg("forbidden_pin_types") = std::vector<PinType>(),
                                           R"(
             Construct an InCycleOfLength gate feature.
 
-            :param int length: The walk length to test for (number of edges).
+            :param list[int] lengths: Walk lengths to test for (number of edges); one feature column is produced per entry, in the given order.
             :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
         )");
 
@@ -936,13 +922,13 @@ namespace hal
             non-sequential gates.
         )");
 
-                py_sequential_in_cycle_of_length.def(py::init<const u32, const std::vector<PinType>&>(),
-                                                     py::arg("length"),
+                py_sequential_in_cycle_of_length.def(py::init<const std::vector<u32>&, const std::vector<PinType>&>(),
+                                                     py::arg("lengths"),
                                                      py::arg("forbidden_pin_types") = std::vector<PinType>(),
                                                      R"(
             Construct a SequentialInCycleOfLength gate feature.
 
-            :param int length: The walk length to test for (number of edges).
+            :param list[int] lengths: Walk lengths to test for (number of edges); one feature column is produced per entry, in the given order.
             :param list[hal_py.PinType] forbidden_pin_types: Pins of these types are not crossed during traversal. Defaults to empty.
         )");
 
@@ -985,7 +971,7 @@ namespace hal
         )");
 
                 py_boolean_influence.def(py::init<const std::vector<machine_learning::StatisticalMoment>&>(),
-                                         py::arg("moments") = std::vector<machine_learning::StatisticalMoment>(),
+                                         py::arg("moments") = std::vector<machine_learning::StatisticalMoment>{machine_learning::StatisticalMoment::average},
                                          R"(
             Construct a BooleanInfluence gate feature.
 

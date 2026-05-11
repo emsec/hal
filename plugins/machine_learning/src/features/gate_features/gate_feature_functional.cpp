@@ -52,7 +52,9 @@ namespace hal
                 }
                 const auto* sequential_influenced_nets = sequential_influenced_nets_res.get();
 
-                std::vector<Net*> influenced_nets;
+                // Build (influenced_net, output_net) pairs so each lookup is scoped to the
+                // output net that actually reaches the influenced net.
+                std::vector<std::pair<Net*, Net*>> influenced_net_output_net_pairs;
                 for (const auto& output_net : output_nets)
                 {
                     const auto influenced_nets_res = sequential_influenced_nets->find(output_net);
@@ -64,10 +66,13 @@ namespace hal
                         continue;
                     }
 
-                    influenced_nets.insert(influenced_nets.end(), influenced_nets_res->second.begin(), influenced_nets_res->second.end());
+                    for (Net* influenced_net : influenced_nets_res->second)
+                    {
+                        influenced_net_output_net_pairs.emplace_back(influenced_net, output_net);
+                    }
                 }
 
-                if (influenced_nets.empty())
+                if (influenced_net_output_net_pairs.empty())
                 {
                     return OK(std::vector<FEATURE_TYPE>(m_moments.size(), FEATURE_TYPE(0)));
                 }
@@ -83,7 +88,7 @@ namespace hal
                 const auto* sequential_boolean_influences = sequential_boolean_influence_res.get();
 
                 std::vector<double> influences;
-                for (const auto& influenced_net : influenced_nets)
+                for (const auto& [influenced_net, output_net] : influenced_net_output_net_pairs)
                 {
                     const auto it = sequential_boolean_influences->find(influenced_net);
                     if (it == sequential_boolean_influences->end())
@@ -92,17 +97,14 @@ namespace hal
                                    + ": failed to find Boolean influence for influenced net " + influenced_net->get_name() + " with ID " + std::to_string(influenced_net->get_id()) + " in cache.");
                     }
 
-                    for (auto& output_net : output_nets)
+                    const auto net_influence = it->second.find(output_net);
+                    if (net_influence == it->second.end())
                     {
-                        const auto net_influence = it->second.find(output_net);
-                        if (net_influence == it->second.end())
-                        {
-                            return ERR("unable to calculate Boolean influence for gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
-                                       + ": failed to find Boolean influence for influenced net " + influenced_net->get_name() + " with ID " + std::to_string(influenced_net->get_id())
-                                       + " and output net " + output_net->get_name() + " with ID " + std::to_string(output_net->get_id()) + " in cache.");
-                        }
-                        influences.push_back(net_influence->second);
+                        return ERR("unable to calculate Boolean influence for gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
+                                   + ": failed to find Boolean influence for influenced net " + influenced_net->get_name() + " with ID " + std::to_string(influenced_net->get_id())
+                                   + " and output net " + output_net->get_name() + " with ID " + std::to_string(output_net->get_id()) + " in cache.");
                     }
+                    influences.push_back(net_influence->second);
                 }
 
                 // 4. Calculate the requested statistical moments from the collected influences.
@@ -113,8 +115,8 @@ namespace hal
                     if (moment_result.is_error())
                     {
                         return ERR_APPEND(moment_result.get_error(),
-                                          "unable to calculate Boolean influence for gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
-                                              + ": failed to calculate statistical moment " + enum_to_string(moment) + " from influences.");
+                                          "unable to calculate Boolean influence for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to calculate statistical moment "
+                                              + enum_to_string(moment) + " from influences.");
                     }
                     result.push_back(moment_result.get());
                 }

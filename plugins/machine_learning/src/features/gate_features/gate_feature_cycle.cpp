@@ -49,19 +49,35 @@ namespace hal
                 }
 
                 /**
-                 * Returns true iff there exists a closed directed walk of length exactly `length`
-                 * from g back to g on the abstraction. Computed by iteratively expanding the set
-                 * of gates reachable in exactly k steps for k = 1..length.
+                 * For each requested length L, returns whether there exists a closed directed
+                 * walk of length exactly L from g back to g on the abstraction. Computed by a
+                 * single iterative expansion of the set of gates reachable in exactly k steps
+                 * (k = 1..max(lengths)); at every step k that appears in `lengths` the membership
+                 * `g ∈ R_k` is recorded. Output order matches `lengths`.
                  */
-                Result<bool> in_cycle_of_length(const NetlistAbstraction& abstr, const Gate* g, const u32 length, const std::vector<PinType>& forbidden_pin_types)
+                Result<std::vector<bool>>
+                    in_cycle_of_lengths(const NetlistAbstraction& abstr, const Gate* g, const std::vector<u32>& lengths, const std::vector<PinType>& forbidden_pin_types)
                 {
-                    if (length == 0)
+                    std::vector<bool> result(lengths.size(), false);
+
+                    std::unordered_map<u32, std::vector<u32>> step_to_output_indices;
+                    u32 max_length = 0;
+                    for (u32 i = 0; i < lengths.size(); ++i)
                     {
-                        return OK(false);
+                        if (lengths[i] == 0)
+                        {
+                            continue;
+                        }
+                        step_to_output_indices[lengths[i]].push_back(i);
+                        max_length = std::max(max_length, lengths[i]);
+                    }
+                    if (max_length == 0)
+                    {
+                        return OK(result);
                     }
 
                     std::set<const Gate*> current = {g};
-                    for (u32 step = 0; step < length; step++)
+                    for (u32 step = 1; step <= max_length; step++)
                     {
                         std::set<const Gate*> next;
                         for (const auto* curr_g : current)
@@ -88,12 +104,27 @@ namespace hal
                             }
                         }
                         current = std::move(next);
+
+                        if (const auto it = step_to_output_indices.find(step); it != step_to_output_indices.end())
+                        {
+                            const bool reachable = current.count(g) > 0;
+                            for (const u32 idx : it->second)
+                            {
+                                result[idx] = reachable;
+                            }
+                        }
+
                         if (current.empty())
                         {
-                            return OK(false);
+                            break;
                         }
                     }
-                    return OK(current.count(g) > 0);
+                    return OK(result);
+                }
+
+                std::string lengths_suffix(const std::vector<u32>& lengths)
+                {
+                    return utils::join("_", lengths.begin(), lengths.end(), [](const u32 l) { return std::to_string(l); });
                 }
 
                 std::string forbidden_pin_types_suffix(const std::vector<PinType>& forbidden_pin_types)
@@ -171,24 +202,36 @@ namespace hal
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get original netlist abstraction");
                 }
 
-                const auto in_cycle = in_cycle_of_length(*nl_abstr.get(), g, m_length, m_forbidden_pin_types);
+                const auto in_cycle = in_cycle_of_lengths(*nl_abstr.get(), g, m_lengths, m_forbidden_pin_types);
                 if (in_cycle.is_error())
                 {
                     return ERR_APPEND(in_cycle.get_error(), "cannot calculate feature " + to_string());
                 }
 
-                return OK({in_cycle.get() ? FEATURE_TYPE(1) : FEATURE_TYPE(0)});
+                std::vector<FEATURE_TYPE> features;
+                features.reserve(m_lengths.size());
+                for (const bool bit : in_cycle.get())
+                {
+                    features.push_back(bit ? FEATURE_TYPE(1) : FEATURE_TYPE(0));
+                }
+                return OK(features);
             }
 
             std::string InCycleOfLength::to_string() const
             {
-                return "InCycleOfLength_" + std::to_string(m_length) + "_" + forbidden_pin_types_suffix(m_forbidden_pin_types);
+                return "InCycleOfLength_" + lengths_suffix(m_lengths) + "_" + forbidden_pin_types_suffix(m_forbidden_pin_types);
             }
 
             std::vector<std::string> InCycleOfLength::get_legend(Context& ctx) const
             {
                 UNUSED(ctx);
-                return {"in_cycle_of_length_" + std::to_string(m_length)};
+                std::vector<std::string> legend;
+                legend.reserve(m_lengths.size());
+                for (const u32 l : m_lengths)
+                {
+                    legend.push_back("in_cycle_of_length_" + std::to_string(l));
+                }
+                return legend;
             }
 
             Result<std::vector<FEATURE_TYPE>> SequentialInCycle::calculate_feature(Context& ctx, const Gate* g) const
@@ -265,7 +308,7 @@ namespace hal
             {
                 if (!g->get_type()->has_property(GateTypeProperty::sequential))
                 {
-                    return OK({FEATURE_TYPE(0)});
+                    return OK(std::vector<FEATURE_TYPE>(m_lengths.size(), FEATURE_TYPE(0)));
                 }
 
                 const auto nl_abstr = ctx.get_sequential_abstraction();
@@ -274,24 +317,36 @@ namespace hal
                     return ERR_APPEND(nl_abstr.get_error(), "cannot calculate feature " + to_string() + ": failed to get sequential netlist abstraction");
                 }
 
-                const auto in_cycle = in_cycle_of_length(*nl_abstr.get(), g, m_length, m_forbidden_pin_types);
+                const auto in_cycle = in_cycle_of_lengths(*nl_abstr.get(), g, m_lengths, m_forbidden_pin_types);
                 if (in_cycle.is_error())
                 {
                     return ERR_APPEND(in_cycle.get_error(), "cannot calculate feature " + to_string());
                 }
 
-                return OK({in_cycle.get() ? FEATURE_TYPE(1) : FEATURE_TYPE(0)});
+                std::vector<FEATURE_TYPE> features;
+                features.reserve(m_lengths.size());
+                for (const bool bit : in_cycle.get())
+                {
+                    features.push_back(bit ? FEATURE_TYPE(1) : FEATURE_TYPE(0));
+                }
+                return OK(features);
             }
 
             std::string SequentialInCycleOfLength::to_string() const
             {
-                return "SequentialInCycleOfLength_" + std::to_string(m_length) + "_" + forbidden_pin_types_suffix(m_forbidden_pin_types);
+                return "SequentialInCycleOfLength_" + lengths_suffix(m_lengths) + "_" + forbidden_pin_types_suffix(m_forbidden_pin_types);
             }
 
             std::vector<std::string> SequentialInCycleOfLength::get_legend(Context& ctx) const
             {
                 UNUSED(ctx);
-                return {"sequential_in_cycle_of_length_" + std::to_string(m_length)};
+                std::vector<std::string> legend;
+                legend.reserve(m_lengths.size());
+                for (const u32 l : m_lengths)
+                {
+                    legend.push_back("sequential_in_cycle_of_length_" + std::to_string(l));
+                }
+                return legend;
             }
         }    // namespace gate_feature
     }    // namespace machine_learning
