@@ -964,7 +964,7 @@ namespace hal
             case BooleanFunction::NodeType::Ule:
                 return OK("(" + operands[0] + " <= " + operands[1] + ")");
             case BooleanFunction::NodeType::Ite:
-                return OK("Ite(" + operands[0] + ", " + operands[1] + ", " + operands[2] + ")");
+                return OK("(" + operands[0] + " ? " + operands[1] + " : " + operands[2] + ")");
 
             default:
                 return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
