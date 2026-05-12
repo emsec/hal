@@ -5,6 +5,7 @@
 #include "verilog_writer/verilog_writer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/parameter.h"
 
 namespace hal 
 {
@@ -299,27 +300,31 @@ namespace hal
 
                 Module* mod = nl->create_module("mod", nl->get_top_module(), {gate});
 
-                gate->set_data("generic", "test_bit_vector", "bit_vector", "123ABC");
-                gate->set_data("generic", "test_string", "string", "one_two_three");
-                gate->set_data("generic", "test_integer", "integer", "123");
-                gate->set_data("generic", "test_float", "floating_point", "1.001");
-                gate->set_data("generic", "test_bit_value", "bit_value", "1");
-
-                // below data should be ignored when writing
-                gate->set_data("generic", "test_invalid", "invalid", "ignore_me");
-                gate->set_data("attribute", "test_attr_string", "string", "one_two_three");
-                gate->set_data("random", "test_rand_string", "string", "one_two_three");
-
-                mod->set_data("generic", "test_bit_vector", "bit_vector", "123ABC");
-                mod->set_data("generic", "test_string", "string", "one_two_three");
-                mod->set_data("generic", "test_integer", "integer", "123");
-                mod->set_data("generic", "test_float", "floating_point", "1.001");
-                mod->set_data("generic", "test_bit_value", "bit_value", "1");
-
-                // below data should be ignored when writing
-                mod->set_data("generic", "test_invalid", "invalid", "ignore_me");
-                mod->set_data("attribute", "test_attr_string", "string", "one_two_three");
-                mod->set_data("random", "test_rand_string", "string", "one_two_three");
+                {
+                    auto p = Parameter::BitVector("test_bit_vector", 21, ""); ASSERT_TRUE(p.is_ok());
+                    ASSERT_TRUE(gate->set_parameter(p.get(), "0x123ABC").is_ok());
+                    ASSERT_TRUE(mod->set_parameter(p.get(), "0x123ABC").is_ok());
+                }
+                {
+                    auto p = Parameter::String("test_string", ""); ASSERT_TRUE(p.is_ok());
+                    ASSERT_TRUE(gate->set_parameter(p.get(), "one_two_three").is_ok());
+                    ASSERT_TRUE(mod->set_parameter(p.get(), "one_two_three").is_ok());
+                }
+                {
+                    auto p = Parameter::Integer("test_integer", ""); ASSERT_TRUE(p.is_ok());
+                    ASSERT_TRUE(gate->set_parameter(p.get(), "123").is_ok());
+                    ASSERT_TRUE(mod->set_parameter(p.get(), "123").is_ok());
+                }
+                {
+                    auto p = Parameter::Float("test_float", ""); ASSERT_TRUE(p.is_ok());
+                    ASSERT_TRUE(gate->set_parameter(p.get(), "1.001").is_ok());
+                    ASSERT_TRUE(mod->set_parameter(p.get(), "1.001").is_ok());
+                }
+                {
+                    auto p = Parameter::BitVector("test_bit_value", 1, ""); ASSERT_TRUE(p.is_ok());
+                    ASSERT_TRUE(gate->set_parameter(p.get(), "0b1").is_ok());
+                    ASSERT_TRUE(mod->set_parameter(p.get(), "0b1").is_ok());
+                }
                 
                 VerilogWriter verilog_writer;
                 ASSERT_TRUE(verilog_writer.write(nl.get(), path_netlist).is_ok());
@@ -335,12 +340,39 @@ namespace hal
                 const Gate* parsed_gate = gates.front();
                 ASSERT_NE(parsed_gate, nullptr);
 
-                EXPECT_EQ(parsed_gate->get_data_map().size(), 5);
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_bit_vector"), std::make_tuple(std::string("bit_vector"), std::string("123ABC")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_string"), std::make_tuple(std::string("string"), std::string("one_two_three")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_integer"), std::make_tuple(std::string("integer"), std::string("123")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_float"), std::make_tuple(std::string("floating_point"), std::string("1.001")));
-                EXPECT_EQ(parsed_gate->get_data("generic", "test_bit_value"), std::make_tuple(std::string("bit_value"), std::string("1")));
+                EXPECT_EQ(parsed_gate->get_parameters().size(), 5);
+                {
+                    auto decl = parsed_gate->get_parameter_declaration("test_bit_vector");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 21);
+                    EXPECT_EQ(parsed_gate->get_parameter_value("test_bit_vector").get(), "0x123ABC");
+                }
+                {
+                    auto decl = parsed_gate->get_parameter_declaration("test_string");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
+                    EXPECT_EQ(parsed_gate->get_parameter_value("test_string").get(), "one_two_three");
+                }
+                {
+                    auto decl = parsed_gate->get_parameter_declaration("test_integer");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
+                    EXPECT_EQ(parsed_gate->get_parameter_value("test_integer").get(), "123");
+                }
+                {
+                    auto decl = parsed_gate->get_parameter_declaration("test_float");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Float);
+                    EXPECT_EQ(parsed_gate->get_parameter_value("test_float").get(), "1.001");
+                }
+                {
+                    auto decl = parsed_gate->get_parameter_declaration("test_bit_value");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    EXPECT_EQ(parsed_gate->get_parameter_value("test_bit_value").get(), "0b1");
+                }
 
                 std::vector<Module*> modules = parsed_nl->get_modules();
                 ASSERT_EQ(modules.size(), 2);
@@ -349,12 +381,39 @@ namespace hal
                 const Module* parsed_module = *mod_it;
                 ASSERT_NE(parsed_module, nullptr);
 
-                EXPECT_EQ(parsed_module->get_data_map().size(), 5);
-                EXPECT_EQ(parsed_module->get_data("generic", "test_bit_vector"), std::make_tuple(std::string("bit_vector"), std::string("123ABC")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_string"), std::make_tuple(std::string("string"), std::string("one_two_three")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_integer"), std::make_tuple(std::string("integer"), std::string("123")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_float"), std::make_tuple(std::string("floating_point"), std::string("1.001")));
-                EXPECT_EQ(parsed_module->get_data("generic", "test_bit_value"), std::make_tuple(std::string("bit_value"), std::string("1")));
+                EXPECT_EQ(parsed_module->get_parameters().size(), 5);
+                {
+                    auto decl = parsed_module->get_parameter_declaration("test_bit_vector");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 21);
+                    EXPECT_EQ(parsed_module->get_parameter_value("test_bit_vector").get(), "0x123ABC");
+                }
+                {
+                    auto decl = parsed_module->get_parameter_declaration("test_string");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
+                    EXPECT_EQ(parsed_module->get_parameter_value("test_string").get(), "one_two_three");
+                }
+                {
+                    auto decl = parsed_module->get_parameter_declaration("test_integer");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
+                    EXPECT_EQ(parsed_module->get_parameter_value("test_integer").get(), "123");
+                }
+                {
+                    auto decl = parsed_module->get_parameter_declaration("test_float");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Float);
+                    EXPECT_EQ(parsed_module->get_parameter_value("test_float").get(), "1.001");
+                }
+                {
+                    auto decl = parsed_module->get_parameter_declaration("test_bit_value");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                    EXPECT_EQ(decl.get().get_size(), 1);
+                    EXPECT_EQ(parsed_module->get_parameter_value("test_bit_value").get(), "0b1");
+                }
             }
         TEST_END
     }

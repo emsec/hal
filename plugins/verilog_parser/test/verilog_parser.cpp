@@ -1130,7 +1130,12 @@ namespace hal {
                                     ".key_bit_vector_bin('b1010_1011_1100),"
                                     ".key_bit_vector_hex_sized(12'habc),"
                                     ".key_single_bit_one(1'b1),"
-                                    ".key_single_bit_zero(1'b0)) "
+                                    ".key_single_bit_zero(1'b0),"
+                                    ".key_boolean_true(true),"
+                                    ".key_boolean_false(FALSE),"
+                                    ".key_time_ns(10ns),"
+                                    ".key_time_ps(250ps),"
+                                    ".key_float_sci(1.5e-9)) "
                                     "gate_0 ("
                                     "  .I (global_in ),"
                                     "  .O (global_out )"
@@ -1276,6 +1281,100 @@ namespace hal {
                 auto val = gate_0->get_parameter_value("key_defparam");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "3");
+            }
+            // Boolean true (case-insensitive; normalized to lowercase)
+            {
+                auto decl = gate_0->get_parameter_declaration("key_boolean_true");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Boolean);
+                auto val = gate_0->get_parameter_value("key_boolean_true");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "true");
+            }
+            // Boolean false (uppercase FALSE → normalized to "false")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_boolean_false");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Boolean);
+                auto val = gate_0->get_parameter_value("key_boolean_false");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "false");
+            }
+            // Time: 10ns
+            {
+                auto decl = gate_0->get_parameter_declaration("key_time_ns");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                auto val = gate_0->get_parameter_value("key_time_ns");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "10ns");
+            }
+            // Time: 250ps
+            {
+                auto decl = gate_0->get_parameter_declaration("key_time_ps");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                auto val = gate_0->get_parameter_value("key_time_ps");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "250ps");
+            }
+            // Float scientific notation (1.5e-9)
+            {
+                auto decl = gate_0->get_parameter_declaration("key_float_sci");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Float);
+                auto val = gate_0->get_parameter_value("key_float_sci");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "1.5e-9");
+            }
+        }
+        {
+            // Enum parameter: gate type has Enum("mode", {"normal","inverted"}, "normal")
+            // and BitVector("width", 16, "0xCAFE"). The parser infers String for the quoted
+            // enum value; the gate-type-declaration override must correct this to Enum.
+            std::string netlist_input("module top ("
+                                    "  global_in,"
+                                    "  global_out"
+                                    " ) ;"
+                                    "  input global_in ;"
+                                    "  output global_out ;"
+                                    "PARAM_TEST #("
+                                    "  .mode(\"inverted\"),"
+                                    "  .width(16'hABCD)"
+                                    ") gate_0 ("
+                                    "  .I0(global_in),"
+                                    "  .I1(global_in),"
+                                    "  .O(global_out)"
+                                    ");"
+                                    "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("PARAM_TEST", "gate_0")).begin();
+            // Enum parameter — type must be Enum, not String
+            {
+                auto decl = gate_0->get_parameter_declaration("mode");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Enum);
+                EXPECT_EQ(decl.get().get_enum_values(), std::vector<std::string>({"normal", "inverted"}));
+                auto val = gate_0->get_parameter_value("mode");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "inverted");
+            }
+            // BitVector parameter — gate type declaration (size=16) is used
+            {
+                auto decl = gate_0->get_parameter_declaration("width");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 16);
+                auto val = gate_0->get_parameter_value("width");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xABCD");
             }
         }
         {
@@ -1964,8 +2063,8 @@ namespace hal {
                                                 gate_child_two_2->get_name()}).size(), 3);
 
             // Test the creation on generic data of the Module child_one_mod
-            EXPECT_EQ(top_child_one->get_data("generic", "child_one_mod_key"),
-                        std::make_tuple("integer", "1234"));
+            ASSERT_TRUE(top_child_one->has_parameter("child_one_mod_key"));
+            EXPECT_EQ(top_child_one->get_parameter_value("child_one_mod_key").get(), "1234");
         }
         {
             // Create a netlist as follows and test its creation (due to request):
@@ -2992,8 +3091,8 @@ namespace hal {
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2",
                                                               "no_comment_3", "no_comment_4", "no_comment_5",
                                                               "no_comment_6"})) {
-                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_TRUE(test_gate->has_parameter(key));
+                    if (!test_gate->has_parameter(key)) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
@@ -3002,8 +3101,8 @@ namespace hal {
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2", "comment_3",
                                                               "comment_4", "comment_5", "comment_6", "comment_7",
                                                               "comment_8", "comment_9"})) {
-                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_FALSE(test_gate->has_parameter(key));
+                    if (test_gate->has_parameter(key)) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }

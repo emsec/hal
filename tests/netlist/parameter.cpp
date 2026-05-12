@@ -85,6 +85,12 @@ namespace hal
             EXPECT_EQ(res.get().get_size(), 64u);
         }
         {
+            // Sizes beyond 64 bits are allowed (e.g., 256-bit FPGA INIT strings).
+            auto res = Parameter::BitVector("init", 256, "0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF");
+            ASSERT_TRUE(res.is_ok());
+            EXPECT_EQ(res.get().get_size(), 256u);
+        }
+        {
             // Single-bit declarations are allowed.
             EXPECT_TRUE(Parameter::BitVector("flag", 1, "0b1").is_ok());
         }
@@ -438,6 +444,13 @@ namespace hal
             // 64-bit-wide bit-vector accepts the full unsigned range.
             const Parameter p = Parameter::BitVector("full", 64, "0b0").get();
             EXPECT_TRUE(p.validate("0xFFFFFFFFFFFFFFFF"));
+        }
+        {
+            // 256-bit wide bit-vector: valid exactly-fitting and overflow cases.
+            const Parameter p = Parameter::BitVector("init", 256, "0b0").get();
+            EXPECT_TRUE(p.validate("0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF"));    // 256 bits
+            EXPECT_TRUE(p.validate("0x0000000000000000000000000000000000000000000000000000000000000001"));       // small value with leading zeros
+            EXPECT_FALSE(p.validate("0x1DEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF"));   // 257 bits
         }
         {
             // LogicVector accepts 9-state literals across all three bases, sized to fit.

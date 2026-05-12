@@ -122,7 +122,7 @@ namespace hal
          * `0b` / `0o` / `0x`.
          *
          * @param[in] name - Parameter name (must be non-empty).
-         * @param[in] size - Bit-width (must be in [1, 64]).
+         * @param[in] size - Bit-width (must be at least 1; up to 65535).
          * @param[in] default_value - Default value as a string.
          */
         static Result<Parameter> BitVector(const std::string& name, u16 size, const std::string& default_value);
@@ -135,7 +135,7 @@ namespace hal
          * 3/4 copies of that state).
          *
          * @param[in] name - Parameter name (must be non-empty).
-         * @param[in] size - Bit-width (must be in [1, 64]).
+         * @param[in] size - Bit-width (must be at least 1; up to 65535).
          * @param[in] default_value - Default value as a 9-state literal string (empty for "no default").
          */
         static Result<Parameter> LogicVector(const std::string& name, u16 size, const std::string& default_value);

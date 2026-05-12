@@ -1886,6 +1886,14 @@ namespace hal
                 }
             }
 
+            // For gate instances, prefer the gate type's own parameter declaration over
+            // the parser-inferred one — this is the only way Enum parameters can be set.
+            const GateType* gt = nullptr;
+            if (const Gate* g = dynamic_cast<const Gate*>(container))
+            {
+                gt = g->get_type();
+            }
+
             for (const auto& parameter : instance->m_parameters)
             {
                 if (!parameter.m_parameter.has_value())
@@ -1894,7 +1902,15 @@ namespace hal
                         "verilog_parser", "could not set generic '{}' for instance '{}' of type '{}': no typed parameter declaration available.", parameter.m_name, instance->m_name, instance->m_type);
                     continue;
                 }
-                if (auto res = container->set_parameter(parameter.m_parameter.value(), parameter.m_value); res.is_error())
+                Parameter effective_param = parameter.m_parameter.value();
+                if (gt != nullptr)
+                {
+                    if (auto decl = gt->get_parameter(parameter.m_name); decl.is_ok())
+                    {
+                        effective_param = decl.get();
+                    }
+                }
+                if (auto res = container->set_parameter(effective_param, parameter.m_value); res.is_error())
                 {
                     log_warning("verilog_parser",
                                 "could not set parameter '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': {}",
@@ -2286,6 +2302,44 @@ namespace hal
             return OK(std::make_pair(param_res.get(), raw));
         }
 
+        // boolean: case-insensitive 'true' / 'false'
+        {
+            const std::string lower = utils::to_lower(raw);
+            if (lower == "true" || lower == "false")
+            {
+                auto param_res = Parameter::Boolean(name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                }
+                return OK(std::make_pair(param_res.get(), lower));
+            }
+        }
+
+        // time literal: <number><unit> with unit in {min, fs, ps, ns, us, ms, s, h}
+        // longest units listed first to avoid partial suffix matches
+        {
+            static const std::vector<std::string> time_units = {"min", "fs", "ps", "ns", "us", "ms", "s", "h"};
+            for (const auto& unit : time_units)
+            {
+                if (raw.size() <= unit.size() || !utils::ends_with(raw, unit))
+                {
+                    continue;
+                }
+                const std::string num_part = raw.substr(0, raw.size() - unit.size());
+                if (!utils::is_integer(num_part) && !is_double_strict(num_part))
+                {
+                    continue;
+                }
+                auto param_res = Parameter::Time(name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                }
+                return OK(std::make_pair(param_res.get(), raw));
+            }
+        }
+
         // string literal: strip outer quotes, no escape processing
         if (raw.size() >= 2 && raw.front() == '"' && raw.back() == '"')
         {
@@ -2431,7 +2485,7 @@ namespace hal
                 const u16 size               = has_width ? explicit_width : static_cast<u16>(hex_digits.size() * 4);
                 return make_param(size, out_prefix + hex_digits);
             }
-            const u16 size = has_width ? explicit_width : static_cast<u16>(digits.size() * bits_per_digit);
+            const u16 size = (has_width && !has_state) ? explicit_width : static_cast<u16>(digits.size() * bits_per_digit);
             return make_param(size, out_prefix + digits);
         }
 

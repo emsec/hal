@@ -65,7 +65,7 @@ namespace hal
             Construct a bit-vector parameter. Values use the prefixes ``0b`` / ``0o`` / ``0x``.
 
             :param str name: Parameter name (must be non-empty).
-            :param int size: Bit-width (must be in [1, 64]).
+            :param int size: Bit-width (must be at least 1; up to 65535).
             :param str default_value: Default value as a string.
         )");
 
@@ -93,7 +93,7 @@ namespace hal
             3/4 copies of that state).
 
             :param str name: Parameter name (must be non-empty).
-            :param int size: Bit-width (must be in [1, 64]).
+            :param int size: Bit-width (must be at least 1; up to 65535).
             :param str default_value: Default value as a 9-state literal string (empty for "no default").
         )");
 

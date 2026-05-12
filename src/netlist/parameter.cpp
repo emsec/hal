@@ -353,6 +353,10 @@ namespace hal
         {
             return ERR("could not create parameter of type 'LogicVector': parameter name is empty");
         }
+        if (size == 0)
+        {
+            return ERR("could not create parameter with name '" + name + "' of type 'LogicVector': size must be at least 1");
+        }
 
         auto param          = Parameter();
         param.type          = Parameter::Type::LogicVector;
@@ -491,17 +495,63 @@ namespace hal
                 return value == "true" || value == "false";
             }
             case Type::BitVector: {
-                auto parsed = parse_bit_vector(value);
-                if (parsed.is_error())
+                if (size <= 64)
+                {
+                    auto parsed = parse_bit_vector(value);
+                    if (parsed.is_error())
+                    {
+                        return false;
+                    }
+                    const u64 v = parsed.get();
+                    return size == 64 || (v >> size) == 0;
+                }
+                // size > 64: validate structurally — count significant bits without
+                // converting to u64 (which would overflow for wide values).
+                if (value.size() < 3 || value[0] != '0')
                 {
                     return false;
                 }
-                const u64 v = parsed.get();
-                if (size < 64 && (v >> size) != 0)
+                const char bc = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
+                int bpd;
+                std::string valid_chars;
+                switch (bc)
+                {
+                    case 'b': bpd = 1; valid_chars = "01"; break;
+                    case 'o': bpd = 3; valid_chars = "01234567"; break;
+                    case 'x': bpd = 4; valid_chars = "0123456789abcdefABCDEF"; break;
+                    default: return false;
+                }
+                const std::string digits = value.substr(2);
+                if (digits.empty())
                 {
                     return false;
                 }
-                return true;
+                for (char c : digits)
+                {
+                    if (valid_chars.find(c) == std::string::npos)
+                    {
+                        return false;
+                    }
+                }
+                // skip leading zero digits to find the most-significant non-zero digit
+                size_t i = 0;
+                while (i < digits.size() && digits[i] == '0')
+                {
+                    ++i;
+                }
+                if (i == digits.size())
+                {
+                    return true;    // value is zero — fits in any size
+                }
+                const char lead      = static_cast<char>(std::tolower(static_cast<unsigned char>(digits[i])));
+                const int  lead_val  = (lead >= 'a') ? (lead - 'a' + 10) : (lead - '0');
+                int        lead_bits = 0;
+                while ((1 << lead_bits) <= lead_val)
+                {
+                    ++lead_bits;
+                }
+                const u64 sig_bits = static_cast<u64>(lead_bits) + static_cast<u64>(digits.size() - i - 1) * static_cast<u64>(bpd);
+                return sig_bits <= size;
             }
             case Type::LogicVector: {
                 auto parsed = parse_logic_vector(value);

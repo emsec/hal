@@ -2255,6 +2255,14 @@ namespace hal
 
             // process generics: every generic becomes a typed Parameter on the container
             // (Gate or Module), built from the source value's shape by parse_generic_assign.
+            // For gate instances, prefer the gate type's own declaration so that Enum
+            // parameters (and any other pre-declared type) are stored with the correct type.
+            const GateType* gt = nullptr;
+            if (const Gate* g = dynamic_cast<const Gate*>(container))
+            {
+                gt = g->get_type();
+            }
+
             for (const auto& generic : instance->m_generics)
             {
                 if (!generic.m_parameter.has_value())
@@ -2269,7 +2277,15 @@ namespace hal
                                 instance_type);
                     continue;
                 }
-                if (auto res = container->set_parameter(generic.m_parameter.value(), generic.m_value); res.is_error())
+                Parameter effective_param = generic.m_parameter.value();
+                if (gt != nullptr)
+                {
+                    if (auto decl = gt->get_parameter(core_strings::to<std::string>(generic.m_name)); decl.is_ok())
+                    {
+                        effective_param = decl.get();
+                    }
+                }
+                if (auto res = container->set_parameter(effective_param, generic.m_value); res.is_error())
                 {
                     log_warning("vhdl_parser",
                                 "could not set generic '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': {}",

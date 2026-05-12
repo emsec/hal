@@ -901,8 +901,14 @@ namespace hal {
                                         "      key_bit_vector_bin => B\"1010_1011_1100\","
                                         "      key_boolean_true => true,"
                                         "      key_boolean_false => FALSE,"
-                                        "      key_time => 1.234sec,"
-                                        "      key_time_ns => 10ns,"
+                                        "      key_time => 1.234 sec,"
+                                        "      key_time_ns => 10 ns,"
+                                        "      key_time_fs => 5 fs,"
+                                        "      key_time_ps => 250 ps,"
+                                        "      key_time_us => 3 us,"
+                                        "      key_time_ms => 2 ms,"
+                                        "      key_time_min => 1 min,"
+                                        "      key_time_hr => 1 hr,"
                                         "      key_bit_value => '1',"
                                         "      key_bit_value_zero => '0'"
                                         "    )"
@@ -1038,6 +1044,48 @@ namespace hal {
                     ASSERT_TRUE(val.is_ok());
                     EXPECT_EQ(val.get(), "10ns");
                 }
+                // Time: 5fs
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_fs");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_fs").get(), "5fs");
+                }
+                // Time: 250ps
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_ps");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_ps").get(), "250ps");
+                }
+                // Time: 3us
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_us");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_us").get(), "3us");
+                }
+                // Time: 2ms
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_ms");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_ms").get(), "2ms");
+                }
+                // Time: 1min → no remapping
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_min");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_min").get(), "1min");
+                }
+                // Time: 1hr → normalized to "1h"
+                {
+                    auto decl = gate_0->get_parameter_declaration("key_time_hr");
+                    ASSERT_TRUE(decl.is_ok());
+                    EXPECT_EQ(decl.get().get_type(), Parameter::Type::Time);
+                    EXPECT_EQ(gate_0->get_parameter_value("key_time_hr").get(), "1h");
+                }
                 // Bit value '1' → BitVector(size=1), value "0b1"
                 {
                     auto decl = gate_0->get_parameter_declaration("key_bit_value");
@@ -1059,6 +1107,61 @@ namespace hal {
                     EXPECT_EQ(val.get(), "0b0");
                 }
             }
+        {
+            // Enum parameter: PARAM_TEST gate type declares Enum("mode",{"normal","inverted"})
+            // and BitVector("width",16). The parser infers String for the quoted enum value;
+            // the gate-type-declaration override must correct this to Enum.
+            std::string netlist_input("entity TEST_Comp is "
+                                    "  port ( "
+                                    "    net_in : in STD_LOGIC := 'X'; "
+                                    "    net_out : out STD_LOGIC; "
+                                    "  ); "
+                                    "end TEST_Comp; "
+                                    "architecture STRUCTURE of TEST_Comp is "
+                                    "begin"
+                                    "  gate_0 : PARAM_TEST"
+                                    "    generic map("
+                                    "      mode => \"inverted\","
+                                    "      width => X\"ABCD\""
+                                    "    )"
+                                    "    port map ( "
+                                    "      I0 => net_in, "
+                                    "      I1 => net_in, "
+                                    "      O => net_out "
+                                    "    ); "
+                                    "end STRUCTURE;");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist_enum.v", netlist_input);
+            VHDLParser vhdl_parser;
+            auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            ASSERT_EQ(nl->get_gates(test_utils::gate_filter("PARAM_TEST", "gate_0")).size(), 1);
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("PARAM_TEST", "gate_0")).begin();
+
+            // Enum parameter — type must be Enum, not String
+            {
+                auto decl = gate_0->get_parameter_declaration("mode");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Enum);
+                EXPECT_EQ(decl.get().get_enum_values(), std::vector<std::string>({"normal", "inverted"}));
+                auto val = gate_0->get_parameter_value("mode");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "inverted");
+            }
+            // BitVector parameter — gate type declaration (size=16) is used
+            {
+                auto decl = gate_0->get_parameter_declaration("width");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 16);
+                auto val = gate_0->get_parameter_value("width");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xabcd");
+            }
+        }
         TEST_END
     }
 
@@ -2402,16 +2505,16 @@ namespace hal {
 
                 // Test that the comments did not removed other parts (all no_comment_n generics should be created)
                 for (std::string key : std::set<std::string>({"no_comment_0", "no_comment_1", "no_comment_2"})) {
-                    EXPECT_NE(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) == std::make_tuple("", "")) {
+                    EXPECT_TRUE(test_gate->has_parameter(key));
+                    if (!test_gate->has_parameter(key)) {
                         std::cout << "comment test failed for: " << key << std::endl;
                     }
                 }
 
                 // Test that the comments are not interpreted (all comment_n generics shouldn't be created)
                 for (std::string key : std::set<std::string>({"comment_0", "comment_1", "comment_2"})) {
-                    EXPECT_EQ(test_gate->get_data("generic", key), std::make_tuple("", ""));
-                    if (test_gate->get_data("generic", key) != std::make_tuple("", "")) {
+                    EXPECT_FALSE(test_gate->has_parameter(key));
+                    if (test_gate->has_parameter(key)) {
                         std::cout << "comment failed for: " << key << std::endl;
                     }
                 }
