@@ -65,21 +65,49 @@ namespace hal
             Enum,
         };
 
-        /** Parameter name. */
-        std::string name;
-        /** Data type of the parameter. */
-        Type type;
-        /** Bit-width of the parameter, where applicable. */
-        u16 size = 0;
-        /** Default value. */
-        std::string default_value = "";
-        /** Ordered list of enum values; empty for non-enum parameters. */
-        std::vector<std::string> enum_values = {};
-
         /**
          * Constructs an empty / invalid Parameter.
          */
         explicit Parameter();
+
+        /**
+         * Get the name of the parameter.
+         *
+         * @returns The parameter name.
+         */
+        const std::string& get_name() const;
+
+        /**
+         * Get the data type of the parameter.
+         *
+         * @returns The parameter type.
+         */
+        Type get_type() const;
+
+        /**
+         * Get the bit-width of the parameter.
+         * Fixed at 1 for `Boolean`, 64 for `Integer` and `Float`, 0 for `String` and `Time`,
+         * `ceil(log2(N))` for `Enum` with N values, and the declared width for `BitVector` / `LogicVector`.
+         *
+         * @returns The bit-width.
+         */
+        u16 get_size() const;
+
+        /**
+         * Get the default value of the parameter as a string.
+         * An empty string signals "no default"; all other values satisfy the type's grammar.
+         *
+         * @returns The default value string.
+         */
+        const std::string& get_default_value() const;
+
+        /**
+         * Get the ordered list of named values for an `Enum` parameter.
+         * Always empty for every other type.
+         *
+         * @returns The enum value list.
+         */
+        const std::vector<std::string>& get_enum_values() const;
 
         /**
          * Construct a boolean parameter. Accepts only the value strings `"true"` and `"false"`.
@@ -190,6 +218,13 @@ namespace hal
 
         bool operator==(const Parameter& other) const;
         bool operator!=(const Parameter& other) const;
+
+    private:
+        std::string name;
+        Type type;
+        u16 size = 0;
+        std::string default_value = "";
+        std::vector<std::string> enum_values = {};
     };
 
     template<>

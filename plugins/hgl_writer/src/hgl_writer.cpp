@@ -115,18 +115,18 @@ namespace hal
                 {
                     rapidjson::Value entry(rapidjson::kObjectType);
                     entry.AddMember("name", rapidjson::Value{}.SetString(pname.c_str(), pname.length(), allocator), allocator);
-                    switch (p.type)
+                    switch (p.get_type())
                     {
                         case Parameter::Type::Boolean:
                             entry.AddMember("type", "boolean", allocator);
                             break;
                         case Parameter::Type::BitVector:
                             entry.AddMember("type", "bit_vector", allocator);
-                            entry.AddMember("size", static_cast<u32>(p.size), allocator);
+                            entry.AddMember("size", static_cast<u32>(p.get_size()), allocator);
                             break;
                         case Parameter::Type::LogicVector:
                             entry.AddMember("type", "logic_vector", allocator);
-                            entry.AddMember("size", static_cast<u32>(p.size), allocator);
+                            entry.AddMember("size", static_cast<u32>(p.get_size()), allocator);
                             break;
                         case Parameter::Type::Integer:
                             entry.AddMember("type", "integer", allocator);
@@ -143,7 +143,7 @@ namespace hal
                         case Parameter::Type::Enum: {
                             entry.AddMember("type", "enum", allocator);
                             rapidjson::Value values_array(rapidjson::kArrayType);
-                            for (const auto& v : p.enum_values)
+                            for (const auto& v : p.get_enum_values())
                             {
                                 values_array.PushBack(rapidjson::Value{}.SetString(v.c_str(), v.length(), allocator), allocator);
                             }
@@ -151,7 +151,7 @@ namespace hal
                             break;
                         }
                     }
-                    entry.AddMember("default", rapidjson::Value{}.SetString(p.default_value.c_str(), p.default_value.length(), allocator), allocator);
+                    entry.AddMember("default", rapidjson::Value{}.SetString(p.get_default_value().c_str(), p.get_default_value().length(), allocator), allocator);
                     params_array.PushBack(entry, allocator);
                 }
                 cell.AddMember("parameters", params_array, allocator);

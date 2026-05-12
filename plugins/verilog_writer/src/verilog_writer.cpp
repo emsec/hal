@@ -411,7 +411,7 @@ namespace hal
 
     Result<std::monostate> VerilogWriter::write_typed_parameter_value(std::stringstream& res_stream, const Parameter& decl, const std::string& value) const
     {
-        switch (decl.type)
+        switch (decl.get_type())
         {
             case Parameter::Type::Integer:
             case Parameter::Type::Float:
@@ -433,7 +433,7 @@ namespace hal
                 // value is "0b...", "0o...", or "0x..." — strip prefix and map to Verilog base notation
                 if (value.size() < 3 || value[0] != '0')
                 {
-                    return ERR("could not write parameter '" + decl.name + "': unexpected value format '" + value + "'");
+                    return ERR("could not write parameter '" + decl.get_name() + "': unexpected value format '" + value + "'");
                 }
                 const char base   = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
                 const auto digits = value.substr(2);
@@ -444,9 +444,9 @@ namespace hal
                     case 'o': verilog_base = 'o'; break;
                     case 'x': verilog_base = 'h'; break;
                     default:
-                        return ERR("could not write parameter '" + decl.name + "': unknown base '" + std::string(1, base) + "' in value '" + value + "'");
+                        return ERR("could not write parameter '" + decl.get_name() + "': unknown base '" + std::string(1, base) + "' in value '" + value + "'");
                 }
-                res_stream << decl.size << "'" << verilog_base << digits;
+                res_stream << decl.get_size() << "'" << verilog_base << digits;
                 break;
             }
         }

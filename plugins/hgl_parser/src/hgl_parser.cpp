@@ -339,7 +339,7 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not parse parameters for gate type '" + name + "'");
                 }
 
-                var_sizes[param.name] = param.size;
+                var_sizes[param.get_name()] = param.get_size();
             }
         }
 

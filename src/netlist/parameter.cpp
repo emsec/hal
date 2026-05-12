@@ -145,7 +145,7 @@ namespace hal
             for (const char c : digits)
             {
                 // '-' has no case; everything else lowercases cleanly.
-                const char l = (c == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+                const char l          = (c == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
                 const bool is_numeric = numeric_lower.find(l) != std::string::npos;
                 const bool is_state   = is_logic_state_char(l) && l != '0' && l != '1';
                 if (!is_numeric && !is_state)
@@ -244,8 +244,8 @@ namespace hal
             {
                 return ERR("time value '" + value + "' is missing a unit suffix");
             }
-            const std::string num_str = value.substr(0, i);
-            const std::string unit    = value.substr(i);
+            const std::string num_str                         = value.substr(0, i);
+            const std::string unit                            = value.substr(i);
             static const std::vector<std::string> valid_units = {"fs", "ps", "ns", "us", "ms", "s", "min", "h"};
             if (std::find(valid_units.begin(), valid_units.end(), unit) == valid_units.end())
             {
@@ -274,6 +274,31 @@ namespace hal
 
     Parameter::Parameter()
     {
+    }
+
+    const std::string& Parameter::get_name() const
+    {
+        return name;
+    }
+
+    Parameter::Type Parameter::get_type() const
+    {
+        return type;
+    }
+
+    u16 Parameter::get_size() const
+    {
+        return size;
+    }
+
+    const std::string& Parameter::get_default_value() const
+    {
+        return default_value;
+    }
+
+    const std::vector<std::string>& Parameter::get_enum_values() const
+    {
+        return enum_values;
     }
 
     Result<Parameter> Parameter::Boolean(const std::string& name, const std::string& default_value)

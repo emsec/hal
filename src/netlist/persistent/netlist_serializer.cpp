@@ -103,14 +103,14 @@ namespace hal
                 {
                     const auto& [decl, pvalue] = decl_and_value;
                     rapidjson::Value entry(rapidjson::kObjectType);
-                    const std::string type_str = enum_to_string<Parameter::Type>(decl.type);
+                    const std::string type_str = enum_to_string<Parameter::Type>(decl.get_type());
                     entry.AddMember("type", JSON_STR_HELPER(type_str), allocator);
-                    entry.AddMember("size", static_cast<u32>(decl.size), allocator);
-                    entry.AddMember("default", JSON_STR_HELPER(decl.default_value), allocator);
-                    if (decl.type == Parameter::Type::Enum)
+                    entry.AddMember("size", static_cast<u32>(decl.get_size()), allocator);
+                    entry.AddMember("default", JSON_STR_HELPER(decl.get_default_value()), allocator);
+                    if (decl.get_type() == Parameter::Type::Enum)
                     {
                         rapidjson::Value enum_values(rapidjson::kArrayType);
-                        for (const auto& v : decl.enum_values)
+                        for (const auto& v : decl.get_enum_values())
                         {
                             enum_values.PushBack(JSON_STR_HELPER(v), allocator);
                         }

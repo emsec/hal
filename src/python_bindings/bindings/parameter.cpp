@@ -216,34 +216,77 @@ namespace hal
             :param str default_value: Default value, must equal one of `values`.
         )");
 
-        py_parameter.def_readwrite("name", &Parameter::name, R"(
-            Parameter name.
+        py_parameter.def_property_readonly("name", &Parameter::get_name, R"(
+            The name of the parameter (read-only).
 
             :type: str
         )");
 
-        py_parameter.def_readwrite("type", &Parameter::type, R"(
-            Data type of the parameter.
+        py_parameter.def("get_name", &Parameter::get_name, R"(
+            Get the name of the parameter.
+
+            :returns: The parameter name.
+            :rtype: str
+        )");
+
+        py_parameter.def_property_readonly("type", &Parameter::get_type, R"(
+            The data type of the parameter (read-only).
 
             :type: hal_py.Parameter.Type
         )");
 
-        py_parameter.def_readwrite("size", &Parameter::size, R"(
-            Bit-width of the parameter, where applicable.
+        py_parameter.def("get_type", &Parameter::get_type, R"(
+            Get the data type of the parameter.
+
+            :returns: The parameter type.
+            :rtype: hal_py.Parameter.Type
+        )");
+
+        py_parameter.def_property_readonly("size", &Parameter::get_size, R"(
+            The bit-width of the parameter (read-only).
+            Fixed at 1 for ``Boolean``, 64 for ``Integer`` and ``Float``, 0 for ``String`` and ``Time``,
+            ``ceil(log2(N))`` for ``Enum`` with N values, and the declared width for ``BitVector`` / ``LogicVector``.
 
             :type: int
         )");
 
-        py_parameter.def_readwrite("default_value", &Parameter::default_value, R"(
-            Default value.
+        py_parameter.def("get_size", &Parameter::get_size, R"(
+            Get the bit-width of the parameter.
+            Fixed at 1 for ``Boolean``, 64 for ``Integer`` and ``Float``, 0 for ``String`` and ``Time``,
+            ``ceil(log2(N))`` for ``Enum`` with N values, and the declared width for ``BitVector`` / ``LogicVector``.
+
+            :returns: The bit-width.
+            :rtype: int
+        )");
+
+        py_parameter.def_property_readonly("default_value", &Parameter::get_default_value, R"(
+            The default value of the parameter as a string (read-only).
+            An empty string signals "no default"; all other values satisfy the type's grammar.
 
             :type: str
         )");
 
-        py_parameter.def_readwrite("enum_values", &Parameter::enum_values, R"(
-            Ordered list of enum values; empty for non-enum parameters.
+        py_parameter.def("get_default_value", &Parameter::get_default_value, R"(
+            Get the default value of the parameter as a string.
+            An empty string signals "no default"; all other values satisfy the type's grammar.
+
+            :returns: The default value string.
+            :rtype: str
+        )");
+
+        py_parameter.def_property_readonly("enum_values", &Parameter::get_enum_values, R"(
+            The ordered list of named values for an ``Enum`` parameter (read-only).
+            Always empty for every other type.
 
             :type: list[str]
+        )");
+
+        py_parameter.def("get_enum_values", &Parameter::get_enum_values, R"(
+            Get the ordered list of named values for an ``Enum`` parameter.
+            Always empty for every other type.
+
+            :returns: The enum value list.
+            :rtype: list[str]
         )");
 
         py_parameter.def("validate", &Parameter::validate, py::arg("value"), R"(

@@ -967,7 +967,7 @@ TEST_F(GateTypeTest, check_parameters)
         ASSERT_EQ(gt->get_parameters().size(), 2u);
         EXPECT_TRUE(gt->get_parameters().count("width") == 1);
         EXPECT_TRUE(gt->get_parameters().count("mode") == 1);
-        EXPECT_EQ(gt->get_parameters().at("mode").size, 2u);  // ceil(log2(4)) == 2
+        EXPECT_EQ(gt->get_parameters().at("mode").get_size(), 2u);  // ceil(log2(4)) == 2
         EXPECT_TRUE(gt->has_parameter("width"));
         EXPECT_TRUE(gt->has_parameter("mode"));
         EXPECT_FALSE(gt->has_parameter("missing"));
@@ -992,7 +992,7 @@ TEST_F(GateTypeTest, check_parameters)
             auto param_res = Parameter::Enum(name, cases[i].first, cases[i].first.front());
             ASSERT_TRUE(param_res.is_ok());
             ASSERT_TRUE(gt->add_parameter(param_res.get()).is_ok());
-            EXPECT_EQ(gt->get_parameter(name).get().size, cases[i].second);
+            EXPECT_EQ(gt->get_parameter(name).get().get_size(), cases[i].second);
         }
     }
 

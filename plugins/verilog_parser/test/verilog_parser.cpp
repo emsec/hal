@@ -1152,7 +1152,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_integer");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
                 auto val = gate_0->get_parameter_value("key_integer");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "1234");
@@ -1161,7 +1161,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_neg_integer");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
                 auto val = gate_0->get_parameter_value("key_neg_integer");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "-42");
@@ -1170,7 +1170,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_floating_point");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::Float);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Float);
                 auto val = gate_0->get_parameter_value("key_floating_point");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "1.234");
@@ -1179,7 +1179,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_string");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::String);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
                 auto val = gate_0->get_parameter_value("key_string");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "test_string");
@@ -1194,7 +1194,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_string_looks_like_float");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::String);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::String);
                 auto val = gate_0->get_parameter_value("key_string_looks_like_float");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "1.234");
@@ -1203,8 +1203,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 12);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_hex");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0xabc");
@@ -1213,7 +1213,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_dec");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
                 auto val = gate_0->get_parameter_value("key_bit_vector_dec");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0xabc");
@@ -1222,8 +1222,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_oct");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 12);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_oct");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0o5274");
@@ -1232,8 +1232,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_bin");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 12);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_bin");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0b101010111100");
@@ -1242,8 +1242,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex_sized");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 12);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_hex_sized");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0xabc");
@@ -1252,8 +1252,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_single_bit_one");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 1);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 1);
                 auto val = gate_0->get_parameter_value("key_single_bit_one");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0b1");
@@ -1262,8 +1262,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_single_bit_zero");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
-                EXPECT_EQ(decl.get().size, 1);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().get_size(), 1);
                 auto val = gate_0->get_parameter_value("key_single_bit_zero");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0b0");
@@ -1272,7 +1272,7 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_defparam");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::Integer);
                 auto val = gate_0->get_parameter_value("key_defparam");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "3");
@@ -1355,8 +1355,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bvec_x");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
-                EXPECT_EQ(decl.get().size, 4);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().get_size(), 4);
                 auto val = gate_0->get_parameter_value("key_bvec_x");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0bXX01");
@@ -1365,8 +1365,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_hvec_z");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
-                EXPECT_EQ(decl.get().size, 12);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_hvec_z");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0xZa1");
@@ -1375,8 +1375,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_bvec_dont_care");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
-                EXPECT_EQ(decl.get().size, 4);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().get_size(), 4);
                 auto val = gate_0->get_parameter_value("key_bvec_dont_care");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0b-0-1");
@@ -1385,8 +1385,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_unsized_x");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
-                EXPECT_EQ(decl.get().size, 1);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().get_size(), 1);
                 auto val = gate_0->get_parameter_value("key_unsized_x");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0bX");
@@ -1395,8 +1395,8 @@ namespace hal {
             {
                 auto decl = gate_0->get_parameter_declaration("key_unsized_z");
                 ASSERT_TRUE(decl.is_ok());
-                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
-                EXPECT_EQ(decl.get().size, 1);
+                EXPECT_EQ(decl.get().get_type(), Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().get_size(), 1);
                 auto val = gate_0->get_parameter_value("key_unsized_z");
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0bZ");

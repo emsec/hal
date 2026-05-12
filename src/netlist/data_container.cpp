@@ -113,9 +113,9 @@ namespace hal
 
     Result<std::monostate> DataContainer::set_parameter(const Parameter& param, const std::string& value)
     {
-        if (m_parameters.find(param.name) != m_parameters.end())
+        if (m_parameters.find(param.get_name()) != m_parameters.end())
         {
-            return ERR("could not set parameter '" + param.name + ": a parameter with that name already exists");
+            return ERR("could not set parameter '" + param.get_name() + ": a parameter with that name already exists");
         }
 
         if (!param.validate(value))
@@ -123,7 +123,7 @@ namespace hal
             return ERR("invalid parameter value");
         }
 
-        m_parameters.insert_or_assign(param.name, std::make_pair(param, value));
+        m_parameters.insert_or_assign(param.get_name(), std::make_pair(param, value));
 
         return OK({});
     }
@@ -140,15 +140,15 @@ namespace hal
 
     Result<std::string> DataContainer::get_parameter_value(const Parameter& param) const
     {
-        auto it = m_parameters.find(param.name);
+        auto it = m_parameters.find(param.get_name());
         if (it == m_parameters.end())
         {
-            return ERR("no parameter named '" + param.name + "'");
+            return ERR("no parameter named '" + param.get_name() + "'");
         }
 
         if (it->second.first != param)
         {
-            return ERR("parameter with name '" + param.name + "' exists, but does not match provided parameter declaration");
+            return ERR("parameter with name '" + param.get_name() + "' exists, but does not match provided parameter declaration");
         }
 
         return OK(it->second.second);
@@ -171,7 +171,7 @@ namespace hal
 
     bool DataContainer::has_parameter(const Parameter& param) const
     {
-        const auto it = m_parameters.find(param.name);
+        const auto it = m_parameters.find(param.get_name());
         return it != m_parameters.end() && it->second.first == param;
     }
 

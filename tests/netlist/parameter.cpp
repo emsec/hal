@@ -33,11 +33,11 @@ namespace hal
             auto res = Parameter::Boolean("flag", "false");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "flag");
-            EXPECT_EQ(p.type, Parameter::Type::Boolean);
-            EXPECT_EQ(p.size, 1u);
-            EXPECT_EQ(p.default_value, "false");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "flag");
+            EXPECT_EQ(p.get_type(), Parameter::Type::Boolean);
+            EXPECT_EQ(p.get_size(), 1u);
+            EXPECT_EQ(p.get_default_value(), "false");
+            EXPECT_TRUE(p.get_enum_values().empty());
 
             EXPECT_TRUE(Parameter::Boolean("flag", "true").is_ok());
         }
@@ -72,17 +72,17 @@ namespace hal
             auto res = Parameter::BitVector("width", 16, "0xCAFE");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "width");
-            EXPECT_EQ(p.type, Parameter::Type::BitVector);
-            EXPECT_EQ(p.size, 16u);
-            EXPECT_EQ(p.default_value, "0xCAFE");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "width");
+            EXPECT_EQ(p.get_type(), Parameter::Type::BitVector);
+            EXPECT_EQ(p.get_size(), 16u);
+            EXPECT_EQ(p.get_default_value(), "0xCAFE");
+            EXPECT_TRUE(p.get_enum_values().empty());
         }
         {
             // The full 64-bit range is allowed.
             auto res = Parameter::BitVector("full", 64, "0xFFFFFFFFFFFFFFFF");
             ASSERT_TRUE(res.is_ok());
-            EXPECT_EQ(res.get().size, 64u);
+            EXPECT_EQ(res.get().get_size(), 64u);
         }
         {
             // Single-bit declarations are allowed.
@@ -123,11 +123,11 @@ namespace hal
             auto res = Parameter::LogicVector("bus", 4, "0b10XZ");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "bus");
-            EXPECT_EQ(p.type, Parameter::Type::LogicVector);
-            EXPECT_EQ(p.size, 4u);
-            EXPECT_EQ(p.default_value, "0b10XZ");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "bus");
+            EXPECT_EQ(p.get_type(), Parameter::Type::LogicVector);
+            EXPECT_EQ(p.get_size(), 4u);
+            EXPECT_EQ(p.get_default_value(), "0b10XZ");
+            EXPECT_TRUE(p.get_enum_values().empty());
         }
         {
             // Octal and hex literals: each digit expands to 3 / 4 bits.
@@ -183,11 +183,11 @@ namespace hal
             auto res = Parameter::Integer("count", "42");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "count");
-            EXPECT_EQ(p.type, Parameter::Type::Integer);
-            EXPECT_EQ(p.size, 64u);
-            EXPECT_EQ(p.default_value, "42");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "count");
+            EXPECT_EQ(p.get_type(), Parameter::Type::Integer);
+            EXPECT_EQ(p.get_size(), 64u);
+            EXPECT_EQ(p.get_default_value(), "42");
+            EXPECT_TRUE(p.get_enum_values().empty());
         }
         {
             // Leading sign, zero, and the i64 extremes are accepted.
@@ -232,17 +232,17 @@ namespace hal
             auto res = Parameter::String("note", "hello world");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "note");
-            EXPECT_EQ(p.type, Parameter::Type::String);
-            EXPECT_EQ(p.size, 0u);
-            EXPECT_EQ(p.default_value, "hello world");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "note");
+            EXPECT_EQ(p.get_type(), Parameter::Type::String);
+            EXPECT_EQ(p.get_size(), 0u);
+            EXPECT_EQ(p.get_default_value(), "hello world");
+            EXPECT_TRUE(p.get_enum_values().empty());
         }
         {
             // Empty string is a valid default.
             auto res = Parameter::String("blank", "");
             ASSERT_TRUE(res.is_ok());
-            EXPECT_EQ(res.get().default_value, "");
+            EXPECT_EQ(res.get().get_default_value(), "");
         }
 
         // Negative
@@ -267,11 +267,11 @@ namespace hal
             auto res = Parameter::Float("pi", "3.14");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "pi");
-            EXPECT_EQ(p.type, Parameter::Type::Float);
-            EXPECT_EQ(p.size, 64u);
-            EXPECT_EQ(p.default_value, "3.14");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "pi");
+            EXPECT_EQ(p.get_type(), Parameter::Type::Float);
+            EXPECT_EQ(p.get_size(), 64u);
+            EXPECT_EQ(p.get_default_value(), "3.14");
+            EXPECT_TRUE(p.get_enum_values().empty());
 
             EXPECT_TRUE(Parameter::Float("exp", "1e-5").is_ok());
             EXPECT_TRUE(Parameter::Float("neg", "-2.5").is_ok());
@@ -307,11 +307,11 @@ namespace hal
             auto res = Parameter::Time("delay", "10ns");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "delay");
-            EXPECT_EQ(p.type, Parameter::Type::Time);
-            EXPECT_EQ(p.size, 0u);
-            EXPECT_EQ(p.default_value, "10ns");
-            EXPECT_TRUE(p.enum_values.empty());
+            EXPECT_EQ(p.get_name(), "delay");
+            EXPECT_EQ(p.get_type(), Parameter::Type::Time);
+            EXPECT_EQ(p.get_size(), 0u);
+            EXPECT_EQ(p.get_default_value(), "10ns");
+            EXPECT_TRUE(p.get_enum_values().empty());
         }
         {
             // All standard units are accepted; fractional and zero values OK.
@@ -367,23 +367,23 @@ namespace hal
             auto res = Parameter::Enum("mode", {"normal", "inverted"}, "normal");
             ASSERT_TRUE(res.is_ok());
             const Parameter p = res.get();
-            EXPECT_EQ(p.name, "mode");
-            EXPECT_EQ(p.type, Parameter::Type::Enum);
-            EXPECT_EQ(p.size, 1u);
-            EXPECT_EQ(p.default_value, "normal");
-            EXPECT_EQ(p.enum_values, std::vector<std::string>({"normal", "inverted"}));
+            EXPECT_EQ(p.get_name(), "mode");
+            EXPECT_EQ(p.get_type(), Parameter::Type::Enum);
+            EXPECT_EQ(p.get_size(), 1u);
+            EXPECT_EQ(p.get_default_value(), "normal");
+            EXPECT_EQ(p.get_enum_values(), std::vector<std::string>({"normal", "inverted"}));
         }
         {
             // Four values fit in 2 bits.
             auto res = Parameter::Enum("speed", {"slow", "fast", "very_fast", "blazing"}, "fast");
             ASSERT_TRUE(res.is_ok());
-            EXPECT_EQ(res.get().size, 2u);
+            EXPECT_EQ(res.get().get_size(), 2u);
         }
         {
             // Non-power-of-two value counts round up.
             auto res = Parameter::Enum("trit", {"a", "b", "c"}, "a");
             ASSERT_TRUE(res.is_ok());
-            EXPECT_EQ(res.get().size, 2u);
+            EXPECT_EQ(res.get().get_size(), 2u);
         }
 
         // Negative
@@ -627,7 +627,7 @@ namespace hal
 
             // The empty default round-trips through the struct.
             const Parameter p = Parameter::BitVector("w", 16, "").get();
-            EXPECT_EQ(p.default_value, "");
+            EXPECT_EQ(p.get_default_value(), "");
         }
 
         // Negative

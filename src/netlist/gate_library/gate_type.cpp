@@ -750,12 +750,12 @@ namespace hal
 
     Result<std::monostate> GateType::add_parameter(const Parameter& param)
     {
-        if (m_parameters.find(param.name) != m_parameters.end())
+        if (m_parameters.find(param.get_name()) != m_parameters.end())
         {
-            return ERR("could not add parameter '" + param.name + "' to gate type '" + m_name + "': a parameter with that name already exists");
+            return ERR("could not add parameter '" + param.get_name() + "' to gate type '" + m_name + "': a parameter with that name already exists");
         }
 
-        m_parameters[param.name] = param;
+        m_parameters[param.get_name()] = param;
         return OK({});
     }
 
