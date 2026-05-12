@@ -78,7 +78,7 @@ namespace hal
                     return false;
                 }
             }, py::arg("param"), py::arg("value"), R"(
-            Set the value of a typed parameter as a string. Stores both the parameter declaration and its current value. 
+            Set (or overwrite) the value of a typed parameter as a string. The value is validated, normalized, and stored; any existing entry with the same name is replaced.
 
             :param hal_py.Parameter param: The parameter declaration.
             :param str value: The value to store as a string.

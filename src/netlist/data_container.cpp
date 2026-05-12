@@ -2,8 +2,30 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <cctype>
+
 namespace hal
 {
+    namespace
+    {
+        std::string normalize_bv_value(Parameter::Type type, const std::string& value)
+        {
+            if (type != Parameter::Type::BitVector && type != Parameter::Type::LogicVector)
+                return value;
+            if (value.size() < 2 || value[0] != '0')
+                return value;
+            const char pfx = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
+            if (pfx != 'b' && pfx != 'o' && pfx != 'x')
+                return value;
+            std::string result;
+            result.reserve(value.size());
+            result += '0';
+            result += pfx;
+            for (std::size_t i = 2; i < value.size(); ++i)
+                result += static_cast<char>(std::toupper(static_cast<unsigned char>(value[i])));
+            return result;
+        }
+    }    // namespace
     bool DataContainer::operator==(const DataContainer& other) const
     {
         return m_data == other.get_data_map() && m_parameters == other.get_parameters();
@@ -113,17 +135,13 @@ namespace hal
 
     Result<std::monostate> DataContainer::set_parameter(const Parameter& param, const std::string& value)
     {
-        if (m_parameters.find(param.get_name()) != m_parameters.end())
-        {
-            return ERR("could not set parameter '" + param.get_name() + ": a parameter with that name already exists");
-        }
-
         if (!param.validate(value))
         {
             return ERR("invalid parameter value");
         }
 
-        m_parameters.insert_or_assign(param.get_name(), std::make_pair(param, value));
+        const std::string normalized = normalize_bv_value(param.get_type(), value);
+        m_parameters.insert_or_assign(param.get_name(), std::make_pair(param, normalized));
 
         return OK({});
     }

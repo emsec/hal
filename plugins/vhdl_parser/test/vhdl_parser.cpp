@@ -978,7 +978,7 @@ namespace hal {
                     ASSERT_TRUE(val.is_ok());
                     EXPECT_EQ(val.get(), "1.234");
                 }
-                // BitVector from hex (X"abc" → 3 digits × 4 bits = 12 bits, value "0xabc")
+                // BitVector from hex (X"abc" → 3 digits × 4 bits = 12 bits, value "0xABC")
                 {
                     auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex");
                     ASSERT_TRUE(decl.is_ok());
@@ -986,7 +986,7 @@ namespace hal {
                     EXPECT_EQ(decl.get().get_size(), 12);
                     auto val = gate_0->get_parameter_value("key_bit_vector_hex");
                     ASSERT_TRUE(val.is_ok());
-                    EXPECT_EQ(val.get(), "0xabc");
+                    EXPECT_EQ(val.get(), "0xABC");
                 }
                 // BitVector from octal (O"5274" → 4 digits × 3 bits = 12 bits, value "0o5274")
                 {
@@ -1159,7 +1159,7 @@ namespace hal {
                 EXPECT_EQ(decl.get().get_size(), 16);
                 auto val = gate_0->get_parameter_value("width");
                 ASSERT_TRUE(val.is_ok());
-                EXPECT_EQ(val.get(), "0xabcd");
+                EXPECT_EQ(val.get(), "0xABCD");
             }
         }
         TEST_END
@@ -1244,7 +1244,7 @@ namespace hal {
                     ASSERT_TRUE(val.is_ok());
                     EXPECT_EQ(val.get(), "0bXX01");
                 }
-                // X"aXb" → 3 hex digits with state char → LogicVector(size=12), value "0xaXb"
+                // X"aXb" → 3 hex digits with state char → LogicVector(size=12), value "0xAXB"
                 {
                     auto decl = gate_0->get_parameter_declaration("key_xvec_x");
                     ASSERT_TRUE(decl.is_ok());
@@ -1252,7 +1252,7 @@ namespace hal {
                     EXPECT_EQ(decl.get().get_size(), 12);
                     auto val = gate_0->get_parameter_value("key_xvec_x");
                     ASSERT_TRUE(val.is_ok());
-                    EXPECT_EQ(val.get(), "0xaXb");
+                    EXPECT_EQ(val.get(), "0xAXB");
                 }
             }
         TEST_END

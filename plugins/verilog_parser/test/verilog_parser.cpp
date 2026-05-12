@@ -1204,7 +1204,7 @@ namespace hal {
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "1.234");
             }
-            // BitVector from hex ('habc → 3 digits × 4 bits = 12 bits, value "0xabc")
+            // BitVector from hex ('habc → 3 digits × 4 bits = 12 bits, value "0xABC")
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex");
                 ASSERT_TRUE(decl.is_ok());
@@ -1212,16 +1212,16 @@ namespace hal {
                 EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_hex");
                 ASSERT_TRUE(val.is_ok());
-                EXPECT_EQ(val.get(), "0xabc");
+                EXPECT_EQ(val.get(), "0xABC");
             }
-            // BitVector from decimal ('d2748 → converted to hex, value "0xabc")
+            // BitVector from decimal ('d2748 → converted to hex, value "0xABC")
             {
                 auto decl = gate_0->get_parameter_declaration("key_bit_vector_dec");
                 ASSERT_TRUE(decl.is_ok());
                 EXPECT_EQ(decl.get().get_type(), Parameter::Type::BitVector);
                 auto val = gate_0->get_parameter_value("key_bit_vector_dec");
                 ASSERT_TRUE(val.is_ok());
-                EXPECT_EQ(val.get(), "0xabc");
+                EXPECT_EQ(val.get(), "0xABC");
             }
             // BitVector from octal ('o5274 → 4 digits × 3 bits = 12 bits, value "0o5274")
             {
@@ -1251,7 +1251,7 @@ namespace hal {
                 EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_bit_vector_hex_sized");
                 ASSERT_TRUE(val.is_ok());
-                EXPECT_EQ(val.get(), "0xabc");
+                EXPECT_EQ(val.get(), "0xABC");
             }
             // Single-bit '1' (1'b1 → BitVector(1), value "0b1")
             {
@@ -1460,7 +1460,7 @@ namespace hal {
                 ASSERT_TRUE(val.is_ok());
                 EXPECT_EQ(val.get(), "0bXX01");
             }
-            // 3'hZa1 → 3 hex digits with Z state → LogicVector(size=12), value "0xZa1"
+            // 3'hZa1 → 3 hex digits with Z state → LogicVector(size=12), value "0xZA1"
             {
                 auto decl = gate_0->get_parameter_declaration("key_hvec_z");
                 ASSERT_TRUE(decl.is_ok());
@@ -1468,7 +1468,7 @@ namespace hal {
                 EXPECT_EQ(decl.get().get_size(), 12);
                 auto val = gate_0->get_parameter_value("key_hvec_z");
                 ASSERT_TRUE(val.is_ok());
-                EXPECT_EQ(val.get(), "0xZa1");
+                EXPECT_EQ(val.get(), "0xZA1");
             }
             // 4'b?0?1 → Verilog '?' normalized to '-' → LogicVector(size=4), value "0b-0-1"
             {

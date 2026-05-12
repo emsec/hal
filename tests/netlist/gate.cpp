@@ -41,11 +41,11 @@ namespace hal
 
             if (len >= 0)
             {
-                ss << std::hex << std::setfill('0') << std::setw(len) << i;
+                ss << std::hex << std::uppercase << std::setfill('0') << std::setw(len) << i;
             }
             else
             {
-                ss << std::hex << i;
+                ss << std::hex << std::uppercase << i;
             }
 
             return ss.str();
@@ -1203,8 +1203,8 @@ namespace hal
             auto all_inputs = lut_type->get_input_pin_names();    // 6 inputs
             std::vector<std::string> inputs_5(all_inputs.begin(), all_inputs.begin() + 5);
 
-            // lower 32 bits = "aaaaaaaa", upper 32 bits = "0000ffff"
-            const std::string init_str = "0000ffffaaaaaaaa";
+            // lower 32 bits = "AAAAAAAA", upper 32 bits = "0000FFFF"
+            const std::string init_str = "0000FFFFAAAAAAAA";
             ASSERT_TRUE(lut_gate->set_init_data({init_str}).is_ok());
 
             // O0 uses all 64 bits
@@ -1234,7 +1234,7 @@ namespace hal
 
             auto all_inputs = lut_type->get_input_pin_names();
 
-            const std::string init1 = "aaaaaaaaaaaaaaaa";
+            const std::string init1 = "AAAAAAAAAAAAAAAA";
             const std::string init2 = "5555555555555555";
             ASSERT_TRUE(lut_gate->set_init_data({init1, init2}).is_ok());
 
