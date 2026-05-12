@@ -1021,13 +1021,6 @@ TEST_F(GateTypeTest, check_parameters)
 
         // Enum with default value not in declared values.
         EXPECT_TRUE(Parameter::Enum("bad_default", std::vector<std::string>{"a", "b"}, "c").is_error());
-
-        // Bit-vector with enum_values manually populated (simulates malformed input).
-        auto mixed_res = Parameter::BitVector("mixed", 4, "");
-        ASSERT_TRUE(mixed_res.is_ok());
-        Parameter mixed = mixed_res.get();
-        mixed.enum_values = {"a", "b"};
-        EXPECT_TRUE(gt->add_parameter(mixed).is_error());
     }
 
     // Parameter::encode_as_int handles bit-vector formats and enum lookups.

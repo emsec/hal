@@ -247,18 +247,18 @@ TEST_F(DataContainerTest, check_get_data)
 TEST_F(DataContainerTest, check_parameters)
 {
     TEST_START
-    const auto width_decl  = Parameter::BitVector("WIDTH", 32, "0").get();
-    const auto mask_decl   = Parameter::BitVector("mask", 16, "0").get();
+    const auto width_decl  = Parameter::BitVector("WIDTH", 32, "").get();
+    const auto mask_decl   = Parameter::BitVector("mask", 16, "").get();
     const auto flavor_decl = Parameter::Enum("flavor", {"normal", "fast", "slow"}, "normal").get();
 
     {
         // Positive: store typed values, read them back, and inspect the map.
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_parameter(width_decl, "32").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(width_decl, "0x20").is_ok());
         EXPECT_TRUE(d_cont.set_parameter(mask_decl, "0xCAFE").is_ok());
         EXPECT_TRUE(d_cont.set_parameter(flavor_decl, "fast").is_ok());
 
-        EXPECT_EQ(d_cont.get_parameter_value("WIDTH").get(), "32");
+        EXPECT_EQ(d_cont.get_parameter_value("WIDTH").get(), "0x20");
         EXPECT_EQ(d_cont.get_parameter_value("mask").get(), "0xCAFE");
         EXPECT_EQ(d_cont.get_parameter_value("flavor").get(), "fast");
 
@@ -268,31 +268,31 @@ TEST_F(DataContainerTest, check_parameters)
 
         ASSERT_EQ(d_cont.get_parameters().size(), 3u);
         EXPECT_EQ(d_cont.get_parameters().at("WIDTH").first, width_decl);
-        EXPECT_EQ(d_cont.get_parameters().at("WIDTH").second, "32");
+        EXPECT_EQ(d_cont.get_parameters().at("WIDTH").second, "0x20");
     }
     {
         // The (Parameter) lookup returns the stored value when the declaration matches.
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_parameter(width_decl, "32").is_ok());
-        EXPECT_EQ(d_cont.get_parameter_value(width_decl).get(), "32");
+        EXPECT_TRUE(d_cont.set_parameter(width_decl, "0x20").is_ok());
+        EXPECT_EQ(d_cont.get_parameter_value(width_decl).get(), "0x20");
 
         // A declaration that disagrees with the stored one is rejected.
-        const auto width_8 = Parameter::BitVector("WIDTH", 8, "0").get();
+        const auto width_8 = Parameter::BitVector("WIDTH", 8, "").get();
         EXPECT_TRUE(d_cont.get_parameter_value(width_8).is_error());
     }
     {
         // has_parameter reports both name- and Parameter-keyed presence.
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_parameter(width_decl, "32").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(width_decl, "0x20").is_ok());
         EXPECT_TRUE(d_cont.has_parameter("WIDTH"));
         EXPECT_TRUE(d_cont.has_parameter(width_decl));
         EXPECT_FALSE(d_cont.has_parameter("unknown"));
-        EXPECT_FALSE(d_cont.has_parameter(Parameter::BitVector("WIDTH", 8, "0").get()));
+        EXPECT_FALSE(d_cont.has_parameter(Parameter::BitVector("WIDTH", 8, "").get()));
     }
     {
         // delete_parameter removes the stored entry and reports whether anything was deleted.
         TestDataContainer d_cont;
-        EXPECT_TRUE(d_cont.set_parameter(width_decl, "32").is_ok());
+        EXPECT_TRUE(d_cont.set_parameter(width_decl, "0x20").is_ok());
         EXPECT_TRUE(d_cont.delete_parameter("WIDTH"));
         EXPECT_FALSE(d_cont.has_parameter("WIDTH"));
         EXPECT_TRUE(d_cont.get_parameter_value("WIDTH").is_error());
@@ -329,20 +329,20 @@ TEST_F(DataContainerTest, check_parameters)
 TEST_F(DataContainerTest, check_parameter_equality)
 {
     TEST_START
-    const auto width_decl = Parameter::BitVector("WIDTH", 32, "0").get();
+    const auto width_decl = Parameter::BitVector("WIDTH", 32, "").get();
 
     TestDataContainer a;
     TestDataContainer b;
     EXPECT_TRUE(a == b);
 
-    EXPECT_TRUE(a.set_parameter(width_decl, "32").is_ok());
+    EXPECT_TRUE(a.set_parameter(width_decl, "0x20").is_ok());
     EXPECT_TRUE(a != b);
 
-    EXPECT_TRUE(b.set_parameter(width_decl, "32").is_ok());
+    EXPECT_TRUE(b.set_parameter(width_decl, "0x20").is_ok());
     EXPECT_TRUE(a == b);
 
     EXPECT_TRUE(b.delete_parameter("WIDTH"));
-    EXPECT_TRUE(b.set_parameter(width_decl, "16").is_ok());
+    EXPECT_TRUE(b.set_parameter(width_decl, "0x10").is_ok());
     EXPECT_TRUE(a != b);    // same declaration, different value
     TEST_END
 }

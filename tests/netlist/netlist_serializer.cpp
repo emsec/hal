@@ -254,7 +254,7 @@ namespace hal {
                  Module* mod = nl->create_module("parametric_mod", nl->get_top_module());
                  ASSERT_NE(mod, nullptr);
                  const Parameter mod_bool   = Parameter::Boolean("ENABLE", "false").get();
-                 const Parameter mod_width  = Parameter::BitVector("WIDTH", 32, "0").get();
+                 const Parameter mod_width  = Parameter::BitVector("WIDTH", 32, "").get();
                  const Parameter mod_logic  = Parameter::LogicVector("STATE", 4, "0b0").get();
                  const Parameter mod_count  = Parameter::Integer("COUNT", "0").get();
                  const Parameter mod_label  = Parameter::String("LABEL", "").get();
@@ -262,7 +262,7 @@ namespace hal {
                  const Parameter mod_delay  = Parameter::Time("DELAY", "0ns").get();
                  const Parameter mod_flavor = Parameter::Enum("FLAVOR", {"normal", "fast"}, "normal").get();
                  ASSERT_TRUE(mod->set_parameter(mod_bool, "true").is_ok());
-                 ASSERT_TRUE(mod->set_parameter(mod_width, "32").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_width, "0x20").is_ok());
                  ASSERT_TRUE(mod->set_parameter(mod_logic, "0b10XZ").is_ok());
                  ASSERT_TRUE(mod->set_parameter(mod_count, "-7").is_ok());
                  ASSERT_TRUE(mod->set_parameter(mod_label, "hello world").is_ok());
@@ -273,8 +273,8 @@ namespace hal {
                  // Net: parameters work identically on nets.
                  Net* net = nl->create_net("metadata_net");
                  ASSERT_NE(net, nullptr);
-                 const Parameter net_delay = Parameter::BitVector("delay_ps", 32, "0").get();
-                 ASSERT_TRUE(net->set_parameter(net_delay, "250").is_ok());
+                 const Parameter net_delay = Parameter::BitVector("delay_ps", 32, "").get();
+                 ASSERT_TRUE(net->set_parameter(net_delay, "0xFA").is_ok());
 
                  std::filesystem::path path = test_utils::create_sandbox_path("test_param_roundtrip.hal");
                  ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), path));
@@ -312,7 +312,7 @@ namespace hal {
                  ASSERT_NE(des_mod, nullptr);
                  EXPECT_EQ(des_mod->get_parameter_value("ENABLE").get(), "true");
                  EXPECT_EQ(des_mod->get_parameter_declaration("ENABLE").get(), mod_bool);
-                 EXPECT_EQ(des_mod->get_parameter_value("WIDTH").get(), "32");
+                 EXPECT_EQ(des_mod->get_parameter_value("WIDTH").get(), "0x20");
                  EXPECT_EQ(des_mod->get_parameter_declaration("WIDTH").get(), mod_width);
                  EXPECT_EQ(des_mod->get_parameter_value("STATE").get(), "0b10XZ");
                  EXPECT_EQ(des_mod->get_parameter_declaration("STATE").get(), mod_logic);
@@ -338,7 +338,7 @@ namespace hal {
                      }
                  }
                  ASSERT_NE(des_net, nullptr);
-                 EXPECT_EQ(des_net->get_parameter_value("delay_ps").get(), "250");
+                 EXPECT_EQ(des_net->get_parameter_value("delay_ps").get(), "0xFA");
                  EXPECT_EQ(des_net->get_parameter_declaration("delay_ps").get(), net_delay);
              }
 

@@ -1238,12 +1238,12 @@ namespace hal {
                 Module* m = nl->create_module("m", nl->get_top_module());
                 ASSERT_NE(m, nullptr);
 
-                const auto width_decl  = Parameter::BitVector("WIDTH", 32, "0").get();
+                const auto width_decl  = Parameter::BitVector("WIDTH", 32, "").get();
                 const auto flavor_decl = Parameter::Enum("flavor", {"normal", "fast"}, "normal").get();
 
                 // Bit-vector parameter: stored value round-trips, declaration preserved.
-                EXPECT_TRUE(m->set_parameter(width_decl, "32").is_ok());
-                EXPECT_EQ(m->get_parameter_value("WIDTH").get(), "32");
+                EXPECT_TRUE(m->set_parameter(width_decl, "0x20").is_ok());
+                EXPECT_EQ(m->get_parameter_value("WIDTH").get(), "0x20");
                 EXPECT_EQ(m->get_parameter_declaration("WIDTH").get(), width_decl);
 
                 // Enum parameter: value stored as the canonical name.
@@ -1251,7 +1251,7 @@ namespace hal {
                 EXPECT_EQ(m->get_parameter_value("flavor").get(), "fast");
 
                 // Values failing validate are rejected and nothing is stored.
-                EXPECT_TRUE(m->set_parameter(Parameter::BitVector("mask", 16, "0").get(), "0x10000").is_error());
+                EXPECT_TRUE(m->set_parameter(Parameter::BitVector("mask", 16, "").get(), "0x10000").is_error());
                 EXPECT_FALSE(m->has_parameter("mask"));
 
                 // delete_parameter clears the stored entry.

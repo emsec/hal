@@ -959,12 +959,12 @@ namespace hal {
                 Net* n = nl->create_net("wire");
                 ASSERT_NE(n, nullptr);
 
-                const auto delay_decl    = Parameter::BitVector("delay_ps", 32, "0").get();
+                const auto delay_decl    = Parameter::BitVector("delay_ps", 32, "").get();
                 const auto polarity_decl = Parameter::Enum("polarity", {"pos", "neg"}, "pos").get();
 
                 // Bit-vector parameter: value round-trips, declaration preserved.
-                EXPECT_TRUE(n->set_parameter(delay_decl, "250").is_ok());
-                EXPECT_EQ(n->get_parameter_value("delay_ps").get(), "250");
+                EXPECT_TRUE(n->set_parameter(delay_decl, "0xFA").is_ok());
+                EXPECT_EQ(n->get_parameter_value("delay_ps").get(), "0xFA");
                 EXPECT_EQ(n->get_parameter_declaration("delay_ps").get(), delay_decl);
 
                 // Enum parameter: stored as the canonical value name.
@@ -972,7 +972,7 @@ namespace hal {
                 EXPECT_EQ(n->get_parameter_value("polarity").get(), "neg");
 
                 // Invalid values are rejected and nothing is stored.
-                EXPECT_TRUE(n->set_parameter(Parameter::BitVector("rise_ps", 8, "0").get(), "0x100").is_error());
+                EXPECT_TRUE(n->set_parameter(Parameter::BitVector("rise_ps", 8, "").get(), "0x100").is_error());
                 EXPECT_FALSE(n->has_parameter("rise_ps"));
 
                 // delete_parameter removes the stored entry.

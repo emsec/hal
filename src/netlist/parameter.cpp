@@ -62,6 +62,10 @@ namespace hal
                     return ERR("invalid base");
                 }
             }
+            else
+            {
+                return ERR("bit-vector value '" + value + "' has no base prefix (expected 0b, 0o, or 0x)");
+            }
             const std::string digits = value.substr(2);
             if (digits.empty())
             {
@@ -299,6 +303,10 @@ namespace hal
         {
             return ERR("could not create parameter of type 'BitVector': parameter name is empty");
         }
+        if (size == 0)
+        {
+            return ERR("could not create parameter with name '" + name + "' of type 'BitVector': size must be at least 1");
+        }
 
         auto param          = Parameter();
         param.type          = Parameter::Type::BitVector;
@@ -419,6 +427,20 @@ namespace hal
         if (name.empty())
         {
             return ERR("could not create parameter of type 'Enum': parameter name is empty");
+        }
+        if (values.size() < 2)
+        {
+            return ERR("could not create parameter with name '" + name + "' of type 'Enum': at least two enum values are required");
+        }
+        {
+            std::unordered_set<std::string> seen;
+            for (const auto& v : values)
+            {
+                if (!seen.insert(v).second)
+                {
+                    return ERR("could not create parameter with name '" + name + "' of type 'Enum': duplicate enum value '" + v + "'");
+                }
+            }
         }
 
         auto param          = Parameter();

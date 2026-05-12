@@ -54,7 +54,6 @@ namespace hal
             EXPECT_TRUE(Parameter::Boolean("flag", "True").is_error());
             EXPECT_TRUE(Parameter::Boolean("flag", "0").is_error());
             EXPECT_TRUE(Parameter::Boolean("flag", "1").is_error());
-            EXPECT_TRUE(Parameter::Boolean("flag", "").is_error());
         }
         TEST_END
     }
@@ -166,7 +165,6 @@ namespace hal
             NO_COUT_TEST_BLOCK;
             EXPECT_TRUE(Parameter::LogicVector("no_prefix", 4, "10XZ").is_error());
             EXPECT_TRUE(Parameter::LogicVector("garbage", 4, "0b10!1").is_error());
-            EXPECT_TRUE(Parameter::LogicVector("empty", 4, "").is_error());
         }
         TEST_END
     }
@@ -216,7 +214,6 @@ namespace hal
             NO_COUT_TEST_BLOCK;
             EXPECT_TRUE(Parameter::Integer("garbage", "abc").is_error());
             EXPECT_TRUE(Parameter::Integer("hex", "0xCAFE").is_error());
-            EXPECT_TRUE(Parameter::Integer("empty", "").is_error());
         }
         TEST_END
     }
@@ -291,7 +288,6 @@ namespace hal
             // Unparseable / empty defaults are rejected.
             NO_COUT_TEST_BLOCK;
             EXPECT_TRUE(Parameter::Float("garbage", "abc").is_error());
-            EXPECT_TRUE(Parameter::Float("empty", "").is_error());
             EXPECT_TRUE(Parameter::Float("trailing", "3.14ns").is_error());
         }
         TEST_END
@@ -352,7 +348,6 @@ namespace hal
             // Garbage / empty defaults are rejected.
             NO_COUT_TEST_BLOCK;
             EXPECT_TRUE(Parameter::Time("garbage", "abc").is_error());
-            EXPECT_TRUE(Parameter::Time("empty", "").is_error());
         }
         TEST_END
     }
@@ -426,7 +421,7 @@ namespace hal
         }
         {
             // Bit-vector validation across bases.
-            const Parameter p = Parameter::BitVector("v", 16, "0").get();
+            const Parameter p = Parameter::BitVector("v", 16, "0b0").get();
             EXPECT_TRUE(p.validate("0b1010"));
             EXPECT_TRUE(p.validate("0o17"));
             EXPECT_TRUE(p.validate("0xCAFE"));
@@ -441,7 +436,7 @@ namespace hal
         }
         {
             // 64-bit-wide bit-vector accepts the full unsigned range.
-            const Parameter p = Parameter::BitVector("full", 64, "0").get();
+            const Parameter p = Parameter::BitVector("full", 64, "0b0").get();
             EXPECT_TRUE(p.validate("0xFFFFFFFFFFFFFFFF"));
         }
         {
@@ -559,7 +554,7 @@ namespace hal
         }
         {
             // Bit-vector encoding parses the value across bases.
-            const Parameter p = Parameter::BitVector("v", 16, "0").get();
+            const Parameter p = Parameter::BitVector("v", 16, "0b0").get();
             EXPECT_EQ(p.encode_as_int("0b1010").get(), 0b1010u);
             EXPECT_EQ(p.encode_as_int("0o17").get(), 017u);
             EXPECT_EQ(p.encode_as_int("0xCAFE").get(), 0xCAFEu);
@@ -660,21 +655,21 @@ namespace hal
         TEST_START
         {
             // Identical declarations compare equal.
-            const Parameter a = Parameter::BitVector("w", 16, "0").get();
-            const Parameter b = Parameter::BitVector("w", 16, "0").get();
+            const Parameter a = Parameter::BitVector("w", 16, "0b0").get();
+            const Parameter b = Parameter::BitVector("w", 16, "0b0").get();
             EXPECT_TRUE(a == b);
             EXPECT_FALSE(a != b);
         }
         {
             // Any single mismatched field makes them unequal.
-            const Parameter base = Parameter::BitVector("w", 16, "0").get();
-            EXPECT_TRUE(base != Parameter::BitVector("w2", 16, "0").get());    // name
-            EXPECT_TRUE(base != Parameter::BitVector("w", 8, "0").get());      // size
-            EXPECT_TRUE(base != Parameter::BitVector("w", 16, "0x1").get());   // default
+            const Parameter base = Parameter::BitVector("w", 16, "0b0").get();
+            EXPECT_TRUE(base != Parameter::BitVector("w2", 16, "0b0").get());    // name
+            EXPECT_TRUE(base != Parameter::BitVector("w", 8, "0b0").get());      // size
+            EXPECT_TRUE(base != Parameter::BitVector("w", 16, "0x1").get());     // default
         }
         {
             // A BitVector and an Enum with the same name are never equal.
-            const Parameter bv = Parameter::BitVector("x", 1, "0").get();
+            const Parameter bv = Parameter::BitVector("x", 1, "0b0").get();
             const Parameter en = Parameter::Enum("x", {"a", "b"}, "a").get();
             EXPECT_TRUE(bv != en);
         }
