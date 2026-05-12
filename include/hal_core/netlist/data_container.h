@@ -26,9 +26,13 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/parameter.h"
+#include "hal_core/utilities/result.h"
 
 #include <map>
+#include <string>
 #include <tuple>
+#include <unordered_map>
 #include <vector>
 
 namespace hal
@@ -119,7 +123,72 @@ namespace hal
          */
         void set_data_map(const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& map);
 
+        /**
+         * Set the value of a typed parameter as a string. The value is validated against the declaration. Stores both the parameter declaration and its current value. 
+         *
+         * @param[in] param - The parameter declaration.
+         * @param[in] value - The value to store as a string.
+         * @returns OK() on success, an error otherwise.
+         */
+        Result<std::monostate> set_parameter(const Parameter& param, const std::string& value);
+
+        /**
+         * Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.
+         *
+         * @param[in] name - The parameter name.
+         * @returns OK() with the value string on success, an error otherwise.
+         */
+        Result<std::string> get_parameter_value(const std::string& name) const;
+
+        /**
+         * Get the value of a typed parameter. Returns the explicitly-stored value or an error if the parameter does not exist.
+         *
+         * @param[in] param - The parameter.
+         * @returns OK() with the value string on success, an error otherwise.
+         */
+        Result<std::string> get_parameter_value(const Parameter& name) const;
+
+        /**
+         * Get the full declaration of a typed parameter.
+         *
+         * @param[in] name - The parameter name.
+         * @returns OK() with the declaration on success, an error otherwise.
+         */
+        Result<Parameter> get_parameter_declaration(const std::string& name) const;
+
+        /**
+         * Check whether a parameter exists and has an explicitly stored value.
+         *
+         * @param[in] param - The parameter.
+         * @returns `true` if the parameter is explicitly set, `false` otherwise.
+         */
+        bool has_parameter(const Parameter& param) const;
+
+        /**
+         * Check whether a parameter with the given name exists and has an explicitly stored value.
+         *
+         * @param[in] name - The parameter name.
+         * @returns `true` if the parameter is explicitly set, `false` otherwise.
+         */
+        bool has_parameter(const std::string& name) const;
+
+        /**
+         * Delete an explicitly stored parameter value, if any.
+         *
+         * @param[in] name - The parameter name.
+         * @returns `true` if a value was deleted, `false` otherwise.
+         */
+        bool delete_parameter(const std::string& name);
+
+        /**
+         * Get all explicitly stored parameters as a map from `name` to `(declaration, value)`.
+         *
+         * @returns The parameter map.
+         */
+        const std::unordered_map<std::string, std::pair<Parameter, std::string>>& get_parameters() const;
+
     protected:
         std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>> m_data;
+        std::unordered_map<std::string, std::pair<Parameter, std::string>> m_parameters;
     };
 }    // namespace hal

@@ -105,6 +105,58 @@ namespace hal
 
             cell.AddMember("types", bts, allocator);
 
+            // parameters: declared at the gate-type level. Variables in Boolean functions whose
+            // names match a parameter are sized according to the declaration when re-parsed.
+            const auto& parameters = gt->get_parameters();
+            if (!parameters.empty())
+            {
+                rapidjson::Value params_array(rapidjson::kArrayType);
+                for (const auto& [pname, p] : parameters)
+                {
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    entry.AddMember("name", rapidjson::Value{}.SetString(pname.c_str(), pname.length(), allocator), allocator);
+                    switch (p.type)
+                    {
+                        case Parameter::Type::Boolean:
+                            entry.AddMember("type", "boolean", allocator);
+                            break;
+                        case Parameter::Type::BitVector:
+                            entry.AddMember("type", "bit_vector", allocator);
+                            entry.AddMember("size", static_cast<u32>(p.size), allocator);
+                            break;
+                        case Parameter::Type::LogicVector:
+                            entry.AddMember("type", "logic_vector", allocator);
+                            entry.AddMember("size", static_cast<u32>(p.size), allocator);
+                            break;
+                        case Parameter::Type::Integer:
+                            entry.AddMember("type", "integer", allocator);
+                            break;
+                        case Parameter::Type::String:
+                            entry.AddMember("type", "string", allocator);
+                            break;
+                        case Parameter::Type::Float:
+                            entry.AddMember("type", "float", allocator);
+                            break;
+                        case Parameter::Type::Time:
+                            entry.AddMember("type", "time", allocator);
+                            break;
+                        case Parameter::Type::Enum: {
+                            entry.AddMember("type", "enum", allocator);
+                            rapidjson::Value values_array(rapidjson::kArrayType);
+                            for (const auto& v : p.enum_values)
+                            {
+                                values_array.PushBack(rapidjson::Value{}.SetString(v.c_str(), v.length(), allocator), allocator);
+                            }
+                            entry.AddMember("values", values_array, allocator);
+                            break;
+                        }
+                    }
+                    entry.AddMember("default", rapidjson::Value{}.SetString(p.default_value.c_str(), p.default_value.length(), allocator), allocator);
+                    params_array.PushBack(entry, allocator);
+                }
+                cell.AddMember("parameters", params_array, allocator);
+            }
+
             std::unordered_map<std::string, BooleanFunction> functions = gt->get_boolean_functions();
 
             // lut_config, ff_config, latch_config, ram_config
@@ -132,7 +184,7 @@ namespace hal
                 // Iterate LUT output pins in their defined order so that data_identifier
                 // order in the JSON matches the order in the InitComponent identifier list.
                 rapidjson::Value output_pins(rapidjson::kArrayType);
-                const auto& pin_configs      = lut_component->get_output_pin_configs();
+                const auto& pin_configs        = lut_component->get_output_pin_configs();
                 const std::string& fallback_id = init_component->get_init_identifiers().front();
                 for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
                 {

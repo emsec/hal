@@ -95,6 +95,112 @@ namespace hal
                 }
             }
 
+            // serialize parameters
+            rapidjson::Value serialize_parameters(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& params, rapidjson::Document::AllocatorType& allocator)
+            {
+                rapidjson::Value out(rapidjson::kObjectType);
+                for (const auto& [pname, decl_and_value] : params)
+                {
+                    const auto& [decl, pvalue] = decl_and_value;
+                    rapidjson::Value entry(rapidjson::kObjectType);
+                    const std::string type_str = enum_to_string<Parameter::Type>(decl.type);
+                    entry.AddMember("type", JSON_STR_HELPER(type_str), allocator);
+                    entry.AddMember("size", static_cast<u32>(decl.size), allocator);
+                    entry.AddMember("default", JSON_STR_HELPER(decl.default_value), allocator);
+                    if (decl.type == Parameter::Type::Enum)
+                    {
+                        rapidjson::Value enum_values(rapidjson::kArrayType);
+                        for (const auto& v : decl.enum_values)
+                        {
+                            enum_values.PushBack(JSON_STR_HELPER(v), allocator);
+                        }
+                        entry.AddMember("enum_values", enum_values, allocator);
+                    }
+                    entry.AddMember("value", JSON_STR_HELPER(pvalue), allocator);
+                    out.AddMember(JSON_STR_HELPER(pname), entry, allocator);
+                }
+                return out;
+            }
+
+            // Reconstruct a Parameter declaration from a serialized JSON entry.
+            // Returns OK with the declaration on success, an error describing what was wrong otherwise.
+            Result<Parameter> deserialize_parameter_decl(const std::string& name, const rapidjson::Value& entry)
+            {
+                if (!entry.HasMember("type") || !entry.HasMember("value"))
+                {
+                    return ERR("parameter '" + name + "' is missing 'type' or 'value'");
+                }
+                const std::string type_str = entry["type"].GetString();
+                if (!is_valid_enum<Parameter::Type>(type_str))
+                {
+                    return ERR("parameter '" + name + "' has unknown type '" + type_str + "'");
+                }
+                const Parameter::Type ptype     = enum_from_string<Parameter::Type>(type_str);
+                const std::string default_value = (entry.HasMember("default") && entry["default"].IsString()) ? entry["default"].GetString() : std::string{};
+                switch (ptype)
+                {
+                    case Parameter::Type::Boolean: {
+                        return Parameter::Boolean(name, default_value);
+                    }
+                    case Parameter::Type::BitVector: {
+                        const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
+                        return Parameter::BitVector(name, size, default_value);
+                    }
+                    case Parameter::Type::LogicVector: {
+                        const u16 size = (entry.HasMember("size") && entry["size"].IsUint()) ? static_cast<u16>(entry["size"].GetUint()) : 0;
+                        return Parameter::LogicVector(name, size, default_value);
+                    }
+                    case Parameter::Type::Integer: {
+                        return Parameter::Integer(name, default_value);
+                    }
+                    case Parameter::Type::String: {
+                        return Parameter::String(name, default_value);
+                    }
+                    case Parameter::Type::Float: {
+                        return Parameter::Float(name, default_value);
+                    }
+                    case Parameter::Type::Time: {
+                        return Parameter::Time(name, default_value);
+                    }
+                    case Parameter::Type::Enum: {
+                        std::vector<std::string> values;
+                        if (entry.HasMember("enum_values") && entry["enum_values"].IsArray())
+                        {
+                            for (const auto& v : entry["enum_values"].GetArray())
+                            {
+                                if (!v.IsString())
+                                {
+                                    return ERR("parameter '" + name + "' has non-string entry in 'enum_values'");
+                                }
+                                values.emplace_back(v.GetString());
+                            }
+                        }
+                        return Parameter::Enum(name, values, default_value);
+                    }
+                }
+                return ERR("parameter '" + name + "' has unhandled type");
+            }
+
+            // Deserialize the contents of a "parameters" JSON object into a DataContainer.
+            // For each entry, reconstructs the declaration and stores the value via set_parameter.
+            Result<std::monostate> deserialize_parameters(DataContainer* c, const rapidjson::Value& val)
+            {
+                for (auto p_it = val.MemberBegin(); p_it != val.MemberEnd(); ++p_it)
+                {
+                    const std::string pname = p_it->name.GetString();
+                    auto decl_res           = deserialize_parameter_decl(pname, p_it->value);
+                    if (decl_res.is_error())
+                    {
+                        return ERR(decl_res.get_error().get());
+                    }
+                    if (auto res = c->set_parameter(decl_res.get(), p_it->value["value"].GetString()); res.is_error())
+                    {
+                        return ERR("failed to set parameter '" + pname + "': " + res.get_error().get());
+                    }
+                }
+                return OK({});
+            }
+
             // serialize endpoint
             rapidjson::Value serialize(const Endpoint* ep, rapidjson::Document::AllocatorType& allocator)
             {
@@ -252,6 +358,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = gate->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 {
                     rapidjson::Value functions(rapidjson::kObjectType);
                     for (const auto& [name, function] : gate->get_boolean_functions(true))
@@ -291,6 +401,15 @@ namespace hal
                     if (val.HasMember("data"))
                     {
                         deserialize_data(gate, val["data"]);
+                    }
+
+                    if (val.HasMember("parameters"))
+                    {
+                        if (auto res = deserialize_parameters(gate, val["parameters"]); res.is_error())
+                        {
+                            log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": {}", res.get_error().get());
+                            return false;
+                        }
                     }
 
                     if (val.HasMember("custom_functions"))
@@ -359,6 +478,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = net->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 return val;
             }
 
@@ -400,6 +523,15 @@ namespace hal
                 if (val.HasMember("data"))
                 {
                     deserialize_data(net, val["data"]);
+                }
+
+                if (val.HasMember("parameters"))
+                {
+                    if (auto res = deserialize_parameters(net, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize net '" + net_name + "' with ID " + std::to_string(net_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
                 }
 
                 return true;
@@ -470,6 +602,10 @@ namespace hal
                 {
                     val.AddMember("data", data, allocator);
                 }
+                if (const auto& params = module->get_parameters(); !params.empty())
+                {
+                    val.AddMember("parameters", serialize_parameters(params, allocator), allocator);
+                }
                 return val;
             }
 
@@ -520,6 +656,15 @@ namespace hal
                 if (val.HasMember("data"))
                 {
                     deserialize_data(sm, val["data"]);
+                }
+
+                if (val.HasMember("parameters"))
+                {
+                    if (auto res = deserialize_parameters(sm, val["parameters"]); res.is_error())
+                    {
+                        log_error("netlist_persistent", "could not deserialize module '" + module_name + "' with ID " + std::to_string(module_id) + ": {}", res.get_error().get());
+                        return false;
+                    }
                 }
 
                 if (val.HasMember("pin_groups"))
@@ -747,7 +892,9 @@ namespace hal
                     {
                         ProjectManager* pm = ProjectManager::instance();
                         if (pm)
+                        {
                             glib_path = pm->get_project_directory() / glib_path;
+                        }
                     }
                     gatelib = gate_library_manager::get_gate_library(glib_path.string());
 
@@ -928,8 +1075,8 @@ namespace hal
                 return nl;
             }
 
-            std::unique_ptr<Netlist> deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source,
-                                                          std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
+            std::unique_ptr<Netlist>
+                deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source, std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
             {
                 if (document.HasParseError())
                 {
@@ -978,10 +1125,14 @@ namespace hal
 
             std::filesystem::path serialize_to_dir = hal_file.parent_path();
             if (serialize_to_dir.empty())
+            {
                 return false;
+            }
 
             if (serialize_to_dir.is_relative())
+            {
                 serialize_to_dir = ProjectManager::instance()->get_project_directory() / serialize_to_dir;
+            }
 
             // create directory if it got erased in the meantime
             if (!std::filesystem::exists(serialize_to_dir))
@@ -1055,7 +1206,7 @@ namespace hal
             // event_controls::enable_all(false);
 
             rapidjson::Document document;
-            document.Parse<0, rapidjson::UTF8<> >(hal_string.c_str());
+            document.Parse<0, rapidjson::UTF8<>>(hal_string.c_str());
 
             return deserialize_document(document, gatelib, "source string", begin_time);
         }

@@ -16,7 +16,24 @@ namespace hal
 {
     namespace
     {
-
+        // Strict double parse: must consume the full string (no trailing junk).
+        bool is_double_strict(const std::string& s)
+        {
+            if (s.empty())
+            {
+                return false;
+            }
+            try
+            {
+                size_t idx;
+                std::stod(s, &idx);
+                return idx == s.size();
+            }
+            catch (...)
+            {
+                return false;
+            }
+        }
     }    // namespace
 
     Result<std::monostate> VerilogParser::parse(const std::filesystem::path& file_path)
@@ -920,12 +937,12 @@ namespace hal
             param.m_name = m_token_stream.consume().string;
             m_token_stream.consume("=", true);
 
-            if (const auto res = parse_parameter_value(m_token_stream.consume()); res.is_ok())
+            if (const auto res = parse_parameter_value(param.m_name, m_token_stream.consume()); res.is_ok())
             {
-                const auto value = res.get();
-                param.m_type     = value.first;
-                param.m_value    = value.second;
-                inst_it->second->m_parameters.push_back(param);
+                const auto& [parsed_param, value_str] = res.get();
+                param.m_value                         = value_str;
+                param.m_parameter                     = parsed_param;
+                inst_it->second->m_parameters.push_back(std::move(param));
             }
             else
             {
@@ -1079,10 +1096,14 @@ namespace hal
                 const Token<std::string> rhs = m_token_stream.join_until(")", "");
                 m_token_stream.consume(")", true);
 
-                if (const auto res = parse_parameter_value(rhs); res.is_ok())
+                if (const auto res = parse_parameter_value(lhs.string, rhs); res.is_ok())
                 {
-                    const auto value = res.get();
-                    generics.push_back(VerilogDataEntry({lhs.string, value.first, value.second}));
+                    const auto& [param, value_str] = res.get();
+                    VerilogDataEntry entry;
+                    entry.m_name      = lhs.string;
+                    entry.m_value     = value_str;
+                    entry.m_parameter = param;
+                    generics.push_back(std::move(entry));
                 }
                 else
                 {
@@ -1865,20 +1886,25 @@ namespace hal
                 }
             }
 
-            // process generics
             for (const auto& parameter : instance->m_parameters)
             {
-                if (!container->set_data("generic", parameter.m_name, parameter.m_type, parameter.m_value))
+                if (!parameter.m_parameter.has_value())
+                {
+                    log_warning(
+                        "verilog_parser", "could not set generic '{}' for instance '{}' of type '{}': no typed parameter declaration available.", parameter.m_name, instance->m_name, instance->m_type);
+                    continue;
+                }
+                if (auto res = container->set_parameter(parameter.m_parameter.value(), parameter.m_value); res.is_error())
                 {
                     log_warning("verilog_parser",
-                                "could not set generic '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set parameter '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': {}",
                                 parameter.m_name,
                                 parameter.m_value,
-                                parameter.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
-                                instance_type);
+                                instance_type,
+                                res.get_error().get());
                 }
             }
         }
@@ -2232,52 +2258,184 @@ namespace hal
         return OK(ss.str());
     }
 
-    Result<std::pair<std::string, std::string>> VerilogParser::parse_parameter_value(const Token<std::string>& value_token) const
+    Result<std::pair<Parameter, std::string>> VerilogParser::parse_parameter_value(const std::string& name, const Token<std::string>& value_token) const
     {
-        std::pair<std::string, std::string> value;
+        const std::string& raw    = value_token.string;
+        const u32 line_number     = value_token.number;
+        const std::string loc_str = " (line " + std::to_string(line_number) + ")";
 
-        if (utils::is_integer(value_token.string))
+        // integer (plain decimal, no Verilog base prefix)
+        if (utils::is_integer(raw))
         {
-            value.first  = "integer";
-            value.second = value_token.string;
-        }
-        else if (utils::is_floating_point(value_token.string))
-        {
-            value.first  = "floating_point";
-            value.second = value_token.string;
-        }
-        else if (value_token.string[0] == '\"' && value_token.string.back() == '\"')
-        {
-            value.first  = "string";
-            value.second = value_token.string.substr(1, value_token.string.size() - 2);
-        }
-        else if (isdigit(value_token.string[0]) || value_token.string[0] == '\'')
-        {
-            if (const auto res = get_hex_from_literal(value_token); res.is_error())
+            auto param_res = Parameter::Integer(name, "");
+            if (param_res.is_error())
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not parse parameter value: failed to convert '" + value_token.string + "' to hexadecimal value (line " + std::to_string(value_token.number) + ")");
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
             }
-            else
-            {
-                value.second = res.get();
-            }
-
-            if (value.second == "0" || value.second == "1")
-            {
-                value.first = "bit_value";
-            }
-            else
-            {
-                value.first = "bit_vector";
-            }
-        }
-        else
-        {
-            return ERR("could not parse parameter value: failed to identify data type of parameter '" + value_token.string + "' (line " + std::to_string(value_token.number) + ")");
+            return OK(std::make_pair(param_res.get(), raw));
         }
 
-        return OK(value);
+        // floating-point (double precision, full-consume)
+        if (is_double_strict(raw))
+        {
+            auto param_res = Parameter::Float(name, "");
+            if (param_res.is_error())
+            {
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+            }
+            return OK(std::make_pair(param_res.get(), raw));
+        }
+
+        // string literal: strip outer quotes, no escape processing
+        if (raw.size() >= 2 && raw.front() == '"' && raw.back() == '"')
+        {
+            auto param_res = Parameter::String(name, "");
+            if (param_res.is_error())
+            {
+                return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+            }
+            return OK(std::make_pair(param_res.get(), raw.substr(1, raw.size() - 2)));
+        }
+
+        // bit/logic vector literal: [N]'[b|o|h|d][digits]
+        if (!raw.empty() && (isdigit(static_cast<unsigned char>(raw[0])) || raw[0] == '\''))
+        {
+            const size_t tick_pos = raw.find('\'');
+            if (tick_pos == std::string::npos)
+            {
+                return ERR("could not parse parameter value: no base prefix in literal '" + raw + "'" + loc_str);
+            }
+
+            // optional explicit width before the tick
+            u16 explicit_width = 0;
+            bool has_width     = false;
+            if (tick_pos > 0)
+            {
+                try
+                {
+                    explicit_width = static_cast<u16>(std::stoul(raw.substr(0, tick_pos)));
+                }
+                catch (...)
+                {
+                    return ERR("could not parse parameter value: invalid width in literal '" + raw + "'" + loc_str);
+                }
+                has_width = true;
+            }
+
+            if (tick_pos + 1 >= raw.size())
+            {
+                return ERR("could not parse parameter value: missing base char in literal '" + raw + "'" + loc_str);
+            }
+            const char base_upper = static_cast<char>(std::toupper(static_cast<unsigned char>(raw[tick_pos + 1])));
+
+            // resolve all base properties in one place; bits_per_digit == 0 flags decimal (needs conversion)
+            std::string numeric_set;
+            std::string out_prefix;
+            int bits_per_digit = 0;
+            bool allow_state   = true;
+            switch (base_upper)
+            {
+                case 'B':
+                    numeric_set    = "01";
+                    out_prefix     = "0b";
+                    bits_per_digit = 1;
+                    break;
+                case 'O':
+                    numeric_set    = "01234567";
+                    out_prefix     = "0o";
+                    bits_per_digit = 3;
+                    break;
+                case 'H':
+                    numeric_set    = "0123456789abcdef";
+                    out_prefix     = "0x";
+                    bits_per_digit = 4;
+                    break;
+                case 'D':
+                    numeric_set    = "0123456789";
+                    out_prefix     = "0x";
+                    bits_per_digit = 0;
+                    allow_state    = false;
+                    break;
+                default:
+                    return ERR("could not parse parameter value: unsupported base '" + std::string(1, base_upper) + "' in literal '" + raw + "'" + loc_str);
+            }
+
+            // single pass: strip underscores, map '?' to '-', validate, detect state chars
+            std::string digits;
+            digits.reserve(raw.size());
+            bool has_state = false;
+            for (size_t i = tick_pos + 2; i < raw.size(); ++i)
+            {
+                const char c = raw[i];
+                if (c == '_')
+                {
+                    continue;
+                }
+                const char mapped   = (c == '?') ? '-' : c;
+                const char l        = (mapped == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(mapped)));
+                const bool is_num   = numeric_set.find(l) != std::string::npos;
+                const bool is_state = (l == 'x' || l == 'z' || l == '-');
+                if (!is_num && (!allow_state || !is_state))
+                {
+                    return ERR("could not parse parameter value: literal '" + raw + "' contains invalid digit '" + std::string(1, c) + "'" + loc_str);
+                }
+                if (is_state)
+                {
+                    has_state = true;
+                }
+                digits += mapped;
+            }
+
+            if (digits.empty())
+            {
+                return ERR("could not parse parameter value: no digits in literal '" + raw + "'" + loc_str);
+            }
+
+            // helper: build the right Parameter type and return
+            const auto make_param = [&](u16 size, const std::string& value) -> Result<std::pair<Parameter, std::string>> {
+                if (has_state)
+                {
+                    auto param_res = Parameter::LogicVector(name, size, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                    }
+                    return OK(std::make_pair(param_res.get(), value));
+                }
+                else
+                {
+                    auto param_res = Parameter::BitVector(name, size, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse parameter value '" + raw + "'" + loc_str);
+                    }
+                    return OK(std::make_pair(param_res.get(), value));
+                }
+            };
+
+            // decimal needs a stoull to hex conversion; all other bases use digits directly
+            if (bits_per_digit == 0)
+            {
+                u64 num = 0;
+                try
+                {
+                    num = std::stoull(digits);
+                }
+                catch (...)
+                {
+                    return ERR("could not parse parameter value: decimal literal '" + raw + "' overflows" + loc_str);
+                }
+                std::stringstream ss;
+                ss << std::hex << num;
+                const std::string hex_digits = ss.str();
+                const u16 size               = has_width ? explicit_width : static_cast<u16>(hex_digits.size() * 4);
+                return make_param(size, out_prefix + hex_digits);
+            }
+            const u16 size = has_width ? explicit_width : static_cast<u16>(digits.size() * bits_per_digit);
+            return make_param(size, out_prefix + digits);
+        }
+
+        return ERR("could not parse parameter value: failed to identify data type of '" + raw + "'" + loc_str);
     }
 
     Result<std::vector<VerilogParser::assignment_t>> VerilogParser::parse_assignment_expression(TokenStream<std::string>&& stream) const

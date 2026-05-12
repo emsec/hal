@@ -1484,4 +1484,63 @@ namespace hal
         }
         TEST_END
     }
+
+    /**
+     * Test storing typed parameter values on a Gate against the declarations of
+     * its GateType. Verifies that PARAM_TEST's declared `width` (bit-vector) and
+     * `mode` (enum) parameters can be stored, looked up, and round-tripped on a
+     * gate instance.
+     *
+     * Functions: set_parameter, get_parameter_value, get_parameter_declaration,
+     *            has_parameter, delete_parameter, get_parameters
+     */
+    TEST_F(GateTest, check_parameters)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            auto gt = nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST");
+            ASSERT_NE(gt, nullptr);
+            Gate* gate = nl->create_gate(gt, "g");
+            ASSERT_NE(gate, nullptr);
+
+            // The declarations originate from the gate type and are used verbatim
+            // when storing per-instance values on the gate.
+            const auto width_decl_res = gt->get_parameter("width");
+            const auto mode_decl_res  = gt->get_parameter("mode");
+            ASSERT_TRUE(width_decl_res.is_ok());
+            ASSERT_TRUE(mode_decl_res.is_ok());
+            const Parameter width_decl = width_decl_res.get();
+            const Parameter mode_decl  = mode_decl_res.get();
+
+            EXPECT_TRUE(gate->set_parameter(width_decl, "0x1234").is_ok());
+            EXPECT_TRUE(gate->set_parameter(mode_decl, "inverted").is_ok());
+
+            // Stored values come back as written, paired with the original declaration.
+            EXPECT_EQ(gate->get_parameter_value("width").get(), "0x1234");
+            EXPECT_EQ(gate->get_parameter_value("mode").get(), "inverted");
+            EXPECT_EQ(gate->get_parameter_declaration("width").get(), width_decl);
+            EXPECT_EQ(gate->get_parameter_declaration("mode").get(), mode_decl);
+
+            // get_parameters() exposes the full (declaration, value) map keyed by name.
+            const auto& params = gate->get_parameters();
+            ASSERT_EQ(params.size(), 2u);
+            EXPECT_EQ(params.at("width").first, width_decl);
+            EXPECT_EQ(params.at("width").second, "0x1234");
+            EXPECT_EQ(params.at("mode").first, mode_decl);
+            EXPECT_EQ(params.at("mode").second, "inverted");
+
+            // Values that fail the declaration's `validate` are rejected.
+            EXPECT_TRUE(gate->set_parameter(width_decl, "0x10000").is_error());          // 16-bit overflow
+            EXPECT_TRUE(gate->set_parameter(mode_decl, "unknown_value").is_error());     // not in enum
+
+            // delete_parameter removes the stored entry; lookups then fail.
+            EXPECT_TRUE(gate->delete_parameter("width"));
+            EXPECT_FALSE(gate->has_parameter("width"));
+            EXPECT_TRUE(gate->get_parameter_value("width").is_error());
+            EXPECT_FALSE(gate->delete_parameter("width"));    // already gone
+            EXPECT_EQ(gate->get_parameters().size(), 1u);
+        }
+        TEST_END
+    }
 }    // namespace hal

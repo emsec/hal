@@ -30,6 +30,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
+#include "hal_core/netlist/parameter.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
 
@@ -79,6 +80,7 @@ namespace hal
             std::string m_name;
             std::string m_type  = "unknown";
             std::string m_value = "";
+            std::optional<Parameter> m_parameter;   // populated by parse_parameter_value; empty for attributes
         };
 
         struct VerilogSignal
@@ -224,7 +226,7 @@ namespace hal
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
         Result<std::vector<BooleanFunction::Value>> get_binary_vector(std::string value) const;
         Result<std::string> get_hex_from_literal(const Token<std::string>& value_token) const;
-        Result<std::pair<std::string, std::string>> parse_parameter_value(const Token<std::string>& value_token) const;
+        Result<std::pair<Parameter, std::string>> parse_parameter_value(const std::string& name, const Token<std::string>& value_token) const;
         Result<std::vector<VerilogParser::assignment_t>> parse_assignment_expression(TokenStream<std::string>&& stream) const;
         std::vector<std::string> expand_assignment_expression(VerilogModule* verilog_module, const std::vector<assignment_t>& vars) const;
     };

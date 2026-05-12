@@ -1100,16 +1100,17 @@ namespace hal {
     }
 
     /**
-     * Testing the correct storage of data of the following data types:
-     * integer, floating_point, string, bit_vector (hexadecimal, decimal, octal, binary)
+     * Testing the correct storage of typed parameters via the Verilog #(...) generic map.
+     * Each parameter produces a typed Parameter stored via set_parameter().
      *
      * Functions: parse
      */
-    TEST_F(VerilogParserTest, check_parameters) 
+    TEST_F(VerilogParserTest, check_parameters)
     {
         TEST_START
         {
-            // Store an instance of all possible data types in one Gate + some special cases
+            // One gate with one parameter of every supported type.
+            // 'habc, 'o5274, 'b1010_1011_1100, 'd2748 are four representations of the same 12-bit value.
             std::string netlist_input("module top ("
                                     "  global_in,"
                                     "  global_out"
@@ -1118,25 +1119,28 @@ namespace hal {
                                     "  output global_out ;"
                                     "BUF #("
                                     ".key_integer(1234),"
+                                    ".key_neg_integer(-42),"
                                     ".key_floating_point(1.234),"
                                     ".key_string(\"test_string\"),"
-                                    ".key_bit_vector_hex('habc),"    // All values are 'ABC' in hex
+                                    ".key_string_with_comma(\"test,1,2,3\"),"
+                                    ".key_string_looks_like_float(\"1.234\"),"
+                                    ".key_bit_vector_hex('habc),"
                                     ".key_bit_vector_dec('d2748),"
                                     ".key_bit_vector_oct('o5274),"
                                     ".key_bit_vector_bin('b1010_1011_1100),"
-                                    ".key_negative_comma_string(\"test,1,2,3\"),"
-                                    ".key_negative_float_string(\"1.234\")) "
+                                    ".key_bit_vector_hex_sized(12'habc),"
+                                    ".key_single_bit_one(1'b1),"
+                                    ".key_single_bit_zero(1'b0)) "
                                     "gate_0 ("
                                     "  .I (global_in ),"
                                     "  .O (global_out )"
                                     " ) ;"
-                                    "defparam gate_0.external_int = 3;"
+                                    "defparam gate_0.key_defparam = 3;"
                                     "endmodule");
             const GateLibrary* gate_lib = test_utils::get_gate_library();
             std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VerilogParser verilog_parser;
             auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-            // std::cout << nl_res.get_error().get() << std::endl;
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);
@@ -1144,19 +1148,135 @@ namespace hal {
             ASSERT_EQ(nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).size(), 1);
             Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
 
-            // Integers are stored in their hex representation
-            EXPECT_EQ(gate_0->get_data("generic", "key_integer"), std::make_tuple("integer", "1234"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_floating_point"), std::make_tuple("floating_point", "1.234"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_string"), std::make_tuple("string", "test_string"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_hex"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_dec"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_oct"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_bit_vector_bin"), std::make_tuple("bit_vector", "ABC"));
-            EXPECT_EQ(gate_0->get_data("generic", "external_int"), std::make_tuple("integer", "3"));
-
-            // Special Characters
-            EXPECT_EQ(gate_0->get_data("generic", "key_negative_comma_string"), std::make_tuple("string", "test,1,2,3"));
-            EXPECT_EQ(gate_0->get_data("generic", "key_negative_float_string"), std::make_tuple("string", "1.234"));
+            // Integer
+            {
+                auto decl = gate_0->get_parameter_declaration("key_integer");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                auto val = gate_0->get_parameter_value("key_integer");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "1234");
+            }
+            // Negative integer
+            {
+                auto decl = gate_0->get_parameter_declaration("key_neg_integer");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                auto val = gate_0->get_parameter_value("key_neg_integer");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "-42");
+            }
+            // Float
+            {
+                auto decl = gate_0->get_parameter_declaration("key_floating_point");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::Float);
+                auto val = gate_0->get_parameter_value("key_floating_point");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "1.234");
+            }
+            // String
+            {
+                auto decl = gate_0->get_parameter_declaration("key_string");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::String);
+                auto val = gate_0->get_parameter_value("key_string");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "test_string");
+            }
+            // String with comma (outer quotes force string classification)
+            {
+                auto val = gate_0->get_parameter_value("key_string_with_comma");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "test,1,2,3");
+            }
+            // String that looks like a float
+            {
+                auto decl = gate_0->get_parameter_declaration("key_string_looks_like_float");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::String);
+                auto val = gate_0->get_parameter_value("key_string_looks_like_float");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "1.234");
+            }
+            // BitVector from hex ('habc → 3 digits × 4 bits = 12 bits, value "0xabc")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 12);
+                auto val = gate_0->get_parameter_value("key_bit_vector_hex");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xabc");
+            }
+            // BitVector from decimal ('d2748 → converted to hex, value "0xabc")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bit_vector_dec");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                auto val = gate_0->get_parameter_value("key_bit_vector_dec");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xabc");
+            }
+            // BitVector from octal ('o5274 → 4 digits × 3 bits = 12 bits, value "0o5274")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bit_vector_oct");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 12);
+                auto val = gate_0->get_parameter_value("key_bit_vector_oct");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0o5274");
+            }
+            // BitVector from binary ('b1010_1011_1100 → 12 bits after stripping underscores, value "0b101010111100")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bit_vector_bin");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 12);
+                auto val = gate_0->get_parameter_value("key_bit_vector_bin");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0b101010111100");
+            }
+            // BitVector from hex with explicit width (12'habc → size=12)
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bit_vector_hex_sized");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 12);
+                auto val = gate_0->get_parameter_value("key_bit_vector_hex_sized");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xabc");
+            }
+            // Single-bit '1' (1'b1 → BitVector(1), value "0b1")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_single_bit_one");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 1);
+                auto val = gate_0->get_parameter_value("key_single_bit_one");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0b1");
+            }
+            // Single-bit '0' (1'b0 → BitVector(1), value "0b0")
+            {
+                auto decl = gate_0->get_parameter_declaration("key_single_bit_zero");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::BitVector);
+                EXPECT_EQ(decl.get().size, 1);
+                auto val = gate_0->get_parameter_value("key_single_bit_zero");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0b0");
+            }
+            // defparam assignment
+            {
+                auto decl = gate_0->get_parameter_declaration("key_defparam");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::Integer);
+                auto val = gate_0->get_parameter_value("key_defparam");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "3");
+            }
         }
         {
             // Port map gets multiple nets (should only assign right-most one)
@@ -1190,6 +1310,97 @@ namespace hal {
 
             ASSERT_NE(gate->get_fan_in_net("I"), nullptr);
             EXPECT_EQ(gate->get_fan_in_net("I")->get_name(), "global_in");
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing generic parameters containing Verilog X/Z/? state characters.
+     * X/Z map to LogicVector; ? is normalized to '-' (HAL don't-care).
+     *
+     * Functions: parse
+     */
+    TEST_F(VerilogParserTest, check_parameters_state_chars)
+    {
+        TEST_START
+        {
+            std::string netlist_input("module top ("
+                                    "  global_in,"
+                                    "  global_out"
+                                    " ) ;"
+                                    "  input global_in ;"
+                                    "  output global_out ;"
+                                    "BUF #("
+                                    ".key_bvec_x(4'bXX01),"
+                                    ".key_hvec_z(3'hZa1),"
+                                    ".key_bvec_dont_care(4'b?0?1),"
+                                    ".key_unsized_x('bX),"
+                                    ".key_unsized_z('bZ)) "
+                                    "gate_0 ("
+                                    "  .I (global_in ),"
+                                    "  .O (global_out )"
+                                    " ) ;"
+                                    "endmodule");
+            const GateLibrary* gate_lib = test_utils::get_gate_library();
+            std::filesystem::path verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
+            VerilogParser verilog_parser;
+            auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
+            ASSERT_TRUE(nl_res.is_ok());
+            std::unique_ptr<Netlist> nl = nl_res.get();
+            ASSERT_NE(nl, nullptr);
+
+            Gate* gate_0 = *nl->get_gates(test_utils::gate_filter("BUF", "gate_0")).begin();
+
+            // 4'bXX01 → LogicVector(size=4), value "0bXX01"
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bvec_x");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().size, 4);
+                auto val = gate_0->get_parameter_value("key_bvec_x");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0bXX01");
+            }
+            // 3'hZa1 → 3 hex digits with Z state → LogicVector(size=12), value "0xZa1"
+            {
+                auto decl = gate_0->get_parameter_declaration("key_hvec_z");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().size, 12);
+                auto val = gate_0->get_parameter_value("key_hvec_z");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0xZa1");
+            }
+            // 4'b?0?1 → Verilog '?' normalized to '-' → LogicVector(size=4), value "0b-0-1"
+            {
+                auto decl = gate_0->get_parameter_declaration("key_bvec_dont_care");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().size, 4);
+                auto val = gate_0->get_parameter_value("key_bvec_dont_care");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0b-0-1");
+            }
+            // 'bX (unsized, single state char) → LogicVector(size=1), value "0bX"
+            {
+                auto decl = gate_0->get_parameter_declaration("key_unsized_x");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().size, 1);
+                auto val = gate_0->get_parameter_value("key_unsized_x");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0bX");
+            }
+            // 'bZ (unsized) → LogicVector(size=1), value "0bZ"
+            {
+                auto decl = gate_0->get_parameter_declaration("key_unsized_z");
+                ASSERT_TRUE(decl.is_ok());
+                EXPECT_EQ(decl.get().type, Parameter::Type::LogicVector);
+                EXPECT_EQ(decl.get().size, 1);
+                auto val = gate_0->get_parameter_value("key_unsized_z");
+                ASSERT_TRUE(val.is_ok());
+                EXPECT_EQ(val.get(), "0bZ");
+            }
         }
         TEST_END
     }

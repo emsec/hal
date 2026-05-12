@@ -1,5 +1,6 @@
 #include "netlist_test_utils.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/parameter.h"
 
 namespace hal {
     using test_utils::MIN_GATE_ID;
@@ -944,6 +945,44 @@ namespace hal {
         TEST_END
     }
     
+    /**
+     * Testing the typed-parameter API inherited from DataContainer. Nets have no
+     * parameter registry, so any Parameter that validates its default may be stored.
+     *
+     * Functions: set_parameter, get_parameter_value, get_parameter_declaration,
+     *            has_parameter, delete_parameter
+     */
+    TEST_F(NetTest, check_parameters) {
+        TEST_START
+            {
+                auto nl = test_utils::create_empty_netlist();
+                Net* n = nl->create_net("wire");
+                ASSERT_NE(n, nullptr);
+
+                const auto delay_decl    = Parameter::BitVector("delay_ps", 32, "0").get();
+                const auto polarity_decl = Parameter::Enum("polarity", {"pos", "neg"}, "pos").get();
+
+                // Bit-vector parameter: value round-trips, declaration preserved.
+                EXPECT_TRUE(n->set_parameter(delay_decl, "250").is_ok());
+                EXPECT_EQ(n->get_parameter_value("delay_ps").get(), "250");
+                EXPECT_EQ(n->get_parameter_declaration("delay_ps").get(), delay_decl);
+
+                // Enum parameter: stored as the canonical value name.
+                EXPECT_TRUE(n->set_parameter(polarity_decl, "neg").is_ok());
+                EXPECT_EQ(n->get_parameter_value("polarity").get(), "neg");
+
+                // Invalid values are rejected and nothing is stored.
+                EXPECT_TRUE(n->set_parameter(Parameter::BitVector("rise_ps", 8, "0").get(), "0x100").is_error());
+                EXPECT_FALSE(n->has_parameter("rise_ps"));
+
+                // delete_parameter removes the stored entry.
+                EXPECT_TRUE(n->delete_parameter("delay_ps"));
+                EXPECT_FALSE(n->has_parameter("delay_ps"));
+                EXPECT_TRUE(n->get_parameter_value("delay_ps").is_error());
+            }
+        TEST_END
+    }
+
     /*************************************
      * Event System
      *************************************/

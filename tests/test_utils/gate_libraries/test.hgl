@@ -3707,6 +3707,71 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "PARAM_TEST",
+            "types": [
+                "combinational"
+            ],
+            "parameters": [
+                {
+                    "name": "width",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0xCAFE"
+                },
+                {
+                    "name": "mode",
+                    "type": "enum",
+                    "values": ["normal", "inverted"],
+                    "default": "normal"
+                }
+            ],
+            "pin_groups": [
+                {
+                    "name": "I0",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I0",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "I1",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "I1",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": true,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((mode == 0b1) & (width == 0xCAFE)) ? !I0 : (I0 & I1)"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

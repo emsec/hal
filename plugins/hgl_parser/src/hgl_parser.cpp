@@ -205,6 +205,144 @@ namespace hal
             return ERR("could not parse gate type '" + name + "': failed to create gate type");
         }
 
+        // Parameters are declared at the gate-type level. Their declared sizes feed the BF parser
+        // for any Boolean functions in this cell that reference parameters as variables.
+        std::map<std::string, u16> var_sizes;
+        if (gate_type.HasMember("parameters") && gate_type["parameters"].IsArray())
+        {
+            for (const auto& param_val : gate_type["parameters"].GetArray())
+            {
+                if (!param_val.HasMember("name") || !param_val["name"].IsString())
+                {
+                    return ERR("could not parse parameter for gate type '" + name + "': missing or invalid name");
+                }
+                if (!param_val.HasMember("type") || !param_val["type"].IsString())
+                {
+                    return ERR("could not parse parameter for gate type '" + name + "': missing or invalid type");
+                }
+                if (!param_val.HasMember("default") || !param_val["default"].IsString())
+                {
+                    return ERR("could not parse parameter for gate type '" + name + "': missing or invalid default value");
+                }
+
+                const std::string pname    = param_val["name"].GetString();
+                const std::string pdefault = param_val["default"].GetString();
+                const std::string ptype    = param_val["type"].GetString();
+
+                Parameter param;
+
+                if (ptype == "boolean")
+                {
+                    auto param_res = Parameter::Boolean(pname, pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "bit_vector")
+                {
+                    if (!param_val.HasMember("size") || !param_val["size"].IsUint())
+                    {
+                        return ERR("could not parse parameter '" + pname + "' for gate type '" + name + "': bit-vector parameter requires a 'size' field");
+                    }
+                    const u32 sz = param_val["size"].GetUint();
+
+                    auto param_res = Parameter::BitVector(pname, static_cast<u16>(sz), pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "logic_vector")
+                {
+                    if (!param_val.HasMember("size") || !param_val["size"].IsUint())
+                    {
+                        return ERR("could not parse parameter '" + pname + "' for gate type '" + name + "': logic-vector parameter requires a 'size' field");
+                    }
+                    const u32 sz = param_val["size"].GetUint();
+
+                    auto param_res = Parameter::LogicVector(pname, static_cast<u16>(sz), pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "integer")
+                {
+                    auto param_res = Parameter::Integer(pname, pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "string")
+                {
+                    auto param_res = Parameter::String(pname, pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "float")
+                {
+                    auto param_res = Parameter::Float(pname, pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "time")
+                {
+                    auto param_res = Parameter::Time(pname, pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else if (ptype == "enum")
+                {
+                    if (!param_val.HasMember("values") || !param_val["values"].IsArray())
+                    {
+                        return ERR("could not parse parameter '" + pname + "' for gate type '" + name + "': enum parameter requires a 'values' array");
+                    }
+                    std::vector<std::string> values;
+                    for (const auto& v : param_val["values"].GetArray())
+                    {
+                        if (!v.IsString())
+                        {
+                            return ERR("could not parse parameter '" + pname + "' for gate type '" + name + "': enum 'values' must be strings");
+                        }
+                        values.emplace_back(v.GetString());
+                    }
+
+                    auto param_res = Parameter::Enum(pname, std::move(values), pdefault);
+                    if (param_res.is_error())
+                    {
+                        return ERR(param_res.get_error());
+                    }
+                    param = param_res.get();
+                }
+                else
+                {
+                    return ERR("could not parse parameter '" + pname + "' for gate type '" + name + "': unknown type '" + ptype + "'");
+                }
+
+                if (auto res = gt->add_parameter(param); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse parameters for gate type '" + name + "'");
+                }
+
+                var_sizes[param.name] = param.size;
+            }
+        }
+
         if (file_version >= 2)
         {
             if (gate_type.HasMember("pin_groups") && gate_type["pin_groups"].IsArray())
@@ -319,7 +457,7 @@ namespace hal
 
                             if (p_val.HasMember("function") && p_val["function"].IsString())
                             {
-                                if (auto res = BooleanFunction::from_string(p_val["function"].GetString()); res.is_error())
+                                if (auto res = BooleanFunction::from_string(p_val["function"].GetString(), var_sizes); res.is_error())
                                 {
                                     return ERR_APPEND(res.get_error(),
                                                       "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
@@ -333,7 +471,7 @@ namespace hal
 
                             if (p_val.HasMember("x_function") && p_val["x_function"].IsString())
                             {
-                                if (auto res = BooleanFunction::from_string(p_val["x_function"].GetString()); res.is_error())
+                                if (auto res = BooleanFunction::from_string(p_val["x_function"].GetString(), var_sizes); res.is_error())
                                 {
                                     return ERR_APPEND(res.get_error(),
                                                       "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
@@ -347,7 +485,7 @@ namespace hal
 
                             if (p_val.HasMember("z_function") && p_val["z_function"].IsString())
                             {
-                                if (auto res = BooleanFunction::from_string(p_val["z_function"].GetString()); res.is_error())
+                                if (auto res = BooleanFunction::from_string(p_val["z_function"].GetString(), var_sizes); res.is_error())
                                 {
                                     return ERR_APPEND(res.get_error(),
                                                       "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
@@ -493,7 +631,7 @@ namespace hal
 
             for (const auto& [f_name, func] : pin_ctx.boolean_functions)
             {
-                if (auto res = BooleanFunction::from_string(func); res.is_error())
+                if (auto res = BooleanFunction::from_string(func, var_sizes); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
                                       "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + f_name + "' from string");
@@ -510,8 +648,7 @@ namespace hal
         if (LUTComponent* lut_comp = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
             lut_comp != nullptr && lut_comp->get_output_pin_configs().empty())
         {
-            if (const InitComponent* init_comp =
-                    lut_comp->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
+            if (const InitComponent* init_comp = lut_comp->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
                 init_comp != nullptr && !init_comp->get_init_identifiers().empty())
             {
                 const std::string& identifier = init_comp->get_init_identifiers().front();

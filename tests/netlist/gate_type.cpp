@@ -951,4 +951,105 @@ TEST_F(GateTypeTest, check_latch_gt)
 
     TEST_END
 }
+
+TEST_F(GateTypeTest, check_parameters)
+{
+    TEST_START
+
+    GateLibrary gl("no_path", "example_gl");
+
+    // Successfully add a bit-vector parameter and an enum parameter to the same type.
+    {
+        GateType* gt = gl.create_gate_type("bv_and_enum", {GateTypeProperty::combinational});
+        EXPECT_TRUE(gt->add_parameter(Parameter::BitVector("width", 16, "0xCAFE").get()).is_ok());
+        EXPECT_TRUE(gt->add_parameter(Parameter::Enum("mode", {"normal", "fast", "slow", "very_slow"}, "fast").get()).is_ok());
+
+        ASSERT_EQ(gt->get_parameters().size(), 2u);
+        EXPECT_TRUE(gt->get_parameters().count("width") == 1);
+        EXPECT_TRUE(gt->get_parameters().count("mode") == 1);
+        EXPECT_EQ(gt->get_parameters().at("mode").size, 2u);  // ceil(log2(4)) == 2
+        EXPECT_TRUE(gt->has_parameter("width"));
+        EXPECT_TRUE(gt->has_parameter("mode"));
+        EXPECT_FALSE(gt->has_parameter("missing"));
+        EXPECT_TRUE(gt->get_parameter("width").is_ok());
+        EXPECT_TRUE(gt->get_parameter("missing").is_error());
+    }
+
+    // Enum bit-width follows ceil(log2(N)).
+    {
+        GateType* gt = gl.create_gate_type("enum_widths", {GateTypeProperty::combinational});
+        const std::vector<std::pair<std::vector<std::string>, u16>> cases = {
+            {{"a", "b"}, 1},
+            {{"a", "b", "c"}, 2},
+            {{"a", "b", "c", "d"}, 2},
+            {{"a", "b", "c", "d", "e"}, 3},
+            {{"a", "b", "c", "d", "e", "f", "g", "h"}, 3},
+            {{"a", "b", "c", "d", "e", "f", "g", "h", "i"}, 4},
+        };
+        for (size_t i = 0; i < cases.size(); ++i)
+        {
+            const std::string name = "p" + std::to_string(i);
+            auto param_res = Parameter::Enum(name, cases[i].first, cases[i].first.front());
+            ASSERT_TRUE(param_res.is_ok());
+            ASSERT_TRUE(gt->add_parameter(param_res.get()).is_ok());
+            EXPECT_EQ(gt->get_parameter(name).get().size, cases[i].second);
+        }
+    }
+
+    // Validation rejects malformed declarations.
+    {
+        GateType* gt = gl.create_gate_type("bad_decls", {GateTypeProperty::combinational});
+
+        // Empty name.
+        EXPECT_TRUE(Parameter::BitVector("", 4, "").is_error());
+
+        // Duplicate name.
+        EXPECT_TRUE(gt->add_parameter(Parameter::BitVector("x", 4, "").get()).is_ok());
+        EXPECT_TRUE(gt->add_parameter(Parameter::BitVector("x", 4, "").get()).is_error());
+
+        // Bit-vector with size 0.
+        EXPECT_TRUE(Parameter::BitVector("zero", 0, "").is_error());
+
+        // Bit-vector with default value out of range.
+        EXPECT_TRUE(Parameter::BitVector("overflow", 4, "0x100").is_error());
+
+        // Enum with too few values.
+        EXPECT_TRUE(Parameter::Enum("one_val", std::vector<std::string>{"only"}, "only").is_error());
+
+        // Enum with duplicate values.
+        EXPECT_TRUE(Parameter::Enum("dup", std::vector<std::string>{"a", "a"}, "a").is_error());
+
+        // Enum with default value not in declared values.
+        EXPECT_TRUE(Parameter::Enum("bad_default", std::vector<std::string>{"a", "b"}, "c").is_error());
+
+        // Bit-vector with enum_values manually populated (simulates malformed input).
+        auto mixed_res = Parameter::BitVector("mixed", 4, "");
+        ASSERT_TRUE(mixed_res.is_ok());
+        Parameter mixed = mixed_res.get();
+        mixed.enum_values = {"a", "b"};
+        EXPECT_TRUE(gt->add_parameter(mixed).is_error());
+    }
+
+    // Parameter::encode_as_int handles bit-vector formats and enum lookups.
+    {
+        auto bv_res = Parameter::BitVector("x", 16, "");
+        ASSERT_TRUE(bv_res.is_ok());
+        Parameter bv = bv_res.get();
+        EXPECT_EQ(bv.encode_as_int("0xCAFE").get(), 0xCAFEu);
+        EXPECT_EQ(bv.encode_as_int("0b101").get(), 5u);
+        EXPECT_EQ(bv.encode_as_int("0o17").get(), 15u);
+        EXPECT_TRUE(bv.encode_as_int("0xFFFFFF").is_error());    // doesn't fit in 16 bits
+        EXPECT_TRUE(bv.encode_as_int("abc").is_error());         // no prefix
+
+        auto en_res = Parameter::Enum("y", {"off", "on", "auto"}, "off");
+        ASSERT_TRUE(en_res.is_ok());
+        Parameter en = en_res.get();
+        EXPECT_EQ(en.encode_as_int("off").get(), 0u);
+        EXPECT_EQ(en.encode_as_int("on").get(), 1u);
+        EXPECT_EQ(en.encode_as_int("auto").get(), 2u);
+        EXPECT_TRUE(en.encode_as_int("missing").is_error());
+    }
+
+    TEST_END
+}
 }    //namespace hal

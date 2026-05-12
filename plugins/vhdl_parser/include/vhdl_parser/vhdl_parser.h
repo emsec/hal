@@ -30,6 +30,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser.h"
+#include "hal_core/netlist/parameter.h"
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/special_strings.h"
 #include "hal_core/utilities/token_stream.h"
@@ -79,8 +80,9 @@ namespace hal
         {
             u32 m_line_number;
             std::string m_name;
-            std::string m_type  = "unknown";
-            std::string m_value = "";
+            std::string m_type  = "unknown";        // free-form data-type tag (only used for attributes today)
+            std::string m_value = "";               // value string (passed to set_data for attributes; to set_parameter for generics)
+            std::optional<Parameter> m_parameter;   // populated by parse_generic_assign; empty for attributes
         };
 
         struct VhdlSignal

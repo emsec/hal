@@ -1448,6 +1448,53 @@ namespace hal
                     return nullptr;
                 }
             }
+            {
+                // PARAM_TEST: a 2-input/1-output combinational cell with one bit-vector
+                // and one enum parameter. Exercises the typed-parameter system in HGL,
+                // .hal, Verilog, and VHDL round-trips. The output Boolean function
+                // references both parameters as variables so stage 3's parameter-aware
+                // get_boolean_function can be tested without further restructuring.
+                GateType* param_test = lib->create_gate_type("PARAM_TEST", {GateTypeProperty::combinational});
+                if (auto res = param_test->create_pin("I0", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->create_pin("I1", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->create_pin("O", PinDirection::output); res.is_error())
+                {
+                    return nullptr;
+                }
+                auto width_decl = Parameter::BitVector("width", 16, "0xCAFE");
+                if (width_decl.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->add_parameter(width_decl.get()); res.is_error())
+                {
+                    return nullptr;
+                }
+                auto mode_decl = Parameter::Enum("mode", {"normal", "inverted"}, "normal");
+                if (mode_decl.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = param_test->add_parameter(mode_decl.get()); res.is_error())
+                {
+                    return nullptr;
+                }
+                // Output BF references the enum parameter (1-bit) and the bit-vector parameter (16-bit).
+                // mode=inverted (1) and matching width => !I0; mode=normal (0) or non-matching width => I0 & I1.
+                const std::map<std::string, u16> var_sizes = {{"mode", 1}, {"width", 16}};
+                auto bf_o                                  = BooleanFunction::from_string("((mode == 0b1) & (width == 0xCAFE)) ? !I0 : (I0 & I1)", var_sizes);
+                if (bf_o.is_error())
+                {
+                    return nullptr;
+                }
+                param_test->add_boolean_function("O", bf_o.get());
+            }
 
             return std::move(lib);
         }
@@ -1616,6 +1663,13 @@ namespace hal
             else if (state_component1 != nullptr || state_component2 != nullptr)
             {
                 log_info("test_utils", "unequal Init components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
+                return false;
+            }
+
+            // Compare typed parameter declarations (order matters: parameters retain declaration order).
+            if (gt1->get_parameters() != gt2->get_parameters())
+            {
+                log_info("test_utils", "unequal parameters of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                 return false;
             }
 

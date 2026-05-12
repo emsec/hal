@@ -1,17 +1,18 @@
 #include "verilog_writer/verilog_writer.h"
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
+#include <iomanip>
+#include <sstream>
 
 namespace hal
 {
-    const std::set<std::string> VerilogWriter::valid_types = {"string", "integer", "floating_point", "bit_value", "bit_vector", "bit_string"};
-
     Result<std::monostate> VerilogWriter::write(Netlist* netlist, const std::filesystem::path& file_path)
     {
         std::stringstream res_stream;
@@ -139,20 +140,11 @@ namespace hal
 
         {
             // module parameters
-            const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = module->get_data_map();
-
-            for (const auto& [first, second] : data)
+            for (const auto& [name, decl_and_value] : module->get_parameters())
             {
-                const auto& [category, key] = first;
-                const auto& [type, value]   = second;
-
-                if (category != "generic" || valid_types.find(type) == valid_types.end())
-                {
-                    continue;
-                }
-
-                res_stream << "    parameter " << escape(key) << " = ";
-                if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
+                const auto& [decl, value] = decl_and_value;
+                res_stream << "    parameter " << escape(name) << " = ";
+                if (auto res = write_typed_parameter_value(res_stream, decl, value); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
                                       "could not write declaration of module '" + module->get_name() + "' with ID " + std::to_string(module->get_id()) + ": failed to write parameter value");
@@ -317,19 +309,8 @@ namespace hal
 
     Result<std::monostate> VerilogWriter::write_parameter_assignments(std::stringstream& res_stream, const DataContainer* container) const
     {
-        const std::map<std::tuple<std::string, std::string>, std::tuple<std::string, std::string>>& data = container->get_data_map();
-
         bool first_parameter = true;
-        for (const auto& [first, second] : data)
-        {
-            const auto& [category, key] = first;
-            const auto& [type, value]   = second;
-
-            if (category != "generic" || valid_types.find(type) == valid_types.end())
-            {
-                continue;
-            }
-
+        const auto open_or_separator = [&]() {
             if (first_parameter)
             {
                 res_stream << " #(" << std::endl;
@@ -339,14 +320,17 @@ namespace hal
             {
                 res_stream << "," << std::endl;
             }
+        };
 
-            res_stream << "        ." << escape(key) << "(";
-
-            if (auto res = write_parameter_value(res_stream, type, value); res.is_error())
+        for (const auto& [name, decl_and_value] : container->get_parameters())
+        {
+            const auto& [decl, value] = decl_and_value;
+            open_or_separator();
+            res_stream << "        ." << escape(name) << "(";
+            if (auto res = write_typed_parameter_value(res_stream, decl, value); res.is_error())
             {
-                return ERR_APPEND(res.get_error(), "could not write parameter assignments: failed to write parameter value '" + value + "' of type '" + type + "'");
+                return ERR_APPEND(res.get_error(), "could not write parameter assignments for '" + name + "'");
             }
-
             res_stream << ")";
         }
 
@@ -425,57 +409,46 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> VerilogWriter::write_parameter_value(std::stringstream& res_stream, const std::string& type, const std::string& value) const
+    Result<std::monostate> VerilogWriter::write_typed_parameter_value(std::stringstream& res_stream, const Parameter& decl, const std::string& value) const
     {
-        if (type == "string")
+        switch (decl.type)
         {
-            res_stream << "\"" << value << "\"";
-        }
-        else if (type == "integer" || type == "floating_point")
-        {
-            res_stream << value;
-        }
-        else if (type == "bit_value")
-        {
-            res_stream << "1'b" << value;
-        }
-        else if (type == "bit_vector")
-        {
-            u32 len = value.size() * 4;
-            // if (value.at(0) == '0' || value.at(0) == '1')
-            // {
-            //     len -= 3;
-            // }
-            // else if (value.at(0) == '2' || value.at(0) == '3')
-            // {
-            //     len -= 2;
-            // }
-            // else if (value.at(0) >= '4' && value.at(0) <= '7')
-            // {
-            //     len -= 1;
-            // }
-            res_stream << len << "'h" << value;
-        }
-        else if (type == "bit_string")
-        {
-            u32 len = value.size();
-            // if (value.at(0) == '0' || value.at(0) == '1')
-            // {
-            //     len -= 3;
-            // }
-            // else if (value.at(0) == '2' || value.at(0) == '3')
-            // {
-            //     len -= 2;
-            // }
-            // else if (value.at(0) >= '4' && value.at(0) <= '7')
-            // {
-            //     len -= 1;
-            // }
-            res_stream << len << "'b" << value;
-        }
-        else
-        {
-            return ERR("could not write parameter value '" + value + "' of type '" + type + "': invalid type");
+            case Parameter::Type::Integer:
+            case Parameter::Type::Float:
+            case Parameter::Type::Time:
+                res_stream << value;
+                break;
+
+            case Parameter::Type::String:
+            case Parameter::Type::Enum:
+                res_stream << "\"" << value << "\"";
+                break;
+
+            case Parameter::Type::Boolean:
+                res_stream << (value == "true" ? "1'b1" : "1'b0");
+                break;
+
+            case Parameter::Type::BitVector:
+            case Parameter::Type::LogicVector: {
+                // value is "0b...", "0o...", or "0x..." — strip prefix and map to Verilog base notation
+                if (value.size() < 3 || value[0] != '0')
+                {
+                    return ERR("could not write parameter '" + decl.name + "': unexpected value format '" + value + "'");
+                }
+                const char base   = static_cast<char>(std::tolower(static_cast<unsigned char>(value[1])));
+                const auto digits = value.substr(2);
+                char verilog_base;
+                switch (base)
+                {
+                    case 'b': verilog_base = 'b'; break;
+                    case 'o': verilog_base = 'o'; break;
+                    case 'x': verilog_base = 'h'; break;
+                    default:
+                        return ERR("could not write parameter '" + decl.name + "': unknown base '" + std::string(1, base) + "' in value '" + value + "'");
+                }
+                res_stream << decl.size << "'" << verilog_base << digits;
+                break;
+            }
         }
 
         return OK({});

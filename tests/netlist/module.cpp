@@ -2,6 +2,7 @@
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
+#include "hal_core/netlist/parameter.h"
 #include "netlist_test_utils.h"
 
 namespace hal {
@@ -1222,6 +1223,46 @@ namespace hal {
         TEST_END
     }  
       
+    /**
+     * Testing the typed-parameter API inherited from DataContainer. Modules carry
+     * no parameter registry, so any Parameter that validates its default may be
+     * stored and retrieved.
+     *
+     * Functions: set_parameter, get_parameter_value, get_parameter_declaration,
+     *            has_parameter, delete_parameter
+     */
+    TEST_F(ModuleTest, check_parameters) {
+        TEST_START
+            {
+                auto nl = test_utils::create_empty_netlist();
+                Module* m = nl->create_module("m", nl->get_top_module());
+                ASSERT_NE(m, nullptr);
+
+                const auto width_decl  = Parameter::BitVector("WIDTH", 32, "0").get();
+                const auto flavor_decl = Parameter::Enum("flavor", {"normal", "fast"}, "normal").get();
+
+                // Bit-vector parameter: stored value round-trips, declaration preserved.
+                EXPECT_TRUE(m->set_parameter(width_decl, "32").is_ok());
+                EXPECT_EQ(m->get_parameter_value("WIDTH").get(), "32");
+                EXPECT_EQ(m->get_parameter_declaration("WIDTH").get(), width_decl);
+
+                // Enum parameter: value stored as the canonical name.
+                EXPECT_TRUE(m->set_parameter(flavor_decl, "fast").is_ok());
+                EXPECT_EQ(m->get_parameter_value("flavor").get(), "fast");
+
+                // Values failing validate are rejected and nothing is stored.
+                EXPECT_TRUE(m->set_parameter(Parameter::BitVector("mask", 16, "0").get(), "0x10000").is_error());
+                EXPECT_FALSE(m->has_parameter("mask"));
+
+                // delete_parameter clears the stored entry.
+                EXPECT_TRUE(m->has_parameter("WIDTH"));
+                EXPECT_TRUE(m->delete_parameter("WIDTH"));
+                EXPECT_FALSE(m->has_parameter("WIDTH"));
+                EXPECT_TRUE(m->get_parameter_value("WIDTH").is_error());
+            }
+        TEST_END
+    }
+
     /*************************************
      * Event System
      *************************************/

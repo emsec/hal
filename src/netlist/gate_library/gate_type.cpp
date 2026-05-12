@@ -747,4 +747,35 @@ namespace hal
     {
         return m_functions;
     }
+
+    Result<std::monostate> GateType::add_parameter(const Parameter& param)
+    {
+        if (m_parameters.find(param.name) != m_parameters.end())
+        {
+            return ERR("could not add parameter '" + param.name + "' to gate type '" + m_name + "': a parameter with that name already exists");
+        }
+
+        m_parameters[param.name] = param;
+        return OK({});
+    }
+
+    const std::unordered_map<std::string, Parameter>& GateType::get_parameters() const
+    {
+        return m_parameters;
+    }
+
+    Result<Parameter> GateType::get_parameter(const std::string& name) const
+    {
+        if (auto it = m_parameters.find(name); it != m_parameters.end())
+        {
+            return OK(it->second);
+        }
+
+        return ERR("no parameter named '" + name + "'");
+    }
+
+    bool GateType::has_parameter(const std::string& name) const
+    {
+        return m_parameters.find(name) != m_parameters.end();
+    }
 }    // namespace hal

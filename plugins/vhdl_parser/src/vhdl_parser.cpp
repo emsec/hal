@@ -16,6 +16,32 @@ namespace hal
 {
     namespace
     {
+        // Returns true if `c` (case-insensitive) is one of the VHDL std_logic state
+        // characters that fall outside the 2-state {0, 1} bit set: X, Z, U, L, H, W, -.
+        bool is_std_logic_state_char(char c)
+        {
+            const char l = (c == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+            return l == 'x' || l == 'z' || l == 'u' || l == 'l' || l == 'h' || l == 'w' || l == '-';
+        }
+
+        // Strict double parse: must consume the full string.
+        bool is_double_strict(const std::string& s)
+        {
+            if (s.empty())
+            {
+                return false;
+            }
+            try
+            {
+                size_t consumed = 0;
+                (void)std::stod(s, &consumed);
+                return consumed == s.size();
+            }
+            catch (...)
+            {
+                return false;
+            }
+        }
 
     }    // namespace
 
@@ -1141,6 +1167,19 @@ namespace hal
         TokenStream<ci_string> generic_stream = m_token_stream.extract_until(")");
         m_token_stream.consume(")", true);
 
+        // VHDL-2008 predefined time units paired with their Parameter::Time equivalents.
+        // `sec` is normalized to `s` and `hr` to `h`; the rest pass through unchanged.
+        static const std::vector<std::pair<std::string, std::string>> vhdl_time_units = {
+            {"sec", "s"},
+            {"min", "min"},
+            {"hr", "h"},
+            {"fs", "fs"},
+            {"ps", "ps"},
+            {"ns", "ns"},
+            {"us", "us"},
+            {"ms", "ms"},
+        };
+
         while (generic_stream.remaining() > 0)
         {
             VhdlDataEntry generic;
@@ -1150,55 +1189,231 @@ namespace hal
             generic_stream.consume("=>", true);
             const auto rhs = generic_stream.join_until(",", "");
             generic_stream.consume(",", generic_stream.remaining() > 0);    // last entry has no comma
+            const std::string rhs_str = core_strings::to<std::string>(rhs.string);
 
-            // determine data type
-            if ((rhs == "true") || (rhs == "false"))
+            bool classified = false;
+
+            // boolean: `true` or `false`. Normalize to the lowercase form that
+            // Parameter::Boolean expects.
+            if (rhs == "true" || rhs == "false")
             {
-                generic.m_value = core_strings::to<std::string>(rhs.string);
-                generic.m_type  = "boolean";
+                const std::string norm = (rhs == "true") ? "true" : "false";
+                auto param_res         = Parameter::Boolean(generic.m_name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                }
+                generic.m_value     = norm;
+                generic.m_type      = "boolean";
+                generic.m_parameter = param_res.get();
+                classified          = true;
             }
+            // integer: base-10 with optional sign (full-consume strtol via utils::is_integer).
             else if (utils::is_integer(rhs.string))
             {
-                generic.m_value = core_strings::to<std::string>(rhs.string);
-                generic.m_type  = "integer";
-            }
-            else if (utils::is_floating_point(rhs.string))
-            {
-                generic.m_value = core_strings::to<std::string>(rhs.string);
-                generic.m_type  = "floating_point";
-            }
-            else if (utils::ends_with(rhs.string, ci_string("s")) || utils::ends_with(rhs.string, ci_string("sec")) || utils::ends_with(rhs.string, ci_string("min"))
-                     || utils::ends_with(rhs.string, ci_string("hr")))
-            {
-                generic.m_value = core_strings::to<std::string>(rhs.string);
-                generic.m_type  = "time";
-            }
-            else if (rhs.string.at(0) == '\"' && rhs.string.back() == '\"')
-            {
-                generic.m_value = core_strings::to<std::string>(rhs.string.substr(1, rhs.string.size() - 2));
-                generic.m_type  = "string";
-            }
-            else if (rhs.string.at(0) == '\'' && rhs.string.at(2) == '\'')
-            {
-                generic.m_value = core_strings::to<std::string>(rhs.string.substr(1, 1));
-                generic.m_type  = "bit_value";
-            }
-            else if (rhs.string.at(1) == '\"' && rhs.string.back() == '\"')
-            {
-                if (auto res = get_hex_from_literal(rhs); res.is_error())
+                auto param_res = Parameter::Integer(generic.m_name, "");
+                if (param_res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse generic assignment: unable to translate token to hexadecimal string");
+                    return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
                 }
-                else
+                generic.m_value     = rhs_str;
+                generic.m_type      = "integer";
+                generic.m_parameter = param_res.get();
+                classified          = true;
+            }
+            // floating-point: parsed via std::stod (double precision, full-consume).
+            else if (is_double_strict(rhs_str))
+            {
+                auto param_res = Parameter::Float(generic.m_name, "");
+                if (param_res.is_error())
                 {
-                    generic.m_value = core_strings::to<std::string>(res.get());
-                    generic.m_type  = "bit_vector";
+                    return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
                 }
+                generic.m_value     = rhs_str;
+                generic.m_type      = "floating_point";
+                generic.m_parameter = param_res.get();
+                classified          = true;
             }
             else
             {
-                return ERR("could not parse generic assignment: unable to identify data type of generic map value '" + core_strings::to<std::string>(rhs.string) + "' in instance '"
-                           + core_strings::to<std::string>(instance->m_name) + "' (line " + std::to_string(generic.m_line_number) + ")");
+                // time: <number><unit> contiguous, unit from VHDL's 8 predefined units.
+                for (const auto& [vhdl_unit, param_unit] : vhdl_time_units)
+                {
+                    if (rhs_str.size() <= vhdl_unit.size() || !utils::ends_with(rhs.string, ci_string(vhdl_unit.c_str())))
+                    {
+                        continue;
+                    }
+                    const std::string num_part = rhs_str.substr(0, rhs_str.size() - vhdl_unit.size());
+                    if (!utils::is_integer(num_part) && !is_double_strict(num_part))
+                    {
+                        continue;
+                    }
+                    auto param_res = Parameter::Time(generic.m_name, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                    generic.m_value     = num_part + param_unit;
+                    generic.m_type      = "time";
+                    generic.m_parameter = param_res.get();
+                    classified          = true;
+                    break;
+                }
+            }
+
+            // string literal: `"..."`. Strip outer quotes; no escape processing.
+            if (!classified && rhs_str.size() >= 2 && rhs_str.front() == '"' && rhs_str.back() == '"')
+            {
+                auto param_res = Parameter::String(generic.m_name, "");
+                if (param_res.is_error())
+                {
+                    return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                }
+                generic.m_value     = rhs_str.substr(1, rhs_str.size() - 2);
+                generic.m_type      = "string";
+                generic.m_parameter = param_res.get();
+                classified          = true;
+            }
+
+            // single-quoted character literal: `'<c>'`. A `0`/`1` digit is a `bit` value
+            // -> Parameter::BitVector(size=1); any other VHDL std_logic state char is
+            // an `std_logic` value -> Parameter::LogicVector(size=1).
+            if (!classified && rhs_str.size() == 3 && rhs_str.front() == '\'' && rhs_str.back() == '\'')
+            {
+                const char c = rhs_str[1];
+                if (c == '0' || c == '1')
+                {
+                    auto param_res = Parameter::BitVector(generic.m_name, 1, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                    generic.m_value     = std::string("0b") + c;
+                    generic.m_type      = "bit_value";
+                    generic.m_parameter = param_res.get();
+                    classified          = true;
+                }
+                else if (is_std_logic_state_char(c))
+                {
+                    auto param_res = Parameter::LogicVector(generic.m_name, 1, "");
+                    if (param_res.is_error())
+                    {
+                        return ERR_APPEND(param_res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                    generic.m_value     = std::string("0b") + c;
+                    generic.m_type      = "std_logic";
+                    generic.m_parameter = param_res.get();
+                    classified          = true;
+                }
+                else
+                {
+                    return ERR("could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "': character literal '" + rhs_str
+                               + "' is not a valid bit or std_logic value (line " + std::to_string(generic.m_line_number) + ")");
+                }
+            }
+
+            // base-prefixed bit-vector literal: `B"..."`, `O"..."`, `D"..."`, `X"..."`.
+            // Pure-digit literals become `Parameter::BitVector`, literals containing any
+            // std_logic state character become `Parameter::LogicVector`. Underscores in
+            // the source are stripped (VHDL allows them as readability separators).
+            // D"..." (decimal) does not support state chars and is always BitVector.
+            if (!classified && rhs_str.size() >= 4 && rhs_str.back() == '"' && rhs_str[1] == '"')
+            {
+                const char base_char  = static_cast<char>(std::toupper(static_cast<unsigned char>(rhs_str[0])));
+                const std::string raw = rhs_str.substr(2, rhs_str.size() - 3);
+                std::string digits;
+                digits.reserve(raw.size());
+                for (char c : raw)
+                {
+                    if (c != '_')
+                    {
+                        digits += c;
+                    }
+                }
+                if (digits.empty())
+                {
+                    return ERR("could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "': base-prefixed literal '" + rhs_str
+                               + "' has no digits (line " + std::to_string(generic.m_line_number) + ")");
+                }
+
+                const auto classify_base = [&](int bits_per_digit, const std::string& numeric_set, char param_prefix) -> Result<std::monostate> {
+                    bool has_state = false;
+                    for (char c : digits)
+                    {
+                        const char l = (c == '-') ? '-' : static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+                        if (numeric_set.find(l) != std::string::npos)
+                        {
+                            continue;
+                        }
+                        if (is_std_logic_state_char(c))
+                        {
+                            has_state = true;
+                            break;
+                        }
+                        return ERR("base-prefixed literal '" + rhs_str + "' contains invalid digit '" + std::string(1, c) + "'");
+                    }
+                    const u16 total_bits                = static_cast<u16>(digits.size() * bits_per_digit);
+                    const std::string value_with_prefix = std::string("0") + param_prefix + digits;
+                    if (has_state)
+                    {
+                        auto param_res = Parameter::LogicVector(generic.m_name, total_bits, "");
+                        if (param_res.is_error())
+                        {
+                            return ERR(param_res.get_error());
+                        }
+                        generic.m_value     = value_with_prefix;
+                        generic.m_type      = "std_logic_vector";
+                        generic.m_parameter = param_res.get();
+                    }
+                    else
+                    {
+                        auto param_res = Parameter::BitVector(generic.m_name, total_bits, "");
+                        if (param_res.is_error())
+                        {
+                            return ERR(param_res.get_error());
+                        }
+                        generic.m_value     = value_with_prefix;
+                        generic.m_type      = "bit_vector";
+                        generic.m_parameter = param_res.get();
+                    }
+                    return OK({});
+                };
+
+                if (base_char == 'B')
+                {
+                    if (auto res = classify_base(1, "01", 'b'); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                }
+                else if (base_char == 'O')
+                {
+                    if (auto res = classify_base(3, "01234567", 'o'); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                }
+                else if (base_char == 'X')
+                {
+                    if (auto res = classify_base(4, "0123456789abcdef", 'x'); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(), "could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "'");
+                    }
+                }
+                else
+                {
+                    // Decimal base `D"..."` and any other unsupported base prefix are
+                    // intentionally not handled here.
+                    return ERR("could not parse generic assignment '" + generic.m_name + "' in instance '" + core_strings::to<std::string>(instance->m_name) + "': base-prefixed literal '" + rhs_str
+                               + "' has unsupported base '" + std::string(1, base_char) + "' (line " + std::to_string(generic.m_line_number) + ")");
+                }
+                classified = true;
+            }
+
+            if (!classified)
+            {
+                return ERR("could not parse generic assignment: unable to identify data type of generic map value '" + rhs_str + "' in instance '" + core_strings::to<std::string>(instance->m_name)
+                           + "' (line " + std::to_string(generic.m_line_number) + ")");
             }
 
             instance->m_generics.push_back(generic);
@@ -2038,20 +2253,33 @@ namespace hal
                 }
             }
 
-            // process generics
+            // process generics: every generic becomes a typed Parameter on the container
+            // (Gate or Module), built from the source value's shape by parse_generic_assign.
             for (const auto& generic : instance->m_generics)
             {
-                if (!container->set_data("generic", generic.m_name, generic.m_type, generic.m_value))
+                if (!generic.m_parameter.has_value())
                 {
                     log_warning("vhdl_parser",
-                                "could not set generic '{} = {}' of type '{}' for instance '{}' of type '{}' within instance '{}' of type '{}'.",
+                                "could not set generic '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': parser did not produce a parameter declaration.",
                                 generic.m_name,
                                 generic.m_value,
-                                generic.m_type,
                                 instance->m_name,
                                 instance->m_type,
                                 instance_identifier,
                                 instance_type);
+                    continue;
+                }
+                if (auto res = container->set_parameter(generic.m_parameter.value(), generic.m_value); res.is_error())
+                {
+                    log_warning("vhdl_parser",
+                                "could not set generic '{} = {}' for instance '{}' of type '{}' within instance '{}' of type '{}': {}",
+                                generic.m_name,
+                                generic.m_value,
+                                instance->m_name,
+                                instance->m_type,
+                                instance_identifier,
+                                instance_type,
+                                res.get_error().get());
                 }
             }
         }

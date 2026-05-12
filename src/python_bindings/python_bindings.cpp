@@ -15,6 +15,8 @@ namespace hal
         m.def(
             "log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
 
+        parameter_init(m);
+
         data_container_init(m);
 
         core_utils_init(m);

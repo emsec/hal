@@ -235,6 +235,112 @@ namespace hal {
                  ASSERT_NE(des_nl, nullptr);
                  EXPECT_TRUE(*nl == *des_nl);
              }
+             {
+                 // Round-trip typed parameter values on Gate, Module, and Net through the .hal serializer.
+                 auto nl = std::make_unique<Netlist>(m_gl);
+                 GateType* gt = m_gl->get_gate_type_by_name("PARAM_TEST");
+                 ASSERT_NE(gt, nullptr);
+
+                 // Gate: store values against the gate-type's declarations.
+                 Gate* g = nl->create_gate(gt, "instance_with_params");
+                 ASSERT_NE(g, nullptr);
+                 const Parameter gate_width = gt->get_parameter("width").get();
+                 const Parameter gate_mode  = gt->get_parameter("mode").get();
+                 ASSERT_TRUE(g->set_parameter(gate_width, "0xBEEF").is_ok());
+                 ASSERT_TRUE(g->set_parameter(gate_mode, "inverted").is_ok());
+
+                 // Module: arbitrary declarations are accepted; one parameter of each type
+                 // is stored so the full Parameter::Type matrix exercises the JSON round-trip.
+                 Module* mod = nl->create_module("parametric_mod", nl->get_top_module());
+                 ASSERT_NE(mod, nullptr);
+                 const Parameter mod_bool   = Parameter::Boolean("ENABLE", "false").get();
+                 const Parameter mod_width  = Parameter::BitVector("WIDTH", 32, "0").get();
+                 const Parameter mod_logic  = Parameter::LogicVector("STATE", 4, "0b0").get();
+                 const Parameter mod_count  = Parameter::Integer("COUNT", "0").get();
+                 const Parameter mod_label  = Parameter::String("LABEL", "").get();
+                 const Parameter mod_pi     = Parameter::Float("PI", "0").get();
+                 const Parameter mod_delay  = Parameter::Time("DELAY", "0ns").get();
+                 const Parameter mod_flavor = Parameter::Enum("FLAVOR", {"normal", "fast"}, "normal").get();
+                 ASSERT_TRUE(mod->set_parameter(mod_bool, "true").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_width, "32").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_logic, "0b10XZ").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_count, "-7").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_label, "hello world").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_pi, "3.14").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_delay, "250ns").is_ok());
+                 ASSERT_TRUE(mod->set_parameter(mod_flavor, "fast").is_ok());
+
+                 // Net: parameters work identically on nets.
+                 Net* net = nl->create_net("metadata_net");
+                 ASSERT_NE(net, nullptr);
+                 const Parameter net_delay = Parameter::BitVector("delay_ps", 32, "0").get();
+                 ASSERT_TRUE(net->set_parameter(net_delay, "250").is_ok());
+
+                 std::filesystem::path path = test_utils::create_sandbox_path("test_param_roundtrip.hal");
+                 ASSERT_TRUE(netlist_serializer::serialize_to_file(nl.get(), path));
+                 auto des_nl = netlist_serializer::deserialize_from_file(path);
+                 ASSERT_NE(des_nl, nullptr);
+
+                 // Gate values and declarations come back intact, and encode_as_int still works.
+                 Gate* des_g = nullptr;
+                 for (Gate* candidate : des_nl->get_gates())
+                 {
+                     if (candidate->get_name() == "instance_with_params")
+                     {
+                         des_g = candidate;
+                         break;
+                     }
+                 }
+                 ASSERT_NE(des_g, nullptr);
+                 EXPECT_EQ(des_g->get_parameter_value("width").get(), "0xBEEF");
+                 EXPECT_EQ(des_g->get_parameter_value("mode").get(), "inverted");
+                 EXPECT_EQ(des_g->get_parameter_declaration("width").get(), gate_width);
+                 EXPECT_EQ(des_g->get_parameter_declaration("mode").get(), gate_mode);
+                 EXPECT_EQ(des_g->get_parameter_declaration("width").get().encode_as_int("0xBEEF").get(), 0xBEEFu);
+                 EXPECT_EQ(des_g->get_parameter_declaration("mode").get().encode_as_int("inverted").get(), 1u);
+
+                 // Module declarations and values are preserved end-to-end.
+                 Module* des_mod = nullptr;
+                 for (Module* candidate : des_nl->get_modules())
+                 {
+                     if (candidate->get_name() == "parametric_mod")
+                     {
+                         des_mod = candidate;
+                         break;
+                     }
+                 }
+                 ASSERT_NE(des_mod, nullptr);
+                 EXPECT_EQ(des_mod->get_parameter_value("ENABLE").get(), "true");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("ENABLE").get(), mod_bool);
+                 EXPECT_EQ(des_mod->get_parameter_value("WIDTH").get(), "32");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("WIDTH").get(), mod_width);
+                 EXPECT_EQ(des_mod->get_parameter_value("STATE").get(), "0b10XZ");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("STATE").get(), mod_logic);
+                 EXPECT_EQ(des_mod->get_parameter_value("COUNT").get(), "-7");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("COUNT").get(), mod_count);
+                 EXPECT_EQ(des_mod->get_parameter_value("LABEL").get(), "hello world");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("LABEL").get(), mod_label);
+                 EXPECT_EQ(des_mod->get_parameter_value("PI").get(), "3.14");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("PI").get(), mod_pi);
+                 EXPECT_EQ(des_mod->get_parameter_value("DELAY").get(), "250ns");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("DELAY").get(), mod_delay);
+                 EXPECT_EQ(des_mod->get_parameter_value("FLAVOR").get(), "fast");
+                 EXPECT_EQ(des_mod->get_parameter_declaration("FLAVOR").get(), mod_flavor);
+
+                 // Net declarations and values are preserved end-to-end.
+                 Net* des_net = nullptr;
+                 for (Net* candidate : des_nl->get_nets())
+                 {
+                     if (candidate->get_name() == "metadata_net")
+                     {
+                         des_net = candidate;
+                         break;
+                     }
+                 }
+                 ASSERT_NE(des_net, nullptr);
+                 EXPECT_EQ(des_net->get_parameter_value("delay_ps").get(), "250");
+                 EXPECT_EQ(des_net->get_parameter_declaration("delay_ps").get(), net_delay);
+             }
 
 
          TEST_END
