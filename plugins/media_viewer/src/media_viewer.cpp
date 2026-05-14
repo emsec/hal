@@ -194,6 +194,15 @@ namespace hal
         connect(mOpenAction, &QAction::triggered, this, &MediaViewer::handleOpenInputFileDialog);
 
         // ---------------------------------------------------------------
+        // Stop action (toolbar only)
+        // ---------------------------------------------------------------
+        mStopAction = new QAction(this);
+        mStopAction->setToolTip("Stop");
+        mStopAction->setIcon(gui_utility::getStyledSvgIcon("all->#E04848", ":/icons/cross"));
+        mStopAction->setEnabled(false);
+        connect(mStopAction, &QAction::triggered, this, &MediaViewer::handleStopTriggered);
+
+        // ---------------------------------------------------------------
         // Help button — shows keyboard shortcut list on hover and click
         // ---------------------------------------------------------------
         mHelpAction = new QAction("?", this);
@@ -208,6 +217,7 @@ namespace hal
         connect(mPlayer, &QMediaPlayer::positionChanged,      this, &MediaViewer::handlePositionChanged);
         connect(mPlayer, &QMediaPlayer::durationChanged,      this, &MediaViewer::handleDurationChanged);
         connect(mPlayer, &QMediaPlayer::errorOccurred,        this, &MediaViewer::handleMediaError);
+        connect(mPlayer, &QMediaPlayer::sourceChanged,        this, &MediaViewer::handleSourceChanged);
     }
 
     MediaViewer::~MediaViewer() = default;
@@ -215,6 +225,7 @@ namespace hal
     void MediaViewer::setupToolbar(Toolbar* toolbar)
     {
         toolbar->addAction(mOpenAction);
+        toolbar->addAction(mStopAction);
         toolbar->addSeparator();
         toolbar->addAction(mHelpAction);
     }
@@ -304,6 +315,8 @@ namespace hal
 
     void MediaViewer::handlePositionChanged(qint64 position)
     {
+        if (mPlayer->source().isEmpty())
+            return;
         if (!mSeekSlider->isSliderDown())
         {
             mUpdatingSlider = true;
@@ -315,6 +328,8 @@ namespace hal
 
     void MediaViewer::handleDurationChanged(qint64 duration)
     {
+        if (mPlayer->source().isEmpty())
+            return;
         mSeekSlider->setRange(0, static_cast<int>(duration));
         mTimeFormat = (duration >= 3600000LL) ? "hh:mm:ss" : "mm:ss";
         updateTimeLabel();
@@ -410,6 +425,30 @@ namespace hal
         if (mTimeFormat.isEmpty())
             return;
         mTimeLabel->setText(formatTime(mPlayer->position()) + " / " + formatTime(mPlayer->duration()));
+    }
+
+    void MediaViewer::handleSourceChanged(const QUrl& source)
+    {
+        mStopAction->setEnabled(!source.isEmpty());
+    }
+
+    void MediaViewer::handleStopTriggered()
+    {
+        log_info("media_viewer", "Stopped and unloaded.");
+        clearMedia();
+    }
+
+    void MediaViewer::clearMedia()
+    {
+        mSeekingFirstFrame = false;
+        mPlayer->stop();
+        mPlayer->setSource(QUrl());
+        mDisplayStack->setCurrentIndex(PageEmpty);
+        mTimeFormat.clear();
+        mTimeLabel->setText("--:-- / --:--");
+        mSeekSlider->setValue(0);
+        mSeekSlider->setRange(0, 0);
+        mErrorLabel->setText(QString());
     }
 
     void MediaViewer::handleHelpTriggered()

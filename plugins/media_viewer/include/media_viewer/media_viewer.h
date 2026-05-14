@@ -110,9 +110,18 @@ namespace hal
         /** @brief Handle QMediaPlayer error signals. */
         void handleMediaError(QMediaPlayer::Error err, const QString& msg);
 
+        /** @brief Enable or disable the Stop action when the player source changes. */
+        void handleSourceChanged(const QUrl& source);
+
+        /** @brief Stop playback and fully unload the current media. */
+        void handleStopTriggered();
+
     private:
         /** @brief Return the tooltip text listing all keyboard shortcuts. */
         static QString shortcutHelpText();
+
+        /** @brief Stop playback, detach the media source, and reset all load-derived visual state. */
+        void clearMedia();
 
         /** @brief Clamp the current volume by delta into [0,100] and update slider + audio output. */
         void adjustVolume(int delta);
@@ -140,6 +149,7 @@ namespace hal
 
         // Toolbar
         QAction*       mOpenAction    = nullptr;
+        QAction*       mStopAction    = nullptr;
         QAction*       mHelpAction    = nullptr;
 
         // In-widget control bar
