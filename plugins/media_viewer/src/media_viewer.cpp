@@ -30,6 +30,7 @@
 #include "hal_core/utilities/log.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QAudioOutput>
 #include <QComboBox>
 #include <QCursor>
@@ -38,6 +39,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMediaPlayer>
+#include <QPaintEvent>
+#include <QPainter>
 #include <QShortcut>
 #include <QSizePolicy>
 #include <QSlider>
@@ -163,6 +166,7 @@ namespace hal
         // ---------------------------------------------------------------
         // Assemble content layout
         // ---------------------------------------------------------------
+        mContentLayout->setContentsMargins(2, 2, 2, 2);
         mContentLayout->addWidget(mDisplayStack, 1);
         mContentLayout->addWidget(controlBar, 0);
 
@@ -218,6 +222,7 @@ namespace hal
         connect(mPlayer, &QMediaPlayer::durationChanged,      this, &MediaViewer::handleDurationChanged);
         connect(mPlayer, &QMediaPlayer::errorOccurred,        this, &MediaViewer::handleMediaError);
         connect(mPlayer, &QMediaPlayer::sourceChanged,        this, &MediaViewer::handleSourceChanged);
+        connect(qApp,    &QApplication::focusChanged,         this, &MediaViewer::handleFocusChanged);
     }
 
     MediaViewer::~MediaViewer() = default;
@@ -430,6 +435,28 @@ namespace hal
     void MediaViewer::handleSourceChanged(const QUrl& source)
     {
         mStopAction->setEnabled(!source.isEmpty());
+    }
+
+    void MediaViewer::handleFocusChanged(QWidget* /*old*/, QWidget* now)
+    {
+        bool wantFocus = (now != nullptr) && isAncestorOf(now);
+        if (wantFocus != mHasFocusWithin)
+        {
+            mHasFocusWithin = wantFocus;
+            update();
+        }
+    }
+
+    void MediaViewer::paintEvent(QPaintEvent* event)
+    {
+        ExternalContentWidget::paintEvent(event);
+        if (!mHasFocusWithin)
+            return;
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setBrush(Qt::NoBrush);
+        painter.setPen(QPen(QColor(40, 200, 240), 1));
+        painter.drawRect(rect().adjusted(1, 1, -1, -1));
     }
 
     void MediaViewer::handleStopTriggered()

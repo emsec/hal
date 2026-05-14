@@ -116,12 +116,18 @@ namespace hal
         /** @brief Stop playback and fully unload the current media. */
         void handleStopTriggered();
 
+        /** @brief Track focus transitions to drive the keyboard-focus indicator. */
+        void handleFocusChanged(QWidget* old, QWidget* now);
+
     private:
         /** @brief Return the tooltip text listing all keyboard shortcuts. */
         static QString shortcutHelpText();
 
         /** @brief Stop playback, detach the media source, and reset all load-derived visual state. */
         void clearMedia();
+
+        /** @brief Draw the keyboard-focus outline when this widget (or a descendant) has focus. */
+        void paintEvent(QPaintEvent* event) override;
 
         /** @brief Clamp the current volume by delta into [0,100] and update slider + audio output. */
         void adjustVolume(int delta);
@@ -166,5 +172,6 @@ namespace hal
         bool           mUpdatingSlider    = false;
         bool           mMuted             = false;
         bool           mSeekingFirstFrame = false;  // true while auto-playing to decode frame 0
+        bool           mHasFocusWithin    = false;
     };
 }    // namespace hal
