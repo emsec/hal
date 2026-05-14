@@ -25,7 +25,6 @@
 
 #include "media_viewer/plugin_media_viewer.h"
 
-#include "media_viewer/gui_extension_media_viewer.h"
 #include "media_viewer/media_viewer_factory.h"
 #include "gui/gui_globals.h"
 
@@ -41,7 +40,6 @@ namespace hal
 
     MediaViewerPlugin::MediaViewerPlugin()
     {
-        m_extensions.push_back(new GuiExtensionMediaViewer);
     }
 
     std::string MediaViewerPlugin::get_name() const
