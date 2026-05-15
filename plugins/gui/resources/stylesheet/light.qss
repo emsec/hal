@@ -1451,6 +1451,36 @@ hal--MediaViewer QLabel
     color : black;
 }
 
+hal--MediaViewer QSlider::groove:horizontal
+{
+    background    : rgb(200, 200, 200);
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::add-page:horizontal
+{
+    background    : rgb(200, 200, 200);
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::sub-page:horizontal
+{
+    background    : #3192C5;
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::handle:horizontal
+{
+    background    : #5E5E5E;
+    width         : 12px;
+    height        : 12px;
+    margin        : -4px 0;
+    border-radius : 6px;
+}
+
 hal--GraphicsQssAdapter
 {
     qproperty-netBaseColor: #000000;

@@ -1396,6 +1396,36 @@ hal--gui_graph_gate_selection_widget::item
     border-right : 1px solid rgb(169, 183, 198);
 }
 
+hal--MediaViewer QSlider::groove:horizontal
+{
+    background    : #5E5E5E;
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::add-page:horizontal
+{
+    background    : #5E5E5E;
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::sub-page:horizontal
+{
+    background    : #3192C5;
+    height        : 4px;
+    border-radius : 2px;
+}
+
+hal--MediaViewer QSlider::handle:horizontal
+{
+    background    : rgba(228, 228, 228, 1);
+    width         : 12px;
+    height        : 12px;
+    margin        : -4px 0;
+    border-radius : 6px;
+}
+
 hal--GraphicsQssAdapter
 {
     qproperty-netBaseColor: rgb(200, 200, 200);
