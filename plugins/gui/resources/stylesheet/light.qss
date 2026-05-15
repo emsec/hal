@@ -1446,6 +1446,11 @@ hal--SelectionDetailsWidget QLabel
     color : black
 }
 
+hal--MediaViewer QLabel
+{
+    color : black;
+}
+
 hal--GraphicsQssAdapter
 {
     qproperty-netBaseColor: #000000;

@@ -150,12 +150,10 @@ namespace hal
         QLabel* emptyLabel = new QLabel("No file loaded — click 'Open media file' to begin.", mDisplayStack);
         emptyLabel->setAlignment(Qt::AlignCenter);
         emptyLabel->setWordWrap(true);
-        emptyLabel->setForegroundRole(QPalette::PlaceholderText);  // muted, theme-aware
 
         mErrorLabel = new QLabel(mDisplayStack);
         mErrorLabel->setAlignment(Qt::AlignCenter);
         mErrorLabel->setWordWrap(true);
-        mErrorLabel->setForegroundRole(QPalette::BrightText);      // contrasting, theme-aware
 
         mDisplayStack->addWidget(emptyLabel);   // page 0
         mDisplayStack->addWidget(mVideoWidget); // page 1
