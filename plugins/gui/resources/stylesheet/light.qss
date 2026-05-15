@@ -1481,6 +1481,11 @@ hal--MediaViewer QSlider::handle:horizontal
     border-radius : 6px;
 }
 
+hal--MediaViewer QComboBox QAbstractItemView
+{
+    min-width : 5em;
+}
+
 hal--GraphicsQssAdapter
 {
     qproperty-netBaseColor: #000000;
