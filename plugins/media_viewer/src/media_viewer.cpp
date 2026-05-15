@@ -45,7 +45,6 @@
 #include <QSizePolicy>
 #include <QSlider>
 #include <QStackedWidget>
-#include <QStyle>
 #include <QTime>
 #include <QToolButton>
 #include <QToolTip>
@@ -86,7 +85,7 @@ namespace hal
         // Play / Pause button
         // ---------------------------------------------------------------
         mPlayPauseButton = new QToolButton(this);
-        mPlayPauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        mPlayPauseButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/run"));
         mPlayPauseButton->setToolTip("Play");
         mPlayPauseButton->setAutoRaise(true);
         connect(mPlayPauseButton, &QToolButton::clicked, this, &MediaViewer::handlePlayPauseToggle);
@@ -121,7 +120,7 @@ namespace hal
         // Mute button
         // ---------------------------------------------------------------
         mMuteButton = new QToolButton(this);
-        mMuteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        mMuteButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/volume"));
         mMuteButton->setToolTip("Mute");
         mMuteButton->setAutoRaise(true);
         connect(mMuteButton, &QToolButton::clicked, this, &MediaViewer::handleMuteToggle);
@@ -302,12 +301,12 @@ namespace hal
 
         if (state == QMediaPlayer::PlayingState)
         {
-            mPlayPauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+            mPlayPauseButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/pause"));
             mPlayPauseButton->setToolTip("Pause");
         }
         else
         {
-            mPlayPauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+            mPlayPauseButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/run"));
             mPlayPauseButton->setToolTip("Play");
         }
     }
@@ -358,7 +357,7 @@ namespace hal
         {
             mMuted = false;
             mAudioOutput->setMuted(false);
-            mMuteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+            mMuteButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/volume"));
         }
         mAudioOutput->setVolume(static_cast<float>(value) / 100.0f);
     }
@@ -368,9 +367,9 @@ namespace hal
         mMuted = !mMuted;
         mAudioOutput->setMuted(mMuted);
         if (mMuted)
-            mMuteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+            mMuteButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/volume-muted"));
         else
-            mMuteButton->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+            mMuteButton->setIcon(gui_utility::getStyledSvgIcon("all->#000000", ":/icons/volume"));
     }
 
     void MediaViewer::handleMediaError(QMediaPlayer::Error err, const QString& msg)

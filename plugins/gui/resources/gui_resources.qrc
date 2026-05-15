@@ -44,6 +44,9 @@
         <file alias="numbered-list">icons/0186-list-numbered.svg</file>
         <file alias="list">icons/0188-list2.svg</file>
         <file alias="folder">icons/0048-folder.svg</file>
+        <file alias="pause">icons/pause.svg</file>
+        <file alias="volume">icons/volume.svg</file>
+        <file alias="volume-muted">icons/volume-muted.svg</file>
         <file alias="floppy">icons/0099-floppy-disk.svg</file>
         <file alias="database">icons/0101-database.svg</file>
         <file alias="drive">icons/0100-drive.svg</file>
