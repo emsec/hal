@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/pins/gate_pin.h"
 
 #include <unordered_map>
 
@@ -36,22 +37,20 @@ namespace hal
     public:
         /**
          * Maps an output pin to a specific slice of an INIT string.
-         * When bit_count is 0 the full INIT string is used (legacy behaviour).
          */
         struct LUTOutputConfig
         {
             std::string init_identifier;
-            u32 bit_offset = 0;
-            u32 bit_count  = 0;
+            u32 bit_offset;
+            u32 bit_count;
         };
 
         /**
-         * Construct a new LUTComponent with given child component and bit-order.
+         * Construct a new LUTComponent.
          *
-         * @param[in] component - Another component to be added as a child component.
          * @param[in] init_ascending - True if ascending bit-order, false otherwise.
          */
-        LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
+        explicit LUTComponent(bool init_ascending);
 
         /**
          * Get the type of the gate type component.
@@ -92,15 +91,42 @@ namespace hal
         void set_init_ascending(bool init_ascending = true);
 
         /**
-         * Associate an output pin with a specific INIT identifier and an optional bit range.
-         * When bit_count is 0 the full INIT string starting at bit_offset is used.
+         * Associate an output pin with a specific INIT identifier and a bit range.
+         * Overwrites any existing configuration for the same pin name.
          *
          * @param[in] pin_name - Name of the LUT output pin.
          * @param[in] init_identifier - The data identifier within the INIT category.
          * @param[in] bit_offset - First bit (LSB = 0) of the slice within the parsed INIT value.
-         * @param[in] bit_count - Number of bits in the slice; must be a power of two, or 0 for full string.
+         * @param[in] bit_count - Number of bits in the slice; must be a non-zero power of two.
          */
-        void set_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset = 0, u32 bit_count = 0);
+        void add_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset, u32 bit_count);
+
+        /**
+         * Associate an output pin with a specific INIT identifier and a bit range.
+         * Overwrites any existing configuration for the same pin.
+         *
+         * @param[in] pin - The LUT output pin.
+         * @param[in] init_identifier - The data identifier within the INIT category.
+         * @param[in] bit_offset - First bit (LSB = 0) of the slice within the parsed INIT value.
+         * @param[in] bit_count - Number of bits in the slice; must be a non-zero power of two.
+         */
+        void add_output_pin_config(const GatePin* pin, const std::string& init_identifier, u32 bit_offset, u32 bit_count);
+
+        /**
+         * Remove the output configuration for a specific pin.
+         *
+         * @param[in] pin_name - Name of the LUT output pin.
+         * @returns True if an entry was removed, false if no entry existed for that pin.
+         */
+        bool remove_output_pin_config(const std::string& pin_name);
+
+        /**
+         * Remove the output configuration for a specific pin.
+         *
+         * @param[in] pin - The LUT output pin.
+         * @returns True if an entry was removed, false if no entry existed for that pin.
+         */
+        bool remove_output_pin_config(const GatePin* pin);
 
         /**
          * Get the output configuration for a specific pin, or nullptr if none is set.
@@ -119,35 +145,32 @@ namespace hal
 
         /**
          * Extract a bit slice from a full INIT hex string.
-         * Returns the slice as an uppercase hex string padded to (bit_count+3)/4 characters.
-         * If bit_count is 0 or full_hex is empty the string is returned unchanged.
+         * Returns the slice as an uppercase hex string padded to `(bit_count+3)/4` characters.
          *
-         * @param[in] full_hex   - Full INIT value as a hex string.
+         * @param[in] full_hex   - Full INIT value as a hex string; must not be empty and must
+         *                         contain at least `(bit_offset+bit_count+3)/4` hex chars.
          * @param[in] bit_offset - First bit (LSB = 0) of the slice.
-         * @param[in] bit_count  - Number of bits in the slice; 0 means full string.
-         * @returns OK with the extracted hex string, or ERR on parse failure.
+         * @param[in] bit_count  - Number of bits in the slice; must be non-zero.
+         * @returns OK with the extracted hex string on success, an error if `full_hex` is empty, too short, or invalid.
          */
         static Result<std::string> extract_init_slice(const std::string& full_hex, u32 bit_offset, u32 bit_count);
 
         /**
-         * Splice a new slice value into a full INIT hex string at [bit_offset, bit_offset+bit_count).
-         * When bit_count is 0 the slice_hex is treated as the full replacement value (uppercased).
-         * The output preserves the digit width of full_hex; if full_hex is empty the minimum width
+         * Splice a new slice value into a full INIT hex string at `[bit_offset, bit_offset+bit_count)`.
+         * The output preserves the digit width of `full_hex`; if `full_hex` is empty the minimum width
          * needed to hold the splice is used.
          *
          * @param[in] full_hex   - Current full INIT value as a hex string (may be empty).
-         * @param[in] slice_hex  - New value for the bit slice (or full replacement when bit_count==0).
+         * @param[in] slice_hex  - New value for the bit slice.
          * @param[in] bit_offset - First bit (LSB = 0) of the slice.
-         * @param[in] bit_count  - Number of bits in the slice; 0 means full replacement.
-         * @returns OK with the updated full hex string, or ERR on parse failure.
+         * @param[in] bit_count  - Number of bits in the slice; must be non-zero.
+         * @returns OK with the updated full hex string on success, an error on parse failure.
          */
         static Result<std::string> splice_init_slice(const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count);
 
     private:
-        static constexpr ComponentType m_type          = ComponentType::lut;
-        std::unique_ptr<GateTypeComponent> m_component = nullptr;
-
-        bool m_init_ascending = true;
+        static constexpr ComponentType m_type = ComponentType::lut;
+        bool m_init_ascending                 = true;
         std::unordered_map<std::string, LUTOutputConfig> m_output_pin_configs;
     };
 }    // namespace hal

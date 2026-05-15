@@ -102,7 +102,7 @@ namespace hal
         py::class_<LUTComponent::LUTOutputConfig>(py_lut_component, "LUTOutputConfig", R"(
             Per-output-pin INIT configuration for a LUT component.
         )")
-            .def(py::init<>())
+            .def(py::init([]() { return LUTComponent::LUTOutputConfig{"", 0, 0}; }))
             .def_readwrite("init_identifier", &LUTComponent::LUTOutputConfig::init_identifier, R"(
                 The data identifier within the INIT category for this output pin.
 
@@ -114,25 +114,63 @@ namespace hal
                 :type: int
             )")
             .def_readwrite("bit_count", &LUTComponent::LUTOutputConfig::bit_count, R"(
-                The number of bits in the slice. 0 means the full INIT string is used.
+                The number of bits in the slice. Must be a non-zero power of two.
 
                 :type: int
             )");
 
-        py_lut_component.def("set_output_pin_config",
-                             &LUTComponent::set_output_pin_config,
+        py_lut_component.def("add_output_pin_config",
+                             static_cast<void (LUTComponent::*)(const std::string&, const std::string&, u32, u32)>(&LUTComponent::add_output_pin_config),
                              py::arg("pin_name"),
                              py::arg("init_identifier"),
-                             py::arg("bit_offset") = 0,
-                             py::arg("bit_count")  = 0,
+                             py::arg("bit_offset"),
+                             py::arg("bit_count"),
                              R"(
-            Associate an output pin with a specific INIT identifier and an optional bit range.
-            When bit_count is 0 the full INIT string is used.
+            Associate an output pin with a specific INIT identifier and a bit range.
+            Overwrites any existing configuration for the same pin name.
 
             :param str pin_name: Name of the LUT output pin.
             :param str init_identifier: The data identifier within the INIT category.
-            :param int bit_offset: First bit of the slice within the parsed INIT value. Defaults to 0.
-            :param int bit_count: Number of bits in the slice; must be a power of two, or 0 for the full string. Defaults to 0.
+            :param int bit_offset: First bit (LSB = 0) of the slice within the parsed INIT value.
+            :param int bit_count: Number of bits in the slice; must be a non-zero power of two.
+        )");
+
+        py_lut_component.def("add_output_pin_config",
+                             static_cast<void (LUTComponent::*)(const GatePin*, const std::string&, u32, u32)>(&LUTComponent::add_output_pin_config),
+                             py::arg("pin"),
+                             py::arg("init_identifier"),
+                             py::arg("bit_offset"),
+                             py::arg("bit_count"),
+                             R"(
+            Associate an output pin with a specific INIT identifier and a bit range.
+            Overwrites any existing configuration for the same pin.
+
+            :param hal_py.GatePin pin: The LUT output pin.
+            :param str init_identifier: The data identifier within the INIT category.
+            :param int bit_offset: First bit (LSB = 0) of the slice within the parsed INIT value.
+            :param int bit_count: Number of bits in the slice; must be a non-zero power of two.
+        )");
+
+        py_lut_component.def("remove_output_pin_config",
+                             static_cast<bool (LUTComponent::*)(const std::string&)>(&LUTComponent::remove_output_pin_config),
+                             py::arg("pin_name"),
+                             R"(
+            Remove the output configuration for a specific pin.
+
+            :param str pin_name: Name of the LUT output pin.
+            :returns: True if an entry was removed, False if no entry existed for that pin.
+            :rtype: bool
+        )");
+
+        py_lut_component.def("remove_output_pin_config",
+                             static_cast<bool (LUTComponent::*)(const GatePin*)>(&LUTComponent::remove_output_pin_config),
+                             py::arg("pin"),
+                             R"(
+            Remove the output configuration for a specific pin.
+
+            :param hal_py.GatePin pin: The LUT output pin.
+            :returns: True if an entry was removed, False if no entry existed for that pin.
+            :rtype: bool
         )");
 
         py_lut_component.def(
@@ -156,6 +194,59 @@ namespace hal
 
             :returns: Dict mapping pin name to LUTOutputConfig.
             :rtype: dict[str, hal_py.LUTComponent.LUTOutputConfig]
+        )");
+
+        py_lut_component.def_static(
+            "extract_init_slice",
+            [](const std::string& full_hex, u32 bit_offset, u32 bit_count) -> std::optional<std::string> {
+                auto res = LUTComponent::extract_init_slice(full_hex, bit_offset, bit_count);
+                if (res.is_error())
+                {
+                    log_error("python_context", "{}.", res.get_error().get());
+                    return std::nullopt;
+                }
+                return res.get();
+            },
+            py::arg("full_hex"),
+            py::arg("bit_offset"),
+            py::arg("bit_count"),
+            R"(
+            Extract a bit slice from a full INIT hex string.
+            Returns the slice as an uppercase hex string padded to ``(bit_count+3)//4`` characters.
+
+            :param str full_hex: Full INIT value as a hex string; must not be empty and must contain at least ``(bit_offset+bit_count+3)//4`` hex chars.
+            :param int bit_offset: First bit (LSB = 0) of the slice.
+            :param int bit_count: Number of bits in the slice; must be non-zero.
+            :returns: The extracted hex string, or ``None`` if ``full_hex`` is empty, too short, or invalid.
+            :rtype: str or None
+        )");
+
+        py_lut_component.def_static(
+            "splice_init_slice",
+            [](const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count) -> std::optional<std::string> {
+                auto res = LUTComponent::splice_init_slice(full_hex, slice_hex, bit_offset, bit_count);
+                if (res.is_error())
+                {
+                    log_error("python_context", "{}.", res.get_error().get());
+                    return std::nullopt;
+                }
+                return res.get();
+            },
+            py::arg("full_hex"),
+            py::arg("slice_hex"),
+            py::arg("bit_offset"),
+            py::arg("bit_count"),
+            R"(
+            Splice a new slice value into a full INIT hex string at ``[bit_offset, bit_offset+bit_count)``.
+            The output preserves the digit width of ``full_hex``; if ``full_hex`` is empty the minimum width
+            needed to hold the splice is used.
+
+            :param str full_hex: Current full INIT value as a hex string (may be empty).
+            :param str slice_hex: New value for the bit slice.
+            :param int bit_offset: First bit (LSB = 0) of the slice.
+            :param int bit_count: Number of bits in the slice; must be non-zero.
+            :returns: The updated full hex string, or ``None`` on parse failure.
+            :rtype: str or None
         )");
 
         py::class_<FFComponent, GateTypeComponent, RawPtrWrapper<FFComponent>> py_ff_component(m, "FFComponent", R"(

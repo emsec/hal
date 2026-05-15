@@ -289,7 +289,7 @@ namespace hal
             return key;
         };
 
-        // Resolve the bit slice for the currently selected pin (bit_count==0 means full string)
+        // Resolve the bit slice for the currently selected pin
         u32 bit_offset = 0, bit_count = 0;
         if (LUTComponent* lc = mCurrentGate->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
             if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(mSelectedLutPin); cfg != nullptr)

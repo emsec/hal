@@ -1157,7 +1157,8 @@
                 "output_pins": [
                     {
                         "pin": "O0",
-                        "data_identifier": "INIT"
+                        "data_identifier": "INIT",
+                        "bit_count": 64
                     },
                     {
                         "pin": "O1",
@@ -1293,11 +1294,13 @@
                 "output_pins": [
                     {
                         "pin": "O0",
-                        "data_identifier": "INIT1"
+                        "data_identifier": "INIT1",
+                        "bit_count": 64
                     },
                     {
                         "pin": "O1",
-                        "data_identifier": "INIT2"
+                        "data_identifier": "INIT2",
+                        "bit_count": 64
                     }
                 ]
             },

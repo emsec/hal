@@ -643,18 +643,20 @@ namespace hal
             }
         }
 
-        // For legacy LUT configs (no output_pins in HGL): populate default per-pin configs
-        // so every LUT output pin maps to the full init string of the single identifier.
-        if (LUTComponent* lut_comp = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
-            lut_comp != nullptr && lut_comp->get_output_pin_configs().empty())
+        // Legacy LUT configs (no output_pins): populate per-pin configs now that pins exist.
+        if (file_version < 6 && gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
         {
-            if (const InitComponent* init_comp = lut_comp->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                init_comp != nullptr && !init_comp->get_init_identifiers().empty())
+            const auto& lut_cfg = gate_type["lut_config"];
+            if (!lut_cfg.HasMember("output_pins") && lut_cfg.HasMember("data_identifier") && lut_cfg["data_identifier"].IsString())
             {
-                const std::string& identifier = init_comp->get_init_identifiers().front();
-                for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
+                if (LUTComponent* lut_comp = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_comp != nullptr)
                 {
-                    lut_comp->set_output_pin_config(pin->get_name(), identifier, 0, 0);
+                    const std::string identifier = lut_cfg["data_identifier"].GetString();
+                    const u32 legacy_bit_count = 1u << static_cast<u32>(gt->get_input_pins().size());
+                    for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
+                    {
+                        lut_comp->add_output_pin_config(pin->get_name(), identifier, 0, legacy_bit_count);
+                    }
                 }
             }
         }
@@ -728,17 +730,11 @@ namespace hal
             return ERR("could not parse LUT configuration: missing or invalid bit order");
         }
 
-        if (!lut_config.HasMember("data_category") || !lut_config["data_category"].IsString())
-        {
-            return ERR("could not parse LUT configuration: missing or invalid data category for LUT initialization");
-        }
-
         const bool is_ascending = std::string(lut_config["bit_order"].GetString()) == "ascending";
 
         // New format: output_pins array with per-pin INIT identifier and optional bit range.
         if (lut_config.HasMember("output_pins") && lut_config["output_pins"].IsArray())
         {
-            std::vector<std::string> all_identifiers;
             std::vector<std::tuple<std::string, std::string, u32, u32>> pin_cfgs;    // pin, identifier, offset, count
 
             for (const auto& entry : lut_config["output_pins"].GetArray())
@@ -755,36 +751,35 @@ namespace hal
                 const std::string pin_name   = entry["pin"].GetString();
                 const std::string identifier = entry["data_identifier"].GetString();
                 const u32 bit_offset         = (entry.HasMember("bit_offset") && entry["bit_offset"].IsUint()) ? entry["bit_offset"].GetUint() : 0;
-                const u32 bit_count          = (entry.HasMember("bit_count") && entry["bit_count"].IsUint()) ? entry["bit_count"].GetUint() : 0;
+
+                if (!entry.HasMember("bit_count") || !entry["bit_count"].IsUint())
+                {
+                    return ERR("could not parse LUT configuration: missing or invalid bit_count for pin '" + pin_name + "'");
+                }
+                const u32 bit_count = entry["bit_count"].GetUint();
 
                 pin_cfgs.emplace_back(pin_name, identifier, bit_offset, bit_count);
-
-                if (std::find(all_identifiers.begin(), all_identifiers.end(), identifier) == all_identifiers.end())
-                {
-                    all_identifiers.push_back(identifier);
-                }
             }
 
-            auto init_component = GateTypeComponent::create_init_component(lut_config["data_category"].GetString(), all_identifiers);
-            auto lut_comp       = GateTypeComponent::create_lut_component(std::move(init_component), is_ascending);
+            auto lut_comp = GateTypeComponent::create_lut_component(is_ascending);
 
             LUTComponent* lut_ptr = static_cast<LUTComponent*>(lut_comp.get());
             for (const auto& [pin_name, identifier, bit_offset, bit_count] : pin_cfgs)
             {
-                lut_ptr->set_output_pin_config(pin_name, identifier, bit_offset, bit_count);
+                lut_ptr->add_output_pin_config(pin_name, identifier, bit_offset, bit_count);
             }
 
             return OK(std::move(lut_comp));
         }
 
         // Legacy format (version < 5): single data_identifier, no per-pin configs.
+        // Per-pin output_pin_configs are populated later in parse_gate_type once pins exist.
         if (!lut_config.HasMember("data_identifier") || !lut_config["data_identifier"].IsString())
         {
             return ERR("could not parse LUT configuration: missing or invalid data identifier for LUT initialization");
         }
 
-        auto init_component = GateTypeComponent::create_init_component(lut_config["data_category"].GetString(), {lut_config["data_identifier"].GetString()});
-        return OK(GateTypeComponent::create_lut_component(std::move(init_component), is_ascending));
+        return OK(GateTypeComponent::create_lut_component(is_ascending));
     }
 
     Result<std::unique_ptr<GateTypeComponent>> HGLParser::parse_ff_config(const rapidjson::Value& ff_config)

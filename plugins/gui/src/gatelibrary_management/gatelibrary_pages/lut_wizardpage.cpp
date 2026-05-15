@@ -127,9 +127,8 @@ namespace hal
         mPinConfigTable->setCellWidget(row, 2, offsetSpin);
 
         auto* countSpin = new QSpinBox(mPinConfigTable);
-        countSpin->setRange(0, 1 << 20);
-        countSpin->setSpecialValueText("full");
-        countSpin->setValue(static_cast<int>(bitCount));
+        countSpin->setRange(1, 1 << 20);
+        countSpin->setValue(static_cast<int>(bitCount > 0 ? bitCount : 1));
         mPinConfigTable->setCellWidget(row, 3, countSpin);
     }
 
@@ -149,7 +148,7 @@ namespace hal
 
     void LUTWizardPage::addRow()
     {
-        addTableRow("", "INIT", 0, 0, getOutputPinsFromWizard());
+        addTableRow("", "INIT", 0, 1, getOutputPinsFromWizard());
     }
 
     void LUTWizardPage::removeSelectedRow()

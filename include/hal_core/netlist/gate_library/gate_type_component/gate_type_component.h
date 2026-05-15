@@ -57,13 +57,12 @@ namespace hal
         };
 
         /**
-         * Create a new LUTComponent with given child component and bit-order.
-         * 
-         * @param[in] component - Another component to be added as a child component.
+         * Create a new LUTComponent.
+         *
          * @param[in] init_ascending - True if ascending bit-order, false otherwise.
          * @returns The LUTComponent.
          */
-        static std::unique_ptr<GateTypeComponent> create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending);
+        static std::unique_ptr<GateTypeComponent> create_lut_component(bool init_ascending);
 
         /**
          * Create a new FFComponent with given child component and tzhe Boolean functions describing the next state and the clock signal.

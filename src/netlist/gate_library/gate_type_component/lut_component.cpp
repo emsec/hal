@@ -2,14 +2,13 @@
 
 #include "hal_core/utilities/log.h"
 
-#include <algorithm>
 #include <iomanip>
 #include <limits>
 #include <sstream>
 
 namespace hal
 {
-    LUTComponent::LUTComponent(std::unique_ptr<GateTypeComponent> component, bool init_ascending) : m_component(std::move(component)), m_init_ascending(init_ascending)
+    LUTComponent::LUTComponent(bool init_ascending) : m_init_ascending(init_ascending)
     {
     }
 
@@ -25,24 +24,6 @@ namespace hal
 
     std::vector<GateTypeComponent*> LUTComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
-        if (m_component != nullptr)
-        {
-            std::vector<GateTypeComponent*> res = m_component->get_components(filter);
-            if (filter)
-            {
-                if (filter(m_component.get()))
-                {
-                    res.push_back(m_component.get());
-                }
-            }
-            else
-            {
-                res.push_back(m_component.get());
-            }
-
-            return res;
-        }
-
         return {};
     }
 
@@ -56,14 +37,39 @@ namespace hal
         m_init_ascending = ascending;
     }
 
-    void LUTComponent::set_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset, u32 bit_count)
+    void LUTComponent::add_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset, u32 bit_count)
     {
-        if (bit_count != 0 && (bit_count & (bit_count - 1)) != 0)
+        if (bit_count == 0 || (bit_count & (bit_count - 1)) != 0)
         {
-            log_error("lut_component", "cannot set output pin config for pin '{}': bit_count {} is not a power of two.", pin_name, bit_count);
+            log_error("lut_component", "cannot add output pin config for pin '{}': bit_count {} must be a non-zero power of two.", pin_name, bit_count);
             return;
         }
         m_output_pin_configs[pin_name] = {init_identifier, bit_offset, bit_count};
+    }
+
+    void LUTComponent::add_output_pin_config(const GatePin* pin, const std::string& init_identifier, u32 bit_offset, u32 bit_count)
+    {
+        if (pin == nullptr)
+        {
+            log_error("lut_component", "cannot add output pin config: pin is nullptr.");
+            return;
+        }
+        add_output_pin_config(pin->get_name(), init_identifier, bit_offset, bit_count);
+    }
+
+    bool LUTComponent::remove_output_pin_config(const std::string& pin_name)
+    {
+        return m_output_pin_configs.erase(pin_name) > 0;
+    }
+
+    bool LUTComponent::remove_output_pin_config(const GatePin* pin)
+    {
+        if (pin == nullptr)
+        {
+            log_error("lut_component", "cannot remove output pin config: pin is nullptr.");
+            return false;
+        }
+        return remove_output_pin_config(pin->get_name());
     }
 
     const LUTComponent::LUTOutputConfig* LUTComponent::get_output_pin_config(const std::string& pin_name) const
@@ -82,8 +88,22 @@ namespace hal
 
     Result<std::string> LUTComponent::extract_init_slice(const std::string& full_hex, u32 bit_offset, u32 bit_count)
     {
-        if (bit_count == 0 || full_hex.empty())
-            return OK(full_hex);
+        if (bit_count == 0)
+        {
+            return ERR("bit_count must be non-zero");
+        }
+
+        if (full_hex.empty())
+        {
+            return ERR("INIT string is empty");
+        }
+
+        const size_t min_chars = (static_cast<size_t>(bit_offset) + bit_count + 3) / 4;
+        if (full_hex.size() < min_chars)
+        {
+            return ERR("INIT string '" + full_hex + "' is too short: need at least " + std::to_string(min_chars) + " hex char(s) to cover slice [" + std::to_string(bit_offset) + ", "
+                       + std::to_string(bit_offset + bit_count) + "), got " + std::to_string(full_hex.size()));
+        }
 
         u64 full_val = 0;
         try
@@ -111,9 +131,7 @@ namespace hal
     {
         if (bit_count == 0)
         {
-            std::string upper = slice_hex;
-            std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
-            return OK(upper);
+            return ERR("bit_count must be non-zero");
         }
 
         u64 existing = 0;
@@ -150,9 +168,7 @@ namespace hal
         const u64 mask    = (bit_count >= 64) ? std::numeric_limits<u64>::max() : ((1ULL << bit_count) - 1);
         const u64 spliced = (existing & ~(mask << bit_offset)) | ((new_slice & mask) << bit_offset);
 
-        const int width = full_hex.empty()
-                              ? static_cast<int>((bit_offset + bit_count + 3) / 4)
-                              : static_cast<int>(full_hex.size());
+        const int width = full_hex.empty() ? static_cast<int>((bit_offset + bit_count + 3) / 4) : static_cast<int>(full_hex.size());
 
         std::stringstream ss;
         ss << std::hex << std::uppercase << std::setfill('0') << std::setw(width) << spliced;

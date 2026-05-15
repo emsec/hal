@@ -800,22 +800,70 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), true));
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
         ASSERT_NE(gt, nullptr);
 
         LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         ASSERT_NE(lut_component, nullptr);
-        InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::init; });
-        ASSERT_NE(init_component, nullptr);
         EXPECT_EQ(lut_component->is_init_ascending(), true);
-        EXPECT_EQ(init_component->get_init_category(), "category1");
-        EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier1"}));
+        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
+
+        // add by name
+        lut_component->add_output_pin_config("O", "identifier1", 0, 1);
+        ASSERT_NE(lut_component->get_output_pin_config("O"), nullptr);
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->init_identifier, "identifier1");
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_offset, 0u);
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_count, 1u);
+
+        // overwrite by name
+        lut_component->add_output_pin_config("O", "identifier2", 4, 8);
+        ASSERT_NE(lut_component->get_output_pin_config("O"), nullptr);
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->init_identifier, "identifier2");
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_offset, 4u);
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_count, 8u);
+
+        // add by pin pointer — create a pin first
+        auto pin_res = gt->create_pin("Q", PinDirection::output, PinType::lut);
+        ASSERT_FALSE(pin_res.is_error());
+        GatePin* q_pin = gt->get_pin_by_name("Q");
+        ASSERT_NE(q_pin, nullptr);
+
+        lut_component->add_output_pin_config(q_pin, "INIT", 0, 4);
+        ASSERT_NE(lut_component->get_output_pin_config("Q"), nullptr);
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->init_identifier, "INIT");
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_offset, 0u);
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_count, 4u);
+
+        // overwrite by pin pointer
+        lut_component->add_output_pin_config(q_pin, "INIT2", 8, 16);
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->init_identifier, "INIT2");
+
+        // remove by name
+        EXPECT_FALSE(lut_component->remove_output_pin_config("nonexistent"));
+        EXPECT_TRUE(lut_component->remove_output_pin_config("O"));
+        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
+        EXPECT_FALSE(lut_component->remove_output_pin_config("O"));
+
+        // remove by pin pointer
+        EXPECT_TRUE(lut_component->remove_output_pin_config(q_pin));
+        EXPECT_EQ(lut_component->get_output_pin_config("Q"), nullptr);
+        EXPECT_FALSE(lut_component->remove_output_pin_config(q_pin));
+
+        // nullptr safety
+        lut_component->add_output_pin_config(static_cast<const GatePin*>(nullptr), "X", 0, 1);
+        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
+        EXPECT_FALSE(lut_component->remove_output_pin_config(static_cast<const GatePin*>(nullptr)));
+
+        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
+
+        // reject invalid bit_count
+        lut_component->add_output_pin_config("O", "X", 0, 0);
+        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
+        lut_component->add_output_pin_config("O", "X", 0, 3);
+        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
+
         lut_component->set_init_ascending(false);
-        init_component->set_init_category("category2");
-        init_component->set_init_identifiers({"identifier2"});
         EXPECT_EQ(lut_component->is_init_ascending(), false);
-        EXPECT_EQ(init_component->get_init_category(), "category2");
-        EXPECT_EQ(init_component->get_init_identifiers(), std::vector<std::string>({"identifier2"}));
 
         TEST_END
     }

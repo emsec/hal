@@ -587,48 +587,114 @@ namespace hal
         )");
 
         py_gate.def(
-            "get_init_data",
-            [](Gate& self) -> std::vector<std::string> {
-                auto res = self.get_init_data();
+            "get_init_string",
+            [](Gate& self, const std::string& pin_name) -> std::optional<std::string> {
+                auto res = self.get_init_string(pin_name);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while getting INIT data:\n{}", res.get_error().get());
-                    return {};
+                    log_error("python_context", "error encountered while getting INIT string:\n{}", res.get_error().get());
+                    return std::nullopt;
                 }
             },
+            py::arg("pin_name"),
             R"(
-            Get the INIT data of the gate, if available. 
-            An error is returned in case the gate does not hold any INIT data.
+            Get the INIT string owned by the given LUT output or internal pin.
+            Returns the pin's hex slice, or the full INIT string when no bit range is configured.
+            An error is returned when the gate has no LUT component, the pin does not exist,
+            its type is not ``PinType.lut``, or its direction is neither ``output`` nor ``internal``.
 
-            :returns: The INIT data as a list on success, an empty list otherwise.
-            :rtype: list[str]
+            :param str pin_name: Name of the LUT pin.
+            :returns: The INIT string as an uppercase hex string on success, ``None`` otherwise.
+            :rtype: str or None
         )");
 
         py_gate.def(
-            "set_init_data",
-            [](Gate& self, const std::vector<std::string>& init_data) -> bool {
-                auto res = self.set_init_data(init_data);
+            "get_init_string",
+            [](Gate& self, GatePin* pin) -> std::optional<std::string> {
+                auto res = self.get_init_string(pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting INIT string:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("pin"),
+            R"(
+            Get the INIT string owned by the given LUT output or internal pin.
+            Returns the pin's hex slice, or the full INIT string when no bit range is configured.
+            An error is returned when the gate has no LUT component, the pin is ``None``,
+            its type is not ``PinType.lut``, or its direction is neither ``output`` nor ``internal``.
+
+            :param hal_py.GatePin pin: The LUT pin.
+            :returns: The INIT string as an uppercase hex string on success, ``None`` otherwise.
+            :rtype: str or None
+        )");
+
+        py_gate.def(
+            "set_init_string",
+            [](Gate& self, const std::string& pin_name, const std::string& hex) -> bool {
+                auto res = self.set_init_string(pin_name, hex);
                 if (res.is_ok())
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while setting INIT data:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while setting INIT string:\n{}", res.get_error().get());
                     return false;
                 }
             },
-            py::arg("init_data"),
+            py::arg("pin_name"),
+            py::arg("hex"),
             R"(
-            Set the INIT data of the gate, if available.
-            An error is returned in case the gate does not hold any INIT data.
+            Set the INIT string for the given LUT output or internal pin.
+            The hex string must consist only of hex digits (no ``0x`` prefix). When a bit range
+            is configured for the pin its length must equal ``(bit_count + 3) / 4`` characters.
+            An error is returned when the gate has no LUT component, the pin does not exist,
+            its type is not ``PinType.lut``, its direction is neither output nor internal,
+            the pin has no INIT config, or the hex string has an invalid format or length.
 
-            :param list[str] init_data: The INIT data as a list.
-            :returns: True on success, False otherwise.
+            :param str pin_name: Name of the LUT pin.
+            :param str hex: The INIT string as a hex string without ``0x`` prefix.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate.def(
+            "set_init_string",
+            [](Gate& self, GatePin* pin, const std::string& hex) -> bool {
+                auto res = self.set_init_string(pin, hex);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while setting INIT string:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin"),
+            py::arg("hex"),
+            R"(
+            Set the INIT string for the given LUT output or internal pin.
+            The hex string must consist only of hex digits (no ``0x`` prefix). When a bit range
+            is configured for the pin its length must equal ``(bit_count + 3) / 4`` characters.
+            An error is returned when the gate has no LUT component, the pin is None,
+            its type is not ``PinType.lut``, its direction is neither ``output`` nor ``internal``,
+            the pin has no INIT config, or the hex string has an invalid format or length.
+
+            :param hal_py.GatePin pin: The LUT pin.
+            :param str hex: The INIT string as a hex string without ``0x`` prefix.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
     }

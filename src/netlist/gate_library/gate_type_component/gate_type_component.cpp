@@ -21,14 +21,9 @@ namespace hal
                                                                                                                    {GateTypeComponent::ComponentType::state, "state"},
                                                                                                                    {GateTypeComponent::ComponentType::ram_port, "ram_port"}};
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_lut_component(std::unique_ptr<GateTypeComponent> component, bool init_ascending)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_lut_component(bool init_ascending)
     {
-        if (component == nullptr)
-        {
-            return nullptr;
-        }
-
-        return std::make_unique<LUTComponent>(std::move(component), init_ascending);
+        return std::make_unique<LUTComponent>(init_ascending);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
