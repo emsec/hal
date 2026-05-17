@@ -3,6 +3,7 @@
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -780,20 +781,46 @@ namespace hal
 
                     if (gt->has_property(GateTypeProperty::c_lut))
                     {
-                        const auto init_res = g->get_init_data();
-                        if (init_res.is_error())
+                        const LUTComponent* lc = gt->get_component_as<LUTComponent>(
+                            [](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                        if (lc == nullptr)
                         {
-                            return ERR_APPEND(init_res.get_error(),
-                                              "unable to decompose gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
-                        }
-                        const auto init_vec = init_res.get();
-                        if (init_vec.size() != 1)
-                        {
-                            return ERR("unable tor decompose gates of type: got " + std::to_string(init_vec.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
-                                       + std::to_string(g->get_id()));
+                            return ERR("unable to decompose gates of type: gate type '" + gt->get_name() + "' has no LUT component");
                         }
 
-                        init_data = init_vec;
+                        // Collect unique INIT strings in sorted identifier order (preserves former get_init_data behaviour)
+                        std::vector<std::string> ids;
+                        for (const auto& [_, cfg] : lc->get_output_pin_configs())
+                        {
+                            if (std::find(ids.begin(), ids.end(), cfg.init_identifier) == ids.end())
+                                ids.push_back(cfg.init_identifier);
+                        }
+                        std::sort(ids.begin(), ids.end());
+
+                        for (const auto& id : ids)
+                        {
+                            for (const auto& [pin_name, cfg] : lc->get_output_pin_configs())
+                            {
+                                if (cfg.init_identifier == id)
+                                {
+                                    auto res = g->get_init_string(pin_name);
+                                    if (res.is_error())
+                                    {
+                                        return ERR_APPEND(res.get_error(),
+                                                          "unable to decompose gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID "
+                                                              + std::to_string(g->get_id()));
+                                    }
+                                    init_data.push_back(res.get());
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (init_data.size() != 1)
+                        {
+                            return ERR("unable to decompose gates of type: got " + std::to_string(init_data.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
+                                       + std::to_string(g->get_id()));
+                        }
                     }
 
                     // get resynth netlist from cache or create it
@@ -941,20 +968,46 @@ namespace hal
 
                 if (gt->has_property(GateTypeProperty::c_lut))
                 {
-                    const auto init_res = g->get_init_data();
-                    if (init_res.is_error())
+                    const LUTComponent* lc = gt->get_component_as<LUTComponent>(
+                        [](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                    if (lc == nullptr)
                     {
-                        return ERR_APPEND(init_res.get_error(),
-                                          "unable to re-synthesize gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
-                    }
-                    const auto init_vec = init_res.get();
-                    if (init_vec.size() != 1)
-                    {
-                        return ERR("unable tor re-synthesize gates of type: got " + std::to_string(init_vec.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
-                                   + std::to_string(g->get_id()));
+                        return ERR("unable to re-synthesize gates of type: gate type '" + gt->get_name() + "' has no LUT component");
                     }
 
-                    init_data = init_vec;
+                    // Collect unique INIT strings in sorted identifier order (preserves former get_init_data behaviour)
+                    std::vector<std::string> ids;
+                    for (const auto& [_, cfg] : lc->get_output_pin_configs())
+                    {
+                        if (std::find(ids.begin(), ids.end(), cfg.init_identifier) == ids.end())
+                            ids.push_back(cfg.init_identifier);
+                    }
+                    std::sort(ids.begin(), ids.end());
+
+                    for (const auto& id : ids)
+                    {
+                        for (const auto& [pin_name, cfg] : lc->get_output_pin_configs())
+                        {
+                            if (cfg.init_identifier == id)
+                            {
+                                auto res = g->get_init_string(pin_name);
+                                if (res.is_error())
+                                {
+                                    return ERR_APPEND(res.get_error(),
+                                                      "unable to re-synthesize gates of type: failed to get INIT string from gate '" + g->get_name() + "' with ID "
+                                                          + std::to_string(g->get_id()));
+                                }
+                                init_data.push_back(res.get());
+                                break;
+                            }
+                        }
+                    }
+
+                    if (init_data.size() != 1)
+                    {
+                        return ERR("unable to re-synthesize gates of type: got " + std::to_string(init_data.size()) + " INIT strings for gate '" + g->get_name() + "' with ID "
+                                   + std::to_string(g->get_id()));
+                    }
                 }
 
                 // get resynth netlist from cache or create it

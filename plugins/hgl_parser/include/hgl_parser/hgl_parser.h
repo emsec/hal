@@ -55,7 +55,7 @@ namespace hal
         Result<std::unique_ptr<GateLibrary>> parse(const std::filesystem::path& file_path) override;
 
     private:
-        const u32 HGL_FORMAT_VERSION = 5;
+        const u32 HGL_FORMAT_VERSION = 6;
         u32 file_version             = 1;
 
         struct PinCtx

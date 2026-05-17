@@ -7,6 +7,7 @@
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -439,17 +440,24 @@ namespace hal
                         fingerprint.unordered_fan_in.insert(fan_in_nets.cbegin(), fan_in_nets.cend());
                         if (fingerprint.type->has_property(GateTypeProperty::c_lut))
                         {
-                            if (const auto res = gate->get_init_data(); res.is_ok())
+                            auto lut_out_pins = fingerprint.type->get_pins([](const GatePin* p) {
+                                return p->get_type() == PinType::lut
+                                    && (p->get_direction() == PinDirection::output || p->get_direction() == PinDirection::internal);
+                            });
+                            if (!lut_out_pins.empty())
                             {
-                                const auto& init_str = res.get().front();
-                                for (const auto c : init_str)
+                                if (const auto res = gate->get_init_string(lut_out_pins.front()); res.is_ok())
                                 {
-                                    u8 tmp = std::toupper(c) - 0x30;
-                                    if (tmp > 9)
+                                    const auto& init_str = res.get();
+                                    for (const auto c : init_str)
                                     {
-                                        tmp -= 0x7;
+                                        u8 tmp = std::toupper(c) - 0x30;
+                                        if (tmp > 9)
+                                        {
+                                            tmp -= 0x7;
+                                        }
+                                        fingerprint.truth_table_hw += hw_map.at(tmp);
                                     }
-                                    fingerprint.truth_table_hw += hw_map.at(tmp);
                                 }
                             }
                         }
@@ -1867,30 +1875,23 @@ namespace hal
 
             for (auto g : nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
             {
-                auto res = g->get_init_data();
+                // skip if the gate type has more than one output pin
+                if (g->get_type()->get_output_pins().size() != 1)
+                {
+                    continue;
+                }
+
+                const auto out_ep  = g->get_fan_out_endpoints().front();
+                const GatePin* out_pin = out_ep->get_pin();
+
+                auto res = g->get_init_string(out_pin);
                 if (res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
                                       "unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to get original INIT string");
                 }
 
-                const auto original_inits = res.get();
-
-                if (original_inits.size() != 1)
-                {
-                    return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size())
-                               + " init data strings but expected exactly 1.");
-                }
-
-                const auto original_init = original_inits.front();
-
-                // skip if the gate type has more than one fan out endpoints
-                if (g->get_type()->get_output_pins().size() != 1)
-                {
-                    continue;
-                }
-
-                const auto out_ep = g->get_fan_out_endpoints().front();
+                const auto original_init = res.get();
 
                 // skip if the gate has more than one boolean function
                 if (g->get_boolean_functions().size() != 1)
@@ -1933,7 +1934,7 @@ namespace hal
                 // std::cout << "Org Init: " << g->get_init_data().get().front() << std::endl;
                 // std::cout << "New Init: " << new_init_string << std::endl;
 
-                g->set_init_data({new_init_string}).get();
+                g->set_init_string(out_pin, new_init_string).get();
                 g->set_data("preprocessing_information", "original_init", "string", original_init);
 
                 // const auto bf_test = g->get_boolean_function(out_ep->get_pin());

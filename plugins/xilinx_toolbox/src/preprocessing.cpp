@@ -25,13 +25,13 @@ namespace hal
                 auto* o6       = g->get_fan_out_net("O6");
                 const auto* i5 = g->get_fan_in_net("I5");
 
-                const auto init_get_res = g->get_init_data();
+                const auto init_get_res = g->get_init_string("O6");
                 if (init_get_res.is_error())
                 {
                     log_warning("xilinx_toolbox", "could not get INIT string of gate '{}' with ID {}, skipping this gate.", g->get_name(), g->get_id());
                     continue;
                 }
-                auto init = init_get_res.get().front();
+                auto init = init_get_res.get();
                 if (init.length() != 16)
                 {
                     log_warning("xilinx_toolbox", "INIT string '{}' has length {}, expected 16.", init, init.length());
@@ -45,7 +45,7 @@ namespace hal
                     lut5->set_data("xilinx_preprocessing_information", "original_init", "string", init);
 
                     auto init_O5 = init.substr(8, 8);
-                    if (lut5->set_init_data({init_O5}).is_error())
+                    if (lut5->set_init_string("O", init_O5).is_error())
                     {
                         log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}, skipping this gate.", lut5->get_name(), lut5->get_id());
                     }
@@ -70,7 +70,7 @@ namespace hal
                     auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
                     lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init);
 
-                    if (lut6->set_init_data({init}).is_error())
+                    if (lut6->set_init_string("O", init).is_error())
                     {
                         log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}, skipping this gate.", lut6->get_name(), lut6->get_id());
                         nl->delete_gate(lut6);
