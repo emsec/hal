@@ -33,18 +33,45 @@
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 
+#include <vector>
+
 namespace hal
 {
+    class Gate;
     class Netlist;
 
     namespace xilinx_toolbox
     {
         /**
-         * @brief Split LUTs with two outputs into two separate LUT gates.
-         * 
-         * Replaces `LUT6_2` with a `LUT6` and a `LUT5` gate if the respective outputs of the `LUT6_2` are actually used, i.e., connected to other gates.
-         * 
-         * @param[in] nl - The netlist to operate on. 
+         * @brief Split a single `LUT6_2` gate into up to two separate LUT gates.
+         *
+         * Creates replacement gates depending on which outputs are connected:
+         * - `O6` → `LUT6` using all 64 bits of the INIT string and all 6 inputs.
+         * - `O5` → `LUT5` using bits [0, 31] of the INIT string and inputs I0-I4 (I5 is excluded, as it only selects the INIT half).
+         *
+         * The original `LUT6_2` gate is always deleted. The original INIT string is stored on each replacement gate under `xilinx_preprocessing_information/original_init`.
+         *
+         * @param[in] g - The `LUT6_2` gate to split.
+         * @returns An empty OK result on success, an error if `g` is not of type `LUT6_2`, if the INIT string is malformed, or if the gate cannot be deleted.
+         */
+        Result<std::monostate> split_lut(Gate* g);
+
+        /**
+         * @brief Split a set of `LUT6_2` gates into separate LUT gates.
+         *
+         * Calls `split_lut` for each gate in `gates`. Stops and returns an error on the first failure.
+         *
+         * @param[in] gates - The `LUT6_2` gates to split.
+         * @returns The number of split gates on success, an error otherwise.
+         */
+        Result<u32> split_luts(const std::vector<Gate*>& gates);
+
+        /**
+         * @brief Split all `LUT6_2` gates in the netlist into separate LUT gates.
+         *
+         * Finds all gates of type `LUT6_2` and calls `split_luts(nl, gates)`.
+         *
+         * @param[in] nl - The netlist to operate on.
          * @returns The number of split `LUT6_2` gates on success, an error otherwise.
          */
         Result<u32> split_luts(Netlist* nl);

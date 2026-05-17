@@ -81,6 +81,53 @@ namespace hal
         )");
 
         m.def(
+            "split_lut",
+            [](Gate* g) -> bool {
+                auto res = xilinx_toolbox::split_lut(g);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return false;
+            },
+            py::arg("g"),
+            R"(
+            Split a single ``LUT6_2`` gate into up to two separate LUT gates.
+
+            Creates replacement gates depending on which outputs are connected:
+
+            - ``O6`` → ``LUT6`` using all 64 bits of the INIT string and all 6 inputs.
+            - ``O5`` → ``LUT5`` using bits [0, 31] of the INIT string and inputs I0-I4 (I5 is excluded).
+
+            The original ``LUT6_2`` gate is always deleted. The original INIT string is stored on each replacement gate under ``xilinx_preprocessing_information/original_init``.
+
+            :param hal_py.Gate g: The ``LUT6_2`` gate to split.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        m.def(
+            "split_luts",
+            [](const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = xilinx_toolbox::split_luts(gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
+            },
+            py::arg("gates"),
+            R"(
+            Split a list of ``LUT6_2`` gates into separate LUT gates.
+
+            :param list[hal_py.Gate] gates: The ``LUT6_2`` gates to split.
+            :returns: The number of split gates on success, ``None`` otherwise.
+            :rtype: int or None
+        )");
+
+        m.def(
             "split_luts",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = xilinx_toolbox::split_luts(nl);
@@ -88,18 +135,21 @@ namespace hal
                 {
                     return res.get();
                 }
-                else
-                {
-                    log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
-                }
+                log_error("python_context", "{}", res.get_error().get());
+                return std::nullopt;
             },
             py::arg("nl"),
             R"(
-            Split LUTs with two outputs into two separate LUT gates.
-            Replaces ``LUT6_2`` with a ``LUT6`` and a ``LUT5`` gate if the respective outputs of the ``LUT6_2`` are actually used, i.e., connected to other gates.
+            Split all ``LUT6_2`` gates in the netlist into separate LUT gates.
 
-            :param hal_py.Netlist nl: The netlist to operate on. 
+            Replaces each ``LUT6_2`` gate with up to two gates depending on which outputs are connected:
+
+            - ``O6`` → ``LUT6`` using all 64 bits of the INIT string and all 6 inputs.
+            - ``O5`` → ``LUT5`` using bits [0, 31] of the INIT string and inputs I0-I4 (I5 is excluded).
+
+            The original ``LUT6_2`` gate is always deleted. The original INIT string is stored on each replacement gate under ``xilinx_preprocessing_information/original_init``.
+
+            :param hal_py.Netlist nl: The netlist to operate on.
             :returns: The number of split ``LUT6_2`` gates on success, ``None`` otherwise.
             :rtype: int or None
         )");

@@ -18,8 +18,7 @@ namespace hal
             .value("String", Parameter::Type::String, R"(An arbitrary string.)")
             .value("Float", Parameter::Type::Float, R"(A double-precision floating-point number.)")
             .value("Time", Parameter::Type::Time, R"(A time value with a unit suffix (``fs``, ``ps``, ``ns``, ``us``, ``ms``, ``s``, ``min``, ``h``).)")
-            .value("Enum", Parameter::Type::Enum, R"(A finite, ordered set of named values; encoded as an integer index.)")
-            .export_values();
+            .value("Enum", Parameter::Type::Enum, R"(A finite, ordered set of named values; encoded as an integer index.)");
 
         py_parameter.def_static(
             "Boolean",

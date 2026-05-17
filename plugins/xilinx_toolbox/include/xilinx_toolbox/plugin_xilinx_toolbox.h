@@ -30,57 +30,34 @@
 
 #pragma once
 
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
-    class Netlist;
-
-    /**
-     * @class XilinxToolboxPlugin
-     * @brief Plugin interface for the Xilinx toolbox.
-     * 
-     * This class provides an interface to integrate the Xilinx toolbox as a plugin within the HAL framework.
-     */
-    class PLUGIN_API XilinxToolboxPlugin : public BasePluginInterface
+    class XilinxGuiExtension : public GuiExtensionInterface
     {
     public:
-        /** 
-         * @brief Default constructor for `XilinxToolboxPlugin`.
-         */
-        XilinxToolboxPlugin() = default;
+        XilinxGuiExtension() : GuiExtensionInterface("Xilinx Toolbox")
+        {
+        }
 
-        /** 
-         * @brief Default destructor for `XilinxToolboxPlugin`.
-         */
+        std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
+        void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
+    };
+
+    class PLUGIN_API XilinxToolboxPlugin : public BasePluginInterface
+    {
+        mutable XilinxGuiExtension mGuiExtension;
+
+    public:
+        XilinxToolboxPlugin()  = default;
         ~XilinxToolboxPlugin() = default;
 
-        /**
-         * @brief Get the name of the plugin.
-         *
-         * @returns The name of the plugin.
-         */
         std::string get_name() const override;
-
-        /**
-         * @brief Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
         std::string get_version() const override;
-
-        /**
-         * @brief Get a short description of the plugin.
-         *
-         * @returns The short description of the plugin.
-         */
         std::string get_description() const override;
-
-        /**
-         * @brief Get the plugin dependencies.
-         * 
-         * @returns A set of plugin names that this plugin depends on.
-         */
         std::set<std::string> get_dependencies() const override;
+        std::vector<AbstractExtensionInterface*> get_extensions() const override;
     };
 }    // namespace hal

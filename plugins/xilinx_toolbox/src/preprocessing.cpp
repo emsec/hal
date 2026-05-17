@@ -8,46 +8,50 @@ namespace hal
 {
     namespace xilinx_toolbox
     {
-        Result<u32> split_luts(Netlist* nl)
+        Result<std::monostate> split_lut(Gate* g)
         {
-            u32 deleted_gates = 0;
-            u32 new_gates     = 0;
-            std::vector<Gate*> to_delete;
-
-            const auto lut6_type = nl->get_gate_library()->get_gate_type_by_name("LUT6");
-            const auto lut5_type = nl->get_gate_library()->get_gate_type_by_name("LUT5");
-
-            const auto lut6_2_gates = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; });
-
-            for (const auto& g : lut6_2_gates)
+            if (g->get_type()->get_name() != "LUT6_2")
             {
-                auto* o5       = g->get_fan_out_net("O5");
-                auto* o6       = g->get_fan_out_net("O6");
-                const auto* i5 = g->get_fan_in_net("I5");
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " is not of type LUT6_2");
+            }
 
-                const auto init_get_res = g->get_init_string("O6");
-                if (init_get_res.is_error())
+            Netlist* nl     = g->get_netlist();
+            auto* lut5_type = nl->get_gate_library()->get_gate_type_by_name("LUT5");
+            auto* lut6_type = nl->get_gate_library()->get_gate_type_by_name("LUT6");
+
+            auto* o5 = g->get_fan_out_net("O5");
+            auto* o6 = g->get_fan_out_net("O6");
+
+            // LUT6_2 uses a 64-bit INIT string (16 hex chars): O6 uses all 64 bits,
+            // O5 uses bits [0, 31] (the lower half, i.e., truth table for I5=0).
+            const auto init_O6_res = g->get_init_string("O6");
+            if (init_O6_res.is_error())
+            {
+                return ERR("could not get O6 INIT string of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+            const auto init_O6 = init_O6_res.get();
+            if (init_O6.length() != 16)
+            {
+                return ERR("O6 INIT string '" + init_O6 + "' of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has length " + std::to_string(init_O6.length())
+                           + ", expected 16");
+            }
+
+            if (o5 != nullptr && o5->get_num_of_destinations() > 0)
+            {
+                const auto init_O5_res = g->get_init_string("O5");
+                if (init_O5_res.is_error())
                 {
-                    log_warning("xilinx_toolbox", "could not get INIT string of gate '{}' with ID {}, skipping this gate.", g->get_name(), g->get_id());
-                    continue;
+                    log_warning("xilinx_toolbox", "could not get INIT string for O5 of gate '{}' with ID {}, skipping O5 split.", g->get_name(), g->get_id());
                 }
-                auto init = init_get_res.get();
-                if (init.length() != 16)
+                else
                 {
-                    log_warning("xilinx_toolbox", "INIT string '{}' has length {}, expected 16.", init, init.length());
-                    continue;
-                }
+                    const auto init_O5 = init_O5_res.get();
+                    auto* lut5         = nl->create_gate(lut5_type, g->get_name() + "_split_O5");
+                    lut5->set_data("xilinx_preprocessing_information", "original_init", "string", init_O5);
 
-                if (o5->get_num_of_destinations() > 0)
-                {
-                    // create LUT5
-                    auto* lut5 = nl->create_gate(lut5_type, g->get_name() + "_split_O5");
-                    lut5->set_data("xilinx_preprocessing_information", "original_init", "string", init);
-
-                    auto init_O5 = init.substr(8, 8);
                     if (lut5->set_init_string("O", init_O5).is_error())
                     {
-                        log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}, skipping this gate.", lut5->get_name(), lut5->get_id());
+                        log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut5->get_name(), lut5->get_id());
                     }
 
                     if (auto* mod = g->get_module(); !mod->is_top_module())
@@ -55,28 +59,30 @@ namespace hal
                         mod->assign_gate(lut5);
                     }
 
+                    // I5 selects the upper/lower half of the INIT; LUT5 only uses the lower
+                    // half (I5=0), so I5 is not a real input and is excluded here.
                     for (const auto& in_ep : g->get_fan_in_endpoints([](const Endpoint* ep) { return ep->get_pin()->get_name() != "I5"; }))
                     {
                         in_ep->get_net()->add_destination(lut5, in_ep->get_pin()->get_name());
                     }
 
-                    new_gates++;
                     o5->add_source(lut5, "O");
                 }
+            }
 
-                if (o6->get_num_of_destinations() > 0)
+            if (o6 != nullptr && o6->get_num_of_destinations() > 0)
+            {
+                auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
+                lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init_O6);
+
+                // O6 is a full 6-input LUT and uses the entire 64-bit INIT string.
+                if (lut6->set_init_string("O", init_O6).is_error())
                 {
-                    // create LUT6
-                    auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
-                    lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init);
-
-                    if (lut6->set_init_string("O", init).is_error())
-                    {
-                        log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}, skipping this gate.", lut6->get_name(), lut6->get_id());
-                        nl->delete_gate(lut6);
-                        continue;
-                    }
-
+                    log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut6->get_name(), lut6->get_id());
+                    nl->delete_gate(lut6);
+                }
+                else
+                {
                     if (auto* mod = g->get_module(); !mod->is_top_module())
                     {
                         mod->assign_gate(lut6);
@@ -87,26 +93,37 @@ namespace hal
                         in_ep->get_net()->add_destination(lut6, in_ep->get_pin()->get_name());
                     }
 
-                    new_gates++;
                     o6->add_source(lut6, "O");
                 }
-                to_delete.push_back(g);
             }
 
-            for (const auto& g : to_delete)
+            // Always delete the original LUT6_2 regardless of which outputs were used.
+            if (!nl->delete_gate(g))
             {
-                if (!nl->delete_gate(g))
-                {
-                    return ERR("Cannot split luts for netlist with ID " + std::to_string(nl->get_id()) + ": Failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                }
-                else
-                {
-                    deleted_gates++;
-                }
+                return ERR("failed to delete gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
             }
 
-            log_info("xilinx_toolbox", "split {} LUT6_2 gates into {} LUT6 and LUT5 gates", deleted_gates, new_gates);
-            return OK(deleted_gates);
+            return OK({});
+        }
+
+        Result<u32> split_luts(const std::vector<Gate*>& gates)
+        {
+            u32 count = 0;
+            for (auto* g : gates)
+            {
+                if (auto res = split_lut(g); res.is_error())
+                {
+                    return ERR(res.get_error().get());
+                }
+                count++;
+            }
+            log_info("xilinx_toolbox", "split {} LUT6_2 gates into LUT6 and LUT5 gates", count);
+            return OK(count);
+        }
+
+        Result<u32> split_luts(Netlist* nl)
+        {
+            return split_luts(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }));
         }
 
         Result<u32> split_shift_registers(Netlist* nl)
