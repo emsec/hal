@@ -1735,6 +1735,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 2,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -1805,6 +1813,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 4,
+                    "default": "0x0"
                 }
             ]
         },
@@ -1892,6 +1908,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 8,
+                    "default": "0x0"
                 }
             ]
         },
@@ -1995,6 +2019,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2114,6 +2146,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 32,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2250,6 +2290,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -2327,6 +2375,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2422,6 +2478,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -2515,6 +2579,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2627,6 +2699,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },

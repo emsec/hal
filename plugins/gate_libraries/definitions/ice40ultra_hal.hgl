@@ -2433,6 +2433,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -2511,6 +2519,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -2588,6 +2604,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2668,6 +2692,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -2745,6 +2777,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2824,6 +2864,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -2917,6 +2965,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3012,6 +3068,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -3104,6 +3168,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3199,6 +3271,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -3261,6 +3341,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3340,6 +3428,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -3417,6 +3513,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3497,6 +3601,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -3574,6 +3686,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3653,6 +3773,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3746,6 +3874,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -3841,6 +3977,14 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -3933,6 +4077,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -4027,6 +4179,14 @@
                             "function": "IQ"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT",
+                    "type": "bit_vector",
+                    "size": 1,
+                    "default": "0x0"
                 }
             ]
         },
@@ -4130,6 +4290,14 @@
                             "type": "lut"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "LUT_INIT",
+                    "type": "bit_vector",
+                    "size": 16,
+                    "default": "0x0"
                 }
             ]
         },
@@ -5558,6 +5726,104 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_0",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_1",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_2",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_3",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_4",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_5",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_6",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_7",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_8",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_9",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -5905,6 +6171,104 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_0",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_1",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_2",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_3",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_4",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_5",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_6",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_7",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_8",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_9",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -6222,6 +6586,104 @@
                         }
                     ]
                 }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_0",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_1",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_2",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_3",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_4",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_5",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_6",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_7",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_8",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_9",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                }
             ]
         },
         {
@@ -6528,6 +6990,104 @@
                             "type": "data"
                         }
                     ]
+                }
+            ],
+            "parameters": [
+                {
+                    "name": "INIT_0",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_1",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_2",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_3",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_4",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_5",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_6",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_7",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_8",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_9",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_A",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_B",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_C",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_D",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_E",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
+                },
+                {
+                    "name": "INIT_F",
+                    "type": "bit_vector",
+                    "size": 256,
+                    "default": "0x0"
                 }
             ]
         },
