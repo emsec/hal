@@ -298,6 +298,28 @@ namespace hal
                 target_mod = parent_mod;
             }
 
+            // Pre-extract parameters to copy to each FF (evaluated once, applied per-FF in the chain).
+            // INIT is an N-bit SRL reset value: bit i becomes the 1-bit INIT of FF i.
+            // IS_CLK_INVERTED is 1-bit and the same for all FFs; mapped to IS_C_INVERTED on FDCE.
+            // Both are forwarded silently — no error if either side lacks the declaration.
+            const bool has_clk_inv    = g->has_parameter("IS_CLK_INVERTED");
+            const std::string clk_inv_val = has_clk_inv ? g->get_parameter_value("IS_CLK_INVERTED").get() : "";
+
+            bool has_init    = g->has_parameter("INIT");
+            u64 init_bits    = 0;
+            if (has_init)
+            {
+                try
+                {
+                    init_bits = std::stoull(g->get_parameter_value("INIT").get(), nullptr, 0);
+                }
+                catch (...)
+                {
+                    log_warning("xilinx_toolbox", "could not parse INIT of gate '{}' with ID {}, skipping INIT copy", g->get_name(), g->get_id());
+                    has_init = false;
+                }
+            }
+
             std::vector<Net*> chain_nets;    // Q output net of each FF, used to wire D of next
 
             for (u32 i = 0; i <= register_size; i++)
@@ -308,6 +330,28 @@ namespace hal
                 if (target_mod != nullptr)
                 {
                     target_mod->assign_gate(ff);
+                }
+
+                if (has_init)
+                {
+                    if (auto decl = ff->get_type()->get_parameter("INIT"); decl.is_ok())
+                    {
+                        const std::string bit_val = ((init_bits >> i) & 1u) ? "0x1" : "0x0";
+                        if (ff->set_parameter(decl.get(), bit_val).is_error())
+                        {
+                            log_warning("xilinx_toolbox", "could not copy INIT bit {} to FF '{}' with ID {}", i, ff->get_name(), ff->get_id());
+                        }
+                    }
+                }
+                if (has_clk_inv)
+                {
+                    if (auto decl = ff->get_type()->get_parameter("IS_C_INVERTED"); decl.is_ok())
+                    {
+                        if (ff->set_parameter(decl.get(), clk_inv_val).is_error())
+                        {
+                            log_warning("xilinx_toolbox", "could not copy IS_CLK_INVERTED to IS_C_INVERTED on FF '{}' with ID {}", ff->get_name(), ff->get_id());
+                        }
+                    }
                 }
 
                 clk_in->add_destination(ff, "C");

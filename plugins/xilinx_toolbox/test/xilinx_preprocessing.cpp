@@ -6,6 +6,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/netlist/parameter.h"
 #include "netlist_test_utils.h"
 
 #include "gtest/gtest.h"
@@ -71,6 +72,8 @@ namespace hal
             m_fde_type->create_pin("CE", PinDirection::input, PinType::enable);
             m_fde_type->create_pin("D", PinDirection::input, PinType::data);
             m_fde_type->create_pin("Q", PinDirection::output, PinType::state);
+            m_fde_type->add_parameter(Parameter::BitVector("INIT", 1, "0x0").get());
+            m_fde_type->add_parameter(Parameter::BitVector("IS_C_INVERTED", 1, "0x0").get());
 
             // SRL16E: 16-bit shift register with clock enable
             m_srl16e_type = m_gl->create_gate_type("SRL16E", {GateTypeProperty::sequential, GateTypeProperty::shift_register});
@@ -82,6 +85,8 @@ namespace hal
             m_srl16e_type->create_pin("CE", PinDirection::input, PinType::enable);
             m_srl16e_type->create_pin("D", PinDirection::input, PinType::data);
             m_srl16e_type->create_pin("Q", PinDirection::output, PinType::state);
+            m_srl16e_type->add_parameter(Parameter::BitVector("INIT", 16, "0x0000").get());
+            m_srl16e_type->add_parameter(Parameter::BitVector("IS_CLK_INVERTED", 1, "0x0").get());
 
             // SRL16: same structure as SRL16E
             m_srl16_type = m_gl->create_gate_type("SRL16", {GateTypeProperty::sequential, GateTypeProperty::shift_register});
@@ -1008,6 +1013,91 @@ namespace hal
             auto res = xilinx_toolbox::split_shift_registers(nl.get());
             ASSERT_TRUE(res.is_ok());
             EXPECT_EQ(res.get(), 0u);
+        }
+        TEST_END
+    }
+
+    // -------------------------------------------------------------------------
+    // Parameter copying — split_shift_register
+    // -------------------------------------------------------------------------
+
+    TEST_F(XilinxPreprocessingTest, check_split_shift_register_copies_init)
+    {
+        // INIT is N bits wide; bit i becomes the 1-bit INIT of FF i.
+        // Use INIT=0x0002 (binary ...0010): FF0 gets bit 0 = 0, FF1 gets bit 1 = 1.
+        TEST_START
+        {
+            auto nl         = make_netlist();
+            auto [gnd, vcc] = make_constant_nets(nl.get());
+            Gate* srl       = make_srl16e(nl.get(), "srl");
+            connect_addr4(srl, gnd, vcc, 0b0001);    // select_value=1 → 2 FFs (indices 0 and 1)
+            add_sink(nl.get(), srl, "Q");
+
+            auto init_decl = m_srl16e_type->get_parameter("INIT");
+            ASSERT_TRUE(init_decl.is_ok());
+            ASSERT_TRUE(srl->set_parameter(init_decl.get(), "0x0002").is_ok());
+
+            ASSERT_TRUE(xilinx_toolbox::split_shift_register(srl).is_ok());
+
+            auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; });
+            ASSERT_EQ(ffs.size(), 2u);
+
+            for (const Gate* ff : ffs)
+            {
+                ASSERT_TRUE(ff->has_parameter("INIT")) << ff->get_name();
+                // Determine index from the FF name suffix.
+                const u32 idx = ff->get_name().back() - '0';
+                const std::string expected = (idx == 1) ? "0x1" : "0x0";
+                EXPECT_EQ(ff->get_parameter_value("INIT").get(), expected) << ff->get_name();
+            }
+        }
+        TEST_END
+    }
+
+    TEST_F(XilinxPreprocessingTest, check_split_shift_register_copies_clk_inverted)
+    {
+        TEST_START
+        {
+            auto nl         = make_netlist();
+            auto [gnd, vcc] = make_constant_nets(nl.get());
+            Gate* srl       = make_srl16e(nl.get(), "srl");
+            connect_addr4(srl, gnd, vcc, 0b0001);    // 2 FFs
+            add_sink(nl.get(), srl, "Q");
+
+            auto clk_decl = m_srl16e_type->get_parameter("IS_CLK_INVERTED");
+            ASSERT_TRUE(clk_decl.is_ok());
+            ASSERT_TRUE(srl->set_parameter(clk_decl.get(), "0x1").is_ok());
+
+            ASSERT_TRUE(xilinx_toolbox::split_shift_register(srl).is_ok());
+
+            auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; });
+            ASSERT_EQ(ffs.size(), 2u);
+            for (const auto* ff : ffs)
+            {
+                ASSERT_TRUE(ff->has_parameter("IS_C_INVERTED")) << ff->get_name();
+                EXPECT_EQ(ff->get_parameter_value("IS_C_INVERTED").get(), "0x1") << ff->get_name();
+            }
+        }
+        TEST_END
+    }
+
+    TEST_F(XilinxPreprocessingTest, check_split_shift_register_no_params_no_copy)
+    {
+        // When source gate has no parameters set, FFs must not get any either.
+        TEST_START
+        {
+            auto nl         = make_netlist();
+            auto [gnd, vcc] = make_constant_nets(nl.get());
+            Gate* srl       = make_srl16e(nl.get(), "srl");
+            connect_addr4(srl, gnd, vcc, 0b0000);
+            add_sink(nl.get(), srl, "Q");
+
+            ASSERT_TRUE(xilinx_toolbox::split_shift_register(srl).is_ok());
+
+            auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDCE"; });
+            ASSERT_EQ(ffs.size(), 1u);
+            EXPECT_FALSE(ffs.front()->has_parameter("INIT"));
+            EXPECT_FALSE(ffs.front()->has_parameter("IS_C_INVERTED"));
         }
         TEST_END
     }
