@@ -79,99 +79,40 @@ namespace hal
             :rtype: bool
         )");
 
-        py_lut_component.def_property("init_ascending", &LUTComponent::is_init_ascending, &LUTComponent::set_init_ascending, R"(
-            The bit-order of the initialization string. 
-            True if ascending, False otherwise.
-
-            :type: bool
-        )");
-
-        py_lut_component.def("is_init_ascending", &LUTComponent::is_init_ascending, R"(
-            Get the bit-order of the initialization string.
-         
-            :returns: True if ascending bit-order, False otherwise.
-            :rtype: bool
-        )");
-
-        py_lut_component.def("set_init_ascending", &LUTComponent::set_init_ascending, py::arg("init_ascending") = true, R"(
-            Set the bit-order of the initialization string.
-
-            :param bool init_ascending: True if ascending bit-order, False otherwise.
-        )");
-
         py::class_<LUTComponent::LUTOutputConfig>(py_lut_component, "LUTOutputConfig", R"(
             Per-output-pin INIT configuration for a LUT component.
         )")
-            .def(py::init([]() { return LUTComponent::LUTOutputConfig{"", 0, 0}; }))
-            .def_readwrite("init_identifier", &LUTComponent::LUTOutputConfig::init_identifier, R"(
+            .def(py::init<std::string, u32, u32, bool, std::vector<std::string>>(),
+                 py::arg("init_identifier"),
+                 py::arg("bit_offset"),
+                 py::arg("bit_count"),
+                 py::arg("is_ascending") = true,
+                 py::arg("input_pins"))
+            .def_readonly("init_identifier", &LUTComponent::LUTOutputConfig::init_identifier, R"(
                 The data identifier within the INIT category for this output pin.
 
                 :type: str
             )")
-            .def_readwrite("bit_offset", &LUTComponent::LUTOutputConfig::bit_offset, R"(
+            .def_readonly("bit_offset", &LUTComponent::LUTOutputConfig::bit_offset, R"(
                 The first bit (LSB = 0) of the slice within the parsed INIT value.
 
                 :type: int
             )")
-            .def_readwrite("bit_count", &LUTComponent::LUTOutputConfig::bit_count, R"(
+            .def_readonly("bit_count", &LUTComponent::LUTOutputConfig::bit_count, R"(
                 The number of bits in the slice. Must be a non-zero power of two.
 
                 :type: int
+            )")
+            .def_readonly("is_ascending", &LUTComponent::LUTOutputConfig::is_ascending, R"(
+                True if the INIT bits are stored in ascending order (LSB first), False for descending.
+
+                :type: bool
+            )")
+            .def_readonly("input_pins", &LUTComponent::LUTOutputConfig::input_pins, R"(
+                Ordered list of input pin names used by this output. Must be non-empty; size must equal log2(bit_count).
+
+                :type: list[str]
             )");
-
-        py_lut_component.def("add_output_pin_config",
-                             static_cast<void (LUTComponent::*)(const std::string&, const std::string&, u32, u32)>(&LUTComponent::add_output_pin_config),
-                             py::arg("pin_name"),
-                             py::arg("init_identifier"),
-                             py::arg("bit_offset"),
-                             py::arg("bit_count"),
-                             R"(
-            Associate an output pin with a specific INIT identifier and a bit range.
-            Overwrites any existing configuration for the same pin name.
-
-            :param str pin_name: Name of the LUT output pin.
-            :param str init_identifier: The data identifier within the INIT category.
-            :param int bit_offset: First bit (LSB = 0) of the slice within the parsed INIT value.
-            :param int bit_count: Number of bits in the slice; must be a non-zero power of two.
-        )");
-
-        py_lut_component.def("add_output_pin_config",
-                             static_cast<void (LUTComponent::*)(const GatePin*, const std::string&, u32, u32)>(&LUTComponent::add_output_pin_config),
-                             py::arg("pin"),
-                             py::arg("init_identifier"),
-                             py::arg("bit_offset"),
-                             py::arg("bit_count"),
-                             R"(
-            Associate an output pin with a specific INIT identifier and a bit range.
-            Overwrites any existing configuration for the same pin.
-
-            :param hal_py.GatePin pin: The LUT output pin.
-            :param str init_identifier: The data identifier within the INIT category.
-            :param int bit_offset: First bit (LSB = 0) of the slice within the parsed INIT value.
-            :param int bit_count: Number of bits in the slice; must be a non-zero power of two.
-        )");
-
-        py_lut_component.def("remove_output_pin_config",
-                             static_cast<bool (LUTComponent::*)(const std::string&)>(&LUTComponent::remove_output_pin_config),
-                             py::arg("pin_name"),
-                             R"(
-            Remove the output configuration for a specific pin.
-
-            :param str pin_name: Name of the LUT output pin.
-            :returns: True if an entry was removed, False if no entry existed for that pin.
-            :rtype: bool
-        )");
-
-        py_lut_component.def("remove_output_pin_config",
-                             static_cast<bool (LUTComponent::*)(const GatePin*)>(&LUTComponent::remove_output_pin_config),
-                             py::arg("pin"),
-                             R"(
-            Remove the output configuration for a specific pin.
-
-            :param hal_py.GatePin pin: The LUT output pin.
-            :returns: True if an entry was removed, False if no entry existed for that pin.
-            :rtype: bool
-        )");
 
         py_lut_component.def(
             "get_output_pin_config",

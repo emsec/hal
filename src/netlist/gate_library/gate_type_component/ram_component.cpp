@@ -1,9 +1,21 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 
+#include <memory>
+
 namespace hal
 {
     RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size) : m_component(std::move(component)), m_bit_size(bit_size)
     {
+    }
+
+    std::unique_ptr<RAMComponent> RAMComponent::create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
+    {
+        if (component == nullptr)
+        {
+            return nullptr;
+        }
+
+        return std::unique_ptr<RAMComponent>(new RAMComponent(std::move(component), bit_size));
     }
 
     RAMComponent::ComponentType RAMComponent::get_type() const

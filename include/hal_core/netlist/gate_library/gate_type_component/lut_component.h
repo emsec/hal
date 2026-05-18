@@ -28,7 +28,9 @@
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/pins/gate_pin.h"
 
+#include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace hal
 {
@@ -40,17 +42,41 @@ namespace hal
          */
         struct LUTOutputConfig
         {
+            /**
+             * @param[in] init_identifier - The data identifier within the INIT category.
+             * @param[in] bit_offset      - First bit (LSB = 0) of the slice within the parsed INIT value.
+             * @param[in] bit_count       - Number of bits; must be a non-zero power of two.
+             * @param[in] is_ascending    - True if LSB is stored first (ascending), false otherwise.
+             * @param[in] input_pins      - Ordered input pin names; must be non-empty (size must equal log2(bit_count)).
+             */
+            LUTOutputConfig(std::string init_identifier,
+                            u32 bit_offset,
+                            u32 bit_count,
+                            bool is_ascending,
+                            std::vector<std::string> input_pins)
+                : init_identifier(std::move(init_identifier)),
+                  bit_offset(bit_offset),
+                  bit_count(bit_count),
+                  is_ascending(is_ascending),
+                  input_pins(std::move(input_pins))
+            {
+            }
+
             std::string init_identifier;
-            u32 bit_offset;
-            u32 bit_count;
+            u32 bit_offset               = 0;
+            u32 bit_count                = 0;
+            bool is_ascending            = true;
+            std::vector<std::string> input_pins;
         };
 
         /**
-         * Construct a new LUTComponent.
+         * Create a new LUTComponent with the given per-output-pin configurations.
+         * Configurations with a bit_count of zero, a non-power-of-two bit_count, or empty input_pins are silently skipped.
          *
-         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
+         * @param[in] configs - Map from output pin name to LUTOutputConfig.
+         * @returns The new LUTComponent.
          */
-        explicit LUTComponent(bool init_ascending);
+        static std::unique_ptr<LUTComponent> create(std::unordered_map<std::string, LUTOutputConfig> configs = {});
 
         /**
          * Get the type of the gate type component.
@@ -77,58 +103,6 @@ namespace hal
         std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
         /**
-         * Get the bit-order of the initialization string.
-         *
-         * @returns True if ascending bit-order, false otherwise.
-         */
-        bool is_init_ascending() const;
-
-        /**
-         * Set the bit-order of the initialization string.
-         *
-         * @param[in] init_ascending - True if ascending bit-order, false otherwise.
-         */
-        void set_init_ascending(bool init_ascending = true);
-
-        /**
-         * Associate an output pin with a specific INIT identifier and a bit range.
-         * Overwrites any existing configuration for the same pin name.
-         *
-         * @param[in] pin_name - Name of the LUT output pin.
-         * @param[in] init_identifier - The data identifier within the INIT category.
-         * @param[in] bit_offset - First bit (LSB = 0) of the slice within the parsed INIT value.
-         * @param[in] bit_count - Number of bits in the slice; must be a non-zero power of two.
-         */
-        void add_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset, u32 bit_count);
-
-        /**
-         * Associate an output pin with a specific INIT identifier and a bit range.
-         * Overwrites any existing configuration for the same pin.
-         *
-         * @param[in] pin - The LUT output pin.
-         * @param[in] init_identifier - The data identifier within the INIT category.
-         * @param[in] bit_offset - First bit (LSB = 0) of the slice within the parsed INIT value.
-         * @param[in] bit_count - Number of bits in the slice; must be a non-zero power of two.
-         */
-        void add_output_pin_config(const GatePin* pin, const std::string& init_identifier, u32 bit_offset, u32 bit_count);
-
-        /**
-         * Remove the output configuration for a specific pin.
-         *
-         * @param[in] pin_name - Name of the LUT output pin.
-         * @returns True if an entry was removed, false if no entry existed for that pin.
-         */
-        bool remove_output_pin_config(const std::string& pin_name);
-
-        /**
-         * Remove the output configuration for a specific pin.
-         *
-         * @param[in] pin - The LUT output pin.
-         * @returns True if an entry was removed, false if no entry existed for that pin.
-         */
-        bool remove_output_pin_config(const GatePin* pin);
-
-        /**
          * Get the output configuration for a specific pin, or nullptr if none is set.
          *
          * @param[in] pin_name - Name of the LUT output pin.
@@ -147,11 +121,10 @@ namespace hal
          * Extract a bit slice from a full INIT hex string.
          * Returns the slice as an uppercase hex string padded to `(bit_count+3)/4` characters.
          *
-         * @param[in] full_hex   - Full INIT value as a hex string; must not be empty and must
-         *                         contain at least `(bit_offset+bit_count+3)/4` hex chars.
+         * @param[in] full_hex   - Full INIT value as a hex string.
          * @param[in] bit_offset - First bit (LSB = 0) of the slice.
          * @param[in] bit_count  - Number of bits in the slice; must be non-zero.
-         * @returns OK with the extracted hex string on success, an error if `full_hex` is empty, too short, or invalid.
+         * @returns OK with the extracted hex string on success, an error otherwise.
          */
         static Result<std::string> extract_init_slice(const std::string& full_hex, u32 bit_offset, u32 bit_count);
 
@@ -169,8 +142,9 @@ namespace hal
         static Result<std::string> splice_init_slice(const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count);
 
     private:
+        explicit LUTComponent(std::unordered_map<std::string, LUTOutputConfig> configs);
+
         static constexpr ComponentType m_type = ComponentType::lut;
-        bool m_init_ascending                 = true;
         std::unordered_map<std::string, LUTOutputConfig> m_output_pin_configs;
     };
 }    // namespace hal

@@ -27,18 +27,21 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     class RAMComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new RAMComponent with given child component.
-         * 
+         * Create a new RAMComponent with given child component.
+         *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] bit_size - The size of the RAM in bits.
+         * @returns The RAMComponent, or nullptr if component is nullptr.
          */
-        RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size);
+        static std::unique_ptr<RAMComponent> create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size);
 
         /**
          * Get the type of the gate type component.
@@ -81,6 +84,8 @@ namespace hal
         void set_bit_size(const u32 bit_size);
 
     private:
+        RAMComponent(std::unique_ptr<GateTypeComponent> component, u32 bit_size);
+
         static constexpr ComponentType m_type          = ComponentType::ram;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 

@@ -1696,7 +1696,11 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 2
+                        "bit_count": 2,
+                        "input_pins": [
+                            "I0"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },
@@ -1747,7 +1751,12 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 4
+                        "bit_count": 4,
+                        "input_pins": [
+                            "I0",
+                            "I1"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },
@@ -1813,7 +1822,13 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 8
+                        "bit_count": 8,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },
@@ -1894,7 +1909,14 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 16
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },
@@ -1990,7 +2012,15 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 32
+                        "bit_count": 32,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },
@@ -2101,7 +2131,16 @@
                         "pin": "O",
                         "data_identifier": "INIT",
                         "bit_offset": 0,
-                        "bit_count": 64
+                        "bit_count": 64,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3",
+                            "I4",
+                            "I5"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },

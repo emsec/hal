@@ -260,7 +260,8 @@ namespace hal
             }
             {
                 GateType* lut2 = lib->create_gate_type(
-                    "LUT2", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT2", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 4, true, {"I0", "I1"})}}));
                 if (auto res = lut2->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -273,11 +274,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                lut2->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->add_output_pin_config("O", "INIT", 0, 4);
             }
             {
                 GateType* lut3 = lib->create_gate_type(
-                    "LUT3", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT3", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 8, true, {"I0", "I1", "I2"})}}));
                 if (auto res = lut3->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -294,11 +295,33 @@ namespace hal
                 {
                     return nullptr;
                 }
-                lut3->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->add_output_pin_config("O", "INIT", 0, 8);
+            }
+            {
+                // LUT3_desc: same as LUT3 but INIT is stored in descending bit order.
+                GateType* lut3_desc = lib->create_gate_type(
+                    "LUT3_desc", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 8, false, {"I0", "I1", "I2"})}}));
+                if (auto res = lut3_desc->create_pin("I0", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = lut3_desc->create_pin("I1", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = lut3_desc->create_pin("I2", PinDirection::input); res.is_error())
+                {
+                    return nullptr;
+                }
+                if (auto res = lut3_desc->create_pin("O", PinDirection::output, PinType::lut); res.is_error())
+                {
+                    return nullptr;
+                }
             }
             {
                 GateType* lut4 = lib->create_gate_type(
-                    "LUT4", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT4", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 16, true, {"I0", "I1", "I2", "I3"})}}));
                 if (auto res = lut4->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -319,11 +342,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                lut4->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->add_output_pin_config("O", "INIT", 0, 16);
             }
             {
                 GateType* lut5 = lib->create_gate_type(
-                    "LUT5", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT5", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 32, true, {"I0", "I1", "I2", "I3", "I4"})}}));
                 if (auto res = lut5->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -348,11 +371,11 @@ namespace hal
                 {
                     return nullptr;
                 }
-                lut5->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->add_output_pin_config("O", "INIT", 0, 32);
             }
             {
                 GateType* lut6 = lib->create_gate_type(
-                    "LUT6", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT6", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})}}));
                 if (auto res = lut6->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -381,12 +404,13 @@ namespace hal
                 {
                     return nullptr;
                 }
-                lut6->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); })->add_output_pin_config("O", "INIT", 0, 64);
             }
             {
                 // LUT6_2a: 6 inputs, O0 uses the full 64-bit INIT string, O1 uses the lower 32 bits of the same string.
                 GateType* lut6_2a = lib->create_gate_type(
-                    "LUT6_2a", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT6_2a", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O0", LUTComponent::LUTOutputConfig("INIT", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})},
+                                                        {"O1", LUTComponent::LUTOutputConfig("INIT", 0, 32, true, {"I0", "I1", "I2", "I3", "I4"})}}));
                 if (auto res = lut6_2a->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -419,16 +443,14 @@ namespace hal
                 {
                     return nullptr;
                 }
-                LUTComponent* lut6_2a_lc = lut6_2a->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
-                lut6_2a_lc->add_output_pin_config("O0", "INIT", 0, 64);
-                lut6_2a_lc->add_output_pin_config("O1", "INIT", 0, 32);
             }
             {
                 // LUT6_2b: 6 inputs, each output has its own independent 64-bit INIT string.
                 GateType* lut6_2b = lib->create_gate_type(
                     "LUT6_2b",
                     {GateTypeProperty::combinational, GateTypeProperty::c_lut},
-                    GateTypeComponent::create_lut_component(true));
+                    LUTComponent::create({{"O0", LUTComponent::LUTOutputConfig("INIT1", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})},
+                                                        {"O1", LUTComponent::LUTOutputConfig("INIT2", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})}}));
                 if (auto res = lut6_2b->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -461,14 +483,13 @@ namespace hal
                 {
                     return nullptr;
                 }
-                LUTComponent* lut6_2b_lc = lut6_2b->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
-                lut6_2b_lc->add_output_pin_config("O0", "INIT1", 0, 64);
-                lut6_2b_lc->add_output_pin_config("O1", "INIT2", 0, 64);
             }
             {
                 // LUT5_2c: 5 inputs, O0 uses bits [0, 32) and O1 uses bits [32, 32) of a shared 64-bit INIT string.
                 GateType* lut5_2c = lib->create_gate_type(
-                    "LUT5_2c", {GateTypeProperty::combinational, GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+                    "LUT5_2c", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
+                    LUTComponent::create({{"O0", LUTComponent::LUTOutputConfig("INIT", 0, 32, true, {"I0", "I1", "I2", "I3", "I4"})},
+                                                        {"O1", LUTComponent::LUTOutputConfig("INIT", 32, 32, true, {"I0", "I1", "I2", "I3", "I4"})}}));
                 if (auto res = lut5_2c->create_pin("I0", PinDirection::input); res.is_error())
                 {
                     return nullptr;
@@ -497,9 +518,6 @@ namespace hal
                 {
                     return nullptr;
                 }
-                LUTComponent* lut5_2c_lc = lut5_2c->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
-                lut5_2c_lc->add_output_pin_config("O0", "INIT", 0, 32);
-                lut5_2c_lc->add_output_pin_config("O1", "INIT", 32, 32);
             }
             {
                 GateType* mux = lib->create_gate_type("MUX", {GateTypeProperty::combinational, GateTypeProperty::c_mux});
@@ -1048,7 +1066,7 @@ namespace hal
                 GateType* dff =
                     lib->create_gate_type("DFF",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK").get()));
                 if (auto res = dff->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
@@ -1074,7 +1092,7 @@ namespace hal
                 GateType* dff_e =
                     lib->create_gate_type("DFFE",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK & EN").get()));
                 if (auto res = dff_e->create_pin("CLK", PinDirection::input, PinType::clock); res.is_error())
@@ -1104,7 +1122,7 @@ namespace hal
                 GateType* dff_s =
                     lib->create_gate_type("DFFS",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_s->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1137,7 +1155,7 @@ namespace hal
                 GateType* dff_r =
                     lib->create_gate_type("DFFR",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_r->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1170,7 +1188,7 @@ namespace hal
                 GateType* dff_rs =
                     lib->create_gate_type("DFFRS",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK").get()));
                 FFComponent* ff_component = dff_rs->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1209,7 +1227,7 @@ namespace hal
                 GateType* dff_se =
                     lib->create_gate_type("DFFSE",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_se->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1246,7 +1264,7 @@ namespace hal
                 GateType* dff_re =
                     lib->create_gate_type("DFFRE",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_re->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1283,7 +1301,7 @@ namespace hal
                 GateType* dff_rse =
                     lib->create_gate_type("DFFRSE",
                                           {GateTypeProperty::sequential, GateTypeProperty::ff},
-                                          GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("generic", {"INIT"}), "IQ", "IQN"),
+                                          FFComponent::create(StateComponent::create(InitComponent::create("generic", {"INIT"}), "IQ", "IQN"),
                                                                                  BooleanFunction::from_string("D").get(),
                                                                                  BooleanFunction::from_string("CLK & EN").get()));
                 FFComponent* ff_component = dff_rse->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
@@ -1562,11 +1580,6 @@ namespace hal
             const LUTComponent* lut_component2 = gt2->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
             if (lut_component1 != nullptr && lut_component2 != nullptr)
             {
-                if (lut_component1->is_init_ascending() != lut_component2->is_init_ascending())
-                {
-                    log_info("test_utils", "unequal LUT components of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
-                    return false;
-                }
                 const auto& configs1 = lut_component1->get_output_pin_configs();
                 const auto& configs2 = lut_component2->get_output_pin_configs();
                 if (configs1.size() != configs2.size())
@@ -1577,7 +1590,8 @@ namespace hal
                 for (const auto& [pin, cfg] : configs1)
                 {
                     const auto it = configs2.find(pin);
-                    if (it == configs2.end() || it->second.init_identifier != cfg.init_identifier || it->second.bit_offset != cfg.bit_offset || it->second.bit_count != cfg.bit_count)
+                    if (it == configs2.end() || it->second.init_identifier != cfg.init_identifier || it->second.bit_offset != cfg.bit_offset || it->second.bit_count != cfg.bit_count
+                        || it->second.is_ascending != cfg.is_ascending || it->second.input_pins != cfg.input_pins)
                     {
                         log_info("test_utils", "unequal LUT output pin configs of gate types with names '{}' and '{}'", gt1->get_name(), gt2->get_name());
                         return false;

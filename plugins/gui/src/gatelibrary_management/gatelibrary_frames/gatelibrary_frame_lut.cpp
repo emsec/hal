@@ -10,8 +10,6 @@ namespace hal
     GatelibraryFrameLut::GatelibraryFrameLut(QWidget* parent)
         : GatelibraryComponentFrame("LUT Init", parent)
     {
-        mAscending = new GateLibraryLabel(true, " - ", this);
-        mLayout->addRow(new GateLibraryLabel(false, "Bit Order:", parent), mAscending);
         mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     }
 
@@ -30,12 +28,10 @@ namespace hal
             return;
         }
 
-        mAscending->setText(lutc->is_init_ascending() ? "Ascending" : "Descending");
-
         // Remove any previously added output-pin rows.
-        // Row 0 = title span (base class), row 1 = "Bit Order:" (fixed) — start removal at row 2.
-        while (mLayout->rowCount() > 2)
-            mLayout->removeRow(2);
+        // Row 0 = title span (base class) — start removal at row 1.
+        while (mLayout->rowCount() > 1)
+            mLayout->removeRow(1);
 
         // Add one row per output pin config, sorted by pin name for deterministic order
         const auto& raw = lutc->get_output_pin_configs();
@@ -46,7 +42,7 @@ namespace hal
         {
             QString value = QString::fromStdString(cfg.init_identifier);
             if (cfg.bit_count > 0)
-                value += QString(" [%1..%2]").arg(cfg.bit_offset).arg(cfg.bit_offset + cfg.bit_count - 1);
+                value += QString(" [%1..%2] %3").arg(cfg.bit_offset).arg(cfg.bit_offset + cfg.bit_count - 1).arg(cfg.is_ascending ? "asc" : "desc");
             mLayout->addRow(new GateLibraryLabel(false, QString::fromStdString(pin_name) + ":", this),
                             new GateLibraryLabel(true, value, this));
         }

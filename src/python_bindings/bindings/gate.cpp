@@ -197,18 +197,58 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_gate.def("get_boolean_function", py::overload_cast<const std::string&>(&Gate::get_boolean_function, py::const_), py::arg("name"), R"(
-            Get the Boolean function specified by the given name.
-            This name can for example be an output pin of the gate or any other user-defined function name.
+        py_gate.def("get_boolean_function",
+                    py::overload_cast<const std::string&>(&Gate::get_boolean_function, py::const_),
+                    py::arg("name"),
+                    R"(
+            Get the raw Boolean function specified by the given name without inlining or net substitution.
+            This name can for example be an ``output`` pin of the gate or any other user-defined function name.
+            For full control over inlining and net substitution use ``get_boolean_function`` with ``inlined`` and ``substitute_nets``.
 
-            :param str name: The name.
+            :param str name: The name. If empty, the first output pin is used.
             :returns: The Boolean function on success, an empty Boolean function otherwise.
             :rtype: hal_py.BooleanFunction
         )");
 
-        py_gate.def("get_boolean_function", py::overload_cast<const GatePin*>(&Gate::get_boolean_function, py::const_), py::arg("pin") = nullptr, R"(
-            Get the Boolean function corresponding to the given output pin.
-            If pin is None, the Boolean function of the first output pin is returned.
+        py_gate.def(
+            "get_boolean_function",
+            [](const Gate& self, const std::string& name, bool inlined, bool substitute_nets) -> std::optional<BooleanFunction> {
+                auto res = self.get_boolean_function(name, inlined, substitute_nets);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("name"),
+            py::arg("inlined"),
+            py::arg("substitute_nets"),
+            R"(
+            Get the Boolean function specified by the given name, with full error reporting.
+            When ``inlined`` is ``True``, ``internal`` and ``output`` pin variables are recursively substituted with
+            their definitions, and any gate-instance parameter values are reduced.
+            When ``substitute_nets`` is ``True``, the remaining input pin variables are additionally substituted
+            with variable names derived from the fan-in nets using ``BooleanFunctionNetDecorator``.
+            ``substitute_nets`` requires ``inlined`` to be ``True``; passing ``substitute_nets=True`` with ``inlined=False`` returns ``None``.
+
+            :param str name: The name. Must not be empty.
+            :param bool inlined: Set ``True`` to inline ``internal`` and ``output`` pins and reduce parameter-conditional expressions.
+            :param bool substitute_nets: Set ``True`` to substitute input pin variables with fan-in net variables. Requires ``inlined=True`` and every input pin to have a connected net.
+            :returns: The Boolean function on success, ``None`` otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_gate.def("get_boolean_function",
+                    py::overload_cast<const GatePin*>(&Gate::get_boolean_function, py::const_),
+                    py::arg("pin") = nullptr,
+                    R"(
+            Get the raw Boolean function corresponding to the given ``output`` pin without inlining or net substitution.
+            If ``pin`` is ``None``, the Boolean function of the first ``output`` pin is returned.
+            For full control over inlining and net substitution use ``get_boolean_function`` with ``inlined`` and ``substitute_nets``.
 
             :param hal_py.GatePin pin: The pin.
             :returns: The Boolean function on success, an empty Boolean function otherwise.
@@ -216,9 +256,9 @@ namespace hal
         )");
 
         py_gate.def(
-            "get_resolved_boolean_function",
-            [](const Gate& self, const GatePin* pin, const bool use_net_variables = false) -> std::optional<BooleanFunction> {
-                auto res = self.get_resolved_boolean_function(pin, use_net_variables);
+            "get_boolean_function",
+            [](const Gate& self, const GatePin* pin, bool inlined, bool substitute_nets) -> std::optional<BooleanFunction> {
+                auto res = self.get_boolean_function(pin, inlined, substitute_nets);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -230,29 +270,72 @@ namespace hal
                 }
             },
             py::arg("pin"),
-            py::arg("use_net_variables") = false,
+            py::arg("inlined"),
+            py::arg("substitute_nets"),
             R"(
-            Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
-            If fan-in nets are used to derive variable names, the variable names are generated using the ``BooleanFunctionNetDecorator``.
+            Get the Boolean function corresponding to the given ``output`` pin, with full error reporting.
+            When ``inlined`` is ``True``, ``internal`` and ``output`` pin variables are recursively substituted with
+            their definitions, and any gate-instance parameter values are reduced.
+            When ``substitute_nets`` is ``True``, the remaining input pin variables are additionally substituted
+            with variable names derived from the fan-in nets using ``BooleanFunctionNetDecorator``.
+            ``substitute_nets`` requires ``inlined`` to be ``True``; passing ``substitute_nets=True`` with ``inlined=False`` returns ``None``.
+            Returns ``None`` if ``pin`` is ``None``.
 
             :param hal_py.GatePin pin: The output pin.
-            :param bool use_net_variables: Set ``True`` to use variable names derived from fan-in nets of the gate, ``False`` to use input pin names instead. Defaults to ``False``.
+            :param bool inlined: Set ``True`` to inline ``internal`` and ``output`` pins and reduce parameter-conditional expressions.
+            :param bool substitute_nets: Set ``True`` to substitute input pin variables with fan-in net variables. Requires ``inlined=True`` and every input pin to have a connected net.
             :returns: The Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
         py_gate.def_property_readonly("boolean_functions", [](Gate* g) { return g->get_boolean_functions(); }, R"(
-            A dictionary from function name to Boolean function for all boolean functions associated with this gate.
+            A dictionary from function name to raw Boolean function for all boolean functions associated with this gate.
 
             :rtype: dict[str,hal_py.BooleanFunction]
         )");
 
-        py_gate.def("get_boolean_functions", &Gate::get_boolean_functions, py::arg("only_custom_functions") = false, R"(
-            Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.
+        py_gate.def("get_boolean_functions",
+                    py::overload_cast<bool>(&Gate::get_boolean_functions, py::const_),
+                    py::arg("only_custom_functions") = false,
+                    R"(
+            Get a dictionary from function name to raw Boolean function for all boolean functions associated with this gate.
+            For full control over inlining and net substitution use ``get_boolean_functions`` with ``inlined`` and ``substitute_nets``.
 
-            :param bool only_custom_functions: If true, this returns only the functions which were set via :func:`add_boolean_function`.
-            :returns: A map from function name to function.
+            :param bool only_custom_functions: If ``True``, returns only functions set via ``add_boolean_function``.
+            :returns: A map from function name to function on success, an empty map otherwise.
             :rtype: dict[str,hal_py.BooleanFunction]
+        )");
+
+        py_gate.def(
+            "get_boolean_functions",
+            [](const Gate& self, bool only_custom_functions, bool inlined, bool substitute_nets) -> std::optional<std::unordered_map<std::string, BooleanFunction>> {
+                auto res = self.get_boolean_functions(only_custom_functions, inlined, substitute_nets);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("only_custom_functions"),
+            py::arg("inlined"),
+            py::arg("substitute_nets"),
+            R"(
+            Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.
+            When ``inlined`` is ``True``, ``internal`` and ``output`` pin variables are recursively substituted with
+            their definitions, and gate-instance parameter values are reduced.
+            When ``substitute_nets`` is ``True``, the remaining input pin variables are additionally substituted with
+            variable names derived from the fan-in nets. ``substitute_nets`` requires ``inlined`` to be ``True``.
+            Aborts on the first failure and returns ``None``.
+
+            :param bool only_custom_functions: If ``True``, returns only functions set via :func:`add_boolean_function`.
+            :param bool inlined: Set ``True`` to inline ``internal`` and ``output`` pins and reduce parameter-conditional expressions.
+            :param bool substitute_nets: Set ``True`` to substitute input pin variables with fan-in net variables. Requires ``inlined=True``.
+            :returns: A map from function name to function on success, ``None`` otherwise.
+            :rtype: dict[str,hal_py.BooleanFunction] or None
         )");
 
         py_gate.def("add_boolean_function", &Gate::add_boolean_function, py::arg("name"), py::arg("func"), R"(

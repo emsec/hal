@@ -3,8 +3,12 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/enums.h"
 
 #include <QGridLayout>
@@ -182,13 +186,17 @@ namespace hal
             //Set components
             if (prop == GateTypeProperty::c_lut)
             {
-                parentComponent             = GateTypeComponent::create_lut_component(lutPage->mAscending->isChecked());
-                LUTComponent* lut_component = parentComponent->convert_to<LUTComponent>();
-
+                const bool ascending = lutPage->mAscending->isChecked();
+                std::vector<std::string> input_pin_names;
+                for (PinItem* pi : mPinModel->getInputPins())
+                    input_pin_names.push_back(pi->getName().toStdString());
+                std::unordered_map<std::string, LUTComponent::LUTOutputConfig> lut_configs;
                 for (const auto& entry : lutPage->getOutputPinConfigs())
                 {
-                    lut_component->add_output_pin_config(entry.pinName.toStdString(), entry.initIdentifier.toStdString(), entry.bitOffset, entry.bitCount);
+                    lut_configs.emplace(entry.pinName.toStdString(),
+                                        LUTComponent::LUTOutputConfig(entry.initIdentifier.toStdString(), entry.bitOffset, entry.bitCount, ascending, input_pin_names));
                 }
+                parentComponent = LUTComponent::create(std::move(lut_configs));
             }
             else if (prop == GateTypeProperty::ff)
             {
@@ -197,9 +205,9 @@ namespace hal
                 {
                     identifiers.push_back(id.toStdString());
                 }
-                std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
+                std::unique_ptr<GateTypeComponent> init_component = InitComponent::create(initPage->mCategory->text().toStdString(), identifiers);
                 std::unique_ptr<GateTypeComponent> state_component =
-                    GateTypeComponent::create_state_component(std::move(init_component), statePage->mStateIdentifier->text().toStdString(), statePage->mNegStateIdentifier->text().toStdString());
+                    StateComponent::create(std::move(init_component), statePage->mStateIdentifier->text().toStdString(), statePage->mNegStateIdentifier->text().toStdString());
                 BooleanFunction next_state_bf;
                 BooleanFunction clock_bf;
 
@@ -215,7 +223,7 @@ namespace hal
                     clock_bf = clock_bf_res.get();
                 }
 
-                std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(std::move(state_component), next_state_bf, clock_bf);
+                std::unique_ptr<GateTypeComponent> component = FFComponent::create(std::move(state_component), next_state_bf, clock_bf);
                 FFComponent* ff_component                    = component->convert_to<FFComponent>();
 
                 BooleanFunction async_reset;
@@ -242,8 +250,8 @@ namespace hal
             else if (prop == GateTypeProperty::latch)
             {
                 std::unique_ptr<GateTypeComponent> state_component =
-                    GateTypeComponent::create_state_component(nullptr, statePage->mStateIdentifier->text().toStdString(), statePage->mNegStateIdentifier->text().toStdString());
-                std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(std::move(state_component));
+                    StateComponent::create(nullptr, statePage->mStateIdentifier->text().toStdString(), statePage->mNegStateIdentifier->text().toStdString());
+                std::unique_ptr<GateTypeComponent> component = LatchComponent::create(std::move(state_component));
                 LatchComponent* latch_component              = component->convert_to<LatchComponent>();
 
                 auto data_in_res = BooleanFunction::from_string(latchPage->mDataIn->text().toStdString());
@@ -288,7 +296,7 @@ namespace hal
                 {
                     identifiers.push_back(id.toStdString());
                 }
-                sub_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
+                sub_component = InitComponent::create(initPage->mCategory->text().toStdString(), identifiers);
 
                 for (RAMPortWizardPage::RAMPort rpEdit : ramportPage->getRamPorts())
                 {
@@ -306,10 +314,10 @@ namespace hal
                         enabled_on_bf = enabled_on_res.get();
                     }
 
-                    sub_component = GateTypeComponent::create_ram_port_component(
+                    sub_component = RAMPortComponent::create(
                         std::move(sub_component), rpEdit.dataGroup->text().toStdString(), rpEdit.addressGroup->text().toStdString(), clocked_on_bf, enabled_on_bf, rpEdit.isWritePort->isChecked());
                 }
-                parentComponent = GateTypeComponent::create_ram_component(std::move(sub_component), ramPage->mBitSize->text().toInt());
+                parentComponent = RAMComponent::create(std::move(sub_component), ramPage->mBitSize->text().toInt());
             }
         }
         return std::move(parentComponent);

@@ -3,6 +3,7 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
@@ -793,7 +794,7 @@ namespace hal
                 return ERR("could not construct gate type '" + cell.name + "': missing 'clocked_on' or 'next_state' function (or both)");
             }
 
-            std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.ff->state1, cell.ff->state2);
+            std::unique_ptr<GateTypeComponent> state_component = StateComponent::create(nullptr, cell.ff->state1, cell.ff->state2);
 
             auto next_state_function = BooleanFunction::from_string(cell.ff->next_state);
             if (next_state_function.is_error())
@@ -805,7 +806,7 @@ namespace hal
             {
                 return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clocked_on' function from string");
             }
-            parent_component = GateTypeComponent::create_ff_component(std::move(state_component), next_state_function.get(), clocked_on_function.get());
+            parent_component = FFComponent::create(std::move(state_component), next_state_function.get(), clocked_on_function.get());
 
             FFComponent* ff_component = parent_component->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
@@ -847,9 +848,9 @@ namespace hal
         }
         else if (cell.latch.has_value())
         {
-            std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr, cell.latch->state1, cell.latch->state2);
+            std::unique_ptr<GateTypeComponent> state_component = StateComponent::create(nullptr, cell.latch->state1, cell.latch->state2);
 
-            parent_component                = GateTypeComponent::create_latch_component(std::move(state_component));
+            parent_component                = LatchComponent::create(std::move(state_component));
             LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
             assert(latch_component != nullptr);
 

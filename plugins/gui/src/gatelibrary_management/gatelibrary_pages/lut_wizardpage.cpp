@@ -61,9 +61,12 @@ namespace hal
         if (lutc == nullptr)
             return;
 
-        mAscending->setChecked(lutc->is_init_ascending());
-
         const auto& configs = lutc->get_output_pin_configs();
+        bool first_ascending = true;
+        if (!configs.empty())
+            first_ascending = configs.begin()->second.is_ascending;
+        mAscending->setChecked(first_ascending);
+
         for (const auto& [pin, cfg] : configs)
             mSavedConfigs.push_back({pin, cfg.init_identifier, cfg.bit_offset, cfg.bit_count});
     }

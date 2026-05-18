@@ -1,10 +1,17 @@
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 
+#include <memory>
+
 namespace hal
 {
     StateComponent::StateComponent(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
         : m_component(std::move(component)), m_state_identifier(state_identifier), m_neg_state_identifier(neg_state_identifier)
     {
+    }
+
+    std::unique_ptr<StateComponent> StateComponent::create(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier)
+    {
+        return std::unique_ptr<StateComponent>(new StateComponent(std::move(component), state_identifier, neg_state_identifier));
     }
 
     StateComponent::ComponentType StateComponent::get_type() const

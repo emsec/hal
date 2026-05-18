@@ -10,6 +10,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 
 #include <iostream>
 #include <iomanip>
@@ -967,7 +968,7 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_ok());
 
@@ -1019,7 +1020,7 @@ namespace hal
             net_s3->add_destination(test_gate, "S(3)");
 
             // call with nullptr
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(nullptr);
+            const auto res = test_gate->get_boolean_function(static_cast<const GatePin*>(nullptr), true, true);
             EXPECT_TRUE(res.is_error());
         }
         {
@@ -1035,10 +1036,10 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_error());
-        }   
+        }
         {
             auto nl = test_utils::create_empty_netlist();
             Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "test_gate");
@@ -1081,9 +1082,249 @@ namespace hal
             
             ASSERT_TRUE(co3 != nullptr);
 
-            const Result<BooleanFunction> res = test_gate->get_resolved_boolean_function(co3);
+            const auto res = test_gate->get_boolean_function(co3, true, true);
 
             EXPECT_TRUE(res.is_error());
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing get_boolean_function(pin/name, inlined=true):
+     *   - inlining of internal pins (CARRY4)
+     *   - parameter reduction using gate-instance parameters (PARAM_TEST)
+     */
+    TEST_F(GateTest, check_get_boolean_function_inlined)
+    {
+        TEST_START
+        {
+            // Inlining internal pins: CARRY4 CO(3) with all inputs connected.
+            // get_boolean_function(pin, true) should inline all internal carries and
+            // produce a BF expressed only in terms of input pin names.
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+
+            // inlined result must not contain any internal/output pin variable
+            auto bf_inlined_res = g->get_boolean_function(co3, true, false);
+            ASSERT_TRUE(bf_inlined_res.is_ok());
+            BooleanFunction bf_inlined = bf_inlined_res.get();
+            ASSERT_FALSE(bf_inlined.is_empty());
+
+            for (const auto& var : bf_inlined.get_variable_names())
+            {
+                const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                ASSERT_NE(var_pin, nullptr) << "variable '" << var << "' is not a known pin";
+                EXPECT_EQ(var_pin->get_direction(), PinDirection::input) << "variable '" << var << "' is not an input pin";
+            }
+        }
+        {
+            // Circular dependency: get_boolean_function with inlined=true must return empty BF (+ warning).
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            ASSERT_TRUE(g->add_boolean_function("CO(3)", BooleanFunction::from_string("CO(3)").get()));
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+            EXPECT_TRUE(g->get_boolean_function(co3, true, false).is_error());
+        }
+        {
+            // Parameter reduction – PARAM_TEST BF: ((mode == 0b1) & (width == 0xCAFE)) ? !I0 : (I0 & I1)
+            // Case A: mode="inverted" (1), width="0xCAFE" → condition true → reduces to !I0
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl  = g->get_type()->get_parameter("mode");
+            auto width_decl = g->get_type()->get_parameter("width");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(width_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "inverted").is_ok());
+            ASSERT_TRUE(g->set_parameter(width_decl.get(), "0xCAFE").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, ~BooleanFunction::Var("I0"));
+        }
+        {
+            // Case B: mode="normal" (0) → condition false → reduces to I0 & I1
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl = g->get_type()->get_parameter("mode");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "normal").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, BooleanFunction::Var("I0") & BooleanFunction::Var("I1"));
+        }
+        {
+            // Case C: mode="inverted" but width="0x0001" (mismatch) → condition false → reduces to I0 & I1
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+            auto mode_decl  = g->get_type()->get_parameter("mode");
+            auto width_decl = g->get_type()->get_parameter("width");
+            ASSERT_TRUE(mode_decl.is_ok());
+            ASSERT_TRUE(width_decl.is_ok());
+            ASSERT_TRUE(g->set_parameter(mode_decl.get(), "inverted").is_ok());
+            ASSERT_TRUE(g->set_parameter(width_decl.get(), "0x0001").is_ok());
+
+            auto bf_res = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_res.is_ok());
+            BooleanFunction bf = bf_res.get();
+            ASSERT_FALSE(bf.is_empty());
+            EXPECT_EQ(bf, BooleanFunction::Var("I0") & BooleanFunction::Var("I1"));
+        }
+        {
+            // Case D: no parameters set → BF stays symbolic (still contains mode and width variables)
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g  = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("PARAM_TEST"), "pt");
+
+            BooleanFunction bf_raw = g->get_boolean_function("O");
+            auto bf_inlined_res   = g->get_boolean_function("O", true, false);
+            ASSERT_TRUE(bf_inlined_res.is_ok());
+            BooleanFunction bf_inlined = bf_inlined_res.get();
+
+            // No parameters set → parameter reduction is a no-op; result equals raw BF
+            EXPECT_EQ(bf_raw, bf_inlined);
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing the Result-returning get_boolean_function and get_boolean_functions overloads:
+     *   - error on empty name
+     *   - error on null pin
+     *   - error when substitute_nets=true but inlined=false
+     *   - inlined=true, substitute_nets=false: pin-name variables, parameter reduction
+     *   - inlined=true, substitute_nets=true: net-ID variables
+     *   - get_boolean_functions with inlined=true and substitute_nets=true
+     *   - get_boolean_functions aborts on first missing net
+     */
+    TEST_F(GateTest, check_get_boolean_function_result)
+    {
+        TEST_START
+        {
+            // error on empty name
+            auto nl   = test_utils::create_empty_netlist();
+            Gate* g   = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function("", false, false).is_error());
+        }
+        {
+            // error on null pin
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function(static_cast<const GatePin*>(nullptr), false, false).is_error());
+        }
+        {
+            // error when substitute_nets=true but inlined=false
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            EXPECT_TRUE(g->get_boolean_function("O", false, true).is_error());
+        }
+        {
+            // inlined=true, substitute_nets=false: result expressed in input pin names, no net variables
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+            const GatePin* co3 = g->get_type()->get_pin_by_name("CO(3)");
+            ASSERT_NE(co3, nullptr);
+
+            auto res = g->get_boolean_function(co3, true, false);
+            ASSERT_TRUE(res.is_ok());
+
+            for (const auto& var : res.get().get_variable_names())
+            {
+                const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                ASSERT_NE(var_pin, nullptr) << "variable '" << var << "' should be an input pin name";
+                EXPECT_EQ(var_pin->get_direction(), PinDirection::input);
+            }
+        }
+        {
+            // inlined=true, substitute_nets=true: result expressed in net-ID variables
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            Net* net_i = nl->create_net("net_I");
+            net_i->add_destination(g, "I");
+
+            auto res = g->get_boolean_function("O", true, true);
+            ASSERT_TRUE(res.is_ok());
+
+            // result variables must be net-decorator names, not pin names
+            for (const auto& var : res.get().get_variable_names())
+            {
+                EXPECT_EQ(g->get_type()->get_pin_by_name(var), nullptr)
+                    << "variable '" << var << "' should be a net ID variable, not a pin name";
+            }
+            // must equal the net-substituted version of !I
+            auto expected = BooleanFunctionNetDecorator(*net_i).get_boolean_variable();
+            EXPECT_EQ(res.get(), ~expected);
+        }
+        {
+            // error when substitute_nets=true and an input pin has no connected net
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            // no net connected to "I"
+            EXPECT_TRUE(g->get_boolean_function("O", true, true).is_error());
+        }
+        {
+            // get_boolean_functions with inlined=true, substitute_nets=false: values are inlined
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("CARRY4"), "c4");
+            for (const auto& pin_name : {"CI", "CYINIT", "DI(0)", "DI(1)", "DI(2)", "DI(3)", "S(0)", "S(1)", "S(2)", "S(3)"})
+            {
+                auto* net = nl->create_net(std::string(pin_name) + "_net");
+                net->add_destination(g, pin_name);
+            }
+            auto res = g->get_boolean_functions(false, true, false);
+            ASSERT_TRUE(res.is_ok());
+
+            for (const auto& [name, bf] : res.get())
+            {
+                for (const auto& var : bf.get_variable_names())
+                {
+                    const GatePin* var_pin = g->get_type()->get_pin_by_name(var);
+                    ASSERT_NE(var_pin, nullptr) << "in function '" << name << "': variable '" << var << "' should be an input pin";
+                    EXPECT_EQ(var_pin->get_direction(), PinDirection::input);
+                }
+            }
+        }
+        {
+            // get_boolean_functions with substitute_nets=true: net-ID variables in all values
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            Net* net_i = nl->create_net("net_I");
+            net_i->add_destination(g, "I");
+
+            auto res = g->get_boolean_functions(false, true, true);
+            ASSERT_TRUE(res.is_ok());
+            ASSERT_TRUE(res.get().count("O"));
+
+            for (const auto& var : res.get().at("O").get_variable_names())
+            {
+                EXPECT_EQ(g->get_type()->get_pin_by_name(var), nullptr)
+                    << "variable '" << var << "' should be a net ID variable, not a pin name";
+            }
+        }
+        {
+            // get_boolean_functions aborts on first missing net when substitute_nets=true
+            auto nl = test_utils::create_empty_netlist();
+            Gate* g = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("INV"), "inv");
+            // no net connected to "I"
+            EXPECT_TRUE(g->get_boolean_functions(false, true, true).is_error());
         }
         TEST_END
     }
@@ -1138,13 +1379,9 @@ namespace hal
         {
             // Access the boolean function of a lut, that is stored in descending order
             auto nl = test_utils::create_empty_netlist();
-            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3");
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT3_desc");
+            ASSERT_NE(lut_type, nullptr);
             Gate* lut_gate = nl->create_gate(lut_type, "lut");
-
-            LUTComponent* lut_component = lut_type->get_component_as<LUTComponent>([](const GateTypeComponent* component){ return component->get_type() == GateTypeComponent::ComponentType::lut; });
-            ASSERT_NE(lut_component, nullptr);
-
-            lut_component->set_init_ascending(false);
 
             for (int i = 0x0; i <= 0xff; i++) {
                 auto init_string = i_to_hex_string(i, 2);
@@ -1154,8 +1391,6 @@ namespace hal
                 ASSERT_TRUE(get_init_res.is_ok());
                 EXPECT_EQ(get_init_res.get(), i_to_hex_string(i, 2));
             }
-
-            lut_component->set_init_ascending(true);
         }
         {
             // Add a boolean function to a lut pin

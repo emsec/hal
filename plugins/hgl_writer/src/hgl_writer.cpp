@@ -164,15 +164,6 @@ namespace hal
             {
                 rapidjson::Value lut_config(rapidjson::kObjectType);
 
-                if (lut_component->is_init_ascending())
-                {
-                    lut_config.AddMember("bit_order", "ascending", allocator);
-                }
-                else
-                {
-                    lut_config.AddMember("bit_order", "descending", allocator);
-                }
-
                 rapidjson::Value output_pins(rapidjson::kArrayType);
                 const auto& pin_configs = lut_component->get_output_pin_configs();
                 for (const GatePin* pin : gt->get_pins([](const GatePin* p) { return p->get_type() == PinType::lut; }))
@@ -188,11 +179,15 @@ namespace hal
                     }
                     const auto& cfg = it->second;
                     entry.AddMember("data_identifier", rapidjson::Value{}.SetString(cfg.init_identifier.c_str(), cfg.init_identifier.length(), allocator), allocator);
-                    if (cfg.bit_offset != 0)
-                    {
-                        entry.AddMember("bit_offset", cfg.bit_offset, allocator);
-                    }
+                    entry.AddMember("bit_offset", cfg.bit_offset, allocator);
                     entry.AddMember("bit_count", cfg.bit_count, allocator);
+                    entry.AddMember("is_ascending", cfg.is_ascending, allocator);
+                    rapidjson::Value input_pins_arr(rapidjson::kArrayType);
+                    for (const auto& ip : cfg.input_pins)
+                    {
+                        input_pins_arr.PushBack(rapidjson::Value{}.SetString(ip.c_str(), ip.length(), allocator), allocator);
+                    }
+                    entry.AddMember("input_pins", input_pins_arr, allocator);
                     output_pins.PushBack(entry, allocator);
                 }
                 lut_config.AddMember("output_pins", output_pins, allocator);

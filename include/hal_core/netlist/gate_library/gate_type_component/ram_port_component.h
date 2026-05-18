@@ -28,27 +28,30 @@
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     class RAMPortComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
-         * 
+         * Create a new RAMPortComponent with given child component, the write/read data/address pin groups, and the write/read clock/enable functions.
+         *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] data_group - The name of the read or write data pin group.
          * @param[in] addr_group - The name of the read or write address pin group.
          * @param[in] clock_bf - The read or write clock's Boolean function.
          * @param[in] enable_bf - The read or write enable's Boolean function.
-         * @param[in] is_write - True if the port is a write port, false otherwise.
+         * @param[in] is_write - Set true for write port, false for read port.
+         * @returns The RAMPortComponent.
          */
-        RAMPortComponent(std::unique_ptr<GateTypeComponent> component,
-                         const std::string& data_group,
-                         const std::string& addr_group,
-                         const BooleanFunction& clock_bf,
-                         const BooleanFunction& enable_bf,
-                         bool is_write);
+        static std::unique_ptr<RAMPortComponent> create(std::unique_ptr<GateTypeComponent> component,
+                                                        const std::string& data_group,
+                                                        const std::string& addr_group,
+                                                        const BooleanFunction& clock_bf,
+                                                        const BooleanFunction& enable_bf,
+                                                        bool is_write);
 
         /**
          * Get the type of the gate type component.
@@ -147,6 +150,13 @@ namespace hal
         void set_write_port(bool is_write);
 
     private:
+        RAMPortComponent(std::unique_ptr<GateTypeComponent> component,
+                         const std::string& data_group,
+                         const std::string& addr_group,
+                         const BooleanFunction& clock_bf,
+                         const BooleanFunction& enable_bf,
+                         bool is_write);
+
         static constexpr ComponentType m_type          = ComponentType::ram_port;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 

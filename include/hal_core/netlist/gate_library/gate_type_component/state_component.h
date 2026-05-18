@@ -27,6 +27,8 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     // TODO tests
@@ -34,13 +36,14 @@ namespace hal
     {
     public:
         /**
-         * Construct a new StateComponent with given child component and the internal state identifiers.
-         * 
+         * Create a new StateComponent with given child component and the internal state identifiers.
+         *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] state_identifier - The identifier of the internal state.
          * @param[in] neg_state_identifier - The identifier of the negated internal state.
+         * @returns The StateComponent.
          */
-        StateComponent(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
+        static std::unique_ptr<StateComponent> create(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
 
         /**
          * Get the type of the gate type component.
@@ -95,6 +98,8 @@ namespace hal
         void set_neg_state_identifier(const std::string& neg_state_identifier);
 
     private:
+        StateComponent(std::unique_ptr<GateTypeComponent> component, const std::string& state_identifier, const std::string& neg_state_identifier);
+
         static constexpr ComponentType m_type          = ComponentType::state;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 

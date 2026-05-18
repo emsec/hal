@@ -8,8 +8,32 @@
 
 namespace hal
 {
-    LUTComponent::LUTComponent(bool init_ascending) : m_init_ascending(init_ascending)
+    LUTComponent::LUTComponent(std::unordered_map<std::string, LUTOutputConfig> configs)
+        : m_output_pin_configs(std::move(configs))
     {
+    }
+
+    std::unique_ptr<LUTComponent> LUTComponent::create(std::unordered_map<std::string, LUTOutputConfig> configs)
+    {
+        for (auto it = configs.begin(); it != configs.end();)
+        {
+            const u32 bc = it->second.bit_count;
+            if (bc == 0 || (bc & (bc - 1)) != 0)
+            {
+                log_error("lut_component", "cannot add output pin config for pin '{}': bit_count {} must be a non-zero power of two — skipping.", it->first, bc);
+                it = configs.erase(it);
+            }
+            else if (it->second.input_pins.empty())
+            {
+                log_error("lut_component", "cannot add output pin config for pin '{}': input_pins must be non-empty — skipping.", it->first);
+                it = configs.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        return std::unique_ptr<LUTComponent>(new LUTComponent(std::move(configs)));
     }
 
     LUTComponent::ComponentType LUTComponent::get_type() const
@@ -25,51 +49,6 @@ namespace hal
     std::vector<GateTypeComponent*> LUTComponent::get_components(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
         return {};
-    }
-
-    bool LUTComponent::is_init_ascending() const
-    {
-        return m_init_ascending;
-    }
-
-    void LUTComponent::set_init_ascending(bool ascending)
-    {
-        m_init_ascending = ascending;
-    }
-
-    void LUTComponent::add_output_pin_config(const std::string& pin_name, const std::string& init_identifier, u32 bit_offset, u32 bit_count)
-    {
-        if (bit_count == 0 || (bit_count & (bit_count - 1)) != 0)
-        {
-            log_error("lut_component", "cannot add output pin config for pin '{}': bit_count {} must be a non-zero power of two.", pin_name, bit_count);
-            return;
-        }
-        m_output_pin_configs[pin_name] = {init_identifier, bit_offset, bit_count};
-    }
-
-    void LUTComponent::add_output_pin_config(const GatePin* pin, const std::string& init_identifier, u32 bit_offset, u32 bit_count)
-    {
-        if (pin == nullptr)
-        {
-            log_error("lut_component", "cannot add output pin config: pin is nullptr.");
-            return;
-        }
-        add_output_pin_config(pin->get_name(), init_identifier, bit_offset, bit_count);
-    }
-
-    bool LUTComponent::remove_output_pin_config(const std::string& pin_name)
-    {
-        return m_output_pin_configs.erase(pin_name) > 0;
-    }
-
-    bool LUTComponent::remove_output_pin_config(const GatePin* pin)
-    {
-        if (pin == nullptr)
-        {
-            log_error("lut_component", "cannot remove output pin config: pin is nullptr.");
-            return false;
-        }
-        return remove_output_pin_config(pin->get_name());
     }
 
     const LUTComponent::LUTOutputConfig* LUTComponent::get_output_pin_config(const std::string& pin_name) const

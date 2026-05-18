@@ -41,8 +41,6 @@ namespace hal
 
         void update(GateType* gt) override;
 
-    private:
-        QLabel* mAscending;
     };
 
 }

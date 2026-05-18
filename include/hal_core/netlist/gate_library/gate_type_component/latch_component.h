@@ -29,17 +29,20 @@
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     class LatchComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new LatchComponent with given child component and the Boolean functions describing the data input and the enable signal.
-         * 
+         * Create a new LatchComponent with given child component.
+         *
          * @param[in] component - Another component to be added as a child component.
+         * @returns The LatchComponent.
          */
-        LatchComponent(std::unique_ptr<GateTypeComponent> component);
+        static std::unique_ptr<LatchComponent> create(std::unique_ptr<GateTypeComponent> component);
 
         /**
          * Get the type of the gate type component.
@@ -139,6 +142,8 @@ namespace hal
         void set_async_set_reset_behavior(AsyncSetResetBehavior behav_state, AsyncSetResetBehavior behav_neg_state);
 
     private:
+        explicit LatchComponent(std::unique_ptr<GateTypeComponent> component);
+
         static constexpr ComponentType m_type          = ComponentType::latch;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 

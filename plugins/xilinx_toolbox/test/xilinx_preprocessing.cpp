@@ -40,22 +40,22 @@ namespace hal
 
             // LUT5: I0-I4 → O, 32-bit INIT
             m_lut5_type = m_gl->create_gate_type("LUT5", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
-                LUTComponent::create_lut_component({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 32)}}));
+                LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 32, true, {"I0", "I1", "I2", "I3", "I4"})}}));
             for (int i = 0; i < 5; ++i)
                 m_lut5_type->create_pin("I" + std::to_string(i), PinDirection::input);
             m_lut5_type->create_pin("O", PinDirection::output, PinType::lut);
 
             // LUT6: I0-I5 → O, 64-bit INIT
             m_lut6_type = m_gl->create_gate_type("LUT6", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
-                LUTComponent::create_lut_component({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 64)}}));
+                LUTComponent::create({{"O", LUTComponent::LUTOutputConfig("INIT", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})}}));
             for (int i = 0; i < 6; ++i)
                 m_lut6_type->create_pin("I" + std::to_string(i), PinDirection::input);
             m_lut6_type->create_pin("O", PinDirection::output, PinType::lut);
 
             // LUT6_2: I0-I5 inputs; O6 = full 64-bit INIT, O5 = lower 32 bits of the same INIT
             m_lut6_2_type = m_gl->create_gate_type("LUT6_2", {GateTypeProperty::combinational, GateTypeProperty::c_lut},
-                LUTComponent::create_lut_component({{"O6", LUTComponent::LUTOutputConfig("INIT", 0, 64)},
-                                                    {"O5", LUTComponent::LUTOutputConfig("INIT", 0, 32)}}));
+                LUTComponent::create({{"O6", LUTComponent::LUTOutputConfig("INIT", 0, 64, true, {"I0", "I1", "I2", "I3", "I4", "I5"})},
+                                                    {"O5", LUTComponent::LUTOutputConfig("INIT", 0, 32, true, {"I0", "I1", "I2", "I3", "I4"})}}));
             for (int i = 0; i < 6; ++i)
                 m_lut6_2_type->create_pin("I" + std::to_string(i), PinDirection::input);
             m_lut6_2_type->create_pin("O5", PinDirection::output, PinType::lut);

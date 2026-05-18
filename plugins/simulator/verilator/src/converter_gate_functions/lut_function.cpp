@@ -26,14 +26,17 @@ namespace hal
                 std::vector<GatePin*> output_pins = gt->get_output_pins();
                 u32 lut_size                      = input_pins.size();
 
-                // check if LUTComponent exists, if not abort
-                if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr)
-                {
-                    log_debug("verilator", "valid LUT, got LUT component");
-                }
-                else
+                const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+                if (lut_component == nullptr)
                 {
                     log_error("verilator", "cannot get LUTComponent, aborting...");
+                    return function.str();
+                }
+
+                const auto& pin_cfgs = lut_component->get_output_pin_configs();
+                if (pin_cfgs.empty())
+                {
+                    log_error("verilator", "LUT gate type '{}' has no output pin configs, aborting...", gt->get_name());
                     return function.str();
                 }
 
@@ -42,6 +45,8 @@ namespace hal
                     log_error("verilator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the LUT_INIT string correctly :) ! aborting...");
                     return function.str();
                 }
+
+                const std::string& init_identifier = pin_cfgs.begin()->second.init_identifier;
 
                 std::reverse(input_pins.begin(), input_pins.end());    // needs to be reverted due to access in LUT_INIT string
                 function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
@@ -52,16 +57,9 @@ namespace hal
                 function.seekp(-2, function.cur);    // remove the additional colon and space
                 function << "};" << std::endl;
 
-                InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-
-                if (init_component == nullptr)
-                {
-                    log_error("verilator", "Could not get init component for gate type {}!", gt->get_name());
-                }
-
                 for (const auto& output_pin : output_pins)
                 {
-                    function << "assign " << output_pin->get_name() << " = " << init_component->get_init_identifiers().front() << "[lut_lookup];" << std::endl;
+                    function << "assign " << output_pin->get_name() << " = " << init_identifier << "[lut_lookup];" << std::endl;
                 }
 
                 return function.str();

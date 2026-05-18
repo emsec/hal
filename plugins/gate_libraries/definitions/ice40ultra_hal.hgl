@@ -4044,7 +4044,14 @@
                         "pin": "O",
                         "data_identifier": "LUT_INIT",
                         "bit_offset": 0,
-                        "bit_count": 16
+                        "bit_count": 16,
+                        "input_pins": [
+                            "I0",
+                            "I1",
+                            "I2",
+                            "I3"
+                        ],
+                        "is_ascending": true
                     }
                 ]
             },

@@ -800,70 +800,48 @@ namespace hal
 
         GateLibrary gl("no_path", "example_gl");
 
-        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::c_lut}, GateTypeComponent::create_lut_component(true));
+        // Create with all configs at once
+        GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::c_lut},
+            LUTComponent::create({
+                {"O",  LUTComponent::LUTOutputConfig("identifier2", 4, 8, true, {"A", "B", "C"})},
+                {"Q",  LUTComponent::LUTOutputConfig("INIT2", 8, 16, true, {"A", "B", "C", "D"})},
+                {"Z",  LUTComponent::LUTOutputConfig("INIT", 0, 4, false, {"A", "B"})},
+            }));
         ASSERT_NE(gt, nullptr);
 
         LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::lut; });
         ASSERT_NE(lut_component, nullptr);
-        EXPECT_EQ(lut_component->is_init_ascending(), true);
-        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
+        EXPECT_EQ(lut_component->get_output_pin_configs().size(), 3u);
 
-        // add by name
-        lut_component->add_output_pin_config("O", "identifier1", 0, 1);
-        ASSERT_NE(lut_component->get_output_pin_config("O"), nullptr);
-        EXPECT_EQ(lut_component->get_output_pin_config("O")->init_identifier, "identifier1");
-        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_offset, 0u);
-        EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_count, 1u);
-
-        // overwrite by name
-        lut_component->add_output_pin_config("O", "identifier2", 4, 8);
+        // configs are immutable after construction — verify via get_output_pin_config
         ASSERT_NE(lut_component->get_output_pin_config("O"), nullptr);
         EXPECT_EQ(lut_component->get_output_pin_config("O")->init_identifier, "identifier2");
         EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_offset, 4u);
         EXPECT_EQ(lut_component->get_output_pin_config("O")->bit_count, 8u);
+        EXPECT_EQ(lut_component->get_output_pin_config("O")->is_ascending, true);
 
-        // add by pin pointer — create a pin first
-        auto pin_res = gt->create_pin("Q", PinDirection::output, PinType::lut);
-        ASSERT_FALSE(pin_res.is_error());
-        GatePin* q_pin = gt->get_pin_by_name("Q");
-        ASSERT_NE(q_pin, nullptr);
-
-        lut_component->add_output_pin_config(q_pin, "INIT", 0, 4);
         ASSERT_NE(lut_component->get_output_pin_config("Q"), nullptr);
-        EXPECT_EQ(lut_component->get_output_pin_config("Q")->init_identifier, "INIT");
-        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_offset, 0u);
-        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_count, 4u);
-
-        // overwrite by pin pointer
-        lut_component->add_output_pin_config(q_pin, "INIT2", 8, 16);
         EXPECT_EQ(lut_component->get_output_pin_config("Q")->init_identifier, "INIT2");
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_offset, 8u);
+        EXPECT_EQ(lut_component->get_output_pin_config("Q")->bit_count, 16u);
 
-        // remove by name
-        EXPECT_FALSE(lut_component->remove_output_pin_config("nonexistent"));
-        EXPECT_TRUE(lut_component->remove_output_pin_config("O"));
-        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
-        EXPECT_FALSE(lut_component->remove_output_pin_config("O"));
+        ASSERT_NE(lut_component->get_output_pin_config("Z"), nullptr);
+        EXPECT_EQ(lut_component->get_output_pin_config("Z")->is_ascending, false);
+        EXPECT_EQ(lut_component->get_output_pin_config("Z")->input_pins, (std::vector<std::string>{"A", "B"}));
 
-        // remove by pin pointer
-        EXPECT_TRUE(lut_component->remove_output_pin_config(q_pin));
-        EXPECT_EQ(lut_component->get_output_pin_config("Q"), nullptr);
-        EXPECT_FALSE(lut_component->remove_output_pin_config(q_pin));
+        // nonexistent pin
+        EXPECT_EQ(lut_component->get_output_pin_config("nonexistent"), nullptr);
 
-        // nullptr safety
-        lut_component->add_output_pin_config(static_cast<const GatePin*>(nullptr), "X", 0, 1);
-        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
-        EXPECT_FALSE(lut_component->remove_output_pin_config(static_cast<const GatePin*>(nullptr)));
-
-        EXPECT_TRUE(lut_component->get_output_pin_configs().empty());
-
-        // reject invalid bit_count
-        lut_component->add_output_pin_config("O", "X", 0, 0);
-        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
-        lut_component->add_output_pin_config("O", "X", 0, 3);
-        EXPECT_EQ(lut_component->get_output_pin_config("O"), nullptr);
-
-        lut_component->set_init_ascending(false);
-        EXPECT_EQ(lut_component->is_init_ascending(), false);
+        // invalid configs (bad bit_count or empty input_pins) are silently skipped
+        auto invalid_comp = LUTComponent::create({{"X", LUTComponent::LUTOutputConfig("INIT", 0, 0, true, {"X"})}});
+        ASSERT_NE(invalid_comp, nullptr);
+        EXPECT_TRUE(invalid_comp->get_output_pin_configs().empty());
+        auto invalid_comp2 = LUTComponent::create({{"X", LUTComponent::LUTOutputConfig("INIT", 0, 3, true, {"A", "B"})}});
+        ASSERT_NE(invalid_comp2, nullptr);
+        EXPECT_TRUE(invalid_comp2->get_output_pin_configs().empty());
+        auto invalid_comp3 = LUTComponent::create({{"X", LUTComponent::LUTOutputConfig("INIT", 0, 4, true, {})}});
+        ASSERT_NE(invalid_comp3, nullptr);
+        EXPECT_TRUE(invalid_comp3->get_output_pin_configs().empty());
 
         TEST_END
     }
@@ -875,7 +853,7 @@ namespace hal
 
     GateType* gt = gl.create_gate_type("dummy",
                                        {GateTypeProperty::ff},
-                                       GateTypeComponent::create_ff_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
+                                       FFComponent::create(StateComponent::create(nullptr, "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
     ASSERT_NE(gt, nullptr);
     FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::ff; });
     ASSERT_NE(ff_component, nullptr);
@@ -914,8 +892,8 @@ namespace hal
     GateType* gt = gl.create_gate_type(
         "dummy",
         {GateTypeProperty::ff},
-        GateTypeComponent::create_ff_component(
-            GateTypeComponent::create_state_component(GateTypeComponent::create_init_component("category1", {"identifier1"}), "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
+        FFComponent::create(
+            StateComponent::create(InitComponent::create("category1", {"identifier1"}), "IQ", "IQN"), BooleanFunction::Var("D"), BooleanFunction::Var("C")));
     ASSERT_NE(gt, nullptr);
     FFComponent* ff_component = gt->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); });
     ASSERT_NE(ff_component, nullptr);
@@ -966,7 +944,7 @@ TEST_F(GateTypeTest, check_latch_gt)
 
     GateLibrary gl("no_path", "example_gl");
 
-    GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::latch}, GateTypeComponent::create_latch_component(GateTypeComponent::create_state_component(nullptr, "IQ", "IQN")));
+    GateType* gt = gl.create_gate_type("dummy", {GateTypeProperty::latch}, LatchComponent::create(StateComponent::create(nullptr, "IQ", "IQN")));
     ASSERT_NE(gt, nullptr);
     LatchComponent* latch_component = gt->get_component_as<LatchComponent>([](const GateTypeComponent* component) { return component->get_type() == GateTypeComponent::ComponentType::latch; });
     ASSERT_NE(latch_component, nullptr);

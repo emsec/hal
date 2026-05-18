@@ -27,15 +27,19 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
+#include <memory>
+
 namespace hal
 {
     class MACComponent : public GateTypeComponent
     {
     public:
         /**
-         * Construct a new MACComponent.
+         * Create a new MACComponent.
+         *
+         * @returns The MACComponent.
          */
-        MACComponent() = default;
+        static std::unique_ptr<MACComponent> create();
 
         /**
          * Get the type of the gate type component.
@@ -62,6 +66,8 @@ namespace hal
         std::vector<GateTypeComponent*> get_components(const std::function<bool(const GateTypeComponent*)>& filter = nullptr) const override;
 
     private:
+        MACComponent() = default;
+
         static constexpr ComponentType m_type = ComponentType::mac;
     };
 }    // namespace hal

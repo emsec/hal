@@ -62,7 +62,7 @@ namespace hal
                 BooleanFunction bf;
                 if (const auto it = gate_cache.find({src->get_id(), src_ep->get_pin()}); it == gate_cache.end())
                 {
-                    const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
+                    const auto bf_res = src->get_boolean_function(src_ep->get_pin(), true, true);
                     if (bf_res.is_error())
                     {
                         return ERR_APPEND(bf_res.get_error(),

@@ -11,12 +11,12 @@
 #include "hal_core/utilities/log.h"
 #include "verilator/verilator.h"
 
+#include <cctype>
 #include <filesystem>
 #include <fstream>
 #include <set>
 #include <sstream>
 #include <vector>
-#include <cctype>
 
 namespace hal
 {
@@ -30,7 +30,7 @@ namespace hal
             {
                 log_info("verilator", "converting {} to verilog for simulation", nl->get_gate_library()->get_name());
 
-                std::unordered_map<GateType*,std::string> gate_type_names = get_gate_gate_types_from_netlist(nl);
+                std::unordered_map<GateType*, std::string> gate_type_names = get_gate_gate_types_from_netlist(nl);
 
                 // get preset simulation gate models if path given
                 std::filesystem::path gate_definitions_path = verilator_sim_path / "gate_definitions/";
@@ -53,11 +53,12 @@ namespace hal
 
                     bool replace_name = false;
                     if (it.second == it.first->get_name())
+                    {
                         log_info("verilator", "creating verilog simulation model for '{}'", it.first->get_name());
+                    }
                     else
                     {
-                        log_info("verilator", "creating verilog simulation model for '{}' which corresponds to gate type '{}'",
-                                 it.second, it.first->get_name());
+                        log_info("verilator", "creating verilog simulation model for '{}' which corresponds to gate type '{}'", it.second, it.first->get_name());
                         replace_name = true;
                     }
                     std::stringstream gate_description;
@@ -81,19 +82,24 @@ namespace hal
                     std::ofstream gate_file(gate_definitions_path / (it.second + ".v"));
                     if (replace_name)
                     {
-                        std::string buffer =  gate_description.str();
-                        size_t pos = 0;
+                        std::string buffer = gate_description.str();
+                        size_t pos         = 0;
                         for (;;)
                         {
                             pos = buffer.find(it.first->get_name());
-                            if (pos == std::string::npos) break;
+                            if (pos == std::string::npos)
+                            {
+                                break;
+                            }
                             buffer.replace(pos, it.first->get_name().size(), it.second);
                             pos += it.second.size();
                         }
                         gate_file << buffer;
                     }
                     else
+                    {
                         gate_file << gate_description.str();
+                    }
                     gate_file.close();
                 }
 
@@ -141,13 +147,13 @@ namespace hal
                 return supported_gate_types;
             }
 
-            std::unordered_map<GateType*,std::string> get_gate_gate_types_from_netlist(const Netlist* nl)
+            std::unordered_map<GateType*, std::string> get_gate_gate_types_from_netlist(const Netlist* nl)
             {
-                std::unordered_map<GateType*,std::string> gate_types;
+                std::unordered_map<GateType*, std::string> gate_types;
 
                 for (const auto& gate : nl->get_gates())
                 {
-                    gate_types.emplace(std::make_pair<GateType*,std::string>(gate->get_type(),get_name_for_gate_type(gate->get_type())));
+                    gate_types.emplace(std::make_pair<GateType*, std::string>(gate->get_type(), get_name_for_gate_type(gate->get_type())));
                 }
 
                 return gate_types;
@@ -161,11 +167,15 @@ namespace hal
                     if (isalnum(cc))
                     {
                         if (isdigit(cc) && retval.str().empty())
-                           retval << 'G';
+                        {
+                            retval << 'G';
+                        }
                         retval << cc;
                     }
                     else if (cc == '_')
+                    {
                         retval << cc;
+                    }
                     else
                     {
                         retval << '_' << std::hex << static_cast<unsigned int>(cc) << "_";
@@ -184,37 +194,32 @@ namespace hal
                     u32 init_len             = 1 << lut_size;
                     bool lut_init_descending = false;
 
-                    if (LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lut_component != nullptr)
-                    {
-                        if (!lut_component->is_init_ascending())
-                        {
-                            lut_init_descending = true;
-                        }
-                    }
-                    else
+                    const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+                    if (lut_component == nullptr)
                     {
                         log_error("verilator", "cannot get LUTComponent, aborting...");
                         return std::vector<std::string>();
                     }
 
-                    std::stringstream parameter;
-
-                    InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                    
-                    if (init_component == nullptr)
+                    const auto& pin_cfgs = lut_component->get_output_pin_configs();
+                    if (pin_cfgs.empty())
                     {
-                        log_error("verilator", "Could not get init component for gate type {}!", gt->get_name());
+                        log_error("verilator", "LUT gate type '{}' has no output pin configs, aborting...", gt->get_name());
+                        return std::vector<std::string>();
                     }
 
-                    if (lut_init_descending)
+                    const std::string& init_identifier = pin_cfgs.begin()->second.init_identifier;
+                    std::stringstream parameter;
+
+                    if (!pin_cfgs.begin()->second.is_ascending)
                     {
                         parameter << "parameter [" << init_len - 1 << ":0]"
-                                  <<  " " << init_component->get_init_identifiers().front() << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                                  << " " << init_identifier << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
                     }
                     else
                     {
                         parameter << "parameter [0:" << init_len - 1 << "]"
-                                  <<  " " << init_component->get_init_identifiers().front() << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
+                                  << " " << init_identifier << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
                     }
 
                     parameters.push_back(parameter.str());
@@ -225,7 +230,7 @@ namespace hal
                     {
                         std::stringstream parameter;
                         parameter << "parameter [0:0]"
-                                  << " " << init_component->get_init_identifiers().front() <<  "= 1'b0,";
+                                  << " " << init_component->get_init_identifiers().front() << "= 1'b0,";
                         parameters.push_back(parameter.str());
                     }
                 }
