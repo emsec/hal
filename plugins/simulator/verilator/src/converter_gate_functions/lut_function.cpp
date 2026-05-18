@@ -3,13 +3,13 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "verilator/verilator.h"
 
-#include <filesystem>
+#include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <vector>
 
@@ -22,49 +22,64 @@ namespace hal
             std::string get_function_for_lut(const GateType* gt)
             {
                 std::stringstream function;
-                std::vector<GatePin*> input_pins  = gt->get_input_pins();
-                std::vector<GatePin*> output_pins = gt->get_output_pins();
-                u32 lut_size                      = input_pins.size();
 
                 const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
                 if (lut_component == nullptr)
                 {
-                    log_error("verilator", "cannot get LUTComponent, aborting...");
-                    return function.str();
+                    log_error("verilator", "cannot get LUTComponent for gate type '{}', aborting...", gt->get_name());
+                    return {};
                 }
 
                 const auto& pin_cfgs = lut_component->get_output_pin_configs();
                 if (pin_cfgs.empty())
                 {
                     log_error("verilator", "LUT gate type '{}' has no output pin configs, aborting...", gt->get_name());
-                    return function.str();
+                    return {};
                 }
 
-                if (output_pins.size() > 1)
+                for (const auto& [pin_name, cfg] : pin_cfgs)
                 {
-                    log_error("verilator", "unsupported reached: currently only supporting LUTs with one output, split them into two and set the LUT_INIT string correctly :) ! aborting...");
-                    return function.str();
-                }
+                    if (cfg.input_pins.empty())
+                    {
+                        log_error("verilator", "LUT gate type '{}': output pin '{}' has no input pins configured, aborting...", gt->get_name(), pin_name);
+                        return {};
+                    }
 
-                const std::string& init_identifier = pin_cfgs.begin()->second.init_identifier;
+                    // Sanitize pin name for use as a Verilog wire identifier
+                    std::string safe_name = pin_name;
+                    for (char& c : safe_name)
+                    {
+                        if (!std::isalnum(static_cast<unsigned char>(c)))
+                        {
+                            c = '_';
+                        }
+                    }
+                    const std::string lookup_wire = "lut_lookup_" + safe_name;
 
-                std::reverse(input_pins.begin(), input_pins.end());    // needs to be reverted due to access in LUT_INIT string
-                function << "wire [" << lut_size - 1 << ":0] lut_lookup = {";
-                for (const auto input_pin : input_pins)
-                {
-                    function << input_pin->get_name() << ", ";
-                }
-                function.seekp(-2, function.cur);    // remove the additional colon and space
-                function << "};" << std::endl;
+                    // Reverse input order so that the LSB input lands at index 0,
+                    // matching the INIT bit addressing convention used in get_lut_function.
+                    std::vector<std::string> inputs = cfg.input_pins;
+                    std::reverse(inputs.begin(), inputs.end());
 
-                for (const auto& output_pin : output_pins)
-                {
-                    function << "assign " << output_pin->get_name() << " = " << init_identifier << "[lut_lookup];" << std::endl;
+                    function << "wire [" << inputs.size() - 1 << ":0] " << lookup_wire << " = {";
+                    for (const auto& ipin : inputs)
+                    {
+                        function << ipin << ", ";
+                    }
+                    function.seekp(-2, function.cur);
+                    function << "};\n";
+
+                    function << "assign " << pin_name << " = " << cfg.init_identifier << "[" << lookup_wire;
+                    if (cfg.bit_offset > 0)
+                    {
+                        function << " + " << cfg.bit_offset;
+                    }
+                    function << "];\n";
                 }
 
                 return function.str();
             }
 
         }    // namespace converter
-    }        // namespace verilator
+    }    // namespace verilator
 }    // namespace hal

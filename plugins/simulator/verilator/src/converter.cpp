@@ -4,8 +4,6 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
-#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -16,6 +14,7 @@
 #include <fstream>
 #include <set>
 #include <sstream>
+#include <unordered_set>
 #include <vector>
 
 namespace hal
@@ -184,80 +183,31 @@ namespace hal
                 return retval.str();
             }
 
-            std::vector<std::string> get_parameters_for_gate(const GateType* gt)
-            {
-                std::vector<std::string> parameters;
-                // insert gate specific function
-                if (gt->has_property(hal::GateTypeProperty::c_lut))
-                {
-                    u32 lut_size             = gt->get_input_pins().size();
-                    u32 init_len             = 1 << lut_size;
-                    bool lut_init_descending = false;
-
-                    const LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
-                    if (lut_component == nullptr)
-                    {
-                        log_error("verilator", "cannot get LUTComponent, aborting...");
-                        return std::vector<std::string>();
-                    }
-
-                    const auto& pin_cfgs = lut_component->get_output_pin_configs();
-                    if (pin_cfgs.empty())
-                    {
-                        log_error("verilator", "LUT gate type '{}' has no output pin configs, aborting...", gt->get_name());
-                        return std::vector<std::string>();
-                    }
-
-                    const std::string& init_identifier = pin_cfgs.begin()->second.init_identifier;
-                    std::stringstream parameter;
-
-                    if (!pin_cfgs.begin()->second.is_ascending)
-                    {
-                        parameter << "parameter [" << init_len - 1 << ":0]"
-                                  << " " << init_identifier << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
-                    }
-                    else
-                    {
-                        parameter << "parameter [0:" << init_len - 1 << "]"
-                                  << " " << init_identifier << " = " << init_len << "'h" << std::setfill('0') << std::setw(init_len / 4) << 0 << ",";
-                    }
-
-                    parameters.push_back(parameter.str());
-                }
-                else if (gt->has_property(hal::GateTypeProperty::ff) || gt->has_property(hal::GateTypeProperty::latch))
-                {
-                    if (InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); }); init_component != nullptr)
-                    {
-                        std::stringstream parameter;
-                        parameter << "parameter [0:0]"
-                                  << " " << init_component->get_init_identifiers().front() << "= 1'b0,";
-                        parameters.push_back(parameter.str());
-                    }
-                }
-
-                return parameters;
-            }
-
             std::string get_prologue_for_gate_type(const GateType* gt)
             {
                 std::stringstream prologue;
 
                 prologue << "`timescale 1 ps/1 ps" << std::endl;
-
                 prologue << "module " << gt->get_name() << std::endl;
 
-                // some gates have parameters, which we need to insert
-
-                std::vector<std::string> parameters = get_parameters_for_gate(gt);
-
-                // add parameters to all gates
-                if (!parameters.empty())
+                // Emit #(...) parameter block from the gate type's declared parameters
+                const auto& gate_params = gt->get_parameters();
+                if (!gate_params.empty())
                 {
                     prologue << "#(" << std::endl;
                     std::string parameter_str;
-                    for (const auto& parameter : parameters)
+                    for (const auto& [name, param] : gate_params)
                     {
-                        parameter_str += "\t" + parameter + "\n";
+                        const u32 size          = param.get_size();
+                        std::string hex_default = param.get_default_value();
+                        if (hex_default.size() >= 2 && hex_default[0] == '0' && (hex_default[1] == 'x' || hex_default[1] == 'X'))
+                            hex_default = hex_default.substr(2);
+                        if (hex_default.empty())
+                            hex_default = std::string(std::max(1u, size / 4), '0');
+                        std::stringstream entry;
+                        entry << "\tparameter [" << size - 1 << ":0] " << name << " = " << size << "'h"
+                              << std::setfill('0') << std::setw(std::max(1u, size / 4)) << hex_default << ",\n";
+                        parameter_str += entry.str();
                     }
                     parameter_str.erase(parameter_str.find_last_of(","));
                     prologue << parameter_str << std::endl;
