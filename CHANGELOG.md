@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* **[BREAKING]** multi-output LUT support — complete overhaul of `LUTComponent` and related INIT APIs (see details below)
+* **[BREAKING]** component factory functions moved from `GateTypeComponent` to individual component classes as static `create()` methods
+* **[BREAKING]** `Gate::get_init_data()` and `Gate::set_init_data()` replaced with per-pin `get_init_string()` / `set_init_string()`
+* **[BREAKING]** `Gate::get_resolved_boolean_function()` replaced by the new `get_boolean_function()` overloads with `inlined` / `substitute_nets` parameters
+* **[BREAKING]** HGL format version bumped from 4 to 6; old files with version ≤ 5 are still read
+* added new `Parameter` struct for typed gate-type parameters (Boolean, BitVector, LogicVector, Integer, String, Float, Time, Enum)
+* added parameter support to `GateType` and `DataContainer`
+* added parameter Python bindings
+* added `BooleanFunction::from_string()` overload accepting a `var_sizes` map for multi-bit variables
+* added `Eq`, `Add`, `Sub`, `Mul`, and ternary `Ite` operations to `BooleanFunction` and its parser
+* added support for parsing multi-bit constants and variables in `BooleanFunction`
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * changed context menu for data in selections details, can now add, modify, or delete data rows
@@ -9,6 +20,54 @@ All notable changes to this project will be documented in this file.
 * module pin groups
   * fixed bug in pin model which must not crash when deleting a non-empty pin group
   * fixed bug by disallowing deletion of group comprising a single pin with same name
+* API breaks in detail
+  * `Gate`
+    * **[BREAKING]** removed `get_resolved_boolean_function(pin, use_net_variables)` — use `get_boolean_function(pin, inlined=true, substitute_nets=true)` instead
+    * **[BREAKING]** removed `get_init_data()` — use `get_init_string(pin_name)` or `get_init_string(pin*)` instead
+    * **[BREAKING]** removed `set_init_data(init_data)` — use `set_init_string(pin_name, hex)` or `set_init_string(pin*, hex)` instead
+    * added `get_boolean_function(name, inlined, substitute_nets)` and `get_boolean_function(pin, inlined, substitute_nets)` overloads returning `Result<BooleanFunction>` with optional inlining and net substitution
+    * added `get_boolean_functions(only_custom, inlined, substitute_nets)` overload returning `Result<std::unordered_map<std::string, BooleanFunction>>`
+    * added `get_init_string(pin_name)` and `get_init_string(pin*)` returning an uppercase hex string for the given LUT output or internal pin
+    * added `set_init_string(pin_name, hex)` and `set_init_string(pin*, hex)` for writing a per-pin INIT hex slice
+  * `LUTComponent`
+    * **[BREAKING]** removed constructor `LUTComponent(component, init_ascending)` — use `LUTComponent::create(configs)` instead
+    * **[BREAKING]** removed `is_init_ascending()` and `set_init_ascending()` — per-output-pin bit-order is now encoded in `LUTOutputConfig::is_ascending`
+    * added `LUTComponent::LUTOutputConfig` struct holding per-pin INIT identifier, bit offset, bit count, bit order, and input pin list for multi-output LUT support
+    * added static factory `LUTComponent::create(configs)` replacing the old constructor
+    * added `get_output_pin_config(pin_name)` and `get_output_pin_configs()` accessors
+    * added static helpers `extract_init_slice(full_hex, bit_offset, bit_count)` and `splice_init_slice(full_hex, slice_hex, bit_offset, bit_count)`
+  * `GateTypeComponent` (factory functions)
+    * **[BREAKING]** removed `GateTypeComponent::create_lut_component()` — use `LUTComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_ff_component()` — use `FFComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_latch_component()` — use `LatchComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_ram_component()` — use `RAMComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_mac_component()` — use `MACComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_init_component()` — use `InitComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_state_component()` — use `StateComponent::create()` instead
+    * **[BREAKING]** removed `GateTypeComponent::create_ram_port_component()` — use `RAMPortComponent::create()` instead
+    * all component constructors (`FFComponent`, `InitComponent`, `LatchComponent`, `MACComponent`, `RAMComponent`, `RAMPortComponent`, `StateComponent`) made private; each class now exposes a static `create()` factory
+  * `GateType`
+    * added `add_parameter(param)`, `get_parameters()`, `get_parameter(name)`, and `has_parameter(name)` for typed parameter declarations
+  * `DataContainer`
+    * added `set_parameter(param, value)`, `get_parameter_value(name)`, `get_parameter_declaration(name)`, `has_parameter(param/name)`, `delete_parameter(name)`, and `get_parameters()` for storing and querying typed parameter values on gate instances
+  * `BooleanFunction`
+    * added `from_string(expression, var_sizes)` overload; the `var_sizes` map allows specifying bit-widths for multi-bit variables (e.g. those compared against multi-bit constants in parameter equality checks)
+  * `xilinx_toolbox` preprocessing
+    * **[BREAKING]** `split_luts(Netlist*)` signature extended with optional `create_module` parameter; added `split_luts(std::vector<Gate*>, create_module)` and `split_lut(Gate*, create_module)` overloads
+    * **[BREAKING]** `split_shift_registers(Netlist*)` signature extended with optional `create_module` parameter; added `split_shift_registers(std::vector<Gate*>, create_module)` and `split_shift_register(Gate*, create_module)` overloads; now also handles `SRL16`, `SRLC16E`, and `SRLC32E` in addition to `SRL16E`
+    * added GUI extension class `XilinxGuiExtension` providing context-menu contributions for split-LUT and split-shift-register actions
+* gate libraries
+  * **[BREAKING]** removed `XILINX_SIMPRIM.hgl` from the distribution
+  * updated `XILINX_UNISIM.hgl` and `XILINX_UNISIM_hal.hgl` with multi-output LUT type definitions for all `LUT6_2` variants
+  * updated `ice40ultra.hgl` and `ice40ultra_hal.hgl` with multi-output LUT support
+  * updated `example_library.hgl` with multi-output LUT examples
+  * bumped HGL format version to 6 for all shipped libraries
+* parsers / writers
+  * Verilog parser: generics are now parsed into typed `Parameter` objects and stored via `DataContainer::set_parameter()` instead of `set_data()`; vector parameters normalized to uppercase
+  * VHDL parser: generics now parsed into typed `Parameter` objects analogously; conversion from old `data`-based storage for existing HAL projects
+  * Verilog writer: parameter output now uses `write_typed_parameter_value()` based on `Parameter` type; removed `valid_types` whitelist
+  * HGL parser / writer: bumped format version from 4 to 6; added serialization for typed parameter declarations and multi-output LUT configurations
+  * netlist serializer: extended to persist typed `Parameter` values alongside legacy `data` entries
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
@@ -17,6 +76,13 @@ All notable changes to this project will be documented in this file.
   * fixed broken initialization of DANA plugin when starting via CLI
   * changed behavior of GUI plugin manager to keep only those plugins loaded which are requested by user
   * fixed bug in the bitorder propagation algorithm that would assign a wrong propagation order if pingroups with direction none were given as parameters
+  * xilinx_toolbox
+    * added comprehensive test suite for split-LUT and split-shift-register preprocessing functions
+    * fixed revert not working properly after INIT string change
+* GUI
+  * updated gate library wizard to support multi-output LUT type creation and INIT configuration per output pin
+  * fixed GUI thread safety issue in dataflow analysis progress communication (race condition, thread blocking)
+  * fixed missing initialization in `NetlistRelay`
 
 ## [4.5.0](v4.5.0) - 2025-09-23 12:00:00+02:00 (urgency: medium)
 * plugins
