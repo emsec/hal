@@ -69,6 +69,11 @@ namespace hal
 
             new_gate->set_data_map(gate->get_data_map());
 
+            for (const auto& [pname, pv] : gate->get_parameters())
+            {
+                new_gate->set_parameter(pv.first, pv.second);
+            }
+
             // mark gnd and vcc gates
             if (gate->is_gnd_gate())
             {
