@@ -4,11 +4,49 @@
 #include "hal_core/netlist/netlist.h"
 #include "xilinx_toolbox/plugin_xilinx_toolbox.h"
 
+namespace
+{
+    // Extract the numeric index from an address pin name.
+    // Handles both "Ai" (e.g. "A0", "A3") and "A(i)" (e.g. "A(0)", "A(4)") formats.
+    u32 srl_addr_pin_index(const hal::GatePin* p)
+    {
+        std::string digits;
+        for (unsigned char c : p->get_name())
+        {
+            if (c >= '0' && c <= '9')
+            {
+                digits += static_cast<char>(c);
+            }
+        }
+        return static_cast<u32>(std::stoull(digits));
+    }
+
+    // Returns the fixed cascade output pin name for cascadeable SRL types, or empty string.
+    // SRLC16E always outputs stage 15 on Q15; SRLC32E always outputs stage 31 on Q31.
+    std::string srl_cascade_pin(const std::string& type_name)
+    {
+        if (type_name == "SRLC16E")
+        {
+            return "Q15";
+        }
+        if (type_name == "SRLC32E")
+        {
+            return "Q31";
+        }
+        return {};
+    }
+
+    bool is_srl_type(const std::string& type_name)
+    {
+        return type_name == "SRL16E" || type_name == "SRL16" || type_name == "SRLC16E" || type_name == "SRLC32E";
+    }
+}    // namespace
+
 namespace hal
 {
     namespace xilinx_toolbox
     {
-        Result<std::monostate> split_lut(Gate* g)
+        Result<std::monostate> split_lut(Gate* g, bool create_module)
         {
             if (g->get_type()->get_name() != "LUT6_2")
             {
@@ -22,20 +60,19 @@ namespace hal
             auto* o5 = g->get_fan_out_net("O5");
             auto* o6 = g->get_fan_out_net("O6");
 
-            // LUT6_2 uses a 64-bit INIT string (16 hex chars): O6 uses all 64 bits,
-            // O5 uses bits [0, 31] (the lower half, i.e., truth table for I5=0).
-            const auto init_O6_res = g->get_init_string("O6");
-            if (init_O6_res.is_error())
+            // Determine target module for replacement gates.
+            Module* target_mod = nullptr;
+            if (create_module)
             {
-                return ERR("could not get O6 INIT string of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+                target_mod = nl->create_module(g->get_name(), g->get_module());
             }
-            const auto init_O6 = init_O6_res.get();
-            if (init_O6.length() != 16)
+            else if (!g->get_module()->is_top_module())
             {
-                return ERR("O6 INIT string '" + init_O6 + "' of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has length " + std::to_string(init_O6.length())
-                           + ", expected 16");
+                target_mod = g->get_module();
             }
 
+            // LUT6_2 uses a 64-bit INIT string (16 hex chars): O6 uses all 64 bits,
+            // O5 uses bits [0, 31] (the lower half, i.e., truth table for I5=0).
             if (o5 != nullptr && o5->get_num_of_destinations() > 0)
             {
                 const auto init_O5_res = g->get_init_string("O5");
@@ -52,48 +89,65 @@ namespace hal
                     if (lut5->set_init_string("O", init_O5).is_error())
                     {
                         log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut5->get_name(), lut5->get_id());
+                        nl->delete_gate(lut5);
                     }
-
-                    if (auto* mod = g->get_module(); !mod->is_top_module())
+                    else
                     {
-                        mod->assign_gate(lut5);
-                    }
+                        if (target_mod != nullptr)
+                        {
+                            target_mod->assign_gate(lut5);
+                        }
 
-                    // I5 selects the upper/lower half of the INIT; LUT5 only uses the lower
-                    // half (I5=0), so I5 is not a real input and is excluded here.
-                    for (const auto& in_ep : g->get_fan_in_endpoints([](const Endpoint* ep) { return ep->get_pin()->get_name() != "I5"; }))
-                    {
-                        in_ep->get_net()->add_destination(lut5, in_ep->get_pin()->get_name());
-                    }
+                        // I5 selects the upper/lower half of the INIT; LUT5 only uses the lower
+                        // half (I5=0), so I5 is not a real input and is excluded here.
+                        for (const auto& in_ep : g->get_fan_in_endpoints())
+                        {
+                            if (in_ep->get_pin()->get_name() == "I5")
+                            {
+                                continue;
+                            }
 
-                    o5->add_source(lut5, "O");
+                            in_ep->get_net()->add_destination(lut5, in_ep->get_pin()->get_name());
+                        }
+
+                        o5->add_source(lut5, "O");
+                    }
                 }
             }
 
             if (o6 != nullptr && o6->get_num_of_destinations() > 0)
             {
-                auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
-                lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init_O6);
-
-                // O6 is a full 6-input LUT and uses the entire 64-bit INIT string.
-                if (lut6->set_init_string("O", init_O6).is_error())
+                const auto init_O6_res = g->get_init_string("O6");
+                if (init_O6_res.is_error())
                 {
-                    log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut6->get_name(), lut6->get_id());
-                    nl->delete_gate(lut6);
+                    return ERR("could not get O6 INIT string of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
                 }
                 else
                 {
-                    if (auto* mod = g->get_module(); !mod->is_top_module())
-                    {
-                        mod->assign_gate(lut6);
-                    }
+                    const auto init_O6 = init_O6_res.get();
+                    auto* lut6         = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
+                    lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init_O6);
 
-                    for (const auto& in_ep : g->get_fan_in_endpoints())
+                    // O6 is a full 6-input LUT and uses the entire 64-bit INIT string.
+                    if (lut6->set_init_string("O", init_O6).is_error())
                     {
-                        in_ep->get_net()->add_destination(lut6, in_ep->get_pin()->get_name());
+                        log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut6->get_name(), lut6->get_id());
+                        nl->delete_gate(lut6);
                     }
+                    else
+                    {
+                        if (target_mod != nullptr)
+                        {
+                            target_mod->assign_gate(lut6);
+                        }
 
-                    o6->add_source(lut6, "O");
+                        for (const auto& in_ep : g->get_fan_in_endpoints())
+                        {
+                            in_ep->get_net()->add_destination(lut6, in_ep->get_pin()->get_name());
+                        }
+
+                        o6->add_source(lut6, "O");
+                    }
                 }
             }
 
@@ -106,208 +160,227 @@ namespace hal
             return OK({});
         }
 
-        Result<u32> split_luts(const std::vector<Gate*>& gates)
+        Result<u32> split_luts(const std::vector<Gate*>& gates, bool create_module)
         {
             u32 count = 0;
             for (auto* g : gates)
             {
-                if (auto res = split_lut(g); res.is_error())
+                if (auto res = split_lut(g, create_module); res.is_error())
                 {
-                    return ERR(res.get_error().get());
+                    log_warning("xilinx_toolbox", "skipping gate '{}' with ID {}: {}", g->get_name(), g->get_id(), res.get_error().get());
                 }
-                count++;
+                else
+                {
+                    count++;
+                }
             }
-            log_info("xilinx_toolbox", "split {} LUT6_2 gates into LUT6 and LUT5 gates", count);
+            log_info("xilinx_toolbox", "split {} of {} LUT6_2 gates into LUT6 and LUT5 gates", count, gates.size());
             return OK(count);
         }
 
-        Result<u32> split_luts(Netlist* nl)
+        Result<u32> split_luts(Netlist* nl, bool create_module)
         {
-            return split_luts(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }));
+            return split_luts(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }), create_module);
         }
 
-        Result<u32> split_shift_registers(Netlist* nl)
+        Result<std::monostate> split_shift_register(Gate* g, bool create_module)
         {
-            u32 deleted_gates = 0;
-            u32 new_gates     = 0;
-            std::vector<Gate*> to_delete;
+            const std::string type_name = g->get_type()->get_name();
+            if (!is_srl_type(type_name))
+            {
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " is not a supported shift register type (SRL16, SRL16E, SRLC16E, SRLC32E)");
+            }
 
-            GateType* ff_gt = nl->get_gate_library()->get_gate_type_by_name("FDE");
+            Netlist* nl     = g->get_netlist();
+            GateType* ff_gt = nl->get_gate_library()->get_gate_type_by_name("FDCE");
             if (ff_gt == nullptr)
             {
-                return ERR("could not find gate type 'FDE' in gate library");
+                return ERR("could not find gate type 'FDCE' in gate library");
             }
 
-            // iterate over all shift registers of type 'SRL16E' or 'SRLC32E'
-            for (const auto& gate : nl->get_gates([](const auto& g) { return g->get_type()->get_name() == "SRL16E" || g->get_type()->get_name() == "SRLC32E"; }))
+            // --- Address (control) pins: sort A0 < A1 < ... ---
+            auto ctrl_pins = g->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::control; });
+
+            const u32 expected_ctrl = (type_name == "SRLC32E") ? 5u : 4u;
+            if (ctrl_pins.size() != expected_ctrl)
             {
-                auto control_pins = gate->get_type()->get_pins([](const auto& pg) { return (pg->get_direction() == PinDirection::input) && (pg->get_type() == PinType::control); });
-                if (control_pins.size() != 4 && gate->get_type()->get_name() == "SRLC16E" || control_pins.size() != 5 && gate->get_type()->get_name() == "SRLC32E")
-                {
-                    return ERR("invalid number of control pins");
-                }
-
-                if (gate->get_type()->get_name() == "SRL16E")
-                {
-                    std::sort(control_pins.begin(), control_pins.end(), [](const auto& p1, const auto& p2) {
-                        const u32 idx1 = std::stoull(p1->get_name().substr(1));    // Ai
-                        const u32 idx2 = std::stoull(p2->get_name().substr(1));    // Ai
-
-                        return idx1 < idx2;
-                    });
-                }
-                else
-                {
-                    std::sort(control_pins.begin(), control_pins.end(), [](const auto& p1, const auto& p2) {
-                        const u32 idx1 = std::stoull(p1->get_name().substr(2));    // A(i)
-                        const u32 idx2 = std::stoull(p2->get_name().substr(2));    // A(i)
-
-                        return idx1 < idx2;
-                    });
-                }
-
-                u32 select_value = 0;
-                for (u32 idx = 0; idx < control_pins.size(); idx++)
-                {
-                    const Net* cn = gate->get_fan_in_net(control_pins.at(idx));
-
-                    if (cn == nullptr)
-                    {
-                        log_warning("xilinx_toolbox", "control net at pin '{}' of gate '{}' with ID {} is 'nullptr'", control_pins.at(idx)->get_name(), gate->get_name(), gate->get_id());
-                        continue;
-                    }
-
-                    if (!cn->is_gnd_net() && !cn->is_vcc_net())
-                    {
-                        log_warning("xilinx_toolbox", "control net at pin '{}' of gate '{}' with ID {} is not constant", control_pins.at(idx)->get_name(), gate->get_name(), gate->get_id());
-                        continue;
-                    }
-
-                    select_value += (cn->is_gnd_net() ? 0 : 1) << idx;
-                }
-
-                const auto clock_pins = gate->get_type()->get_pins([](const auto& p) { return (p->get_direction() == PinDirection::input) && (p->get_type() == PinType::clock); });
-                if (clock_pins.size() != 1)
-                {
-                    return ERR("invalid number of input clock pins at shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                const auto enable_pins = gate->get_type()->get_pins([](const auto& p) { return (p->get_direction() == PinDirection::input) && (p->get_type() == PinType::enable); });
-                if (enable_pins.size() != 1)
-                {
-                    return ERR("invalid number of input enable pins at shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                const auto data_pins = gate->get_type()->get_pins([](const auto& p) { return (p->get_direction() == PinDirection::input) && (p->get_type() == PinType::data); });
-                if (data_pins.size() != 1)
-                {
-                    return ERR("invalid number of input data pins at shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                Net* clk_in        = gate->get_fan_in_net(clock_pins.front());
-                Net* enable_in     = gate->get_fan_in_net(enable_pins.front());
-                Net* data_in       = gate->get_fan_in_net(data_pins.front());
-                Net* state_out     = nullptr;
-                Net* max_state_out = nullptr;
-
-                if (gate->get_type()->get_name() == "SRLC32E")
-                {
-                    state_out     = gate->get_fan_out_net("Q");
-                    max_state_out = gate->get_fan_out_net("Q31");
-                }
-                else
-                {
-                    state_out = gate->get_fan_out_net("Q");
-                }
-
-                if (clk_in == nullptr)
-                {
-                    return ERR("no clock input net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                if (enable_in == nullptr)
-                {
-                    return ERR("no enable input net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                if (data_in == nullptr)
-                {
-                    return ERR("no data input net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                if (state_out == nullptr && max_state_out == nullptr)
-                {
-                    return ERR("no state output net connected to shift register gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()));
-                }
-
-                u32 register_size = 0;
-                std::vector<Gate*> flip_flops;
-                std::vector<Net*> state_nets;
-
-                if (max_state_out != nullptr)
-                {
-                    register_size = max_state_out->get_num_of_destinations() > 0 ? 31 : select_value;
-                }
-                else
-                {
-                    register_size = select_value;
-                }
-
-                for (u32 ff_idx = 0; ff_idx <= register_size; ff_idx++)
-                {
-                    const std::string ff_name = gate->get_name() + "_split_ff_" + std::to_string(ff_idx);
-                    Gate* new_gate            = nl->create_gate(ff_gt, ff_name);
-                    new_gates++;
-
-                    clk_in->add_destination(new_gate, "C");
-                    enable_in->add_destination(new_gate, "CE");
-
-                    if (ff_idx == 0)
-                    {
-                        data_in->add_destination(new_gate, "D");
-                    }
-                    else
-                    {
-                        state_nets.back()->add_destination(new_gate, "D");
-                    }
-
-                    if (ff_idx == select_value && state_out != nullptr)
-                    {
-                        state_out->add_source(new_gate, "Q");
-                        state_nets.push_back(state_out);
-                    }
-                    else if (ff_idx == register_size && max_state_out != nullptr)
-                    {
-                        max_state_out->add_source(new_gate, "Q");
-                        state_nets.push_back(max_state_out);
-                    }
-                    else
-                    {
-                        Net* new_net = nl->create_net(ff_name + "_out");
-                        new_net->add_source(new_gate, "Q");
-                        state_nets.push_back(new_net);
-                    }
-                }
-
-                to_delete.push_back(gate);
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has " + std::to_string(ctrl_pins.size()) + " control pins, expected "
+                           + std::to_string(expected_ctrl));
             }
 
-            for (const auto& g : to_delete)
+            std::sort(ctrl_pins.begin(), ctrl_pins.end(), [](const GatePin* a, const GatePin* b) { return srl_addr_pin_index(a) < srl_addr_pin_index(b); });
+
+            // Compute select_value from constant address pins (binary, little-endian: A0 = bit 0).
+            // Stage select_value is where Q is tapped; depth = select_value + 1 clock cycles.
+            u32 select_value = 0;
+            for (u32 i = 0; i < ctrl_pins.size(); i++)
             {
-                if (!nl->delete_gate(g))
+                const Net* cn = g->get_fan_in_net(ctrl_pins[i]);
+                if (cn == nullptr)
                 {
-                    return ERR("Cannot split shift register primitives for netlist with ID " + std::to_string(nl->get_id()) + ": Failed to delete gate " + g->get_name() + " with ID "
-                               + std::to_string(g->get_id()));
+                    return ERR("control pin '" + ctrl_pins[i]->get_name() + "' of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has no connected net");
                 }
-                else
+                if (!cn->is_gnd_net() && !cn->is_vcc_net())
                 {
-                    deleted_gates++;
+                    return ERR("control pin '" + ctrl_pins[i]->get_name() + "' of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " is not driven by a constant (GND/VCC) net");
+                }
+                if (cn->is_vcc_net())
+                {
+                    select_value |= (1u << i);
                 }
             }
 
-            log_info("xilinx_toolbox", "split {} SRL16E/SRLC32E gates into {} flip-flops", deleted_gates, new_gates);
+            // --- Clock / enable / data pins ---
+            const auto clk_pins = g->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::clock; });
+            if (clk_pins.size() != 1)
+            {
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has " + std::to_string(clk_pins.size()) + " clock pins, expected 1");
+            }
 
-            return OK(deleted_gates);
+            const auto en_pins = g->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::enable; });
+            if (en_pins.size() != 1)
+            {
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has " + std::to_string(en_pins.size()) + " enable pins, expected 1");
+            }
+
+            const auto data_pins = g->get_type()->get_pins([](const GatePin* p) { return p->get_direction() == PinDirection::input && p->get_type() == PinType::data; });
+            if (data_pins.size() != 1)
+            {
+                return ERR("gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " has " + std::to_string(data_pins.size()) + " data pins, expected 1");
+            }
+
+            Net* clk_in    = g->get_fan_in_net(clk_pins.front());
+            Net* enable_in = g->get_fan_in_net(en_pins.front());
+            Net* data_in   = g->get_fan_in_net(data_pins.front());
+
+            if (clk_in == nullptr)
+            {
+                return ERR("no clock input connected to gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+            if (enable_in == nullptr)
+            {
+                return ERR("no enable input connected to gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+            if (data_in == nullptr)
+            {
+                return ERR("no data input connected to gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+
+            // --- Output nets ---
+            const std::string casc_pin = srl_cascade_pin(type_name);
+            Net* state_out             = g->get_fan_out_net("Q");
+            Net* cascade_out           = casc_pin.empty() ? nullptr : g->get_fan_out_net(casc_pin);
+
+            // Cascade output is only "used" when it has actual downstream consumers.
+            const bool cascade_used = (cascade_out != nullptr && cascade_out->get_num_of_destinations() > 0);
+
+            if (state_out == nullptr && !cascade_used)
+            {
+                return ERR("no output connected to gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+
+            // When the cascade output is used, all stages up to the maximum must be materialized
+            // (SRLC16E: 0..15, SRLC32E: 0..31) so that Q15/Q31 reflects the true last stage.
+            const u32 max_depth     = (1u << ctrl_pins.size()) - 1u;
+            const u32 register_size = cascade_used ? max_depth : select_value;
+
+            // --- Build the FDE chain ---
+            Module* parent_mod = g->get_module();
+
+            // Determine target module for replacement FFs.
+            Module* target_mod = nullptr;
+            if (create_module)
+            {
+                target_mod = nl->create_module(g->get_name(), parent_mod);
+            }
+            else if (!parent_mod->is_top_module())
+            {
+                target_mod = parent_mod;
+            }
+
+            std::vector<Net*> chain_nets;    // Q output net of each FF, used to wire D of next
+
+            for (u32 i = 0; i <= register_size; i++)
+            {
+                const std::string ff_name = g->get_name() + "_split_ff_" + std::to_string(i);
+                Gate* ff                  = nl->create_gate(ff_gt, ff_name);
+
+                if (target_mod != nullptr)
+                {
+                    target_mod->assign_gate(ff);
+                }
+
+                clk_in->add_destination(ff, "C");
+                enable_in->add_destination(ff, "CE");
+
+                (i == 0 ? data_in : chain_nets.back())->add_destination(ff, "D");
+
+                const bool is_q_stage       = (state_out != nullptr && i == select_value);
+                const bool is_cascade_stage = (cascade_used && i == register_size);
+
+                if (is_q_stage)
+                {
+                    state_out->add_source(ff, "Q");
+                    if (is_cascade_stage)
+                    {
+                        // Q and cascade tap the same stage: a single FF output pin can source only
+                        // one net, so merge cascade_out's consumers into state_out.
+                        // Capture gate/pin BEFORE removal since remove_destination frees the Endpoint.
+                        std::vector<std::pair<Gate*, std::string>> casc_consumers;
+                        for (const Endpoint* ep : cascade_out->get_destinations())
+                        {
+                            casc_consumers.emplace_back(ep->get_gate(), ep->get_pin()->get_name());
+                        }
+                        for (const auto& [g, pin] : casc_consumers)
+                        {
+                            cascade_out->remove_destination(g, pin);
+                            state_out->add_destination(g, pin);
+                        }
+                    }
+                    chain_nets.push_back(state_out);
+                }
+                else if (is_cascade_stage)
+                {
+                    cascade_out->add_source(ff, "Q");
+                    chain_nets.push_back(cascade_out);
+                }
+                else
+                {
+                    Net* internal = nl->create_net(ff_name + "_out");
+                    internal->add_source(ff, "Q");
+                    chain_nets.push_back(internal);
+                }
+            }
+
+            if (!nl->delete_gate(g))
+            {
+                return ERR("failed to delete gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
+            }
+
+            return OK({});
+        }
+
+        Result<u32> split_shift_registers(const std::vector<Gate*>& gates, bool create_module)
+        {
+            u32 count = 0;
+            for (Gate* g : gates)
+            {
+                if (auto res = split_shift_register(g, create_module); res.is_error())
+                {
+                    log_warning("xilinx_toolbox", "skipping gate '{}' with ID {}: {}", g->get_name(), g->get_id(), res.get_error().get());
+                }
+                else
+                {
+                    count++;
+                }
+            }
+            log_info("xilinx_toolbox", "split {} of {} shift register gates into FDE flip-flop chains", count, gates.size());
+            return OK(count);
+        }
+
+        Result<u32> split_shift_registers(Netlist* nl, bool create_module)
+        {
+            return split_shift_registers(nl->get_gates([](const Gate* g) { return is_srl_type(g->get_type()->get_name()); }), create_module);
         }
     }    // namespace xilinx_toolbox
 }    // namespace hal

@@ -52,39 +52,84 @@ namespace hal
          * The original `LUT6_2` gate is always deleted. The original INIT string is stored on each replacement gate under `xilinx_preprocessing_information/original_init`.
          *
          * @param[in] g - The `LUT6_2` gate to split.
+         * @param[in] create_module - If `true`, a new module named after the original gate is created as a child of its parent module and all replacement gates are placed into it. If `false` (default), replacement gates inherit the parent module of the original gate.
          * @returns An empty OK result on success, an error if `g` is not of type `LUT6_2`, if the INIT string is malformed, or if the gate cannot be deleted.
          */
-        Result<std::monostate> split_lut(Gate* g);
+        Result<std::monostate> split_lut(Gate* g, bool create_module = false);
 
         /**
          * @brief Split a set of `LUT6_2` gates into separate LUT gates.
          *
-         * Calls `split_lut` for each gate in `gates`. Stops and returns an error on the first failure.
+         * Calls `split_lut` for each gate in `gates`. Gates that cannot be split are skipped with a
+         * warning; processing always continues with the remaining gates.
          *
          * @param[in] gates - The `LUT6_2` gates to split.
-         * @returns The number of split gates on success, an error otherwise.
+         * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
+         * @returns The number of successfully split gates.
          */
-        Result<u32> split_luts(const std::vector<Gate*>& gates);
+        Result<u32> split_luts(const std::vector<Gate*>& gates, bool create_module = false);
 
         /**
          * @brief Split all `LUT6_2` gates in the netlist into separate LUT gates.
          *
-         * Finds all gates of type `LUT6_2` and calls `split_luts(nl, gates)`.
+         * Finds all gates of type `LUT6_2` in the netlist and calls `split_luts(gates)`.
          *
          * @param[in] nl - The netlist to operate on.
-         * @returns The number of split `LUT6_2` gates on success, an error otherwise.
+         * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
+         * @returns The number of successfully split `LUT6_2` gates.
          */
-        Result<u32> split_luts(Netlist* nl);
+        Result<u32> split_luts(Netlist* nl, bool create_module = false);
 
         /**
-         * @brief Split shift register primitives and replaces them with equivalent flip-flops chains.
-         * 
-         * Currently only implemented for gate type `SRL16E`.
-         * 
-         * @param[in] nl - The netlist to operate on. 
-         * @return The number of split shift registers on success, an error otherwise.
+         * @brief Split a single shift register primitive into an equivalent chain of `FDCE` flip-flops.
+         *
+         * Supported gate types: `SRL16`, `SRL16E`, `SRLC16E`, `SRLC32E`.
+         *
+         * Every address pin must be connected and driven by a constant (GND/VCC) net; an error is
+         * returned otherwise.  The number of flip-flops created equals `select_value + 1`, where
+         * `select_value` is the binary value encoded by the address pins (A0 = bit 0).  When the
+         * cascade output (`Q15` for `SRLC16E`, `Q31` for `SRLC32E`) has downstream consumers, all
+         * stages up to the maximum depth (15 or 31) are materialised so that the last flip-flop
+         * correctly drives the cascade net.
+         *
+         * The original gate is always deleted on success.
+         *
+         * @param[in] g - The shift register gate to split.
+         * @param[in] create_module - If `true`, a new module named after the original gate is created as a child of its parent module and all replacement flip-flops are placed into it. If `false` (default), replacement flip-flops inherit the parent module of the original gate.
+         * @returns An empty OK result on success, an error if `g` is not a supported shift register
+         *          type, if any address pin is unconnected or not driven by a constant (GND/VCC) net,
+         *          or if the gate cannot be deleted.
          */
-        Result<u32> split_shift_registers(Netlist* nl);
+        Result<std::monostate> split_shift_register(Gate* g, bool create_module = false);
+
+        /**
+         * @brief Split a set of shift register primitives into equivalent `FDCE` flip-flop chains.
+         *
+         * Supported gate types: `SRL16`, `SRL16E`, `SRLC16E`, `SRLC32E`.
+         *
+         * Calls `split_shift_register` for each gate in `gates`. Gates that cannot be split (e.g.
+         * because an address pin is not driven by a constant net) are skipped with a warning;
+         * processing always continues with the remaining gates.
+         *
+         * @param[in] gates - The shift register gates to split.
+         * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
+         * @returns The number of successfully split gates.
+         */
+        Result<u32> split_shift_registers(const std::vector<Gate*>& gates, bool create_module = false);
+
+        /**
+         * @brief Split all shift register primitives in the netlist into `FDCE` flip-flop chains.
+         *
+         * Supported gate types: `SRL16`, `SRL16E`, `SRLC16E`, `SRLC32E`.
+         *
+         * Finds all gates of one of the supported types in the netlist and calls
+         * `split_shift_registers(gates)`.
+         *
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] create_module - If `true`, each split gate's replacements are placed into a new module named after the original gate. If `false` (default), replacements inherit the parent module of the original gate.
+         * @returns The number of successfully split shift register gates.
+         */
+        Result<u32> split_shift_registers(Netlist* nl, bool create_module = false);
 
         /**
          * @brief Parse an `.xdc` file and extract the position LOC and BEL data of each gate.

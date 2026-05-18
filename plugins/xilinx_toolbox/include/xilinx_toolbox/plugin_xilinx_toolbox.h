@@ -37,11 +37,16 @@ namespace hal
 {
     class XilinxGuiExtension : public GuiExtensionInterface
     {
+        bool mSplitLuts           = false;
+        bool mSplitShiftRegisters = false;
+
     public:
-        XilinxGuiExtension() : GuiExtensionInterface("Xilinx Toolbox")
+        XilinxGuiExtension() : GuiExtensionInterface("xilinx_toolbox")
         {
         }
 
+        std::vector<PluginParameter> get_parameter() const override;
+        void set_parameter(const std::vector<PluginParameter>& params) override;
         std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
         void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
     };
