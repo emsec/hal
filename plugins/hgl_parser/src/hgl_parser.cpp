@@ -49,12 +49,9 @@ namespace hal
     {
         if (!document.HasMember("version") || !document["version"].IsUint() || document["version"].GetUint() < HGL_FORMAT_VERSION)
         {
-            log_warning("hgl_parser", "you are using an outdated HGL file format that might not support all features, please make sure to re-write the HGL file using the HAL HGL writer.");
-        }
-
-        if (document.HasMember("version") && document["version"].IsUint())
-        {
-            file_version = document["version"].GetUint();
+            return ERR("could not parse gate library: HGL file format version is outdated (requires version " + std::to_string(HGL_FORMAT_VERSION)
+                       + "). Please upgrade the file using the tools/upgrade_hgl.py script. Manual corrections might still be necessary after the upgrade, please check the output of the upgrade "
+                         "script for details.");
         }
 
         if (!document.HasMember("library"))
@@ -126,27 +123,7 @@ namespace hal
                 }
                 catch (const std::runtime_error&)
                 {
-                    // legacy support
-                    if (property_str == "buffer")
-                    {
-                        properties.insert(GateTypeProperty::c_buffer);
-                    }
-                    else if (property_str == "carry")
-                    {
-                        properties.insert(GateTypeProperty::c_carry);
-                    }
-                    else if (property_str == "mux")
-                    {
-                        properties.insert(GateTypeProperty::c_mux);
-                    }
-                    else if (property_str == "lut")
-                    {
-                        properties.insert(GateTypeProperty::c_lut);
-                    }
-                    else
-                    {
-                        return ERR("could not parse gate type '" + name + "': invalid property '" + base_type.GetString() + "'");
-                    }
+                    return ERR("could not parse gate type '" + name + "': invalid property '" + base_type.GetString() + "'");
                 }
             }
         }
@@ -158,54 +135,14 @@ namespace hal
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
         if (gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
         {
-            const auto& lut_cfg      = gate_type["lut_config"];
-            const bool is_legacy_lut = file_version < 6 && !lut_cfg.HasMember("output_pins") && lut_cfg.HasMember("data_identifier") && lut_cfg["data_identifier"].IsString();
-            if (is_legacy_lut)
+            const auto& lut_cfg = gate_type["lut_config"];
+            if (auto res = parse_lut_config(lut_cfg); res.is_error())
             {
-                // Legacy format: pre-scan pins to find lut output names and count inputs.
-                const std::string identifier = lut_cfg["data_identifier"].GetString();
-                const bool legacy_ascending  = (!lut_cfg.HasMember("bit_order") || !lut_cfg["bit_order"].IsString()) ? true : (std::string(lut_cfg["bit_order"].GetString()) == "ascending");
-                u32 input_count              = 0;
-                std::vector<std::string> lut_input_pins;
-                std::vector<std::string> lut_output_pins;
-                if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
-                {
-                    for (const auto& pin : gate_type["pins"].GetArray())
-                    {
-                        if (!pin.HasMember("direction") || !pin["direction"].IsString() || !pin.HasMember("name") || !pin["name"].IsString())
-                        {
-                            continue;
-                        }
-                        const std::string dir = pin["direction"].GetString();
-                        if (dir == "input")
-                        {
-                            input_count++;
-                            lut_input_pins.push_back(pin["name"].GetString());
-                        }
-                        else if (dir == "output" && pin.HasMember("type") && pin["type"].IsString() && std::string(pin["type"].GetString()) == "lut")
-                        {
-                            lut_output_pins.push_back(pin["name"].GetString());
-                        }
-                    }
-                }
-                const u32 legacy_bit_count = 1u << input_count;
-                std::unordered_map<std::string, LUTComponent::LUTOutputConfig> cfg_map;
-                for (const auto& pname : lut_output_pins)
-                {
-                    cfg_map.emplace(pname, LUTComponent::LUTOutputConfig(identifier, 0, legacy_bit_count, legacy_ascending, lut_input_pins));
-                }
-                parent_component = LUTComponent::create(std::move(cfg_map));
+                return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing LUT configuration");
             }
             else
             {
-                if (auto res = parse_lut_config(lut_cfg); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing LUT configuration");
-                }
-                else
-                {
-                    parent_component = res.get();
-                }
+                parent_component = res.get();
             }
         }
         else if (gate_type.HasMember("ff_config") && gate_type["ff_config"].IsObject())
@@ -386,363 +323,170 @@ namespace hal
             }
         }
 
-        if (file_version >= 2)
+        if (gate_type.HasMember("pin_groups") && gate_type["pin_groups"].IsArray())
         {
-            if (gate_type.HasMember("pin_groups") && gate_type["pin_groups"].IsArray())
+            for (const auto& pg_val : gate_type["pin_groups"].GetArray())
             {
-                for (const auto& pg_val : gate_type["pin_groups"].GetArray())
+                if (!pg_val.HasMember("name") || !pg_val["name"].IsString())
                 {
-                    if (!pg_val.HasMember("name") || !pg_val["name"].IsString())
-                    {
-                        return ERR("could not parse pin group: missing or invalid name");
-                    }
-                    std::string pg_name = pg_val["name"].GetString();
+                    return ERR("could not parse pin group: missing or invalid name");
+                }
+                std::string pg_name = pg_val["name"].GetString();
 
-                    if (!pg_val.HasMember("direction") || !pg_val["direction"].IsString())
-                    {
-                        return ERR("could not parse pin group '" + pg_name + "': missing or invalid pin direction");
-                    }
-                    PinDirection pg_direction;
-                    std::string pg_direction_str = pg_val["direction"].GetString();
-                    try
-                    {
-                        pg_direction = enum_from_string<PinDirection>(pg_direction_str);
-                    }
-                    catch (const std::runtime_error&)
-                    {
-                        return ERR("could not parse pin '" + pg_name + "': invalid pin direction '" + pg_direction_str + "'");
-                    }
+                if (!pg_val.HasMember("direction") || !pg_val["direction"].IsString())
+                {
+                    return ERR("could not parse pin group '" + pg_name + "': missing or invalid pin direction");
+                }
+                PinDirection pg_direction;
+                std::string pg_direction_str = pg_val["direction"].GetString();
+                try
+                {
+                    pg_direction = enum_from_string<PinDirection>(pg_direction_str);
+                }
+                catch (const std::runtime_error&)
+                {
+                    return ERR("could not parse pin '" + pg_name + "': invalid pin direction '" + pg_direction_str + "'");
+                }
 
-                    if (!pg_val.HasMember("type") || !pg_val["type"].IsString())
-                    {
-                        return ERR("could not parse pin group '" + pg_name + "': missing or invalid pin type");
-                    }
-                    PinType pg_type;
-                    std::string pg_type_str = pg_val["type"].GetString();
-                    try
-                    {
-                        pg_type = enum_from_string<PinType>(pg_type_str);
-                    }
-                    catch (const std::runtime_error&)
-                    {
-                        return ERR("could not parse pin group '" + pg_name + "': invalid pin type '" + pg_type_str + "'");
-                    }
+                if (!pg_val.HasMember("type") || !pg_val["type"].IsString())
+                {
+                    return ERR("could not parse pin group '" + pg_name + "': missing or invalid pin type");
+                }
+                PinType pg_type;
+                std::string pg_type_str = pg_val["type"].GetString();
+                try
+                {
+                    pg_type = enum_from_string<PinType>(pg_type_str);
+                }
+                catch (const std::runtime_error&)
+                {
+                    return ERR("could not parse pin group '" + pg_name + "': invalid pin type '" + pg_type_str + "'");
+                }
 
-                    if (!pg_val.HasMember("ascending") || !pg_val["ascending"].IsBool())
-                    {
-                        return ERR("could not parse pin group '" + pg_name + "': missing or ascending property");
-                    }
-                    bool ascending = pg_val["ascending"].GetBool();
+                if (!pg_val.HasMember("ascending") || !pg_val["ascending"].IsBool())
+                {
+                    return ERR("could not parse pin group '" + pg_name + "': missing or ascending property");
+                }
+                bool ascending = pg_val["ascending"].GetBool();
 
-                    bool ordered = false;
-                    if (pg_val.HasMember("ordered") && pg_val["ordered"].IsBool())
-                    {
-                        ordered = pg_val["ordered"].GetBool();
-                    }
+                bool ordered = false;
+                if (pg_val.HasMember("ordered") && pg_val["ordered"].IsBool())
+                {
+                    ordered = pg_val["ordered"].GetBool();
+                }
 
-                    if (!pg_val.HasMember("start_index") || !pg_val["start_index"].IsUint())
-                    {
-                        return ERR("could not parse pin group '" + pg_name + "': missing or start index");
-                    }
-                    u32 start_index = pg_val["start_index"].GetUint();
+                if (!pg_val.HasMember("start_index") || !pg_val["start_index"].IsUint())
+                {
+                    return ERR("could not parse pin group '" + pg_name + "': missing or start index");
+                }
+                u32 start_index = pg_val["start_index"].GetUint();
 
-                    if (pg_val.HasMember("pins") && pg_val["pins"].IsArray())
-                    {
-                        std::vector<GatePin*> pins;
+                if (pg_val.HasMember("pins") && pg_val["pins"].IsArray())
+                {
+                    std::vector<GatePin*> pins;
 
-                        for (const auto& p_val : pg_val["pins"].GetArray())
+                    for (const auto& p_val : pg_val["pins"].GetArray())
+                    {
+                        if (!p_val.HasMember("name") || !p_val["name"].IsString())
                         {
-                            if (!p_val.HasMember("name") || !p_val["name"].IsString())
-                            {
-                                return ERR("could not parse pin: missing or invalid name");
-                            }
-                            std::string p_name = p_val["name"].GetString();
+                            return ERR("could not parse pin: missing or invalid name");
+                        }
+                        std::string p_name = p_val["name"].GetString();
 
-                            if (!p_val.HasMember("direction") || !p_val["direction"].IsString())
-                            {
-                                return ERR("could not parse pin '" + p_name + "': missing or invalid pin direction");
-                            }
-                            PinDirection p_direction;
-                            std::string p_direction_str = p_val["direction"].GetString();
+                        if (!p_val.HasMember("direction") || !p_val["direction"].IsString())
+                        {
+                            return ERR("could not parse pin '" + p_name + "': missing or invalid pin direction");
+                        }
+                        PinDirection p_direction;
+                        std::string p_direction_str = p_val["direction"].GetString();
+                        try
+                        {
+                            p_direction = enum_from_string<PinDirection>(p_direction_str);
+                        }
+                        catch (const std::runtime_error&)
+                        {
+                            return ERR("could not parse pin '" + p_name + "': invalid pin direction '" + p_direction_str + "'");
+                        }
+
+                        PinType p_type;
+                        if (p_val.HasMember("type") && p_val["type"].IsString())
+                        {
+                            std::string p_type_str = p_val["type"].GetString();
                             try
                             {
-                                p_direction = enum_from_string<PinDirection>(p_direction_str);
+                                p_type = enum_from_string<PinType>(p_type_str);
                             }
                             catch (const std::runtime_error&)
                             {
-                                return ERR("could not parse pin '" + p_name + "': invalid pin direction '" + p_direction_str + "'");
+                                return ERR("could not parse pin '" + p_name + "': invalid pin type '" + p_type_str + "'");
                             }
+                        }
+                        else
+                        {
+                            p_type = PinType::none;
+                        }
 
-                            PinType p_type;
-                            if (p_val.HasMember("type") && p_val["type"].IsString())
+                        auto p_res = gt->create_pin(p_name, p_direction, p_type, false);
+                        if (p_res.is_error())
+                        {
+                            return ERR_APPEND(p_res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + p_name + "'");
+                        }
+                        pins.push_back(p_res.get());
+
+                        if (p_val.HasMember("function") && p_val["function"].IsString())
+                        {
+                            if (auto res = BooleanFunction::from_string(p_val["function"].GetString(), var_sizes); res.is_error())
                             {
-                                std::string p_type_str = p_val["type"].GetString();
-                                try
-                                {
-                                    p_type = enum_from_string<PinType>(p_type_str);
-                                }
-                                catch (const std::runtime_error&)
-                                {
-                                    return ERR("could not parse pin '" + p_name + "': invalid pin type '" + p_type_str + "'");
-                                }
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
+                                                      + "' from string");
                             }
                             else
                             {
-                                p_type = PinType::none;
-                            }
-
-                            auto p_res = gt->create_pin(p_name, p_direction, p_type, false);
-                            if (p_res.is_error())
-                            {
-                                return ERR_APPEND(p_res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + p_name + "'");
-                            }
-                            pins.push_back(p_res.get());
-
-                            if (p_val.HasMember("function") && p_val["function"].IsString())
-                            {
-                                if (auto res = BooleanFunction::from_string(p_val["function"].GetString(), var_sizes); res.is_error())
-                                {
-                                    return ERR_APPEND(res.get_error(),
-                                                      "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
-                                                          + "' from string");
-                                }
-                                else
-                                {
-                                    gt->add_boolean_function(p_name, res.get());
-                                }
-                            }
-
-                            if (p_val.HasMember("x_function") && p_val["x_function"].IsString())
-                            {
-                                if (auto res = BooleanFunction::from_string(p_val["x_function"].GetString(), var_sizes); res.is_error())
-                                {
-                                    return ERR_APPEND(res.get_error(),
-                                                      "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
-                                                          + "_undefined' from string");
-                                }
-                                else
-                                {
-                                    gt->add_boolean_function(p_name + "_undefined", res.get());
-                                }
-                            }
-
-                            if (p_val.HasMember("z_function") && p_val["z_function"].IsString())
-                            {
-                                if (auto res = BooleanFunction::from_string(p_val["z_function"].GetString(), var_sizes); res.is_error())
-                                {
-                                    return ERR_APPEND(res.get_error(),
-                                                      "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
-                                                          + "_tristate' from string");
-                                }
-                                else
-                                {
-                                    gt->add_boolean_function(p_name + "_tristate", res.get());
-                                }
+                                gt->add_boolean_function(p_name, res.get());
                             }
                         }
 
-                        auto pg_res = gt->create_pin_group(pg_name, pins, pg_direction, pg_type, ascending, start_index, ordered);
-                        if (pg_res.is_error())
+                        if (p_val.HasMember("x_function") && p_val["x_function"].IsString())
                         {
-                            return ERR_APPEND(pg_res.get_error(),
-                                              "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin group '" + pg_name + "'");
+                            if (auto res = BooleanFunction::from_string(p_val["x_function"].GetString(), var_sizes); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
+                                                      + "_undefined' from string");
+                            }
+                            else
+                            {
+                                gt->add_boolean_function(p_name + "_undefined", res.get());
+                            }
                         }
-                    }
-                    else
-                    {
-                        return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": no pins given for pin group with name '" + pg_name + "'");
-                    }
-                }
-            }
-        }
-        else if (file_version < 2)
-        {
-            std::map<std::string, std::string> pins_to_groups;
-            std::map<std::string, GroupCtx> groups_to_pins;
 
-            if (gate_type.HasMember("groups") && gate_type["groups"].IsArray())
-            {
-                for (const auto& group_val : gate_type["groups"].GetArray())
-                {
-                    // read name
-                    std::string pg_name;
-                    if (!group_val.HasMember("name") || !group_val["name"].IsString())
-                    {
-                        return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": missing or invalid pin group name");
-                    }
-
-                    pg_name = group_val["name"].GetString();
-                    if (!group_val.HasMember("pins") || !group_val["pins"].IsArray())
-                    {
-                        return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": missing or invalid pins for pin group '" + pg_name + "'");
-                    }
-
-                    // TODO will need changes to HGL format to be fancy
-                    i32 start     = -1;
-                    i32 direction = 0;
-                    std::vector<std::string> pins;
-                    GroupCtx pin_group_info;
-                    for (const auto& pin_obj : group_val["pins"].GetArray())
-                    {
-                        if (!pin_obj.IsObject())
+                        if (p_val.HasMember("z_function") && p_val["z_function"].IsString())
                         {
-                            return ERR("could not parse pin group '" + name + "' with ID " + std::to_string(gt->get_id()) + ": invalid pin group assignment");
-                        }
-                        const auto pin_val   = pin_obj.GetObject().MemberBegin();
-                        u32 pin_index        = std::stoul(pin_val->name.GetString());
-                        std::string pin_name = pin_val->value.GetString();
-                        pin_group_info.pins.push_back(pin_name);
-                        pins_to_groups[pin_name] = pg_name;
-
-                        // if (auto res = gt->get_pin_by_name(pin_name); res == nullptr)
-                        // {
-                        //     return ERR("could not parse pin group '" + name + "': failed to get pin by name '" + pin_name + "'");
-                        // }
-                        // else
-                        // {
-                        //     pins.push_back(res);
-                        // }
-
-                        if (start == -1)
-                        {
-                            start = pin_index;
-                        }
-                        else
-                        {
-                            direction = (start < (i32)pin_index) ? 1 : -1;
+                            if (auto res = BooleanFunction::from_string(p_val["z_function"].GetString(), var_sizes); res.is_error())
+                            {
+                                return ERR_APPEND(res.get_error(),
+                                                  "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + p_name
+                                                      + "_tristate' from string");
+                            }
+                            else
+                            {
+                                gt->add_boolean_function(p_name + "_tristate", res.get());
+                            }
                         }
                     }
 
-                    pin_group_info.ascending   = (direction == 1) ? true : false;
-                    pin_group_info.start_index = start;
-
-                    // if (auto res = gt->create_pin_group(name, pins, pins.at(0)->get_direction(), pins.at(0)->get_type(), , start); res.is_error())
-                    // {
-                    //     return ERR_APPEND(res.get_error(), "could not parse pin group '" + name + "': failed to create pin group");
-                    // }
-                    groups_to_pins[pg_name] = pin_group_info;
-                }
-            }
-
-            PinCtx pin_ctx;
-            if (gate_type.HasMember("pins") && gate_type["pins"].IsArray())
-            {
-                for (const auto& pin : gate_type["pins"].GetArray())
-                {
-                    if (auto res = parse_pin(pin_ctx, pin); res.is_error())
+                    auto pg_res = gt->create_pin_group(pg_name, pins, pg_direction, pg_type, ascending, start_index, ordered);
+                    if (pg_res.is_error())
                     {
-                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing pin");
-                    }
-                }
-            }
-
-            for (const auto& pin_name : pin_ctx.pins)
-            {
-                if (const auto it = pins_to_groups.find(pin_name); it == pins_to_groups.end())
-                {
-                    if (auto res = gt->create_pin(pin_name, pin_ctx.pin_to_direction.at(pin_name), pin_ctx.pin_to_type.at(pin_name), true); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + pin_name);
+                        return ERR_APPEND(pg_res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin group '" + pg_name + "'");
                     }
                 }
                 else
                 {
-                    if (gt->get_pin_group_by_name(it->second) != nullptr)
-                    {
-                        continue;
-                    }
-
-                    std::vector<GatePin*> pins;
-                    auto pg_info = groups_to_pins.at(it->second);
-                    for (const auto& p_name : pg_info.pins)
-                    {
-                        if (auto res = gt->create_pin(p_name, pin_ctx.pin_to_direction.at(p_name), pin_ctx.pin_to_type.at(p_name), false); res.is_error())
-                        {
-                            return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin '" + p_name);
-                        }
-                        else
-                        {
-                            pins.push_back(res.get());
-                        }
-                    }
-                    if (auto res = gt->create_pin_group(it->second, pins, pins.front()->get_direction(), pins.front()->get_type(), pg_info.ascending, pg_info.start_index); res.is_error())
-                    {
-                        return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed to create pin group '" + it->second);
-                    }
+                    return ERR("could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": no pins given for pin group with name '" + pg_name + "'");
                 }
             }
-
-            for (const auto& [f_name, func] : pin_ctx.boolean_functions)
-            {
-                if (auto res = BooleanFunction::from_string(func, var_sizes); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not parse gate type '" + name + "' with ID " + std::to_string(gt->get_id()) + ": failed parsing Boolean function with name '" + f_name + "' from string");
-                }
-                else
-                {
-                    gt->add_boolean_function(f_name, res.get());
-                }
-            }
-        }
-
-        return OK({});
-    }
-
-    Result<std::monostate> HGLParser::parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin)
-    {
-        if (!pin.HasMember("name") || !pin["name"].IsString())
-        {
-            return ERR("could not parse pin: missing or invalid name");
-        }
-
-        std::string name = pin["name"].GetString();
-        if (!pin.HasMember("direction") || !pin["direction"].IsString())
-        {
-            return ERR("could not parse pin '" + name + "': missing or invalid pin direction");
-        }
-
-        std::string direction = pin["direction"].GetString();
-        try
-        {
-            pin_ctx.pin_to_direction[name] = enum_from_string<PinDirection>(direction);
-            pin_ctx.pins.push_back(name);
-        }
-        catch (const std::runtime_error&)
-        {
-            return ERR("could not parse pin '" + name + "': invalid pin direction '" + direction + "'");
-        }
-
-        if (pin.HasMember("function") && pin["function"].IsString())
-        {
-            pin_ctx.boolean_functions[name] = pin["function"].GetString();
-        }
-
-        if (pin.HasMember("x_function") && pin["x_function"].IsString())
-        {
-            pin_ctx.boolean_functions[name + "_undefined"] = pin["x_function"].GetString();
-        }
-
-        if (pin.HasMember("z_function") && pin["z_function"].IsString())
-        {
-            pin_ctx.boolean_functions[name + "_tristate"] = pin["z_function"].GetString();
-        }
-
-        if (pin.HasMember("type") && pin["type"].IsString())
-        {
-            std::string type_str = pin["type"].GetString();
-            try
-            {
-                pin_ctx.pin_to_type[name] = enum_from_string<PinType>(type_str);
-            }
-            catch (const std::runtime_error&)
-            {
-                return ERR("could not parse pin '" + name + "': invalid pin type '" + type_str + "'");
-            }
-        }
-        else
-        {
-            pin_ctx.pin_to_type[name] = PinType::none;
         }
 
         return OK({});

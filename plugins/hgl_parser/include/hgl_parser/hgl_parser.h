@@ -31,9 +31,7 @@
 #include "rapidjson/document.h"
 
 #include <filesystem>
-#include <map>
-#include <optional>
-#include <unordered_map>
+#include <set>
 
 namespace hal
 {
@@ -56,22 +54,6 @@ namespace hal
 
     private:
         const u32 HGL_FORMAT_VERSION = 6;
-        u32 file_version             = 1;
-
-        struct PinCtx
-        {
-            std::vector<std::string> pins;
-            std::unordered_map<std::string, PinType> pin_to_type;
-            std::unordered_map<std::string, PinDirection> pin_to_direction;
-            std::unordered_map<std::string, std::string> boolean_functions;
-        };
-
-        struct GroupCtx
-        {
-            std::vector<std::string> pins;
-            bool ascending;
-            u32 start_index;
-        };
 
         std::unique_ptr<GateLibrary> m_gate_lib;
         std::filesystem::path m_path;
@@ -80,7 +62,6 @@ namespace hal
 
         Result<std::monostate> parse_gate_library(const rapidjson::Document& document);
         Result<std::monostate> parse_gate_type(const rapidjson::Value& gate_type);
-        Result<std::monostate> parse_pin(PinCtx& pin_ctx, const rapidjson::Value& pin);
         Result<std::unique_ptr<GateTypeComponent>> parse_lut_config(const rapidjson::Value& lut_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_ff_config(const rapidjson::Value& ff_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_latch_config(const rapidjson::Value& latch_config);
