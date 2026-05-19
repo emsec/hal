@@ -46,14 +46,15 @@ namespace hal
          */
         enum class ComponentType
         {
-            lut,     /**< LUT component type. */
-            ff,      /**< Flip-flop component type. */
-            latch,   /**< Latch component type. */
-            ram,     /**< RAM component type. */
-            mac,     /**< MAC component type. */
-            init,    /**< Initialization component type. */
-            state,   /**< State component type. */
-            ram_port /**< RAM port component type. */
+            lut,         /**< LUT component type. */
+            ff,          /**< Flip-flop component type. */
+            latch,       /**< Latch component type. */
+            ram,         /**< RAM component type. */
+            mac,         /**< MAC component type. */
+            init,        /**< Initialization component type. */
+            state,       /**< State component type. */
+            ram_port,    /**< RAM port component type. */
+            state_table  /**< State table component type. */
         };
 
         /**

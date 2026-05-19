@@ -10,7 +10,8 @@ namespace hal
                                                                                                                    {GateTypeComponent::ComponentType::mac, "mac"},
                                                                                                                    {GateTypeComponent::ComponentType::init, "init"},
                                                                                                                    {GateTypeComponent::ComponentType::state, "state"},
-                                                                                                                   {GateTypeComponent::ComponentType::ram_port, "ram_port"}};
+                                                                                                                   {GateTypeComponent::ComponentType::ram_port, "ram_port"},
+                                                                                                                   {GateTypeComponent::ComponentType::state_table, "state_table"}};
 
     GateTypeComponent* GateTypeComponent::get_component(const std::function<bool(const GateTypeComponent*)>& filter) const
     {
