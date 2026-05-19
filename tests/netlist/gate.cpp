@@ -1711,6 +1711,27 @@ namespace hal
             ASSERT_TRUE(r1.is_ok());
             EXPECT_EQ(r1.get(), "FFFF0000");
         }
+        // ---- LUT5_2c: reverse-order write must not corrupt the other slice ----
+        {
+            auto nl = test_utils::create_empty_netlist();
+            GateType* lut_type = nl->get_gate_library()->get_gate_type_by_name("LUT5_2c");
+            ASSERT_NE(lut_type, nullptr);
+            Gate* lut_gate = nl->create_gate(lut_type, "lut5_2c_rev");
+            LUTComponent* lc = get_lc(lut_type);
+            ASSERT_NE(lc, nullptr);
+
+            // Set O1 (upper 32 bits) first, then O0 (lower 32 bits)
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O1", "CCCCCCCC").is_ok());
+            ASSERT_TRUE(lc->set_init_string(lut_gate, "O0", "12345678").is_ok());
+
+            auto r1 = lc->get_init_string(lut_gate, "O1");
+            ASSERT_TRUE(r1.is_ok());
+            EXPECT_EQ(r1.get(), "CCCCCCCC");
+
+            auto r0 = lc->get_init_string(lut_gate, "O0");
+            ASSERT_TRUE(r0.is_ok());
+            EXPECT_EQ(r0.get(), "12345678");
+        }
         // ---- NEGATIVE tests ----
         {
             NO_COUT_TEST_BLOCK;
@@ -1736,6 +1757,11 @@ namespace hal
             EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "GG").is_error());
             EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "").is_error());
             EXPECT_TRUE(lc->set_init_string(lut_gate, "O", "0x1F").is_error());
+
+            // get_init_string before any set (no parameter stored) must return an error
+            auto nl2 = test_utils::create_empty_netlist();
+            Gate* fresh_gate = nl2->create_gate(lut_type, "lut3_fresh");
+            EXPECT_TRUE(lc->get_init_string(fresh_gate, "O").is_error());
         }
         {
             // wrong length for a bit-ranged pin (LUT5_2c O0 expects exactly 8 hex digits)
