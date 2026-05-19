@@ -560,56 +560,6 @@ namespace hal
          */
         Endpoint* get_successor(const GatePin* pin) const;
 
-        /**
-         * Get the INIT string owned by the given LUT output or internal pin.
-         * Returns the pin's hex slice, or the full INIT string when no bit range is configured.
-         * An error is returned when the gate has no LUT component, the pin does not exist,
-         * its type is not `PinType::lut`, or its direction is neither `output` nor `internal`.
-         *
-         * @param[in] pin_name - Name of the LUT pin.
-         * @returns The INIT string as an uppercase hex string on success, an error otherwise.
-         */
-        Result<std::string> get_init_string(const std::string& pin_name) const;
-
-        /**
-         * Get the INIT string owned by the given LUT output or internal pin.
-         * Returns the pin's hex slice, or the full INIT string when no bit range is configured.
-         * An error is returned when the gate has no LUT component, the pin is nullptr,
-         * its type is not `PinType::lut`, or its direction is neither `output` nor `internal`.
-         *
-         * @param[in] pin - The LUT pin.
-         * @returns The INIT string as an uppercase hex string on success, an error otherwise.
-         */
-        Result<std::string> get_init_string(const GatePin* pin) const;
-
-        /**
-         * Set the INIT string for the given LUT output or internal pin.
-         * The hex string must consist only of hex digits (no '0x' prefix). When a bit range
-         * is configured for the pin its length must equal (bit_count + 3) / 4 characters.
-         * An error is returned when the gate has no LUT component, the pin does not exist,
-         * its type is not `PinType::lut`, its direction is neither `output` nor `internal`,
-         * the pin has no INIT config, or the hex string has an invalid format or length.
-         *
-         * @param[in] pin_name - Name of the LUT output or internal pin.
-         * @param[in] hex - The INIT string as a hex string without '0x' prefix.
-         * @returns Ok on success, an error otherwise.
-         */
-        Result<std::monostate> set_init_string(const std::string& pin_name, const std::string& hex);
-
-        /**
-         * Set the INIT string for the given LUT output or internal pin.
-         * The hex string must consist only of hex digits (no '0x' prefix). When a bit range
-         * is configured for the pin its length must equal (bit_count + 3) / 4 characters.
-         * An error is returned when the gate has no LUT component, the pin is nullptr,
-         * its type is not `PinType::lut`, its direction is neither `output` nor `internal`,
-         * the pin has no INIT config, or the hex string has an invalid format or length.
-         *
-         * @param[in] pin - The LUT output or internal pin.
-         * @param[in] hex - The INIT string as a hex string without '0x' prefix.
-         * @returns Ok on success, an error otherwise.
-         */
-        Result<std::monostate> set_init_string(const GatePin* pin, const std::string& hex);
-
     private:
         friend class NetlistInternalManager;
         Gate(NetlistInternalManager* mgr, EventHandler* event_handler, u32 id, GateType* gt, const std::string& name, i32 x, i32 y);

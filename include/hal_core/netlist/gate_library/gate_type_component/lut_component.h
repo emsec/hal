@@ -27,13 +27,17 @@
 
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 #include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/utilities/result.h"
 
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace hal
 {
+    class Gate;
+
     class LUTComponent : public GateTypeComponent
     {
     public:
@@ -140,6 +144,46 @@ namespace hal
          * @returns OK with the updated full hex string on success, an error on parse failure.
          */
         static Result<std::string> splice_init_slice(const std::string& full_hex, const std::string& slice_hex, u32 bit_offset, u32 bit_count);
+
+        /**
+         * Get the INIT hex string for a specific LUT output pin on a gate instance.
+         * The pin must be of type PinType::lut and have a configured LUTOutputConfig.
+         *
+         * @param[in] gate - The gate instance.
+         * @param[in] pin_name - The output pin name.
+         * @returns OK with the hex INIT string (no prefix) on success, an error otherwise.
+         */
+        Result<std::string> get_init_string(const Gate* gate, const std::string& pin_name) const;
+
+        /**
+         * Get the INIT hex string for a specific LUT output pin on a gate instance.
+         *
+         * @param[in] gate - The gate instance.
+         * @param[in] pin - The output pin.
+         * @returns OK with the hex INIT string (no prefix) on success, an error otherwise.
+         */
+        Result<std::string> get_init_string(const Gate* gate, const GatePin* pin) const;
+
+        /**
+         * Set the INIT hex string for a specific LUT output pin on a gate instance.
+         * The hex string must be exactly `(bit_count + 3) / 4` hex digits with no prefix.
+         *
+         * @param[in] gate - The gate instance.
+         * @param[in] pin_name - The output pin name.
+         * @param[in] hex - Hex string (no prefix, uppercase or lowercase).
+         * @returns OK on success, an error otherwise.
+         */
+        Result<std::monostate> set_init_string(Gate* gate, const std::string& pin_name, const std::string& hex) const;
+
+        /**
+         * Set the INIT hex string for a specific LUT output pin on a gate instance.
+         *
+         * @param[in] gate - The gate instance.
+         * @param[in] pin - The output pin.
+         * @param[in] hex - Hex string (no prefix, uppercase or lowercase).
+         * @returns OK on success, an error otherwise.
+         */
+        Result<std::monostate> set_init_string(Gate* gate, const GatePin* pin, const std::string& hex) const;
 
     private:
         explicit LUTComponent(std::unordered_map<std::string, LUTOutputConfig> configs);

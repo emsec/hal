@@ -287,17 +287,8 @@ namespace hal
             {
                 rapidjson::Value ram_config(rapidjson::kObjectType);
 
-                InitComponent* init_component = ram_component->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-                if (init_component == nullptr)
-                {
-                    return false;
-                }
-
-                // data_category, data_identifier
-                ram_config.AddMember("data_category", init_component->get_init_category(), allocator);
-
                 rapidjson::Value identifiers(rapidjson::kArrayType);
-                for (const std::string& identifier : init_component->get_init_identifiers())
+                for (const std::string& identifier : ram_component->get_init_identifiers())
                 {
                     identifiers.PushBack(rapidjson::Value{}.SetString(identifier.c_str(), identifier.length(), allocator), allocator);
                 }

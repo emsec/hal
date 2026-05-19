@@ -446,7 +446,9 @@ namespace hal
                             });
                             if (!lut_out_pins.empty())
                             {
-                                if (const auto res = gate->get_init_string(lut_out_pins.front()); res.is_ok())
+                                auto* lc_fp = fingerprint.type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                                if (lc_fp != nullptr)
+                                if (const auto res = lc_fp->get_init_string(gate, lut_out_pins.front()); res.is_ok())
                                 {
                                     const auto& init_str = res.get();
                                     for (const auto c : init_str)
@@ -1881,10 +1883,16 @@ namespace hal
                     continue;
                 }
 
+                auto* lc_simp = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+                if (lc_simp == nullptr)
+                {
+                    continue;
+                }
+
                 const auto out_ep  = g->get_fan_out_endpoints().front();
                 const GatePin* out_pin = out_ep->get_pin();
 
-                auto res = g->get_init_string(out_pin);
+                auto res = lc_simp->get_init_string(g, out_pin);
                 if (res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
@@ -1934,7 +1942,7 @@ namespace hal
                 // std::cout << "Org Init: " << g->get_init_data().get().front() << std::endl;
                 // std::cout << "New Init: " << new_init_string << std::endl;
 
-                g->set_init_string(out_pin, new_init_string).get();
+                lc_simp->set_init_string(g, out_pin, new_init_string).get();
                 g->set_data("preprocessing_information", "original_init", "string", original_init);
 
                 // const auto bf_test = g->get_boolean_function(out_ep->get_pin());

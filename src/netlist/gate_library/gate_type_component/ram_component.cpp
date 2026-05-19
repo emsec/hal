@@ -4,18 +4,14 @@
 
 namespace hal
 {
-    RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size) : m_component(std::move(component)), m_bit_size(bit_size)
+    RAMComponent::RAMComponent(std::unique_ptr<GateTypeComponent> component, const u32 bit_size, std::vector<std::string> init_identifiers)
+        : m_component(std::move(component)), m_bit_size(bit_size), m_init_identifiers(std::move(init_identifiers))
     {
     }
 
-    std::unique_ptr<RAMComponent> RAMComponent::create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size)
+    std::unique_ptr<RAMComponent> RAMComponent::create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size, const std::vector<std::string>& init_identifiers)
     {
-        if (component == nullptr)
-        {
-            return nullptr;
-        }
-
-        return std::unique_ptr<RAMComponent>(new RAMComponent(std::move(component), bit_size));
+        return std::unique_ptr<RAMComponent>(new RAMComponent(std::move(component), bit_size, init_identifiers));
     }
 
     RAMComponent::ComponentType RAMComponent::get_type() const
@@ -59,5 +55,15 @@ namespace hal
     void RAMComponent::set_bit_size(const u32 bit_size)
     {
         m_bit_size = bit_size;
+    }
+
+    const std::vector<std::string>& RAMComponent::get_init_identifiers() const
+    {
+        return m_init_identifiers;
+    }
+
+    void RAMComponent::set_init_identifiers(const std::vector<std::string>& init_identifiers)
+    {
+        m_init_identifiers = init_identifiers;
     }
 }    // namespace hal

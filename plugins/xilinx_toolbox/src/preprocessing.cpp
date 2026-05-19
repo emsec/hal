@@ -1,4 +1,5 @@
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -73,9 +74,16 @@ namespace hal
 
             // LUT6_2 uses a 64-bit INIT string (16 hex chars): O6 uses all 64 bits,
             // O5 uses bits [0, 31] (the lower half, i.e., truth table for I5=0).
+            auto* lc_g = g->get_type()->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
+            if (lc_g == nullptr)
+            {
+                return ERR("LUT6_2 gate type has no LUT component");
+            }
+            auto* lc_lut5t = (lut5_type != nullptr) ? lut5_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; }) : nullptr;
+            auto* lc_lut6t = (lut6_type != nullptr) ? lut6_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; }) : nullptr;
             if (o5 != nullptr && o5->get_num_of_destinations() > 0)
             {
-                const auto init_O5_res = g->get_init_string("O5");
+                const auto init_O5_res = lc_g->get_init_string(g, "O5");
                 if (init_O5_res.is_error())
                 {
                     log_warning("xilinx_toolbox", "could not get INIT string for O5 of gate '{}' with ID {}, skipping O5 split.", g->get_name(), g->get_id());
@@ -86,7 +94,7 @@ namespace hal
                     auto* lut5         = nl->create_gate(lut5_type, g->get_name() + "_split_O5");
                     lut5->set_data("xilinx_preprocessing_information", "original_init", "string", init_O5);
 
-                    if (lut5->set_init_string("O", init_O5).is_error())
+                    if (lc_lut5t == nullptr || lc_lut5t->set_init_string(lut5, "O", init_O5).is_error())
                     {
                         log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut5->get_name(), lut5->get_id());
                         nl->delete_gate(lut5);
@@ -117,7 +125,7 @@ namespace hal
 
             if (o6 != nullptr && o6->get_num_of_destinations() > 0)
             {
-                const auto init_O6_res = g->get_init_string("O6");
+                const auto init_O6_res = lc_g->get_init_string(g, "O6");
                 if (init_O6_res.is_error())
                 {
                     return ERR("could not get O6 INIT string of gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()));
@@ -129,7 +137,7 @@ namespace hal
                     lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init_O6);
 
                     // O6 is a full 6-input LUT and uses the entire 64-bit INIT string.
-                    if (lut6->set_init_string("O", init_O6).is_error())
+                    if (lc_lut6t == nullptr || lc_lut6t->set_init_string(lut6, "O", init_O6).is_error())
                     {
                         log_warning("xilinx_toolbox", "could not set INIT string of gate '{}' with ID {}.", lut6->get_name(), lut6->get_id());
                         nl->delete_gate(lut6);

@@ -296,7 +296,6 @@ namespace hal
                 {
                     identifiers.push_back(id.toStdString());
                 }
-                sub_component = InitComponent::create(initPage->mCategory->text().toStdString(), identifiers);
 
                 for (RAMPortWizardPage::RAMPort rpEdit : ramportPage->getRamPorts())
                 {
@@ -317,7 +316,7 @@ namespace hal
                     sub_component = RAMPortComponent::create(
                         std::move(sub_component), rpEdit.dataGroup->text().toStdString(), rpEdit.addressGroup->text().toStdString(), clocked_on_bf, enabled_on_bf, rpEdit.isWritePort->isChecked());
                 }
-                parentComponent = RAMComponent::create(std::move(sub_component), ramPage->mBitSize->text().toInt());
+                parentComponent = RAMComponent::create(std::move(sub_component), ramPage->mBitSize->text().toInt(), identifiers);
             }
         }
         return std::move(parentComponent);

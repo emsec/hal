@@ -810,28 +810,18 @@ namespace hal
 
     Result<std::unique_ptr<GateTypeComponent>> HGLParser::parse_ram_config(const rapidjson::Value& ram_config)
     {
-        std::unique_ptr<GateTypeComponent> sub_component = nullptr;
-        if (ram_config.HasMember("data_category") && ram_config["data_category"].IsString())
+        if (!ram_config.HasMember("data_identifiers") || !ram_config["data_identifiers"].IsArray())
         {
-            std::vector<std::string> init_identifiers;
-            if (ram_config.HasMember("data_identifiers") && ram_config["data_identifiers"].IsArray())
-            {    // now allows for multiple identifiers (required for BRAM)
+            return ERR("could not parse RAM configuration: missing or invalid data_identifiers");
+        }
 
-                for (const auto& identifier : ram_config["data_identifiers"].GetArray())
-                {
-                    init_identifiers.push_back(identifier.GetString());
-                }
-            }
-            else
-            {
-                return ERR("could not parse RAM configuration: missing or invalid data identifier for RAM initialization");
-            }
-            sub_component = InitComponent::create(ram_config["data_category"].GetString(), init_identifiers);
-        }
-        else if (ram_config.HasMember("data_identifiers") && ram_config["data_identifiers"].IsArray())
+        std::vector<std::string> init_identifiers;
+        for (const auto& identifier : ram_config["data_identifiers"].GetArray())
         {
-            return ERR("could not parse RAM configuration: missing or invalid data category for RAM initialization");
+            init_identifiers.push_back(identifier.GetString());
         }
+
+        std::unique_ptr<GateTypeComponent> sub_component = nullptr;
 
         if (!ram_config.HasMember("bit_size") || !ram_config["bit_size"].IsUint())
         {
@@ -894,7 +884,7 @@ namespace hal
                 std::move(sub_component), ram_port["data_group"].GetString(), ram_port["address_group"].GetString(), clocked_on_function, enabled_on_function, ram_port["is_write"].GetBool());
         }
 
-        std::unique_ptr<GateTypeComponent> component = RAMComponent::create(std::move(sub_component), ram_config["bit_size"].GetUint());
+        std::unique_ptr<GateTypeComponent> component = RAMComponent::create(std::move(sub_component), ram_config["bit_size"].GetUint(), init_identifiers);
 
         return OK(std::move(component));
     }

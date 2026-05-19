@@ -803,7 +803,7 @@ namespace hal
                             {
                                 if (cfg.init_identifier == id)
                                 {
-                                    auto res = g->get_init_string(pin_name);
+                                    auto res = lc->get_init_string(g, pin_name);
                                     if (res.is_error())
                                     {
                                         return ERR_APPEND(res.get_error(),
@@ -990,7 +990,7 @@ namespace hal
                         {
                             if (cfg.init_identifier == id)
                             {
-                                auto res = g->get_init_string(pin_name);
+                                auto res = lc->get_init_string(g, pin_name);
                                 if (res.is_error())
                                 {
                                     return ERR_APPEND(res.get_error(),

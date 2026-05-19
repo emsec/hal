@@ -28,6 +28,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/gate_type_component.h"
 
 #include <memory>
+#include <vector>
 
 namespace hal
 {
@@ -39,9 +40,10 @@ namespace hal
          *
          * @param[in] component - Another component to be added as a child component.
          * @param[in] bit_size - The size of the RAM in bits.
-         * @returns The RAMComponent, or nullptr if component is nullptr.
+         * @param[in] init_identifiers - The parameter names for initialization data.
+         * @returns The RAMComponent.
          */
-        static std::unique_ptr<RAMComponent> create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size);
+        static std::unique_ptr<RAMComponent> create(std::unique_ptr<GateTypeComponent> component, const u32 bit_size, const std::vector<std::string>& init_identifiers = {});
 
         /**
          * Get the type of the gate type component.
@@ -78,17 +80,32 @@ namespace hal
 
         /**
          * Set the size of the RAM in bits.
-         * 
+         *
          * @param[in] bit_size - The size of the RAM in bits.
          */
         void set_bit_size(const u32 bit_size);
 
+        /**
+         * Get the parameter names used to find initialization data.
+         *
+         * @returns The vector of init identifier strings.
+         */
+        const std::vector<std::string>& get_init_identifiers() const;
+
+        /**
+         * Set the parameter names used to find initialization data.
+         *
+         * @param[in] init_identifiers - The vector of init identifier strings.
+         */
+        void set_init_identifiers(const std::vector<std::string>& init_identifiers);
+
     private:
-        RAMComponent(std::unique_ptr<GateTypeComponent> component, u32 bit_size);
+        RAMComponent(std::unique_ptr<GateTypeComponent> component, u32 bit_size, std::vector<std::string> init_identifiers);
 
         static constexpr ComponentType m_type          = ComponentType::ram;
         std::unique_ptr<GateTypeComponent> m_component = nullptr;
 
         u32 m_bit_size;
+        std::vector<std::string> m_init_identifiers;
     };
 }    // namespace hal

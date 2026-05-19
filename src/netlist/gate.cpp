@@ -4,7 +4,6 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "hal_core/netlist/gate_library/gate_type_component/init_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -21,61 +20,61 @@
 #include <iomanip>
 #include <sstream>
 
-template<typename T, T m, int k>
-static inline T swapbits(T p)
+namespace
 {
-    T q = ((p >> k) ^ p) & m;
-    return p ^ q ^ (q << k);
-}
-
-// Read an INIT hex string (no prefix) for the given key from the parameter map.
-static std::string lut_init_read(const hal::DataContainer* dc, const std::string& key)
-{
-    if (!dc->has_parameter(key))
+    template<typename T, T m, int k>
+    inline T swapbits(T p)
     {
-        return "";
-    }
-    const std::string pv = dc->get_parameter_value(key).get();
-    return (pv.size() >= 2 && pv[0] == '0' && pv[1] == 'x') ? pv.substr(2) : pv;
-}
-
-// Write an INIT hex string (no prefix) to parameters as a BitVector.
-// Reuses the existing parameter declaration when the value fits; creates a fresh one otherwise.
-static void lut_init_write(hal::DataContainer* dc, const std::string& key, const std::string& plain_hex)
-{
-    if (plain_hex.empty())
-    {
-        return;
-    }
-    const std::string value = "0x" + plain_hex;
-    const size_t nbits      = plain_hex.size() * 4;
-    if (nbits == 0 || nbits > 64)
-    {
-        return;
+        T q = ((p >> k) ^ p) & m;
+        return p ^ q ^ (q << k);
     }
 
-    auto param_res = hal::Parameter::BitVector(key, static_cast<u16>(nbits), "");
-    if (param_res.is_error())
+    std::string lut_init_read(const hal::DataContainer* dc, const std::string& key)
     {
-        return;
+        if (!dc->has_parameter(key))
+        {
+            return "";
+        }
+        const std::string pv = dc->get_parameter_value(key).get();
+        return (pv.size() >= 2 && pv[0] == '0' && pv[1] == 'x') ? pv.substr(2) : pv;
     }
 
-    dc->set_parameter(param_res.get(), value);
-}
+    void lut_init_write(hal::DataContainer* dc, const std::string& key, const std::string& plain_hex)
+    {
+        if (plain_hex.empty())
+        {
+            return;
+        }
+        const std::string value = "0x" + plain_hex;
+        const size_t nbits      = plain_hex.size() * 4;
+        if (nbits == 0 || nbits > 64)
+        {
+            return;
+        }
 
-static u64 bitreverse(u64 n)
-{
-    static const u64 m0 = 0x5555555555555555LLU;
-    static const u64 m1 = 0x0300c0303030c303LLU;
-    static const u64 m2 = 0x00c0300c03f0003fLLU;
-    static const u64 m3 = 0x00000ffc00003fffLLU;
-    n                   = ((n >> 1) & m0) | (n & m0) << 1;
-    n                   = swapbits<u64, m1, 4>(n);
-    n                   = swapbits<u64, m2, 8>(n);
-    n                   = swapbits<u64, m3, 20>(n);
-    n                   = (n >> 34) | (n << 30);
-    return n;
-}
+        auto param_res = hal::Parameter::BitVector(key, static_cast<u16>(nbits), "");
+        if (param_res.is_error())
+        {
+            return;
+        }
+
+        dc->set_parameter(param_res.get(), value);
+    }
+
+    u64 bitreverse(u64 n)
+    {
+        static const u64 m0 = 0x5555555555555555LLU;
+        static const u64 m1 = 0x0300c0303030c303LLU;
+        static const u64 m2 = 0x00c0300c03f0003fLLU;
+        static const u64 m3 = 0x00000ffc00003fffLLU;
+        n                   = ((n >> 1) & m0) | (n & m0) << 1;
+        n                   = swapbits<u64, m1, 4>(n);
+        n                   = swapbits<u64, m2, 8>(n);
+        n                   = swapbits<u64, m3, 20>(n);
+        n                   = (n >> 34) | (n << 30);
+        return n;
+    }
+}    // namespace
 
 namespace hal
 {
@@ -1225,118 +1224,4 @@ namespace hal
         return get_successor(pin);
     }
 
-    Result<std::string> Gate::get_init_string(const std::string& pin_name) const
-    {
-        const GatePin* pin = m_type->get_pin_by_name(pin_name);
-        if (pin == nullptr)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin_name + "' does not exist");
-        }
-        return get_init_string(pin);
-    }
-
-    Result<std::string> Gate::get_init_string(const GatePin* pin) const
-    {
-        if (pin == nullptr)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is nullptr");
-        }
-
-        const LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
-        if (lut_component == nullptr)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name() + "' is not a LUT type");
-        }
-
-        if (pin->get_type() != PinType::lut)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' is not of type PinType::lut");
-        }
-
-        const PinDirection dir = pin->get_direction();
-        if (dir != PinDirection::output && dir != PinDirection::internal)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' must have direction output or internal, got "
-                       + enum_to_string(dir));
-        }
-
-        const LUTComponent::LUTOutputConfig* cfg = lut_component->get_output_pin_config(pin->get_name());
-        if (cfg == nullptr)
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' has no INIT config");
-        }
-
-        const std::string full_str = lut_init_read(this, cfg->init_identifier);
-
-        auto res = LUTComponent::extract_init_slice(full_str, cfg->bit_offset, cfg->bit_count);
-        if (res.is_error())
-        {
-            return ERR("could not get INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": " + res.get_error().get());
-        }
-        return OK(res.get());
-    }
-
-    Result<std::monostate> Gate::set_init_string(const std::string& pin_name, const std::string& hex)
-    {
-        const GatePin* pin = m_type->get_pin_by_name(pin_name);
-        if (pin == nullptr)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin_name + "' does not exist");
-        }
-        return set_init_string(pin, hex);
-    }
-
-    Result<std::monostate> Gate::set_init_string(const GatePin* pin, const std::string& hex)
-    {
-        if (pin == nullptr)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is nullptr");
-        }
-
-        const LUTComponent* lut_component = m_type->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return c->get_type() == GateTypeComponent::ComponentType::lut; });
-        if (lut_component == nullptr)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": gate type '" + m_type->get_name() + "' is not a LUT type");
-        }
-
-        if (pin->get_type() != PinType::lut)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' is not of type PinType::lut");
-        }
-
-        const PinDirection dir = pin->get_direction();
-        if (dir != PinDirection::output && dir != PinDirection::internal)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' must have direction output or internal, got "
-                       + enum_to_string(dir));
-        }
-
-        const LUTComponent::LUTOutputConfig* cfg = lut_component->get_output_pin_config(pin->get_name());
-        if (cfg == nullptr)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' has no INIT config");
-        }
-
-        if (hex.empty() || !std::all_of(hex.begin(), hex.end(), [](unsigned char c) { return std::isxdigit(c); }))
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": '" + hex + "' is not a valid hex string");
-        }
-
-        const size_t expected_chars = (static_cast<size_t>(cfg->bit_count) + 3) / 4;
-        if (hex.size() != expected_chars)
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": INIT string for pin '" + pin->get_name() + "' must be "
-                       + std::to_string(expected_chars) + " hex digit(s) long (got " + std::to_string(hex.size()) + ")");
-        }
-
-        const std::string existing_str = lut_init_read(this, cfg->init_identifier);
-        auto res                       = LUTComponent::splice_init_slice(existing_str, hex, cfg->bit_offset, cfg->bit_count);
-        if (res.is_error())
-        {
-            return ERR("could not set INIT string for gate '" + m_name + "' with ID " + std::to_string(m_id) + ": " + res.get_error().get());
-        }
-        lut_init_write(this, cfg->init_identifier, res.get());
-
-        return OK({});
-    }
 }    // namespace hal
