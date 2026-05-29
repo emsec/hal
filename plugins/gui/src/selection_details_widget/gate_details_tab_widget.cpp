@@ -255,25 +255,26 @@ namespace hal
         mLutTable->setBooleanFunction(bf, QString::fromStdString(pinName));
 
         GateType*      gt             = mCurrentGate->get_type();
-        InitComponent* init_component = gt->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
-        if (init_component == nullptr)
+
+        LUTComponent* lut_component = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
+        if (lut_component == nullptr)
         {
             mLutConfigLabel->setText(" Could not load init string.");
             return;
         }
-        std::string initKey    = init_component->get_init_identifiers()[0];
-        u32         bit_offset = 0;
-        u32         bit_count  = 0;
-        if (LUTComponent* lc = gt->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }); lc != nullptr)
+        const LUTComponent::LUTOutputConfig* cfg = lut_component->get_output_pin_config(pinName);
+        if (cfg == nullptr)
         {
-            if (const LUTComponent::LUTOutputConfig* cfg = lc->get_output_pin_config(pinName); cfg != nullptr)
-            {
-                initKey    = cfg->init_identifier;
-                bit_offset = cfg->bit_offset;
-                bit_count  = cfg->bit_count;
-            }
+            mLutConfigLabel->setText(" Could not load init string.");
+            return;
         }
-        const std::string raw_str    = std::get<1>(mCurrentGate->get_data(init_component->get_init_category(), initKey));
+        const std::string& initKey    = cfg->init_identifier;
+        const u32          bit_offset = cfg->bit_offset;
+        const u32          bit_count  = cfg->bit_count;
+
+        const auto& params = mCurrentGate->get_parameters();
+        auto it = params.find(initKey);
+        const std::string raw_str = (it != params.end()) ? it->second.second : "";
         const auto        slice_res  = LUTComponent::extract_init_slice(raw_str, bit_offset, bit_count);
         const std::string displayHex = slice_res.is_ok() ? slice_res.get() : raw_str;
         mLutConfigLabel->setText(" 0x" + QString::fromStdString(displayHex));
