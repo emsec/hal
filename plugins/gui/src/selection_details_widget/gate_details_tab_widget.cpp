@@ -27,8 +27,10 @@
 #include <QDebug>
 #include "gui/comment_system/widgets/comment_widget.h"
 // temporal debug includes
-#include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/comment_entry.h"
+#include "gui/comment_system/widgets/comment_item.h"
+#include "gui/selection_details_widget/gate_details_widget/parameter_table_widget.h"
+
 #include <QMenu>
 
 namespace hal
@@ -101,6 +103,12 @@ namespace hal
 
         addTab("Data", mDataFrame, false);
 
+        //parameter tab
+        mParameterTable = new ParameterTableWidget(this);
+        mParameterFrame = new DetailsFrameWidget(mParameterTable, "Parameters", this);
+
+        addTab("Parameters", mParameterFrame, false);
+
         //comments tab, no frame is used here
         mCommentWidget = new CommentWidget(this);
         QTabWidget::addTab(mCommentWidget, "Comments");
@@ -116,6 +124,7 @@ namespace hal
         mGroupingsOfItemTable->setGate(gate);
         mPinsTree->setGate(gate);
         mDataTable->setGate(gate);
+        mParameterTable->setGate(gate);
         mCommentWidget->nodeChanged(Node(gate->get_id(), Node::NodeType::Gate));
 
         // Logic for LUT/FF/LATCH

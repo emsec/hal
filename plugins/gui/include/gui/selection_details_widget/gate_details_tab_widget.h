@@ -46,6 +46,7 @@ namespace hal
     class DataTableWidget;
     class GroupingsOfItemWidget;
     class CommentWidget;
+    class ParameterTableWidget;
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -166,5 +167,9 @@ namespace hal
 
         //comment tab
         CommentWidget* mCommentWidget;
+
+        //parameter tab
+        ParameterTableWidget* mParameterTable;
+        DetailsFrameWidget* mParameterFrame;
     };
 }
