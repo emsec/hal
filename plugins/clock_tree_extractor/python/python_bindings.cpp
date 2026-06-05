@@ -241,26 +241,6 @@ namespace hal
                 py::arg( "vertices" ),
                 R"()" )
             .def(
-                "get_paths",
-                []( const cte::ClockTree &self ) -> py::dict {
-                    auto res = self.get_paths();
-                    py::dict result;
-                    for( const auto &[key, val] : res )
-                    {
-                        py::tuple py_key( 2 );
-                        py_key[0] = py::cast( (const Gate *) key.first );
-                        py_key[1] = py::cast( (const Gate *) key.second );
-                        py::list py_val;
-                        for( const Gate *gate : val )
-                        {
-                            py_val.append( gate );
-                        }
-                        result[py_key] = py_val;
-                    }
-                    return result;
-                },
-                R"()" )
-            .def(
                 "get_parents",
                 []( const cte::ClockTree &self, const void *ptr ) -> py::list {
                     auto res = self.get_neighbors( ptr, IGRAPH_IN );

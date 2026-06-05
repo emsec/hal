@@ -105,10 +105,6 @@ namespace hal
             Result<std::vector<std::pair<const void *, PtrType>>>
             get_ptrs_from_vertices( const std::vector<igraph_integer_t> &vertices ) const;
 
-            const std::
-                unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
-                get_paths() const;
-
             const std::vector<const Gate *> get_gates() const;
 
             const std::vector<const Net *> get_nets() const;
@@ -137,9 +133,6 @@ namespace hal
             std::unordered_map<const void *, igraph_integer_t> m_ptrs_to_vertices;
 
             std::unordered_map<const void *, PtrType> m_ptrs_to_types;
-
-            std::unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
-                m_paths;
         };
     }  // namespace cte
 }  // namespace hal

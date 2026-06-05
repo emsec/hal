@@ -141,9 +141,6 @@ namespace hal
             NetlistTraversalDecorator ntd = NetlistTraversalDecorator( *netlist );
             std::unordered_set<std::pair<const Gate *, const Gate *>, VoidPtrHash> visited;
 
-            std::unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
-                paths;
-
             for( const Gate *ff : netlist->get_gates( is_ff ) )
             {
                 const std::vector<hal::GatePin *> clock_pins = ff->get_type()->get_pins( []( const auto &p ) {
@@ -173,7 +170,7 @@ namespace hal
                     for( const Endpoint *source_ep : clk->get_sources() )
                     {
                         const Gate *gate = source_ep->get_gate();
-                        if( !( is_buffer(gate) || is_inverter(gate) ) )
+                        if( !( is_buffer( gate ) || is_inverter( gate ) ) )
                         {
                             // In theory, it should be either all buffers or all inverters. But depending on
                             // extraction results, e.g., it could happen that a buffer is split into two inverters.
@@ -186,7 +183,8 @@ namespace hal
                     if( !valid )
                     {
                         log_error( "clock_tree_extractor",
-                                   "invalid number of sources for clock net with ID " + std::to_string( clk->get_id() ) );
+                                   "invalid number of sources for clock net with ID "
+                                       + std::to_string( clk->get_id() ) );
                         continue;
                     }
                 }
@@ -240,14 +238,17 @@ namespace hal
                         continue;
                     }
 
-                    vertices.insert( (void *) source );
-                    vertices.insert( (void *) reference );
+                    for( const Gate *gate : path )
+                    {
+                        vertices.insert( (void *) gate );
+                        ptrs_to_type[(void *) gate] = PtrType::GATE;
+                    }
 
-                    ptrs_to_type[(void *) source] = PtrType::GATE;
-                    ptrs_to_type[(void *) reference] = PtrType::GATE;
+                    for( u32 idx = 0; idx < path.size() - 1; idx++ )
+                    {
+                        edges.insert( { (void *) path[idx + 1], (void *) path[idx] } );
+                    }
 
-                    edges.insert( { (void *) source, (void *) reference } );
-                    paths[{ (void *) source, (void *) reference }] = path;
                     path.clear();
                     path.push_back( source );
 
@@ -278,16 +279,25 @@ namespace hal
 
                     if( net->is_global_input_net() )
                     {
+                        for( const Gate *gate : path )
+                        {
+                            vertices.insert( (void *) gate );
+                            ptrs_to_type[(void *) gate] = PtrType::GATE;
+                        }
+
+                        for( u32 idx = 0; idx < path.size() - 1; idx++ )
+                        {
+                            edges.insert( { (void *) path[idx + 1], (void *) path[idx] } );
+                        }
+
                         vertices.insert( (void *) net );
-                        vertices.insert( (void *) reference );
 
                         ptrs_to_type[(void *) net] = PtrType::NET;
-                        ptrs_to_type[(void *) reference] = PtrType::GATE;
 
-                        edges.insert( { (void *) net, (void *) reference } );
+                        edges.insert( { (void *) net, (void *) path.back() } );
 
-                        // paths[{ (void *) net, (void *) reference }] = path;
-                        // path.clear();
+                        path.clear();
+                        path.push_back( source );
 
                         continue;
                     }
@@ -327,7 +337,6 @@ namespace hal
             }
 
             clock_tree->m_ptrs_to_types = ptrs_to_type;
-            clock_tree->m_paths = std::move( paths );
 
             igraph_error_t ierror;
             igraph_vector_int_t iedges;
@@ -419,6 +428,11 @@ namespace hal
                 {
                     dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() )
                            << ( coords.size() == 0 ? ";\n" : " [" + coords + "];\n" );
+                }
+                else
+                {
+                    dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() ) << " [" << coords
+                           << " shape=hexagon];\n";
                 }
             }
 
@@ -727,13 +741,6 @@ namespace hal
         const igraph_t *ClockTree::get_igraph() const
         {
             return m_igraph_ptr;
-        }
-
-        const std::
-            unordered_map<std::pair<const void *, const void *>, std::vector<const Gate *>, VoidPtrHash, PairPtrEq>
-            ClockTree::get_paths() const
-        {
-            return m_paths;
         }
 
         Result<std::vector<std::pair<const void *, PtrType>>>
