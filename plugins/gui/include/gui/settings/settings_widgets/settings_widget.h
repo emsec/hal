@@ -68,14 +68,6 @@ namespace hal
          */
         void reset_labels();
 
-        /**
-         * Searches the given string in the label of this widget's underlying SettingsItem.
-         *
-         * @param needle - The string to search for.
-         * @return True if the string was found. False otherwise.
-         */
-        bool matchLabel(const QString& needle);
-
         /** @name Q_PROPERTY READ Function
           */
         ///@{

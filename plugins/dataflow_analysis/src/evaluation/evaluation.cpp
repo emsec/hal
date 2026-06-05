@@ -128,9 +128,11 @@ namespace hal
                     // scan groups until all or done
                     float original_size = sorted_results.size();
                     ProgressPrinter progress_bar;
+                    progress_bar.print_message_to_gui("dataflow: evaluate results …");
                     while (!sorted_results.empty())
                     {
-                        progress_bar.print_progress((original_size - sorted_results.size()) / original_size);
+                        progress_bar.print_progress_to_stderr((original_size - sorted_results.size()) / original_size);
+                        progress_bar.print_progress_to_gui();
 
                         // precompute the group indices of each gate
                         std::unordered_map<u32, u32> max_group_size_of_gate;

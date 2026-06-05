@@ -25,9 +25,10 @@ namespace hal {
     };
 
     std::unordered_map<Module*,PinChangedEvent::EventStack*> PinChangedEvent::s_event_stack;
+    u64 PinChangedEvent::s_order = 0;
 
     PinChangedEvent::PinChangedEvent(Module* m, PinEvent pev, u32 id)
-        : m_module(m), m_event(pev), m_id(id)
+        : m_module(m), m_event(pev), m_id(id), m_order(++s_order)
     {;}
 
     void PinChangedEvent::send()
@@ -58,6 +59,8 @@ namespace hal {
     {
         if (a.m_event < b.m_event) return true;
         if (a.m_event > b.m_event) return false;
+        if (a.m_event == PinEvent::PinAssignToGroup)
+            return a.m_order > b.m_order; // revert order for descending pin groups
         return a.m_id<b.m_id;
     }
 

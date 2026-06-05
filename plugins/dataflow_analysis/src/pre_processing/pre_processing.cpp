@@ -88,6 +88,8 @@ namespace hal
                     measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
                     float cnt = 0;
 
+                    progress_bar.print_message_to_gui("dataflow: preprocessing …");
+
                     // cache map of nets to group indices of known net groups
                     std::unordered_map<const Net*, u32> net_to_group_index;
                     for (u32 i = 0; i < config.known_net_groups.size(); i++)
@@ -110,7 +112,8 @@ namespace hal
                     for (const auto& gate : netlist_abstr.target_gates)
                     {
                         cnt++;
-                        progress_bar.print_progress(cnt / netlist_abstr.target_gates.size());
+                        progress_bar.print_progress_to_stderr(cnt / netlist_abstr.target_gates.size());
+                        progress_bar.print_progress_to_gui();
 
                         // create sets even if there are no successors
                         if (netlist_abstr.gate_to_successors.find(gate->get_id()) == netlist_abstr.gate_to_successors.end())

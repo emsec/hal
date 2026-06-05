@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
 * added information to GUI setting file so that widgets position and size from previous session gets restored
 * added option to focus on pin in pin context menu
 * changed default order to 'descending' when creating a pin group via Python command

@@ -62,6 +62,7 @@ namespace hal
                             ctx.pass_counter = end_id;
                             if (ctx.pass_counter >= num_passes)
                             {
+                                std::lock_guard guard(ctx.result_mutex);
                                 ctx.done = true;
                             }
                         }
@@ -72,13 +73,16 @@ namespace hal
 
                             if (auto it = ctx.pass_outcome.find({current_state, current_pass.id}); it != ctx.pass_outcome.end())
                             {
-                                // early exit, outcome is already known
-                                std::lock_guard guard(ctx.result_mutex);
-                                ctx.new_recurring_results.emplace_back(current_state, current_pass.id, it->second);
-                                ctx.finished_passes++;
-                                m_progress_printer.print_progress((float)ctx.finished_passes / ctx.current_passes.size(),
+                                {
+                                    // early exit, outcome is already known
+                                    std::lock_guard guard(ctx.result_mutex);
+                                    ctx.new_recurring_results.emplace_back(current_state, current_pass.id, it->second);
+                                    ctx.finished_passes++;
+                                    m_progress_printer.print_progress_to_stderr((float)ctx.finished_passes / ctx.current_passes.size(),
                                                                   std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
                                                                       + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
+                                }
+                                m_progress_printer.print_progress_to_gui();
                                 continue;
                             }
 
@@ -107,10 +111,11 @@ namespace hal
                                 }
 
                                 ctx.finished_passes++;
-                                m_progress_printer.print_progress((float)ctx.finished_passes / ctx.current_passes.size(),
+                                m_progress_printer.print_progress_to_stderr((float)ctx.finished_passes / ctx.current_passes.size(),
                                                                   std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
                                                                       + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
                             }
+                            m_progress_printer.print_progress_to_gui();
                         }
                     }
                 }
