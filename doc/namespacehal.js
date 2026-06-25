@@ -671,6 +671,7 @@ var namespacehal =
       [ "pll", "namespacehal.html#adb8da04d2161f277bd489e806a2721caab23e9e4405d0c242f0d6b1c946683384", null ],
       [ "oscillator", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa308be888ec420d44a702912901f57459", null ],
       [ "scan", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa53aefec08170b2ebed981a0a86d0dbe0", null ],
+      [ "delay", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa7243f8be75253afbadf7477867021f8b", null ],
       [ "c_buffer", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa9ba05435d8e40af8d429b81a612d70b1", null ],
       [ "c_inverter", "namespacehal.html#adb8da04d2161f277bd489e806a2721caad85794454679ce47ec639fe85b32200e", null ],
       [ "c_and", "namespacehal.html#adb8da04d2161f277bd489e806a2721caa6e1d73881119ca86b46e4de2d83c621b", null ],
