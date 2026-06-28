@@ -1,5 +1,6 @@
 #include "gui/selection_details_widget/gate_details_widget/parameter_table_widget.h"
 
+#include "gui/selection_details_widget/gate_details_widget/parameter_value_delegate.h"
 #include "hal_core/netlist/gate.h"
 
 #include <QHeaderView>
@@ -10,8 +11,6 @@ namespace hal
     {
         setModel(mParameterTableModel);
         setSelectionMode(QAbstractItemView::SingleSelection);
-        setSelectionBehavior(QAbstractItemView::SelectRows);
-        setFocusPolicy(Qt::NoFocus);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         verticalHeader()->setVisible(false);
         horizontalHeader()->setVisible(true);
@@ -19,6 +18,7 @@ namespace hal
         horizontalHeader()->setStretchLastSection(true);
         setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setFrameStyle(QFrame::NoFrame);
+        setItemDelegateForColumn(4, new ParameterValueDelegate(this));
     }
 
     void ParameterTableWidget::setGate(Gate* gate)
@@ -27,7 +27,6 @@ namespace hal
             return;
 
         mParameterTableModel->updateData(gate->get_parameters());
-        clearSelection();
     }
 }
 

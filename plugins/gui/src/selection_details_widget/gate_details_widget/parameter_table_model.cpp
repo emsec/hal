@@ -12,20 +12,20 @@ namespace hal
 
     int ParameterTableModel::columnCount(const QModelIndex& parent) const
     {
-        Q_UNUSED(parent)
         return 5;
     }
 
     int ParameterTableModel::rowCount(const QModelIndex& parent) const
     {
-        Q_UNUSED(parent)
         return mRows.size();
     }
 
     QVariant ParameterTableModel::data(const QModelIndex& index, int role) const
     {
-        if (index.row() < 0 || index.row() >= mRows.size())
+        if (index.row() < 0 || index.row() >= rowCount())
+        {
             return QVariant();
+        }
 
         const ParameterRow& row = mRows[index.row()];
 
@@ -33,16 +33,28 @@ namespace hal
         {
             switch (index.column())
             {
-                case 0: return row.name;
-                case 1: return row.type;
-                case 2: return row.size;
-                case 3: return row.defaultValue;
-                case 4: return row.value;
+                case 0:
+                    return row.name;
+                case 1:
+                    return row.type;
+                case 2:
+                    return row.size;
+                case 3:
+                    return row.defaultValue;
+                case 4:
+                    return row.value;
             }
         }
 
+        if (role == Qt::EditRole && index.column() == 4)
+        {
+            return row.value;
+        }
+
         if (role == Qt::TextAlignmentRole)
+        {
             return Qt::AlignLeft;
+        }
 
         return QVariant();
     }
@@ -51,7 +63,9 @@ namespace hal
     {
         const char* horizontalHeader[] = {"Name", "Type", "Size", "Default", "Value"};
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount())
+        {
             return QString(horizontalHeader[section]);
+        }
 
         return QVariant();
     }
@@ -79,4 +93,26 @@ namespace hal
 
         endResetModel();
     }
-}
+
+    bool ParameterTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
+    {
+        if (role != Qt::EditRole || index.column() != 4)
+        {
+            return false;
+        }
+
+        this->mRows[index.row()].value = value.toString();
+
+        Q_EMIT dataChanged(index, index);
+        return true;
+    }
+
+    Qt::ItemFlags ParameterTableModel::flags(const QModelIndex& index) const
+    {
+        if (index.column() == 4)
+        {
+            return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+        }
+        return QAbstractTableModel::flags(index);
+    }
+}    // namespace hal

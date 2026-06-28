@@ -98,6 +98,10 @@ namespace hal
          */
         void updateData(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& parameters);
 
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
+        Qt::ItemFlags flags(const QModelIndex &index) const override;
+
     private:
         struct ParameterRow
         {
