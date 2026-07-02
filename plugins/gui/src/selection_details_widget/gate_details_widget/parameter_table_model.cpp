@@ -1,8 +1,10 @@
 #include "gui/selection_details_widget/gate_details_widget/parameter_table_model.h"
 
+#include "hal_core/netlist/gate.h"
 #include "hal_core/utilities/enums.h"
 
 #include <algorithm>
+#include <boost/container/container_fwd.hpp>
 
 namespace hal
 {
@@ -70,12 +72,13 @@ namespace hal
         return QVariant();
     }
 
-    void ParameterTableModel::updateData(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& parameters)
+    void ParameterTableModel::updateData(Gate* gate)
     {
         beginResetModel();
+        mGate = gate;
         mRows.clear();
 
-        for (const auto& [name, declAndValue] : parameters)
+        for (const auto& [name, declAndValue] : gate->get_parameters())
         {
             const Parameter& decl = declAndValue.first;
 
@@ -101,7 +104,22 @@ namespace hal
             return false;
         }
 
-        this->mRows[index.row()].value = value.toString();
+        const std::string name = mRows[index.row()].name.toStdString();
+
+        Result<Parameter> param = this->mGate->get_parameter_declaration(name);
+        if (param.is_error())
+        {
+            return false;
+        }
+
+        Result<std::monostate> result = this->mGate->set_parameter(param.get(), value.toString().toStdString());
+        if (result.is_error())
+        {
+            return false;
+        }
+
+        std::string norm_value = this->mGate->get_parameter_value(name).get();
+        this->mRows[index.row()].value = QString::fromStdString(norm_value);
 
         Q_EMIT dataChanged(index, index);
         return true;

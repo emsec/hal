@@ -25,18 +25,14 @@
 
 #pragma once
 
-#include "hal_core/netlist/parameter.h"
-
 #include <QAbstractTableModel>
 #include <QString>
 #include <QVector>
 
-#include <string>
-#include <unordered_map>
-#include <utility>
-
 namespace hal
 {
+    class Gate;
+
     /**
      * @ingroup utility_widgets-selection_details
      *
@@ -92,11 +88,12 @@ namespace hal
         QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
         /**
-         * Fills the table with the given gate parameters (name -> (declaration, value)).
+         * Fills the table with the parameters of the given gate and remembers the gate so that
+         * edits can be written back to it.
          *
-         * @param parameters - The parameters as returned by Gate::get_parameters().
+         * @param gate - The gate whose parameters are displayed.
          */
-        void updateData(const std::unordered_map<std::string, std::pair<Parameter, std::string>>& parameters);
+        void updateData(Gate* gate);
 
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
@@ -113,5 +110,8 @@ namespace hal
         };
 
         QVector<ParameterRow> mRows;
+
+        // Non-owning pointer to the gate currently displayed; the netlist owns the gate.
+        Gate* mGate = nullptr;
     };
 }

@@ -58,7 +58,7 @@ namespace hal
              *
              * @param gate - The gate.
              */
-            void setGate(Gate* gate);
+            void setGate(Gate* gate) const;
 
     private:
             ParameterTableModel* mParameterTableModel;

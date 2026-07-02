@@ -21,12 +21,12 @@ namespace hal
         setItemDelegateForColumn(4, new ParameterValueDelegate(this));
     }
 
-    void ParameterTableWidget::setGate(Gate* gate)
+    void ParameterTableWidget::setGate(Gate* gate) const
     {
         if (gate == nullptr)
             return;
 
-        mParameterTableModel->updateData(gate->get_parameters());
+        mParameterTableModel->updateData(gate);
     }
 }
 

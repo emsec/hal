@@ -24,7 +24,7 @@ namespace hal
             }
             case Parameter::Type::Integer: {
                 auto textField = new QLineEdit(parent);
-                textField->setValidator(new QIntValidator(textField));
+                textField->setValidator(new QRegularExpressionValidator(QRegularExpression("-?\\d*"), textField));
                 return textField;
             }
             case Parameter::Type::Float: {
