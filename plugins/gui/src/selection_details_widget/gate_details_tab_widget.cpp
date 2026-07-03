@@ -140,6 +140,7 @@ namespace hal
             GateDetailsTabWidget::GateTypeCategory gateTypeCategory = getGateTypeCategory(g);
             setupBooleanFunctionTables(g, gateTypeCategory);
             mDataTable->setGate(g);
+            mParameterTable->setGate(g);
         }
     }
 

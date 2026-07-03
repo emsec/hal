@@ -1,5 +1,6 @@
 #include "gui/selection_details_widget/gate_details_widget/parameter_table_model.h"
 
+#include "gui/user_action/action_set_parameter_value.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/utilities/enums.h"
 
@@ -104,25 +105,9 @@ namespace hal
             return false;
         }
 
-        const std::string name = mRows[index.row()].name.toStdString();
-
-        Result<Parameter> param = this->mGate->get_parameter_declaration(name);
-        if (param.is_error())
-        {
-            return false;
-        }
-
-        Result<std::monostate> result = this->mGate->set_parameter(param.get(), value.toString().toStdString());
-        if (result.is_error())
-        {
-            return false;
-        }
-
-        std::string norm_value = this->mGate->get_parameter_value(name).get();
-        this->mRows[index.row()].value = QString::fromStdString(norm_value);
-
-        Q_EMIT dataChanged(index, index);
-        return true;
+        auto act = new ActionSetParameterValue(mRows[index.row()].name, value.toString());
+        act->setObject(UserActionObject(mGate->get_id(), UserActionObjectType::Gate));
+        return act->exec();
     }
 
     Qt::ItemFlags ParameterTableModel::flags(const QModelIndex& index) const
