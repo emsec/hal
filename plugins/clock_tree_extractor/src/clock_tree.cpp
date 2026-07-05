@@ -46,6 +46,11 @@ namespace hal
                 return gate->get_type()->has_property( GateTypeProperty::c_inverter );
             }
 
+            inline bool is_delay( const Gate *gate )
+            {
+                return gate->get_type()->has_property( GateTypeProperty::delay );
+            }
+
             inline bool is_control_pin( const PinType &pin_type )
             {
                 return pin_type == PinType::clock || pin_type == PinType::enable || pin_type == PinType::select
@@ -143,6 +148,9 @@ namespace hal
 
             for( const Gate *ff : netlist->get_gates( is_ff ) )
             {
+                vertices.insert( (void *) ff );
+                ptrs_to_type[(void *) ff] = PtrType::GATE;
+
                 const std::vector<hal::GatePin *> clock_pins = ff->get_type()->get_pins( []( const auto &p ) {
                     return ( p->get_direction() == PinDirection::input ) && ( p->get_type() == PinType::clock );
                 } );
@@ -207,9 +215,6 @@ namespace hal
                     const Gate *gate = source_ep->get_gate();
                     queue.push( { ff, gate, std::vector<const Gate *>{ ff } } );
                 }
-
-                vertices.insert( (void *) ff );
-                ptrs_to_type[(void *) ff] = PtrType::GATE;
             }
 
             const std::unordered_set<const Gate *> toggle_ffs = get_toggle_ffs( netlist );
@@ -230,7 +235,7 @@ namespace hal
                     // Ignore latches
                     continue;
                 }
-                else if( is_buffer( source ) || is_inverter( source ) || is_ff( source ) )
+                else if( is_buffer( source ) || is_inverter( source ) || is_delay( source ) || is_ff( source ) )
                 {
                     if( is_ff( source ) && toggle_ffs.find( source ) == toggle_ffs.end() )
                     {
@@ -408,32 +413,52 @@ namespace hal
                     continue;
                 }
 
-                const i32 x = ( (Gate *) ptr )->get_location_x();
-                const i32 y = ( (Gate *) ptr )->get_location_y();
+                const Gate *gate = (const Gate *) ptr;
 
-                const std::string coords =
-                    ( x < 0 || y < 0 ) ? "" : "x=" + std::to_string( x ) + " y=" + std::to_string( y );
+                std::string coords = "";
 
-                if( is_buffer( (Gate *) ptr ) )
+                // Workaround for negative coordinates
+
+                // const i32 x = gate->get_location_x();
+                // const i32 y = gate->get_location_y();
+
+                try
                 {
-                    dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() ) << " [" << coords
-                           << " shape=rectangle];\n";
-                }
-                else if( is_inverter( (Gate *) ptr ) )
+                    const i32 x = std::stoi( std::get<1>( gate->get_data( "generic", "X" ) ) );
+                    const i32 y = std::stoi( std::get<1>( gate->get_data( "generic", "Y" ) ) );
+                    coords = " x=" + std::to_string( x ) + " y=" + std::to_string( y );
+                } catch( const std::invalid_argument &err )
                 {
-                    dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() ) << " [" << coords
-                           << " shape=triangle, orientation=180];\n";
+                    log_error( "clock_tree_extractor", "invalid coordinate format: {}", err.what() );
                 }
-                else if( is_ff( (Gate *) ptr ) )
+
+                std::string shape = "shape=hexagon";  // default (clock gates)
+
+                if( is_buffer( gate ) )
                 {
-                    dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() )
-                           << ( coords.size() == 0 ? ";\n" : " [" + coords + "];\n" );
+                    shape = "shape=rectangle";
                 }
-                else
+                else if( is_inverter( gate ) )
                 {
-                    dot_fd << "  " << std::to_string( ( (Gate *) ptr )->get_id() ) << " [" << coords
-                           << " shape=hexagon];\n";
+                    shape = "shape=triangle orientation=180";
                 }
+                else if( is_ff( gate ) )
+                {
+                    shape = "";  // no shape
+                }
+                else if( is_delay( gate ) )
+                {
+                    shape = "shape=square";
+                }
+
+                dot_fd << "  " << gate->get_id() << " [instance=\"" << gate->get_name() << "\"" << coords;
+
+                if( !shape.empty() )
+                {
+                    dot_fd << " " << shape;
+                }
+
+                dot_fd << "];\n";
             }
 
             std::queue<std::pair<igraph_integer_t, std::string>> queue;
