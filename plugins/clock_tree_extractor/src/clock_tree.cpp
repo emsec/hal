@@ -451,7 +451,8 @@ namespace hal
                     shape = "shape=square";
                 }
 
-                dot_fd << "  " << gate->get_id() << " [instance=\"" << gate->get_name() << "\"" << coords;
+                dot_fd << "  " << gate->get_id() << " [instance=\"" << gate->get_name() << "\" type=\""
+                       << gate->get_type()->get_name() << "\"" << coords;
 
                 if( !shape.empty() )
                 {
