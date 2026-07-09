@@ -53,6 +53,11 @@ namespace hal
             return row.value;
         }
 
+        if (role == EnumValuesRole && index.column() == 4)
+        {
+            return row.enumValues;
+        }
+
         if (role == Qt::TextAlignmentRole)
         {
             return Qt::AlignLeft;
@@ -88,6 +93,15 @@ namespace hal
             row.size         = QString::number(decl.get_size());
             row.defaultValue = QString::fromStdString(decl.get_default_value());
             row.value        = QString::fromStdString(declAndValue.second);
+
+            if (decl.get_type() == Parameter::Type::Enum)
+            {
+                for (const std::string& enumValue : decl.get_enum_values())
+                {
+                    row.enumValues.append(QString::fromStdString(enumValue));
+                }
+            }
+
             mRows.append(row);
         }
 

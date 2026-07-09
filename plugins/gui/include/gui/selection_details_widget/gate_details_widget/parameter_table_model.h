@@ -27,6 +27,7 @@
 
 #include <QAbstractTableModel>
 #include <QString>
+#include <QStringList>
 #include <QVector>
 
 namespace hal
@@ -45,6 +46,14 @@ namespace hal
         Q_OBJECT
 
     public:
+        /**
+         * Custom data roles exposed to the value-column editor delegate.
+         */
+        enum ItemDataRole
+        {
+            EnumValuesRole = Qt::UserRole
+        };
+
         /**
          * Constructor.
          *
@@ -107,6 +116,7 @@ namespace hal
             QString size;
             QString defaultValue;
             QString value;
+            QStringList enumValues;
         };
 
         QVector<ParameterRow> mRows;
