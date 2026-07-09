@@ -5,7 +5,6 @@
 #include "hal_core/utilities/enums.h"
 
 #include <algorithm>
-#include <boost/container/container_fwd.hpp>
 
 namespace hal
 {
