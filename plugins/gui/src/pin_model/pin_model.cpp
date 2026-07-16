@@ -97,6 +97,7 @@ namespace hal
             PinType groupType                  = group->getPinType();
 
             //create group item
+            groupItem->setId(group->getId());
             groupItem->setName(group->getName());
             groupItem->setDirection(groupDirection);
             groupItem->setType(groupType);
@@ -393,20 +394,6 @@ namespace hal
             //rename PinItem
             pinItem->setName(newName);
 
-            //rename pin within pinGroup
-            auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
-            for(auto group : getPinGroups()){
-                if(group->getName() == pinGroup->getName()){
-                    for(auto item : group->getChildren()){
-                        PinItem* pin = static_cast<PinItem*>(item);
-                        if(pin->getId() == pinItem->getId()){
-                            pin->setName(newName);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
             return true;
         }
 
