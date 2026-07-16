@@ -54,7 +54,7 @@ namespace hal
         mSavedConfigs.clear();
         mTableInitialized = false;
 
-        if (gate == nullptr || !gate->has_component_of_type(GateTypeComponent::ComponentType::init))
+        if (gate == nullptr || !gate->has_component_of_type(GateTypeComponent::ComponentType::lut))
             return;
 
         auto* lutc = gate->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
