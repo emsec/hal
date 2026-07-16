@@ -1,13 +1,10 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/lut_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
-#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "gui/pin_model/pin_item.h"
 
-#include <QComboBox>
 #include <QHeaderView>
 #include <QSpinBox>
-#include <QHBoxLayout>
 
 namespace hal
 {
@@ -35,18 +32,12 @@ namespace hal
         QWidget*     btnWidget = new QWidget(this);
         QHBoxLayout* btnLayout = new QHBoxLayout(btnWidget);
         btnLayout->setContentsMargins(0, 0, 0, 0);
-        mAddBtn    = new QPushButton("+", btnWidget);
-        mRemoveBtn = new QPushButton("-", btnWidget);
-        btnLayout->addWidget(mAddBtn);
-        btnLayout->addWidget(mRemoveBtn);
         btnLayout->addStretch();
         mLayout->addWidget(btnWidget, 2, 0, 1, 2);
 
         setLayout(mLayout);
 
         connect(mAscending, &QCheckBox::stateChanged, this, &LUTWizardPage::completeChanged);
-        connect(mAddBtn,    &QPushButton::clicked,    this, &LUTWizardPage::addRow);
-        connect(mRemoveBtn, &QPushButton::clicked,    this, &LUTWizardPage::removeSelectedRow);
     }
 
     void LUTWizardPage::setData(GateType* gate)
@@ -73,24 +64,32 @@ namespace hal
 
     void LUTWizardPage::initializePage()
     {
-        const QStringList pins = getOutputPinsFromWizard();
+        const QStringList pins = getLutPinsFromWizard();
 
-        if (!mTableInitialized)
+        mPinConfigTable->setRowCount(0);
+        for (const QString& pin : pins)
         {
-            mTableInitialized = true;
-            mPinConfigTable->setRowCount(0);
+            const std::string pinName = pin.toStdString();
+
+            // prefill from an existing configuration if this pin already has one
+            const SavedConfig* saved = nullptr;
             for (const auto& cfg : mSavedConfigs)
-                addTableRow(QString::fromStdString(cfg.pinName),
-                            QString::fromStdString(cfg.initIdentifier),
-                            cfg.bitOffset, cfg.bitCount, pins);
-        }
-        else
-        {
-            updateDropdowns(pins);
+            {
+                if (cfg.pinName == pinName)
+                {
+                    saved = &cfg;
+                    break;
+                }
+            }
+
+            if (saved != nullptr)
+                addTableRow(pin, QString::fromStdString(saved->initIdentifier), saved->bitOffset, saved->bitCount);
+            else
+                addTableRow(pin, "", 0, 1);
         }
     }
 
-    QStringList LUTWizardPage::getOutputPinsFromWizard() const
+    QStringList LUTWizardPage::getLutPinsFromWizard() const
     {
         auto* wiz = static_cast<GateLibraryWizard*>(wizard());
         if (!wiz) return {};
@@ -102,25 +101,21 @@ namespace hal
             {
                 auto* pin = static_cast<PinItem*>(child);
                 if (pin->getItemType() == PinItem::TreeItemType::Pin &&
-                    pin->getDirection() == PinDirection::output)
+                    pin->getPinType()  == PinType::lut)
                     result << pin->getName();
             }
         }
         return result;
     }
 
-    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId,
-                                     u32 bitOffset, u32 bitCount,
-                                     const QStringList& availablePins)
+    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount)
     {
         int row = mPinConfigTable->rowCount();
         mPinConfigTable->insertRow(row);
 
-        auto* combo = new QComboBox(mPinConfigTable);
-        combo->addItems(availablePins);
-        int idx = combo->findText(pinName);
-        if (idx >= 0) combo->setCurrentIndex(idx);
-        mPinConfigTable->setCellWidget(row, 0, combo);
+        auto* pinItem = new QTableWidgetItem(pinName);
+        pinItem->setFlags(pinItem->flags() & ~Qt::ItemIsEditable);
+        mPinConfigTable->setItem(row, 0, pinItem);
 
         mPinConfigTable->setItem(row, 1, new QTableWidgetItem(initId.isEmpty() ? "INIT" : initId));
 
@@ -135,42 +130,16 @@ namespace hal
         mPinConfigTable->setCellWidget(row, 3, countSpin);
     }
 
-    void LUTWizardPage::updateDropdowns(const QStringList& pins)
-    {
-        for (int r = 0; r < mPinConfigTable->rowCount(); ++r)
-        {
-            auto* combo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 0));
-            if (!combo) continue;
-            const QString current = combo->currentText();
-            combo->clear();
-            combo->addItems(pins);
-            int idx = combo->findText(current);
-            if (idx >= 0) combo->setCurrentIndex(idx);
-        }
-    }
-
-    void LUTWizardPage::addRow()
-    {
-        addTableRow("", "INIT", 0, 1, getOutputPinsFromWizard());
-    }
-
-    void LUTWizardPage::removeSelectedRow()
-    {
-        const int row = mPinConfigTable->currentRow();
-        if (row >= 0)
-            mPinConfigTable->removeRow(row);
-    }
-
     QVector<LUTWizardPage::OutputPinEntry> LUTWizardPage::getOutputPinConfigs() const
     {
         QVector<OutputPinEntry> result;
         for (int r = 0; r < mPinConfigTable->rowCount(); ++r)
         {
-            auto* combo      = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 0));
+            auto* pinItem    = mPinConfigTable->item(r, 0);
             auto* offsetSpin = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 2));
             auto* countSpin  = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 3));
 
-            const QString pin = combo ? combo->currentText() : QString();
+            const QString pin = pinItem ? pinItem->text() : QString();
             if (pin.isEmpty()) continue;
 
             const QString id = (mPinConfigTable->item(r, 1) && !mPinConfigTable->item(r, 1)->text().isEmpty())

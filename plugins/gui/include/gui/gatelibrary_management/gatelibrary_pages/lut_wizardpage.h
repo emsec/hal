@@ -56,23 +56,14 @@ namespace hal {
 
         QVector<OutputPinEntry> getOutputPinConfigs() const;
 
-    private Q_SLOTS:
-        void addRow();
-        void removeSelectedRow();
-
     private:
-        void addTableRow(const QString& pinName, const QString& initId,
-                         u32 bitOffset, u32 bitCount,
-                         const QStringList& availablePins);
-        void updateDropdowns(const QStringList& pins);
-        QStringList getOutputPinsFromWizard() const;
+        void addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount);
+        QStringList getLutPinsFromWizard() const;
 
         QGridLayout*  mLayout;
         QCheckBox*    mAscending;
         QLabel*       mLabAscending;
         QTableWidget* mPinConfigTable;
-        QPushButton*  mAddBtn;
-        QPushButton*  mRemoveBtn;
 
         struct SavedConfig {
             std::string pinName;
