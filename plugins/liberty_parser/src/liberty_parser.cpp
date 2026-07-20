@@ -215,6 +215,7 @@ namespace hal
             else if (next_token == "bit_to")
             {
                 type_str.consume(":", true);
+                [[maybe_unused]] u32 bit_to = std::stol(type_str.consume().string);
             }
             else if (next_token == "downto")
             {
