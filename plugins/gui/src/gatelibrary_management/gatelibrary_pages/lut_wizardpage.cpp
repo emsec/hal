@@ -38,6 +38,7 @@ namespace hal
         setLayout(mLayout);
 
         connect(mAscending, &QCheckBox::stateChanged, this, &LUTWizardPage::completeChanged);
+        connect(mPinConfigTable, &QTableWidget::itemChanged, this, &LUTWizardPage::completeChanged);
     }
 
     void LUTWizardPage::setData(GateType* gate)
@@ -85,7 +86,7 @@ namespace hal
             if (saved != nullptr)
                 addTableRow(pin, QString::fromStdString(saved->initIdentifier), saved->bitOffset, saved->bitCount);
             else
-                addTableRow(pin, "", 0, 1);
+                addTableRow(pin, "INIT", 0, 1);
         }
     }
 
@@ -117,7 +118,7 @@ namespace hal
         pinItem->setFlags(pinItem->flags() & ~Qt::ItemIsEditable);
         mPinConfigTable->setItem(row, 0, pinItem);
 
-        mPinConfigTable->setItem(row, 1, new QTableWidgetItem(initId.isEmpty() ? "INIT" : initId));
+        mPinConfigTable->setItem(row, 1, new QTableWidgetItem(initId));
 
         auto* offsetSpin = new QSpinBox(mPinConfigTable);
         offsetSpin->setRange(0, 1 << 20);
@@ -142,14 +143,23 @@ namespace hal
             const QString pin = pinItem ? pinItem->text() : QString();
             if (pin.isEmpty()) continue;
 
-            const QString id = (mPinConfigTable->item(r, 1) && !mPinConfigTable->item(r, 1)->text().isEmpty())
-                               ? mPinConfigTable->item(r, 1)->text()
-                               : "INIT";
+            const QString id = mPinConfigTable->item(r, 1)->text();
 
             result.push_back({pin, id,
                                static_cast<u32>(offsetSpin ? offsetSpin->value() : 0),
                                static_cast<u32>(countSpin  ? countSpin->value()  : 0)});
         }
         return result;
+    }
+
+    bool LUTWizardPage::isComplete() const
+    {
+        for (int row = 0; row < mPinConfigTable->rowCount(); ++row)
+        {
+            auto* pinInitIdentifier = mPinConfigTable->item(row, 1);
+            if (pinInitIdentifier == nullptr || pinInitIdentifier->text().trimmed().isEmpty()) return false;
+        }
+
+        return true;
     }
 }

@@ -53,6 +53,7 @@ namespace hal {
         LUTWizardPage(QWidget* parent = nullptr);
         void setData(GateType* gate);
         void initializePage() override;
+        bool isComplete() const override;
 
         QVector<OutputPinEntry> getOutputPinConfigs() const;
 
