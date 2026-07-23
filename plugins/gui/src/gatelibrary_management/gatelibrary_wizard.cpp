@@ -391,7 +391,7 @@ namespace hal
                 {
                     return RAM;
                 }
-                return Init;
+                return -1;
             case RAM:
                 return RAMPort;
             case RAMPort:
