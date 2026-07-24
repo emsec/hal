@@ -58,7 +58,7 @@ namespace hal {
         QVector<OutputPinEntry> getOutputPinConfigs() const;
 
     private:
-        void addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount);
+        void addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount, u32 maxBitCount);
         QStringList getLutPinsFromWizard() const;
 
         QGridLayout*  mLayout;
@@ -73,6 +73,5 @@ namespace hal {
             u32 bitCount;
         };
         std::vector<SavedConfig> mSavedConfigs;
-        bool mTableInitialized = false;
     };
 }

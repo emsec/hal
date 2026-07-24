@@ -52,6 +52,7 @@ namespace hal
         friend class FlipFlopWizardPage;
         friend class BoolWizardPage;
         friend class LatchWizardPage;
+        friend class LUTWizardPage;
 
         friend class RAMPortWizardPage;
         friend class StateWizardPage;

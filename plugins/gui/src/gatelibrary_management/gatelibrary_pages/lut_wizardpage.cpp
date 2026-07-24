@@ -44,7 +44,6 @@ namespace hal
     void LUTWizardPage::setData(GateType* gate)
     {
         mSavedConfigs.clear();
-        mTableInitialized = false;
 
         if (gate == nullptr || !gate->has_component_of_type(GateTypeComponent::ComponentType::lut))
             return;
@@ -67,6 +66,11 @@ namespace hal
     {
         const QStringList pins = getLutPinsFromWizard();
 
+        auto* wiz = static_cast<GateLibraryWizard*>(wizard());
+        int n = wiz ? wiz->mPinModel->getInputPins().size() : 0;
+        if (n > 30) n = 30;
+        const u32 maxBitCount = 1u << n;
+
         mPinConfigTable->setRowCount(0);
         for (const QString& pin : pins)
         {
@@ -84,9 +88,9 @@ namespace hal
             }
 
             if (saved != nullptr)
-                addTableRow(pin, QString::fromStdString(saved->initIdentifier), saved->bitOffset, saved->bitCount);
+                addTableRow(pin, QString::fromStdString(saved->initIdentifier), saved->bitOffset, saved->bitCount, maxBitCount);
             else
-                addTableRow(pin, "INIT", 0, 1);
+                addTableRow(pin, "INIT", 0, 1, maxBitCount);
         }
     }
 
@@ -109,7 +113,7 @@ namespace hal
         return result;
     }
 
-    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount)
+    void LUTWizardPage::addTableRow(const QString& pinName, const QString& initId, u32 bitOffset, u32 bitCount, u32 maxBitCount)
     {
         int row = mPinConfigTable->rowCount();
         mPinConfigTable->insertRow(row);
@@ -126,9 +130,10 @@ namespace hal
         mPinConfigTable->setCellWidget(row, 2, offsetSpin);
 
         auto* countSpin = new QSpinBox(mPinConfigTable);
-        countSpin->setRange(1, 1 << 20);
+        countSpin->setRange(1, static_cast<int>(maxBitCount));
         countSpin->setValue(static_cast<int>(bitCount > 0 ? bitCount : 1));
         mPinConfigTable->setCellWidget(row, 3, countSpin);
+        connect(countSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &LUTWizardPage::completeChanged);
     }
 
     QVector<LUTWizardPage::OutputPinEntry> LUTWizardPage::getOutputPinConfigs() const
@@ -143,7 +148,8 @@ namespace hal
             const QString pin = pinItem ? pinItem->text() : QString();
             if (pin.isEmpty()) continue;
 
-            const QString id = mPinConfigTable->item(r, 1)->text();
+            auto* idItem     = mPinConfigTable->item(r, 1);
+            const QString id = idItem ? idItem->text() : QString();
 
             result.push_back({pin, id,
                                static_cast<u32>(offsetSpin ? offsetSpin->value() : 0),
@@ -158,6 +164,10 @@ namespace hal
         {
             auto* pinInitIdentifier = mPinConfigTable->item(row, 1);
             if (pinInitIdentifier == nullptr || pinInitIdentifier->text().trimmed().isEmpty()) return false;
+
+            auto* countSpin  = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(row, 3));
+            const int count = countSpin ? countSpin->value() : 1;
+            if (count == 0 || count & (count - 1)) return false; // ensure bit count is non-zero power of two
         }
 
         return true;
