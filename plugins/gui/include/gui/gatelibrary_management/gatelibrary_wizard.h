@@ -75,6 +75,25 @@ namespace hal
         GateLibraryWizard(GateLibrary* gateLibrary, GateType* gateType = nullptr, QWidget* parent = nullptr);
 
         QList<PinItem*> getPingroups();
+
+        /**
+         * Checks whether the functionality of a pin is already given by the LUT component, which is the case for
+         * pins of type lut of a gate type with the property c_lut. Such a pin needs no boolean function.
+         *
+         * @param pin - The pin to check
+         * @returns true if the functionality of the pin is defined by the LUT, false otherwise
+         */
+        bool isDefinedByLut(const PinItem* pin) const;
+
+        /**
+         * Checks whether at least one output pin needs a boolean function to define its functionality, which is the
+         * case for every output pin that is not covered by the LUT component. Only then the boolean function page
+         * has to be visited.
+         *
+         * @returns true if a boolean function is required for at least one output pin, false otherwise
+         */
+        bool requiresBooleanFunctions() const;
+
         std::unique_ptr<GateTypeComponent> setComponents();
         GateType* getRecentCreatedGate();
         void accept() override;

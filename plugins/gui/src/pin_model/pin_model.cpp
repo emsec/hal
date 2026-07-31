@@ -760,4 +760,19 @@ namespace hal
         return outputPins;
     }
 
+    QList<PinItem*> PinModel::getInternalPins()
+    {
+        QList<PinItem*> internalPins;
+        for(BaseTreeItem* pinGroup : mRootItem->getChildren())
+        {
+            if (static_cast<PinItem*>(pinGroup)->getItemType() != PinItem::TreeItemType::PinGroup) continue;
+            for(BaseTreeItem* item : pinGroup->getChildren()){
+                PinItem* pin = static_cast<PinItem*>(item);
+                if (pin->getItemType() != PinItem::TreeItemType::Pin) continue;
+                if (pin->getDirection() == PinDirection::internal) internalPins.append(pin);
+            }
+        }
+        return internalPins;
+    }
+
 }

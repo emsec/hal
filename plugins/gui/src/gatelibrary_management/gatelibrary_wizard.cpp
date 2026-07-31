@@ -178,6 +178,27 @@ namespace hal
         return mPinModel->getPinGroups();
     }
 
+    bool GateLibraryWizard::isDefinedByLut(const PinItem* pin) const
+    {
+        if (!generalInfoPage->getProperties().contains(GateTypeProperty::c_lut))
+        {
+            return false;
+        }
+        return pin->getPinType() == PinType::lut;
+    }
+
+    bool GateLibraryWizard::requiresBooleanFunctions() const
+    {
+        for (PinItem* pin : mPinModel->getOutputPins())
+        {
+            if (!isDefinedByLut(pin))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     std::unique_ptr<GateTypeComponent> GateLibraryWizard::setComponents()
     {
         std::unique_ptr<GateTypeComponent> parentComponent;
@@ -391,6 +412,10 @@ namespace hal
                 {
                     return RAM;
                 }
+                else if (requiresBooleanFunctions())
+                {
+                    return BoolFunc;
+                }
                 return -1;
             case RAM:
                 return RAMPort;
@@ -401,7 +426,7 @@ namespace hal
                 }
                 return Init;
             case Init:
-                if (properties.contains(GateTypeProperty::c_lut))
+                if (properties.contains(GateTypeProperty::c_lut) && !requiresBooleanFunctions())
                 {
                     return -1;
                 }
