@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
 #include "gui/pin_model/pin_item.h"
 
+#include <QComboBox>
 #include <QHeaderView>
 #include <QSpinBox>
 
@@ -129,11 +130,12 @@ namespace hal
         offsetSpin->setValue(static_cast<int>(bitOffset));
         mPinConfigTable->setCellWidget(row, 2, offsetSpin);
 
-        auto* countSpin = new QSpinBox(mPinConfigTable);
-        countSpin->setRange(1, static_cast<int>(maxBitCount));
-        countSpin->setValue(static_cast<int>(bitCount > 0 ? bitCount : 1));
-        mPinConfigTable->setCellWidget(row, 3, countSpin);
-        connect(countSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, &LUTWizardPage::completeChanged);
+        auto* countCombo = new QComboBox(mPinConfigTable);
+        for (u32 count = 1; count <= maxBitCount; count <<= 1)
+            countCombo->addItem(QString::number(count), count);
+        countCombo->setCurrentIndex(countCombo->findData(bitCount));
+        mPinConfigTable->setCellWidget(row, 3, countCombo);
+        connect(countCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LUTWizardPage::completeChanged);
     }
 
     QVector<LUTWizardPage::OutputPinEntry> LUTWizardPage::getOutputPinConfigs() const
@@ -143,7 +145,7 @@ namespace hal
         {
             auto* pinItem    = mPinConfigTable->item(r, 0);
             auto* offsetSpin = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 2));
-            auto* countSpin  = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(r, 3));
+            auto* countCombo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(r, 3));
 
             const QString pin = pinItem ? pinItem->text() : QString();
             if (pin.isEmpty()) continue;
@@ -153,7 +155,7 @@ namespace hal
 
             result.push_back({pin, id,
                                static_cast<u32>(offsetSpin ? offsetSpin->value() : 0),
-                               static_cast<u32>(countSpin  ? countSpin->value()  : 0)});
+                               countCombo ? countCombo->currentData().toUInt() : 0});
         }
         return result;
     }
@@ -165,8 +167,8 @@ namespace hal
             auto* pinInitIdentifier = mPinConfigTable->item(row, 1);
             if (pinInitIdentifier == nullptr || pinInitIdentifier->text().trimmed().isEmpty()) return false;
 
-            auto* countSpin  = qobject_cast<QSpinBox*>(mPinConfigTable->cellWidget(row, 3));
-            const int count = countSpin ? countSpin->value() : 1;
+            auto* countCombo = qobject_cast<QComboBox*>(mPinConfigTable->cellWidget(row, 3));
+            const u32 count  = countCombo ? countCombo->currentData().toUInt() : 0;
             if (count == 0 || count & (count - 1)) return false; // ensure bit count is non-zero power of two
         }
 
