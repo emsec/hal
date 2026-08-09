@@ -33,6 +33,7 @@
 
 namespace hal
 {
+    class PinItem;
 
     class PinDelegate : public QStyledItemDelegate
     {
@@ -46,5 +47,11 @@ namespace hal
         void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
         void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 
+    private:
+        // Whether the item or, in case of a pin group, one of its pins is of type PinType::lut.
+        static bool containsLutType(const PinItem* item);
+
+        // Whether the item or, in case of a pin group, one of its pins has direction PinDirection::input.
+        static bool containsInputDirection(const PinItem* item);
     };
 }   // namespace hal
