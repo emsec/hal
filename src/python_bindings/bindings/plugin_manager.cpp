@@ -4,7 +4,64 @@ namespace hal
 {
     void plugin_manager_init(py::module& m)
     {
+        py::class_<FacExtensionInterface> py_fac_extension_interface(m, "FacExtensionInterface", R"(
+            An extension interface that lets a plugin provide a parser or writer for a file type.
+        )");
+
+        py::enum_<FacExtensionInterface::Feature>(py_fac_extension_interface, "Feature", R"(
+            The feature that is provided by the extension.
+        )")
+            .value("FacUnknown", FacExtensionInterface::Feature::FacUnknown, R"(No known feature.)")
+            .value("FacNetlistParser", FacExtensionInterface::Feature::FacNetlistParser, R"(A netlist parser.)")
+            .value("FacNetlistWriter", FacExtensionInterface::Feature::FacNetlistWriter, R"(A netlist writer.)")
+            .value("FacGatelibParser", FacExtensionInterface::Feature::FacGatelibParser, R"(A gate library parser.)")
+            .value("FacGatelibWriter", FacExtensionInterface::Feature::FacGatelibWriter, R"(A gate library writer.)")
+            .export_values();
+
+        py_fac_extension_interface.def("get_feature", &FacExtensionInterface::get_feature, R"(
+            Get the feature provided by the extension.
+
+            :returns: The feature.
+            :rtype: hal_py.FacExtensionInterface.Feature
+        )");
+
+        py_fac_extension_interface.def("get_description", &FacExtensionInterface::get_description, R"(
+            Get the description of the extension.
+
+            :returns: The description.
+            :rtype: str
+        )");
+
+        py_fac_extension_interface.def("get_supported_file_extensions", &FacExtensionInterface::get_supported_file_extensions, R"(
+            Get the file extensions supported by the extension.
+
+            :returns: A list of file extensions.
+            :rtype: list[str]
+        )");
+
         auto py_plugin_manager = m.def_submodule("plugin_manager");
+
+        py::class_<plugin_manager::PluginFeature> py_plugin_feature(py_plugin_manager, "PluginFeature", R"(
+            A feature provided by a plugin, such as a parser or a writer.
+        )");
+
+        py_plugin_feature.def_readwrite("feature", &plugin_manager::PluginFeature::feature, R"(
+            The kind of feature that is provided.
+
+            :type: hal_py.FacExtensionInterface.Feature
+        )");
+
+        py_plugin_feature.def_readwrite("args", &plugin_manager::PluginFeature::args, R"(
+            Additional arguments of the feature, holding the supported file extensions if a parser or writer is registered.
+
+            :type: list[str]
+        )");
+
+        py_plugin_feature.def_readwrite("description", &plugin_manager::PluginFeature::description, R"(
+            The description of the feature.
+
+            :type: str
+        )");
 
         py_plugin_manager.def("get_plugin_names", &plugin_manager::get_plugin_names, R"(
             Get the names of all loaded plugins.
@@ -94,6 +151,44 @@ namespace hal
             Remove a registered callback.
 
             :param int id: The ID of the registered callback.
+        )");
+
+        py_plugin_manager.def("add_existing_options_description", &plugin_manager::add_existing_options_description, py::arg("existing_options"), R"(
+            Register existing program options to avoid reuse by plugins.
+
+            :param hal_py.ProgramOptions existing_options: The program options.
+        )");
+
+        py_plugin_manager.def("get_cli_plugin_options", &plugin_manager::get_cli_plugin_options, R"(
+            Get the command line interface options of all plugins.
+
+            :returns: The program options.
+            :rtype: hal_py.ProgramOptions
+        )");
+
+        py_plugin_manager.def("get_plugin_path", &plugin_manager::get_plugin_path, py::arg("plugin_name"), R"(
+            Get the full path of a plugin.
+            On macOS, several possible file extensions are probed.
+
+            :param str plugin_name: The name of the plugin.
+            :returns: The full path to the plugin within the HAL build directory.
+            :rtype: pathlib.Path
+        )");
+
+        py_plugin_manager.def("has_valid_file_extension", &plugin_manager::has_valid_file_extension, py::arg("file_name"), R"(
+            Check whether a file has an extension that is legal for a plugin on the current operating system.
+
+            :param pathlib.Path file_name: The path to the file.
+            :returns: ``False`` if the extension indicates that the file cannot be a plugin, ``True`` otherwise.
+            :rtype: bool
+        )");
+
+        py_plugin_manager.def("get_plugin_features", &plugin_manager::get_plugin_features, py::arg("name"), R"(
+            Get the features of a plugin identified by the stem of its file name.
+
+            :param str name: The stem of the file name of the plugin.
+            :returns: A list of features such as parsers or writers.
+            :rtype: list[hal_py.plugin_manager.PluginFeature]
         )");
     }
 }    // namespace hal

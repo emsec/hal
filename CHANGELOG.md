@@ -2,7 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* added Python bindings for `plugin_manager.get_cli_plugin_flags`, `get_ui_plugin_flags`, `add_model_changed_callback`, and `remove_model_changed_callback`, and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+* added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
+* added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+* added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
 * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
 * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
 * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API

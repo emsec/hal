@@ -47,8 +47,6 @@ namespace hal
     namespace plugin_manager
     {
         /**
-         * TODO Python binding, requires bindings for ProgramOptions.
-         *
          * Register existing program options to avoid reuse by plugins.
          *
          * @param[in] existing_options - The program options.
@@ -84,8 +82,6 @@ namespace hal
         std::unordered_map<std::string, std::string> get_ui_plugin_flags();
 
         /**
-         * TODO Python binding, requires bindings for ProgramOptions.
-         *
          * Get command line interface options for all plugins.
          *
          * @returns The program options.
