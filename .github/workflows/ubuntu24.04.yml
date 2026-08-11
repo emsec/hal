@@ -2,6 +2,8 @@ name: Ubuntu 24.04
 
 on:
   push:
+    branches: [ master ]
+  pull_request:
 #  create:
 #    tags:
 #      - v*
@@ -16,21 +18,15 @@ jobs:
   build_ubuntu_24_04:
     name: Build and Test on Ubuntu 24.04
 
-    strategy:
-      matrix:
-        #        runs-on: [ ubuntu-22.04, macOS-latest]
-        runs-on: [ ubuntu-24.04 ]
-      fail-fast: false
-
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v2
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-      - run: |
-          git fetch --prune --unshallow
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # cmake/hal_cmake_tools.cmake derives the HAL version through 'git describe --tags',
+          # so the full history including tags is required
+          fetch-depth: 0
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -62,7 +58,6 @@ jobs:
         run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
-        if: startsWith(runner.os, 'Linux')
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
         shell: bash
@@ -75,7 +70,7 @@ jobs:
           export BUILD_TYPE=Debug
           cp $GITHUB_WORKSPACE/documentation/index.html doc/
           $GITHUB_WORKSPACE/tools/genversion.py $GITHUB_WORKSPACE
-          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/ -DPYBIND11_PYTHON_VERSION=3.6
+          cmake -G Ninja $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DPL_GUI=ON -DBUILD_DOCUMENTATION=ON -DPACKAGE_DEB=OFF -DCMAKE_INSTALL_PREFIX=/usr/
         env:
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -84,7 +79,6 @@ jobs:
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
 
       - name: Build
-        if: startsWith(runner.os, 'Linux')
         shell: bash
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
