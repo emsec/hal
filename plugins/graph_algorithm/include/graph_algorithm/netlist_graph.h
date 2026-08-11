@@ -92,10 +92,23 @@ namespace hal
              */
             NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates);
 
-            /** 
+            /**
              * @brief Default destructor for `NetlistGraph`.
              */
             ~NetlistGraph();
+
+            /**
+             * `igraph_t` is a plain C struct holding heap pointers, so the implicitly generated copy
+             * operations would bitwise-copy `m_graph` and leave two `NetlistGraph` objects aliasing the
+             * same graph internals -- the destructor would then call `igraph_destroy()` on them twice, and
+             * the copy's `m_graph_ptr` would still point into the source object. Every factory hands out a
+             * `std::unique_ptr<NetlistGraph>`, so nothing is meant to copy a graph in the first place;
+             * deleting the copy operations makes that invariant explicit and enforced at compile time
+             * instead of relying on convention.
+             */
+            NetlistGraph(const NetlistGraph&) = delete;
+
+            NetlistGraph& operator=(const NetlistGraph&) = delete;
 
             /**
              * @brief Create a directed graph from a netlist. 
@@ -353,9 +366,20 @@ namespace hal
             igraph_t m_graph;
 
             /**
+             * Whether `m_graph` has actually been initialized and therefore has to be destroyed.
+             *
+             * The `NetlistGraph(Netlist*)` constructor deliberately leaves `m_graph` uninitialized -- the
+             * factories fill it in afterwards via `igraph_create()`/`igraph_empty()`. If such a factory bails
+             * out in between (e.g. an igraph allocation fails), the `std::unique_ptr` holding the
+             * half-constructed graph unwinds and the destructor would otherwise call `igraph_destroy()` on
+             * uninitialized memory. This flag lets the destructor skip that.
+             */
+            bool m_graph_initialized = false;
+
+            /**
              * A pointer to the `igraph` object.
              */
-            igraph_t* m_graph_ptr;
+            igraph_t* m_graph_ptr = nullptr;
 
             /**
              * A map from `igraph` nodes to HAL gates.
