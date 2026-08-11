@@ -122,7 +122,8 @@ namespace hal
                 return ERR(igraph_strerror(res));
             }
 
-            if (auto res = igraph_get_shortest_paths(graph->get_graph(), &paths_raw, nullptr, from_vertex, v_sel, mode, nullptr, nullptr); res != IGRAPH_SUCCESS)
+            // a `nullptr` weight vector makes igraph treat all edges as having unit weight
+            if (auto res = igraph_get_shortest_paths(graph->get_graph(), nullptr, &paths_raw, nullptr, from_vertex, v_sel, mode, nullptr, nullptr); res != IGRAPH_SUCCESS)
             {
                 igraph_vs_destroy(&v_sel);
                 igraph_vector_int_list_destroy(&paths_raw);
@@ -264,7 +265,8 @@ namespace hal
                 return ERR(igraph_strerror(res));
             }
 
-            if (auto res = igraph_get_all_shortest_paths(graph->get_graph(), &paths_raw, nullptr, nullptr, from_vertex, v_sel, mode); res != IGRAPH_SUCCESS)
+            // a `nullptr` weight vector makes igraph treat all edges as having unit weight
+            if (auto res = igraph_get_all_shortest_paths(graph->get_graph(), nullptr, &paths_raw, nullptr, nullptr, from_vertex, v_sel, mode); res != IGRAPH_SUCCESS)
             {
                 igraph_vs_destroy(&v_sel);
                 igraph_vector_int_list_destroy(&paths_raw);
