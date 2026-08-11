@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes a flip-flop, i.e., its next state, clock, and asynchronous set and reset behavior.
+     */
     class FFComponent : public GateTypeComponent
     {
     public:
@@ -54,7 +57,7 @@ namespace hal
          * Check whether a component is a FFComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a FFComponent, false otherwise.
+         * @returns `true` if component is a FFComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 

@@ -203,9 +203,9 @@ namespace hal
         return m_includes;
     }
 
-    void GateLibrary::add_include(const std::string& inc)
+    void GateLibrary::add_include(const std::string& include)
     {
-        m_includes.push_back(inc);
+        m_includes.push_back(include);
     }
 
     u32 GateLibrary::get_unique_gate_type_id()

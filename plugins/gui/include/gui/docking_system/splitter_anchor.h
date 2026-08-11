@@ -53,6 +53,7 @@ namespace hal
         /**
          *The splitter anchor's constructor.
          *
+         * @param apos - The position within the main content area this anchor is responsible for.
          * @param dockBar - The splitter ancor's dockbar.
          * @param splitter - The actual splitter to represent the dockbar's area.
          * @param parent - The parent of the splitter anchor.

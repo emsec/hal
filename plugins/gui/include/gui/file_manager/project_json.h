@@ -30,6 +30,9 @@
 #include <QJsonObject>
 
 namespace hal {
+    /**
+     * Reads the project file of a HAL project and provides the netlist and gate library paths that it references.
+     */
     class ProjectJson {
     public:
         enum Status {Ok = 0, NotExisting = -1, CannotOpen = -2, ParseError = -3,

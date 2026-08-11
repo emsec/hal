@@ -43,6 +43,8 @@ namespace hal
 #endif
 
     /**
+     * A thin wrapper around a shared library that is loaded at runtime and provides access to its exported symbols.
+     *
      * @ingroup plugins
      */
     class CORE_API RuntimeLibrary
@@ -56,7 +58,7 @@ namespace hal
          * Loads a library.
          *
          * @param[in] file_name - Name of the library.
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool load_library(const std::string& file_name);
 
@@ -70,7 +72,7 @@ namespace hal
         /**
          * Unloads the library.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unload_library();
 

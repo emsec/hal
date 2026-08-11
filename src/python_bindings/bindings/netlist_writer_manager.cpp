@@ -16,7 +16,7 @@ namespace hal
 
                 :param hal_py.Netlist netlist: The netlist.
                 :param pathlib.Path file_path: The output path.
-                :returns: True on success, false otherwise.
+                :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
                 )");
     }

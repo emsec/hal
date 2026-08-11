@@ -42,6 +42,9 @@ namespace hal {
     class ModuleProxyModel;
     class Searchbar;
 
+    /**
+     * Receives the module that the user picked and moves the current selection into it.
+     */
     class AddToModuleReceiver : public ModuleSelectReceiver
     {
         Q_OBJECT
@@ -66,7 +69,10 @@ namespace hal {
         /**
          * The constructor.
          *
-         * @param receiver - The receiver for graphical picker, picker will be hidden if nullptr
+         * @param excludeIds - The ids of the modules that must not be selectable.
+         * @param title - The window title of the dialog.
+         * @param omitCreateNew - `true` to hide the 'Create new module' button, `false` to show it.
+         * @param receiver - The receiver for graphical picker, picker will be hidden if `nullptr`
          * @param parent - The dialog's parent.
          */
         ModuleDialog(const QSet<u32>& excludeIds = {}, const QString& title=QString("Select module"), bool omitCreateNew=false,
@@ -82,13 +88,13 @@ namespace hal {
         /**
          * Get the flag that states if a new module should be created.
          *
-         * @return True if a new module should be created, False otherwise.
+         * @return `true` if a new module should be created, `false` otherwise.
          */
         bool isNewModule() const { return mNewModule; }
 
         /**
          * Indicates that user has activated graphical gate picker mode.
-         * @return true if picker mode activated, false otherwise.
+         * @return `true` if picker mode activated, `false` otherwise.
          */
         bool pickerModeActivated() const { return mPickerModeActivated; }
     private Q_SLOTS:
@@ -103,11 +109,11 @@ namespace hal {
         /**
          *
          * Checks if the selected module id is valid (not excluded). If yes and the doubleClick
-         * parameter is set to True, the dialog is accepted. If doubleClick is False, the dialog
+         * parameter is set to `true`, the dialog is accepted. If doubleClick is `false`, the dialog
          * buttons will be enabled.
          *
          * @param id - The selected id.
-         * @param doubleClick - True to accept the dialog when id is valid. False to enable buttons.
+         * @param doubleClick - `true` to accept the dialog when id is valid. `false` to enable buttons.
          */
         void handleTableSelection(u32 id, bool doubleClick);
 

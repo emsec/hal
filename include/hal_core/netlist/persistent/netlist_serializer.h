@@ -38,9 +38,10 @@ namespace hal
      * @file
      *
      * \namespace netlist_serializer
+     * Contains the functions that serialize a netlist to and deserialize it from HAL's own `.hal` file format.
+     *
      * @ingroup persistent
      */
-
     namespace netlist_serializer
     {
 

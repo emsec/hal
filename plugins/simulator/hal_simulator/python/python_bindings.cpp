@@ -62,7 +62,7 @@ namespace hal
 
                 :param hal_py.Net clock_net: The net that carries the clock signal.
                 :param int frequency: The clock frequency in hertz.
-                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
+                :param bool start_at_zero: Initial clock state is 0 if ``True``, 1 otherwise.
             )")
 
             .def("add_clock_period", &NetlistSimulator::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero") = true, R"(
@@ -70,7 +70,7 @@ namespace hal
         
                 :param hal_py.Net clock_net: The net that carries the clock signal.
                 :param int period: The clock period from rising edge to rising edge in picoseconds.
-                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
+                :param bool start_at_zero: Initial clock state is 0 if ``True``, 1 otherwise.
             )")
 
             .def("get_gates", &NetlistSimulator::get_gates, R"(
@@ -187,7 +187,7 @@ namespace hal
                 :param int start_time: Start of the timeframe to write to the file (in picoseconds).
                 :param int end_time: End of the timeframe to write to the file (in picoseconds).
                 :param set[hal_py.Net] nets: Nets to include in the VCD file.
-                :returns: True if the file gerneration was successful, false otherwise.
+                :returns: ``True`` if the file gerneration was successful, ``False`` otherwise.
                 :rtype: bool
             )");
 

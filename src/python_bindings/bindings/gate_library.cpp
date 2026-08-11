@@ -61,7 +61,7 @@ namespace hal
             :param str y_coordinate: The data identifier for the y-coordinate.
         )");
 
-        py_gate_library.def("get_gate_location_data_category", &GateLibrary::get_gate_location_data_category, R"(
+        py_gate_library.def("get_gate_location_data_identifiers", &GateLibrary::get_gate_location_data_identifiers, R"(
             Get the data identifiers of the gate location information for both the x- and y-coordinates.
 
             :returns: A pair of data identifiers.
@@ -73,7 +73,7 @@ namespace hal
 
         //     :param str name: The name of the gate type.
         //     :param set[hal_py.GateTypeProperty] properties: The properties of the gate type.
-        //     :returns: The new gate type instance on success, None otherwise.
+        //     :returns: The new gate type instance on success, ``None`` otherwise.
         //     :rtype: hal_py.GateType
         // )");
 
@@ -81,7 +81,7 @@ namespace hal
             Check whether the given gate type is contained in this library.
 
             :param hal_py.GateType gate_type: The gate type.
-            :returns: True if the gate type is part of this library, false otherwise.
+            :returns: ``True`` if the gate type is part of this library, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -89,15 +89,15 @@ namespace hal
             Check by name whether the given gate type is contained in this library.
 
             :param str name: The name of the gate type.
-            :returns: True if the gate type is part of this library, false otherwise.
+            :returns: ``True`` if the gate type is part of this library, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_gate_library.def("get_gate_type_by_name", &GateLibrary::get_gate_type_by_name, py::arg("name"), R"(
-            Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, None is returned.
+            Get the gate type corresponding to the given name if contained within the library. In case there is no gate type with that name, ``None`` is returned.
 
             :param str name: The name of the gate type.
-            :returns: The gate type on success, None otherwise.
+            :returns: The gate type on success, ``None`` otherwise.
             :rtype: hal_py.GateType or None
         )");
 
@@ -120,7 +120,7 @@ namespace hal
             Mark a gate type as a VCC gate type.
         
             :param hal_py.GateType gate_type: The gate type.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -141,7 +141,7 @@ namespace hal
             Mark a gate type as a GND gate type.
         
             :param hal_py.GateType gate_type: The gate type.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -161,7 +161,7 @@ namespace hal
         py_gate_library.def("add_include", &GateLibrary::add_include, py::arg("include"), R"(
             Add an include required for parsing a corresponding netlist, e.g., VHDL libraries.
 
-            :param str inc: The include to add.
+            :param str include: The include to add.
         )");
 
         py_gate_library.def_property_readonly("includes", &GateLibrary::get_includes, R"(

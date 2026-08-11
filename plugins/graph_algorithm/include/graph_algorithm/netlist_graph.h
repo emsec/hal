@@ -45,6 +45,9 @@ namespace hal
     class Gate;
     class Net;
 
+    /**
+     * Provides graph representations of a netlist together with the graph algorithms that operate on them.
+     */
     namespace graph_algorithm
     {
         /**

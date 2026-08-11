@@ -30,6 +30,9 @@
 
 namespace hal
 {
+    /**
+     * A single simulation event, i.e., the value that a net assumes at a given point in time.
+     */
     struct WaveEvent
     {
         /**
@@ -56,7 +59,7 @@ namespace hal
          * Tests whether two events are equal.
          *
          * @param[in] other - Event to compare to.
-         * @returns True when both events are equal, false otherwise.
+         * @returns `true` when both events are equal, `false` otherwise.
          */
         bool operator==(const WaveEvent& other) const
         {
@@ -67,7 +70,7 @@ namespace hal
          * Tests whether one event happened before the other.
          *
          * @param[in] other - Event to compare to.
-         * @returns True when this event happened before the other, false otherwise.
+         * @returns `true` when this event happened before the other, `false` otherwise.
          */
         bool operator<(const WaveEvent& other) const
         {

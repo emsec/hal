@@ -42,6 +42,8 @@ namespace hal
     class GateType;
 
     /**
+     * A gate library writer that serializes a gate library into HAL's own HGL format.
+     *
      * @ingroup netlist
      */
     class NETLIST_API HGLWriter : public GateLibraryWriter
@@ -55,13 +57,16 @@ namespace hal
          *
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 
     private:
         const u32 HGL_FORMAT_VERSION = 4;
 
+        /**
+         * Holds the name, direction, type, and Boolean functions of a single pin while it is being written.
+         */
         struct PinCtx
         {
             std::string name;
@@ -72,6 +77,9 @@ namespace hal
             std::string z_function = "";
         };
 
+        /**
+         * Holds the name and the indexed pins of a single pin group while it is being written.
+         */
         struct GroupCtx
         {
             std::string name;

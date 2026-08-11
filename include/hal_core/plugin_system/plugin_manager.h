@@ -46,8 +46,8 @@ namespace hal
      */
     namespace plugin_manager
     {
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Register existing program options to avoid reuse by plugins.
          *
@@ -69,8 +69,8 @@ namespace hal
          */
         std::filesystem::path get_plugin_path(std::string plugin_name);
 
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Get a mapping of flags pointing to their corresponding CLI plugin.
          *
@@ -78,8 +78,8 @@ namespace hal
          */
         std::unordered_map<std::string, std::string> get_cli_plugin_flags();
 
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Get a mapping of flags pointing to their corresponding UI plugin.
          *
@@ -87,8 +87,8 @@ namespace hal
          */
         std::unordered_map<std::string, std::string> get_ui_plugin_flags();
 
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Get command line interface options for all plugins.
          *
@@ -97,11 +97,11 @@ namespace hal
         ProgramOptions get_cli_plugin_options();
 
         /**
-         * Load all plugins in the specified diretories.<br>
+         * Load all plugins in the specified directories.<br>
          * If \p directory_names is empty, the default directories will be searched.
          *
          * @param[in] directory_names - A vector of directory paths.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool load_all_plugins(const std::vector<std::filesystem::path>& directory_names = {});
 
@@ -110,14 +110,14 @@ namespace hal
          *
          * @param[in] plugin_name - The desired name that is unique in the framework.
          * @param[in] file_path - The path to the plugin file.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool load(const std::string& plugin_name, const std::filesystem::path& file_path = std::filesystem::path());
 
         /**
          * Releases all plugins and their associated resources.
          *
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unload_all_plugins();
 
@@ -125,7 +125,7 @@ namespace hal
          * Releases a single plugin and its associated ressources.
          *
          * @param[in] plugin_name - The name of the plugin to unload.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unload(const std::string& plugin_name);
 
@@ -134,20 +134,20 @@ namespace hal
          * By default calls the initialize() function of the plugin.
          *
          * @param[in] plugin_name - The name of the plugin.
-         * @param[in] initialize - If false, the plugin's initialize function is not called.
-         * @param[in] silent - If true error message gets omitted if plugin not found
+         * @param[in] initialize - If `false`, the plugin's initialize function is not called.
+         * @param[in] silent - If `true` error message gets omitted if plugin not found
          * @returns The basic plugin interface.
          */
         BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true, bool silent = false);
 
+        // TODO Python bindings for different types and extend by initialize flag.
         /**
-         * TODO Python bindings for different types and extend by initialize flag.
          * 
          * Gets a specific interface for a plugin specified by name.
          * By default calls the initialize() function of the plugin.
          *
          * @param[in] plugin_name - The name of the plugin.
-         * @param[in] initialize - If false, the plugin's initialize function is not called.
+         * @param[in] initialize - If `false`, the plugin's initialize function is not called.
          * @returns The specific plugin interface.
          */
         template<typename T>
@@ -160,8 +160,8 @@ namespace hal
          * Get first plugin extension of given type T.
          *
          * @param[in] plugin_name - The name of the plugin.
-         * @param[in] initialize - If false, the plugin's initialize function is not called.
-         * @return pointer to first extension of type T or nullptr if no such extension exists.
+         * @param[in] initialize - If `false`, the plugin's initialize function is not called.
+         * @return pointer to first extension of type T or `nullptr` if no such extension exists.
          */
         template<typename T>
         T* get_first_extension(const std::string& plugin_name, bool initialize = true)
@@ -172,21 +172,21 @@ namespace hal
             return bpif->get_first_extension<T>();
         }
 
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Add a callback to notify the GUI about loaded or unloaded plugins.
          *
          * @param[in] callback - The callback function. Parameters are:
-         * * bool - True = load, false = unload.
+         * * bool - `true` = load, `false` = unload.
          * * std::string - The plugin name.
          * * std::string - The plugin path.
          * @returns The id of the registered callback.
          */
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
 
+        // TODO Python binding.
         /**
-         * TODO Python binding.
          * 
          * Remove a registered callback.
          *
@@ -207,7 +207,7 @@ namespace hal
         /**
          * Returns whether file has an extension which is legal for plugins in OS
          * @param file_name
-         * @return False if extension indicated that this file cannot be a plugin, true otherwise
+         * @return `false` if extension indicated that this file cannot be a plugin, `true` otherwise
          */
         bool has_valid_file_extension(std::filesystem::path file_name);
 

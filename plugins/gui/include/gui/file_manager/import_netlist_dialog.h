@@ -37,6 +37,9 @@ namespace hal {
 
     class GateLibrarySelection;
 
+    /**
+     * The dialog in which the user picks the gate library and the project directory for a netlist that is being imported.
+     */
     class ImportNetlistDialog : public QDialog
     {
         Q_OBJECT

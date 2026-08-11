@@ -38,6 +38,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the initialization string of the LUT component of the selected gate type.
+     */
     class GatelibraryLutInit : public GatelibraryComponentFrame
     {
         Q_OBJECT

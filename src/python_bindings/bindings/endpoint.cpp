@@ -17,14 +17,14 @@ namespace hal
         py_endpoint.def(py::self == py::self, R"(
             Check whether two endpoints are equal.
 
-            :returns: True if both endpoints are equal, False otherwise.
+            :returns: ``True`` if both endpoints are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_endpoint.def(py::self != py::self, R"(
             Check whether two endpoints are unequal.
 
-            :returns: True if both endpoints are unequal, False otherwise.
+            :returns: ``True`` if both endpoints are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -42,7 +42,7 @@ namespace hal
         )");
 
         py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
-            Get pin associated with the endpoint.
+            Get the pin associated with the endpoint.
 
             :returns: The pin.
             :rtype: hal_py.GatePin
@@ -62,7 +62,7 @@ namespace hal
         )");
 
         py_endpoint.def_property_readonly("source_pin", &Endpoint::is_source_pin, R"(
-            True if the pin of the endpoint is a source (output) pin, False otherwise.
+            ``True`` if the pin of the endpoint is a source (output) pin, ``False`` otherwise.
 
             :type: bool
         )");
@@ -70,12 +70,12 @@ namespace hal
         py_endpoint.def("is_source_pin", &Endpoint::is_source_pin, R"(
             Checks whether the pin of the endpoint is a source (output) pin.
 
-            :returns: True if the endpoint is an source (output) pin, False otherwise.
+            :returns: ``True`` if the endpoint is an source (output) pin, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_endpoint.def_property_readonly("destination_pin", &Endpoint::is_destination_pin, R"(
-            True if the pin of the endpoint is a destination (input) pin, False otherwise.
+            ``True`` if the pin of the endpoint is a destination (input) pin, ``False`` otherwise.
 
             :type: bool
         )");
@@ -83,7 +83,7 @@ namespace hal
         py_endpoint.def("is_destination_pin", &Endpoint::is_destination_pin, R"(
             Checks whether the pin of the endpoint is a destination (input) pin.
 
-            :returns: True if the endpoint is an destination (input) pin, False otherwise.
+            :returns: ``True`` if the endpoint is an destination (input) pin, ``False`` otherwise.
             :rtype: bool
         )");
     }

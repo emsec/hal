@@ -56,7 +56,7 @@ namespace hal
         /**
          * Callback function that is connected to the core. Emits the appropriate signals.
          *
-         * @param is_load - True if the plugin is loaded, False if unloaded.
+         * @param is_load - `true` if the plugin is loaded, `false` if unloaded.
          * @param plugin_name - The plugin's name.
          * @param plugin_path - The plugin's path.
          */

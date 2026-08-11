@@ -47,8 +47,8 @@ namespace hal
             Get the FF dependency matrix of a netlist.
 
             :param hal_py.Netlist nl: The netlist to extract the dependency matrix from.
-            :returns: A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
-            :rtype: pair(dict(int, hal_py.Gate), list[list[int]])
+            :returns: A pair consisting of a dict from the original gate IDs to the ones in the matrix, and the FF dependency matrix itself.
+            :rtype: tuple(dict[int,hal_py.Gate], list[list[int]])
         )");
 
         py_netlist_utils.def("get_next_gates",
@@ -61,12 +61,12 @@ namespace hal
             Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            If a filter function is given, the recursion stops whenever the filter function evaluates to ``False``. 
             Only gates matching the filter will be added to the result vector.
             The result will not include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: True to return successors, False for Predecessors.
+            :param bool get_successors: ``True`` to return successors, ``False`` for Predecessors.
             :param int depth: Depth of recursion.
             :param lambda filter: User-defined filter function.
             :returns: List of predecessor/successor gates.
@@ -83,11 +83,11 @@ namespace hal
             Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
             Higher number of depth causes as many steps of recursive calls. 
             If depth is set to 0 there is no limitation and the loop  continues until no more predecessors/succesors are found.
-            If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
+            If a filter function is given, the recursion stops whenever the filter function evaluates to ``False``. 
             Only gates matching the filter will be added to the result vector.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: True to return successors, False for Predecessors.
+            :param bool get_successors: ``True`` to return successors, ``False`` for Predecessors.
             :param int depth: Depth of recursion.
             :param lambda filter: User-defined filter function.
             :returns: List of predecessor/successor gates.
@@ -108,7 +108,7 @@ namespace hal
             Different caches for different values of get_successors shall be used.
         
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
@@ -120,7 +120,7 @@ namespace hal
             The result may include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :returns: All sequential successors or predecessors of the gate.
             :rtype: list[hal_py.Gate]
         )");
@@ -138,7 +138,7 @@ namespace hal
             Different caches for different values of get_successors shall be used.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
@@ -149,7 +149,7 @@ namespace hal
             Traverses combinational logic of all input or output nets until sequential gates are found.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, sequential successors are returned, otherwise sequential predecessors are returned.
+            :param bool get_successors: If ``True``, sequential successors are returned, otherwise sequential predecessors are returned.
             :returns: All sequential successors or predecessors of the net.
             :rtype: list[hal_py.Net]
         )");
@@ -169,7 +169,7 @@ namespace hal
             Different caches for different values of get_successors shall be used.
         
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the gate.
@@ -183,7 +183,7 @@ namespace hal
             The result may include the provided gate itself.
 
             :param hal_py.Gate gate: The initial gate.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :returns: All gates on the predecessor or successor path of the gate.
             :rtype: list[hal_py.Gate]
@@ -203,7 +203,7 @@ namespace hal
             Different caches for different values of get_successors shall be used.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :param dict[int, list[hal_py.Gate]] cache: The cache. 
             :returns: All gates on the predecessor or successor path of the net.
@@ -215,7 +215,7 @@ namespace hal
             Traverses all input or output nets until gates of the specified base types are found.
 
             :param hal_py.Net net: The initial net.
-            :param bool get_successors: If true, the successor path is returned, otherwise the predecessor path is returned.
+            :param bool get_successors: If ``True``, the successor path is returned, otherwise the predecessor path is returned.
             :param set[hal_py.GateTypeProperty] stop_properties: Stop recursion when reaching a gate of a type with one of the specified properties.
             :returns: All gates on the predecessor or successor path of the net.
             :rtype: list[hal_py.Net]
@@ -226,7 +226,7 @@ namespace hal
         
             :param hal_py.Gate gate: The gate.
             :param list[hal_py.GatePin] pins: The targeted pins.
-            :returns: The list of nets connected to the pins.
+            :returns: A list of nets connected to the pins.
             :rtype: list[hal_py.Net]
         )");
 
@@ -251,7 +251,7 @@ namespace hal
             If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.
 
             :param hal_py.Netlist netlist: The target netlist.
-            :param bool analyze_inputs: Set True to dynamically analyze the inputs, False otherwise.
+            :param bool analyze_inputs: Set ``True`` to dynamically analyze the inputs, ``False`` otherwise.
             :returns: The number of removed buffers on success, -1 otherwise.
             :rtype: int
         )");
@@ -315,7 +315,7 @@ namespace hal
             :param hal_py.Gate gate: The gate to be replaced.
             :param hal_py.GateType target_type: The gate type of the replacement gate.
             :param dict[hal_py.GatePin,hal_py.GatePin] pin_map: A dict from old to new pins.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -384,42 +384,44 @@ namespace hal
 
             :param hal_py.Gate start_gate: The gate at which to start the chain detection.
             :param list[hal_py.GateType] chain_types: The sequence of gate types that is expected to make up the gate chain.
-            :param dict[hal_py.GateType,set[str]] input_pins: The input pins through which the gates are allowed to be connected.
-            :param dict[hal_py.GateType,set[str]] output_pins: The output pins through which the gates are allowed to be connected.
-            :param lambda filter: A filter that is evaluated on all candidates.
-            :returns: A list of gates that form a chain.
+            :param dict[hal_py.GateType,set[str]] input_pins: The input pins (of every gate type of the sequence) through which the gates must be connected.
+            :param dict[hal_py.GateType,set[str]] output_pins: The output pins (of every gate type of the sequence) through which the gates must be connected.
+            :param lambda filter: An optional filter function to be evaluated on each gate.
+            :returns: A list of gates that form a chain on success, an empty list on error.
             :rtype: list[hal_py.Gate]
         )");
 
         py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Gate*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_gate"), py::arg("search_both_directions") = false, R"(
-            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with the end gate. 
             The gate where the search started from will be the first in the result vector, the end gate will be the last. 
             If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
 
-            :param hal_py.Gate start_gate: The start gate for the path (might be the end if searching both directions)
-            :param hal_py.Gate end_gate: The end gate for the path (might be the start if searching both directions)
-            :param bool search_both_directions: If true checking start <-> end, which ever direction is shorter
-            :returns: A list of gates that form a chain on success, an empty list on error.
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Gate end_gate: The gate to connect to.
+            :param bool search_both_directions: ``True`` to additionally check whether a shorter path from end to start exists, ``False`` otherwise.
+            :returns: A list of gates that connect the start with end gate (possibly in reverse order).
             :rtype: list[hal_py.Gate]
         )");
 
         py_netlist_utils.def("get_shortest_path", py::overload_cast<Gate*,Module*,bool>(&netlist_utils::get_shortest_path), py::arg("start_gate"), py::arg("end_module"), py::arg("forward_direction"), R"(
-            Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with any gate for the given module.
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start gate with any gate from the given module.
             The gate where the search started from will be the first in the result vector, the end gate will be the last.
             If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.
 
-            :param hal_py.Gate start_gate: The start gate for the path
-            :param hal_py.Module end_module: The module which contains the end gate for the path
-            :param bool forward_direction: Search successor module to gate if true, else search predecessor module.
-            :returns: A list of gates that form a chain on success, an empty list on error.
+            :param hal_py.Gate start_gate: The gate to start from.
+            :param hal_py.Module end_module: The module to connect to.
+            :param bool forward_direction: ``True`` to search along the fan-out nets of the start gate, ``False`` to search along its fan-in nets.
+            :returns: A list of gates that connect the start with end gate (possibly in reverse order).
             :rtype: list[hal_py.Gate]
         )");
 
         py_netlist_utils.def("get_shortest_path", py::overload_cast<Module*,Module*>(&netlist_utils::get_shortest_path), py::arg("start_module"), py::arg("end_module"), R"(
-            Find (multiple) shortest path (i.e., theresult set with the lowest number of gates) that connects the module with another module.
+            Find the shortest path (i.e., the result set with the lowest number of gates) that connects the start module with the target module.
+            There might be more than one connection thus a list of connecting gate lists is returned.
 
-            :param hal_py.Module start_module: The module which contains a gate as start for the path
-            :param hal_py.Module end_module: The module which contains a gate as end of the path
+            :param hal_py.Module start_module: The module to start from.
+            :param hal_py.Module end_module: The module to connect to.
+            :returns: A list of connecting lists with gates that connect the start with end gate.
             :rtype: list[list[hal_py.Gate]]
         )");
     }

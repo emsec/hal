@@ -11,14 +11,14 @@ namespace hal
         py_gate_base_pin.def(py::self == py::self, R"(
             Check whether two pins are equal.
 
-            :returns: True if both pins are equal, False otherwise.
+            :returns: ``True`` if both pins are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_gate_base_pin.def(py::self != py::self, R"(
             Check whether two pins are unequal.
 
-            :returns: True if both pins are unequal, False otherwise.
+            :returns: ``True`` if both pins are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -101,14 +101,14 @@ namespace hal
         py_module_base_pin.def(py::self == py::self, R"(
             Check whether two pins are equal.
 
-            :returns: True if both pins are equal, False otherwise.
+            :returns: ``True`` if both pins are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_base_pin.def(py::self != py::self, R"(
             Check whether two pins are unequal.
 
-            :returns: True if both pins are unequal, False otherwise.
+            :returns: ``True`` if both pins are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 

@@ -81,15 +81,6 @@ public:
      */
     QVariant data(const QModelIndex& index, int role) const override;
 
-    /**
-     * Sets the role data for the item at index to value.
-     *
-     * @param index - The model index
-     * @param value - The value to set
-     * @param role - The access role
-     * @returns <b>true</b> on success
-     */
-    //bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     /**
      * Returns the header data fields
@@ -108,9 +99,9 @@ public:
 
 
     /**
-     * Try to load a gate library from file.
+     * Fill the model with the content of the given gate library.
      *
-     * @param path - The file path
+     * @param g - The gate library to display.
      */
     void loadFile(const GateLibrary* g);
 

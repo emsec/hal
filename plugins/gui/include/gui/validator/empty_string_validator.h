@@ -33,7 +33,7 @@ namespace hal
      * @ingroup gui
      * @brief Checks if a given string is not empty.
      *
-     * The EmptyStringValidator is a Validator which validate function returns <b>true</b> if the candidate string
+     * The EmptyStringValidator is a Validator which validate function returns `true` if the candidate string
      * contains at least one non-whitespace character.
      * It should be used whenever an input must not be empty.
      */
@@ -46,12 +46,12 @@ namespace hal
             EmptyStringValidator();
 
             /**
-             * Given any string this function returns <b>true</b> iff the string contains at least one non-whitespace
+             * Given any string this function returns `true` iff the string contains at least one non-whitespace
              * character. Whitespace characters are: <i>space, horizontal tab, new line, vertical tab,
              * new page</i> and <i>carriage return</i>
              *
              * @param input - The input string
-             * @returns <b>true</b> iff the string is considered valid (unique)
+             * @returns `true` iff the string is considered valid (unique), `false` otherwise.
              */
             bool validate(const QString &input);
     };

@@ -35,6 +35,9 @@
 namespace hal {
     class WaveDataList;
 
+    /**
+     * Renders the value column of the waveform tree.
+     */
     class WaveValueDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
@@ -45,6 +48,9 @@ namespace hal {
                       const QModelIndex &index) const override;
     };
 
+    /**
+     * The tree view that lists the waveforms and their groups next to the waveform canvas.
+     */
     class WaveTreeView : public QTreeView
     {
         Q_OBJECT

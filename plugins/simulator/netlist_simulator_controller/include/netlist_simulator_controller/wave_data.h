@@ -43,6 +43,9 @@ namespace hal {
     class SaleaeInputFile;
     class Net;
 
+    /**
+     * The time interval that is currently loaded and displayed, i.e., the simulated range and the visible cursor range.
+     */
     class WaveDataTimeframe
     {
         friend class WaveDataList;
@@ -66,6 +69,9 @@ namespace hal {
     class WaveDataList;
     class WaveDataTrigger;
 
+    /**
+     * The waveform of a single net, i.e., the sequence of value changes over time together with its display properties.
+     */
     class WaveData
     {
     public:
@@ -141,6 +147,9 @@ namespace hal {
         void removeSubscriber() { if (mSubscriber) -- mSubscriber; }
     };
 
+    /**
+     * The waveform of a clock net, which is generated from a period rather than read from simulation results.
+     */
     class WaveDataClock : public WaveData
     {
         SimulationInput::Clock mClock;
@@ -156,6 +165,9 @@ namespace hal {
     class WaveDataGroup;
     class WaveDataBoolean;
 
+    /**
+     * The list of all waveforms of a simulation, which also owns them and notifies the views about changes.
+     */
     class WaveDataList : public QObject, public QList<WaveData*>
     {
         friend class WaveDataGroup;
@@ -250,6 +262,9 @@ namespace hal {
         void triggerEndResetModel();
     };
 
+    /**
+     * The key under which a waveform is stored in a group, derived from the ID and the kind of the waveform.
+     */
     class WaveDataGroupIndex {
         friend uint qHash(const WaveDataGroupIndex& wdgi);
         uint mCode;
@@ -262,6 +277,9 @@ namespace hal {
 
     uint qHash(const WaveDataGroupIndex& wdgi);
 
+    /**
+     * A waveform that is computed from other waveforms by evaluating a Boolean function on them.
+     */
     class WaveDataBoolean : public WaveData
     {
         int mInputCount;
@@ -279,6 +297,9 @@ namespace hal {
         virtual int intValue(double t) const override;
     };
 
+    /**
+     * A waveform that marks the points in time at which a set of other waveforms shows a given transition.
+     */
     class WaveDataTrigger : public WaveData
     {
         int mTriggerCount;
@@ -299,6 +320,9 @@ namespace hal {
         WaveData* get_filter_wave() const { return mFilterWave; }
     };
 
+    /**
+     * A group of waveforms that are displayed together and whose values form a single multi-bit value.
+     */
     class WaveDataGroup : public WaveData
     {
 

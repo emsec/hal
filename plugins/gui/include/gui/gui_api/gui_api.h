@@ -39,8 +39,14 @@
 
 namespace hal
 {
+    /**
+     * The classes that the GUI exposes to python, e.g., the current selection and the graph views.
+     */
     namespace GuiApiClasses {
 
+        /**
+         * The python interface to the graph views of the GUI.
+         */
         class View{
         public:
             /**
@@ -60,7 +66,7 @@ namespace hal
              * 
              * @param id - The id of the view.
              * 
-             * @return True on success, otherwise false.
+             * @return `true` on success, `false` otherwise.
              */
             static bool deleteView(int id);
             /**
@@ -70,7 +76,7 @@ namespace hal
              * @param modules - The list of modules to be added to the view.
              * @param gates - The list of gates to be added to the view.
              * 
-             * @return True on success, otherwise false.
+             * @return `true` on success, `false` otherwise.
              */
             static bool addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates);
             /**
@@ -80,7 +86,7 @@ namespace hal
              * @param modules - The modules to be removed from the view.
              * @param gates - The gates to be removed from the view.
              * 
-             * @return True on success, otherwise false.
+             * @return `true` on success, `false` otherwise.
              */
             static bool removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates);
             /**
@@ -89,7 +95,7 @@ namespace hal
              * @param id - The id of the view.
              * @param name - The new name of the view.
              * 
-             * @return True on success, otherwise false.
+             * @return `true` on success, `false` otherwise.
              */
             static bool setName(int id, const std::string& name);
             /**
@@ -139,7 +145,7 @@ namespace hal
              * @param view_id - The id of the view.
              * @param module - The Module to fold.
              *
-             * @return True on success, otherwise False.
+             * @return `true` on success, `false` otherwise.
              */
             static bool foldModule(int view_id, Module* module);
             /**
@@ -148,10 +154,13 @@ namespace hal
              * @param view_id - The id of the view.
              * @param module - The Module to unfold.
              *
-             * @return True on success, otherwise False.
+             * @return `true` on success, `false` otherwise.
              */
             static bool unfoldModule(int view_id, Module* module);
 
+            /**
+             * A set of module IDs together with a set of gate IDs, as returned by the python interface.
+             */
             struct ModuleGateIdPair {
                 QSet<u32> moduleIds;
                 QSet<u32> gateIds;
@@ -330,10 +339,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gate_id - The id of the gate to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectGate(u32 gate_id, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -343,10 +352,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gate_ids - A list of gate ids. These gates will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectGate(const std::vector<u32>& gate_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -356,10 +365,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gate - The gate to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectGate(Gate* gate, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -369,10 +378,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gates - A list of gates. These gates will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectGate(const std::vector<Gate*>& gates, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -382,10 +391,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param netId - The id of the net to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectNet(u32 netId, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -395,10 +404,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param net_ids - A list of net ids. These nets will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectNet(const std::vector<u32>& net_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -408,10 +417,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param net - The net to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectNet(Net* net, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -421,10 +430,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param nets - A list of nets. These nets will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectNet(const std::vector<Net*>& nets, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -434,10 +443,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param module_id - The id of the module to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectModule(u32 module_id, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -447,10 +456,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param module_ids - A list of module ids. These modules will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectModule(const std::vector<u32>& module_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -460,10 +469,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param module - The module to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectModule(Module* module, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -473,10 +482,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param modules - A list of modules. These modules will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void selectModule(const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -486,10 +495,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gate - The gate to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(Gate* gate, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -499,10 +508,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param net - The net to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(Net* net, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -512,10 +521,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param module - The module to select
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(Module* module, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -525,10 +534,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param gates - A list of gates. These gates will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(const std::vector<Gate*>& gates, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -538,10 +547,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param nets - A list of nets. These nets will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(const std::vector<Net*>& nets, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -551,10 +560,10 @@ namespace hal
          * This behaviour can be changed with the parameters clear_current_selection and navigate_to_selection.
          *
          * @param modules - A list of modules. These modules will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -566,10 +575,10 @@ namespace hal
          * @param gate_ids - A list of gate ids. These gates will bse selected.
          * @param net_ids - A list of net ids. These nets will be selected.
          * @param module_ids - A list of module ids. These modules will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(const std::vector<u32>& gate_ids, const std::vector<u32>& net_ids, const std::vector<u32>& module_ids, bool clear_current_selection = true, bool navigate_to_selection = true);
 
@@ -581,10 +590,10 @@ namespace hal
          * @param gates - A list of gates. These gates will be selected.
          * @param nets - A list of nets. These nets will be selected.
          * @param modules - A list of modules. These modules will be selected.
-         * @param clear_current_selection - <b>true</b> (default): The old selection will be overwritten. <br>
-         *                                  <b>false</b>: The new selection will be appended to the old one.
-         * @param navigate_to_selection - <b>true</b> (default): The view will be moved to the new selection. <br>
-         *                                <b>false</b>: The view won't be moved.
+         * @param clear_current_selection - `true` (default): The old selection will be overwritten. <br>
+         *                                  `false`: The new selection will be appended to the old one.
+         * @param navigate_to_selection - `true` (default): The view will be moved to the new selection. <br>
+         *                                `false`: The view won't be moved.
          */
         void select(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules, bool clear_current_selection = true, bool navigate_to_selection = true);
 

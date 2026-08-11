@@ -35,12 +35,23 @@ namespace hal
 {
     namespace dataflow
     {
+        /**
+         * The processing phase of dataflow analysis, which repeatedly applies grouping passes to produce candidate groupings.
+         */
         namespace processing
         {
+            /**
+             * The outcome of the processing phase, i.e., all unique groupings that were produced and the pass combinations that led to them.
+             */
             struct Result
             {
+                /** All groupings that were produced, with duplicates removed. */
                 std::vector<std::shared_ptr<Grouping>> unique_groupings;
+
+                /** A map from each unique grouping to all sequences of passes that produce it. */
                 std::map<std::shared_ptr<Grouping>, std::vector<std::vector<pass_id>>> pass_combinations_leading_to_grouping;
+
+                /** A map from each sequence of passes to the grouping that it produces. */
                 std::map<std::vector<pass_id>, std::shared_ptr<Grouping>> groupings;
             };
 

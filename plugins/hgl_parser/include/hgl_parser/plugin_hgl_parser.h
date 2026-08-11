@@ -31,12 +31,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the HGL gate library parser with HAL's gate library parser manager.
+     */
     class HGLParserExtension : public FacExtensionInterface
     {
     public:
         HGLParserExtension();
     };
 
+    /**
+     * The plugin that provides the HGL gate library parser.
+     */
     class PLUGIN_API HGLParserPlugin : public BasePluginInterface
     {
         HGLParserExtension* m_extension;

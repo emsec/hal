@@ -51,7 +51,7 @@ namespace hal
         /**
          * Constructor.
          *
-         * @param editor - The CodeEditor this line number area should be associated with. Must not be a <i>nullptr</i>.
+         * @param editor - The CodeEditor this line number area should be associated with. Must not be a `nullptr`.
          */
         explicit LineNumberArea(CodeEditor* editor);
 

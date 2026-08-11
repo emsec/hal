@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the Liberty gate library parser with HAL's gate library parser manager.
+     */
     class LibertyParserExtension : public FacExtensionInterface
     {
     public:
         LibertyParserExtension();
     };
 
+    /**
+     * The plugin that provides the Liberty gate library parser.
+     */
     class PLUGIN_API LibertyParserPlugin : public BasePluginInterface
     {
         LibertyParserExtension* m_extension;

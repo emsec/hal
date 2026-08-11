@@ -123,6 +123,7 @@ namespace hal
          *
          * @param n - The undelying net of the StandardGraphicsNet
          * @param l - The lines this GraphicsNet consists of
+         * @param knots - The points at which the net splits, drawn as junction dots
          */
         StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF>& knots = QList<QPointF>());
 

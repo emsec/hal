@@ -4,7 +4,9 @@ namespace hal
 {
     void netlist_modification_decorator_init(py::module& m)
     {
-        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"()");
+        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"(
+            A netlist decorator that provides functionality to modify the associated netlist.
+        )");
 
         py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
             Construct new NetlistModificationDecorator object.
@@ -32,7 +34,7 @@ namespace hal
             An optional filter can be specified to delete only modules fulfilling a certain condition.
 
             :param lambda filter: An optional filter to be applied to the modules before deletion.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -61,7 +63,7 @@ namespace hal
             :param hal_py.Gate gate: The gate to be replaced.
             :param hal_py.GateType target_type: The gate type of the replacement gate.
             :param dict[hal_py.GatePin,hal_py.GatePin] pin_map: A dict from old to new pins.
-            :returns: The new gate on success, None otherwise.
+            :returns: The new gate on success, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
@@ -93,7 +95,7 @@ namespace hal
             :param hal_py.GatePin src_pin: The output pin of the source gate.
             :param hal_py.Gate dst_gate: The destination gate.
             :param hal_py.GatePin dst_pin: The input pin of the destination gate.
-            :returns: The connecting net on success, None otherwise.
+            :returns: The connecting net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
@@ -119,7 +121,7 @@ namespace hal
 
             :param hal_py.Net master_net: The net that receives all properties from the slave net. 
             :param hal_py.Net slave_net: The net that transfers all properties to the master net and is subsequently deleted.
-            :returns: The merged net on success, None otherwise.
+            :returns: The merged net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
     }

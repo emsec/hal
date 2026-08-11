@@ -9,14 +9,14 @@ namespace hal
         py_net.def(py::self == py::self, R"(
             Check whether two nets are equal.
 
-            :returns: True if both nets are equal, false otherwise.
+            :returns: ``True`` if both nets are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def(py::self != py::self, R"(
             Check whether two nets are unequal.
 
-            :returns: True if both nets are unequal, false otherwise.
+            :returns: ``True`` if both nets are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -74,7 +74,7 @@ namespace hal
 
         py_net.def("get_grouping", &Net::get_grouping, R"(
             Get the grouping in which this net is contained.
-            If no grouping contains this gate, *None* is returned.
+            If no grouping contains this gate, ``None`` is returned.
 
             :returns: The grouping.
             :rtype: hal_py.Grouping
@@ -86,7 +86,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an output pin of the gate.
-            :returns: The endpoint on success, None otherwise.
+            :returns: The endpoint on success, ``None`` otherwise.
             :rtype: hal_py.Endpoint or None
         )");
 
@@ -96,7 +96,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param hal_py.GatePin pin: The output pin of the gate.
-            :returns: The endpoint on success, None otherwise.
+            :returns: The endpoint on success, ``None`` otherwise.
             :rtype: hal_py.Endpoint or None
         )");
 
@@ -106,7 +106,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an output pin of the gate.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -116,7 +116,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param hal_py.GatePin pin: The output pin of the gate.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -124,7 +124,7 @@ namespace hal
             Remove a source endpoint from the net.
 
             :param hal_py.Endpoint ep: The endpoint.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -132,7 +132,7 @@ namespace hal
             Check whether a gate is a source of the net independent of the pin.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True if the gate is a source of the net, False otherwise.
+            :returns: ``True`` if the gate is a source of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -142,7 +142,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an output pin of the gate.
-            :returns: True if the endpoint is a source of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a source of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -152,7 +152,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param hal_py.GatePin pin: The output pin of the gate.
-            :returns: True if the endpoint is a source of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a source of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -160,7 +160,7 @@ namespace hal
             Check whether an endpoint is a source of the net.
 
             :param hal_py.Endpoint ep: The endpoint.
-            :returns: True if the endpoint is a source of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a source of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -200,7 +200,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an input pin of the gate.
-            :returns: The endpoint on success, None otherwise.
+            :returns: The endpoint on success, ``None`` otherwise.
             :rtype: hal_py.Endpoint or None
         )");
 
@@ -209,8 +209,8 @@ namespace hal
             The endpoint is specified by a tuple of a gate and an input pin of that gate.
 
             :param hal_py.Gate gate: The gate.
-            :param str pin_name: The input pin of the gate.
-            :returns: The endpoint on success, None otherwise.
+            :param hal_py.GatePin pin: The input pin of the gate.
+            :returns: The endpoint on success, ``None`` otherwise.
             :rtype: hal_py.Endpoint or None
         )");
 
@@ -220,7 +220,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an input pin of the gate.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -230,15 +230,15 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param hal_py.GatePin pin: The input pin of the gate.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("remove_destination", py::overload_cast<Endpoint*>(&Net::remove_destination), py::arg("ep"), R"(
             Remove a destination endpoint from the net.
 
-            :param hal_py.Endpoint ep: The destination endpoint.
-            :returns: True on success, False otherwise.
+            :param hal_py.Endpoint ep: The endpoint.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -246,7 +246,7 @@ namespace hal
             Check whether a gate is a destination of the net independent of the pin.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True if the gate is a destination of the net, False otherwise.
+            :returns: ``True`` if the gate is a destination of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -256,7 +256,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param str pin_name: The name of an input pin of the gate.
-            :returns: True if the endpoint is a destination of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a destination of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -266,7 +266,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate.
             :param hal_py.GatePin pin: The input pin of the gate.
-            :returns: True if the endpoint is a destination of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a destination of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -274,7 +274,7 @@ namespace hal
             Check whether an endpoint is a destination of the net.
 
             :param hal_py.Endpoint ep: The endpoint.
-            :returns: True if the endpoint is a destination of the net, False otherwise.
+            :returns: ``True`` if the endpoint is a destination of the net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -311,63 +311,63 @@ namespace hal
         py_net.def("is_unrouted", &Net::is_unrouted, R"(
             Check whether the net is unrouted, i.e., it has no source or no destination.
 
-            :returns: True if the net is unrouted, False otherwise.
+            :returns: ``True`` if the net is unrouted, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_gnd_net", &Net::is_gnd_net, R"(
             Check whether the net is connected to GND.
 
-            :returns: True if the net is connected to GND, False otherwise.
+            :returns: ``True`` if the net is connected to GND, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_vcc_net", &Net::is_vcc_net, R"(
             Check whether the net is connected to VCC.
 
-            :returns: True if the net is connected to VCC, False otherwise.
+            :returns: ``True`` if the net is connected to VCC, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("mark_global_input_net", &Net::mark_global_input_net, R"(
             Mark this net as a global input net.
 
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("mark_global_output_net", &Net::mark_global_output_net, R"(
             Mark this net as a global output net.
 
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("unmark_global_input_net", &Net::unmark_global_input_net, R"(
             Unmark this net as a global input net.
 
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("unmark_global_output_net", &Net::unmark_global_output_net, R"(
             Unmark this net as a global output net.
 
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_global_input_net", &Net::is_global_input_net, R"(
             Checks whether this net is a global input net.
 
-            :returns: True if the net is a global input net, False otherwise.
+            :returns: ``True`` if the net is a global input net, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_net.def("is_global_output_net", &Net::is_global_output_net, R"(
             Checks whether this net is a global output net.
 
-            :returns: True if the net is a global output net, False otherwise.
+            :returns: ``True`` if the net is a global output net, ``False`` otherwise.
             :rtype: bool
         )");
     }

@@ -36,6 +36,9 @@ namespace hal
     class Netlist;
 
     /**
+     * The base class for all netlist writers.
+     * A writer serializes a netlist into a file of the format that it implements.
+     *
      * @ingroup netlist_writer
      */
     class NETLIST_API NetlistWriter
@@ -49,7 +52,7 @@ namespace hal
          *
          * @param[in] netlist - The netlist.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         virtual Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) = 0;
     };

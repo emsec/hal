@@ -33,6 +33,9 @@
 namespace hal  {
 
 
+    /**
+     * The base class for the type-erased factory that a file-access extension hands to the framework.
+     */
     class AbstractFactoryProvider
     {
     public:
@@ -41,7 +44,8 @@ namespace hal  {
     };
 
     /**
-     * @brief File-Access Factory class
+     * Holds the factory function that creates instances of the file-access implementation `T`,
+     * e.g., a netlist parser or a gate library writer contributed by a plugin.
      */
     template <typename T> class FacFactoryProvider : public AbstractFactoryProvider
     {
@@ -51,6 +55,10 @@ namespace hal  {
         std::function<std::unique_ptr<T>()> m_factory;
     };
 
+    /**
+     * A plugin extension that registers a factory for a file format, e.g., a netlist parser or a gate library writer.
+     * It advertises the feature it provides together with the file extensions that it supports.
+     */
     class FacExtensionInterface : public AbstractExtensionInterface
     {
     public:

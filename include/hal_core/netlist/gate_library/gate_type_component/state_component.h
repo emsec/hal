@@ -30,6 +30,9 @@
 namespace hal
 {
     // TODO tests
+    /**
+     * A gate type component that describes the internal state of a sequential gate by naming its state and negated state identifiers.
+     */
     class StateComponent : public GateTypeComponent
     {
     public:
@@ -53,7 +56,7 @@ namespace hal
          * Check whether a component is a StateComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a StateComponent, false otherwise.
+         * @returns `true` if component is a StateComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 
@@ -74,7 +77,7 @@ namespace hal
         const std::string& get_state_identifier() const;
 
         /**
-         * Get the identifier of the internal state.
+         * Set the identifier of the internal state.
          * 
          * @param[in] state_identifier - The identifier of the internal state.
          */
@@ -88,7 +91,7 @@ namespace hal
         const std::string& get_neg_state_identifier() const;
 
         /**
-         * Get the identifier of the negated internal state.
+         * Set the identifier of the negated internal state.
          * 
          * @param[in] neg_state_identifier - The identifier of the negated internal state.
          */

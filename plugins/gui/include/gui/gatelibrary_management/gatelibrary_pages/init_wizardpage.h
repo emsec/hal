@@ -35,6 +35,9 @@
 #include <QLabel>
 
 namespace hal {
+    /**
+     * The wizard page on which the init component of the gate type is configured.
+     */
     class InitWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
         Q_OBJECT

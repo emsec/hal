@@ -110,7 +110,7 @@ namespace hal
             if (dynamic_cast<PythonThread*>(QThread::currentThread()))
             {
                 // call from differnt thread, we cannot create GUI objects directly
-                DotViewerCallFromTread* dvcft = new DotViewerCallFromTread;
+                DotViewerCallFromThread* dvcft = new DotViewerCallFromThread;
                 bool retval = dvcft->openInputFileByName(this, fileName, creator);
                 delete dvcft;
                 return retval;
@@ -208,12 +208,12 @@ namespace hal
             }
         }
 
-        bool DotViewerCallFromTread::openInputFileByName(DotViewer* callee, QString filename, QString plugin)
+        bool DotViewerCallFromThread::openInputFileByName(DotViewer* callee, QString filename, QString plugin)
         {
             if (!callee) return false;
-            connect(this, &DotViewerCallFromTread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName, Qt::BlockingQueuedConnection);
+            connect(this, &DotViewerCallFromThread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName, Qt::BlockingQueuedConnection);
             Q_EMIT callOpenInputFileByName(filename, plugin);
-            disconnect(this, &DotViewerCallFromTread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName);
+            disconnect(this, &DotViewerCallFromThread::callOpenInputFileByName, callee, &DotViewer::handleOpenInputFileByName);
             return (callee->filename() == filename); // callee will not store filename upon load error
         }
 }  // namespace hal

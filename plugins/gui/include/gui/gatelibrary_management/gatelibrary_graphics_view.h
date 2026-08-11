@@ -32,6 +32,9 @@ namespace hal
 {
     class Gate;
 
+    /**
+     * The graphics view that shows the pin layout of the selected gate type and supports zooming.
+     */
     class GatelibraryGraphicsView : public QGraphicsView
     {
         Q_OBJECT

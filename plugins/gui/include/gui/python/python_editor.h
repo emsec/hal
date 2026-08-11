@@ -58,8 +58,14 @@ namespace hal
     class SettingsItemKeybind;
     class SettingsItemSpinbox;
 
+    /**
+     * Stores the python scripts that are open in the editor together with the project.
+     */
     class PythonSerializer : public ProjectSerializer
     {
+        /**
+         * One stored editor tab, i.e., the path of its script and whether it had unsaved changes.
+         */
         struct PythonEditorControlEntry {
             int tabInx;
             bool active;
@@ -158,7 +164,7 @@ namespace hal
         virtual void clear() override;
 
         /**
-         * Action to open a file. A dialogue will appear where the user can select the .py file he want to open. <br>
+         * Action to open a file. A dialogue will appear where the user can select the `.py` file he want to open. <br>
          * In case the user opens an already open file the user is ask whether the changes should be overwritten or not.
          */
         void handleActionOpenFile();
@@ -245,15 +251,16 @@ namespace hal
          * QueryIfEmpty no name was given before
          *
          * @param queryPolicy one of  GenericName, QueryIfEmpty, QueryAlways
-         * @param isAutosave True if save request was issued from autosave, false otherwise
+         * @param isAutosave `true` if save request was issued from autosave, `false` otherwise
          * @param index - The tab index
-         * @returns true if the tab was saved, false otherwise
+         * @returns `true` if the tab was saved, `false` otherwise
          */
         bool saveFile(bool isAutosave, QueryFilenamePolicy queryPolicy, int index = -1);
 
         /**
          * Saves all open tabs. Will use generic filenames if no name was given so far.
-         * @param isAutosave True if save request was issued from autosave, false otherwise
+         * @param genericPath Directory in which tabs without a filename of their own are stored
+         * @param isAutosave `true` if save request was issued from autosave, `false` otherwise
          */
         void saveAllTabs(const QString& genericPath, bool isAutosave);
 
@@ -294,7 +301,7 @@ namespace hal
          * @param start - The start position. (Tab index)
          * @param end - The end position. (Tab index) (not included)
          * @param exclude - May be passed to skip a certain index. Pass -1 to not exclude any indices.
-         * @returns true if the tabs should be discarded.
+         * @returns `true` if the tabs should be discarded, `false` otherwise.
          */
         bool confirmDiscardForRange(int start, int end, int exclude = -1);
 
@@ -538,13 +545,13 @@ namespace hal
         void setSearchActiveIconStyle(const QString& style);
 
         /**
-         * Deserialize the necessary information from the .hal file that is loaded.
-         * All tabs that appear in the .hal file were opened.
+         * Deserialize the necessary information from the `.hal` file that is loaded.
+         * All tabs that appear in the `.hal` file were opened.
          *
          * @param path - Unused
          * @param netlist - The deserialization target
-         * @param document - The json document of the .hal file
-         * @returns true on success
+         * @param document - The json document of the `.hal` file
+         * @returns `true` on success, `false` otherwise.
          */
         bool handleDeserializationFromHalFile(const std::filesystem::path& path, Netlist* netlist, rapidjson::Document& document);
 
@@ -630,7 +637,7 @@ namespace hal
         void handleBaseFileModifiedOk();
 
         /**
-         * Slot called after a .hal file (or a .v/.vhdl is parsed) (emitted by FileManager). Used to check for
+         * Slot called after a `.hal` file (or a `.v`/.vhdl is parsed) (emitted by FileManager). Used to check for
          * existing snapshots.
          *
          * @param fileName - the opened file
@@ -696,15 +703,15 @@ namespace hal
          * @param snapshot_file_path - The path of the snapshot file
          * @param original_file_path  - The original file the snapshot is made for
          * @param content - The content to write
-         * @returns true on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool writeSnapshotFile(QFileInfo snapshot_file_path, QString original_file_path, QString content) const;
 
         /**
          * Get the path to the directory where the snapshots for this netlist are stored.
          *
-         * @param create_if_non_existent if true, the directory will be created if not already existent.
-         * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = false) or
+         * @param create_if_non_existent if `true`, the directory will be created if not already existent.
+         * @returns the snapshot directory. If the directory does not exist (with create_if_non_existent = `false`) or
          *          cannot be created, an empty string is returned
          */
         QString getSnapshotDirectory(const bool create_if_non_existent = true);
@@ -730,7 +737,7 @@ namespace hal
          *
          * @param saved_snapshots - The map (original_path -> content) of saved snapshots (snapshots of non empty paths)
          * @param original_path - The path of the original version
-         * @return true if the snapshot file should be loaded/inserted
+         * @return `true` if the snapshot file should be loaded/inserted, `false` otherwise.
          */
         bool decideLoadSnapshot(const QMap<QString, QString>& saved_snapshots, const QFileInfo original_path) const;
 
@@ -748,16 +755,16 @@ namespace hal
          * @param original_path - the path of the original file
          * @param original_content - the content of the original file
          * @param snapshot_content - the content of the snapshot file
-         * @return true if the snapshot file should be loaded
+         * @return `true` if the snapshot file should be loaded, `false` otherwise.
          */
         bool askLoadSnapshot(const QString original_path, const QString original_content, const QString snapshot_content) const;
 
         /**
          * Ask the user with a message box whether the snapshot files should be ignored and deleted or not. <br>
-         * This box appers if the user reparses a .v/.vhdl file, but there are still snapshots
+         * This box appers if the user reparses a `.v`/.vhdl file, but there are still snapshots
          *
          * @param original_path - the found snapshots
-         * @return true if the snapshot file should be ignored and deleted. False if the snapshots should be loaded.
+         * @return `true` if the snapshot file should be ignored and deleted. `false` if the snapshots should be loaded, `false` otherwise.
          */
         bool askDeleteSnapshots(const QPair<QMap<QString, QString>, QVector<QString>>& snapshots) const;
 

@@ -31,12 +31,29 @@
 
 namespace hal
 {
+    /**
+     * The plugin that provides utilities to translate between HAL Boolean functions and z3 expressions.
+     */
     class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
     {
     public:
+        /**
+         * Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
+        /**
+         * Initialize the plugin.
+         */
         void initialize() override;
     };
 }    // namespace hal

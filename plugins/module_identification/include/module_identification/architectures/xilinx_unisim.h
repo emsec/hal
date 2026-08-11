@@ -44,6 +44,9 @@ namespace hal
         class BaseCandidate;
         class StructuralCandidate;
 
+        /**
+         * The gate type properties of the Xilinx UNISIM architecture that module identification needs, e.g., which types are carry chains.
+         */
         namespace xilinx_unisim
         {
             /**

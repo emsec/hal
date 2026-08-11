@@ -112,10 +112,10 @@ namespace hal
 
         py_gate_type.def("get_component", &GateType::get_component, py::arg("filter") = nullptr, R"(
             Get a single component matching the filter condition (if provided).
-            Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
+            Returns ``None`` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
             :param lambda filter: The filter applied to all candidate components.
-            :returns: The component or None.
+            :returns: The component or ``None``.
             :rtype: hal_py.GateTypeComponent or None
         )");
 
@@ -123,7 +123,7 @@ namespace hal
             Check if the gate type contains a component of the specified type.
 
             :param hal_py.GateTypeComponent.ComponentType type: The component type to check for.
-            :returns: True if the gate type contains a component of the speciifed type, False otherwise.
+            :returns: ``True`` if the gate type contains a component of the speciifed type, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -177,11 +177,11 @@ namespace hal
             :rtype: list[hal_py.GateTypeProperty]
         )");
 
-        py_gate_type.def("has_property", &GateType::has_property, R"(
+        py_gate_type.def("has_property", &GateType::has_property, py::arg("property"), R"(
             Check whether the gate type has the specified property.
 
-            :param hal_py.GateTypeProperty type: The property to check for.
-            :returns: True if the gate type has the specified property, false otherwise.
+            :param hal_py.GateTypeProperty property: The property to check for.
+            :returns: ``True`` if the gate type has the specified property, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -207,14 +207,14 @@ namespace hal
         py_gate_type.def(py::self == py::self, R"(
             Check whether two gate types are equal.
 
-            :returns: True if both gate types are equal, false otherwise.
+            :returns: ``True`` if both gate types are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_gate_type.def(py::self != py::self, R"(
             Check whether two gate types are unequal.
 
-            :returns: True if both gate types are unequal, false otherwise.
+            :returns: ``True`` if both gate types are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -312,7 +312,7 @@ namespace hal
 
             :returns: A list of input pin names of the gate type.
             :param lambda filter: An optional filter.
-            :returns: An ordered list of pins.
+            :returns: An ordered list of pin names.
             :rtype: list[str]
         )");
 
@@ -415,7 +415,7 @@ namespace hal
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
             R"(
-            Create a gate pin group with the given name.
+            Create a pin group with the given name.
 
             :param int id: The ID of the pin group.
             :param str name: The name of the pin group.
@@ -458,7 +458,7 @@ namespace hal
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
             R"(
-            Create a gate pin group with the given name.
+            Create a pin group with the given name.
             The ID of the pin group is set automatically.
 
             :param str name: The name of the pin group.
@@ -573,7 +573,7 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(
+        py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("name"), py::arg("function"), R"(
             Add a Boolean function with the specified name to the gate type.
 
             :param str name: The name of the Boolean function.
@@ -610,7 +610,7 @@ namespace hal
 
         py_gate_type.def("get_boolean_function", py::overload_cast<const GatePin*>(&GateType::get_boolean_function, py::const_), py::arg("pin") = nullptr, R"(
             Get the Boolean function corresponding to the given output pin.
-            If pin is a None, the Boolean function of the first output pin is returned.
+            If pin is a ``None``, the Boolean function of the first output pin is returned.
 
             :param hal_py.GatePin pin: The pin.
             :returns: The Boolean function on success, an empty Boolean function otherwise.

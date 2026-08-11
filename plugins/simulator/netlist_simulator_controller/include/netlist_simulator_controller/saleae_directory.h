@@ -178,7 +178,7 @@ namespace hal
         /// Access to child keys
         const std::vector<int>& get_children() const {return mChildKeys; }
 
-        /// Getter for data list which is used  a) Boolean: list of accepted(=true) net combinations b) Trigger: target value when to trigger
+        /// Getter for data list which is used  a) Boolean: list of accepted(=`true`) net combinations b) Trigger: target value when to trigger
         const std::vector<int>& get_data() const { return mData; }
 
         /// Setter for data list described above
@@ -208,6 +208,9 @@ namespace hal
     {
         friend class SaleaeDirectoryStoreRequest;
     public:
+        /**
+         * One entry of the SALEAE directory, i.e., a net together with the data file that holds its waveform.
+         */
         struct ListEntry
         {
             uint32_t id;
@@ -233,7 +236,7 @@ namespace hal
         /// constructor
         SaleaeDirectory(const std::string& path, bool create=false);
 
-        /// Parse .json file into class instance
+        /// Parse `.json` file into class instance
         bool parse_json();
 
         /// Add net entry if not yet existing, replace existing entry otherwise

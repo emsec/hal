@@ -29,6 +29,9 @@
 #include <QString>
 
 namespace hal {
+    /**
+     * A button that shows the currently selected color and opens a color dialog when clicked.
+     */
     class ColorSelection : public QPushButton
     {
         Q_OBJECT

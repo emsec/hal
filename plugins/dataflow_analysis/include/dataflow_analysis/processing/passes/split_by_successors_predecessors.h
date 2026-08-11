@@ -39,6 +39,9 @@ namespace hal
             struct Configuration;
         }
 
+        /**
+         * A dataflow analysis pass that splits a group whenever its flip-flops have different successor or predecessor groups.
+         */
         namespace split_by_successors_predecessors
         {
             std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors);

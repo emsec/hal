@@ -132,6 +132,9 @@ namespace hal {
         void close();
     };
 
+    /**
+     * A JSON object that members and nested objects or arrays can be added to.
+     */
     class JsonWriteObject : public JsonWriteComplex
     {
         friend class JsonWriteData;
@@ -179,6 +182,9 @@ namespace hal {
         JsonWriteArray& add_array(const std::string& tag);
     };
 
+    /**
+     * A JSON array that values and nested objects or arrays can be appended to.
+     */
     class JsonWriteArray : public JsonWriteComplex
     {
         friend class JsonWriteData;
@@ -228,6 +234,10 @@ namespace hal {
         JsonWriteObject& add_object();
     };
 
+    /**
+     * The root of a JSON document that is being written.
+     * Members are added like for any other JSON object, and `serialize` writes the result to a file.
+     */
     class JsonWriteDocument : public JsonWriteObject
     {
         friend class JsonWriteData;
@@ -250,7 +260,7 @@ namespace hal {
          * Serialize to file method
          * 
          * @param[in] filename The output filename
-         * @return true if successful, false otherwise
+         * @return `true` if successful, `false` otherwise
          */
         bool serialize(const std::string& filename);
 
@@ -260,6 +270,9 @@ namespace hal {
         void dump();
    };
 
+    /**
+     * Contains the conversions between HAL data types and their JSON representation.
+     */
     namespace JsonConverter {
         /**
          * Convert JSON string to key->value map (aka dictionary)

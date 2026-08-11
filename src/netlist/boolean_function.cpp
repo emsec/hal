@@ -1172,11 +1172,11 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
     {
-        /// Helper function to find the replacement for a variable and substitute it with a Boolean function.
-        ///
-        /// @param[in] node - Node.
-        /// @param[in] operands - Operands of node.
-        /// @returns AST replacement.
+        // Helper function to find the replacement for a variable and substitute it with a Boolean function.
+        //
+        // node     - Node.
+        // operands - Operands of node.
+        // returns the AST replacement.
         auto substitute_variable = [substitutions](const auto& node, auto&& operands) -> BooleanFunction {
             if (node.is_variable())
             {
@@ -1438,12 +1438,12 @@ namespace hal
 
     z3::expr BooleanFunction::to_z3(z3::context& context, const std::map<std::string, z3::expr>& var2expr) const
     {
-        /// Helper function to reduce a abstract syntax subtree to z3 expressions
-        ///
-        /// @param[in] node - Boolean function node.
-        /// @param[in] p - Boolean function node parameters.
-        /// @returns (1) status (true on success, false otherwise),
-        ///          (2) SMT-LIB string representation of node and operands.
+        // Helper function to reduce a abstract syntax subtree to z3 expressions
+        //
+        // node - Boolean function node.
+        // p    - Boolean function node parameters.
+        // returns (1) status (true on success, false otherwise),
+        //         (2) SMT-LIB string representation of node and operands.
         auto reduce_to_z3 = [&context, &var2expr](const auto& node, auto&& p) -> std::tuple<bool, z3::expr> {
             if (node.get_arity() != p.size())
             {

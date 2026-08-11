@@ -34,6 +34,9 @@ namespace hal
     {
         namespace evaluation
         {
+            /**
+             * The state that is carried over between the iterations of the evaluation phase of dataflow analysis.
+             */
             struct Context
             {
                 Context() {
@@ -42,6 +45,7 @@ namespace hal
 
                 // u32 phase;
                 // std::shared_ptr<grouping> control_state;
+                /** The merged grouping of every iteration performed so far, in order. */
                 std::vector<std::shared_ptr<Grouping>> partial_results;
             };
 

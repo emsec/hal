@@ -25,6 +25,11 @@ sys.path.insert(0, os.path.abspath('@CMAKE_BINARY_DIR@/lib/hal_plugins'))
 
 os.environ['HAL_BASE_PATH'] = '@CMAKE_BINARY_DIR@'
 
+# Import hal_py before autodoc touches any plugin module. The plugin modules bind classes
+# that derive from hal::BasePluginInterface, and pybind11 only knows that base type once
+# hal_py has been imported -- otherwise autodoc fails with "referenced unknown base type".
+import hal_py  # noqa: E402,F401
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

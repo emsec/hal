@@ -35,6 +35,9 @@ class QStringList;
 
 namespace hal
 {
+    /**
+     * A dialog in which the user picks one entry from a drop-down list.
+     */
     class ComboboxDialog : public QDialog
     {
     public:

@@ -83,7 +83,7 @@ namespace hal
         /**
          * Configures the ModuleWidget's toolbar. Since the ModuleWidget has no toolbar actions, nothing is done here.
          *
-         * @param Toolbar - The toolbar to configure
+         * @param toolbar - The toolbar to configure
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 

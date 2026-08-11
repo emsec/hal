@@ -28,9 +28,9 @@ namespace hal
         )");
 
         py_project_directory.def("get_default_filename", &ProjectDirectory::get_default_filename, py::arg("extension") = std::string(), R"(
-            Returns the default file name for the project directory.
+            Returns the default file name for the project directory, which is a file with the same name as the project directory plus an extension.
 
-            :param str extension: Extension of the default file name. If empty, '.hal' is assumed.
+            :param str extension: Extension of the default file name. If empty, '``.hal``' is assumed.
             :returns: The absolute path to the default file.
             :rtype: str
         )");
@@ -46,7 +46,7 @@ namespace hal
         py_project_directory.def("get_shadow_filename", &ProjectDirectory::get_shadow_filename, py::arg("extension") = std::string(), R"(
             Returns the file name within the autosave (shadow) directory.
 
-            :param str extension: Extension of the shadow file name. If empty, '.hal' is assumed.
+            :param str extension: Extension of the shadow file name. If empty, '``.hal``' is assumed.
             :returns: The absolute path to the shadow file.
             :rtype: str
         )");
@@ -126,8 +126,8 @@ namespace hal
             Serialize the netlist and all dependent data to the project directory.
 
             :param hal_py.Netlist netlist: The netlist.
-            :param bool shadow: Set to True if function is called from autosave procedure, False otherwise. Defaults to False.
-            :returns: True if serialization of the netlist was successful, False otherwise.
+            :param bool shadow: Set to ``True`` if function is called from autosave procedure, ``False`` otherwise. Defaults to ``False``.
+            :returns: ``True`` if serialization of the netlist was successful, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -135,7 +135,7 @@ namespace hal
             Open the project specified by the provided directory path.
 
             :param str path: The path to the project directory. Can be omitted if the path was previously set using `ProjectManager::set_project_directory`.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -159,14 +159,14 @@ namespace hal
             The project directory must not exist.
 
             :param str path: The path to the new project directory.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_project_manager.def("remove_project_directory", &ProjectManager::remove_project_directory, R"(
             Remove the existing project directory and clear the path member variable.
 
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 

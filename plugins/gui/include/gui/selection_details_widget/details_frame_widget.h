@@ -31,6 +31,9 @@
 
 namespace hal
 {
+/**
+ * A collapsible frame of the details view that groups one section of information.
+ */
 class DetailsFrameWidget : public QWidget
 {
     Q_OBJECT
