@@ -46,6 +46,9 @@ namespace hal
 {
     class GatelibraryGraphicsView;
 
+    /**
+     * The main widget of the gate library manager, which lists the gate types of a library and shows the details of the selected one.
+     */
     class GateLibraryManager : public QFrame
     {
         Q_OBJECT

@@ -42,6 +42,9 @@
 
 namespace hal
 {
+    /**
+     * Identifies word-level operations such as adders, multipliers, and comparators within a gate-level netlist.
+     */
     namespace module_identification
     {
         /**

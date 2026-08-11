@@ -4,7 +4,9 @@ namespace hal
 {
     void plugin_manager_init(py::module& m)
     {
-        auto py_plugin_manager = m.def_submodule("plugin_manager");
+        auto py_plugin_manager = m.def_submodule("plugin_manager", R"(
+            The plugin manager takes care of loading and unloading plugins at runtime.
+    )");
 
         py_plugin_manager.def("get_plugin_names", &plugin_manager::get_plugin_names, R"(
             Get the names of all loaded plugins.
@@ -14,12 +16,11 @@ namespace hal
         )");
 
         py_plugin_manager.def("load_all_plugins", &plugin_manager::load_all_plugins, py::arg("directory_names") = std::vector<std::filesystem::path>(), R"(
-            Load all plugins in the specified directories. 
-            If directory is empty, the default directories will be searched.
+            Load all plugins in the specified directories.
+            If ``directory_names`` is empty, the default directories will be searched.
 
-            :param directory_names: A list of directory paths.
-            :type directory_names: pathlib.Path
-            :returns: True on success, false otherwise.
+            :param list[pathlib.Path] directory_names: A list of directory paths.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -27,16 +28,15 @@ namespace hal
             Load a single plugin by specifying its name and file path.
 
             :param str plugin_name: The desired name that is unique in the framework.
-            :param file_path: The path to the plugin file.
-            :type file_path: pathlib.Path
-            :returns: True on success, false otherwise.
+            :param pathlib.Path file_path: The path to the plugin file.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_plugin_manager.def("unload_all_plugins", &plugin_manager::unload_all_plugins, R"(
             Releases all plugins and their associated resources.
 
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -44,7 +44,7 @@ namespace hal
             Releases a single plugin and its associated ressources.
 
             :param str plugin_name: The name of the plugin to unload.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 

@@ -72,7 +72,7 @@ namespace hal
          * Does not check netlist IDs.
          *
          * @param[in] other - The netlist to compare against.
-         * @returns True if both netlists are equal, false otherwise.
+         * @returns `true` if both netlists are equal, `false` otherwise.
          */
         bool operator==(const Netlist& other) const;
 
@@ -81,7 +81,7 @@ namespace hal
          * Does not check netlist IDs.
          *
          * @param[in] other - The netlist to compare against.
-         * @returns True if both netlists are unequal, false otherwise.
+         * @returns `true` if both netlists are unequal, `false` otherwise.
          */
         bool operator!=(const Netlist& other) const;
 
@@ -178,7 +178,7 @@ namespace hal
          * @param[in] name - The name of the gate.
          * @param[in] x - The x-coordinate of the gate.
          * @param[in] y - The y-coordinate of the gate.
-         * @returns The new gate on success, nullptr otherwise.
+         * @returns The new gate on success, `nullptr` otherwise.
          */
         Gate* create_gate(const u32 gate_id, GateType* gate_type, const std::string& name = "", i32 x = -1, i32 y = -1);
 
@@ -190,7 +190,7 @@ namespace hal
          * @param[in] name - The name of the gate.
          * @param[in] x - The x-coordinate of the gate.
          * @param[in] y - The y-coordinate of the gate.
-         * @returns The new gate on success, nullptr otherwise.
+         * @returns The new gate on success, `nullptr` otherwise.
          */
         Gate* create_gate(GateType* gate_type, const std::string& name = "", i32 x = -1, i32 y = -1);
 
@@ -198,7 +198,7 @@ namespace hal
          * Remove a gate from the netlist.
          *
          * @param[in] gate - The gate.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_gate(Gate* gate);
 
@@ -206,7 +206,7 @@ namespace hal
          * Check whether the gate is registered in the netlist.
          *
          * @param[in] gate - The gate to check.
-         * @returns True if the gate is in the netlist, false otherwise.
+         * @returns `true` if the gate is in the netlist, `false` otherwise.
          */
         bool is_gate_in_netlist(const Gate* gate) const;
 
@@ -214,7 +214,7 @@ namespace hal
          * Get the gate specified by the given ID.
          *
          * @param[in] gate_id - The unique ID of the gate.
-         * @returns The gate on success, nullptr otherwise.
+         * @returns The gate on success, `nullptr` otherwise.
          */
         Gate* get_gate_by_id(const u32 gate_id) const;
 
@@ -238,7 +238,7 @@ namespace hal
          * Mark a gate as a global VCC gate.
          *
          * @param[in] gate - The gate.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_vcc_gate(Gate* gate);
 
@@ -246,7 +246,7 @@ namespace hal
          * Mark a gate as a global GND gate.
          *
          * @param[in] gate - The gate.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_gnd_gate(Gate* gate);
 
@@ -254,7 +254,7 @@ namespace hal
          * Unmark a global VCC gate.
          *
          * @param[in] gate - The gate.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_vcc_gate(Gate* gate);
 
@@ -262,7 +262,7 @@ namespace hal
          * Unmark a global GND gate.
          *
          * @param[in] gate - The gate.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_gnd_gate(Gate* gate);
 
@@ -270,7 +270,7 @@ namespace hal
          * Check whether a gate is a global VCC gate.
          *
          * @param[in] gate - The gate to check.
-         * @returns True if the gate is a global VCC gate, false otherwise.
+         * @returns `true` if the gate is a global VCC gate, `false` otherwise.
          */
         bool is_vcc_gate(const Gate* gate) const;
 
@@ -278,7 +278,7 @@ namespace hal
          * Check whether a gate is a global GND gate.
          *
          * @param[in] gate - The gate to check.
-         * @returns True if the gate is a global GND gate, false otherwise.
+         * @returns `true` if the gate is a global GND gate, `false` otherwise.
          */
         bool is_gnd_gate(const Gate* gate) const;
 
@@ -315,7 +315,7 @@ namespace hal
          *
          * @param[in] net_id - The unique ID of the net.
          * @param[in] name - The name of the net.
-         * @returns The new net on success, nullptr otherwise.
+         * @returns The new net on success, `nullptr` otherwise.
          */
         Net* create_net(const u32 net_id, const std::string& name);
 
@@ -324,7 +324,7 @@ namespace hal
          * The ID of the net is set automatically.
          *
          * @param[in] name - The name of the net.
-         * @returns The new net on success, nullptr otherwise.
+         * @returns The new net on success, `nullptr` otherwise.
          */
         Net* create_net(const std::string& name);
 
@@ -332,7 +332,7 @@ namespace hal
          * Remove a net from the netlist.
          *
          * @param[in] net - The net.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_net(Net* net);
 
@@ -340,7 +340,7 @@ namespace hal
          * Check whether the net is registered in the netlist.
          *
          * @param[in] net - The net to check.
-         * @returns True if the net is in the netlist, false otherwise.
+         * @returns `true` if the net is in the netlist, `false` otherwise.
          */
         bool is_net_in_netlist(const Net* net) const;
 
@@ -348,7 +348,7 @@ namespace hal
          * Get the net specified by the given ID.
          *
          * @param[in] net_id - The unique ID of the net.
-         * @returns The net on success, nullptr otherwise.
+         * @returns The net on success, `nullptr` otherwise.
          */
         Net* get_net_by_id(u32 net_id) const;
 
@@ -372,7 +372,7 @@ namespace hal
          * Mark a net as a global input net.
          *
          * @param[in] net - The net.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_global_input_net(Net* net);
 
@@ -380,7 +380,7 @@ namespace hal
          * Mark a net as a global output net.
          *
          * @param[in] net - The net.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_global_output_net(Net* net);
 
@@ -388,7 +388,7 @@ namespace hal
          * Unmark a global input net.
          *
          * @param[in] net - The net.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_global_input_net(Net* net);
 
@@ -396,7 +396,7 @@ namespace hal
          * Unmark a global output net.
          *
          * @param[in] net - The net.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_global_output_net(Net* net);
 
@@ -404,7 +404,7 @@ namespace hal
          * Checks whether a net is a global input net.
          *
          * @param[in] net - The net to check.
-         * @returns True if the net is a global input net, false otherwise.
+         * @returns `true` if the net is a global input net, `false` otherwise.
          */
         bool is_global_input_net(const Net* net) const;
 
@@ -412,7 +412,7 @@ namespace hal
          * Checks whether a net is a global output net.
          *
          * @param[in] net - The net to check.
-         * @returns True if the net is a global output net, false otherwise.
+         * @returns `true` if the net is a global output net, `false` otherwise.
          */
         bool is_global_output_net(const Net* net) const;
 
@@ -433,7 +433,7 @@ namespace hal
         /**
          * Get all GND nets in the netlist.
          * 
-         * @returns A vector nets.
+         * @returns A vector of nets.
          */
         std::vector<Net*> get_gnd_nets() const;
 
@@ -473,7 +473,7 @@ namespace hal
          * @param[in] name - The name of the module.
          * @param[in] parent - The parent module.
          * @param[in] gates - Gates to assign to the new module.
-         * @returns The new module on success, nullptr otherwise.
+         * @returns The new module on success, `nullptr` otherwise.
          */
         Module* create_module(const u32 module_id, const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
 
@@ -484,7 +484,7 @@ namespace hal
          * @param[in] name - The name of the module.
          * @param[in] parent - The parent module.
          * @param[in] gates - Gates to assign to the new module.
-         * @returns The new module on success, nullptr otherwise.
+         * @returns The new module on success, `nullptr` otherwise.
          */
         Module* create_module(const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
 
@@ -493,7 +493,7 @@ namespace hal
          * Submodules, gates and nets under this module will be moved to the parent of this module.
          *
          * @param[in] module - The module.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_module(Module* module);
 
@@ -501,7 +501,7 @@ namespace hal
          * Check whether the module is registered in the netlist.
          *
          * @param[in] module - The module to check.
-         * @returns True if the module is in the netlist, false otherwise.
+         * @returns `true` if the module is in the netlist, `false` otherwise.
          */
         bool is_module_in_netlist(const Module* module) const;
 
@@ -509,7 +509,7 @@ namespace hal
          * Get the module specified by the given ID.
          *
          * @param[in] module_id - The unique ID of the module.
-         * @returns The module on success, nullptr otherwise.
+         * @returns The module on success, `nullptr` otherwise.
          */
         Module* get_module_by_id(u32 module_id) const;
 
@@ -555,7 +555,7 @@ namespace hal
          *
          * @param[in] grouping_id - The unique ID of the grouping.
          * @param[in] name - The name of the grouping.
-         * @returns The new grouping on success, nullptr otherwise.
+         * @returns The new grouping on success, `nullptr` otherwise.
          */
         Grouping* create_grouping(const u32 grouping_id, const std::string& name = "");
 
@@ -564,7 +564,7 @@ namespace hal
          * The ID of the grouping is set automatically.
          *
          * @param[in] name - The name of the grouping.
-         * @returns The new grouping on success, nullptr otherwise.
+         * @returns The new grouping on success, `nullptr` otherwise.
          */
         Grouping* create_grouping(const std::string& name = "");
 
@@ -572,7 +572,7 @@ namespace hal
          * Remove a grouping from the netlist.
          *
          * @param[in] grouping - The grouping.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_grouping(Grouping* grouping);
 
@@ -580,7 +580,7 @@ namespace hal
          * Check whether the grouping is registered in the netlist.
          *
          * @param[in] grouping - The grouping to check.
-         * @returns True if the grouping is in the netlist, false otherwise.
+         * @returns `true` if the grouping is in the netlist, `false` otherwise.
          */
         bool is_grouping_in_netlist(const Grouping* grouping) const;
 
@@ -588,7 +588,7 @@ namespace hal
          * Get the grouping specified by the given ID.
          *
          * @param[in] grouping_id - The unique ID of the grouping.
-         * @returns The grouping on success, nullptr otherwise.
+         * @returns The grouping on success, `nullptr` otherwise.
          */
         Grouping* get_grouping_by_id(u32 grouping_id) const;
 
@@ -776,7 +776,7 @@ namespace hal
         std::set<u32> get_free_grouping_ids() const;
 
         /**
-         * Get a set of all grouping IDs that have previously been used but been freed ever since.
+         * Set the set of all grouping IDs that have previously been used but been freed ever since.
          * 
          * @param[in] ids - All freed grouping ids.
          */
@@ -807,7 +807,7 @@ namespace hal
          * 
          * @param[in] data_category - The data category.
          * @param[in] data_identifiers - The data identifiers for the x- and y-coordinates.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 

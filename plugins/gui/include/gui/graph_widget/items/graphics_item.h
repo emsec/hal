@@ -82,7 +82,7 @@ namespace hal
         /**
          * Highlights or normalizes(removes highlight) this GraphicsItem.
          *
-         * @param hl - <b>true</b> to highlight the GraphicsItem. <b>false</b> to normalize the GraphicsItem.
+         * @param hl - `true` to highlight the GraphicsItem. `false` to normalize the GraphicsItem.
          */
         void setHightlight(bool hl);
 
@@ -134,7 +134,7 @@ namespace hal
         ItemType mItemType; // USE QT ITEM TYPE SYSTEM INSTEAD ???
 
         /**
-         * <b>true</b> if the GraphicsItem is highlighted.
+         * `true` if the GraphicsItem is highlighted.
          */
         bool mHighlight;  // paint with hightlight color
 

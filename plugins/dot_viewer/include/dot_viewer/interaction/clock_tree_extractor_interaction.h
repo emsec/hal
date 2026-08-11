@@ -31,30 +31,81 @@
 #include <QHash>
 
 namespace hal {
+    /**
+     * Adds the clock tree extractor actions to the context menu of the nodes and edges of a displayed DOT graph.
+     */
     class ClockTreeExtractorInteraction : public QGVInteraction {
         Q_OBJECT
     public:
+        /**
+         * Construct the interaction for the given scene.
+         *
+         * @param[in] parent - The scene that holds the displayed graph.
+         */
         ClockTreeExtractorInteraction(QGVScene* parent);
 
+        /**
+         * Attach the interaction to a node of the graph, which makes the gate or net it represents selectable.
+         *
+         * @param[in] node - The node to attach to.
+         */
         void registerNode(QGVNode* node) override;
+
+        /**
+         * Attach the interaction to an edge of the graph, which makes the connection it represents selectable.
+         *
+         * @param[in] scene - The edge to attach to.
+         */
         void registerEdge(QGVEdge* scene) override;
 
     private Q_SLOTS:
+        /**
+         * Highlight the graph nodes that correspond to the netlist elements selected in HAL.
+         *
+         * @param[in] sender - The object that changed the selection.
+         */
         void handleHALSelectionChanged(void* sender);
+
+        /**
+         * Select the netlist elements that correspond to the graph nodes selected in the scene.
+         */
         void handleQGVSelectionChanged();
 
     private:
+        /** A map from each gate to the graph node that represents it. */
         QHash<u32, QGVNode*> mGateHash;
+
+        /** A map from each graph node to the gate that it represents. */
         QHash<QGVNode*, u32> mNodeHash;
+
+        /** A map from each net to the graph node that represents it. */
         QHash<u32, QGVNode*> mNetHash;
+
+        /** A map from each graph node to the global input net that it represents. */
         QHash<QGVNode*, u32> mGlobalInputHash;
+
+        /** The scene that holds the displayed graph. */
         QGVScene* mScene;
     };
 
+    /**
+     * Create the clock tree extractor interaction for the given scene.
+     *
+     * @param[in] parent - The scene that holds the displayed graph.
+     * @returns The created interaction.
+     */
     QGVInteraction* constructClockTreeExtractorInteraction(QGVScene* parent);
+    /**
+     * Registers the clock tree extractor interaction with the DOT viewer on program startup.
+     */
     class ClockTreeExtractorInteractionRegistration {
+        /** The single instance whose construction performs the registration. */
         static ClockTreeExtractorInteractionRegistration sRegistration;
+
     public:
+        /**
+         * Register the clock tree extractor interaction with the DOT viewer.
+         */
         ClockTreeExtractorInteractionRegistration();
     };
 

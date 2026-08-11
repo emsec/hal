@@ -78,7 +78,7 @@ namespace hal
          * 
          * @param[in] netlist - The netlist.
          * @param[in] args - The command line options.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool write(Netlist* netlist, const ProgramArguments& args);
 
@@ -87,7 +87,7 @@ namespace hal
          * 
          * @param[in] netlist - The netlist.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool write(Netlist* netlist, const std::filesystem::path& file_path);
 

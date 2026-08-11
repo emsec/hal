@@ -37,11 +37,19 @@ class QGraphicsLineItem;
 
 QPointF scenePoint(const QPoint& p);
 
+/// @cond DOXYGEN_SHOULD_SKIP_THIS
+// Note: hidden from doxygen because it collides with hal::u32 from "hal_core/defines.h".
+// Doxygen has no real name lookup and would resolve every `u32` in the project to
+// whichever of the two typedefs it saw last, breaking overload matching across the
+// whole netlist API.
 typedef quint32 u32;
+/// @endcond
 
 namespace hal {
 
     /**
+     * One of the four directions in which a wire can leave a grid point.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutDirection
@@ -70,6 +78,8 @@ namespace hal {
     };
 
     /**
+     * A point of the layout grid that wires are routed between.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutPoint : public QPoint
@@ -89,6 +99,8 @@ namespace hal {
     };
 
     /**
+     * A single wire segment, i.e., a grid point together with the direction the segment extends in.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutWire
@@ -110,6 +122,8 @@ namespace hal {
     };
 
     /**
+     * The wire segments that connect two grid points, together with the way points they pass through.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutConnection : public QList<NetLayoutWire>
@@ -127,6 +141,8 @@ namespace hal {
     };
 
     /**
+     * The routing cost of one connection, used to route the more constrained nets first.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutMetric
@@ -145,6 +161,8 @@ namespace hal {
     };
 
     /**
+     * Computes the connections between the sources and the destinations of a net.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutConnectionFactory
@@ -161,6 +179,8 @@ namespace hal {
     };
 
     /**
+     * All connections of a net ordered by their routing cost.
+     *
      * @ingroup graph-layouter
      */
     class NetLayoutConnectionMetric : public QMap<NetLayoutMetric,NetLayoutConnection*>

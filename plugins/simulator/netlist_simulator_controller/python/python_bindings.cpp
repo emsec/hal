@@ -96,7 +96,7 @@ namespace hal
 
                 :param hal_py.Net clock_net: The net that carries the clock signal.
                 :param int frequency: The clock frequency in hertz.
-                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
+                :param bool start_at_zero: Initial clock state is 0 if ``True``, 1 otherwise.
             )")
 
             .def("add_clock_period", &NetlistSimulatorController::add_clock_period, py::arg("clock_net"), py::arg("period"), py::arg("start_at_zero") = true, py::arg("duration") = 0, R"(
@@ -104,7 +104,7 @@ namespace hal
 
                 :param hal_py.Net clock_net: The net that carries the clock signal.
                 :param int period: The clock period from rising edge to rising edge in picoseconds.
-                :param bool start_at_zero: Initial clock state is 0 if true, 1 otherwise.
+                :param bool start_at_zero: Initial clock state is 0 if ``True``, 1 otherwise.
                 :param int duration: Optional max time limit when showing clock in VCD viewer or editor
             )")
 
@@ -289,7 +289,7 @@ namespace hal
             .def("get_results", &NetlistSimulatorController::get_results, R"(
                 Get simulated data from engine, either from shared memory or from VCD file
 
-                :returns: True on success, False otherwise
+                :returns: ``True`` on success, ``False`` otherwise
                 :rtype: bool
              )")
 
@@ -304,7 +304,7 @@ namespace hal
             .def("run_simulation", &NetlistSimulatorController::run_simulation, R"(
                   Run the simulation.
 
-                  :returns: True if all simulation steps could be processed successfully, False otherwise
+                  :returns: ``True`` if all simulation steps could be processed successfully, ``False`` otherwise
                   :rtype: bool
              )")
 
@@ -378,7 +378,7 @@ namespace hal
                 :param int start_time: Start of the timeframe to write to the file (in picoseconds).
                 :param int end_time: End of the timeframe to write to the file (in picoseconds).
                 :param set[hal_py.Net] nets: Nets to include in the VCD file.
-                :returns: True if the file gerneration was successful, false otherwise.
+                :returns: ``True`` if the file gerneration was successful, ``False`` otherwise.
                 :rtype: bool
             )")
 
@@ -451,14 +451,14 @@ namespace hal
             .def(py::self == py::self, R"(
                 Tests whether two events are equal.
 
-                :returns: True when both events are equal, false otherwise.
+                :returns: ``True`` when both events are equal, ``False`` otherwise.
                 :rtype: bool
             )")
 
             .def(py::self < py::self, R"(
                 Tests whether one event happened before the other.
          
-                :returns: True when this event happened before the other, false otherwise.
+                :returns: ``True`` when this event happened before the other, ``False`` otherwise.
                 :rtype: bool
             )");
 

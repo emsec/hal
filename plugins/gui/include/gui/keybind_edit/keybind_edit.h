@@ -62,7 +62,7 @@ namespace hal
 
         /**
          * Sets the hasGrab variable that should be set when the widget has the
-         * keyboard focus (is set to true in the focusIn event and to false in
+         * keyboard focus (is set to `true` in the focusIn event and to `false` in
          * the focusOut event).
          *
          * @param isgrab - The value to set hasGrab state.
@@ -101,7 +101,7 @@ namespace hal
          * in the global keymap or the existing sequence belongs the settingsitem of this
          * widget.
          *
-         * @return True if the sequence is valid. False otherwise.
+         * @return `true` if the sequence is valid. `false` otherwise.
          */
         bool doValidate();
 

@@ -62,7 +62,7 @@ namespace hal
         /**
          * Checks if the new selection/focus of this action differs from the current selection/focus.
          *
-         * @returns true iff the selection/focus differs from the current one.
+         * @returns `true` iff the selection/focus differs from the current one, `false` otherwise.
          */
         bool hasModifications() const;
         void setObject(const UserActionObject &obj) override;

@@ -147,15 +147,15 @@ namespace hal
         bool hidden();
 
         /**
-         * Get the available status of the dockbutton. This status is set to false when the dockbutton is dragged.
+         * Get the available status of the dockbutton. This status is set to `false` when the dockbutton is dragged.
          *
          * @return The available status of the dockbutton.
          */
         bool available();
 
         /**
-         * Sets the available status of the button. This status is to be set to false at the start of the buttondragging and
-         * set to true at the end of it.
+         * Sets the available status of the button. This status is to be set to `false` at the start of the buttondragging and
+         * set to `true` at the end of it.
          *
          * @param available - The new available status of the widget.
          */
@@ -184,7 +184,7 @@ namespace hal
 
         /**
          * The main purpose of this function is to be connected to the buttons's own clicked signal.
-         * When the button is checked and therefore mChecked = true (remember, it is a toolbutton), the
+         * When the button is checked and therefore mChecked = `true` (remember, it is a toolbutton), the
          * associated widget is opened and therefore visible. Otherwise it is closed.
          *
          * @param mChecked - The boolean wether the dockbutton is checked or not checked.

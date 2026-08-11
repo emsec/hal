@@ -53,6 +53,9 @@ namespace hal {
 class Netlist;
 
 /**
+ * Drives a single simulation run from gate selection over input generation to the results.
+ * It is the central entry point for simulation, independent of the engine that eventually performs it.
+ *
  * @ingroup netlist_writer
  */
 class NETLIST_API NetlistSimulatorController : public QObject {
@@ -74,6 +77,9 @@ public:
         NoFilter
     };
 
+    /**
+     * The header of one column of the input editor, i.e., a named group of nets that are stimulated together.
+     */
     struct InputColumnHeader
     {
         std::vector<const Net*> nets;
@@ -91,13 +97,13 @@ public:
      * Call to one of the registered engine factories to create a new engine.
      * Controller will take ownership for new engine.
      * @param[in] name name of engine factory (thus name of the engine)
-     * @return Pointer to engine if successfully created, nullptr otherwise
+     * @return Pointer to engine if successfully created, `nullptr` otherwise
      */
     SimulationEngine* create_simulation_engine(const std::string& name);
 
     /**
      * Getter for simulation engine (if any)
-     * @return Pointer to engine or nullptr
+     * @return Pointer to engine or `nullptr`
      */
     SimulationEngine* get_simulation_engine() const;
 
@@ -107,7 +113,7 @@ public:
      *
      * @param[in] clock_net - The net that carries the clock signal.
      * @param[in] frequency - The clock frequency in hertz.
-     * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+     * @param[in] start_at_zero - Initial clock state is 0 if `true`, 1 otherwise.
      */
     void add_clock_frequency(const Net* clock_net, u64 frequency, bool start_at_zero = true);
 
@@ -117,7 +123,7 @@ public:
      *
      * @param[in] clock_net - The net that carries the clock signal.
      * @param[in] period - The clock period from rising edge to rising edge in picoseconds.
-     * @param[in] start_at_zero - Initial clock state is 0 if true, 1 otherwise.
+     * @param[in] start_at_zero - Initial clock state is 0 if `true`, 1 otherwise.
      * @param[in] duration - Optional max time limit when showing clock in VCD viewer or editor
      */
     void add_clock_period(const Net* clock_net, u64 period, bool start_at_zero = true, u64 duration=0);
@@ -152,6 +158,7 @@ public:
     /**
      * Create a waveform group from the nets of a given gate pin group.
      *
+     * @param gate The gate the pin group belongs to.
      * @param pin_group The pin_group to create waveform group from.
      * @return ID of new waveform group
      */
@@ -176,7 +183,7 @@ public:
     /**
      * Add boolean waveform based on list of accepted combinations
      * @param input_waves List of input waveforms
-     * @param accept_combination List of accepted combinations. Each combination is coded as binary integer value which is matched bitwise with value of input waveform.
+     * @param accepted_combination List of accepted combinations. Each combination is coded as binary integer value which is matched bitwise with value of input waveform.
      * @return ID of new boolean waveform
      */
     u32 add_boolean_accept_list_waveform(const std::vector<WaveData*>& input_waves, const std::vector<int>& accepted_combination);
@@ -214,7 +221,7 @@ public:
     /**
      * Load waveform signal groups into container either for inputs or for everything except inputs
      *
-     * @param inputs[in] - If true only waveform groups providing simulation input are loaded. Otherwise these groups are omitted.
+     * @param[in] inputs - If `true` only waveform groups providing simulation input are loaded. Otherwise these groups are omitted.
      */
     void load_waveform_groups(bool inputs);
 
@@ -340,7 +347,7 @@ public:
 
     /**
      * Get simulated data from engine, either from shared memory or from VCD file
-     * @return true on success, false otherwise
+     * @return `true` on success, `false` otherwise
      */
     bool get_results();
 
@@ -352,7 +359,7 @@ public:
 
     /**
      * run simulation
-     * @return true on success, false otherwise
+     * @return `true` on success, `false` otherwise
      */
     bool run_simulation();
 
@@ -400,7 +407,7 @@ public:
      * @param[in] start_time - Start of the timeframe to write to the file (in picoseconds).
      * @param[in] end_time - End of the timeframe to write to the file (in picoseconds).
      * @param[in] nets - Nets to include in the VCD file.
-     * @returns True if the file gerneration was successful, false otherwise.
+     * @returns `true` if the file gerneration was successful, `false` otherwise.
      */
     bool generate_vcd(const std::filesystem::path& path, u32 start_time=0, u32 end_time=0, std::set<const Net*> nets = {}) const;
 
@@ -412,7 +419,7 @@ public:
 
     /**
      * Verilator's gmake disallows spaces in directory name. Other tests (e.g. dot) might be added in future.
-     * @return true if directory name is legal, false otherwise
+     * @return `true` if directory name is legal, `false` otherwise
      */
     bool is_legal_directory_name() const;
 
@@ -436,35 +443,35 @@ public:
 
     /**
      * Getter for a single waveform
-     * @param[in] Pointer to net waveform is associated with
+     * @param[in] n - The net the waveform is associated with.
      * @return The waveform data
      */
     WaveData* get_waveform_by_net(const Net* n) const;
 
     /**
      * Rename waveform and emit 'renamed' signal
-     * @param wd[in] Waveform to be renamed
-     * @param name[in] New name for waveform
+     * @param[in] wd - Waveform to be renamed.
+     * @param[in] name - New name for waveform.
      */
     void rename_waveform(WaveData* wd, std::string name);
 
     /**
      * Getter for waveform group
-     * @param id[in] Waveform group id
+     * @param[in] id - Waveform group id.
      * @return The waveform group object
      */
     WaveDataGroup* get_waveform_group_by_id(u32 id) const;
 
     /**
      * Getter for boolean waveform (which is a combination of several other waveform by boolean operation).
-     * @param id[in] Boolean waveform id
+     * @param[in] id - Boolean waveform id.
      * @return The boolean waveform object
      */
     WaveDataBoolean* get_waveform_boolean_by_id(u32 id) const;
 
     /**
      * Getter for trigger time set.
-     * @param id[in] Trigger time id
+     * @param[in] id - Trigger time id.
      * @return The trigger time object which derives from WaveData.
      */
     WaveDataTrigger* get_trigger_time_by_id(u32 id) const;
@@ -484,7 +491,7 @@ public:
 
     /**
      * Controller is in a state that allows import from VCD, CSV, or SALEAE waveform data
-     * @return True if import is allowed, false otherwise.
+     * @return `true` if import is allowed, `false` otherwise.
      */
     bool can_import_data() const;
 
@@ -502,7 +509,7 @@ public:
 
     /**
      * Store significant information into working directory
-     * @return True if JSON file created successfully, false otherwise.
+     * @return `true` if JSON file created successfully, `false` otherwise.
      */
     bool persist() const;
 
@@ -553,6 +560,9 @@ private:
     SimulationLogReceiver* mLogReceiver;
 };
 
+/**
+ * Keeps track of all simulation controllers that currently exist, indexed by their ID.
+ */
 class NetlistSimulatorControllerMap : public QObject {
     Q_OBJECT
 

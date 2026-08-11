@@ -43,6 +43,8 @@ namespace hal
 {
 
     /**
+     * A netlist parser for gate-level Verilog.
+     *
      * @ingroup netlist_parser
      */
     class NETLIST_API VerilogParser : public NetlistParser
@@ -55,7 +57,7 @@ namespace hal
          * Parse a Verilog netlist into an internal intermediate format.
          *
          * @param[in] file_path - Path to the Verilog netlist file.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         Result<std::monostate> parse(const std::filesystem::path& file_path) override;
 
@@ -74,6 +76,9 @@ namespace hal
         using empty_t             = std::monostate;
         using assignment_t        = std::variant<identifier_t, ranged_identifier_t, numeral_t, empty_t>;
 
+        /**
+         * A named value with an associated type, used for the attributes, parameters, and generics of a Verilog design.
+         */
         struct VerilogDataEntry
         {
             std::string m_name;
@@ -81,6 +86,9 @@ namespace hal
             std::string m_value = "";
         };
 
+        /**
+         * The intermediate representation of a Verilog signal, i.e., a wire or a port, including its bit ranges.
+         */
         struct VerilogSignal
         {
             std::string m_name;
@@ -89,6 +97,9 @@ namespace hal
             std::vector<std::string> m_expanded_names;
         };
 
+        /**
+         * The intermediate representation of a port of a Verilog module.
+         */
         struct VerilogPort
         {
             std::string m_identifier;
@@ -98,18 +109,27 @@ namespace hal
             std::vector<std::string> m_expanded_identifiers;
         };
 
+        /**
+         * The signals that are assigned to a single port of a Verilog instance.
+         */
         struct VerilogPortAssignment
         {
             std::optional<std::string> m_port_name;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * A continuous assignment between two sets of Verilog signals.
+         */
         struct VerilogAssignment
         {
             std::vector<assignment_t> m_variable;
             std::vector<assignment_t> m_assignment;
         };
 
+        /**
+         * The intermediate representation of an instantiation of a Verilog module or a gate type.
+         */
         struct VerilogInstance
         {
             std::string m_name;
@@ -121,6 +141,9 @@ namespace hal
             std::vector<std::pair<std::string, std::string>> m_expanded_port_assignments;
         };
 
+        /**
+         * The intermediate representation of a Verilog module, i.e., its ports, signals, assignments, and instances.
+         */
         struct VerilogModule
         {
         public:
@@ -131,7 +154,7 @@ namespace hal
              * Check whether an module is considered smaller than another module.
              *
              * @param[in] other - The module to compare against.
-             * @returns True if the module is smaller than 'other', false otherwise.
+             * @returns `true` if the module is smaller than 'other', `false` otherwise.
              */
             bool operator<(const VerilogModule& other) const
             {

@@ -37,6 +37,9 @@ namespace hal
     class GateLibrary;
 
     /**
+     * The base class for all netlist parsers.
+     * A parser reads a netlist file into an internal intermediate representation and can then instantiate it for a given gate library.
+     *
      * @ingroup netlist_parser
      */
     class NETLIST_API NetlistParser
@@ -49,7 +52,7 @@ namespace hal
          * Parse a netlist into an internal intermediate format.
          *
          * @param[in] file_path - Path to the netlist file.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         virtual Result<std::monostate> parse(const std::filesystem::path& file_path) = 0;
 

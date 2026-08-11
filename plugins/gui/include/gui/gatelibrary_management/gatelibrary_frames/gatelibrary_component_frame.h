@@ -34,6 +34,9 @@
 
 namespace hal
 {
+    /**
+     * The base class for the frames that display one gate type component of the selected gate type.
+     */
     class GatelibraryComponentFrame : public QFrame
     {
         Q_OBJECT

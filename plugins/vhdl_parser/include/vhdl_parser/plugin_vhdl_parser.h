@@ -30,12 +30,18 @@
 
 namespace hal
 {
+    /**
+     * Registers the VHDL netlist parser with HAL's netlist parser manager.
+     */
     class VHDLParserExtension : public FacExtensionInterface
     {
     public:
         VHDLParserExtension();
     };
 
+    /**
+     * The plugin that provides the VHDL netlist parser.
+     */
     class PLUGIN_API VHDLParserPlugin : public BasePluginInterface
     {
         VHDLParserExtension* m_extension;

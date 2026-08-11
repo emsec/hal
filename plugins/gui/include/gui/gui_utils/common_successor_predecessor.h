@@ -34,6 +34,9 @@
 namespace hal {
     class Gate;
 
+    /**
+     * The traversal front of one gate while common successors or predecessors are being searched.
+     */
     class CommonSuccessorPredecessorGateQueue
     {
         int mIndex;
@@ -48,6 +51,9 @@ namespace hal {
         QList<Gate*> waypoints(Gate* g) const;
     };
 
+    /**
+     * Finds the gates that are reachable from all of the given gates within a maximum depth.
+     */
     class CommonSuccessorPredecessor
     {
         bool mForward;

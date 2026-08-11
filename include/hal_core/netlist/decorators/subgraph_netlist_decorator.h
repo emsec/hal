@@ -147,7 +147,7 @@ namespace hal
          * 
          * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const std::vector<const Gate*>& subgraph_gates, const Net* subgraph_output) const;
 
@@ -157,7 +157,7 @@ namespace hal
          * 
          * @param[in] subgraph_gates - The subgraph gates making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) const;
 
@@ -167,7 +167,7 @@ namespace hal
          * 
          * @param[in] subgraph_module - The module making up the subgraph to consider.
          * @param[in] subgraph_output - The subgraph oputput net from which to start the back propagation from.
-         * @return The input nets that would be the input for the subgraph function on success, an error otherwise;
+         * @return The input nets that would be the input for the subgraph function on success, an error otherwise.
          */
         Result<std::set<const Net*>> get_subgraph_function_inputs(const Module* subgraph_module, const Net* subgraph_output) const;
 

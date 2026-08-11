@@ -290,11 +290,12 @@ namespace hal
             R"(
                 Apply manually implemented optimizations to the netlist centered around muxes.
                 Currently implemented optimizations include:
-                 - removing inverters incase there are inverter gates in front and behind every data input and output of the mux
-                 - optimizing and therefore unifying possible inverters preceding the select signals by resynthesizing
 
-                :param halp_py.Netlist nl: The netlist to operate on.
-                :param halp_py.GateLibrary mux_inv_gl: A gate library only containing mux and inverter gates used for resynthesis.
+                - removing inverters in case there are inverter gates in front of and behind every data input and output of the mux
+                - optimizing and therefore unifying possible inverters preceding the select signals by resynthesizing
+
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param hal_py.GateLibrary mux_inv_gl: A gate library only containing mux and inverter gates used for resynthesis.
                 :returns: The difference in the total number of gates caused by these optimizations.
                 :rtype: int or ``None``
             )");
@@ -462,12 +463,12 @@ namespace hal
             py::arg("nl"),
             py::arg("concatenated_pin_groups"),
             R"(
-                Create modules from large gates like RAMs and DSPs with the option to concat multiple gate pin groups to larger consecutive pin groups.
+                Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.
 
-                :param hal_py.Netlist nl: The netlist to operate on. 
-                :param  concatenated_pin_groups: 
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :param dict[str,dict[str,list[str]]] concatenated_pin_groups: A dict from gate type name to a dict from the name of the resulting pin group to the names of the pin groups it is concatenated from.
+                :returns: The created modules on success, an empty list otherwise.
+                :rtype: list[hal_py.Module]
             )");
 
         m.def(
@@ -484,7 +485,15 @@ namespace hal
                     return {};
                 }
             },
-            py::arg("nl"));
+            py::arg("nl"),
+            R"(
+                Create a new net for every unconnected output pin of every gate of the netlist.
+                The new nets are named ``HAL_UNCONNECTED_<net_id>``.
+
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :returns: The created nets on success, an empty list otherwise.
+                :rtype: list[hal_py.Net]
+            )");
 
         m.def(
             "unify_ff_outputs",

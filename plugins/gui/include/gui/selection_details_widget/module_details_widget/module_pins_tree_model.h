@@ -39,6 +39,9 @@ namespace hal
     class Net;
 
 
+    /**
+     * One entry of the module pin tree, i.e., a pin or a pin group of the selected module.
+     */
     class ModulePinsTreeItem : public BaseTreeItem
     {
     public:
@@ -74,7 +77,6 @@ namespace hal
              * Returns the pin-id if the item represents a pin or the pingroup-id
              * if the item represents a pingroup.
              *
-             * @param item - The item.
              * @return The pin- or pingroup-id.
              */
             u32 id() const { return mId; }
@@ -123,10 +125,10 @@ namespace hal
         /**
          * Get the underlying net from an (port) item.
          * If this model does not represent a module or
-         * an invalid (port) item is given a nullptr is returned.
+         * an invalid (port) item is given a `nullptr` is returned.
          *
          * @param item - The (port) item.
-         * @return The net or nullptr.
+         * @return The net or `nullptr`.
          */
         Net* getNetFromItem(ModulePinsTreeItem* item);
 

@@ -4,7 +4,9 @@ namespace hal
 {
     void netlist_factory_init(py::module& m)
     {
-        m.def_submodule("NetlistFactory")
+        m.def_submodule("NetlistFactory", R"(
+            Functions to create a netlist, either empty or by parsing a netlist file.
+    )")
             .def(
                 "create_netlist", [](const GateLibrary* gate_library) { return std::shared_ptr<Netlist>(netlist_factory::create_netlist(gate_library)); }, py::arg("gate_library"), R"(
                 Create a new empty netlist using the specified gate library.
@@ -42,23 +44,23 @@ namespace hal
                 Will either deserialize ``.hal`` file or call parser plugin for other formats.
 
                 :param pathlib.Path netlist_file: Path to the file.
-                :param hal_py.GateLibrary gate_library_file: Path to the gate library file.
+                :param hal_py.GateLibrary gate_library: The gate library.
                 :returns: The netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None
             )")
 
             .def(
                 "load_netlist_from_string",
-                [](const std::string& hdl_string, const std::filesystem::path& gate_library_file) {
-                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist_from_string(hdl_string, gate_library_file));
+                [](const std::string& netlist_string, const std::filesystem::path& gate_library_file) {
+                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist_from_string(netlist_string, gate_library_file));
                 },
-                py::arg("hdl_string"),
+                py::arg("netlist_string"),
                 py::arg("gate_library_file") = "",
                 R"(
                 Create a netlist from the given string. 
                 The string must contain a netlist in HAL-(JSON)-format.
 
-                :param pathlib.Path netlist_file: The string containing the netlist.
+                :param str netlist_string: The string containing the netlist.
                 :param pathlib.Path gate_library_file: Path to the gate library file.
                 :returns: The netlist on success, ``None`` otherwise.
                 :rtype: hal_py.Netlist or None

@@ -127,7 +127,10 @@ ui_*.h
 CMakeLists.txt.user*
 
 Testing
-tools/__pycache__/
+
+# Python bytecode caches (tools/, tests/python_binding/, ...)
+__pycache__/
+*.py[cod]
 
 .envrc
 
@@ -142,3 +145,5 @@ HAL_DEPLOYMENT_KEY
 HAL_GPG_KEY
 changelog
 hal_pass
+
+.claude/

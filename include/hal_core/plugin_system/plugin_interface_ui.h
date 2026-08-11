@@ -46,7 +46,7 @@ namespace hal
          * Generic call to run the interactive UI.
          *
          * @param[in] args - Program options for HAL.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         virtual bool exec(ProgramArguments& args) = 0;
 
@@ -54,7 +54,7 @@ namespace hal
          * Generic call to block layouter.
          *
          * Can be enabled multiple times, but each enable must be match by disable to remove the lock.
-         * @param[in] enable Enable lock on true, disable on false
+         * @param[in] enable Enable lock on `true`, disable on `false`
          */
         virtual void set_layout_locker(bool enable) = 0;
     };

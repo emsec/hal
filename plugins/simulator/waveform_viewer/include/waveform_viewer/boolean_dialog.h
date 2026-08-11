@@ -35,6 +35,9 @@ class QRadioButton;
 
 namespace hal {
 
+    /**
+     * The dialog in which the user enters the Boolean function that a computed waveform is derived from.
+     */
     class BooleanDialog : public QDialog
     {
         Q_OBJECT

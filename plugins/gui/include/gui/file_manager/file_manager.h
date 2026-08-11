@@ -66,7 +66,7 @@ namespace hal
         /**
          * Get the status if a file is currently open or not.
          *
-         * @return True when a file is open.
+         * @return `true` when a file is open, `false` otherwise.
          */
         bool fileOpen() const;
 
@@ -162,7 +162,7 @@ namespace hal
          * Opens the given filename. It handles the initialization and deserialization process of the netlists as well
          * as the shadowfile logic in an automated fashion.
          *
-         * @param fileName - The file to be opened.
+         * @param filename - The file to be opened.
          * @param gatelibraryPath - Path to gate library, auto detection if empty
          */
         bool deprecatedOpenFile(QString filename, QString gatelibraryPath);

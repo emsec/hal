@@ -90,7 +90,7 @@ namespace hal
             /** @brief No operation. */
             none,
 
-            /** @brief´Mixed operation, for merged `VerifiedCandidates` that contain multiple candidate types. */
+            /** @brief Mixed operation, for merged `VerifiedCandidates` that contain multiple candidate types. */
             mixed,
         };
 

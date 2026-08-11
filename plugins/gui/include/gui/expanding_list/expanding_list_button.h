@@ -99,14 +99,14 @@ namespace hal
         /**
          * Get the button's hover state.
          *
-         * @return True if the mouse is currently over the button. False otherwise.
+         * @return `true` if the mouse is currently over the button. `false` otherwise.
          */
         bool hover() const;
 
         /**
          * Get the button's selected state.
          *
-         * @return True if the button is currently selected. False otherwise.
+         * @return `true` if the button is currently selected. `false` otherwise.
          */
         bool selected() const;
 
@@ -126,7 +126,7 @@ namespace hal
         /**
          * Set or unset the button's selected state.
          *
-         * @param selected - True to set the state, false to unset the state.
+         * @param selected - `true` to set the state, `false` to unset the state.
          */
         void setSelected(bool selected);
 

@@ -30,6 +30,8 @@
 
 namespace hal {
     /**
+     * Several user actions that are executed and undone together as if they were one.
+     *
      * @ingroup user_action
      */
     class UserActionCompound : public UserAction
@@ -49,6 +51,8 @@ namespace hal {
     };
 
     /**
+     * Creates compound user actions when a stored action history is replayed.
+     *
      * @ingroup user_action
      */
     class UserActionCompoundFactory : public UserActionFactory

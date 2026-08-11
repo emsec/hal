@@ -62,7 +62,7 @@ namespace hal
          * Does not check for connected nets or containing module.
          *
          * @param[in] other - The gate to compare against.
-         * @returns True if both gates are equal, false otherwise.
+         * @returns `true` if both gates are equal, `false` otherwise.
          */
         bool operator==(const Gate& other) const;
 
@@ -71,7 +71,7 @@ namespace hal
          * Does not check for connected nets or containing module.
          *
          * @param[in] other - The gate to compare against.
-         * @returns True if both gates are unequal, false otherwise.
+         * @returns `true` if both gates are unequal, `false` otherwise.
          */
         bool operator!=(const Gate& other) const;
 
@@ -120,7 +120,7 @@ namespace hal
         /**
          * Check whether the gate's location in the layout is available.
          *
-         * @returns True if valid location data is available, false otherwise.
+         * @returns `true` if valid location data is available, `false` otherwise.
          */
         bool has_location() const;
 
@@ -182,7 +182,7 @@ namespace hal
 
         /**
          * Get all modules that contain this gate, either directly or as parent of another module.
-         * If `recursive` is set to true, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.<br>
+         * If `recursive` is set to `true`, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
@@ -193,7 +193,7 @@ namespace hal
 
         /**
          * Gets the grouping in which this gate is contained.<br>
-         * If no grouping contains this gate, a nullptr is returned.
+         * If no grouping contains this gate, a `nullptr` is returned.
          *
          * @returns The grouping.
          */
@@ -246,42 +246,42 @@ namespace hal
         /**
          * Mark this gate as a global vcc gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_vcc_gate();
 
         /**
          * Mark this gate as a global gnd gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool mark_gnd_gate();
 
         /**
          * Unmark this gate as a global vcc gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_vcc_gate();
 
         /**
          * Unmark this gate as a global gnd gate.
          *
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool unmark_gnd_gate();
 
         /**
          * Checks whether this gate is a global vcc gate.
          *
-         * @returns True if the gate is a global vcc gate.
+         * @returns `true` if the gate is a global vcc gate, `false` otherwise.
          */
         bool is_vcc_gate() const;
 
         /**
          * Checks whether this gate is a global gnd gate.
          *
-         * @returns True if the gate is a global gnd gate.
+         * @returns `true` if the gate is a global gnd gate, `false` otherwise.
          */
         bool is_gnd_gate() const;
 
@@ -317,7 +317,7 @@ namespace hal
          * Get the fan-in net corresponding to the specified input pin.
          *
          * @param[in] pin - The input pin.
-         * @returns The fan-in net on success, a nullptr otherwise.
+         * @returns The fan-in net on success, a `nullptr` otherwise.
          */
         Net* get_fan_in_net(const GatePin* pin) const;
 
@@ -397,7 +397,7 @@ namespace hal
          * Get the fan-out net corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
-         * @returns The fan-out net on success, a nullptr otherwise.
+         * @returns The fan-out net on success, a `nullptr` otherwise.
          */
         Net* get_fan_out_net(const GatePin* pin) const;
 
@@ -434,7 +434,7 @@ namespace hal
         Endpoint* get_fan_out_endpoint(const std::string& pin_name) const;
 
         /**
-         * Get the fan-out endpoint corresponding to the specified input pin.
+         * Get the fan-out endpoint corresponding to the specified output pin.
          *
          * @param[in] pin - The output pin.
          * @returns The endpoint on success, a `nullptr` otherwise.

@@ -36,6 +36,9 @@ namespace hal
 {
     class LayoutLocker;
 
+    /**
+     * The command line interface of the GUI plugin.
+     */
     class CliExtensionsGui : public CliExtensionInterface
     {
     public:
@@ -94,7 +97,7 @@ namespace hal
          * Executes the gui plugin.
          *
          * @param args - The given program arguments.
-         * @return True on success, False otherwise.
+         * @return `true` on success, `false` otherwise.
          */
         bool exec(ProgramArguments& args) override;
 
@@ -102,7 +105,7 @@ namespace hal
          * Call to block layouter.
          *
          * Can be enabled multiple times, but each enable must be match by disable to remove the lock.
-         * @param[in] enable Enable lock on true, disable on false
+         * @param[in] enable Enable lock on `true`, disable on `false`
          */
         void set_layout_locker(bool enable) override;
     };

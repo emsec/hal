@@ -30,6 +30,9 @@
 #include <QMap>
 
 namespace hal {
+    /**
+     * The persistent settings of the simulator, e.g., the waveform colors and the engine properties.
+     */
     class SimulationSettings : public QSettings
     {
         Q_OBJECT

@@ -32,6 +32,8 @@
 namespace hal
 {
     /**
+     * Helper functions of the GUI, e.g., natural sorting of strings and the styling of SVG icons.
+     *
      * @ingroup gui
      */
     namespace gui_utility
@@ -70,7 +72,7 @@ namespace hal
          *
          * @param a - First string to compare.
          * @param b - Second string to compare.
-         * @return True if a < b, false otherwise.
+         * @return `true` if a < b, `false` otherwise.
          */
         bool naturalOrderCompare(const QString& a, const QString& b);
 
@@ -79,7 +81,7 @@ namespace hal
          *
          * @param a - First string to compare
          * @param b - Second string to compare
-         * @return True if a < b, false otherwise.
+         * @return `true` if a < b, `false` otherwise.
          */
         bool lexicalOrderCompare(const QString& a, const QString& b);
 
@@ -89,7 +91,7 @@ namespace hal
          *
          * @param a - The first string to compare.
          * @param b - The second string to compare.
-         * @return True if a < b, false otherwise.
+         * @return `true` if a < b, `false` otherwise.
          */
         bool numeratedOrderCompare(const QString& a, const QString& b);
 
@@ -109,7 +111,7 @@ namespace hal
          * @param mechanism - The criteria by which the 2 strings should be compared with.
          * @param a - The first string to compare.
          * @param b - The second string to compare.
-         * @return True if a < b, false otherwise.
+         * @return `true` if a < b, `false` otherwise.
          */
         int compare(mSortMechanism mechanism, QString a, QString b);
 

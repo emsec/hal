@@ -33,8 +33,9 @@
 namespace hal
 {
     /**
-     * Container storing the string description of an enum.
-     * Must be declared for every enum to be supported.
+     * Holds the string representations of the values of an enum type.
+     * Specialize this template for an enum to make it usable with `enum_to_string` and `enum_from_string`.
+     * Must be declared for every enum.
      */
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     struct EnumStrings
@@ -108,7 +109,7 @@ namespace hal
      * Checks whether a string has a valid translation into the enum type T.
      *
      * @param[in] str - The string.
-     * @returns True if string has valid translation, false otherwise.
+     * @returns `true` if string has valid translation, `false` otherwise.
      */
     template<typename T, typename = typename std::enable_if<std::is_enum<T>::value, T>::type>
     bool is_valid_enum(const std::string& str) noexcept

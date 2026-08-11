@@ -49,10 +49,10 @@ namespace hal
         explicit Splitter(Qt::Orientation orientation, QWidget* parent = nullptr);
 
         /**
-         * Returns true if the Splitter is currently unused, i.e. if all Widget%s of the Splitter are hidden. Returns
-         * false otherwise.
+         * Returns `true` if the Splitter is currently unused, i.e. if all Widget%s of the Splitter are hidden. Returns
+         * `false` otherwise.
          *
-         * @returns <b>true</b> iff the Splitter is unused.
+         * @returns `true` iff the Splitter is unused, `false` otherwise.
          */
         bool unused();
     };

@@ -30,6 +30,9 @@
 namespace hal
 {
     class GraphContext;
+    /**
+     * Stores the graph views of a project so that they can be restored when the project is opened again.
+     */
     class GraphContextSerializer : public ProjectSerializer
     {
         GraphContext* mSelectedContext;

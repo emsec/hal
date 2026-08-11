@@ -41,6 +41,9 @@ namespace hal
 {
     class Gate;
 
+    /**
+     * Locates candidates for symmetric cryptographic implementations within a gate-level netlist.
+     */
     namespace hawkeye
     {
         class RoundCandidate;

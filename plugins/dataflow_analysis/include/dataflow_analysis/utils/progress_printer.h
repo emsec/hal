@@ -31,6 +31,9 @@ namespace hal
 {
     namespace dataflow
     {
+        /**
+         * Reports the progress of a long-running operation, either to stderr or to the progress indicator of the GUI.
+         */
         class ProgressPrinter
         {
         public:
@@ -51,13 +54,26 @@ namespace hal
             // returns -1 if terminal width cannot be determined
             int get_terminal_width();
 
+            /** The number of progress bar segments that have been printed so far. */
             u32 m_printed_progress;
+
+            /** The message that was printed last, kept so that it can be overwritten. */
             std::string m_last_message;
-            std::string m_gui_message; // not all messages are relevant for GUI
+
+            /** The message that was last forwarded to the GUI. Not every message is relevant for the GUI. */
+            std::string m_gui_message;
+
+            /** The width of the progress bar in characters. */
             u32 m_bar_width;
+
+            /** The maximum length of a message, longer messages are truncated. */
             u32 m_max_message_size;
+
+            /** The percentage that was printed last, kept so that unchanged values are not reprinted. */
             int m_last_percentage;
-            int m_terminal_width;    // no terminal found if negative
+
+            /** The width of the terminal in characters, negative if no terminal could be determined. */
+            int m_terminal_width;
         };
     }    // namespace dataflow
 }    // namespace hal

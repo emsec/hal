@@ -34,6 +34,9 @@ namespace hal {
 
     class NetlistSimulatorController;
 
+    /**
+     * Runs an event-driven simulation engine in a separate thread so that the GUI stays responsive.
+     */
     class SimulationThread : public QThread {
         Q_OBJECT
 

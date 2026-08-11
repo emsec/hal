@@ -39,7 +39,7 @@ namespace hal
          * 
          * @param[in] e The Z3 expression to be simplified.
          * @param[in] cache A cache to store simplified (sub)expressions.
-         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is false.
+         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is `false`.
          * @returns OK() and the simplified Z3 expression in case of success, an error otherwise.
          */
         Result<z3::expr> simplify_local(const z3::expr& e, std::unordered_map<u32, z3::expr>& cache, const bool check_correctness = false);
@@ -48,7 +48,7 @@ namespace hal
          * @brief Applies hand-crafted simplification rules iteratively until no further simplifications can be made.
          * 
          * @param[in] e The Z3 expression to be simplified.
-         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is false.
+         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is `false`.
          * @returns OK() and the simplified Z3 expression in case of success, an error otherwise.
          */
         Result<z3::expr> simplify_local(const z3::expr& e, const bool check_correctness = false);

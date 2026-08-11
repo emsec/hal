@@ -31,6 +31,8 @@
 namespace hal
 {
     /**
+     * A gate library writer that serializes a gate library into the GENLIB format used by ABC.
+     *
      * @ingroup netlist
      */
     class NETLIST_API GenlibWriter : public GateLibraryWriter
@@ -46,7 +48,7 @@ namespace hal
          * 
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) override;
 

@@ -87,7 +87,7 @@ namespace hal
         /**
          * Get the expanded property of this items.
          *
-         * @return True if the item's children are expanded. False otherwise.
+         * @return `true` if the item's children are expanded. `false` otherwise.
          */
         bool expanded() const;
 

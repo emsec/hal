@@ -8,6 +8,9 @@ namespace hal {
 
     class Net;
 
+    /**
+     * The table in which the input stimuli of a simulation are entered.
+     */
     class WavedataTableEditor : public QTableWidget
     {
         Q_OBJECT

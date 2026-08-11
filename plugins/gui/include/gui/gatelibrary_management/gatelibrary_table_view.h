@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * The table view that lists the gate types of the loaded gate library.
+     */
     class GatelibraryTableView : public QTableView
     {
         Q_OBJECT

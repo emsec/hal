@@ -11,14 +11,14 @@ namespace hal
         py_module_pin.def(py::self == py::self, R"(
             Check whether two module pins are equal.
 
-            :returns: True if both module pins are equal, False otherwise.
+            :returns: ``True`` if both module pins are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_pin.def(py::self != py::self, R"(
             Check whether two module pins are unequal.
 
-            :returns: True if both module pins are unequal, False otherwise.
+            :returns: ``True`` if both module pins are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
