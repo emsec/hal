@@ -32,6 +32,9 @@ namespace hal
 {
     class DetailsFrameWidget;
 
+    /**
+     * The base class for the tabbed detail views of gates, nets, and modules.
+     */
     class DetailsTabWidget : public QTabWidget
     {
         Q_OBJECT
@@ -67,7 +70,8 @@ namespace hal
         /**
          *  Set the top right corner icon of the tab details widget.
          *
-         * @param fileName - Icon name from gui ressources file.
+         * @param catg - The icon category the icon is taken from.
+         * @param itemId - The id of the netlist item the icon belongs to. Defaults to `0`.
          */
         void setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId=0);
     };

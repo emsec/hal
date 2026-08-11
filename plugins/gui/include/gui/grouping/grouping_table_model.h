@@ -70,7 +70,6 @@ namespace hal {
          * Initializes the GroupingTableEntry with an already existing grouping.
          *
          * @param grp - The grouping to represent
-         * @param c - The color of the grouping
          */
         GroupingTableEntry(Grouping* grp)
             : mGrouping(grp) {;}
@@ -140,6 +139,7 @@ namespace hal {
         /**
          * Constructor.
          *
+         * @param history - `true` to list the previously selected groupings, `false` to list the groupings of the netlist.
          * @param parent - The parent widget
          */
         GroupingTableModel(bool history, QObject* parent=nullptr);
@@ -185,7 +185,7 @@ namespace hal {
          * @param index - The model index
          * @param value - The value to set
          * @param role - The access role
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
@@ -195,21 +195,21 @@ namespace hal {
          * @param row - The row index
          * @param count - Unused and ignored (always one row is deleted at a time)
          * @param parent - Unused and ingnored
-         * @returns <b>true</b> on success
+         * @returns `true` on success, `false` otherwise.
          */
         bool removeRows(int row, int count=1, const QModelIndex &parent=QModelIndex()) override;
 
         /**
-         * Returns <b>true</b> if <i>input</i> is a unique and valid grouping name. Returns <b>false</b> otherwise.
+         * Returns `true` if <i>input</i> is a unique and valid grouping name. Returns `false` otherwise.
          *
          * @param input - A grouping name
-         * @returns <b>true</b> if <i>input</i> is a unique and valid grouping name.
-         *          Returns <b>false</b> otherwise
+         * @returns `true` if <i>input</i> is a unique and valid grouping name, `false` otherwise.
+         *          Returns `false` otherwise
          */
         bool validate(const QString &input);
 
         /**
-         * This function is used to prevent the 'validate'-function to return <b>false</b> while renaming a grouping to
+         * This function is used to prevent the 'validate'-function to return `false` while renaming a grouping to
          * its old name. Therefore the old name of the grouping will always considered as valid. <br>
          * To achieve this one has to call this function to store the old name.
          *
@@ -236,7 +236,7 @@ namespace hal {
          * Searches for a grouping with the given name in the grouping table.
          *
          * @param name - The name to search for
-         * @returns the grouping if found. Returns <i>nullptr</i> otherwise.
+         * @returns the grouping if found. Returns `nullptr` otherwise.
          */
         Grouping* groupingByName(const QString& name) const;
 
@@ -336,6 +336,9 @@ namespace hal {
 
     };
 
+    /**
+     * The groupings that the user selected most recently, offered for quick reuse.
+     */
     class GroupingTableHistory : public QList<u32>
     {
         static GroupingTableHistory* inst;
@@ -347,6 +350,9 @@ namespace hal {
         void add(u32 id);
     };
 
+    /**
+     * The table view that lists the groupings of the netlist.
+     */
     class GroupingTableView : public QTableView
     {
         Q_OBJECT

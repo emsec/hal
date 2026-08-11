@@ -49,10 +49,10 @@ namespace hal
             },
             py::arg("nodes"),
             R"(
-            Builds a Boolean function from a list of nodes.
+            Builds and validates a Boolean function from a list of nodes.
 
-            :param list[hal_py.BooleanFunction.Node] nodes: The nodes to build the Boolean function from.
-            :returns: The Boolean function on success, None otherwise.
+            :param list[hal_py.BooleanFunction.Node] nodes: List of Boolean function nodes.
+            :returns: The Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -77,7 +77,7 @@ namespace hal
 
             :param list[hal_py.BooleanFunction.Value] value: The value as a bit-vector.
             :param int base: The base that the values should be converted to. Valid values are 2 (default), 8, 10, and 16.
-            :returns: A string representing the values in the given base on success, None otherwise.
+            :returns: A string representing the values in the given base on success, ``None`` otherwise.
             :rtype: str or None
         )");
 
@@ -100,7 +100,7 @@ namespace hal
             Convert the given bit-vector to its unsigned 64-bit integer representation.
 
             :param list[hal_py.BooleanFunction.Value] value: The value as a bit-vector.
-            :returns: A 64-bit integer representing the values on success, None otherwise.
+            :returns: A 64-bit integer representing the values on success, ``None`` otherwise.
             :rtype: int or None
         )");
 
@@ -109,11 +109,11 @@ namespace hal
         )");
 
         py_boolean_function.def_static("Var", &BooleanFunction::Var, py::arg("name"), py::arg("size") = 1, R"(
-            Creates a multi-bit Boolean function of the given bit-size comprising only a variable of the specified name.
+            Creates a Boolean function of the given bit-size comprising only a variable of the specified name.
 
             :param str name: The name of the variable.
             :param int size: The bit-size. Defaults to 1.
-            :returns: The BooleanFunction.
+            :returns: The Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -175,7 +175,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -203,7 +203,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -229,7 +229,7 @@ namespace hal
 
             :param hal_py.BooleanFunction p0: The Boolean function to negate.
             :param int size: Bit-size of the operation.
-            :returns: The negated Boolean function on success, None otherwise.
+            :returns: The negated Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -257,7 +257,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -285,7 +285,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -313,7 +313,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -341,7 +341,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -369,7 +369,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -397,7 +397,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -425,7 +425,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -453,7 +453,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -483,7 +483,7 @@ namespace hal
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding start index ``i``.
             :param hal_py.BooleanFunction p2: Boolean function of type ``Index`` encoding end index ``j``.
             :param int size: Bit-size of the resulting Boolean function slice, i.e., ``j - i + 1``.
-            :returns: The Boolean function slice on success, None otherwise.
+            :returns: The Boolean function slice on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -510,7 +510,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function (MSBs).
             :param hal_py.BooleanFunction p1: Second Boolean function (LSBs).
             :param int size: Bit-size of the concatenated Boolean function, i.e., ``n + m``.
-            :returns: The concatenated Boolean function on success, None otherwise.
+            :returns: The concatenated Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -537,7 +537,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to extend.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the bit-size of the zero-extended result.
             :param int size: Bit-size of the zero-extended Boolean function.
-            :returns: The zero-extended Boolean function on success, None otherwise.
+            :returns: The zero-extended Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -564,7 +564,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to extend.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the bit-size of the sign-extended result.
             :param int size: Bit-size of the sign-extended Boolean function.
-            :returns: The sign-extended Boolean function on success, None otherwise.
+            :returns: The sign-extended Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -591,7 +591,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to shift.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
             :param int size: Bit-size of the shifted Boolean function.
-            :returns: The shifted Boolean function on success, None otherwise.
+            :returns: The shifted Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -618,7 +618,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to shift.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
             :param int size: Bit-size of the shifted Boolean function.
-            :returns: The shifted Boolean function on success, None otherwise.
+            :returns: The shifted Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -645,7 +645,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to shift.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
             :param int size: Bit-size of the shifted Boolean function.
-            :returns: The shifted Boolean function on success, None otherwise.
+            :returns: The shifted Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -672,7 +672,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to rotate.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to rotate.
             :param int size: Bit-size of the rotated Boolean function.
-            :returns: The rotated Boolean function on success, None otherwise.
+            :returns: The rotated Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -699,7 +699,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: Boolean function to rotate.
             :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to rotate.
             :param int size: Bit-size of the rotated Boolean function.
-            :returns: The rotated Boolean function on success, None otherwise.
+            :returns: The rotated Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -726,7 +726,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation (always =1).
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -753,7 +753,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation (always =1).
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -780,7 +780,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation (always =1).
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -807,7 +807,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation (always =1).
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -834,7 +834,7 @@ namespace hal
             :param hal_py.BooleanFunction p0: First Boolean function.
             :param hal_py.BooleanFunction p1: Second Boolean function.
             :param int size: Bit-size of the operation (always =1).
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -857,15 +857,15 @@ namespace hal
             py::arg("p2"),
             py::arg("size"),
             R"(
-            Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
+            Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as ``True``-case, and p2 as ``False``-case.
             Requires ``p1`` to be of bit-size 1 and both Boolean functions ``p1`` and ``p2`` to be of the same bit-size.
             Produces a new Boolean function of the specified bit-size that must be equal to the size of ``p1`` and ``p2``.
 
             :param hal_py.BooleanFunction p0: Boolean function condition.
-            :param hal_py.BooleanFunction p1: Boolean function for ``true``-case.
-            :param hal_py.BooleanFunction p1: Boolean function for ``false``-case.
+            :param hal_py.BooleanFunction p1: Boolean function for ``True``-case.
+            :param hal_py.BooleanFunction p2: Boolean function for ``False``-case.
             :param int size: Bit-size of the operation, i.e., size of ``p1`` and ``p2``.
-            :returns: The joined Boolean function on success, None otherwise.
+            :returns: The joined Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -875,7 +875,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -885,7 +885,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -895,7 +895,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -905,7 +905,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -922,7 +922,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -932,7 +932,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -942,7 +942,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -952,7 +952,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -962,7 +962,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -972,7 +972,7 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -980,9 +980,9 @@ namespace hal
             Joins two Boolean functions by an MUL operation.
             Requires both Boolean functions to be of the same bit-size.
 
-            **Warning:*  fails if the Boolean functions have different bit-sizes.
+            **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -992,35 +992,35 @@ namespace hal
 
             **Warning:** fails if the Boolean functions have different bit-sizes.
 
-            :returns: The joined Boolean Bunction.
+            :returns: The joined Boolean function.
             :rtype: hal_py.BooleanFunction
         )");
 
         py_boolean_function.def(py::self == py::self, R"(
             Checks whether two Boolean functions are equal.
 
-            :returns: True if both Boolean functions are equal, False otherwise.
+            :returns: ``True`` if both Boolean functions are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def(py::self != py::self, R"(
             Checks whether two Boolean functions are unequal.
 
-            :returns: True if both Boolean functions are unequal, False otherwise.
+            :returns: ``True`` if both Boolean functions are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def(py::self < py::self, R"(
             Checks whether this Boolean function is 'smaller' than the ``other`` Boolean function.
 
-            :returns: True if this Boolean function is 'smaller', False otherwise.
+            :returns: ``True`` if this Boolean function is 'smaller', ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def("is_empty", &BooleanFunction::is_empty, R"(
             Checks whether the Boolean function is empty.
 
-            :returns: True if the Boolean function is empty, False otherwise.
+            :returns: ``True`` if the Boolean function is empty, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1048,22 +1048,22 @@ namespace hal
             Checks whether the top-level node of the Boolean function is of a specific type.
 
             :param int type: The type to check for.
-            :returns: True if the node is of the given type, False otherwise.
+            :returns: ``True`` if the node is of the given type, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function.def("is_variable", &BooleanFunction::is_variable, R"(
-            Checks whether the top-level node of the Boolean function is of type ``Variable`` and holds a specific variable name.
+            Checks whether the top-level node of the Boolean function is of type ``Variable``.
 
-            :returns: True if the top-level node of the Boolean function is of type Variable, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Variable, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("has_variable_name", &BooleanFunction::has_variable_name, R"(
+        py_boolean_function.def("has_variable_name", &BooleanFunction::has_variable_name, py::arg("value"), R"(
             Checks whether the top-level node of the Boolean function is of type Variable and holds a specific variable name.
 
             :param int value: The variable name to check for.
-            :returns: True if the top-level node of the Boolean function is of type Variable and holds the given variable name, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Variable and holds the given variable name, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1084,30 +1084,30 @@ namespace hal
             R"(
             Get the variable name of the top-level node of the Boolean function of type Variable.
 
-            :returns: The variable name on success, None otherwise.
+            :returns: The variable name on success, ``None`` otherwise.
             :rtype: str or None
         )");
 
         py_boolean_function.def("is_constant", &BooleanFunction::is_constant, R"(
             Checks whether the top-level node of the Boolean function is of type Constant.
 
-            :returns: True if the top-level node of the Boolean function is of type Constant, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Constant, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("has_constant_value", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::has_constant_value, py::const_), R"(
+        py_boolean_function.def("has_constant_value", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::has_constant_value, py::const_), py::arg("value"), R"(
             Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
 
             :param list[hal_py.BooleanFunction.Value] value: The constant value to check for.
-            :returns: True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Constant and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("has_constant_value", py::overload_cast<u64>(&BooleanFunction::has_constant_value, py::const_), R"(
+        py_boolean_function.def("has_constant_value", py::overload_cast<u64>(&BooleanFunction::has_constant_value, py::const_), py::arg("value"), R"(
             Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
 
             :param int value: The constant value to check for.
-            :returns: True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Constant and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1126,9 +1126,9 @@ namespace hal
                 }
             },
             R"(
-            Get the constant value of the top-level node of the Boolean function of type Constant as a list of ``hal_py.BooleanFunction.Value``.
+            Get the value of the top-level node of the Boolean function of type ``Constant`` as a list of ``hal_py.BooleanFunction.Value``.
 
-            :returns: The constant value on success, None otherwise.
+            :returns: The constant value on success, ``None`` otherwise.
             :rtype: list[hal_py.BooleanFunction.Value] or None
         )");
 
@@ -1147,24 +1147,24 @@ namespace hal
                 }
             },
             R"(
-            Get the constant value of the top-level node of the Boolean function of type Constant as long as it has a size <= 64-bit.
+            Get the value of the top-level node of the Boolean function of type ``Constant`` as long as it has a size <= 64-bit.
 
-            :returns: The constant value on success, None otherwise.
+            :returns: The constant value on success, ``None`` otherwise.
             :rtype: int or None
         )");
 
         py_boolean_function.def("is_index", &BooleanFunction::is_index, R"(
             Checks whether the top-level node of the Boolean function is of type Index. 
 
-            :returns: True if the top-level node of the Boolean function is of type Index, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Index, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_boolean_function.def("has_index_value", &BooleanFunction::has_index_value, R"(
+        py_boolean_function.def("has_index_value", &BooleanFunction::has_index_value, py::arg("value"), R"(
             Checks whether the top-level node of the Boolean function is of type Index and holds a specific value.
 
             :param int value: The index value to check for.
-            :returns: True if the top-level node of the Boolean function is of type Index and holds the given value, False otherwise.
+            :returns: ``True`` if the top-level node of the Boolean function is of type Index and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1185,7 +1185,7 @@ namespace hal
             R"(
             Get the index value of the top-level node of the Boolean function of type Index.
 
-            :returns: The index value on success, None otherwise.
+            :returns: The index value on success, ``None`` otherwise.
             :rtype: int or None
         )");
 
@@ -1219,7 +1219,7 @@ namespace hal
             :rtype: int
         )");
 
-        py_boolean_function.def("nodes", &BooleanFunction::get_nodes, R"(
+        py_boolean_function.def_property_readonly("nodes", &BooleanFunction::get_nodes, R"(
             The reverse polish notation list of the Boolean function nodes.
 
             :type: list[hal_py.BooleanFunction.Node]
@@ -1241,7 +1241,7 @@ namespace hal
         py_boolean_function.def("get_parameters", &BooleanFunction::get_parameters, R"(
             Returns the parameter list of the top-level node of the Boolean function.
 
-            :returns: A vector of Boolean functions.
+            :returns: A list of Boolean functions.
             :rtype: list[hal_py.BooleanFunction]
         )");
 
@@ -1296,7 +1296,7 @@ namespace hal
         )");
 
         py_boolean_function.def("simplify_local", &BooleanFunction::simplify_local, R"(
-            Simplifies the Boolean function only with local simplification rules and not invoking ABC.
+            Simplifies the Boolean function using only the local simplification, i.e., without invoking ABC.
 
             :returns: The simplified Boolean function.
             :rtype: hal_py.BooleanFunction
@@ -1335,7 +1335,7 @@ namespace hal
 
             :param str variable_name: The variable to substitute.
             :param hal_py.BooleanFunction function: The function replace the variable with.
-            :returns: The resulting Boolean function on success, None otherwise.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -1367,11 +1367,11 @@ namespace hal
             },
             py::arg("substitutions"),
             R"(
-            Substitute multiple variables with other boolean functions at once.
+            Substitute multiple variables with Boolean functions at once.
             The operation is applied to all instances of the variable in the function.
 
-            :param dict substitutions: A map from the variable names to the function to replace the variable with.
-            :returns: The resulting Boolean function on success, None otherwise.
+            :param dict[str,hal_py.BooleanFunction] substitutions: A dict from variable names to Boolean functions.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -1394,7 +1394,7 @@ namespace hal
             Evaluates a Boolean function comprising only single-bit variables using the given input values.
 
             :param dict[str,hal_py.BooleanFunction.Value] inputs: A dict from variable name to input value.
-            :returns: The resulting value on success, None otherwise.
+            :returns: The resulting value on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction.Value or None
         )");
 
@@ -1417,7 +1417,7 @@ namespace hal
             Evaluates a Boolean function comprising multi-bit variables using the given input values.
 
             :param dict[str,list[hal_py.BooleanFunction.Value]] inputs:  A dict from variable name to a list of input values.
-            :returns: A vector of values on success, None otherwise.
+            :returns: A list of values on success, ``None`` otherwise.
             :rtype: list[hal_py.BooleanFunction.Value] or None
         )");
 
@@ -1443,8 +1443,8 @@ namespace hal
             **Warning:** The generation of the truth table is exponential in the number of parameters.
 
             :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
-            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
-            :returns: A list of values representing the truth table output on success, None otherwise.
+            :param bool remove_unknown_variables: Set ``True`` to remove variables from the truth table that are not present within the Boolean function, ``False`` otherwise. Defaults to ``False``.
+            :returns: A list of values representing the truth table output on success, ``None`` otherwise.
             :rtype: list[list[hal_py.BooleanFunction.Value]] or None
         )");
 
@@ -1472,8 +1472,8 @@ namespace hal
 
             :param list[str] ordered_variables: A list describing the order of input variables used to generate the truth table. Defaults to an empty list.
             :param str function_name: The name of the Boolean function to be printed as header of the output columns.
-            :param bool remove_unknown_variables: Set True to remove variables from the truth table that are not present within the Boolean function, False otherwise. Defaults to False.
-            :returns: A string representing the truth table on success, None otherwise.
+            :param bool remove_unknown_variables: Set ``True`` to remove variables from the truth table that are not present within the Boolean function, ``False`` otherwise. Defaults to ``False``.
+            :returns: A string representing the truth table on success, ``None`` otherwise.
             :rtype: str or None
         )");
 
@@ -1549,21 +1549,21 @@ namespace hal
         py_boolean_function_node.def(py::self == py::self, R"(
             Checks whether two Boolean function nodes are equal.
 
-            :returns: True if both Boolean function nodes are equal, False otherwise.
+            :returns: ``True`` if both Boolean function nodes are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function_node.def(py::self != py::self, R"(
             Checks whether two Boolean function nodes are unequal.
 
-            :returns: True if both Boolean function nodes are unequal, False otherwise.
+            :returns: ``True`` if both Boolean function nodes are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function_node.def(py::self < py::self, R"(
             Checks whether this Boolean function node is 'smaller' than the ``other`` Boolean function node.
 
-            :returns: True if this Boolean function node is 'smaller', False otherwise.
+            :returns: ``True`` if this Boolean function node is 'smaller', ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1605,14 +1605,14 @@ namespace hal
             Checks whether the Boolean function node is of a specific type.
 
             :param int type: The type to check for.
-            :returns: True if the node is of the given type, False otherwise.
+            :returns: ``True`` if the node is of the given type, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function_node.def("is_constant", &BooleanFunction::Node::is_constant, R"(
             Checks whether the Boolean function node is of type Constant.
 
-            :returns: True if the Boolean function node is of type Constant, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Constant, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1620,7 +1620,7 @@ namespace hal
             Checks whether the Boolean function node is of type Constant and holds a specific value.
 
             :param list[hal_py.BooleanFunction.Value] value: The value to check for.
-            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Constant and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1628,7 +1628,7 @@ namespace hal
             Checks whether the Boolean function node is of type Constant and holds a specific value.
 
             :param int value: The value to check for.
-            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Constant and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1648,7 +1648,7 @@ namespace hal
             R"(
             Get the constant value of the node of type ``Constant`` as a list of ``hal_py.BooleanFunction.Value``.
 
-            :returns: The constant value on success, None otherwise. 
+            :returns: The constant value on success, ``None`` otherwise. 
             :rtype: list[hal_py.BooleanFunction.Value] or None
         )");
 
@@ -1668,14 +1668,14 @@ namespace hal
             R"(
             Get the constant value of the node of type ``Constant`` as long as it has a size <= 64-bit.
 
-            :returns: The constant value on success, None otherwise. 
+            :returns: The constant value on success, ``None`` otherwise. 
             :rtype: int or None
         )");
 
         py_boolean_function_node.def("is_index", &BooleanFunction::Node::is_index, R"(
             Checks whether the Boolean function node is of type Index.
 
-            :returns: True if the Boolean function node is of type Index, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Index, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1683,7 +1683,7 @@ namespace hal
             Checks whether the Boolean function node is of type Index and holds a specific value.
 
             :param int value: The value to check for.
-            :returns: True if the Boolean function node is of type Index and holds the given value, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Index and holds the given value, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1703,14 +1703,14 @@ namespace hal
             R"(
             Get the index value of node of type ``Index``.
 
-            :returns: The index value on success, None otherwise. 
+            :returns: The index value on success, ``None`` otherwise. 
             :rtype: int or None
         )");
 
         py_boolean_function_node.def("is_variable", &BooleanFunction::Node::is_variable, R"(
             Checks whether the Boolean function node is of type Variable.
 
-            :returns: True if the Boolean function node is of type Variable, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Variable, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1718,7 +1718,7 @@ namespace hal
             Checks whether the Boolean function node is of type Variable and holds a specific variable name.
 
             :param str variable_name: The variable name to check for.
-            :returns: True if the Boolean function node is of type Variable and holds the given variable name, False otherwise.
+            :returns: ``True`` if the Boolean function node is of type Variable and holds the given variable name, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -1738,28 +1738,28 @@ namespace hal
             R"(
             Get the variable name of node of type ``Variable``.
 
-            :returns: The variable name on success, None otherwise. 
+            :returns: The variable name on success, ``None`` otherwise. 
             :rtype: str or None
         )");
 
         py_boolean_function_node.def("is_operation", &BooleanFunction::Node::is_operation, R"(
             Checks whether the Boolean function node is an operation node.
 
-            :returns: True if the Boolean function node is an operation node, False otherwise.
+            :returns: ``True`` if the Boolean function node is an operation node, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function_node.def("is_operand", &BooleanFunction::Node::is_operand, R"(
             Checks whether the Boolean function node is an operand node.
 
-            :returns: True if the Boolean function node is an operand node, False otherwise.
+            :returns: ``True`` if the Boolean function node is an operand node, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_boolean_function_node.def("is_commutative", &BooleanFunction::Node::is_commutative, R"(
             Checks whether the Boolean function node is commutative.
 
-            :returns: True if the Boolean function node is commutative, False otherwise.
+            :returns: ``True`` if the Boolean function node is commutative, ``False`` otherwise.
             :rtype: bool
         )");
 

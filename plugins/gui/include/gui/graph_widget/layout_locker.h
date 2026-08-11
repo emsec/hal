@@ -32,6 +32,9 @@ namespace hal
 {
     class GraphContext;
 
+    /**
+     * Counts how many layout lockers are currently active and suppresses relayouting while that count is not zero.
+     */
     class LayoutLockerManager
     {
         static LayoutLockerManager* inst;
@@ -48,6 +51,9 @@ namespace hal
         void removeWaitingContext(GraphContext* ctx);
     };
 
+    /**
+     * Suppresses relayouting of the graph views for as long as the object exists.
+     */
     class LayoutLocker
     {
     public:

@@ -43,8 +43,9 @@ namespace hal
          * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
-         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
-         * @return The the z3 expression representation of combined Boolean function of the subgraph on success, an error otherwise.
+         * @param[in] subgraph_output - The subgraph output net for which to generate the Boolean function.
+         * @param[in] ctx - The context where the new expression is created in.
+         * @return The z3 expression representation of the combined Boolean function of the subgraph on success, an error otherwise.
          */
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx);
 
@@ -54,8 +55,9 @@ namespace hal
          * The variables of the resulting Boolean functions are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph to consider.
-         * @param[in] subgraph_outputs - The subgraph oputput nets for which to generate the Boolean functions.
-         * @return The the z3 expression representations of combined Boolean functions of the subgraph on success, an error otherwise.
+         * @param[in] subgraph_outputs - The subgraph output nets for which to generate the Boolean functions.
+         * @param[in] ctx - The context where the new expression is created in.
+         * @return The z3 expression representations of the combined Boolean functions of the subgraph on success, an error otherwise.
          */
         Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs, z3::context& ctx);
     }    // namespace z3_utils

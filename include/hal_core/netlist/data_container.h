@@ -52,7 +52,7 @@ namespace hal
          * Check whether two data containers are equal.
          *
          * @param[in] other - The data container to compare against.
-         * @returns True if both data containers are equal, false otherwise.
+         * @returns `true` if both data containers are equal, `false` otherwise.
          */
         bool operator==(const DataContainer& other) const;
 
@@ -60,7 +60,7 @@ namespace hal
          * Check whether two data containers are unequal.
          *
          * @param[in] other - The data container to compare against.
-         * @returns True if both data containers are unequal, false otherwise.
+         * @returns `true` if both data containers are unequal, `false` otherwise.
          */
         bool operator!=(const DataContainer& other) const;
 
@@ -73,7 +73,7 @@ namespace hal
         * @param[in] data_type - The data type.
         * @param[in] value - The data value.
         * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
-        * @returns True on success, false otherwise.
+        * @returns `true` on success, `false` otherwise.
         */
         bool set_data(const std::string& category, const std::string& key, const std::string& data_type, const std::string& value, const bool log_with_info_level = false);
 
@@ -82,7 +82,7 @@ namespace hal
          * 
          * @param[in] category - The data category.
          * @param[in] key - The data key.
-         * @returns True if the entry exists, false otherwise.
+         * @returns `true` if the entry exists, `false` otherwise.
          */
         bool has_data(const std::string& category, const std::string& key) const;
 
@@ -101,7 +101,7 @@ namespace hal
          * @param[in] category - The data category.
          * @param[in] key - The data key.
          * @param[in] log_with_info_level - Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         bool delete_data(const std::string& category, const std::string& key, const bool log_with_info_level = false);
 

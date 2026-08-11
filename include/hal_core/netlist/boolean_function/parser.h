@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * Contains the tokenizer and the parsers that translate a string into a Boolean function.
+     */
     namespace BooleanFunctionParser
     {
         /// ParserType refers to the parser identifier

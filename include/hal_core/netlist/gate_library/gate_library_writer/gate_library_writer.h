@@ -50,7 +50,7 @@ namespace hal
          *
          * @param[in] gate_lib - The gate library.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         virtual bool write(const GateLibrary* gate_lib, const std::filesystem::path& file_path) = 0;
     };

@@ -39,6 +39,9 @@ namespace hal
     class NetlistSimulatorController;
     class SimulationLogReceiver;
 
+    /**
+     * The base class for all simulation engines, which holds the name, working directory, and properties of an engine.
+     */
     class SimulationEngine
     {
         std::string mName;
@@ -106,7 +109,7 @@ namespace hal
 
         /**
          * Request clock change as regular net input event
-         * @return true if clock events are required by engine, false otherwise
+         * @return `true` if clock events are required by engine, `false` otherwise
          */
         bool clock_events_required() const
         {
@@ -116,7 +119,7 @@ namespace hal
         /**
          * Tells the caller whether engine can share simulation results directly from memory.
          * If not the caller will most likely ask to have a VCD result file created.
-         * @return true if results can be read from memory
+         * @return `true` if results can be read from memory, `false` otherwise.
          */
         bool can_share_memory() const
         {
@@ -125,8 +128,8 @@ namespace hal
 
         /**
          * Copy header and source files so that saleae parser can be compiled into project
-         * @param dirname[in] Target directory to copy files into
-         * @return true if files copied successfully, false otherwise
+         * @param[in] dirname - Target directory to copy files into.
+         * @return `true` if files copied successfully, `false` otherwise
          */
         bool install_saleae_parser(std::string dirname) const;
 
@@ -135,13 +138,13 @@ namespace hal
          *
          * Will be called by controller to pass all relevant information to setup the simulation
          * @param[in] simInput the input
-         * @return true if engine could be prepared successfully with given input, false on error
+         * @return `true` if engine could be prepared successfully with given input, `false` otherwise.
          */
         virtual bool setSimulationInput(SimulationInput* simInput) = 0;
 
         /**
          * Set the name of VCD result file. If set engine is requested to produce such a file upon finalize
-         * @param[in] the name of the file to be created.
+         * @param[in] filename - Name of the file to be created.
          */
         virtual void setResultFilename(const std::string filename)
         {
@@ -165,7 +168,7 @@ namespace hal
          * Derived classes SimulationEngineEventDriven and SimulationEngineScripted will
          * implement their own run handlers to start either a separate process or a thread
          *
-         * @return true if successful, false on error
+         * @return `true` if successful, `false` otherwise.
          */
         virtual bool run(NetlistSimulatorController* controller, SimulationLogReceiver* logReceiver=nullptr) = 0;
 
@@ -177,7 +180,7 @@ namespace hal
          * SimulationEngineEventDriven:   all input events have been processed
          * SimulationEngineScripted:      all comands executed successfully
          *
-         * @return true if successful, false on error
+         * @return `true` if successful, `false` otherwise.
          */
         virtual bool finalize();
 
@@ -199,10 +202,10 @@ namespace hal
         
         
         /**
-         * Set property which can be evaluated by engine
+         * Get property which can be evaluated by engine
          *
          * @param key property name
-         * @param value property value
+         * @return the property value, an empty string if the property is not set
          */
         virtual std::string get_engine_property(const std::string& key);
 
@@ -219,6 +222,9 @@ namespace hal
         virtual SimulationInput* get_simulation_input() const { return mSimulationInput; }
     };
 
+    /**
+     * The base class for simulation engines that run inside HAL and produce their events directly.
+     */
     class SimulationEngineEventDriven : public SimulationEngine
     {
         bool run(NetlistSimulatorController* controller, SimulationLogReceiver* logReceiver=nullptr) override;
@@ -232,19 +238,22 @@ namespace hal
          *
          * Passes an event to engine to trigger simulation
          * @param[in] netEv input event asigning input values (0,1,X,Z) for nets and providing number of cycles to simulate
-         * @return true if event was handled successfully, false otherwise
+         * @return `true` if event was handled successfully, `false` otherwise
          */
         virtual bool inputEvent(const SimulationInputNetEvent& netEv) = 0;
 
         /**
          * Get vector of simulated events for net
          *
-         * @param[in] n - The net for which events where simulated
+         * @param[in] netId - The net for which events where simulated
          * @return Vector of events
          */
         virtual std::vector<WaveEvent> get_simulation_events(u32 netId) const;
     };
 
+    /**
+     * The base class for simulation engines that run as external processes driven by a sequence of shell commands.
+     */
     class SimulationEngineScripted : public SimulationEngine
     {
         virtual bool run(NetlistSimulatorController* controller, SimulationLogReceiver *logReceiver=nullptr) override;
@@ -268,12 +277,15 @@ namespace hal
          * Must be implemented by derived class
          *
          * Returns command and argument to be executed
-         * @param[in] lineNumber the line index of the script starting from 0
+         * @param[in] lineIndex the line index of the script starting from 0
          * @return first element is command to be executed, subsequent elements are arguments
          */
         virtual std::vector<std::string> commandLine(int lineIndex) const = 0;
     };
 
+    /**
+     * The base class for the factories that create simulation engine instances.
+     */
     class SimulationEngineFactory
     {
     protected:
@@ -292,6 +304,9 @@ namespace hal
         }
     };
 
+    /**
+     * The registry of all simulation engine factories that are available within HAL.
+     */
     class SimulationEngineFactories : public std::vector<SimulationEngineFactory*>
     {
         SimulationEngineFactories()

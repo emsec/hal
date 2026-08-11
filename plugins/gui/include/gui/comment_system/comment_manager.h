@@ -33,6 +33,9 @@
 
 namespace hal
 {
+    /**
+     * Manages the comments that the user attached to netlist elements and stores them with the project.
+     */
     class CommentManager : public QObject, public ProjectSerializer
     {
         Q_OBJECT
@@ -44,7 +47,7 @@ namespace hal
 
         /**
          * Call to restore
-         * @return true if successful, false otherwise
+         * @return `true` if successful, `false` otherwise
          */
         bool restore();
 
@@ -80,16 +83,15 @@ namespace hal
         /**
          * Return whether or not comment entries for node exist.
          * @param nd The node key for search.
-         * @return True if at least a single entry exists, false otherwise
+         * @return `true` if at least a single entry exists, `false` otherwise
          */
         bool contains(const Node& nd) const;
 
         /**
          * Removes and deletes the given entry.
          * Before deleting the comment, the entryAboutToBeDeleted is emmitted.
-         * (Perhaps return true on success instead of just void?)
-         * @param nd
-         * @param entry
+         * (Perhaps return `true` on success instead of just void?)
+         * @param entry The entry to remove and delete.
          */
         void deleteComment(CommentEntry* entry);
 
@@ -105,7 +107,6 @@ namespace hal
          * Similiar as to the selectionModel.
          *
          * @param entry - The modified entry.
-         * @param sender - The sender.
          */
         void relayEntryModified(CommentEntry* entry);
 

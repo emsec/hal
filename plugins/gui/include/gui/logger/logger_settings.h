@@ -27,6 +27,9 @@
 
 namespace hal
 {
+    /**
+     * The severity levels that the log widget shows for each log channel.
+     */
     struct LoggerSettings
     {
         bool debugSeverity;

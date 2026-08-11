@@ -39,6 +39,9 @@ namespace hal {
     class NodeDragShadow;
     class GraphicsScene;
 
+    /**
+     * Tracks a drag-and-drop operation within the graph view and decides where the dragged nodes may be dropped.
+     */
     class DragController : public QObject
     {
         Q_OBJECT
@@ -64,7 +67,7 @@ namespace hal {
         /**
          * Starts the dragging of a gate or module to show its shadow meanwhile.
          *
-         * @param wantSwap - True if keyboard swap modifier has been pressed, false otherwise
+         * @param wantSwap - `true` if keyboard swap modifier has been pressed, `false` otherwise
          */
         void enterDrag(bool wantSwap);
 
@@ -72,7 +75,7 @@ namespace hal {
          * Moves the shadow that appears while dragging a gate or module.
          *
          * @param eventPos - The mouse position in scene coordinates while dragging
-         * @param wantSwap - True if keyboard swap modifier has been pressed, false otherwise
+         * @param wantSwap - `true` if keyboard swap modifier has been pressed, `false` otherwise
          * @param gridPos - The new grid position of the primary node
          */
         void move(const QPoint& eventPos, bool wantSwap, const QPoint& gridPos);

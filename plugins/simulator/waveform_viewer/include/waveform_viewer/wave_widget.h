@@ -48,6 +48,9 @@ namespace hal {
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
 
+    /**
+     * The widget that combines the waveform tree and the waveform canvas of one simulation.
+     */
     class WaveWidget : public QSplitter
     {
         Q_OBJECT

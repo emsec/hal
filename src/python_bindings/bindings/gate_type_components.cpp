@@ -60,10 +60,10 @@ namespace hal
 
         py_gate_type_component.def("get_component", &GateTypeComponent::get_component, py::arg("filter") = nullptr, R"(
             Get a single component matching the filter condition (if provided).
-            Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
+            Returns ``None`` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.
 
             :param lambda filter: The filter applied to all candidate components.
-            :returns: The component or None.
+            :returns: The component or ``None``.
             :rtype: hal_py.GateTypeComponent or None
         )");
 
@@ -75,13 +75,13 @@ namespace hal
             Check whether a component is a LUTComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a LUTComponent, False otherwise.
+            :returns: ``True`` if component is a LUTComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_lut_component.def_property("init_ascending", &LUTComponent::is_init_ascending, &LUTComponent::set_init_ascending, R"(
             The bit-order of the initialization string. 
-            True if ascending, False otherwise.
+            ``True`` if ascending, ``False`` otherwise.
 
             :type: bool
         )");
@@ -89,14 +89,14 @@ namespace hal
         py_lut_component.def("is_init_ascending", &LUTComponent::is_init_ascending, R"(
             Get the bit-order of the initialization string.
          
-            :returns: True if ascending bit-order, False otherwise.
+            :returns: ``True`` if ascending bit-order, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_lut_component.def("set_init_ascending", &LUTComponent::set_init_ascending, py::arg("init_ascending") = true, R"(
             Set the bit-order of the initialization string.
          
-            :param bool init_ascending: True if ascending bit-order, False otherwise.
+            :param bool init_ascending: ``True`` if ascending bit-order, ``False`` otherwise.
         )");
 
         py::class_<FFComponent, GateTypeComponent, RawPtrWrapper<FFComponent>> py_ff_component(m, "FFComponent", R"(
@@ -107,7 +107,7 @@ namespace hal
             Check whether a component is a FFComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a FFComponent, False otherwise.
+            :returns: ``True`` if component is a FFComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -187,7 +187,7 @@ namespace hal
             Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
 
             :returns: The values specifying the behavior for the internal and negated internal state.
-            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
+            :rtype: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
         )");
 
         py_ff_component.def("set_async_set_reset_behavior", &FFComponent::set_async_set_reset_behavior, py::arg("behav_state"), py::arg("behav_neg_state"), R"(
@@ -205,7 +205,7 @@ namespace hal
             Check whether a component is a LatchComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a LatchComponent, False otherwise.
+            :returns: ``True`` if component is a LatchComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -285,7 +285,7 @@ namespace hal
             Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.
 
             :returns: The values specifying the behavior for the internal and negated internal state.
-            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
+            :rtype: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)
         )");
 
         py_latch_component.def("set_async_set_reset_behavior", &LatchComponent::set_async_set_reset_behavior, py::arg("behav_state"), py::arg("behav_neg_state"), R"(
@@ -303,7 +303,7 @@ namespace hal
             Check whether a component is a RAMComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a RAMComponent, False otherwise.
+            :returns: ``True`` if component is a RAMComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -317,6 +317,7 @@ namespace hal
             Get the size of the RAM in bits.
 
             :returns: The size of the RAM in bits.
+            :rtype: int
         )");
 
         py_ram_component.def("set_bit_size", &RAMComponent::set_bit_size, py::arg("bit_size"), R"(
@@ -333,7 +334,7 @@ namespace hal
             Check whether a component is a MACComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a MACComponent, False otherwise.
+            :returns: ``True`` if component is a MACComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -345,7 +346,7 @@ namespace hal
             Check whether a component is an InitComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a InitComponent, False otherwise.
+            :returns: ``True`` if component is an InitComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -392,10 +393,10 @@ namespace hal
         )");
 
         py_state_component.def_static("is_class_of", &StateComponent::is_class_of, py::arg("component"), R"(
-            Check whether a component is an StateComponent.
+            Check whether a component is a StateComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a StateComponent, False otherwise.
+            :returns: ``True`` if component is a StateComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -445,7 +446,7 @@ namespace hal
             Check whether a component is a RAMPortComponent.
 
             :param hal_py.GateTypeComponent component: The component to check.
-            :returns: True if component is a RAMPortComponent, False otherwise.
+            :returns: ``True`` if component is a RAMPortComponent, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -526,7 +527,7 @@ namespace hal
         )");
 
         py_ram_port_component.def_property("write_port", &RAMPortComponent::is_write_port, &RAMPortComponent::set_write_port, R"(
-            True if the port is a write port, false if it is a read port.
+            ``True`` if the port is a write port, ``False`` if it is a read port.
 
             :type: bool
         )");
@@ -534,14 +535,14 @@ namespace hal
         py_ram_port_component.def("is_write_port", &RAMPortComponent::is_write_port, R"(
             Check whether the port is a write or a read port.
 
-            :returns: True if the port is a write port, false if it is a read port.
+            :returns: ``True`` if the port is a write port, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_ram_port_component.def("set_write_port", &RAMPortComponent::set_write_port, py::arg("is_write"), R"(
             Set the port to be a write or a read port.
 
-            :param bool is_write: True if the port is a write port, false if it is a read port.
+            :param bool is_write: ``True`` to set the port to be a write port, ``False`` to set it to be a read port.
         )");
     }
 }    // namespace hal

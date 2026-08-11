@@ -37,10 +37,16 @@
 
 namespace hal {
     class GateLibraryWizard;
+    /**
+     * The wizard page on which the RAM port components of the gate type are configured.
+     */
     class RAMPortWizardPage:public QWizardPage{
     public:
         RAMPortWizardPage(QWidget* parent = nullptr);
 
+        /**
+         * The input widgets that make up one RAM port entry of the wizard page.
+         */
         struct RAMPort{
             QLineEdit* dataGroup;
             QLineEdit* addressGroup;

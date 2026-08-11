@@ -162,7 +162,7 @@ namespace hal
      * Function used by sort algorithm to organize events according to their priority.
      * @param a - Pin changed event A
      * @param b - Pin changed event B
-     * @return true if A should be handled before B, false otherwise.
+     * @return `true` if A should be handled before B, `false` otherwise.
      */
     bool pin_event_order(const PinChangedEvent& a, const PinChangedEvent& b);
 }

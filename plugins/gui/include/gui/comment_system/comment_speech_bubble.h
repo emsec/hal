@@ -30,6 +30,9 @@
 namespace hal {
     class GraphContext;
 
+    /**
+     * The speech bubble that marks a commented node within the graph view.
+     */
     class CommentSpeechBubble : public QGraphicsItem
     {
         bool mHover;

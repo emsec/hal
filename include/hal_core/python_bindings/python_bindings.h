@@ -92,8 +92,8 @@ namespace hal
     template<class T>
     using RawPtrWrapper = std::unique_ptr<T, py::nodelete>;
 
+    // TODO move into own namespace
     /**
-     * TODO move into own namespace
      *
      * @ingroup pybind
      * @{

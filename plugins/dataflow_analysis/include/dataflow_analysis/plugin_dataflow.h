@@ -40,6 +40,9 @@ namespace hal
 
     class DataflowPlugin;
 
+    /**
+     * The command line interface of the dataflow analysis plugin.
+     */
     class CliExtensionDataflow : public CliExtensionInterface
     {
     public:
@@ -50,16 +53,33 @@ namespace hal
         virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) override;
     };
 
+    /**
+     * The GUI contribution of the dataflow analysis plugin, i.e., its configurable parameters and the entry points invoked from the GUI.
+     */
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
+        /** The directory that the analysis results are written to. */
         std::string m_output_path = "/tmp";
+
+        /** Set `true` to write the result as a `.dot` graph, `false` otherwise. */
         bool m_write_dot          = false;
+
+        /** Set `true` to write the result as a text file, `false` otherwise. */
         bool m_write_txt          = false;
+
+        /** Set `true` to create a module for every identified group, `false` otherwise. */
         bool m_create_modules     = false;
+
+        /** Set `true` once the user has triggered the analysis from the GUI, `false` otherwise. */
         bool m_button_clicked     = false;
 
+        /** The group sizes that are prioritized during evaluation. */
         std::vector<u32> m_expected_sizes = {};
+
+        /** The minimum number of gates that a group must contain to be part of the result. */
         u32 m_min_group_size              = 8;
+
+        /** Set `true` to take register stages into account, `false` otherwise. */
         bool m_enable_stages              = false;
 
     public:

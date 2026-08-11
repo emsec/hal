@@ -42,6 +42,8 @@ namespace hal
     class Module;
 
     /**
+     * A netlist writer that serializes a netlist into gate-level Verilog.
+     *
      * @ingroup netlist_writer
      */
     class NETLIST_API VerilogWriter : public NetlistWriter
@@ -55,7 +57,7 @@ namespace hal
          *
          * @param[in] netlist - The netlist.
          * @param[in] file_path - The output path.
-         * @returns True on success, false otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
         Result<std::monostate> write(Netlist* netlist, const std::filesystem::path& file_path) override;
 

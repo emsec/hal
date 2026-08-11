@@ -12,7 +12,7 @@ namespace hal
             Check whether two netlists are equal.
             Does not check netlist IDs.
 
-            :returns: True if both netlists are equal, false otherwise.
+            :returns: ``True`` if both netlists are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -20,7 +20,7 @@ namespace hal
             Check whether two netlists are unequal.
             Does not check netlist IDs.
 
-            :returns: True if both netlists are unequal, false otherwise.
+            :returns: ``True`` if both netlists are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -69,7 +69,7 @@ namespace hal
         py_netlist.def("set_input_filename", &Netlist::set_input_filename, py::arg("path"), R"(
             Set the path to the input file.
 
-            :param pathlib.Path filename: The path to the input file.
+            :param pathlib.Path path: The path to the input file.
         )");
 
         py_netlist.def_property("design_name", &Netlist::get_design_name, &Netlist::set_design_name, R"(
@@ -107,7 +107,7 @@ namespace hal
         py_netlist.def("set_device_name", &Netlist::set_device_name, py::arg("device_name"), R"(
             Set the name of the target device.
 
-            :param str divice_name: The name of the target device.
+            :param str device_name: The name of the target device.
         )");
 
         py_netlist.def_property_readonly("gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
@@ -172,7 +172,7 @@ namespace hal
             :param str name: The name of the gate.
             :param int x: The x-coordinate of the gate.
             :param int y: The y-coordinate of the gate.
-            :returns: The new gate on success, None otherwise.
+            :returns: The new gate on success, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
@@ -190,25 +190,23 @@ namespace hal
             :param str name: The name of the gate.
             :param int x: The x-coordinate of the gate.
             :param int y: The y-coordinate of the gate.
-            :returns: The new gate on success, None otherwise.
+            :returns: The new gate on success, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
         py_netlist.def("delete_gate", &Netlist::delete_gate, py::arg("gate"), R"(
             Remove a gate from the netlist.
 
-            :param gate: The gate.
-            :type gate: hal_py.Gate
-            :returns: True on success, false otherwise.
+            :param hal_py.Gate gate: The gate.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_netlist.def("is_gate_in_netlist", &Netlist::is_gate_in_netlist, py::arg("gate"), R"(
             Check whether the gate is registered in the netlist.
 
-            :param gate: The gate to check.
-            :type gate: hal_py.Gate
-            :returns: True if the gate is in the netlist, false otherwise.
+            :param hal_py.Gate gate: The gate to check.
+            :returns: ``True`` if the gate is in the netlist, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -216,7 +214,7 @@ namespace hal
             Get the gate specified by the given ID.
 
             :param int gate_id: The unique ID of the gate.
-            :returns: The gate on success, None otherwise.
+            :returns: The gate on success, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
@@ -243,18 +241,18 @@ namespace hal
         )");
 
         py_netlist.def("mark_vcc_gate", &Netlist::mark_vcc_gate, py::arg("gate"), R"(
-            Mark a gate as global VCC gate.
+            Mark a gate as a global VCC gate.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_netlist.def("mark_gnd_gate", &Netlist::mark_gnd_gate, py::arg("gate"), R"(
-            Mark a gate as global GND gate.
+            Mark a gate as a global GND gate.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -262,7 +260,7 @@ namespace hal
             Unmark a global VCC gate.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -270,25 +268,23 @@ namespace hal
             Unmark a global GND gate.
 
             :param hal_py.Gate gate: The gate.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_netlist.def("is_vcc_gate", &Netlist::is_vcc_gate, py::arg("gate"), R"(
             Check whether a gate is a global VCC gate.
 
-            :param gate: The gate to check.
-            :type gate: hal_py.Gate
-            :returns: True if the gate is a global VCC gate, false otherwise.
+            :param hal_py.Gate gate: The gate to check.
+            :returns: ``True`` if the gate is a global VCC gate, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_netlist.def("is_gnd_gate", &Netlist::is_gnd_gate, py::arg("gate"), R"(
             Check whether a gate is a global GND gate.
 
-            :param gate: The gate to check.
-            :type gate: hal_py.Gate
-            :returns: True if the gate is a global GND gate, false otherwise.
+            :param hal_py.Gate gate: The gate to check.
+            :returns: ``True`` if the gate is a global GND gate, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -338,7 +334,7 @@ namespace hal
         )");
 
         py_netlist.def("get_gnd_nets", &Netlist::get_gnd_nets, R"(
-            Get all global GND nets.
+            Get all GND nets in the netlist.
 
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
@@ -357,7 +353,7 @@ namespace hal
 
             :param int net_id: The unique ID of the net.
             :param str name: The name of the net.
-            :returns: The new net on success, None otherwise.
+            :returns: The new net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
@@ -366,15 +362,15 @@ namespace hal
             The ID of the net is set automatically.
 
             :param str name: The name of the net.
-            :returns: The new net on success, None otherwise.
+            :returns: The new net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
         py_netlist.def("delete_net", &Netlist::delete_net, py::arg("net"), R"(
-            Removes a net from the netlist.
+            Remove a net from the netlist.
 
             :param hal_py.Net net: The net.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -382,7 +378,7 @@ namespace hal
             Check whether a net is registered in the netlist.
 
             :param hal_py.Net net: The net to check.
-            :returns: True if the net is in the netlist, false otherwise.
+            :returns: ``True`` if the net is in the netlist, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -390,7 +386,7 @@ namespace hal
             Get the net specified by the given ID.
 
             :param int net_id: The unique ID of the net.
-            :returns: The net on success, None otherwise.
+            :returns: The net on success, ``None`` otherwise.
             :rtype: hal_py.Net or None
         )");
 
@@ -420,7 +416,7 @@ namespace hal
             Mark a net as a global input net.
 
             :param hal_py.Net net: The net.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -428,7 +424,7 @@ namespace hal
             Mark a net as a global output net.
 
             :param hal_py.Net net: The net.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -436,7 +432,7 @@ namespace hal
             Unmark a global input net.
 
             :param hal_py.Net net: The net.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -444,7 +440,7 @@ namespace hal
             Unmark a global output net.
 
             :param hal_py.Net net: The net.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -452,7 +448,7 @@ namespace hal
             Check whether a net is a global input net.
 
             :param hal_py.Net net: The net to check.
-            :returns: True if the net is a global input net, false otherwise.
+            :returns: ``True`` if the net is a global input net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -460,7 +456,7 @@ namespace hal
             Check whether a net is a global output net.
 
             :param hal_py.Net net: The net to check.
-            :returns: True if the net is a global output net, false otherwise.
+            :returns: ``True`` if the net is a global output net, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -495,7 +491,7 @@ namespace hal
             
             WARNING: if disabled, the user is responsible to assign correct input and output nets and create respective module pins. Wrong usage may result in unknown behavior or crashes.
 
-            :param bool enable_checks: Set True to enable automatic checks, False otherwise.
+            :param bool enable_checks: Set ``True`` to enable automatic checks, ``False`` otherwise.
         )");
 
         py_netlist.def("get_unique_module_id", &Netlist::get_unique_module_id, R"(
@@ -519,7 +515,7 @@ namespace hal
             :param str name: The name of the module.
             :param hal_py.Module parent: The parent module.
             :param list gates: Gates to assign to the new module.
-            :returns: The new module on succes, None on error.
+            :returns: The new module on success, ``None`` otherwise.
             :rtype: hal_py.Module or None
         )");
 
@@ -535,7 +531,7 @@ namespace hal
             :param str name: The name of the module.
             :param hal_py.Module parent: The parent module.
             :param list gates: Gates to assign to the new module.
-            :returns: The new module on succes, None on error.
+            :returns: The new module on success, ``None`` otherwise.
             :rtype: hal_py.Module or None
         )");
 
@@ -543,9 +539,8 @@ namespace hal
             Remove a module from the netlist.
             Submodules, gates and nets under this module will be moved to the parent of this module.
 
-            :param module: The module.
-            :type module: hal_py.Module
-            :returns: True on success, false otherwise.
+            :param hal_py.Module module: The module.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -553,7 +548,7 @@ namespace hal
             Check whether a module is registered in the netlist.
 
             :param hal_py.Module module: The module to check.
-            :returns: True if the module is in the netlist, false otherwise.
+            :returns: ``True`` if the module is in the netlist, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -561,7 +556,7 @@ namespace hal
             Get the module specified by the given ID.
 
             :param int module_id: The unique ID of the module.
-            :returns: The module on success, None otherwise.
+            :returns: The module on success, ``None`` otherwise.
             :rtype: hal_py.Module
         )");
 
@@ -617,7 +612,7 @@ namespace hal
 
             :param int grouping_id: The unique ID of the grouping.
             :param str name: The name of the grouping.
-            :returns: The new grouping on success, None otherwise.
+            :returns: The new grouping on success, ``None`` otherwise.
             :rtype: hal_py.Grouping or None
         )");
 
@@ -629,7 +624,7 @@ namespace hal
             The ID of the grouping is set automatically.
 
             :param str name: The name of the grouping.
-            :returns: The new grouping on success, None otherwise.
+            :returns: The new grouping on success, ``None`` otherwise.
             :rtype: hal_py.Grouping or None
         )");
 
@@ -637,7 +632,7 @@ namespace hal
             Remove a grouping from the netlist.
 
             :param hal_py.Grouping grouping: The grouping.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -645,7 +640,7 @@ namespace hal
             Check whether the grouping is registered in the netlist.
 
             :param hal_py.Module grouping: The grouping to check.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -842,7 +837,7 @@ namespace hal
 
             :param str data_category: The data category.
             :param tuple(str,str) data_identifiers: The data identifiers for the x- and y-coordinates.
-            :returns: True on success, False otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
     }

@@ -61,7 +61,7 @@ namespace hal
          * Check whether two nets are equal.
          *
          * @param[in] other - The net to compare against.
-         * @returns True if both nets are equal, false otherwise.
+         * @returns `true` if both nets are equal, `false` otherwise.
          */
         bool operator==(const Net& other) const;
 
@@ -69,7 +69,7 @@ namespace hal
          * Check whether two nets are unequal.
          *
          * @param[in] other - The net to compare against.
-         * @returns True if both nets are unequal, false otherwise.
+         * @returns `true` if both nets are unequal, `false` otherwise.
          */
         bool operator!=(const Net& other) const;
 
@@ -110,7 +110,7 @@ namespace hal
 
         /**
          * Get the grouping in which this net is contained. <br>
-         * If no grouping contains this gate, a nullptr is returned.
+         * If no grouping contains this gate, a `nullptr` is returned.
          *
          * @returns The grouping.
          */
@@ -140,6 +140,7 @@ namespace hal
          */
         Endpoint* add_source(Gate* gate, GatePin* pin);
 
+        // TODO test
         /**
          * Remove a source endpoint from the net.
          * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
@@ -150,6 +151,7 @@ namespace hal
          */
         bool remove_source(Gate* gate, const std::string& pin_name);
 
+        // TODO test
         /**
          * Remove a source endpoint from the net.
          * The endpoint is specified by a tuple of a gate and an output pin of that gate.
@@ -160,6 +162,7 @@ namespace hal
          */
         bool remove_source(Gate* gate, const GatePin* pin);
 
+        // TODO test
         /**
          * Remove a source endpoint from the net.
          *
@@ -186,6 +189,7 @@ namespace hal
          */
         bool is_a_source(const Gate* gate, const std::string& pin_name) const;
 
+        // TODO test
         /**
          * Check whether an endpoint is a source of the net.
          * The endpoint is specified by a tuple of a gate and an output pin of that gate.
@@ -246,6 +250,7 @@ namespace hal
          */
         Endpoint* add_destination(Gate* gate, GatePin* pin);
 
+        // TODO test
         /**
          * Remove a destination endpoint from the net.
          * The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.
@@ -256,6 +261,7 @@ namespace hal
          */
         bool remove_destination(Gate* gate, const std::string& pin_name);
 
+        // TODO test
         /**
          * Remove a destination endpoint from the net.
          * The endpoint is specified by a tuple of a gate and an input pin of that gate.
@@ -266,6 +272,7 @@ namespace hal
          */
         bool remove_destination(Gate* gate, const GatePin* pin);
 
+        // TODO test
         /**
          * Remove a destination endpoint from the net.
          *
@@ -292,6 +299,7 @@ namespace hal
          */
         bool is_a_destination(const Gate* gate, const std::string& pin_name) const;
 
+        // TODO test
         /**
          * Check whether an endpoint is a destination of the net.
          * The endpoint is specified by a tuple of a gate and an input pin of that gate.

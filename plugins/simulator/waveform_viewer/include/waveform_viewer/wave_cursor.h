@@ -32,6 +32,9 @@ namespace hal {
     class WaveTransform;
     class WaveScrollbar;
 
+    /**
+     * The vertical cursor line that shows the currently selected point in time across all waveforms.
+     */
     class WaveCursor : public QWidget
     {
         const WaveTransform* mTransform;

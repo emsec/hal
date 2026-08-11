@@ -105,14 +105,14 @@ namespace hal
 
         py_module.def_property("parent_module", &Module::get_parent_module, &Module::set_parent_module, R"(
             The parent module of this module.
-            Is set to None for the top module, but cannot be set to None by the user.
+            Is set to ``None`` for the top module, but cannot be set to ``None`` by the user.
 
             :type: hal_py.Module or None
         )");
 
         py_module.def("get_parent_module", &Module::get_parent_module, R"(
             Get the parent module of this module.
-            For the top module, None is returned.
+            For the top module, ``None`` is returned.
 
             :returns: The parent module.
             :rtype: hal_py.Module or None
@@ -176,9 +176,10 @@ namespace hal
             :param hal_py.Module module: The module.
             :param bool recursive: Set ``True`` to check recursively, ``False`` otherwise.
             :returns: ``True`` if the module is a submodule of the specified module, ``False`` otherwise.
+            :rtype: bool
         )");
 
-        py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recusive") = false, R"(
+        py_module.def("contains_module", &Module::contains_module, py::arg("other"), py::arg("recursive") = false, R"(
             Checks whether another module is a submodule of this module.
             If recursive is set to ``True``, all indirect submodules are also included.
 
@@ -189,13 +190,13 @@ namespace hal
         )");
 
         py_module.def_property_readonly("top_module", &Module::is_top_module, R"(
-            True only if the module is the top module of the netlist.
+            ``True`` only if the module is the top module of the netlist.
         
             :type: bool
         )");
 
         py_module.def("is_top_module", &Module::is_top_module, R"(
-            Returns true only if the module is the top module of the netlist.
+            Returns ``True`` only if the module is the top module of the netlist.
 
             :returns: ``True`` if the module is the top module, ``False`` otherwise.
             :rtype: bool
@@ -219,9 +220,6 @@ namespace hal
             Has no effect on module pins. 
 
             WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.
-
-            :returns: ``True`` on success, ``False`` otherwise.
-            :rtype: bool
         )");
 
         py_module.def("contains_net", &Module::contains_net, py::arg("net"), py::arg("recursive") = false, R"(
@@ -373,7 +371,7 @@ namespace hal
 
             :param int id: The unique ID of the gate.
             :param bool recursive: ``True`` to also consider gates in submodules, ``False`` otherwise.
-            :returns: The gate if found, None otherwise.
+            :returns: The gate if found, ``None`` otherwise.
             :rtype: hal_py.Gate or None
         )");
 
@@ -438,9 +436,9 @@ namespace hal
             py::arg("create_group") = true,
             py::arg("force_name")   = false,
             R"(
-            Manually assign a module pin to a net.
+            Manually create a module pin and assign it to a net.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_net``.
+            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_nets``.
             If ``create_group`` is set to ``False``, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using ``hal_py.Netlist.enable_automatic_net_checks``.
@@ -450,7 +448,7 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
@@ -475,10 +473,10 @@ namespace hal
             py::arg("create_group") = true,
             py::arg("force_name")   = false,
             R"(
-            Manually assign a module pin to a net.
+            Manually create a module pin and assign it to a net.
             The ID of the pin is set automatically.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_net``.
+            Hence, make sure to update the module nets beforehand using ``hal_py.Module.update_nets``.
             If ``create_group`` is set to ``False``, the pin will not be added to a pin group.
             
             WARNING: can only be used when automatic net checks have been disabled using ``hal_py.Netlist.enable_automatic_net_checks``.
@@ -487,7 +485,7 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
@@ -499,11 +497,11 @@ namespace hal
         )");
 
         py_module.def("get_pins", &Module::get_pins, py::arg("filter") = nullptr, R"(
-            Get the (ordered) pins of the module.
+            Get an ordered list of all pins of the module.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
             :param lambda filter: An optional filter.
-            :returns: A list of pins.
+            :returns: An ordered list of pins.
             :rtype: list[hal_py.ModulePin]
         )");
 
@@ -522,7 +520,7 @@ namespace hal
 
             :returns: A list of input pin names of the module.
             :param lambda filter: An optional filter.
-            :returns: An ordered list of pins.
+            :returns: An ordered list of pin names.
             :rtype: list[str]
         )");
 
@@ -638,7 +636,7 @@ namespace hal
 
             :param hal_py.ModulePin pin: The pin.
             :param str new_name: The name to be assigned to the pin.
-            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
@@ -783,7 +781,7 @@ namespace hal
             :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
             :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
             :param int start_index: The start index of the pin group. Defaults to ``0``.
-            :param bool delete_empty_groups: Set `True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :param bool delete_empty_groups: Set ``True``` to delete groups that are empty after the pins have been assigned to the new group, ```False``` to keep empty groups. Defaults to ```True```.
             :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None

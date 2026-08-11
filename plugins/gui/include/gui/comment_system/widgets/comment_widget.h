@@ -44,6 +44,9 @@ namespace hal
     class CommentItem;
     class CommentEntry;
 
+    /**
+     * Displays all comments that are attached to the currently selected netlist element.
+     */
     class CommentWidget : public QWidget
     {
         Q_OBJECT

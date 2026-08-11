@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Contains the rewrite rules and helpers used to symbolically simplify a Boolean function.
+     */
     namespace Simplification
     {
         /**

@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * Displays the RAM component of the selected gate type.
+     */
     class GateLibraryFrameRAM : public GatelibraryComponentFrame
     {
         Q_OBJECT

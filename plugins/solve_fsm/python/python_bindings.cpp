@@ -97,7 +97,7 @@ namespace hal
                 :param list[hal_py.Gate] state_reg: A list of flip-flop gates that make up the state register of the FSM.
                 :param list[hal_py.Gate] transition_logic: A list of combinational gates that make up the transition logic of the FSM.
                 :param pathlib.Path graph_path: File path at which to store the DOT state transition graph. No file is created if the path is left empty. Defaults to an empty path.
-                :returns: A dict from each state to its successor states as well as the condition for the respective transition to be taken on success, `None` otherwise.
+                :returns: A dict from each state to its successor states as well as the condition for the respective transition to be taken on success, ``None`` otherwise.
                 :rtype: dict[int,dict[int,hal_py.BooleanFunction]] or None
             )");
 
@@ -138,7 +138,7 @@ namespace hal
                 :param dict[hal_py.Gate,bool] initial_state: A dict from the state register flip-flops to their initial (Boolean) value. If an empty dict is provided, the initial state is set to 0. Defaults to an empty dict.
                 :param pathlib.Path graph_path: File path at which to store the DOT state transition graph. No file is created if the path is left empty. Defaults to an empty path.
                 :param int timeout: Timeout for the underlying SAT solvers. Defaults to 600000 ms.
-                :returns: A dict from each state to its successor states as well as the condition for the respective transition to be taken on success, `None` otherwise.
+                :returns: A dict from each state to its successor states as well as the condition for the respective transition to be taken on success, ``None`` otherwise.
                 :rtype: dict[int,dict[int,hal_py.BooleanFunction]] or None
             )");
 

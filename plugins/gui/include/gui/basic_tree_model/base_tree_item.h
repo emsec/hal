@@ -84,7 +84,7 @@ namespace hal
          * Sets the data for a specified column. The index must be within
          * already existing boundaries (for example, add dummy data beforehand).
          *
-         * @param index - The column to set the new data.
+         * @param column - The column to set the new data.
          * @param data - The new column data.
          */
         virtual void setDataAtColumn(int column, QVariant& data) = 0;
@@ -114,7 +114,7 @@ namespace hal
          * Get the child of a specific row.
          *
          * @param row - The requested row.
-         * @return The child if within bounds. Nullptr otherwise.
+         * @return The child if within bounds. `nullptr` otherwise.
          */
         virtual BaseTreeItem* getChild(int row) const;
 
@@ -145,16 +145,16 @@ namespace hal
          * Removes the child at the given row and returns it.
          *
          * @param row - The row from which to remove the child.
-         * @return The removed child. Nullptr if row was out of bounds.
+         * @return The removed child. `nullptr` if row was out of bounds.
          */
         virtual BaseTreeItem* removeChildAtPos(int row);
 
         /**
-         * Removes the given item and returns True if removing was successful
-         * or False if the given item was no child.
+         * Removes the given item and returns `true` if removing was successful
+         * or `false` if the given item was no child.
          *
          * @param child - The child to remove.
-         * @return True on success, False otherwise.
+         * @return `true` on success, `false` otherwise.
          */
         virtual bool removeChild(BaseTreeItem* child);
 
@@ -215,8 +215,7 @@ namespace hal
 
         /**
          * Set header label to new value. If element in list does not exist it gets created.
-         * @param column The section of the header.
-         * @param data The string value.
+         * @param data The header labels, one per section.
          */
         void setData(QList<QVariant> data) override;
 
@@ -224,7 +223,7 @@ namespace hal
          * Sets the data for a specified column. The index must be within
          * already existing boundaries (for example, add dummy data beforehand).
          *
-         * @param index - The column to set the new data.
+         * @param column - The column to set the new data.
          * @param data - The new column data.
          */
         void setDataAtColumn(int column, QVariant& data) override;

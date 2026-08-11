@@ -41,6 +41,9 @@ namespace hal
     class CommentEntry;
     class SearchableLabel;
 
+    /**
+     * Displays a single comment together with its header and its edit and delete actions.
+     */
     class CommentItem : public QFrame
     {
         Q_OBJECT

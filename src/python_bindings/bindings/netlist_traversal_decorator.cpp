@@ -361,7 +361,7 @@ namespace hal
 
             :param hal_py.Net net: Start net.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
+            :param set[hal_py.PinType] forbidden_pins: Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
             :returns: The next combinational gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
@@ -391,7 +391,7 @@ namespace hal
 
             :param hal_py.Gate gate: Start gate.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
+            :param set[hal_py.PinType] forbidden_pins: Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.
             :returns: The next combinational gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
@@ -427,7 +427,7 @@ namespace hal
 
                 :param hal_py.Gate start_gate: The gate to start from.
                 :param hal_py.Gate end_gate: The gate to connect to.
-                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
+                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output`` or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
                 :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
                 :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
                 :returns: The shortest distance between the start and end gate on success, ``None`` otherwise.
@@ -466,7 +466,7 @@ namespace hal
 
                 :param hal_py.Gate start_gate: The gate to start from.
                 :param hal_py.Gate end_gate: The gate to connect to.
-                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output``, or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
+                :param hal_py.PinDirection direction: The direction to search in. Can be ``hal_py.PinDirection.input``, ``hal_py.PinDirection.output`` or ``hal_py.PinDirection.inout`` to search both directions and return the shorter one.
                 :param lambda exit_endpoint_filter: Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
                 :param lambda entry_endpoint_filter: Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
                 :returns: A list of gates that connect the start with end gate on success, ``None`` otherwise.

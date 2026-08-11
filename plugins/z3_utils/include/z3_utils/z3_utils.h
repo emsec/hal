@@ -34,11 +34,13 @@
 
 namespace hal
 {
+    /**
+     * Translates between HAL Boolean functions and z3 expressions and provides the analyses built on top of them.
+     */
     namespace z3_utils
     {
         /**
-         * @brief Translates a hal Boolean function into an equivalent z3 expression in the given context. 
-         * 
+         * Translates a HAL Boolean function into an equivalent z3 expression in the given context. 
          * Replacement expressions for variables can be specified.
          * 
          * @param[in] bf - The Boolean function to translate.
@@ -46,19 +48,19 @@ namespace hal
          * @param[in] var2expr - Optional replacements for variables.
          * @returns A z3 expression equivalent to the Boolean function.
          */
-        z3::expr from_bf(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr = {});
+        z3::expr from_bf(const BooleanFunction& bf, z3::context& ctx, const std::map<std::string, z3::expr>& var2expr = {});
 
         /**
-         * @brief Creates a z3 expression from a binary representation of a value of arbitrary size.
+         * Creates a z3 expression from a binary representation of a value of arbitrary size.
          * 
          * @param[in] ctx - The context where the new expression is created in.
-         * @param[in] bit_string - The binary string 
+         * @param[in] bit_string - The binary string.
          * @returns A z3 expression equivalent to the Boolean function.
          */
-        Result<z3::expr> value_from_binary_string(z3::context& context, const std::string& bit_string);
+        Result<z3::expr> value_from_binary_string(z3::context& ctx, const std::string& bit_string);
 
         /**
-         * @brief Translates a z3 expression into an equivalent hal Boolean function.
+         * Translates a z3 expression into an equivalent HAL Boolean function.
          * 
          * @param[in] e - The expression to translate.
          * @returns A Boolean function equivalent to the  z3 expression.
@@ -66,15 +68,15 @@ namespace hal
         Result<BooleanFunction> to_bf(const z3::expr& e);
 
         /**
-         * @brief Translates a z3 expression into an equivalent smt2 representation. 
+         * Translates a z3 expression into an equivalent SMT2 representation. 
          * 
          * @param[in] e - The expression to translate.
-         * @returns A string containing the smt2 representation.
+         * @returns A string containing the SMT2 representation.
          */
         std::string to_smt2(const z3::expr& e);
 
         /**
-         * @brief Translates a z3 expression into a c++ representation that can be used to evalute the function fast and track the influence of the variables. 
+         * Translates a z3 expression into a C++ representation that can be used to evaluate the function fast and track the influence of the variables. 
          * 
          * @param[in] e - The expression to translate.
          * @returns A string containing the c++ representation.
@@ -99,18 +101,18 @@ namespace hal
         std::set<std::string> get_variable_names(const z3::expr& e);
 
         /**
-         * @brief Extracts all net ids from the variables of a z3 expression.
+         * @brief Extracts all net IDs from the variables of a z3 expression.
          * 
-         * @param[in] e - The expression to extract the net ids from.
-         * @returns A set containing all the net ids.
+         * @param[in] e - The expression to extract the net IDs from.
+         * @returns A set containing all the net IDs.
          */
         std::set<u32> extract_net_ids(const z3::expr& e);
 
         /**
-         * @brief Extracts all net ids from a set of variables.
+         * @brief Extracts all net IDs from a set of variables.
          * 
          * @param[in] variable_names - The set of variable names.
-         * @returns A set containing all the net ids.
+         * @returns A set containing all the net IDs.
          */
         std::set<u32> extract_net_ids(const std::set<std::string>& variable_names);
 

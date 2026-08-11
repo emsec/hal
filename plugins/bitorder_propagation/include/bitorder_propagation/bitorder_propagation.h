@@ -43,6 +43,9 @@ namespace hal
     class Module;
     class ModulePin;
 
+    /**
+     * Propagates a known bit order from one module pin group to the pin groups that are connected to it.
+     */
     namespace bitorder_propagation
     {
         /** 
@@ -127,22 +130,22 @@ namespace hal
                                                                                                            const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst);
 
         /**
-         * @brief Export word composition, known bitorder and connectivity in .json format to solve with external tools.
+         * @brief Export word composition, known bitorder and connectivity in `.json` format to solve with external tools.
          * 
          * @param[in] src - The pairs of module and pin group with known bit order.
          * @param[in] dst - The pairs of module and pin group with unknown bit order.
-         * @param[in] export_filepath - The filepath where the .json file should be written to.
+         * @param[in] export_filepath - The filepath where the `.json` file should be written to.
          * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> export_bitorder_propagation_information(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
                                                                                                                 const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
                                                                                                                 const std::string& export_filepath);
         /** 
-         * @brief Export word composition, known bitorder and connectivity in .json format to solve with external tools.
+         * @brief Export word composition, known bitorder and connectivity in `.json` format to solve with external tools.
          *
          * @param[in] src - The known indices for the nets belonging to the given module pin groups. 
          * @param[in] dst - The pairs of module ID and pin group name with unknown bit order.
-         * @param[in] export_filepath - The filepath where the .json file should be written to.
+         * @param[in] export_filepath - The filepath where the `.json` file should be written to.
          * @returns OK and the mapping from each mdoule/pingroup pair to its index on success, an error otherwise.
          */
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, u32>> export_bitorder_propagation_information(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,

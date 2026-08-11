@@ -234,12 +234,12 @@ namespace hal
         virtual void restoreFromProject() {;}
 
         /**
-         * Detached frame if widget is detached, nullptr otherwise
+         * Detached frame if widget is detached, `nullptr` otherwise
          */
         ContentFrame* detachedFrame() const;
 
         /**
-         * Set pointer to frame when detached, to nullptr when reattached
+         * Set pointer to frame when detached, to `nullptr` when reattached
          * @param df - pointer to frame
          */
         void setDetachedFrame(ContentFrame* df);

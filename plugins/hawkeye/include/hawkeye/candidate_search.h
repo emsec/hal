@@ -126,7 +126,7 @@ namespace hal
          * To this end, large candidates that fully contain a smaller candidate and candidates that are smaller than `min_state_size` are discarded.
          * 
          * @param[in] nl - The netlist to operate on.
-         * @param[in] config - The configurations of the detection approaches to be executed one after another on each start flip-flop.
+         * @param[in] configs - The configurations of the detection approaches to be executed one after another on each start flip-flop.
          * @param[in] min_state_size - The minimum size of a register candidate to be considered a cryptographic state register. Defaults to `40`.
          * @param[in] start_ffs - The flip-flops to analyze. Defaults to an empty vector, i.e., all flip-flops in the netlist will be analyzed.
          * @returns Ok() and a vector of candidates on success, an error otherwise.

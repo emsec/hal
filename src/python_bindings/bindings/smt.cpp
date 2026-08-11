@@ -60,7 +60,7 @@ namespace hal
         py_smt_query_config.def("with_call", &SMT::QueryConfig::with_call, py::arg("call"), R"(
             Sets the call type to the desired target.
 
-            :param hal_py.SMT.CallTyepe call: The solver type identifier.
+            :param hal_py.SMT.SolverCall call: The solver call.
             :returns: The updated SMT query configuration.
             :rtype: hal_py.SMT.QueryConfig
         )");
@@ -73,7 +73,7 @@ namespace hal
         )");
 
         py_smt_query_config.def("with_remote_solver", &SMT::QueryConfig::with_remote_solver, R"(
-            Activates remote SMT solver execution.
+            Indicates that the SMT solver runs on a remote machine.
 
             :returns: The updated SMT query configuration.
             :rtype: hal_py.SMT.QueryConfig
@@ -128,7 +128,7 @@ namespace hal
         py_smt_constraint.def("is_assignment", &SMT::Constraint::is_assignment, R"(
             Checks whether the constraint is an assignment constraint.
         
-            :returns: True of the constraint is an assignment, False otherwise.
+            :returns: ``True`` if the constraint is an assignment, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -149,7 +149,7 @@ namespace hal
             R"(
             Returns the assignment constraint as a pair of Boolean functions.
 
-            :returns: The assignment constraint on success, None otherwise.
+            :returns: The assignment constraint on success, ``None`` otherwise.
             :rtype: tuple(hal_py.BooleanFunction,hal_py.BooleanFunction) or None
         )");
 
@@ -168,9 +168,9 @@ namespace hal
                 }
             },
             R"(
-            Returns the function constraint as a Boolean function.
+            Returns the function constraint.
 
-            :returns: The function constraint on success, None otherwise.
+            :returns: The function constraint on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -196,14 +196,14 @@ namespace hal
         py_smt_model.def(py::self == py::self, R"(
             Checks whether two SMT models are equal.
 
-            :returns: True if both models are equal, False otherwise.
+            :returns: ``True`` if both models are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_smt_model.def(py::self != py::self, R"(
             Checks whether two SMT models are unequal.
 
-            :returns: True if both models are unequal, False otherwise.
+            :returns: ``True`` if both models are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -234,7 +234,7 @@ namespace hal
 
             :param str model_str: The SMT-Lib model string.
             :param hal_py.SMT.SolverType solver: The solver that computed the model.
-            :returns: The model on success, None otherwise.
+            :returns: The model on success, ``None`` otherwise.
             :rtype: hal_py.SMT.Model or None
         )");
 
@@ -257,7 +257,7 @@ namespace hal
             Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.
 
             :param hal_py.BooleanFunction bf: The Boolean function to evaluate.
-            :returns: The evaluated function on success, None otherwise.
+            :returns: The evaluated function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -303,28 +303,28 @@ namespace hal
             Checks whether the result is of a specific type.
 
             :param hal_py.SMT.ResultType type: The type to check.
-            :returns: True in case result matches the given type, False otherwise.
+            :returns: ``True`` in case result matches the given type, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_smt_result.def("is_sat", &SMT::SolverResult::is_sat, R"(
             Checks whether the result is satisfiable.
 
-            :returns: True in case result is satisfiable, False otherwise.
+            :returns: ``True`` in case result is satisfiable, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_smt_result.def("is_unsat", &SMT::SolverResult::is_unsat, R"(
             Checks whether the result is unsatisfiable.
 
-            :returns: True in case result is unsatisfiable, False otherwise.
+            :returns: ``True`` in case result is unsatisfiable, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_smt_result.def("is_unknown", &SMT::SolverResult::is_unknown, R"(
             Checks whether the result is unknown.
 
-            :returns: True in case result is unknown, False otherwise.
+            :returns: ``True`` in case result is unknown, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -371,8 +371,8 @@ namespace hal
             Checks whether a SMT solver of the given type is available on the local machine.
 
             :param hal_py.SMT.SolverType type: The SMT solver type.
-            :param hal_py.SMT.SolverCall call: The call to the SMT solver.
-            :returns: True if an SMT solver of the requested type is available, False otherwise.
+            :param hal_py.SMT.SolverCall call: The solver call.
+            :returns: ``True`` if an SMT solver of the requested type is available, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -439,10 +439,10 @@ namespace hal
             py::arg("config"),
             py::arg("smt2"),
             R"(
-            Queries a local SMT solver with the specified query configuration and the smt2 formatted query.
+            Queries a local SMT solver with the specified query configuration and the provided smt2 representation of the query.
 
             :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.
-            :param string smt2: A solver query formatted in smt2 style.
+            :param str smt2: The SMT solver query as smt2 string.
             :returns: The result on success, a string error message otherwise.
             :rtype: hal_py.SMT.Result or str
         )");
@@ -468,10 +468,10 @@ namespace hal
         )");
 
         py_smt_symbolic_state.def("get", &SMT::SymbolicState::get, py::arg("key"), R"(
-            Looks up the Boolean function equivalent in the symbolic state.
+            Looks up a Boolean function in the symbolic state.
 
             :param hal_py.BooleanFunction key: The Boolean function to look up.
-            :returns: The Boolean function equivalent from the symbolic state or the key itself if it is not contained in the symbolic state.
+            :returns: The Boolean function from the symbolic state or the key itself if it is not contained in the symbolic state.
             :rtype: hal_py.BooleanFunction
         )");
 
@@ -510,7 +510,7 @@ namespace hal
             Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
 
             :param hal_py.SMT.Constraint constraint: The equality constraint to evaluate.
-            :returns: None on success, a string error message otherwise.
+            :returns: ``None`` on success, a string error message otherwise.
             :rtype: None or str
         )");
     }

@@ -261,11 +261,11 @@ namespace hal
             py::arg("dst"),
             py::arg("export_filepath"),
             R"(
-                    Export collected bitorder information like word composition, known bitorder and connectivity in .json format to solve with external tools.
+                    Export collected bitorder information like word composition, known bitorder and connectivity in ``.json`` format to solve with external tools.
          
                     :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] src: The known indices for the nets belonging to the given module pin groups. 
                     :param set[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst: The pairs of module ID and pin group name with unknown bit order.
-                    :param str export_filepath: The filepath where the .json file should be written to.
+                    :param str export_filepath: The filepath where the ``.json`` file should be written to.
                     :returns: The mapping from each mdoule/pingroup pair to its index on success, ``None`` otherwise.
                     :rtype: dict[tuple(hal_py.Module, hal_py.ModulePinGroup), int] or None
                 )");
@@ -290,11 +290,11 @@ namespace hal
             py::arg("dst"),
             py::arg("export_filepath"),
             R"(
-                    Export collected bitorder information like word composition, known bitorder and connectivity in .json format to solve with external tools.
+                    Export collected bitorder information like word composition, known bitorder and connectivity in ``.json`` format to solve with external tools.
          
                    :param tuple(hal_py.Module,hal_py.ModulePinGroup) src: The pair of module and pin group with known bit order. 
                     :param tuple(hal_py.Module,hal_py.ModulePinGroup) dst: The pair of module and pin group with unknown bit order.
-                    :param str export_filepath: The filepath where the .json file should be written to.
+                    :param str export_filepath: The filepath where the ``.json`` file should be written to.
                     :returns: The mapping from each mdoule/pingroup pair to its index on success, ``None`` otherwise.
                     :rtype: dict[tuple(hal_py.Module, hal_py.ModulePinGroup), int] or None
                 )");

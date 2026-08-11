@@ -106,7 +106,7 @@ PYBIND11_PLUGIN(hal_gui)
                  Query position for gate identified by ID.
 
                  :param int gateId: Gate ID.
-                 :returns: Position of gate or None if gate not found in hash.
+                 :returns: Position of gate or ``None`` if gate not found in hash.
                  :rtype: tuple(int,int) or None
             )")
 
@@ -114,7 +114,7 @@ PYBIND11_PLUGIN(hal_gui)
                  Query position for module identified by ID.
 
                  :param int moduleId: Module ID.
-                 :returns: Position of module or None if module not found in hash.
+                 :returns: Position of module or ``None`` if module not found in hash.
                  :rtype: tuple(int,int) or None
             )");
 
@@ -132,7 +132,7 @@ PYBIND11_PLUGIN(hal_gui)
 
         :param int viewId: ID of the view.
         :param string name: New unique name.
-        :returns: True on success otherwise False.
+        :returns: ``True`` on success, ``False`` otherwise.
         :rtype: bool
 )")
     .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
@@ -141,14 +141,14 @@ PYBIND11_PLUGIN(hal_gui)
         :param int viewId: ID of the view.
         :param list[hal.py.module] modules: Modules to be added.
         :param list[hal.py.Gate] gates: Gates to be added.
-        :returns: True on success, otherwise False.
+        :returns: ``True`` on success, ``False`` otherwise.
         :rtype: bool
 )")
     .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
         Deletes the view specified by the ID.
 
         :param int viewId: ID of the view.
-        :returns: True on success, otherwise False.
+        :returns: ``True`` on success, ``False`` otherwise.
         :rtype: bool
         )")
     .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
@@ -157,7 +157,7 @@ PYBIND11_PLUGIN(hal_gui)
         :param int viewId: ID of the view.
         :param list[hal.py.module] modules: Modules to be removed.
         :param list[hal.py.Gate] gates: Gates to be removed.
-        :returns: True on success, otherwise False.
+        :returns: ``True`` on success, ``False`` otherwise.
         :rtype: bool
 )")
     .def_static("getId", &GuiApiClasses::View::getId, py::arg("name"),R"(
@@ -201,7 +201,7 @@ PYBIND11_PLUGIN(hal_gui)
 
             :param int viewId: ID of the view.
             :param Module* module: module to unfold
-            :returns: True on success, otherwise False.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
 )")
     .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
@@ -209,7 +209,7 @@ PYBIND11_PLUGIN(hal_gui)
 
             :param int viewId: ID of the view.
             :param Module* module: module to fold
-            :returns: True on success, otherwise False.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
 )")
     .def_static("getGridPlacement", &GuiApiClasses::View::getGridPlacement, py::arg("view_id"), R"(
@@ -254,7 +254,7 @@ PYBIND11_PLUGIN(hal_gui)
         
         :param int viewId: ID of the view to move.
         :param int destinationDirectoryId: ID of the destination directory to which the view will be moved. 
-            If None, the view is instead moved to the current directory.
+            If ``None``, the view is instead moved to the current directory.
         :param int row: The row index in the parent directory, where the view will be inserted.
 )")
     .def_static("moveDirectory", &GuiApiClasses::View::moveDirectory, py::arg("directoryId"), py::arg("destinationDirectoryId") = py::none(), py::arg("row") = py::none(), R"(
@@ -262,7 +262,7 @@ PYBIND11_PLUGIN(hal_gui)
         
         :param int directoryId: ID of the directory to move.
         :param int destinationDirectoryId: ID of the destination directory to which the directory will be moved. 
-            If None, the directory is instead moved to the current directory.
+            If ``None``, the directory is instead moved to the current directory.
         :param int row: The row index in the parent directory, where the directory will be inserted.
 )")
     .def_static("getChildDirectories", &GuiApiClasses::View::getChildDirectories, py::arg("directoryId"), R"(
@@ -270,7 +270,7 @@ PYBIND11_PLUGIN(hal_gui)
         
         :param int directoryId: ID of the parent directory, whose direct children will be returned
         :returns: List of the ids of all direct child directories of the specified directory. 
-            Returns None, if the given directory does not exist.
+            Returns ``None``, if the given directory does not exist.
         :rtype: list[int]|None
 )")
     .def_static("getChildViews", &GuiApiClasses::View::getChildViews, py::arg("directoryId"), R"(
@@ -278,7 +278,7 @@ PYBIND11_PLUGIN(hal_gui)
         
         :param int directoryId: ID of the parent directory, whose direct children will be returned
         :returns: List of the ids of all direct child views of the specified directory. 
-            Returns None, if the given directory does not exist.
+            Returns ``None``, if the given directory does not exist.
         :rtype: list[int]|None
 )");
 
@@ -341,8 +341,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectGate", py::overload_cast<u32, bool, bool>(&GuiApi::selectGate), py::arg("gate_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate with id 'gate_id' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gate with the id 'gate_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int gate_id: The gate id of the gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
@@ -351,8 +351,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectGate", py::overload_cast<Gate*, bool, bool>(&GuiApi::selectGate), py::arg("gate"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gate will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.Gate gate: The gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
@@ -361,8 +361,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectGate", py::overload_cast<const std::vector<u32>&, bool, bool>(&GuiApi::selectGate), py::arg("gate_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates with the ids in list 'gate_ids' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gate with the id 'gate_id' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gate with the id 'gate_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] gate_ids: List of gate ids of the gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
@@ -371,8 +371,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectGate", py::overload_cast<const std::vector<Gate*>&, bool, bool>(&GuiApi::selectGate), py::arg("gates"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gates will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Gate] gates: The gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
@@ -381,8 +381,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectNet", py::overload_cast<u32, bool, bool>(&GuiApi::selectNet), py::arg("mNetId"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net with id 'mNetId' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the net with the id 'mNetId' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the net with the id 'mNetId' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int mNetId: The net id of the net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
@@ -391,8 +391,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectNet", py::overload_cast<Net*, bool, bool>(&GuiApi::selectNet), py::arg("net"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net in the graph view of the GUI.
-       If 'clear_current_selection' is false, the net will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the net will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.Net net: The net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
@@ -401,8 +401,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectNet", py::overload_cast<const std::vector<u32>&, bool, bool>(&GuiApi::selectNet), py::arg("net_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets with the ids in list 'net_ids' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the net with the id 'mNetId' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the net with the id 'mNetId' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] net_ids: List of net ids of the nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
@@ -411,8 +411,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectNet", py::overload_cast<const std::vector<Net*>&, bool, bool>(&GuiApi::selectNet), py::arg("nets"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets in the graph view of the GUI.
-       If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the nets will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Net] nets: The nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
@@ -421,8 +421,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectModule", py::overload_cast<u32, bool, bool>(&GuiApi::selectModule), py::arg("module_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module with id 'module_id' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the module with the id 'module_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param int module_id: The module id of the module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
@@ -431,8 +431,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectModule", py::overload_cast<Module*, bool, bool>(&GuiApi::selectModule), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
-       If 'clear_current_selection' is false, the module will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the module will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.module module: The module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
@@ -441,8 +441,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectModule", py::overload_cast<const std::vector<u32>&, bool, bool>(&GuiApi::selectModule), py::arg("module_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules with the ids in list 'module_ids' in the graph view of the GUI.
-       If 'clear_current_selection' is false, the module with the id 'module_id' will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the module with the id 'module_id' will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[int] module_ids: List of module ids of the modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
@@ -451,8 +451,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("selectModule", py::overload_cast<const std::vector<Module*>&, bool, bool>(&GuiApi::selectModule), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
-       If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.module] modules: The modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
@@ -461,8 +461,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<Gate*, bool, bool>(&GuiApi::select), py::arg("gate"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gate in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gate will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gate will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.Gate gate: The gate to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gate.
@@ -471,8 +471,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<Net*, bool, bool>(&GuiApi::select), py::arg("net"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the net in the graph view of the GUI.
-       If 'clear_current_selection' is false, the net will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the net will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.Net net: The net to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the net.
@@ -481,8 +481,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<Module*, bool, bool>(&GuiApi::select), py::arg("module"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the module in the graph view of the GUI.
-       If 'clear_current_selection' is false, the module will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the module will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param hal_py.module module: The module to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the module.
@@ -491,8 +491,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<const std::vector<Gate*>&, bool, bool>(&GuiApi::select), py::arg("gates"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gates will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gates will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Gate] gates: The gates to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the gates.
@@ -501,8 +501,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<const std::vector<Net*>&, bool, bool>(&GuiApi::select), py::arg("nets"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the nets in the graph view of the GUI.
-       If 'clear_current_selection' is false, the nets will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the nets will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Net] nets: The nets to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the nets.
@@ -511,8 +511,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<const std::vector<Module*>&, bool, bool>(&GuiApi::select), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the modules in the graph view of the GUI.
-       If 'clear_current_selection' is false, the modules will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.module] modules: The modules to be selected.
        :param bool clear_current_selection: Determines if the previous selection gets cleared before the selection of the modules.
@@ -521,8 +521,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&, bool, bool>(&GuiApi::select), py::arg("gate_ids"), py::arg("net_ids"), py::arg("module_ids"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates, nets and modules with the passed ids in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gates, nets and modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Gate] gates: The ids of the gates to be selected.
        :param list[hal_py.Net] nets: The ids of the nets to be selected.
@@ -533,8 +533,8 @@ PYBIND11_PLUGIN(hal_gui)
 
     py_gui_api.def("select", py::overload_cast<const std::vector<Gate*>&, const std::vector<Net*>&, const std::vector<Module*>&, bool, bool>(&GuiApi::select), py::arg("gates"), py::arg("nets"), py::arg("modules"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(
        Select the gates, nets and modules in the graph view of the GUI.
-       If 'clear_current_selection' is false, the gates, nets and modules will be added to the currently existing selection.
-       If 'navigate_to_selection' is false, the graph view will not modify the graph view camera position to fit all selected items.
+       If 'clear_current_selection' is ``False``, the gates, nets and modules will be added to the currently existing selection.
+       If 'navigate_to_selection' is ``False``, the graph view will not modify the graph view camera position to fit all selected items.
 
        :param list[hal_py.Gate] gates: The gates to be selected.
        :param list[hal_py.Net] nets: The nets to be selected.

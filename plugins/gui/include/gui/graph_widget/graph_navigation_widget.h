@@ -114,7 +114,7 @@ namespace hal {
          * Note: It seems that this piece of code can't be put in the keyPressEvent. I won't work then.
          *
          * @param ev - The QEvent
-         * @returns true if the event e was recognized and processed (see Qt documentation)
+         * @returns `true` if the event e was recognized and processed (see Qt documentation), `false` otherwise.
          */
         bool event(QEvent *ev) override;
     public:
@@ -157,10 +157,10 @@ namespace hal {
     public:
         /**
          * Constructor. <br>
-         * If the onlyNavigate flag is set to true, this widget can not be used to add gates to the view. In this case
+         * If the onlyNavigate flag is set to `true`, this widget can not be used to add gates to the view. In this case
          * only the GraphNavigationTableWidget will appear while navigating.
          *
-         * @param onlyNavigate - Set to <b>true</b> if the widget should be used for navigation only.
+         * @param onlyNavigate - Set to `true` if the widget should be used for navigation only.
          * @param parent - The parent widget (where to embed the navigation widget)
          */
         GraphNavigationWidget(bool onlyNavigate, QWidget* parent = nullptr);
@@ -208,14 +208,14 @@ namespace hal {
          * Checks if the navigation widget is empty. It is considered empty if neither the GraphNavigationTableWidget nor
          * the GraphNavigationTreeWidget contain data to show.
          *
-         * @returns <b>true</b> if the navigation widget is considered empty.
+         * @returns `true` if the navigation widget is considered empty, `false` otherwise.
          */
         bool isEmpty() const;
 
         /**
          * Checks if both the GraphNavigationTableWidget and the GraphNavigationTreeWidget contain data to show.
          *
-         * @returns <b>true</b> if both widgets contain data to show.
+         * @returns `true` if both widgets contain data to show, `false` otherwise.
          */
         bool hasBothWidgets() const;
 

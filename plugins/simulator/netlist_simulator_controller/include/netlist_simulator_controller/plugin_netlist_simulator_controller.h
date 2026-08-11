@@ -39,6 +39,9 @@ namespace hal
     class SimulationSettings;
     class Netlist;
 
+    /**
+     * Stores the simulation controllers of a project so that they can be restored when the project is opened again.
+     */
     class SimulatorSerializer : public ProjectSerializer
     {
         Netlist* mNetlist;
@@ -56,6 +59,9 @@ namespace hal
 
     class NetlistSimulatorControllerPlugin;
 
+    /**
+     * The GUI contribution of the simulation controller plugin.
+     */
     class GuiExtensionSimulator : public GuiExtensionInterface
     {
         NetlistSimulatorControllerPlugin* mParent;
@@ -76,6 +82,9 @@ namespace hal
         void set_parameter(const std::vector<PluginParameter>& params) override;
     };
 
+    /**
+     * The plugin that provides the simulation controller and the registry of simulation engines.
+     */
     class PLUGIN_API NetlistSimulatorControllerPlugin : public BasePluginInterface
     {
         static u32 sMaxControllerId;
@@ -123,7 +132,6 @@ namespace hal
          * Restore controller with waveform data from previous simulation.
          * @param[in] nl The netlist the simulation was performed with.
          * @param[in] filename Full path and filename of 'netlist_simulator_controller.json'.
-         * @param[in] workdir Working directory will be created at given location.
          *
          * @returns The simulator instance.
          */

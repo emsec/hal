@@ -32,6 +32,9 @@
 
 namespace hal
 {
+    /**
+     * The base class for the key-value tables of the details views.
+     */
     class GeneralTableWidget : public QTableWidget
     {
         Q_OBJECT
@@ -52,6 +55,7 @@ namespace hal
          * @param key - The key displayed in the first column of the row.
          * @param val - The value displayed in the second column of the row.
          * @param contextMenu - The context menu that will be displayed when right clicking the row.
+         * @param doubleClickAction - The action that is executed when double clicking the row.
          */
         void setRow(const QString& key, const QString& val, QMenu* contextMenu = nullptr, std::function<void()> doubleClickAction = nullptr);
 

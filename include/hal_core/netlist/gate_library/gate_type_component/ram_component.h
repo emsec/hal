@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * A gate type component that describes a random access memory, in particular its size in bits.
+     */
     class RAMComponent : public GateTypeComponent
     {
     public:
@@ -51,7 +54,7 @@ namespace hal
          * Check whether a component is a RAMComponent.
          * 
          * @param[in] component - The component to check.
-         * @returns True if component is a RAMComponent, false otherwise.
+         * @returns `true` if component is a RAMComponent, `false` otherwise.
          */
         static bool is_class_of(const GateTypeComponent* component);
 

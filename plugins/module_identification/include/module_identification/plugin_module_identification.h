@@ -41,13 +41,13 @@ namespace hal
 
         /**
          * @brief Flag to enable or disable multithreading.
-         * Default is false.
+         * Default is `false`.
          */
         bool m_do_multithreading = false;
 
         /**
          * @brief Flag to indicate if the button was clicked.
-         * Default is false.
+         * Default is `false`.
          */
         bool m_button_clicked = false;
 

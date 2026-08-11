@@ -81,7 +81,7 @@ namespace hal
          * No flag can be registered twice.
          *
          * @param[in] flag - The flag to check.
-         * @returns True if the flag is already registered.
+         * @returns `true` if the flag is already registered, `false` otherwise.
          */
         bool is_registered(const std::string& flag) const;
 
@@ -95,7 +95,7 @@ namespace hal
          * @param[in] flag - The flag activating the option.
          * @param[in] description - A description of the option.
          * @param[in] parameters - A list of default values for all parameters. [optional]
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool add(const std::string& flag, const std::string& description, const std::initializer_list<std::string>& parameters = {});
 
@@ -109,7 +109,7 @@ namespace hal
          * @param[in] flags - The flags activating the option.
          * @param[in] description - A description of the option.
          * @param[in] parameters - A list of default values for all parameters. [optional]
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool add(const std::initializer_list<std::string>& flags, const std::string& description, const std::initializer_list<std::string>& parameters = {});
 
@@ -130,7 +130,7 @@ namespace hal
          *
          * @param[in] other_options - The set of options to add.
          * @param[in] category - A category for the added options. [optional]
-         * @returns True on success.
+         * @returns `true` on success, `false` otherwise.
          */
         bool add(const ProgramOptions& other_options, const std::string& category = "");
 
@@ -139,7 +139,7 @@ namespace hal
          * If multiple flags for an option exist, the others will still remain available.
          *
          * @param[in] flag - The flag activating the option.
-         * @returns True if the option was found.
+         * @returns `true` if the option was found, `false` otherwise.
          */
         bool remove(const std::string& flag);
 
@@ -160,6 +160,9 @@ namespace hal
         std::vector<std::tuple<std::set<std::string>, std::string>> get_options() const;
 
     private:
+        /**
+         * A single command line option, comprising its description, its parameters, and the flags that select it.
+         */
         struct Option
         {
             std::string description;

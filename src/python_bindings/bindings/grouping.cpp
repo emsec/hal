@@ -65,7 +65,7 @@ namespace hal
 
             :param hal_py.Gate gate: The gate to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -76,7 +76,7 @@ namespace hal
 
             :param int gate_id: The ID of the gate to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -123,7 +123,7 @@ namespace hal
             Fails if the gate is not contained within the grouping.
 
             :param hal_py.Gate gate: The gate to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -132,7 +132,7 @@ namespace hal
             Fails if the gate is not contained within the grouping.
 
             :param int gate_id: The ID of the gate to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -140,7 +140,7 @@ namespace hal
             Check whether a gate is in the grouping.
 
             :param hal_py.Gate gate: The gate to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -148,7 +148,7 @@ namespace hal
             Check whether a gate is in the grouping by ID.
 
             :param int gate_id: The ID of the gate to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -159,7 +159,7 @@ namespace hal
 
             :param hal_py.Net net: The net to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -170,7 +170,7 @@ namespace hal
 
             :param int net_id: The ID of the net to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -217,7 +217,7 @@ namespace hal
             Fails if the net is not contained within the grouping.
 
             :param hal_py.Net net: The net to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -226,7 +226,7 @@ namespace hal
             Fails if the net is not contained within the grouping.
 
             :param int net_id: The ID of the net to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -234,7 +234,7 @@ namespace hal
             Check whether a net is in the grouping.
 
             :param hal_py.Net net: The net to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -242,7 +242,7 @@ namespace hal
             Check whether a net is in the grouping by ID.
 
             :param int net_id: The ID of the net to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -253,7 +253,7 @@ namespace hal
 
             :param hal_py.Gate module: The module to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -264,7 +264,7 @@ namespace hal
 
             :param int module_id: The ID of the module to assign.
             :param bool force: Overwrite previous assignment.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -310,7 +310,7 @@ namespace hal
             Fails if the module is not contained within the grouping.
 
             :param hal_py.Gate module: The module to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -319,7 +319,7 @@ namespace hal
             Fails if the module is not contained within the grouping.
 
             :param int module_id: The ID of the module to remove.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -327,7 +327,7 @@ namespace hal
             Check whether a module is in the grouping.
 
             :param hal_py.Gate module: The module to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -335,7 +335,7 @@ namespace hal
             Check whether a module is in the grouping by ID.
 
             :param int module_id: The ID of the module to check for.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
     }

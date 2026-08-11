@@ -31,6 +31,9 @@
 
 namespace hal
 {
+    /**
+     * The kinds of modification that a pin group action can perform, e.g., creating, renaming, or moving a pin group.
+     */
     class PinActionType : public QObject
     {
         Q_OBJECT
@@ -102,6 +105,9 @@ namespace hal
     class ActionPingroup : public UserAction
     {
     private:
+        /**
+         * One indivisible step of a pin group action, which can be undone on its own.
+         */
         class AtomicAction
         {
         public:
@@ -112,6 +118,9 @@ namespace hal
             AtomicAction(PinActionType::Type tp, int id, const QString& name = QString(), int v=0) : mType(tp), mId(id), mName(name), mValue(v) {;}
         };
 
+        /**
+         * The state of a pin group before it was modified, kept so that the action can be undone.
+         */
         class GroupRestore
         {
         public:

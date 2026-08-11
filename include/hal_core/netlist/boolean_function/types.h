@@ -35,6 +35,9 @@
 
 namespace hal
 {
+    /**
+     * Contains the configuration, queries, and results of the SMT solvers that HAL can use to reason about Boolean functions.
+     */
     namespace SMT
     {
         /**
@@ -87,7 +90,7 @@ namespace hal
             QueryConfig& with_solver(SolverType solver);
 
             /**
-             * Sets the solver type to the desired SMT solver.
+             * Sets the call type to the desired target.
              *
              * @param[in] call - The solver call.
              * @returns The updated SMT query configuration.
@@ -255,7 +258,7 @@ namespace hal
              * Checks whether two SMT models are unequal.
              *
              * @param[in] other - The model to compare again.
-             * @returns True if both models are unequal, false otherwise.
+             * @returns `true` if both models are unequal, `false` otherwise.
              */
             bool operator!=(const Model& other) const;
 

@@ -39,7 +39,9 @@ namespace hal
 
     void plugin_interfaces_init(py::module& m)
     {
-        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, PyBasePluginInterface> py_base_plugin_interface(m, "BasePluginInterface");
+        py::class_<BasePluginInterface, RawPtrWrapper<BasePluginInterface>, PyBasePluginInterface> py_base_plugin_interface(m, "BasePluginInterface", R"(
+            The base class for all HAL plugins. Every plugin has to derive from this class and implement at least ``get_name`` and ``get_version``.
+        )");
 
         py_base_plugin_interface.def_property_readonly("name", &BasePluginInterface::get_name, R"(
             The name of the plugin.

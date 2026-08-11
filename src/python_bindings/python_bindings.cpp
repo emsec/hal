@@ -12,9 +12,6 @@ namespace hal
         py::module m("hal_py", "hal python bindings");
 #endif    // ifdef PYBIND11_MODULE
 
-        m.def(
-            "log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
-
         data_container_init(m);
 
         core_utils_init(m);

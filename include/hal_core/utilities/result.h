@@ -34,13 +34,20 @@
 
 namespace hal
 {
+    /**
+     * Contains the tag types that the `OK()` and `ERR()` macros use to select the matching `Result` constructor.
+     */
     namespace result_constructor_type
     {
-        // Constructor type for macro: OK()
+        /**
+         * Tag type that lets the `OK()` macro select the success constructor of `Result`.
+         */
         class OK
         {
         };
-        // Constructor type for macro: ERROR()
+        /**
+         * Tag type that lets the `ERR()` macro select the error constructor of `Result`.
+         */
         class ER
         {
         };
@@ -110,7 +117,7 @@ namespace hal
          * Check whether two results are equal.
          *
          * @param[in] other - The result to compare against.
-         * @returns True if both results are equal, false otherwise.
+         * @returns `true` if both results are equal, `false` otherwise.
          */
         bool operator==(const Result<T>& other)
         {
@@ -121,7 +128,7 @@ namespace hal
          * Check whether two results are unequal.
          *
          * @param[in] other - The result to compare against.
-         * @returns True if both results are unequal, false otherwise.
+         * @returns `true` if both results are unequal, `false` otherwise.
          */
         bool operator!=(const Result<T>& other)
         {

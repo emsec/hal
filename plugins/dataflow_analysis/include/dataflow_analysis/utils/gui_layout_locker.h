@@ -33,8 +33,13 @@ namespace hal
 
     namespace dataflow
     {
+        /**
+         * Suppresses layout updates of the GUI for as long as the object exists.
+         * This keeps a long-running analysis from triggering a re-layout on every single netlist change.
+         */
         class GuiLayoutLocker
         {
+            /** The GUI plugin whose layout updates are suppressed, `nullptr` if the GUI is not loaded. */
             UIPluginInterface* mGuiPlugin;
 
         public:

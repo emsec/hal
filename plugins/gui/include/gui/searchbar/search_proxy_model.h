@@ -29,6 +29,9 @@
 
 namespace hal
 {
+    /**
+     * The base class for the proxy models that filter their source model by the current search string and options.
+     */
     class SearchProxyModel : public QSortFilterProxyModel
     {
         Q_OBJECT
@@ -53,12 +56,12 @@ namespace hal
          *
          * @param searchString The search criteria to match against `stringToCheck`.
          * @param stringToCheck The string to be checked for a match.
-         * @return True if `stringToCheck` matches the search criteria, otherwise false.
+         * @return `true` if `stringToCheck` matches the search criteria, `false` otherwise.
          */
         bool isMatching(const QString searchString, const QString stringToCheck) const;
 
         /**
-         * @brief Should be called inside filterAcceptsRow function and returns true if the source_row, source_parent matches given SearchOptions
+         * @brief Should be called inside filterAcceptsRow function and returns `true` if the source_row, source_parent matches given SearchOptions
          *
          * This function checks whether a given `source_row` should be shown
          * based on given `search options` .
@@ -69,7 +72,7 @@ namespace hal
          * @param endIndex The index of the last column to stop checking.
          * @param offset The offset to apply to the column indices based on search options if specific columns are checked.
          *
-         * @return True if the row contains a matching entry, otherwise false.
+         * @return `true` if the row contains a matching entry, `false` otherwise.
          */
         bool checkRow(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const;
 

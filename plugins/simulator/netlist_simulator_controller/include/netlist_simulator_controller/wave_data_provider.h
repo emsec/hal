@@ -39,6 +39,9 @@ namespace hal {
     class WaveDataTimeframe;
     class WaveData;
 
+    /**
+     * The base class for the sources that feed waveform transitions to the renderer, one transition at a time.
+     */
     class WaveDataProvider
     {
         WaveData::NetType mWaveType;
@@ -57,6 +60,9 @@ namespace hal {
         void setWaveType(WaveData::NetType type, int bts=1, int base=16);
     };
 
+    /**
+     * Provides waveform transitions from a map that is already held in memory.
+     */
     class WaveDataProviderMap : public WaveDataProvider
     {
         const QMap<u64,int>& mDataMap;
@@ -67,6 +73,9 @@ namespace hal {
         virtual SaleaeDataTuple nextPoint() override;
     };
 
+    /**
+     * Provides waveform transitions by streaming them from a SALEAE data file.
+     */
     class WaveDataProviderFile : public WaveDataProvider
     {
     public:
@@ -91,6 +100,9 @@ namespace hal {
         const QMap<u64,int>& dataMap() const { return mDataMap; }
     };
 
+    /**
+     * Provides the waveform transitions of a clock, which are generated on the fly from its period.
+     */
     class WaveDataProviderClock : public WaveDataProvider
     {
         const SimulationInput::Clock& mClock;
@@ -102,6 +114,9 @@ namespace hal {
         virtual SaleaeDataTuple nextPoint() override;
     };
 
+    /**
+     * Provides the combined waveform transitions of a group of nets.
+     */
     class WaveDataProviderGroup : public WaveDataProvider
     {
         SaleaeParser mParser;
@@ -122,6 +137,9 @@ namespace hal {
         virtual SaleaeDataTuple nextPoint() override;
     };
 
+    /**
+     * Provides the waveform transitions that result from evaluating a Boolean function on a group of nets.
+     */
     class WaveDataProviderBoolean : public WaveDataProviderGroup
     {
         int mInputCount;
@@ -134,6 +152,9 @@ namespace hal {
         virtual SaleaeDataTuple nextPoint() override;
     };
 
+    /**
+     * Provides the points in time at which a set of nets shows the configured transition.
+     */
     class WaveDataProviderTrigger : public WaveDataProvider
     {
         SaleaeParser mParser;

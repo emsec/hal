@@ -124,27 +124,27 @@ namespace hal
         }
     }
 
-    void EventHandler::register_callback(const std::string& name, std::function<void(GateEvent::event, Gate*, u32)> function)
+    void EventHandler::register_callback(const std::string& name, std::function<void(GateEvent::event e, Gate*, u32 associated_data)> function)
     {
         m_gate_callback.add_callback(name, function);
     }
 
-    void EventHandler::register_callback(const std::string& name, std::function<void(GroupingEvent::event, Grouping*, u32)> function)
+    void EventHandler::register_callback(const std::string& name, std::function<void(GroupingEvent::event e, Grouping* grouping, u32 associated_data)> function)
     {
         m_grouping_callback.add_callback(name, function);
     }
 
-    void EventHandler::register_callback(const std::string& name, std::function<void(ModuleEvent::event, Module*, u32)> function)
+    void EventHandler::register_callback(const std::string& name, std::function<void(ModuleEvent::event e, Module* module, u32 associated_data)> function)
     {
         m_module_callback.add_callback(name, function);
     }
 
-    void EventHandler::register_callback(const std::string& name, std::function<void(NetEvent::event, Net*, u32)> function)
+    void EventHandler::register_callback(const std::string& name, std::function<void(NetEvent::event e, Net*, u32 associated_data)> function)
     {
         m_net_callback.add_callback(name, function);
     }
 
-    void EventHandler::register_callback(const std::string& name, std::function<void(NetlistEvent::event, Netlist*, u32)> function)
+    void EventHandler::register_callback(const std::string& name, std::function<void(NetlistEvent::event e, Netlist* netlist, u32 associated_data)> function)
     {
         m_netlist_callback.add_callback(name, function);
     }

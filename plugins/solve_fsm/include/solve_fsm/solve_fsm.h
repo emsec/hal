@@ -41,6 +41,9 @@ namespace hal
     class Netlist;
     class Gate;
 
+    /**
+     * Recovers the state transition graph of a finite state machine from the gate-level netlist that implements it.
+     */
     namespace solve_fsm
     {
         /**

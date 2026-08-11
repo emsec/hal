@@ -64,8 +64,8 @@ namespace hal
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] from_gate - The start vertex of the shortest path.
-         * @param[in] to_gates - A vector of end vertices of the shortest path.
+         * @param[in] from_vertex - The start vertex of the shortest path.
+         * @param[in] to_vertices - A vector of end vertices of the shortest path.
          * @param[in] direction - The direction in which to compute the shortest paths starting at the `from_vertex`.
          * @returns The shortest paths in order of the `to_vertices` on success, an error otherwise.
          */
@@ -78,8 +78,8 @@ namespace hal
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] from_gate - The start vertex of the shortest path.
-         * @param[in] to_gates - An igraph vector of end vertices of the shortest path.
+         * @param[in] from_vertex - The start vertex of the shortest path.
+         * @param[in] to_vertices - An igraph vector of end vertices of the shortest path.
          * @param[in] direction - The direction in which to compute the shortest paths starting at the `from_vertex`.
          * @returns The shortest paths in order of the `to_vertices` on success, an error otherwise.
          */
@@ -106,8 +106,8 @@ namespace hal
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] from_gate - The start vertex of the shortest path.
-         * @param[in] to_gates - A vector of end vertices of the shortest path.
+         * @param[in] from_vertex - The start vertex of the shortest path.
+         * @param[in] to_vertices - A vector of end vertices of the shortest path.
          * @param[in] direction - The direction in which to compute the shortest paths starting at the `from_vertex`.
          * @returns The shortest paths in order of the `to_vertices` on success, an error otherwise.
          */
@@ -119,8 +119,8 @@ namespace hal
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] from_gate - The start vertex of the shortest path.
-         * @param[in] to_gates - An igraph vector of end vertices of the shortest path.
+         * @param[in] from_vertex - The start vertex of the shortest path.
+         * @param[in] to_vertices - An igraph vector of end vertices of the shortest path.
          * @param[in] direction - The direction in which to compute the shortest paths starting at the `from_vertex`.
          * @returns The shortest paths in order of the `to_vertices` on success, an error otherwise.
          */

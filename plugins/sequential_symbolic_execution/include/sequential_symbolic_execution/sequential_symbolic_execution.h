@@ -44,6 +44,9 @@ namespace hal
     class Net;
     class Netlist;
 
+    /**
+     * Symbolically executes the sequential part of a netlist over several clock cycles.
+     */
     namespace sse
     {
         /**

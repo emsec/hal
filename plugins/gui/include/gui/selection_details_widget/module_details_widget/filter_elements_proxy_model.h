@@ -25,15 +25,13 @@ namespace hal
 
         /**
          * Sets whether or not nets are filtered out by the filter.
-         * @returns <b>true</b> if nets are filtered out now. <b>false</b> if not. 
-         * @param filterNets if <b>true</b>, then nets are filtered out.
+         * @param filterNets if `true`, then nets are filtered out.
          */
         void setFilterNets(bool filterNets);
 
         /**
          * Sets whether or not gates are filtered out by the filter.
-         * @returns <b>true</b> if gates are filtered out now. <b>false</b> if not. 
-         * @param filterNets if <b>true</b>, then gates are filtered out.
+         * @param filterGates if `true`, then gates are filtered out.
          */
         void setFilterGates(bool filterGates);
 
@@ -53,7 +51,7 @@ namespace hal
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - The source parent
-         * @returns <b>true</b> if the row should be included in the model.
+         * @returns `true` if the row should be included in the model, `false` otherwise.
          */
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 

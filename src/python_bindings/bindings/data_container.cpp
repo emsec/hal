@@ -16,28 +16,28 @@ namespace hal
             Add a data entry.<br>
             May overwrite an existing entry.
 
-            :param str category: The data key category.
+            :param str category: The data category.
             :param str key: The data key.
             :param str data_type: The data type.
             :param str value: The data value.
             :param bool log_with_info_level: Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_data_container.def("has_data", &DataContainer::has_data, py::arg("category"), py::arg("key"), R"(
             Determine whether an entry of given category and key exists.
 
-            :param str category: The data key category.
+            :param str category: The data category.
             :param str key: The data key.
-            :returns: True if the entry exists, False otherwise.
+            :returns: ``True`` if the entry exists, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_data_container.def("get_data", &DataContainer::get_data, py::arg("category"), py::arg("key"), R"(
             Get the data entry specified by the given category and key.
 
-            :param str category: The data key category.
+            :param str category: The data category.
             :param str key: The data key.
             :returns: The tuple ((1) type, (2) value).
             :rtype: tuple(str,str)
@@ -46,10 +46,10 @@ namespace hal
         py_data_container.def("delete_data", &DataContainer::delete_data, py::arg("category"), py::arg("key"), py::arg("log_with_info_level") = false, R"(
             Delete a data entry.
 
-            :param str category: The data key category.
+            :param str category: The data category.
             :param str key: The data key.
             :param bool log_with_info_level: Force explicit logging channel 'netlist' with log level 'info' to trace GUI events.
-            :returns: True on success, false otherwise.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 

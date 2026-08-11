@@ -33,9 +33,15 @@ namespace hal
     {
         namespace evaluation
         {
+            /**
+             * The configuration of the evaluation phase of dataflow analysis, e.g., the group sizes that are prioritized.
+             */
             struct Configuration
             {
+                /** The group sizes that are preferred when candidate groupings are ranked against each other. */
                 std::vector<u32> prioritized_sizes;
+
+                /** The minimum number of gates that a group must contain to be part of the result. */
                 u32 min_group_size;
             };
 

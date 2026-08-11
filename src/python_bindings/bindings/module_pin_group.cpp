@@ -11,14 +11,14 @@ namespace hal
         py_module_pin_group.def(py::self == py::self, R"(
             Check whether two module pin groups are equal.
 
-            :returns: True if both module pin groups are equal, False otherwise.
+            :returns: ``True`` if both module pin groups are equal, ``False`` otherwise.
             :rtype: bool
         )");
 
         py_module_pin_group.def(py::self != py::self, R"(
             Check whether two module pin groups are unequal.
 
-            :returns: True if both module pin groups are unequal, False otherwise.
+            :returns: ``True`` if both module pin groups are unequal, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -38,7 +38,7 @@ namespace hal
         py_module_pin_group.def("get_id", &PinGroup<ModulePin>::get_id, R"(
             Get the ID of the module pin group. The ID is unique within a module.
 
-            :returns: The ID of the pin.
+            :returns: The ID of the pin group.
             :rtype: int
         )");
 
@@ -64,7 +64,7 @@ namespace hal
         py_module_pin_group.def("get_direction", &PinGroup<ModulePin>::get_direction, R"(
             Get the direction of the pin group.
 
-            :returns: The direction of the pin.
+            :returns: The direction of the pin group.
             :rtype: hal_py.PinDirection
         )");
 
@@ -77,7 +77,7 @@ namespace hal
         py_module_pin_group.def("get_type", &PinGroup<ModulePin>::get_type, R"(
             Get the type of the pin group.
 
-            :returns: The type of the pin.
+            :returns: The type of the pin group.
             :rtype: hal_py.PinType
         )");
 
@@ -89,9 +89,9 @@ namespace hal
 
         py_module_pin_group.def("get_pins", &PinGroup<ModulePin>::get_pins, py::arg("filter") = nullptr, R"(
             Get the (ordered) pins of the pin groups.
-            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter function to be evaluated on each pin.
+            :param lambda filter: An optional filter.
             :returns: The ordered pins.
             :rtype: list[hal_py.ModulePin]
         )");
@@ -115,7 +115,7 @@ namespace hal
             Get the pin specified by the given index.
 
             :param int index: The index of the pin within the pin group.
-            :returns: The pin on success, None otherwise.
+            :returns: The pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
@@ -143,10 +143,10 @@ namespace hal
         )");
 
         py_module_pin_group.def("contains_pin", &PinGroup<ModulePin>::contains_pin, py::arg("pin"), R"(
-            Check whether the pin group contaisn the given pin.
+            Check whether the pin group contains the given pin.
 
             :param hal_py.ModulePin pin: The pin to check.
-            :returns: True if the pin group contains the pin, True otherwise.
+            :returns: ``True`` if the pin group contains the pin, ``False`` otherwise.
             :rtype: bool
         )");
 
@@ -241,7 +241,7 @@ namespace hal
         py_module_pin_group.def("empty", &PinGroup<ModulePin>::empty, R"(
             Check whether the pin group is empty, i.e., contains no pins.
 
-            :returns: True if the pin group is empty, False otherwise.
+            :returns: ``True`` if the pin group is empty, ``False`` otherwise.
             :rtype: bool
         )");
 
