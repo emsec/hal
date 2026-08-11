@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('structhal_1_1_graphics_module_1_1_modu
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="graphics__module_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::GraphicsModule::ModulePin:</div>
 <div class="dyncontent">
@@ -113,13 +115,13 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a5bdc05b7d3b18f499191be0891371d61"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_graphics_module_1_1_module_pin.html#a5bdc05b7d3b18f499191be0891371d61">name</a></td></tr>
 <tr class="separator:a5bdc05b7d3b18f499191be0891371d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa14bcbee588796d58b6c94548870ec45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_graphics_module_1_1_module_pin.html#aa14bcbee588796d58b6c94548870ec45">mNetId</a></td></tr>
+<tr class="memitem:aa14bcbee588796d58b6c94548870ec45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_graphics_module_1_1_module_pin.html#aa14bcbee588796d58b6c94548870ec45">mNetId</a></td></tr>
 <tr class="separator:aa14bcbee588796d58b6c94548870ec45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents one pin (both input or output) of a module. It stores the pin type name and the id of the net connected to the pin. Besides, it provides comparison functions. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00066">66</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00067">67</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7d48bfe8c1ccb6d8a2c375f1b937f350"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d48bfe8c1ccb6d8a2c375f1b937f350">&#9670;&nbsp;</a></span>operator&lt;()</h2>
@@ -146,9 +148,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>The comparison is done based only on the name of both modules. (See <a class="el" href="namespacehal_1_1gui__utility.html#a6b35891fb34a786fd160ec0db4833c12">gui_utility::numeratedOrderCompare</a>) </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00080">80</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00081">81</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__module_8h_source.html#l00069">name</a>, and <a class="el" href="sort_8cpp_source.html#l00104">hal::gui_utility::numeratedOrderCompare()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__module_8h_source.html#l00070">name</a>, and <a class="el" href="sort_8cpp_source.html#l00104">hal::gui_utility::numeratedOrderCompare()</a>.</p>
 
 </div>
 </div>
@@ -177,9 +179,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Two ModulePins are considered equal if both their names and their connected nets are the same </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00074">74</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00075">75</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__module_8h_source.html#l00071">mNetId</a>, and <a class="el" href="graphics__module_8h_source.html#l00069">name</a>.</p>
+<p class="reference">References <a class="el" href="graphics__module_8h_source.html#l00072">mNetId</a>, and <a class="el" href="graphics__module_8h_source.html#l00070">name</a>.</p>
 
 </div>
 </div>
@@ -191,15 +193,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GraphicsModule::ModulePin::mNetId</td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GraphicsModule::ModulePin::mNetId</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>The id of the net connected to this pin </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00071">71</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00072">72</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__module_8h_source.html#l00074">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__module_8h_source.html#l00075">operator==()</a>.</p>
 
 </div>
 </div>
@@ -216,14 +218,14 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>The name of the pin type </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00069">69</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__module_8h_source.html#l00070">70</a> of file <a class="el" href="graphics__module_8h_source.html">graphics_module.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__module_8h_source.html#l00080">operator&lt;()</a>, and <a class="el" href="graphics__module_8h_source.html#l00074">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__module_8h_source.html#l00081">operator&lt;()</a>, and <a class="el" href="graphics__module_8h_source.html#l00075">operator==()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/<a class="el" href="graphics__module_8h_source.html">graphics_module.h</a></li>
+<li>plugins/gui/include/gui/graph_widget/items/nodes/modules/<a class="el" href="graphics__module_8h_source.html">graphics_module.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -231,7 +233,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graphics_module.html">GraphicsModule</a></li><li class="navelem"><a class="el" href="structhal_1_1_graphics_module_1_1_module_pin.html">ModulePin</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

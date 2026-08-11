@@ -1,0 +1,7 @@
+<map id="hal::SimulationInput::NetGroup" name="hal::SimulationInput::NetGroup">
+<area shape="rect" id="node1" title=" " alt="" coords="159,433,313,599"/>
+<area shape="rect" id="node2" href="$classhal_1_1_pin_group.html" title=" " alt="" coords="5,205,149,371"/>
+<area shape="rect" id="node3" href="$classhal_1_1_gate.html" title=" " alt="" coords="174,213,298,363"/>
+<area shape="rect" id="node4" href="$classhal_1_1_data_container.html" title=" " alt="" coords="160,5,312,156"/>
+<area shape="rect" id="node5" href="$classhal_1_1_pin_group.html" title=" " alt="" coords="323,205,467,371"/>
+</map>

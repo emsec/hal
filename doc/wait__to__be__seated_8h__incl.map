@@ -1,13 +1,13 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/wait_to_be_seated.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/wait_to_be_seated.h">
-<area shape="rect" id="node1" title=" " alt="" coords="81,5,283,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,124,60,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="84,124,144,151"/>
-<area shape="rect" id="node4" title=" " alt="" coords="122,206,175,233"/>
-<area shape="rect" id="node5" title=" " alt="" coords="200,206,265,233"/>
-<area shape="rect" id="node6" href="$gui__def_8h.html" title=" " alt="" coords="297,124,403,151"/>
-<area shape="rect" id="node7" href="$defines_8h.html" title=" " alt="" coords="439,288,579,315"/>
-<area shape="rect" id="node8" href="$log_8h.html" title=" " alt="" coords="649,199,779,240"/>
-<area shape="rect" id="node9" title=" " alt="" coords="341,206,415,233"/>
-<area shape="rect" id="node10" title=" " alt="" coords="440,206,505,233"/>
-<area shape="rect" id="node11" title=" " alt="" coords="529,206,624,233"/>
+<map id="plugins/gui/include/gui/graph_widget/layouters/wait_to_be_seated.h" name="plugins/gui/include/gui/graph_widget/layouters/wait_to_be_seated.h">
+<area shape="rect" id="node1" title=" " alt="" coords="81,5,283,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,60,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="84,109,144,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="122,191,175,218"/>
+<area shape="rect" id="node5" title=" " alt="" coords="200,191,265,218"/>
+<area shape="rect" id="node6" href="$gui__def_8h.html" title=" " alt="" coords="297,109,403,136"/>
+<area shape="rect" id="node7" href="$defines_8h.html" title=" " alt="" coords="439,273,579,300"/>
+<area shape="rect" id="node8" href="$log_8h.html" title=" " alt="" coords="649,184,779,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="341,191,415,218"/>
+<area shape="rect" id="node10" title=" " alt="" coords="440,191,505,218"/>
+<area shape="rect" id="node11" title=" " alt="" coords="529,191,624,218"/>
 </map>

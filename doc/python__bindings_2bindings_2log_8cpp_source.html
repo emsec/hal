@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/python_bindings/bindings/log.cpp Source File</title>
+<title>HAL: src/python_bindings/bindings/log.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -94,112 +96,219 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2log_8cpp_s
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">    9</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">log_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m)</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">namespace</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">auto</span> log_manager = py::class_&lt;LogManager, RawPtrWrapper&lt;LogManager&gt;&gt;(m, <span class="stringliteral">&quot;LogManager&quot;</span>);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        log_manager.def(py::init([]() {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>* lm = <a class="code" href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">LogManager::get_instance</a>();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper&lt;LogManager&gt;</a>(lm);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        }));</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        log_manager.def(<span class="stringliteral">&quot;set_file_name&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e">LogManager::set_file_name</a>, py::arg(<span class="stringliteral">&quot;file_name&quot;</span>) = <span class="stringliteral">&quot;&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">            Set the log file name.</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">            If file_name is empty, the default log file will be used.</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">            :param str file_name: The desired log file.</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;set_level_of_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a05ee503b0a3d64ad5ee6e067361eee67">LogManager::set_level_of_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), py::arg(<span class="stringliteral">&quot;level&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">            Set a channel&#39;s severity level.</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">            :param str channel_name: Name of the channel.</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">            :param str level: The severity level, one out of {}.</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">        log_manager.def_static(</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_channel&quot;</span>, [](std::string channel_name) { <a class="code" href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">LogManager::get_instance</a>()-&gt;<a class="code" href="classhal_1_1_log_manager.html#ab0f66a23f31c9f40fd17d31d45cfd881">get_channel</a>(channel_name); }, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">            Main purpose of get_channel() method in PYTHON is to create channel if not existing.</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">            :param str channel_name: Name of the channel.</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a91c934b15fe7853ae434fe96029130fa">LogManager::get_channels</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral">            Returns all channels&#39; names.</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">            :returns: Set of channel names.</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_available_log_levels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#af45a31acd9c308ffe832035b7cb9fc7f">LogManager::get_available_log_levels</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            Get all available severity levels.</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            :returns: Set of severity levels.</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;activate_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2141d31e95e066170a1e3658faeca830">LogManager::activate_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">            Activate a channel.</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">            By default all channels are active.</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">            :param str channel_name: The name of the channel.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;activate_all_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a8f6283f60bea0a12479347f443a65430">LogManager::activate_all_channels</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">            Activate all logging channels.</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;deactivate_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2e5339547fcb310f216555a68b26ca37">LogManager::deactivate_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            Deactivate a channel suppressing all output.</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :param str channel_name: The name of the channel.</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;deactivate_all_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2defb30df0b5f5b3a572b002a551a9c0">LogManager::deactivate_all_channels</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            Deactivate all logging channels.</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_default_sinks&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a90a74a0d0885652cd83817dd45aeeb2e">LogManager::get_default_sinks</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">            Get the list of default sinks that are added to each newly created logger by default.</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">            :returns: list of default sinks.</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.log_sink]</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;remove_sink_from_default&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#ac7dad63d99c3d3e6bfff4476c33bdee7">LogManager::remove_sink_from_default</a>, py::arg(<span class="stringliteral">&quot;sink_type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">            Removes all sinks of the specified type from the default sinks that get a added to each newly created channel by default.</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        std::string python_caller_location()</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordflow">try</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                py::object frame  = py::module_::import(<span class="stringliteral">&quot;sys&quot;</span>).attr(<span class="stringliteral">&quot;_getframe&quot;</span>)();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> file   = py::cast&lt;std::string&gt;(frame.attr(<span class="stringliteral">&quot;f_code&quot;</span>).attr(<span class="stringliteral">&quot;co_filename&quot;</span>));</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> line   = py::cast&lt;int&gt;(frame.attr(<span class="stringliteral">&quot;f_lineno&quot;</span>));</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                <span class="keywordflow">return</span> <span class="stringliteral">&quot;[&quot;</span> + file + <span class="stringliteral">&quot;:&quot;</span> + std::to_string(line) + <span class="stringliteral">&quot;] &quot;</span>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            <span class="keywordflow">catch</span> (<span class="keyword">const</span> py::error_already_set&amp;)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keywordflow">return</span> std::string();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">void</span> log_message(spdlog::level::level_enum level, <span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message, <span class="keywordtype">bool</span> with_location)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keyword">const</span> std::string text = with_location ? python_caller_location() + message : message;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <a class="code" href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">LogManager::get_instance</a>()-&gt;<a class="code" href="classhal_1_1_log_manager.html#ab0f66a23f31c9f40fd17d31d45cfd881">get_channel</a>(channel)-&gt;log(level, text);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }    <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">   41</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">log_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="comment">// The python counterparts of the C++ log_* macros. They keep the C++ argument order</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment">// (channel first) and, like the macros, prefix every severity but &#39;info&#39; with the source</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">// location of the caller.</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        m.def(</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="stringliteral">&quot;log_trace&quot;</span>,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::trace, channel, message, <span class="keyword">true</span>); },</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``trace``.</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            The message is prefixed with the file name and line number of the calling python code.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;log_debug&quot;</span>,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::debug, channel, message, <span class="keyword">true</span>); },</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``debug``.</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            The message is prefixed with the file name and line number of the calling python code.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;log_info&quot;</span>,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::info, channel, message, <span class="keyword">false</span>); },</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``info``.</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            :param str sink_type: The type of sink to remove.</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> log_sink = py::class_&lt;LogManager::log_sink, RawPtrWrapper&lt;LogManager::log_sink&gt;&gt;(log_manager, <span class="stringliteral">&quot;log_sink&quot;</span>);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        log_sink.def_readonly(<span class="stringliteral">&quot;sink_type&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a105f6ac5b730584b21bdc0f994f13e62">LogManager::log_sink::sink_type</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">                The type of the sink.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">                :type: str</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;is_file_sink&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">LogManager::log_sink::is_file_sink</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">                Boolean indication whether sink is a file sink.</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">                :type: bool</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;truncate&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">LogManager::log_sink::truncate</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="stringliteral">                Truncate option passed to sink.</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">                :type: bool</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;path&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">LogManager::log_sink::path</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">                The file path incase the sink is a file sink.</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;log_warning&quot;</span>,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::warn, channel, message, <span class="keyword">true</span>); },</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``warning``.</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">            The message is prefixed with the file name and line number of the calling python code.</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;log_error&quot;</span>,</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::err, channel, message, <span class="keyword">true</span>); },</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``error``.</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">            The message is prefixed with the file name and line number of the calling python code.</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">                :type: pathlib.Path</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
-<div class="ttc" id="aclasshal_1_1_log_manager_html"><div class="ttname"><a href="classhal_1_1_log_manager.html">hal::LogManager</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00104">log.h:105</a></div></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">        m.def(</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;log_critical&quot;</span>,</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            [](<span class="keyword">const</span> std::string&amp; channel, <span class="keyword">const</span> std::string&amp; message) { log_message(spdlog::level::critical, channel, message, <span class="keyword">true</span>); },</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            py::arg(<span class="stringliteral">&quot;channel&quot;</span>),</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            py::arg(<span class="stringliteral">&quot;message&quot;</span>),</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="stringliteral">            Log a message into a specific channel with severity ``critical``.</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="stringliteral">            The message is prefixed with the file name and line number of the calling python code.</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">            :param str channel: The log channel&#39;s name.</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">            :param str message: The message to log.</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> log_manager = py::class_&lt;LogManager, RawPtrWrapper&lt;LogManager&gt;&gt;(m, <span class="stringliteral">&quot;LogManager&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="stringliteral">            The log manager takes care of the log channels of HAL and the sinks (e.g., stdout, log file, GUI) that they write to.</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">        log_manager.def(py::init([]() {</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">            <a class="code" href="classhal_1_1_log_manager.html">LogManager</a>* lm = <a class="code" href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">LogManager::get_instance</a>();</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">            </span><span class="keywordflow">return</span> <a class="code" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper&lt;LogManager&gt;</a>(lm);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        }));</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        log_manager.def(<span class="stringliteral">&quot;set_file_name&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e">LogManager::set_file_name</a>, py::arg(<span class="stringliteral">&quot;file_name&quot;</span>) = <span class="stringliteral">&quot;&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">            Set the log file name.</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">            If file_name is empty, the default log file will be used.</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">            :param str file_name: The desired log file.</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;set_level_of_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a05ee503b0a3d64ad5ee6e067361eee67">LogManager::set_level_of_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), py::arg(<span class="stringliteral">&quot;level&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">            Set a channel&#39;s severity level.</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="stringliteral">            :param str channel_name: Name of the channel.</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">            :param str level: The severity level.</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">        log_manager.def_static(</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_channel&quot;</span>, [](std::string channel_name) { <a class="code" href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">LogManager::get_instance</a>()-&gt;<a class="code" href="classhal_1_1_log_manager.html#ab0f66a23f31c9f40fd17d31d45cfd881">get_channel</a>(channel_name); }, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="stringliteral">            Ensure that a channel with the given name exists, creating it if it does not exist yet.</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">            Note that, unlike its C++ counterpart, this does not return the channel itself.</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral">            :param str channel_name: Name of the channel.</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a91c934b15fe7853ae434fe96029130fa">LogManager::get_channels</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">            Returns all channels&#39; names.</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">            :returns: A set of channel names.</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_available_log_levels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#af45a31acd9c308ffe832035b7cb9fc7f">LogManager::get_available_log_levels</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">            Get all available severity levels.</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">            :returns: A set of severity levels.</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;activate_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2141d31e95e066170a1e3658faeca830">LogManager::activate_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">            Activate a channel.</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">            By default all channels are active.</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">            :param str channel_name: The name of the channel.</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;activate_all_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a8f6283f60bea0a12479347f443a65430">LogManager::activate_all_channels</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">            Activate all logging channels.</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;deactivate_channel&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2e5339547fcb310f216555a68b26ca37">LogManager::deactivate_channel</a>, py::arg(<span class="stringliteral">&quot;channel_name&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="stringliteral">            Deactivate a channel suppressing all output.</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral">            :param str channel_name: The name of the channel.</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;deactivate_all_channels&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a2defb30df0b5f5b3a572b002a551a9c0">LogManager::deactivate_all_channels</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">            Deactivate all logging channels.</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;get_default_sinks&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#a90a74a0d0885652cd83817dd45aeeb2e">LogManager::get_default_sinks</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">            Get the list of default sinks that are added to each newly created logger by default.</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="stringliteral">            :returns: The default sinks.</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.log_sink]</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">        log_manager.def(</span><span class="stringliteral">&quot;remove_sink_from_default&quot;</span>, &amp;<a class="code" href="classhal_1_1_log_manager.html#ac7dad63d99c3d3e6bfff4476c33bdee7">LogManager::remove_sink_from_default</a>, py::arg(<span class="stringliteral">&quot;sink_type&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">            Remove the specified sink type from the list of default sinks if present.</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">            :param str sink_type: The type of sink to remove from default sinks.</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> log_sink = py::class_&lt;LogManager::log_sink, RawPtrWrapper&lt;LogManager::log_sink&gt;&gt;(log_manager, <span class="stringliteral">&quot;log_sink&quot;</span>);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        log_sink.def_readonly(<span class="stringliteral">&quot;sink_type&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a105f6ac5b730584b21bdc0f994f13e62">LogManager::log_sink::sink_type</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">                The type of the sink.</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="stringliteral">                :type: str</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;is_file_sink&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">LogManager::log_sink::is_file_sink</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="stringliteral">                Boolean indication whether sink is a file sink.</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="stringliteral">                :type: bool</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;truncate&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">LogManager::log_sink::truncate</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="stringliteral">                Truncate option passed to sink.</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="stringliteral">                :type: bool</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="stringliteral">        log_sink.def_readonly(</span><span class="stringliteral">&quot;path&quot;</span>, &amp;<a class="code" href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">LogManager::log_sink::path</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="stringliteral">                The file path incase the sink is a file sink.</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="stringliteral">                :type: pathlib.Path</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="stringliteral">            )&quot;);</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="ttc" id="aclasshal_1_1_log_manager_html"><div class="ttname"><a href="classhal_1_1_log_manager.html">hal::LogManager</a></div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00106">log.h:107</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html_a05ee503b0a3d64ad5ee6e067361eee67"><div class="ttname"><a href="classhal_1_1_log_manager.html#a05ee503b0a3d64ad5ee6e067361eee67">hal::LogManager::set_level_of_channel</a></div><div class="ttdeci">void set_level_of_channel(const std::string &amp;channel_name, const std::string &amp;level)</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00164">log.cpp:164</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html_a2141d31e95e066170a1e3658faeca830"><div class="ttname"><a href="classhal_1_1_log_manager.html#a2141d31e95e066170a1e3658faeca830">hal::LogManager::activate_channel</a></div><div class="ttdeci">void activate_channel(const std::string &amp;channel_name)</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00178">log.cpp:178</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html_a2defb30df0b5f5b3a572b002a551a9c0"><div class="ttname"><a href="classhal_1_1_log_manager.html#a2defb30df0b5f5b3a572b002a551a9c0">hal::LogManager::deactivate_all_channels</a></div><div class="ttdeci">void deactivate_all_channels()</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00196">log.cpp:196</a></div></div>
@@ -213,22 +322,22 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2log_8cpp_s
 <div class="ttc" id="aclasshal_1_1_log_manager_html_af45a31acd9c308ffe832035b7cb9fc7f"><div class="ttname"><a href="classhal_1_1_log_manager.html#af45a31acd9c308ffe832035b7cb9fc7f">hal::LogManager::get_available_log_levels</a></div><div class="ttdeci">std::set&lt; std::string &gt; get_available_log_levels() const</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00283">log.cpp:283</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html_af9498836b0dc786c6e38c9c0a76bcb7e"><div class="ttname"><a href="classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e">hal::LogManager::set_file_name</a></div><div class="ttdeci">void set_file_name(const std::filesystem::path &amp;file_name)</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00291">log.cpp:291</a></div></div>
 <div class="ttc" id="agroup__pybind_html_ga81181bacca930bfda574ce3a51a01e9c"><div class="ttname"><a href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a></div><div class="ttdeci">std::unique_ptr&lt; T, py::nodelete &gt; RawPtrWrapper</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00090">python_bindings.h:90</a></div></div>
-<div class="ttc" id="agroup__pybind_html_gac711bd76ed6d19d0ae42c56d8f190cfa"><div class="ttname"><a href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a></div><div class="ttdeci">void log_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2log_8cpp_source.html#l00009">log.cpp:9</a></div></div>
+<div class="ttc" id="agroup__pybind_html_gac711bd76ed6d19d0ae42c56d8f190cfa"><div class="ttname"><a href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a></div><div class="ttdeci">void log_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2log_8cpp_source.html#l00041">log.cpp:41</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a105f6ac5b730584b21bdc0f994f13e62"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a105f6ac5b730584b21bdc0f994f13e62">hal::LogManager::log_sink::sink_type</a></div><div class="ttdeci">std::string sink_type</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00110">log.h:110</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a267e71d77e6f2a52ee57d934e88df357"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">hal::LogManager::log_sink::path</a></div><div class="ttdeci">std::filesystem::path path</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00113">log.h:113</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a3a09ddb29a0af4fec0ad93a7cb76a498"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">hal::LogManager::log_sink::truncate</a></div><div class="ttdeci">bool truncate</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00112">log.h:112</a></div></div>
-<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa39047eba08df4948b012a86240729fa"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">hal::LogManager::log_sink::is_file_sink</a></div><div class="ttdeci">bool is_file_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00111">log.h:111</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a105f6ac5b730584b21bdc0f994f13e62"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a105f6ac5b730584b21bdc0f994f13e62">hal::LogManager::log_sink::sink_type</a></div><div class="ttdeci">std::string sink_type</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00115">log.h:115</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a267e71d77e6f2a52ee57d934e88df357"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a267e71d77e6f2a52ee57d934e88df357">hal::LogManager::log_sink::path</a></div><div class="ttdeci">std::filesystem::path path</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00118">log.h:118</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_a3a09ddb29a0af4fec0ad93a7cb76a498"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498">hal::LogManager::log_sink::truncate</a></div><div class="ttdeci">bool truncate</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00117">log.h:117</a></div></div>
+<div class="ttc" id="astructhal_1_1_log_manager_1_1log__sink_html_aa39047eba08df4948b012a86240729fa"><div class="ttname"><a href="structhal_1_1_log_manager_1_1log__sink.html#aa39047eba08df4948b012a86240729fa">hal::LogManager::log_sink::is_file_sink</a></div><div class="ttdeci">bool is_file_sink</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00116">log.h:116</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2log_8cpp.html">log.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

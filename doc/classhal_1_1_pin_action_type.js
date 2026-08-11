@@ -14,6 +14,5 @@ var classhal_1_1_pin_action_type =
       [ "PinDirChange", "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2ab637887ec9496abf70b1d7a0b0a10d20", null ],
       [ "PinMoveToRow", "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a1f20d6544ec3112e62c3d7fe7ce162c4", null ],
       [ "MaxAction", "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a98ab17d188ea7556380e70c636b2d207", null ]
-    ] ],
-    [ "Q_ENUM", "classhal_1_1_pin_action_type.html#a025d8719ccf9a795e55f2017dfcfc38a", null ]
+    ] ]
 ];

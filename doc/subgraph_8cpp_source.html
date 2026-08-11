@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/graph_algorithm/src/algorithms/subgraph.cpp Source File</title>
+<title>HAL: plugins/graph_algorithm/src/algorithms/subgraph.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -181,7 +183,7 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(igraph_strerror(res));</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i = 0; i &lt; subgraph_vertices.size(); i++)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; subgraph_vertices.size(); i++)</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            {</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                VECTOR(i_gates)[i] = subgraph_vertices.at(i);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
@@ -216,7 +218,7 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(igraph_strerror(res));</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            }</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i = 0;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = subgraph_vertices.begin(); it != subgraph_vertices.end(); it++)</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            {</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                VECTOR(i_gates)[i] = *it;</div>
@@ -243,7 +245,7 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            }</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            igraph_vs_t v_sel = igraph_vss_vector(subgraph_vertices);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> subgraph_size = igraph_vector_int_size(subgraph_vertices);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> subgraph_size = igraph_vector_int_size(subgraph_vertices);</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            igraph_vector_int_t i_vertex_map;</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = igraph_vector_int_init(&amp;i_vertex_map, subgraph_size); res != IGRAPH_SUCCESS)</div>
@@ -264,7 +266,7 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = graph-&gt;<a class="code" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb">get_gates_from_vertices_igraph</a>(&amp;i_vertex_map); res.is_ok())</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            {</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                std::vector&lt;Gate*&gt; gates = res.get();</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i = 0; i &lt; gates.size(); i++)</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; gates.size(); i++)</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                {</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                    nodes_to_gates[i] = gates.at(i);</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                }</div>
@@ -286,19 +288,19 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        }</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    }    <span class="comment">// namespace graph_algorithm</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;}    <span class="comment">// namespace hal</span></div>
-<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00063">result.h:64</a></div></div>
-<div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">hal::graph_algorithm::NetlistGraph</a></div><div class="ttdoc">A directed graph corresponding to a netlist.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8h_source.html#l00056">netlist_graph.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00070">result.h:71</a></div></div>
+<div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">hal::graph_algorithm::NetlistGraph</a></div><div class="ttdoc">A directed graph corresponding to a netlist.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8h_source.html#l00059">netlist_graph.h:60</a></div></div>
 <div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html_a00d12d6f99e745c2b2431a65fdd3f84c"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a00d12d6f99e745c2b2431a65fdd3f84c">hal::graph_algorithm::NetlistGraph::get_netlist</a></div><div class="ttdeci">Netlist * get_netlist() const</div><div class="ttdoc">Get the netlist associated with the netlist graph.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8cpp_source.html#l00219">netlist_graph.cpp:219</a></div></div>
 <div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html_a6f4cc0de28874cd858e1bb58102a88a5"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5">hal::graph_algorithm::NetlistGraph::get_vertices_from_gates_igraph</a></div><div class="ttdeci">Result&lt; igraph_vector_int_t &gt; get_vertices_from_gates_igraph(const std::vector&lt; Gate * &gt; &amp;gates) const</div><div class="ttdoc">Get the vertices corresponding to the specified gates.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8cpp_source.html#l00431">netlist_graph.cpp:431</a></div></div>
 <div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html_a9c9f2fac0f0fc865a4f73435bb3a7afb"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb">hal::graph_algorithm::NetlistGraph::get_gates_from_vertices_igraph</a></div><div class="ttdeci">Result&lt; std::vector&lt; Gate * &gt; &gt; get_gates_from_vertices_igraph(const igraph_vector_int_t *vertices) const</div><div class="ttdoc">Get the gates corresponding to the specified vertices.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8cpp_source.html#l00275">netlist_graph.cpp:275</a></div></div>
 <div class="ttc" id="aclasshal_1_1graph__algorithm_1_1_netlist_graph_html_afd9b42ee5a97346f3d12aa4f4dca8402"><div class="ttname"><a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#afd9b42ee5a97346f3d12aa4f4dca8402">hal::graph_algorithm::NetlistGraph::get_graph</a></div><div class="ttdeci">igraph_t * get_graph() const</div><div class="ttdoc">Get the graph object of the netlist graph.</div><div class="ttdef"><b>Definition:</b> <a href="netlist__graph_8cpp_source.html#l00224">netlist_graph.cpp:224</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="gate_8h.html">gate.h</a></div></div>
-<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00053">result.h:53</a></div></div>
-<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00049">result.h:49</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00060">result.h:60</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00056">result.h:56</a></div></div>
 <div class="ttc" id="anamespacehal_1_1graph__algorithm_html_a6de3adfdb0cca775a2dff1af5f877061"><div class="ttname"><a href="namespacehal_1_1graph__algorithm.html#a6de3adfdb0cca775a2dff1af5f877061">hal::graph_algorithm::get_subgraph_igraph</a></div><div class="ttdeci">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt; get_subgraph_igraph(const NetlistGraph *graph, const igraph_vector_int_t *subgraph_vertices)</div><div class="ttdoc">Compute the subgraph induced by the specified vertices, including all edges between these vertices.</div><div class="ttdef"><b>Definition:</b> <a href="subgraph_8cpp_source.html#l00150">subgraph.cpp:150</a></div></div>
 <div class="ttc" id="anamespacehal_1_1graph__algorithm_html_aa0eda0a1c6ed5556e55821fa94d54967"><div class="ttname"><a href="namespacehal_1_1graph__algorithm.html#aa0eda0a1c6ed5556e55821fa94d54967">hal::graph_algorithm::get_subgraph</a></div><div class="ttdeci">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt; get_subgraph(const NetlistGraph *graph, const std::vector&lt; Gate * &gt; &amp;subgraph_gates)</div><div class="ttdoc">Compute the subgraph induced by the specified gates, including all edges between the corresponding ve...</div><div class="ttdef"><b>Definition:</b> <a href="subgraph_8cpp_source.html#l00010">subgraph.cpp:10</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist__graph_8h_html"><div class="ttname"><a href="netlist__graph_8h.html">netlist_graph.h</a></div><div class="ttdoc">This file contains the class that holds a netlist graph.</div></div>
 <div class="ttc" id="asubgraph_8h_html"><div class="ttname"><a href="subgraph_8h.html">subgraph.h</a></div><div class="ttdoc">This file contains functions related to subgraphs.</div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -307,7 +309,7 @@ $(document).ready(function(){initNavTree('subgraph_8cpp_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_192b19fb2b8fdce0ad89db78639c6562.html">graph_algorithm</a></li><li class="navelem"><a class="el" href="dir_12e2d667539b63992169e7388aea4805.html">src</a></li><li class="navelem"><a class="el" href="dir_7f6e6e76e7fbca7c850e966c11babe0e.html">algorithms</a></li><li class="navelem"><a class="el" href="subgraph_8cpp.html">subgraph.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

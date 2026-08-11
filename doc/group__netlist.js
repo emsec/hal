@@ -7,21 +7,6 @@ var group__netlist =
     [ "Gate Library", "group__gate__lib.html", "group__gate__lib" ],
     [ "Persistency", "group__persistent.html", "group__persistent" ],
     [ "Event System", "group__events.html", null ],
-    [ "HGLParser", "classhal_1_1_h_g_l_parser.html", [
-      [ "HGLParser", "classhal_1_1_h_g_l_parser.html#a392638eac4e33667403a50d84e1d4f29", null ],
-      [ "~HGLParser", "classhal_1_1_h_g_l_parser.html#a5e62397b77b75f4f05b8820cb06614d3", null ],
-      [ "parse", "classhal_1_1_h_g_l_parser.html#aef1def52a65633346a43e8a2c0fcda1d", null ]
-    ] ],
-    [ "HGLWriter", "classhal_1_1_h_g_l_writer.html", [
-      [ "HGLWriter", "classhal_1_1_h_g_l_writer.html#af971e3ff7221a533e14885c329e2f4d1", null ],
-      [ "~HGLWriter", "classhal_1_1_h_g_l_writer.html#a47352a14d43e63fcd48265578fefef27", null ],
-      [ "write", "classhal_1_1_h_g_l_writer.html#aeeeddcf73de629199064b19764a7dab9", null ]
-    ] ],
-    [ "LibertyParser", "classhal_1_1_liberty_parser.html", [
-      [ "LibertyParser", "classhal_1_1_liberty_parser.html#a31d56a1e5dc2758f134a9e9837804537", null ],
-      [ "~LibertyParser", "classhal_1_1_liberty_parser.html#a9b42e79acc9e12ce902dc79e71dfe215", null ],
-      [ "parse", "classhal_1_1_liberty_parser.html#ac3feba23c6e43271052561b325be0b72", null ]
-    ] ],
     [ "BooleanFunction", "classhal_1_1_boolean_function.html", [
       [ "Value", "classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb", [
         [ "ZERO", "classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fbac487892e83456269ce717a99dffe1d49", null ],
@@ -232,6 +217,75 @@ var group__netlist =
       [ "set_name", "classhal_1_1_grouping.html#a9ae38c781f4d854660d6fdbe02623813", null ],
       [ "NetlistInternalManager", "classhal_1_1_grouping.html#a71851ef81c1a491be6395f4c883218de", null ]
     ] ],
+    [ "Module", "classhal_1_1_module.html", [
+      [ "assign_gate", "classhal_1_1_module.html#a7446c45dc94cefbf49a51261e0299e1d", null ],
+      [ "assign_gates", "classhal_1_1_module.html#a29e9fee1e57bc092c1487f378daefc8d", null ],
+      [ "assign_pin_to_group", "classhal_1_1_module.html#a497ac480ee4fbe1f33893e737886f8d8", null ],
+      [ "contains_gate", "classhal_1_1_module.html#af1de789b21097f6c3622e1742a5f39e5", null ],
+      [ "contains_module", "classhal_1_1_module.html#aa6690cd2c223287fc2f570ea0c0cf1bb", null ],
+      [ "contains_net", "classhal_1_1_module.html#a33023848f9c14bc36bf475be597d5747", null ],
+      [ "create_pin", "classhal_1_1_module.html#a91b51c38895e814a7d66507b6e8de9fa", null ],
+      [ "create_pin", "classhal_1_1_module.html#ad35559b823f388e85241716ef8189fc9", null ],
+      [ "create_pin_group", "classhal_1_1_module.html#a52eea387f4537aae1ebf9349b0399204", null ],
+      [ "create_pin_group", "classhal_1_1_module.html#aa80d9564cd6571834b17528bb5031703", null ],
+      [ "delete_pin_group", "classhal_1_1_module.html#a7609f55c575b282d28207f084b6733a5", null ],
+      [ "get_event_handler", "classhal_1_1_module.html#aceeb47293e56ff3ed6ea7d2023319621", null ],
+      [ "get_gate_by_id", "classhal_1_1_module.html#a3498d3a2a908f8c9beb7c8a741fc6cef", null ],
+      [ "get_gates", "classhal_1_1_module.html#a7a969d9d27d1d5f9ab6b6826b0745085", null ],
+      [ "get_gates", "classhal_1_1_module.html#a007d60e4a885ce793c938587bb07950a", null ],
+      [ "get_grouping", "classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc", null ],
+      [ "get_hash", "classhal_1_1_module.html#af095c826fa1e507107519455f0cba13a", null ],
+      [ "get_id", "classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b", null ],
+      [ "get_input_nets", "classhal_1_1_module.html#a8e83b6de125c04f00e5cdc18580bed8d", null ],
+      [ "get_input_pin_names", "classhal_1_1_module.html#a92322b292485d719d98f11fb1102b2b9", null ],
+      [ "get_input_pins", "classhal_1_1_module.html#a25c835211e194461fbc9fd14fe23b1e6", null ],
+      [ "get_internal_nets", "classhal_1_1_module.html#a3a06e13de9d460a68eb4eecda0fa74fc", null ],
+      [ "get_name", "classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df", null ],
+      [ "get_netlist", "classhal_1_1_module.html#ab7ad37f7e5b0982c387ec6c33651a25f", null ],
+      [ "get_nets", "classhal_1_1_module.html#a00f21d72e6698eeecab5a719b9acdd6a", null ],
+      [ "get_nets", "classhal_1_1_module.html#ab6ab9367628bacdef899f288ab3cbcea", null ],
+      [ "get_output_nets", "classhal_1_1_module.html#af5dd20e748f087e213fccedbf73352ff", null ],
+      [ "get_output_pin_names", "classhal_1_1_module.html#af1b6b879995d791edefeb4d73fa5c477", null ],
+      [ "get_output_pins", "classhal_1_1_module.html#a2076e8076209b704c23cfac1ac3c631f", null ],
+      [ "get_parent_module", "classhal_1_1_module.html#a1af5f0f3f5ea75b8762d65d5fcfab3e3", null ],
+      [ "get_parent_modules", "classhal_1_1_module.html#ab525a0fe012a8698e6efd36f14c486b8", null ],
+      [ "get_pin_by_id", "classhal_1_1_module.html#a680f1941741b2fba5b8228584dde4ffd", null ],
+      [ "get_pin_by_name", "classhal_1_1_module.html#a3b3ff86ad385edeb953255e88dcb68e2", null ],
+      [ "get_pin_by_net", "classhal_1_1_module.html#ab8cd2075036048e2fb55b1e62828a865", null ],
+      [ "get_pin_group_by_id", "classhal_1_1_module.html#ae3b92fb9a9cf888b0350f2fb287cb46a", null ],
+      [ "get_pin_group_by_name", "classhal_1_1_module.html#a0d7bbd7adac4f233d5f09555b61406b3", null ],
+      [ "get_pin_groups", "classhal_1_1_module.html#acf36f1449ccad8eadd31678f7edcb41a", null ],
+      [ "get_pin_names", "classhal_1_1_module.html#a04c18e9ed3e10612c4e9c6f98b25cd00", null ],
+      [ "get_pins", "classhal_1_1_module.html#a226c897a79cede1793d8a780417cff39", null ],
+      [ "get_submodule_depth", "classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437", null ],
+      [ "get_submodules", "classhal_1_1_module.html#af1256fe9a3080693b07d7e657d9a31ba", null ],
+      [ "get_type", "classhal_1_1_module.html#af2e1a399775172613cc78fcb2d493e3e", null ],
+      [ "get_unique_pin_group_id", "classhal_1_1_module.html#af837ceb879943a2d9fcba3a772ca34fa", null ],
+      [ "get_unique_pin_id", "classhal_1_1_module.html#aa38fd600013066b1875324ba0421b4da", null ],
+      [ "is_input_net", "classhal_1_1_module.html#a009c72540e8a05665c2ca51ab8e62b07", null ],
+      [ "is_internal_net", "classhal_1_1_module.html#af4bfd1191e90a89fe7db32ebc73a39a2", null ],
+      [ "is_output_net", "classhal_1_1_module.html#a74611022d6c488580fae0106005f7627", null ],
+      [ "is_parent_module_of", "classhal_1_1_module.html#a1dcc0697c42ed194d8c43beaefd45d60", null ],
+      [ "is_submodule_of", "classhal_1_1_module.html#af5b242dab0018751c42ad7788e3e8249", null ],
+      [ "is_top_module", "classhal_1_1_module.html#a5ed13732e904b8bf1b3bc670f637acc2", null ],
+      [ "move_pin_group", "classhal_1_1_module.html#a81328b1ee8b556c853e4e8e402bfadd7", null ],
+      [ "move_pin_within_group", "classhal_1_1_module.html#a10ebc65fb8591a8fb5a875418a6c9280", null ],
+      [ "operator!=", "classhal_1_1_module.html#aa96eb4aef5b526115bcfbd77d3f87bb3", null ],
+      [ "operator==", "classhal_1_1_module.html#a3357e372a3b5193f519e951af42e0713", null ],
+      [ "remove_gate", "classhal_1_1_module.html#a220173f927815a8acc900856bfe6735b", null ],
+      [ "remove_gates", "classhal_1_1_module.html#a61bdd7362b08432bddcdca5ec540dfde", null ],
+      [ "remove_pin_from_group", "classhal_1_1_module.html#a5dca68084160dd36cc8cd6794c999c7f", null ],
+      [ "set_name", "classhal_1_1_module.html#a00c72047157e9a34c9706d2685a90a13", null ],
+      [ "set_parent_module", "classhal_1_1_module.html#a2110d4088efee9b9313fce0171d9bc40", null ],
+      [ "set_pin_group_direction", "classhal_1_1_module.html#a96099729eaf61532a07dd4fd18fb7d80", null ],
+      [ "set_pin_group_name", "classhal_1_1_module.html#acab4a10c20a9f0f23befd4a3f6028418", null ],
+      [ "set_pin_group_type", "classhal_1_1_module.html#a6d846fda0f35a3aab717a5fcbb2b22cd", null ],
+      [ "set_pin_name", "classhal_1_1_module.html#a8398439a4308f59b9a9ab71bb9387810", null ],
+      [ "set_pin_type", "classhal_1_1_module.html#a71e14e85216bde0a7422f0c6ed7cc772", null ],
+      [ "set_type", "classhal_1_1_module.html#a9bcc555241bfad8b6abccaecb2f021ce", null ],
+      [ "update_nets", "classhal_1_1_module.html#a02af541336529b5ff7a4babadd43bbdb", null ],
+      [ "NetlistInternalManager", "classhal_1_1_module.html#a71851ef81c1a491be6395f4c883218de", null ]
+    ] ],
     [ "Net", "classhal_1_1_net.html", [
       [ "add_destination", "classhal_1_1_net.html#a10bc7c36d93e2de9faf274c4a694529f", null ],
       [ "add_destination", "classhal_1_1_net.html#a44f977ce8d85bff88c5972cbdaa6cb82", null ],
@@ -376,5 +430,25 @@ var group__netlist =
       [ "Module", "classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d", null ],
       [ "Net", "classhal_1_1_netlist_internal_manager.html#a18aff2af13a58cdbdf65a107df14ec07", null ],
       [ "Netlist", "classhal_1_1_netlist_internal_manager.html#a9935ab7101b63135c98dd8c1fe3ae0ec", null ]
+    ] ],
+    [ "GenlibWriter", "classhal_1_1_genlib_writer.html", [
+      [ "GenlibWriter", "classhal_1_1_genlib_writer.html#ae412506cd40406bf396e8cea3dcf68d7", null ],
+      [ "~GenlibWriter", "classhal_1_1_genlib_writer.html#a0090a9bc67b5059231b2405c35aa6dea", null ],
+      [ "write", "classhal_1_1_genlib_writer.html#ae3b18e612b96e741c557cc28aade575d", null ]
+    ] ],
+    [ "HGLParser", "classhal_1_1_h_g_l_parser.html", [
+      [ "HGLParser", "classhal_1_1_h_g_l_parser.html#a392638eac4e33667403a50d84e1d4f29", null ],
+      [ "~HGLParser", "classhal_1_1_h_g_l_parser.html#a5e62397b77b75f4f05b8820cb06614d3", null ],
+      [ "parse", "classhal_1_1_h_g_l_parser.html#aef1def52a65633346a43e8a2c0fcda1d", null ]
+    ] ],
+    [ "HGLWriter", "classhal_1_1_h_g_l_writer.html", [
+      [ "HGLWriter", "classhal_1_1_h_g_l_writer.html#af971e3ff7221a533e14885c329e2f4d1", null ],
+      [ "~HGLWriter", "classhal_1_1_h_g_l_writer.html#a47352a14d43e63fcd48265578fefef27", null ],
+      [ "write", "classhal_1_1_h_g_l_writer.html#aeeeddcf73de629199064b19764a7dab9", null ]
+    ] ],
+    [ "LibertyParser", "classhal_1_1_liberty_parser.html", [
+      [ "LibertyParser", "classhal_1_1_liberty_parser.html#a31d56a1e5dc2758f134a9e9837804537", null ],
+      [ "~LibertyParser", "classhal_1_1_liberty_parser.html#a9b42e79acc9e12ce902dc79e71dfe215", null ],
+      [ "parse", "classhal_1_1_liberty_parser.html#ac3feba23c6e43271052561b325be0b72", null ]
     ] ]
 ];

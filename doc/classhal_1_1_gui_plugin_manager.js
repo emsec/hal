@@ -31,18 +31,5 @@ var classhal_1_1_gui_plugin_manager =
     [ "setUnloadIconPath", "classhal_1_1_gui_plugin_manager.html#a30b8b2333d0f064b67b5e10161ae96d2", null ],
     [ "setUnloadIconStyle", "classhal_1_1_gui_plugin_manager.html#aeb9e1565e15e6fdc78321e3b0ca46230", null ],
     [ "unloadIconPath", "classhal_1_1_gui_plugin_manager.html#adf7eee7b729d423e616373674396472a", null ],
-    [ "unloadIconStyle", "classhal_1_1_gui_plugin_manager.html#a411eefc0bc52b9c178020e86d6cb82db", null ],
-    [ "cliIconPath", "classhal_1_1_gui_plugin_manager.html#a0817df44c0c93b33940ee410d6332dd4", null ],
-    [ "cliIconStyle", "classhal_1_1_gui_plugin_manager.html#af3f505b2cbffe82feeeea83e9217aaab", null ],
-    [ "defaultTextColor", "classhal_1_1_gui_plugin_manager.html#a105ce69daacef1d0a0e44c56da8f3c5e", null ],
-    [ "guiIconDisabledPath", "classhal_1_1_gui_plugin_manager.html#adff7e5f42132b436599a16c2fa404b60", null ],
-    [ "guiIconDisabledStyle", "classhal_1_1_gui_plugin_manager.html#a381db7dc32ea08dd560ca6d74c315a44", null ],
-    [ "guiIconEnabledPath", "classhal_1_1_gui_plugin_manager.html#ae53e56945788e5a950b6ccd5059110c3", null ],
-    [ "guiIconEnabledStyle", "classhal_1_1_gui_plugin_manager.html#a825b08d94f56a644c286211023f14143", null ],
-    [ "hilightBackgroundColor", "classhal_1_1_gui_plugin_manager.html#a582a3ef613f43bb19d42987148cda267", null ],
-    [ "hilightTextColor", "classhal_1_1_gui_plugin_manager.html#a988edcf6f1147348cc13e5f4442e6094", null ],
-    [ "loadIconPath", "classhal_1_1_gui_plugin_manager.html#a14d83928aa1d9aa18deb3463be0c6283", null ],
-    [ "loadIconStyle", "classhal_1_1_gui_plugin_manager.html#a676743dfee9da9a5f855327034044343", null ],
-    [ "unloadIconPath", "classhal_1_1_gui_plugin_manager.html#acedae3ffd2b47c669703fb82bee40e54", null ],
-    [ "unloadIconStyle", "classhal_1_1_gui_plugin_manager.html#ac6ae65fccb86c8dbb96e1bb116cee4af", null ]
+    [ "unloadIconStyle", "classhal_1_1_gui_plugin_manager.html#a411eefc0bc52b9c178020e86d6cb82db", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/remove_duplicates.cpp File Reference</title>
+<title>HAL: plugins/dataflow_analysis/src/processing/passes/remove_duplicates.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,35 +94,36 @@ $(document).ready(function(){initNavTree('remove__duplicates_8cpp.html',''); ini
 <div class="textblock"><code>#include &quot;<a class="el" href="remove__duplicates_8h_source.html">dataflow_analysis/processing/passes/remove_duplicates.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__abstraction_8h_source.html">dataflow_analysis/common/netlist_abstraction.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &lt;list&gt;</code><br />
 <code>#include &lt;map&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for remove_duplicates.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="remove__duplicates_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp">
-<area shape="rect" title=" " alt="" coords="775,5,1001,76"/>
-<area shape="rect" href="remove__duplicates_8h.html" title=" " alt="" coords="444,124,657,165"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="651,213,851,255"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="731,303,931,344"/>
-<area shape="rect" title=" " alt="" coords="1704,392,1755,419"/>
-<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="5,124,219,165"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1241,131,1407,158"/>
-<area shape="rect" title=" " alt="" coords="2039,131,2081,158"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="358,392,498,419"/>
-<area shape="rect" title=" " alt="" coords="1277,392,1320,419"/>
-<area shape="rect" title=" " alt="" coords="1414,392,1538,419"/>
-<area shape="rect" title=" " alt="" coords="773,392,888,419"/>
-<area shape="rect" title=" " alt="" coords="937,392,999,419"/>
-<area shape="rect" title=" " alt="" coords="491,310,605,337"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1387,303,1565,344"/>
-<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1056,303,1211,344"/>
-<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="171,310,365,337"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="1617,213,1802,255"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1387,213,1541,255"/>
-<area shape="rect" title=" " alt="" coords="1826,221,1913,247"/>
+<div class="center"><img src="remove__duplicates_8cpp__incl.png" border="0" usemap="#aplugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp" alt=""/></div>
+<map name="aplugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp" id="aplugins_2dataflow__analysis_2src_2processing_2passes_2remove__duplicates_8cpp">
+<area shape="rect" title=" " alt="" coords="647,5,838,61"/>
+<area shape="rect" href="remove__duplicates_8h.html" title=" " alt="" coords="243,109,456,151"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="643,199,843,240"/>
+<area shape="rect" href="netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="571,288,771,329"/>
+<area shape="rect" title=" " alt="" coords="1784,377,1835,404"/>
+<area shape="rect" href="dataflow__analysis_2include_2dataflow__analysis_2processing_2configuration_8h.html" title=" " alt="" coords="5,109,219,151"/>
+<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1123,117,1290,143"/>
+<area shape="rect" title=" " alt="" coords="1973,117,2016,143"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="346,377,486,404"/>
+<area shape="rect" title=" " alt="" coords="1027,377,1069,404"/>
+<area shape="rect" title=" " alt="" coords="1138,377,1262,404"/>
+<area shape="rect" title=" " alt="" coords="613,377,728,404"/>
+<area shape="rect" title=" " alt="" coords="1422,377,1485,404"/>
+<area shape="rect" title=" " alt="" coords="795,295,909,322"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="1237,288,1416,329"/>
+<area shape="rect" href="data__container_8h.html" title=" " alt="" coords="1592,288,1747,329"/>
+<area shape="rect" href="endpoint_8h.html" title=" " alt="" coords="251,295,445,322"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="1643,199,1829,240"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="1129,199,1284,240"/>
+<area shape="rect" title=" " alt="" coords="866,206,953,233"/>
+<area shape="rect" title=" " alt="" coords="977,206,1055,233"/>
 </map>
 </div>
 </div>
@@ -146,7 +149,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_27b66f703f923c992ad19006fb7d81a2.html">processing</a></li><li class="navelem"><a class="el" href="dir_48aa5910fdaf6ebf7e0f2983fa64fd1f.html">passes</a></li><li class="navelem"><a class="el" href="remove__duplicates_8cpp.html">remove_duplicates.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

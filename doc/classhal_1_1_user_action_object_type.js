@@ -10,6 +10,5 @@ var classhal_1_1_user_action_object_type =
       [ "ContextView", "classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a6ca899e3a4da177c3545a4aca98520b3", null ],
       [ "ContextDir", "classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a341c701a1322d287533cc195597dd269", null ],
       [ "MaxObjectType", "classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a1f454bf3fc9403944e7d3d7462f98318", null ]
-    ] ],
-    [ "Q_ENUM", "classhal_1_1_user_action_object_type.html#a5ce96df086b155ae9d71c38ee9b2940a", null ]
+    ] ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/general_table_widget.cpp Source File</title>
+<title>HAL: plugins/gui/src/selection_details_widget/general_table_widget.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -182,16 +184,16 @@ $(document).ready(function(){initNavTree('general__table__widget_8cpp_source.htm
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">void</span> GeneralTableWidget::handleDoubleClick(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">void</span> GeneralTableWidget::handleDoubleClick(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">if</span>(index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">isValid</a>())</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.isValid())</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#row">row</a> = index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">row</a>();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#row">row</a> = <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.row();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span>(mRowDoubleClickActionMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#contains">contains</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#row">row</a>))</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                std::function&lt;void()&gt; <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a> = mRowDoubleClickActionMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#row">row</a>);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                <a class="code" href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">action</a>();</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                std::function&lt;void()&gt; action = mRowDoubleClickActionMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#row">row</a>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                action();</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            }</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    }</div>
@@ -238,8 +240,8 @@ $(document).ready(function(){initNavTree('general__table__widget_8cpp_source.htm
 <div class="ttc" id="aclasshal_1_1_general_table_widget_html_a2dccc4461a603445a7eeb2dbf8dd0738"><div class="ttname"><a href="classhal_1_1_general_table_widget.html#a2dccc4461a603445a7eeb2dbf8dd0738">hal::GeneralTableWidget::setRow</a></div><div class="ttdeci">void setRow(const QString &amp;key, const QString &amp;val, QMenu *contextMenu=nullptr, std::function&lt; void()&gt; doubleClickAction=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="general__table__widget_8cpp_source.html#l00037">general_table_widget.cpp:37</a></div></div>
 <div class="ttc" id="aclasshal_1_1_general_table_widget_html_a49609ef69cc45ba2d602589c6cbb7e85"><div class="ttname"><a href="classhal_1_1_general_table_widget.html#a49609ef69cc45ba2d602589c6cbb7e85">hal::GeneralTableWidget::copyToClipboard</a></div><div class="ttdeci">void copyToClipboard(const QString &amp;text) const</div><div class="ttdef"><b>Definition:</b> <a href="general__table__widget_8cpp_source.html#l00143">general_table_widget.cpp:143</a></div></div>
 <div class="ttc" id="ageneral__table__widget_8h_html"><div class="ttname"><a href="general__table__widget_8h.html">general_table_widget.h</a></div></div>
-<div class="ttc" id="anamespacecontrol_html_a27d3a5443c46266e0263e8ccbb40d0a9"><div class="ttname"><a href="namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9">control.action</a></div><div class="ttdeci">action</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00016">control.py:16</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_EditTrigger-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#EditTrigger-enum">QAbstractItemView::NoEditTriggers</a></div><div class="ttdeci">NoEditTriggers</div></div>
 <div class="ttc" id="aqabstractitemview_html_SelectionBehavior-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionBehavior-enum">QAbstractItemView::SelectRows</a></div><div class="ttdeci">SelectRows</div></div>
 <div class="ttc" id="aqabstractitemview_html_SelectionMode-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::NoSelection</a></div><div class="ttdeci">NoSelection</div></div>
@@ -305,7 +307,7 @@ $(document).ready(function(){initNavTree('general__table__widget_8cpp_source.htm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="general__table__widget_8cpp.html">general_table_widget.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,10 +1,10 @@
-<map id="/home/runner/work/hal/hal/include/hal_core/utilities/enums.h" name="/home/runner/work/hal/hal/include/hal_core/utilities/enums.h">
-<area shape="rect" id="node1" title=" " alt="" coords="269,5,438,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,109,289,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,109,393,136"/>
-<area shape="rect" id="node8" title=" " alt="" coords="417,109,468,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,184,96,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,184,207,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,184,318,211"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,184,413,211"/>
+<map id="include/hal_core/utilities/enums.h" name="include/hal_core/utilities/enums.h">
+<area shape="rect" id="node1" title=" " alt="" coords="263,5,444,47"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,95,289,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="313,95,393,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="417,95,468,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,96,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,169,207,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,169,318,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,169,413,196"/>
 </map>

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_gui_api_classes_1_1_view.
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="gui__api_8h_source.html">gui_api.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gui__api_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/gui_api/gui_api.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::GuiApiClasses::View:</div>
 <div class="dyncontent">
@@ -116,9 +118,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:abb390210761dc734c936dc73e6393014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64d3c874876bdb0db437bc2eceeb3ab8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a64d3c874876bdb0db437bc2eceeb3ab8">removeFrom</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; modules, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; gates)</td></tr>
 <tr class="separator:a64d3c874876bdb0db437bc2eceeb3ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77bea69a913f9e10c13a35cf0b223a77"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a77bea69a913f9e10c13a35cf0b223a77">setName</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:a77bea69a913f9e10c13a35cf0b223a77"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a77bea69a913f9e10c13a35cf0b223a77">setName</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a77bea69a913f9e10c13a35cf0b223a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a485bf6aa918aac9feea36591c5b51d29"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a485bf6aa918aac9feea36591c5b51d29">getId</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:a485bf6aa918aac9feea36591c5b51d29"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a485bf6aa918aac9feea36591c5b51d29">getId</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a485bf6aa918aac9feea36591c5b51d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a511675cdddec5bc15331a66ffb7759"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a8a511675cdddec5bc15331a66ffb7759">getName</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a8a511675cdddec5bc15331a66ffb7759"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,7 +128,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:adea84b30ac92faf474921f4a4bcd11e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa90d2dd86097a63359dd468d10832c95"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#aa90d2dd86097a63359dd468d10832c95">getGates</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:aa90d2dd86097a63359dd468d10832c95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1a44cbba6d5d144dea1736aebe163bc"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#af1a44cbba6d5d144dea1736aebe163bc">getIds</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; modules, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; gates)</td></tr>
+<tr class="memitem:af1a44cbba6d5d144dea1736aebe163bc"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#af1a44cbba6d5d144dea1736aebe163bc">getIds</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; modules, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; gates)</td></tr>
 <tr class="separator:af1a44cbba6d5d144dea1736aebe163bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0687acbfdf121ce24e1afcc161188ba3"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a0687acbfdf121ce24e1afcc161188ba3">foldModule</a> (int view_id, <a class="el" href="classhal_1_1_module.html">Module</a> *module)</td></tr>
 <tr class="separator:a0687acbfdf121ce24e1afcc161188ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,28 +140,29 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a9fd8998810ecaaca74374d0e9a9d54ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa115eb978370834b63f65909accaebcd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#aa115eb978370834b63f65909accaebcd">setGridPlacement</a> (int viewId, <a class="el" href="classhal_1_1_grid_placement.html">GridPlacement</a> *gp)</td></tr>
 <tr class="separator:aa115eb978370834b63f65909accaebcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7647892b2ddcb740a246e7d7c724d34"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#af7647892b2ddcb740a246e7d7c724d34">getCurrentDirectory</a> ()</td></tr>
+<tr class="memitem:af7647892b2ddcb740a246e7d7c724d34"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#af7647892b2ddcb740a246e7d7c724d34">getCurrentDirectory</a> ()</td></tr>
 <tr class="separator:af7647892b2ddcb740a246e7d7c724d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae410afcc372d2aa790bd46e3270ba14a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ae410afcc372d2aa790bd46e3270ba14a">setCurrentDirectory</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
+<tr class="memitem:ae410afcc372d2aa790bd46e3270ba14a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ae410afcc372d2aa790bd46e3270ba14a">setCurrentDirectory</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:ae410afcc372d2aa790bd46e3270ba14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa356adcb7478aa2323548ca0d75f0a9d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#aa356adcb7478aa2323548ca0d75f0a9d">createNewDirectory</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:aa356adcb7478aa2323548ca0d75f0a9d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#aa356adcb7478aa2323548ca0d75f0a9d">createNewDirectory</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:aa356adcb7478aa2323548ca0d75f0a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f303ffe7c0a9ddf571bac1c594ad1c9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a0f303ffe7c0a9ddf571bac1c594ad1c9">deleteDirectory</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
+<tr class="memitem:a0f303ffe7c0a9ddf571bac1c594ad1c9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a0f303ffe7c0a9ddf571bac1c594ad1c9">deleteDirectory</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a0f303ffe7c0a9ddf571bac1c594ad1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a780403d346cc7505c46aec8bcd05802b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a780403d346cc7505c46aec8bcd05802b">moveView</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> viewId, std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; destinationDirectoryId, std::optional&lt; int &gt; row)</td></tr>
+<tr class="memitem:a780403d346cc7505c46aec8bcd05802b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a780403d346cc7505c46aec8bcd05802b">moveView</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> viewId, std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; destinationDirectoryId, std::optional&lt; int &gt; row)</td></tr>
 <tr class="separator:a780403d346cc7505c46aec8bcd05802b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fe17af72011573f2d093460028131e8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a3fe17af72011573f2d093460028131e8">moveDirectory</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> directoryId, std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; destinationDirectoryId, std::optional&lt; int &gt; row)</td></tr>
+<tr class="memitem:a3fe17af72011573f2d093460028131e8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a3fe17af72011573f2d093460028131e8">moveDirectory</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> directoryId, std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; destinationDirectoryId, std::optional&lt; int &gt; row)</td></tr>
 <tr class="separator:a3fe17af72011573f2d093460028131e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2f952c11120d38b8c264bf1a6dde655"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ab2f952c11120d38b8c264bf1a6dde655">getChildDirectories</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> directoryId)</td></tr>
+<tr class="memitem:ab2f952c11120d38b8c264bf1a6dde655"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ab2f952c11120d38b8c264bf1a6dde655">getChildDirectories</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> directoryId)</td></tr>
 <tr class="separator:ab2f952c11120d38b8c264bf1a6dde655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4a1dea6e355ee2d63cf0cb2388ec14a"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ac4a1dea6e355ee2d63cf0cb2388ec14a">getChildViews</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> directoryId)</td></tr>
+<tr class="memitem:ac4a1dea6e355ee2d63cf0cb2388ec14a"><td class="memItemLeft" align="right" valign="top">static std::optional&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#ac4a1dea6e355ee2d63cf0cb2388ec14a">getChildViews</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> directoryId)</td></tr>
 <tr class="separator:ac4a1dea6e355ee2d63cf0cb2388ec14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89386023ea08d10a1864e07df998358f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a89386023ea08d10a1864e07df998358f">isolateModuleToModulePathInNewView</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> fromModId, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> toModId)</td></tr>
+<tr class="memitem:a89386023ea08d10a1864e07df998358f"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a89386023ea08d10a1864e07df998358f">isolateModuleToModulePathInNewView</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> fromModId, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> toModId)</td></tr>
 <tr class="separator:a89386023ea08d10a1864e07df998358f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="gui__api_8h_source.html#l00044">44</a> of file <a class="el" href="gui__api_8h_source.html">gui_api.h</a>.</p>
+<div class="textblock"><p>The python interface to the graph views of the GUI. </p>
+
+<p class="definition">Definition at line <a class="el" href="gui__api_8h_source.html#l00050">50</a> of file <a class="el" href="gui__api_8h_source.html">gui_api.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abb390210761dc734c936dc73e6393014"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb390210761dc734c936dc73e6393014">&#9670;&nbsp;</a></span>addTo()</h2>
@@ -209,11 +212,11 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise false. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00594">594</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="el" href="gui__api_8h_source.html#l00157">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">hal::Netlist::get_top_module()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context_8h_source.html#l00427">hal::GraphContext::getExclusiveModuleId()</a>, <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="el" href="graph__context_8cpp_source.html#l00356">hal::GraphContext::isShowingModuleExclusively()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__api_8h_source.html#l00156">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="el" href="gui__api_8h_source.html#l00166">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">hal::Netlist::get_top_module()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context_8h_source.html#l00428">hal::GraphContext::getExclusiveModuleId()</a>, <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="el" href="graph__context_8cpp_source.html#l00356">hal::GraphContext::isShowingModuleExclusively()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__api_8h_source.html#l00165">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, and <a class="el" href="user__action_8cpp_source.html#l00032">hal::UserAction::setObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -229,7 +232,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GuiApiClasses::View::createNewDirectory </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GuiApiClasses::View::createNewDirectory </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -271,7 +274,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void hal::GuiApiClasses::View::deleteDirectory </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -328,7 +331,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise false. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00579">579</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
@@ -379,7 +382,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise False. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00824">824</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
@@ -399,9 +402,9 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::GuiApiClasses::View::getChildDirectories </td>
+          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; hal::GuiApiClasses::View::getChildDirectories </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>directoryId</em></td><td>)</td>
           <td></td>
         </tr>
@@ -439,9 +442,9 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::GuiApiClasses::View::getChildViews </td>
+          <td class="memname">std::optional&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; hal::GuiApiClasses::View::getChildViews </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>directoryId</em></td><td>)</td>
           <td></td>
         </tr>
@@ -479,7 +482,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GuiApiClasses::View::getCurrentDirectory </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GuiApiClasses::View::getCurrentDirectory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -497,7 +500,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00995">995</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="context__tree__model_8cpp_source.html#l00087">hal::ContextTreeItem::directory()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00714">hal::GraphContextManager::getContextTreeModel()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00407">hal::ContextTreeModel::getCurrentDirectory()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="context__tree__model_8h_source.html#l00058">hal::ContextDirectory::id()</a>.</p>
+<p class="reference">References <a class="el" href="context__tree__model_8cpp_source.html#l00087">hal::ContextTreeItem::directory()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00714">hal::GraphContextManager::getContextTreeModel()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00407">hal::ContextTreeModel::getCurrentDirectory()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="context__tree__model_8h_source.html#l00061">hal::ContextDirectory::id()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -537,7 +540,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00726">726</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00437">hal::GraphContext::gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00437">hal::GraphContext::gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -569,7 +572,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00981">981</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context_8h_source.html#l00322">hal::GraphContext::getLayouter()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00069">hal::GraphLayouter::gridPlacementFactory()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context_8h_source.html#l00323">hal::GraphContext::getLayouter()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00069">hal::GraphLayouter::gridPlacementFactory()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -625,7 +628,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::GuiApiClasses::View::getIds </td>
+          <td class="memname">std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::GuiApiClasses::View::getIds </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt;&#160;</td>
           <td class="paramname"><em>modules</em>, </td>
@@ -700,7 +703,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00713">713</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="graph__context_8cpp_source.html#l00432">hal::GraphContext::modules()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="graph__context_8cpp_source.html#l00432">hal::GraphContext::modules()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -788,7 +791,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00855">855</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="gui__api_8h_source.html#l00157">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00125">hal::Module::get_parent_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">hal::Netlist::get_top_module()</a>, <a class="el" href="gui__api_8cpp_source.html#l00726">getGates()</a>, <a class="el" href="gui__api_8cpp_source.html#l00713">getModules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__api_8h_source.html#l00156">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#remove">QSet::remove()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="gui__api_8h_source.html#l00166">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00125">hal::Module::get_parent_module()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00608">hal::Netlist::get_top_module()</a>, <a class="el" href="gui__api_8cpp_source.html#l00726">getGates()</a>, <a class="el" href="gui__api_8cpp_source.html#l00713">getModules()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__api_8h_source.html#l00165">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#remove">QSet::remove()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00594">addTo()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00509">isolateInNew()</a>.</p>
 
@@ -839,7 +842,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00509">509</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00306">hal::GraphContextManager::contextWithNameExists()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="gui__api_8h_source.html#l00157">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00248">hal::GraphContextManager::getContexts()</a>, <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="user__action__object_8h_source.html#l00097">hal::UserActionObject::id()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__api_8h_source.html#l00156">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00295">hal::GraphContextManager::nextViewName()</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">hal::GraphContext::setDirty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00938">hal::GraphContext::setExclusiveModuleId()</a>, and <a class="el" href="user__action__compound_8h_source.html#l00044">hal::UserActionCompound::setUseCreatedObject()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00306">hal::GraphContextManager::contextWithNameExists()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="gui__api_8h_source.html#l00166">hal::GuiApiClasses::View::ModuleGateIdPair::gateIds</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00253">hal::GraphContextManager::getContextById()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00248">hal::GraphContextManager::getContexts()</a>, <a class="el" href="gui__api_8cpp_source.html#l00855">getValidObjects()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="user__action__object_8h_source.html#l00097">hal::UserActionObject::id()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__api_8h_source.html#l00165">hal::GuiApiClasses::View::ModuleGateIdPair::moduleIds</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00295">hal::GraphContextManager::nextViewName()</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">hal::GraphContext::setDirty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00938">hal::GraphContext::setExclusiveModuleId()</a>, and <a class="el" href="user__action__compound_8h_source.html#l00046">hal::UserActionCompound::setUseCreatedObject()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -857,13 +860,13 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">int hal::GuiApiClasses::View::isolateModuleToModulePathInNewView </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>fromModId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>toModId</em>&#160;</td>
         </tr>
         <tr>
@@ -890,7 +893,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00449">449</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00350">hal::netlist_utils::get_shortest_path()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00097">hal::UserActionObject::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="action__add__items__to__object_8h_source.html#l00076">hal::ActionAddItemsToObject::setPlacementHint()</a>, <a class="el" href="user__action__compound_8h_source.html#l00044">hal::UserActionCompound::setUseCreatedObject()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::ContextView</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00040">hal::UserActionManager::executeActionBlockThread()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00394">hal::netlist_utils::get_shortest_path()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="user__action__object_8h_source.html#l00097">hal::UserActionObject::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00238">hal::UserActionManager::instance()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="action__add__items__to__object_8h_source.html#l00076">hal::ActionAddItemsToObject::setPlacementHint()</a>, <a class="el" href="user__action__compound_8h_source.html#l00046">hal::UserActionCompound::setUseCreatedObject()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02205">y</a>.</p>
 
 </div>
 </div>
@@ -906,13 +909,13 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void hal::GuiApiClasses::View::moveDirectory </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>directoryId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
           <td class="paramname"><em>destinationDirectoryId</em>, </td>
         </tr>
         <tr>
@@ -963,13 +966,13 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void hal::GuiApiClasses::View::moveView </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>viewId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td>
           <td class="paramname"><em>destinationDirectoryId</em>, </td>
         </tr>
         <tr>
@@ -1056,7 +1059,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise false. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00633">633</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
@@ -1078,7 +1081,7 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void hal::GuiApiClasses::View::setCurrentDirectory </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1189,7 +1192,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise false. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00670">670</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
@@ -1240,7 +1243,7 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, otherwise False. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00805">805</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
@@ -1251,8 +1254,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/gui_api/<a class="el" href="gui__api_8h_source.html">gui_api.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/gui_api/<a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a></li>
+<li>plugins/gui/include/gui/gui_api/<a class="el" href="gui__api_8h_source.html">gui_api.h</a></li>
+<li>plugins/gui/src/gui_api/<a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1260,7 +1263,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_gui_api_classes.html">GuiApiClasses</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html">View</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -94,7 +96,7 @@ $(document).ready(function(){initNavTree('structhal_1_1dataflow_1_1_netlist_abst
 <p>The abstraction of the netlist that only contains gates of a specified type, e.g., flip-flops.  
  <a href="structhal_1_1dataflow_1_1_netlist_abstraction.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="netlist__abstraction_8h_source.html">/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/netlist_abstraction.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::dataflow::NetlistAbstraction:</div>
 <div class="dyncontent">
@@ -119,23 +121,23 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a640d804cb761d99804d2626e1046a135"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad7e8395eb8ad80a279989a014eb39bc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#aad7e8395eb8ad80a279989a014eb39bc">target_gates</a></td></tr>
 <tr class="separator:aad7e8395eb8ad80a279989a014eb39bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dddbac87e60f675f17c407cef867c3d"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a0dddbac87e60f675f17c407cef867c3d">gate_to_fingerprint</a></td></tr>
+<tr class="memitem:a0dddbac87e60f675f17c407cef867c3d"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a0dddbac87e60f675f17c407cef867c3d">gate_to_fingerprint</a></td></tr>
 <tr class="separator:a0dddbac87e60f675f17c407cef867c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c9a3281896933f8c9676fd294b7213f"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a5c9a3281896933f8c9676fd294b7213f">gate_to_control_signals</a></td></tr>
+<tr class="memitem:a5c9a3281896933f8c9676fd294b7213f"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a5c9a3281896933f8c9676fd294b7213f">gate_to_control_signals</a></td></tr>
 <tr class="separator:a5c9a3281896933f8c9676fd294b7213f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7737af5453b1aec804f165a8008a8562"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a7737af5453b1aec804f165a8008a8562">gate_to_register_stages</a></td></tr>
+<tr class="memitem:a7737af5453b1aec804f165a8008a8562"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a7737af5453b1aec804f165a8008a8562">gate_to_register_stages</a></td></tr>
 <tr class="separator:a7737af5453b1aec804f165a8008a8562"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a594a243f713eb110245ee40d6f838669"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a594a243f713eb110245ee40d6f838669">gate_to_predecessors</a></td></tr>
+<tr class="memitem:a594a243f713eb110245ee40d6f838669"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a594a243f713eb110245ee40d6f838669">gate_to_predecessors</a></td></tr>
 <tr class="separator:a594a243f713eb110245ee40d6f838669"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9fd25c1e03f29673d15fd28337e5eb7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#aa9fd25c1e03f29673d15fd28337e5eb7">gate_to_successors</a></td></tr>
+<tr class="memitem:aa9fd25c1e03f29673d15fd28337e5eb7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#aa9fd25c1e03f29673d15fd28337e5eb7">gate_to_successors</a></td></tr>
 <tr class="separator:aa9fd25c1e03f29673d15fd28337e5eb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd21b756c8d52ad03ba1e10a5f934a89"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#afd21b756c8d52ad03ba1e10a5f934a89">gate_to_known_predecessor_groups</a></td></tr>
+<tr class="memitem:afd21b756c8d52ad03ba1e10a5f934a89"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#afd21b756c8d52ad03ba1e10a5f934a89">gate_to_known_predecessor_groups</a></td></tr>
 <tr class="separator:afd21b756c8d52ad03ba1e10a5f934a89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8b2f75944d4f7bc5914b60e72fd3952"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#ad8b2f75944d4f7bc5914b60e72fd3952">gate_to_known_successor_groups</a></td></tr>
+<tr class="memitem:ad8b2f75944d4f7bc5914b60e72fd3952"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#ad8b2f75944d4f7bc5914b60e72fd3952">gate_to_known_successor_groups</a></td></tr>
 <tr class="separator:ad8b2f75944d4f7bc5914b60e72fd3952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afef3984e6484837ca97de53dd52d3d5e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#afef3984e6484837ca97de53dd52d3d5e">gate_to_output_shape</a></td></tr>
+<tr class="memitem:afef3984e6484837ca97de53dd52d3d5e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#afef3984e6484837ca97de53dd52d3d5e">gate_to_output_shape</a></td></tr>
 <tr class="separator:afef3984e6484837ca97de53dd52d3d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f435404c1c2420b366f8159fcf470a2"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a2f435404c1c2420b366f8159fcf470a2">gate_to_input_shape</a></td></tr>
+<tr class="memitem:a2f435404c1c2420b366f8159fcf470a2"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html#a2f435404c1c2420b366f8159fcf470a2">gate_to_input_shape</a></td></tr>
 <tr class="separator:a2f435404c1c2420b366f8159fcf470a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -179,12 +181,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::map&lt;<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_control_signals</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::map&lt;<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_control_signals</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the nets connected to its control pins, grouped by pin type. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00079">79</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00083">83</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00109">hal::dataflow::Grouping::get_control_signals_of_group()</a>.</p>
 
@@ -197,12 +200,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_fingerprint</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_fingerprint</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the fingerprint that summarizes its type and connectivity. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00078">78</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00080">80</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">hal::dataflow::Grouping::Grouping()</a>.</p>
 
@@ -215,12 +219,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt;std::vector&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_input_shape</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt;std::vector&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_input_shape</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the sizes of the pin groups that drive its inputs. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00086">86</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00104">104</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 </div>
 </div>
@@ -231,12 +236,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_known_predecessor_groups</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_known_predecessor_groups</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the previously known groups that precede it. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00083">83</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00095">95</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00266">hal::dataflow::Grouping::get_known_predecessor_groups_of_group()</a>.</p>
 
@@ -249,12 +255,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_known_successor_groups</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_known_successor_groups</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the previously known groups that succeed it. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00084">84</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00098">98</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00235">hal::dataflow::Grouping::get_known_successor_groups_of_group()</a>.</p>
 
@@ -267,12 +274,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::vector&lt;std::vector&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_output_shape</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::vector&lt;std::vector&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_output_shape</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the sizes of the pin groups that its outputs feed into. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00085">85</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00101">101</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 </div>
 </div>
@@ -283,12 +291,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_predecessors</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_predecessors</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the target gates that precede it. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00081">81</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00089">89</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00204">hal::dataflow::Grouping::get_predecessor_groups_of_group()</a>, and <a class="el" href="register__stage__identification_8cpp_source.html#l00024">hal::dataflow::pre_processing::identify_register_stages()</a>.</p>
 
@@ -301,12 +310,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_register_stages</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_register_stages</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the register stages it belongs to. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00080">80</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00086">86</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00139">hal::dataflow::Grouping::get_register_stage_intersect_of_group()</a>, and <a class="el" href="register__stage__identification_8cpp_source.html#l00024">hal::dataflow::pre_processing::identify_register_stages()</a>.</p>
 
@@ -319,12 +329,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_successors</td>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, std::unordered_set&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; &gt; hal::dataflow::NetlistAbstraction::gate_to_successors</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from each target gate to the target gates that succeed it. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00082">82</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00092">92</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00173">hal::dataflow::Grouping::get_successor_groups_of_group()</a>, and <a class="el" href="register__stage__identification_8cpp_source.html#l00024">hal::dataflow::pre_processing::identify_register_stages()</a>.</p>
 
@@ -379,14 +390,15 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Set <code>true</code> if the netlist was synthesized with Yosys, <code>false</code> otherwise. </p>
 
 <p class="definition">Definition at line <a class="el" href="netlist__abstraction_8h_source.html#l00070">70</a> of file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/<a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/src/common/<a class="el" href="netlist__abstraction_8cpp_source.html">netlist_abstraction.cpp</a></li>
+<li>plugins/dataflow_analysis/include/dataflow_analysis/common/<a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a></li>
+<li>plugins/dataflow_analysis/src/common/<a class="el" href="netlist__abstraction_8cpp_source.html">netlist_abstraction.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -394,7 +406,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

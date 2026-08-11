@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_netlist_internal_manager.
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="netlist__internal__manager_8h_source.html">hal_core/netlist/netlist_internal_manager.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::NetlistInternalManager:</div>
 <div class="dyncontent">
@@ -114,8 +116,9 @@ Friends</h2></td></tr>
 <tr class="separator:ab61c4d8e4b1799e5578ebdd78701c76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00050">50</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<div class="textblock"><p>Performs all netlist modifications on behalf of the netlist and its elements. It is an implementation detail that keeps the internal caches consistent and emits the corresponding events, and is not part of the public API. </p>
+
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00053">53</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 </div><h2 class="groupheader">Friends And Related Function Documentation</h2>
 <a id="ad8205f09f8efdf8fab19078d103cd6e7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8205f09f8efdf8fab19078d103cd6e7">&#9670;&nbsp;</a></span>Gate</h2>
@@ -137,7 +140,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00055">55</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00058">58</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 
 </div>
 </div>
@@ -161,7 +164,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00056">56</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00059">59</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 
 </div>
 </div>
@@ -185,7 +188,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00053">53</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00056">56</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +212,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00054">54</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00057">57</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 
 </div>
 </div>
@@ -233,13 +236,13 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00052">52</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__internal__manager_8h_source.html#l00055">55</a> of file <a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/<a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/<a class="el" href="netlist__internal__manager_8cpp_source.html">netlist_internal_manager.cpp</a></li>
+<li>include/hal_core/netlist/<a class="el" href="netlist__internal__manager_8h_source.html">netlist_internal_manager.h</a></li>
+<li>src/netlist/<a class="el" href="netlist__internal__manager_8cpp_source.html">netlist_internal_manager.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -247,7 +250,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

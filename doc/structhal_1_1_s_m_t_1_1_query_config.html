@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('structhal_1_1_s_m_t_1_1_query_config.h
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="types_8h_source.html">types.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">hal_core/netlist/boolean_function/types.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::SMT::QueryConfig:</div>
 <div class="dyncontent">
@@ -145,7 +147,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the data structure to configure an <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00060">60</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00063">63</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aeb675d740cbc23801eb805217f389301"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb675d740cbc23801eb805217f389301">&#9670;&nbsp;</a></span>with_call()</h2>
@@ -162,7 +164,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the solver type to the desired <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver.</p>
+<p>Sets the call type to the desired target.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">call</td><td>- The solver call. </td></tr>
@@ -171,9 +173,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00095">95</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00095">95</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00069">call</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00072">call</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -196,7 +198,7 @@ Friends</h2></td></tr>
 <p>Activates local <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver execution.</p>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00101">101</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00101">101</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -219,9 +221,9 @@ Friends</h2></td></tr>
 <p>Indicates that the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver should generate a model in case the formula is satisfiable.</p>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00113">113</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00113">113</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00073">generate_model</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00076">generate_model</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00406">hal::solve_fsm::solve_fsm()</a>.</p>
 
@@ -244,7 +246,7 @@ Friends</h2></td></tr>
 <p>Indicates that the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver runs on a remote machine.</p>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00107">107</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00107">107</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -274,9 +276,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00089">89</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00089">89</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00067">solver</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00070">solver</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -306,9 +308,9 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00125">125</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00125">125</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00075">timeout_in_seconds</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00078">timeout_in_seconds</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00406">hal::solve_fsm::solve_fsm()</a>.</p>
 
@@ -331,9 +333,9 @@ Friends</h2></td></tr>
 <p>Indicates that the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver should not generate a model.</p>
 <dl class="section return"><dt>Returns</dt><dd>The updated <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00119">119</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00119">119</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00073">generate_model</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00076">generate_model</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -383,7 +385,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00131">131</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00131">131</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -402,7 +404,7 @@ Friends</h2></td></tr>
 
 <p>Controls whether the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query is performed on a local or a remote machine. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00071">71</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00074">74</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -420,9 +422,9 @@ Friends</h2></td></tr>
 
 <p>The calling format for the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00069">69</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00072">72</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00439">hal::SMT::Solver::query_local_with_smt2()</a>, and <a class="el" href="types_8cpp_source.html#l00095">with_call()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00439">hal::SMT::Solver::query_local_with_smt2()</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00095">with_call()</a>.</p>
 
 </div>
 </div>
@@ -440,9 +442,9 @@ Friends</h2></td></tr>
 
 <p>Controls whether the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver should generate a model in case formula is satisfiable. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00073">73</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00076">76</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00140">hal::SMT::Boolector::query_binary()</a>, <a class="el" href="solver_8cpp_source.html#l00234">hal::SMT::Bitwuzla::query_library()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, <a class="el" href="types_8cpp_source.html#l00113">with_model_generation()</a>, and <a class="el" href="types_8cpp_source.html#l00119">without_model_generation()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00140">hal::SMT::Boolector::query_binary()</a>, <a class="el" href="solver_8cpp_source.html#l00234">hal::SMT::Bitwuzla::query_library()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00113">with_model_generation()</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00119">without_model_generation()</a>.</p>
 
 </div>
 </div>
@@ -460,9 +462,9 @@ Friends</h2></td></tr>
 
 <p>The <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver identifier. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00067">67</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00070">70</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00439">hal::SMT::Solver::query_local_with_smt2()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="types_8cpp_source.html#l00089">with_solver()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00439">hal::SMT::Solver::query_local_with_smt2()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00089">with_solver()</a>.</p>
 
 </div>
 </div>
@@ -480,15 +482,15 @@ Friends</h2></td></tr>
 
 <p>The timeout after which the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> solver is killed in seconds. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00075">75</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00078">78</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00053">hal::SMT::Z3::query_binary()</a>, <a class="el" href="solver_8cpp_source.html#l00140">hal::SMT::Boolector::query_binary()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="types_8cpp_source.html#l00125">with_timeout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00053">hal::SMT::Z3::query_binary()</a>, <a class="el" href="solver_8cpp_source.html#l00140">hal::SMT::Boolector::query_binary()</a>, <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>, and <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00125">with_timeout()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/<a class="el" href="types_8h_source.html">types.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/boolean_function/<a class="el" href="types_8cpp_source.html">types.cpp</a></li>
+<li>include/hal_core/netlist/boolean_function/<a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a></li>
+<li>src/netlist/boolean_function/<a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -496,7 +498,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

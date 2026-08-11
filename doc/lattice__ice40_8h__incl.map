@@ -1,0 +1,11 @@
+<map id="plugins/module_identification/include/module_identification/architectures/lattice_ice40.h" name="plugins/module_identification/include/module_identification/architectures/lattice_ice40.h">
+<area shape="rect" id="node1" title="This file contains the function to generate structural candidates for Lattice iCE40 FPGAs." alt="" coords="315,5,534,61"/>
+<area shape="rect" id="node2" href="$base__candidate_8h.html" title="This file contains the definition of the BaseCandidate class, which represents a base candidate in th..." alt="" coords="52,117,267,158"/>
+<area shape="rect" id="node5" title=" " alt="" coords="399,317,450,344"/>
+<area shape="rect" id="node6" title=" " alt="" coords="558,317,635,344"/>
+<area shape="rect" id="node7" title=" " alt="" coords="83,317,145,344"/>
+<area shape="rect" id="node8" href="$structural__candidate_8h.html" title="This file contains the class for defining and managing structural candidates within the module identi..." alt="" coords="343,109,506,165"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="203,317,343,344"/>
+<area shape="rect" id="node4" href="$gate_8h.html" title=" " alt="" coords="341,228,508,255"/>
+<area shape="rect" id="node9" href="$candidate__context_8h.html" title="This file contains the CandidateContext struct and that is used for optimization purposes during the ..." alt="" coords="151,213,317,269"/>
+</map>

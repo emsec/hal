@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.cpp Source File</title>
+<title>HAL: plugins/gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -125,14 +127,14 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8cpp_source.html
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">    }</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">    */</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">   40</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">PinTreeView::handleEditNewDone</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index)</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">   40</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">PinTreeView::handleEditNewDone</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> nextIndex;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">if</span> (index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">column</a>() || index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">parent</a>().<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">isValid</a>())</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            nextIndex = <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#model">model</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#index">index</a>(index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">row</a>()+1,0,index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">parent</a>());</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.column() || <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.parent().isValid())</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            nextIndex = <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#model">model</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#index">index</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.row()+1,0,<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.parent());</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            nextIndex = <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#model">model</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#index">index</a>(index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">row</a>(),1,index.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#parent">parent</a>());</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            nextIndex = <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#model">model</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#index">index</a>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.row(),1,<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>.parent());</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#setCurrentIndex">setCurrentIndex</a>(nextIndex);</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#edit">edit</a>(nextIndex);</div>
@@ -190,16 +192,17 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8cpp_source.html
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html_aca10daff0a4ee16e3acfa5a83d405394"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html#aca10daff0a4ee16e3acfa5a83d405394">hal::GateLibraryTabPin::getPinModel</a></div><div class="ttdeci">PinModel * getPinModel()</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00094">gatelibrary_tab_pin.cpp:94</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html_ace7d9b4014fe724cbffaedb398e39cc4"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html#ace7d9b4014fe724cbffaedb398e39cc4">hal::GateLibraryTabPin::getTreeView</a></div><div class="ttdeci">QTreeView * getTreeView()</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00089">gatelibrary_tab_pin.cpp:89</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00051">gate_type.h:52</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_delegate_html"><div class="ttname"><a href="classhal_1_1_pin_delegate.html">hal::PinDelegate</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__delegate_8h_source.html#l00037">pin_delegate.h:38</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_model_html"><div class="ttname"><a href="classhal_1_1_pin_model.html">hal::PinModel</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8h_source.html#l00049">pin_model.h:50</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_delegate_html"><div class="ttname"><a href="classhal_1_1_pin_delegate.html">hal::PinDelegate</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__delegate_8h_source.html#l00040">pin_delegate.h:41</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_model_html"><div class="ttname"><a href="classhal_1_1_pin_model.html">hal::PinModel</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8h_source.html#l00052">pin_model.h:53</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_model_html_a528b9e6d54bfe9918f97ad93a5cefff8"><div class="ttname"><a href="classhal_1_1_pin_model.html#a528b9e6d54bfe9918f97ad93a5cefff8">hal::PinModel::setGate</a></div><div class="ttdeci">void setGate(GateType *gate)</div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8cpp_source.html#l00041">pin_model.cpp:41</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_model_html_a887afd631594eb99d21448bc9f85a27c"><div class="ttname"><a href="classhal_1_1_pin_model.html#a887afd631594eb99d21448bc9f85a27c">hal::PinModel::editNewDone</a></div><div class="ttdeci">void editNewDone(QModelIndex index)</div></div>
-<div class="ttc" id="aclasshal_1_1_pin_tree_view_html"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html">hal::PinTreeView</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00038">gatelibrary_tab_pin.h:39</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_tree_view_html"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html">hal::PinTreeView</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00041">gatelibrary_tab_pin.h:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_tree_view_html_a15ac3ef83af83e4868c663e99c1cb5a7"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html#a15ac3ef83af83e4868c663e99c1cb5a7">hal::PinTreeView::handleEditNewDone</a></div><div class="ttdeci">void handleEditNewDone(const QModelIndex &amp;index)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00040">gatelibrary_tab_pin.cpp:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pin_tree_view_html_ad5bd3da5cedb1103c32813e8e10d433b"><div class="ttname"><a href="classhal_1_1_pin_tree_view.html#ad5bd3da5cedb1103c32813e8e10d433b">hal::PinTreeView::PinTreeView</a></div><div class="ttdeci">PinTreeView(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8cpp_source.html#l00013">gatelibrary_tab_pin.cpp:13</a></div></div>
 <div class="ttc" id="agatelibrary__tab__pin_8h_html"><div class="ttname"><a href="gatelibrary__tab__pin_8h.html">gatelibrary_tab_pin.h</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="apin__delegate_8h_html"><div class="ttname"><a href="pin__delegate_8h.html">pin_delegate.h</a></div></div>
 <div class="ttc" id="apin__model_8h_html"><div class="ttname"><a href="pin__model_8h.html">pin_model.h</a></div></div>
 <div class="ttc" id="aqabstractitemmodel_html_index"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#index">QAbstractItemModel::index</a></div><div class="ttdeci">virtual QModelIndex index(int row, int column, const QModelIndex &amp;parent) const const=0</div></div>
@@ -212,10 +215,6 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8cpp_source.html
 <div class="ttc" id="aqgridlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a></div></div>
 <div class="ttc" id="aqgridlayout_html_addWidget-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgridlayout.html#addWidget-1">QGridLayout::addWidget</a></div><div class="ttdeci">void addWidget(QWidget *widget, int row, int column, Qt::Alignment alignment)</div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
-<div class="ttc" id="aqmodelindex_html_column"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column</a></div><div class="ttdeci">int column() const const</div></div>
-<div class="ttc" id="aqmodelindex_html_isValid"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid</a></div><div class="ttdeci">bool isValid() const const</div></div>
-<div class="ttc" id="aqmodelindex_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html#parent">QModelIndex::parent</a></div><div class="ttdeci">QModelIndex parent() const const</div></div>
-<div class="ttc" id="aqmodelindex_html_row"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row</a></div><div class="ttdeci">int row() const const</div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
 <div class="ttc" id="aqstyle_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyle.html">QStyle</a></div></div>
 <div class="ttc" id="aqstyle_html_polish"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyle.html#polish">QStyle::polish</a></div><div class="ttdeci">virtual void polish(QWidget *widget)</div></div>
@@ -234,7 +233,7 @@ $(document).ready(function(){initNavTree('gatelibrary__tab__pin_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_e94d755b33bc55104d832e61a117714c.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="dir_1cd7bec10474bbcc85a605192c4609b0.html">gatelibrary_tab_widgets</a></li><li class="navelem"><a class="el" href="gatelibrary__tab__pin_8cpp.html">gatelibrary_tab_pin.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

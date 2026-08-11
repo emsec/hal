@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/graph_algorithm/src/algorithms/components.cpp File Reference</title>
+<title>HAL: plugins/graph_algorithm/src/algorithms/components.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -95,19 +97,19 @@ $(document).ready(function(){initNavTree('components_8cpp.html',''); initResizab
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for components.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="components_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2graph__algorithm_2src_2algorithms_2components_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2graph__algorithm_2src_2algorithms_2components_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2graph__algorithm_2src_2algorithms_2components_8cpp">
-<area shape="rect" title=" " alt="" coords="272,5,502,61"/>
-<area shape="rect" href="components_8h.html" title="This file contains functions related to graph components." alt="" coords="56,109,259,151"/>
-<area shape="rect" href="netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="300,109,474,151"/>
-<area shape="rect" title=" " alt="" coords="499,117,550,143"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="168,288,308,315"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="92,199,223,240"/>
-<area shape="rect" title=" " alt="" coords="247,206,367,233"/>
-<area shape="rect" title=" " alt="" coords="26,206,68,233"/>
-<area shape="rect" title=" " alt="" coords="412,288,498,315"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="492,206,671,233"/>
-<area shape="rect" title=" " alt="" coords="584,288,708,315"/>
+<div class="center"><img src="components_8cpp__incl.png" border="0" usemap="#aplugins_2graph__algorithm_2src_2algorithms_2components_8cpp" alt=""/></div>
+<map name="aplugins_2graph__algorithm_2src_2algorithms_2components_8cpp" id="aplugins_2graph__algorithm_2src_2algorithms_2components_8cpp">
+<area shape="rect" title=" " alt="" coords="272,5,502,47"/>
+<area shape="rect" href="components_8h.html" title="This file contains functions related to graph components." alt="" coords="56,95,259,136"/>
+<area shape="rect" href="netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="300,95,474,136"/>
+<area shape="rect" title=" " alt="" coords="499,102,550,129"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="168,273,308,300"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="92,184,223,225"/>
+<area shape="rect" title=" " alt="" coords="247,191,367,218"/>
+<area shape="rect" title=" " alt="" coords="26,191,68,218"/>
+<area shape="rect" title=" " alt="" coords="412,273,498,300"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="492,191,671,218"/>
+<area shape="rect" title=" " alt="" coords="584,273,708,300"/>
 </map>
 </div>
 </div>
@@ -122,7 +124,7 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a342053bd60ebc4294ba58fc3f378ec6c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a342053bd60ebc4294ba58fc3f378ec6c">hal::graph_algorithm::get_connected_components</a> (const NetlistGraph *graph, bool strong, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> min_size=0)</td></tr>
+<tr class="memitem:a342053bd60ebc4294ba58fc3f378ec6c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::vector&lt; std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a342053bd60ebc4294ba58fc3f378ec6c">hal::graph_algorithm::get_connected_components</a> (const NetlistGraph *graph, bool strong, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> min_size=0)</td></tr>
 <tr class="memdesc:a342053bd60ebc4294ba58fc3f378ec6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the (strongly) connected components of the specified graph.  <a href="namespacehal_1_1graph__algorithm.html#a342053bd60ebc4294ba58fc3f378ec6c">More...</a><br /></td></tr>
 <tr class="separator:a342053bd60ebc4294ba58fc3f378ec6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -132,7 +134,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_192b19fb2b8fdce0ad89db78639c6562.html">graph_algorithm</a></li><li class="navelem"><a class="el" href="dir_12e2d667539b63992169e7388aea4805.html">src</a></li><li class="navelem"><a class="el" href="dir_7f6e6e76e7fbca7c850e966c11babe0e.html">algorithms</a></li><li class="navelem"><a class="el" href="components_8cpp.html">components.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

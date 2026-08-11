@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/netlist/boolean_function.cpp File Reference</title>
+<title>HAL: src/netlist/boolean_function.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,10 +93,10 @@ $(document).ready(function(){initNavTree('netlist_2boolean__function_8cpp.html',
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="boolean__function_8h_source.html">hal_core/netlist/boolean_function.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="parser_8h_source.html">hal_core/netlist/boolean_function/parser.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="simplification_8h_source.html">hal_core/netlist/boolean_function/simplification.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2boolean__function_2simplification_8h_source.html">hal_core/netlist/boolean_function/simplification.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symbolic__execution_8h_source.html">hal_core/netlist/boolean_function/symbolic_execution.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;bitset&gt;</code><br />
 <code>#include &lt;boost/spirit/home/x3.hpp&gt;</code><br />
@@ -104,28 +106,43 @@ $(document).ready(function(){initNavTree('netlist_2boolean__function_8cpp.html',
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for boolean_function.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="netlist_2boolean__function_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp" id="a_2home_2runner_2work_2hal_2hal_2src_2netlist_2boolean__function_8cpp">
-<area shape="rect" title=" " alt="" coords="711,5,881,61"/>
-<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="320,199,499,240"/>
-<area shape="rect" title=" " alt="" coords="295,377,345,404"/>
-<area shape="rect" title=" " alt="" coords="761,295,847,322"/>
-<area shape="rect" href="parser_8h.html" title=" " alt="" coords="93,109,272,151"/>
-<area shape="rect" href="simplification_8h.html" title=" " alt="" coords="547,109,733,151"/>
-<area shape="rect" href="symbolic__execution_8h.html" title=" " alt="" coords="296,109,523,151"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="859,109,989,151"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="756,199,887,240"/>
-<area shape="rect" title=" " alt="" coords="1013,117,1072,143"/>
-<area shape="rect" title=" " alt="" coords="1096,117,1280,143"/>
-<area shape="rect" title=" " alt="" coords="1304,117,1371,143"/>
-<area shape="rect" title=" " alt="" coords="1395,117,1469,143"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="602,377,742,404"/>
-<area shape="rect" href="enums_8h.html" title=" " alt="" coords="305,288,436,329"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="607,288,737,329"/>
-<area shape="rect" title=" " alt="" coords="461,295,531,322"/>
-<area shape="rect" title=" " alt="" coords="60,295,129,322"/>
-<area shape="rect" title=" " alt="" coords="154,295,230,322"/>
-<area shape="rect" title=" " alt="" coords="871,295,913,322"/>
+<div class="center"><img src="netlist_2boolean__function_8cpp__incl.png" border="0" usemap="#asrc_2netlist_2boolean__function_8cpp" alt=""/></div>
+<map name="asrc_2netlist_2boolean__function_8cpp" id="asrc_2netlist_2boolean__function_8cpp">
+<area shape="rect" title=" " alt="" coords="970,5,1113,47"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="687,273,865,315"/>
+<area shape="rect" title=" " alt="" coords="827,452,877,479"/>
+<area shape="rect" title=" " alt="" coords="889,370,975,397"/>
+<area shape="rect" href="parser_8h.html" title=" " alt="" coords="669,184,848,225"/>
+<area shape="rect" href="include_2hal__core_2netlist_2boolean__function_2simplification_8h.html" title=" " alt="" coords="923,184,1109,225"/>
+<area shape="rect" href="symbolic__execution_8h.html" title=" " alt="" coords="341,95,568,136"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1672,184,1803,225"/>
+<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="1100,273,1231,315"/>
+<area shape="rect" title=" " alt="" coords="1155,102,1213,129"/>
+<area shape="rect" title=" " alt="" coords="1237,102,1421,129"/>
+<area shape="rect" title=" " alt="" coords="1445,102,1512,129"/>
+<area shape="rect" title=" " alt="" coords="1536,102,1611,129"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1198,452,1338,479"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="245,363,376,404"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1100,363,1231,404"/>
+<area shape="rect" title=" " alt="" coords="549,370,619,397"/>
+<area shape="rect" title=" " alt="" coords="644,370,713,397"/>
+<area shape="rect" title=" " alt="" coords="738,370,814,397"/>
+<area shape="rect" title=" " alt="" coords="1729,370,1772,397"/>
+<area shape="rect" title=" " alt="" coords="401,370,525,397"/>
+<area shape="rect" title=" " alt="" coords="1407,370,1470,397"/>
+<area shape="rect" title=" " alt="" coords="1505,452,1591,479"/>
+<area shape="rect" title=" " alt="" coords="1495,370,1553,397"/>
+<area shape="rect" href="symbolic__state_8h.html" title=" " alt="" coords="93,184,291,225"/>
+<area shape="rect" href="include_2hal__core_2netlist_2boolean__function_2types_8h.html" title=" " alt="" coords="365,184,544,225"/>
+<area shape="rect" title=" " alt="" coords="144,281,219,307"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="1457,273,1588,315"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="2281,273,2452,315"/>
+<area shape="rect" title=" " alt="" coords="2287,370,2364,397"/>
+<area shape="rect" title=" " alt="" coords="2389,370,2443,397"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="1663,273,1811,315"/>
+<area shape="rect" title=" " alt="" coords="1836,281,1900,307"/>
+<area shape="rect" title=" " alt="" coords="1924,281,2108,307"/>
+<area shape="rect" title=" " alt="" coords="2133,281,2257,307"/>
 </map>
 </div>
 </div>
@@ -149,7 +166,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2boolean__function_8cpp.html">boolean_function.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

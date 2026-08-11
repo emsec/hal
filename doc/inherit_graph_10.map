@@ -3,7 +3,8 @@
 <area shape="rect" id="node2" href="$classhal_1_1_context_tree_item.html" title=" " alt="" coords="204,5,363,32"/>
 <area shape="rect" id="node3" href="$classhal_1_1_gate_pins_tree_item.html" title=" " alt="" coords="201,56,366,83"/>
 <area shape="rect" id="node4" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="219,107,347,133"/>
-<area shape="rect" id="node5" href="$classhal_1_1_module_pins_tree_item.html" title=" " alt="" coords="192,157,375,184"/>
-<area shape="rect" id="node6" href="$classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="233,208,333,235"/>
-<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="215,259,352,285"/>
+<area shape="rect" id="node6" href="$classhal_1_1_module_pins_tree_item.html" title=" " alt="" coords="192,157,375,184"/>
+<area shape="rect" id="node7" href="$classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="233,208,333,235"/>
+<area shape="rect" id="node8" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="215,259,352,285"/>
+<area shape="rect" id="node5" href="$classhal_1_1_select_gate_item.html" title=" " alt="" coords="423,107,573,133"/>
 </map>

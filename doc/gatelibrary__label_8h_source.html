@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/gatelibrary_management/gatelibrary_label.h Source File</title>
+<title>HAL: plugins/gui/include/gui/gatelibrary_management/gatelibrary_label.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -86,7 +88,7 @@ $(document).ready(function(){initNavTree('gatelibrary__label_8h_source.html','')
 <div class="title">gatelibrary_label.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="gatelibrary__label_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_label.html#adde2f0735f4eb99dc9d8f06141a972b8">    1</a></span>&#160;<span class="comment">// MIT License</span></div>
+<a href="gatelibrary__label_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
@@ -118,24 +120,23 @@ $(document).ready(function(){initNavTree('gatelibrary__label_8h_source.html','')
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_label.html">   33</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_gate_library_label.html">GateLibraryLabel</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_gate_library_label.html#adde2f0735f4eb99dc9d8f06141a972b8">isValue</a> READ <a class="code" href="classhal_1_1_gate_library_label.html#adde2f0735f4eb99dc9d8f06141a972b8">isValue</a> WRITE <a class="code" href="classhal_1_1_gate_library_label.html#a8d0335c6d53a0a9f55402c54a77198a0">setValue</a>)  <span class="comment">// label or value</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">bool</span> mValue;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="classhal_1_1_gate_library_label.html#aa60f6a33efebcf023c22619c72191cc3">GateLibraryLabel</a>(<span class="keywordtype">bool</span> isVal, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt= <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(), <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">   41</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">isValue</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mValue; }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_library_label.html#a8d0335c6d53a0a9f55402c54a77198a0">setValue</a>(<span class="keywordtype">bool</span> isVal);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    };</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_gate_library_label_html"><div class="ttname"><a href="classhal_1_1_gate_library_label.html">hal::GateLibraryLabel</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8h_source.html#l00033">gatelibrary_label.h:34</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_library_label_html_a361c60f70e35626ac747b6be360bb76a"><div class="ttname"><a href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">hal::GateLibraryLabel::isValue</a></div><div class="ttdeci">bool isValue() const</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8h_source.html#l00041">gatelibrary_label.h:41</a></div></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_label.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_gate_library_label.html">GateLibraryLabel</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">Q_PROPERTY</a>(<span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">isValue</a> READ <a class="code" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">isValue</a> WRITE <a class="code" href="classhal_1_1_gate_library_label.html#a8d0335c6d53a0a9f55402c54a77198a0">setValue</a>)  <span class="comment">// label or value</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">bool</span> mValue;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classhal_1_1_gate_library_label.html#aa60f6a33efebcf023c22619c72191cc3">GateLibraryLabel</a>(<span class="keywordtype">bool</span> isVal, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt= <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(), <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">   44</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">isValue</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mValue; }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_library_label.html#a8d0335c6d53a0a9f55402c54a77198a0">setValue</a>(<span class="keywordtype">bool</span> isVal);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_gate_library_label_html"><div class="ttname"><a href="classhal_1_1_gate_library_label.html">hal::GateLibraryLabel</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8h_source.html#l00036">gatelibrary_label.h:37</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_library_label_html_a361c60f70e35626ac747b6be360bb76a"><div class="ttname"><a href="classhal_1_1_gate_library_label.html#a361c60f70e35626ac747b6be360bb76a">hal::GateLibraryLabel::isValue</a></div><div class="ttdeci">bool isValue() const</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8h_source.html#l00044">gatelibrary_label.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_label_html_a8d0335c6d53a0a9f55402c54a77198a0"><div class="ttname"><a href="classhal_1_1_gate_library_label.html#a8d0335c6d53a0a9f55402c54a77198a0">hal::GateLibraryLabel::setValue</a></div><div class="ttdeci">void setValue(bool isVal)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8cpp_source.html#l00012">gatelibrary_label.cpp:12</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_library_label_html_aa60f6a33efebcf023c22619c72191cc3"><div class="ttname"><a href="classhal_1_1_gate_library_label.html#aa60f6a33efebcf023c22619c72191cc3">hal::GateLibraryLabel::GateLibraryLabel</a></div><div class="ttdeci">GateLibraryLabel(bool isVal, const QString &amp;txt=QString(), QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8cpp_source.html#l00005">gatelibrary_label.cpp:5</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_library_label_html_adde2f0735f4eb99dc9d8f06141a972b8"><div class="ttname"><a href="classhal_1_1_gate_library_label.html#adde2f0735f4eb99dc9d8f06141a972b8">hal::GateLibraryLabel::isValue</a></div><div class="ttdeci">bool isValue</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__label_8h_source.html#l00001">gatelibrary_label.h:37</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqobject_html_Q_PROPERTY"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_PROPERTY">QObject::Q_PROPERTY</a></div><div class="ttdeci">Q_PROPERTY(...)</div></div>
@@ -148,7 +149,7 @@ $(document).ready(function(){initNavTree('gatelibrary__label_8h_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_4252469b3ac735c304362e15e3ea1050.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="gatelibrary__label_8h.html">gatelibrary_label.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

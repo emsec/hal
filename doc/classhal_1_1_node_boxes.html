@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_node_boxes.html',''); ini
 <p>The <a class="el" href="classhal_1_1_node_boxes.html" title="The NodeBoxes class owns all NodeBox&#39;es from hal view.">NodeBoxes</a> class owns all <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a>'es from hal view.  
  <a href="classhal_1_1_node_boxes.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="node__box_8h_source.html">node_box.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="node__box_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/node_box.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::NodeBoxes:</div>
 <div class="dyncontent">
@@ -137,7 +139,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac1e881a35e4dea4d4b842b1562f5228e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node_box.html">NodeBox</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e">boxForItem</a> (<a class="el" href="classhal_1_1_graphics_node.html">GraphicsNode</a> *item) const</td></tr>
 <tr class="memdesc:ac1e881a35e4dea4d4b842b1562f5228e"><td class="mdescLeft">&#160;</td><td class="mdescRight">boxForItem find <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> by graphics item  <a href="classhal_1_1_node_boxes.html#ac1e881a35e4dea4d4b842b1562f5228e">More...</a><br /></td></tr>
 <tr class="separator:ac1e881a35e4dea4d4b842b1562f5228e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca3eafb47c2269d1c6dbd858df864912"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_boxes.html#aca3eafb47c2269d1c6dbd858df864912">filterNotInView</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gats) const</td></tr>
+<tr class="memitem:aca3eafb47c2269d1c6dbd858df864912"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_boxes.html#aca3eafb47c2269d1c6dbd858df864912">filterNotInView</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;gats) const</td></tr>
 <tr class="separator:aca3eafb47c2269d1c6dbd858df864912"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qvector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qvector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qvector.html">QVector&lt; NodeBox * &gt;</a></td></tr>
 <tr class="memitem:QVector inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#QVector">QVector</a> ()</td></tr>
@@ -232,9 +234,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:takeLast inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:fill inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html">QVector</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#fill">fill</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>, int <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#size">size</a>)</td></tr>
 <tr class="separator:fill inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:indexOf inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#indexOf">indexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>, int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>) const const</td></tr>
+<tr class="memitem:indexOf inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#indexOf">indexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>, int from) const const</td></tr>
 <tr class="separator:indexOf inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:lastIndexOf inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#lastIndexOf">lastIndexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>, int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>) const const</td></tr>
+<tr class="memitem:lastIndexOf inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#lastIndexOf">lastIndexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>, int from) const const</td></tr>
 <tr class="separator:lastIndexOf inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:contains inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#contains">contains</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#value">value</a>) const const</td></tr>
 <tr class="separator:contains inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,7 +254,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:length inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:takeAt inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#takeAt">takeAt</a> (int i)</td></tr>
 <tr class="separator:takeAt inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:move inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#move">move</a> (int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>, int to)</td></tr>
+<tr class="memitem:move inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#move">move</a> (int from, int to)</td></tr>
 <tr class="separator:move inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:begin inherit pub_methods_qvector"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#iterator-typedef">QVector::iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#begin">begin</a> ()</td></tr>
 <tr class="separator:begin inherit pub_methods_qvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -501,7 +503,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8cpp_source.html#l00061">61</a> of file <a class="el" href="node__box_8cpp_source.html">node_box.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector&lt; NodeBox * &gt;::append()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00087">hal::NodeBox::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00095">hal::Node::isModule()</a>, and <a class="el" href="node__box_8h_source.html#l00124">hal::NodeBox::item()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#append">QVector&lt; NodeBox * &gt;::append()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00087">hal::NodeBox::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00095">hal::Node::isModule()</a>, and <a class="el" href="node__box_8h_source.html#l00124">hal::NodeBox::item()</a>.</p>
 
 </div>
 </div>
@@ -536,12 +538,10 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or <code>nullptr</code> if none found</dd></dl>
 <p>A <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> is returned if the box either represents the given gate or if the gate is part of a module rendered as box. The method ist mostly used to find boxes by net endpoints. </p>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00184">184</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
-
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00421">hal::GraphContext::getNetDestination()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00410">hal::GraphContext::getNetSource()</a>.</p>
 
@@ -578,7 +578,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or <code>nullptr</code> if none found</dd></dl>
 <p>Mostly used to find <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> selected in <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsview.html">QGraphicsView</a> engine, e.g. by mouse position </p>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00209">209</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
@@ -618,12 +618,10 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or <code>nullptr</code> if none found</dd></dl>
 <p>Used to search gates or modules by ID. </p>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00200">200</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
-
-<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00751">hal::ShortestPath::module()</a>, <a class="el" href="graph__context_8cpp_source.html#l00485">hal::GraphContext::refreshModule()</a>, and <a class="el" href="drag__controller_8cpp_source.html#l00048">hal::DragController::set()</a>.</p>
 
@@ -660,7 +658,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or nullptr if none found </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to <a class="el" href="classhal_1_1_node_box.html" title="The NodeBox class represents a node placed at a grid position within a hal view.">NodeBox</a> or <code>nullptr</code> if none found </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="node__box_8h_source.html#l00191">191</a> of file <a class="el" href="node__box_8h_source.html">node_box.h</a>.</p>
 
@@ -698,9 +696,9 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::NodeBoxes::filterNotInView </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::NodeBoxes::filterNotInView </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gats</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -714,8 +712,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/<a class="el" href="node__box_8h_source.html">node_box.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/graph_widget/layouters/<a class="el" href="node__box_8cpp_source.html">node_box.cpp</a></li>
+<li>plugins/gui/include/gui/graph_widget/layouters/<a class="el" href="node__box_8h_source.html">node_box.h</a></li>
+<li>plugins/gui/src/graph_widget/layouters/<a class="el" href="node__box_8cpp_source.html">node_box.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -723,7 +721,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_node_boxes.html">NodeBoxes</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

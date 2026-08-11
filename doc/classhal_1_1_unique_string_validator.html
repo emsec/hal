@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_unique_string_validator.h
 <p>Checks if a given string is unique compared to other given strings.  
  <a href="classhal_1_1_unique_string_validator.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="unique__string__validator_8h_source.html">unique_string_validator.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="unique__string__validator_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/validator/unique_string_validator.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::UniqueStringValidator:</div>
 <div class="dyncontent">
@@ -134,7 +136,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Checks if a given string is unique compared to other given strings. </p>
-<p>The <a class="el" href="classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings.">UniqueStringValidator</a> is a <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> which validate function returns <b>true</b> if the candidate string does not appear in the list of unique strings passed in the constructor. It should be used whenever an input must not contain an already used identifier. </p>
+<p>The <a class="el" href="classhal_1_1_unique_string_validator.html" title="Checks if a given string is unique compared to other given strings.">UniqueStringValidator</a> is a <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> which validate function returns <code>true</code> if the candidate string does not appear in the list of unique strings passed in the constructor. It should be used whenever an input must not contain an already used identifier. </p>
 
 <p class="definition">Definition at line <a class="el" href="unique__string__validator_8h_source.html#l00042">42</a> of file <a class="el" href="unique__string__validator_8h_source.html">unique_string_validator.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -156,7 +158,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Constructor.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">unique_strings</td><td>- The black list of strings that will cause the validate function to return <b>false</b> </td></tr>
+    <tr><td class="paramname">unique_strings</td><td>- The black list of strings that will cause the validate function to return <code>false</code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -191,14 +193,14 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Given any string this function returns <b>true</b> iff the string does not appear in the unique_string list passed to the constructor.</p>
+<p>Given any string this function returns <code>true</code> iff the string does not appear in the unique_string list passed to the constructor.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>- The input string </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> iff the string is considered valid (unique) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> iff the string is considered valid (unique), <code>false</code> otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classhal_1_1_validator.html#ad5c3781fcedbe516c57803a7232e7f91">hal::Validator</a>.</p>
 
@@ -209,8 +211,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/validator/<a class="el" href="unique__string__validator_8h_source.html">unique_string_validator.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/validator/<a class="el" href="unique__string__validator_8cpp_source.html">unique_string_validator.cpp</a></li>
+<li>plugins/gui/include/gui/validator/<a class="el" href="unique__string__validator_8h_source.html">unique_string_validator.h</a></li>
+<li>plugins/gui/src/validator/<a class="el" href="unique__string__validator_8cpp_source.html">unique_string_validator.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -218,7 +220,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_unique_string_validator.html">UniqueStringValidator</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

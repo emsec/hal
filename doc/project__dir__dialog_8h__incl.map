@@ -1,13 +1,13 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/file_manager/project_dir_dialog.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/file_manager/project_dir_dialog.h">
-<area shape="rect" id="node1" title=" " alt="" coords="303,5,487,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,124,103,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="127,124,200,151"/>
-<area shape="rect" id="node4" title=" " alt="" coords="225,124,393,151"/>
-<area shape="rect" id="node5" title=" " alt="" coords="417,124,547,151"/>
-<area shape="rect" id="node6" title=" " alt="" coords="571,124,652,151"/>
-<area shape="rect" id="node7" href="$file__manager_8h.html" title=" " alt="" coords="676,124,795,151"/>
-<area shape="rect" id="node8" href="$program__arguments_8h.html" title=" " alt="" coords="454,199,625,240"/>
-<area shape="rect" id="node9" title=" " alt="" coords="649,206,723,233"/>
-<area shape="rect" id="node10" title=" " alt="" coords="748,206,819,233"/>
-<area shape="rect" id="node11" title=" " alt="" coords="843,206,894,233"/>
+<map id="plugins/gui/include/gui/file_manager/project_dir_dialog.h" name="plugins/gui/include/gui/file_manager/project_dir_dialog.h">
+<area shape="rect" id="node1" title=" " alt="" coords="303,5,487,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,103,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="127,109,200,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="225,109,393,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="417,109,547,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="571,109,652,136"/>
+<area shape="rect" id="node7" href="$file__manager_8h.html" title=" " alt="" coords="676,109,795,136"/>
+<area shape="rect" id="node8" href="$program__arguments_8h.html" title=" " alt="" coords="454,184,625,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="649,191,723,218"/>
+<area shape="rect" id="node10" title=" " alt="" coords="748,191,819,218"/>
+<area shape="rect" id="node11" title=" " alt="" coords="843,191,894,218"/>
 </map>

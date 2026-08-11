@@ -8,7 +8,5 @@ var classhal_1_1_import_netlist_dialog =
     [ "saveIconPath", "classhal_1_1_import_netlist_dialog.html#a8a4166da551789e5b79c832dc86d086c", null ],
     [ "saveIconStyle", "classhal_1_1_import_netlist_dialog.html#a0fb74898dbdd697b50b636d4888d192c", null ],
     [ "setSaveIconPath", "classhal_1_1_import_netlist_dialog.html#a20cdcc058f56d14dc6c1697cd45b7c29", null ],
-    [ "setSaveIconStyle", "classhal_1_1_import_netlist_dialog.html#a03ccc05d90f9e684e2b636205ad39c99", null ],
-    [ "saveIconPath", "classhal_1_1_import_netlist_dialog.html#ac6137ceb2119b1b46fb9eab42f800407", null ],
-    [ "saveIconStyle", "classhal_1_1_import_netlist_dialog.html#ae05515305ea2c984f3defca3073aa842", null ]
+    [ "setSaveIconStyle", "classhal_1_1_import_netlist_dialog.html#a03ccc05d90f9e684e2b636205ad39c99", null ]
 ];

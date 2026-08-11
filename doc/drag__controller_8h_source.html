@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/drag_controller.h Source File</title>
+<title>HAL: plugins/gui/include/gui/graph_widget/drag_controller.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -127,41 +129,41 @@ $(document).ready(function(){initNavTree('drag__controller_8h_source.html',''); 
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">class </span>NodeDragShadow;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">class </span>GraphicsScene;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_drag_controller.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_drag_controller.html">DragController</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* mGraphWidget;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">bool</span> mDropAllowed;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">bool</span> mWantSwap;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> mMousedownPosition;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* mDragNodeBox;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> mCurrentGridpos;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;NodeBox*&gt;</a> mAdditionalBoxes;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhash.html">QHash&lt;const NodeBox*,NodeDragShadow*&gt;</a> mShadows;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_graphics_scene.html">GraphicsScene</a>* mShadowScene;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> setSwapIntent(<span class="keywordtype">bool</span> wantSwap);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">void</span> addShadow(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* nb);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classhal_1_1_drag_controller.html#ad21a136f2b1203af9681d2ca4cf776c9">DragController</a>(<a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* gw, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a4c343f816a8f208083282630e03b7ec4">clear</a>();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a472b54d8f41c3dcd743607e3c689b9ad">set</a>(<a class="code" href="classhal_1_1_graphics_node.html">GraphicsNode</a>* drgItem, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#afa6e4bbf931833a33ab321ab4497bb31">enterDrag</a>(<span class="keywordtype">bool</span> wantSwap);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a31f2558675e306a5da2734acd8730669">move</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos, <span class="keywordtype">bool</span> wantSwap, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; gridPos);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#afcf77011e3ba616dc0a276d7920fb834">clearShadows</a>(<a class="code" href="classhal_1_1_graphics_scene.html">GraphicsScene</a>* sc);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_drag_controller.html#a3896f859f02907cee64ba88ecdd262b5">hasDragged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_drag_controller.html#a84cf51aaebcd1f094d1500afbe60e899">isDropAllowed</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <a class="code" href="classhal_1_1_grid_placement.html">GridPlacement</a>* <a class="code" href="classhal_1_1_drag_controller.html#a1f0d31369a654055d76960723b5dc6cd">finalGridPlacement</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">NodeDragShadow::DragCue</a> <a class="code" href="classhal_1_1_drag_controller.html#ae769844aaeeec99074564bb053d45bc8">dragCue</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    };</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_drag_controller_html"><div class="ttname"><a href="classhal_1_1_drag_controller.html">hal::DragController</a></div><div class="ttdef"><b>Definition:</b> <a href="drag__controller_8h_source.html#l00042">drag_controller.h:43</a></div></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_drag_controller.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_drag_controller.html">DragController</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* mGraphWidget;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">bool</span> mDropAllowed;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">bool</span> mWantSwap;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> mMousedownPosition;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* mDragNodeBox;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> mCurrentGridpos;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;NodeBox*&gt;</a> mAdditionalBoxes;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhash.html">QHash&lt;const NodeBox*,NodeDragShadow*&gt;</a> mShadows;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classhal_1_1_graphics_scene.html">GraphicsScene</a>* mShadowScene;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> setSwapIntent(<span class="keywordtype">bool</span> wantSwap);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">void</span> addShadow(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node_box.html">NodeBox</a>* nb);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classhal_1_1_drag_controller.html#ad21a136f2b1203af9681d2ca4cf776c9">DragController</a>(<a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* gw, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a4c343f816a8f208083282630e03b7ec4">clear</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a472b54d8f41c3dcd743607e3c689b9ad">set</a>(<a class="code" href="classhal_1_1_graphics_node.html">GraphicsNode</a>* drgItem, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#afa6e4bbf931833a33ab321ab4497bb31">enterDrag</a>(<span class="keywordtype">bool</span> wantSwap);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#a31f2558675e306a5da2734acd8730669">move</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos, <span class="keywordtype">bool</span> wantSwap, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; gridPos);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_drag_controller.html#afcf77011e3ba616dc0a276d7920fb834">clearShadows</a>(<a class="code" href="classhal_1_1_graphics_scene.html">GraphicsScene</a>* sc);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_drag_controller.html#a3896f859f02907cee64ba88ecdd262b5">hasDragged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; eventPos);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_drag_controller.html#a84cf51aaebcd1f094d1500afbe60e899">isDropAllowed</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="classhal_1_1_grid_placement.html">GridPlacement</a>* <a class="code" href="classhal_1_1_drag_controller.html#a1f0d31369a654055d76960723b5dc6cd">finalGridPlacement</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">NodeDragShadow::DragCue</a> <a class="code" href="classhal_1_1_drag_controller.html#ae769844aaeeec99074564bb053d45bc8">dragCue</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    };</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_drag_controller_html"><div class="ttname"><a href="classhal_1_1_drag_controller.html">hal::DragController</a></div><div class="ttdef"><b>Definition:</b> <a href="drag__controller_8h_source.html#l00045">drag_controller.h:46</a></div></div>
 <div class="ttc" id="aclasshal_1_1_drag_controller_html_a1f0d31369a654055d76960723b5dc6cd"><div class="ttname"><a href="classhal_1_1_drag_controller.html#a1f0d31369a654055d76960723b5dc6cd">hal::DragController::finalGridPlacement</a></div><div class="ttdeci">GridPlacement * finalGridPlacement() const</div><div class="ttdef"><b>Definition:</b> <a href="drag__controller_8cpp_source.html#l00213">drag_controller.cpp:213</a></div></div>
 <div class="ttc" id="aclasshal_1_1_drag_controller_html_a31f2558675e306a5da2734acd8730669"><div class="ttname"><a href="classhal_1_1_drag_controller.html#a31f2558675e306a5da2734acd8730669">hal::DragController::move</a></div><div class="ttdeci">void move(const QPoint &amp;eventPos, bool wantSwap, const QPoint &amp;gridPos)</div><div class="ttdef"><b>Definition:</b> <a href="drag__controller_8cpp_source.html#l00156">drag_controller.cpp:156</a></div></div>
 <div class="ttc" id="aclasshal_1_1_drag_controller_html_a3896f859f02907cee64ba88ecdd262b5"><div class="ttname"><a href="classhal_1_1_drag_controller.html#a3896f859f02907cee64ba88ecdd262b5">hal::DragController::hasDragged</a></div><div class="ttdeci">bool hasDragged(const QPoint &amp;eventPos)</div><div class="ttdef"><b>Definition:</b> <a href="drag__controller_8cpp_source.html#l00176">drag_controller.cpp:176</a></div></div>
@@ -175,11 +177,11 @@ $(document).ready(function(){initNavTree('drag__controller_8h_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_graph_widget_html"><div class="ttname"><a href="classhal_1_1_graph_widget.html">hal::GraphWidget</a></div><div class="ttdoc">Wraps a GraphContext and a GraphGraphicsView.</div><div class="ttdef"><b>Definition:</b> <a href="graph__widget_8h_source.html#l00054">graph_widget.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graphics_node_html"><div class="ttname"><a href="classhal_1_1_graphics_node.html">hal::GraphicsNode</a></div><div class="ttdoc">Abstract base class for nodes (e.g. gates, modules)</div><div class="ttdef"><b>Definition:</b> <a href="graphics__node_8h_source.html#l00041">graphics_node.h:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graphics_scene_html"><div class="ttname"><a href="classhal_1_1_graphics_scene.html">hal::GraphicsScene</a></div><div class="ttdoc">Container for a GraphGraphicsView containing gates, nets, and modules.</div><div class="ttdef"><b>Definition:</b> <a href="graphics__scene_8h_source.html#l00058">graphics_scene.h:59</a></div></div>
-<div class="ttc" id="aclasshal_1_1_grid_placement_html"><div class="ttname"><a href="classhal_1_1_grid_placement.html">hal::GridPlacement</a></div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00140">gui_def.h:141</a></div></div>
+<div class="ttc" id="aclasshal_1_1_grid_placement_html"><div class="ttname"><a href="classhal_1_1_grid_placement.html">hal::GridPlacement</a></div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00143">gui_def.h:144</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_box_html"><div class="ttname"><a href="classhal_1_1_node_box.html">hal::NodeBox</a></div><div class="ttdoc">The NodeBox class represents a node placed at a grid position within a hal view.</div><div class="ttdef"><b>Definition:</b> <a href="node__box_8h_source.html#l00049">node_box.h:50</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012b"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">hal::NodeDragShadow::DragCue</a></div><div class="ttdeci">DragCue</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8h_source.html#l00042">node_drag_shadow.h:43</a></div></div>
 <div class="ttc" id="agui__def_8h_html"><div class="ttname"><a href="gui__def_8h.html">gui_def.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anode__drag__shadow_8h_html"><div class="ttname"><a href="node__drag__shadow_8h.html">node_drag_shadow.h</a></div></div>
 <div class="ttc" id="aqhash_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhash.html">QHash</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
@@ -193,7 +195,7 @@ $(document).ready(function(){initNavTree('drag__controller_8h_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="drag__controller_8h.html">drag_controller.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

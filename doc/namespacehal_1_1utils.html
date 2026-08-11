@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -101,119 +103,121 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae94b0047d0de8da3d4e54a9d55ccd327"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ae94b0047d0de8da3d4e54a9d55ccd327">file_exists</a> (const std::string &amp;filename)</td></tr>
-<tr class="separator:ae94b0047d0de8da3d4e54a9d55ccd327"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad382fe6e6a03a05ea538803c92cae5f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ad382fe6e6a03a05ea538803c92cae5f6">folder_exists_and_is_accessible</a> (const std::filesystem::path &amp;folder)</td></tr>
-<tr class="separator:ad382fe6e6a03a05ea538803c92cae5f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb615f0cc47727167aa44158da41fe14"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#afb615f0cc47727167aa44158da41fe14">get_binary_directory</a> ()</td></tr>
-<tr class="separator:afb615f0cc47727167aa44158da41fe14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72e02a1147a8fcfa1228245909557904"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a72e02a1147a8fcfa1228245909557904">get_base_directory</a> ()</td></tr>
-<tr class="separator:a72e02a1147a8fcfa1228245909557904"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7de316388e4d4baf69a170c67a6efd57"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a7de316388e4d4baf69a170c67a6efd57">get_library_directory</a> ()</td></tr>
-<tr class="separator:a7de316388e4d4baf69a170c67a6efd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56092ec04728c373dc56e7b6dd9f162a"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a56092ec04728c373dc56e7b6dd9f162a">get_share_directory</a> ()</td></tr>
-<tr class="separator:a56092ec04728c373dc56e7b6dd9f162a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38383c74e49cb831f05ce87992e69c9d"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a38383c74e49cb831f05ce87992e69c9d">get_user_share_directory</a> ()</td></tr>
-<tr class="separator:a38383c74e49cb831f05ce87992e69c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30cc2ed597f07309d8bc36935880e803"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a30cc2ed597f07309d8bc36935880e803">get_config_directory</a> ()</td></tr>
-<tr class="separator:a30cc2ed597f07309d8bc36935880e803"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90b1bccb0d75d10c94b959cdebf2ce36"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a90b1bccb0d75d10c94b959cdebf2ce36">get_user_config_directory</a> ()</td></tr>
-<tr class="separator:a90b1bccb0d75d10c94b959cdebf2ce36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc1ab1edf5587b57530713faa040fb92"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#acc1ab1edf5587b57530713faa040fb92">get_default_log_directory</a> (std::filesystem::path source_file)</td></tr>
-<tr class="separator:acc1ab1edf5587b57530713faa040fb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71212a14f5936988deadcdba0596bd2d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a71212a14f5936988deadcdba0596bd2d">get_gate_library_directories</a> ()</td></tr>
-<tr class="separator:a71212a14f5936988deadcdba0596bd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa84f04771420e5c67784826253d48901"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aa84f04771420e5c67784826253d48901">get_plugin_directories</a> ()</td></tr>
-<tr class="separator:aa84f04771420e5c67784826253d48901"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40c0b4ef1b9b45b5c766ce9811e7aba3"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a40c0b4ef1b9b45b5c766ce9811e7aba3">get_first_directory_exists</a> (std::vector&lt; std::filesystem::path &gt; path_hints)</td></tr>
-<tr class="separator:a40c0b4ef1b9b45b5c766ce9811e7aba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbfe0cd7b2ec80643d4c16e4ffb7a7d3"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">get_file</a> (std::string file_name, std::vector&lt; std::filesystem::path &gt; path_hints)</td></tr>
-<tr class="separator:afbfe0cd7b2ec80643d4c16e4ffb7a7d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe865cd13e526c5228f269a9c7b2629b"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#abe865cd13e526c5228f269a9c7b2629b">which</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::string &amp;path)</td></tr>
-<tr class="separator:abe865cd13e526c5228f269a9c7b2629b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57de478cba76d9207aeed95d5f2982f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a57de478cba76d9207aeed95d5f2982f5">get_unique_temp_directory</a> (const std::string &amp;prefix, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> max_attmeps)</td></tr>
-<tr class="separator:a57de478cba76d9207aeed95d5f2982f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b4623be57665e39318991c7344de89d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a7b4623be57665e39318991c7344de89d">get_open_source_licenses</a> ()</td></tr>
-<tr class="separator:a7b4623be57665e39318991c7344de89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a1df8fc6d689dc2e7f74a050282b9f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a8a1df8fc6d689dc2e7f74a050282b9f7">wrapped_stoull</a> (const std::string &amp;s, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> base)</td></tr>
-<tr class="separator:a8a1df8fc6d689dc2e7f74a050282b9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9394b4d75f96d92ca9ed37e34a0ae281"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a9394b4d75f96d92ca9ed37e34a0ae281">wrapped_stoul</a> (const std::string &amp;s, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> base)</td></tr>
-<tr class="separator:a9394b4d75f96d92ca9ed37e34a0ae281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99d0bad47b8889780fe90db4c3308b77"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a99d0bad47b8889780fe90db4c3308b77"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a99d0bad47b8889780fe90db4c3308b77">unordered_vector_erase</a> (std::vector&lt; T &gt; &amp;vec, T element)</td></tr>
-<tr class="separator:a99d0bad47b8889780fe90db4c3308b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">unordered_vector_erase</a> (std::vector&lt; T &gt; &amp;vec, T element)</td></tr>
+<tr class="separator:ad5404c6eab703aa306f6769ae81ce7ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a387d8f01579a42674ccd58d8651d9342"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a387d8f01579a42674ccd58d8651d9342"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a387d8f01579a42674ccd58d8651d9342">vectors_have_same_content</a> (std::vector&lt; T &gt; vec_1, std::vector&lt; T &gt; vec_2)</td></tr>
 <tr class="separator:a387d8f01579a42674ccd58d8651d9342"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bb3205d9597f2279b18a99fdd7affa6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a5bb3205d9597f2279b18a99fdd7affa6">get_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
-<tr class="separator:a5bb3205d9597f2279b18a99fdd7affa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34ef9fc77538514e7bb5a9fe55275550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a34ef9fc77538514e7bb5a9fe55275550">set_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
-<tr class="separator:a34ef9fc77538514e7bb5a9fe55275550"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99df1ac028bf7f9696ea4c631ff0ff38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a99df1ac028bf7f9696ea4c631ff0ff38">clear_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
-<tr class="separator:a99df1ac028bf7f9696ea4c631ff0ff38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a7452b760ebd68235319a6db5ff8965"><td class="memItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a4a7452b760ebd68235319a6db5ff8965">toggle_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> index)</td></tr>
-<tr class="separator:a4a7452b760ebd68235319a6db5ff8965"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0de77a47a2551c69619fd6e3fce84674"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0de77a47a2551c69619fd6e3fce84674"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a0de77a47a2551c69619fd6e3fce84674">ends_with</a> (const T &amp;s, const T &amp;end)</td></tr>
-<tr class="separator:a0de77a47a2551c69619fd6e3fce84674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca8da557f49866efbd3d79be8bf5815"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2ca8da557f49866efbd3d79be8bf5815"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a2ca8da557f49866efbd3d79be8bf5815">starts_with</a> (const T &amp;s, const T &amp;start)</td></tr>
-<tr class="separator:a2ca8da557f49866efbd3d79be8bf5815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fc4367e2b10cb8ed7c83998e231797d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0fc4367e2b10cb8ed7c83998e231797d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a0fc4367e2b10cb8ed7c83998e231797d">is_digits</a> (const T &amp;s)</td></tr>
-<tr class="separator:a0fc4367e2b10cb8ed7c83998e231797d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94d00e2a6c7e4945e1301d5e96377459"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a94d00e2a6c7e4945e1301d5e96377459"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a94d00e2a6c7e4945e1301d5e96377459">is_integer</a> (const T &amp;s)</td></tr>
-<tr class="separator:a94d00e2a6c7e4945e1301d5e96377459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac066333866ab6d67d66f1d9ec5671d79"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac066333866ab6d67d66f1d9ec5671d79"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ac066333866ab6d67d66f1d9ec5671d79">is_floating_point</a> (const T &amp;s)</td></tr>
-<tr class="separator:ac066333866ab6d67d66f1d9ec5671d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43bf1ffd1c76cf2b5809c2346dd561c4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a43bf1ffd1c76cf2b5809c2346dd561c4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">split</a> (const T &amp;s, const char delim, bool obey_brackets=false)</td></tr>
-<tr class="separator:a43bf1ffd1c76cf2b5809c2346dd561c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25f9f24b47512daf25a4a192486c26c4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a25f9f24b47512daf25a4a192486c26c4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a25f9f24b47512daf25a4a192486c26c4">ltrim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
-<tr class="separator:a25f9f24b47512daf25a4a192486c26c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49847bd2008decfefbfeb8edc1c9d0c0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a49847bd2008decfefbfeb8edc1c9d0c0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">rtrim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
-<tr class="separator:a49847bd2008decfefbfeb8edc1c9d0c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b3244bd8945cb61cfa299c32686a601"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a3b3244bd8945cb61cfa299c32686a601"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">trim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
-<tr class="separator:a3b3244bd8945cb61cfa299c32686a601"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b35fa35b17eeadefc578daab0de6c06"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0b35fa35b17eeadefc578daab0de6c06"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">replace</a> (const T &amp;str, const T &amp;search, const T &amp;replace)</td></tr>
-<tr class="separator:a0b35fa35b17eeadefc578daab0de6c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6da84185634d8a00ea82c3b3bf6798b3"><td class="memTemplParams" colspan="2">template&lt;typename Iterator , class Transform &gt; </td></tr>
-<tr class="memitem:a6da84185634d8a00ea82c3b3bf6798b3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a6da84185634d8a00ea82c3b3bf6798b3">join</a> (const std::string &amp;joiner, const Iterator &amp;begin, const Iterator &amp;end, const Transform &amp;transform)</td></tr>
-<tr class="separator:a6da84185634d8a00ea82c3b3bf6798b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63e9eeee5acde021a4c6643e679531c8"><td class="memTemplParams" colspan="2">template&lt;typename T , class Transform &gt; </td></tr>
-<tr class="memitem:a63e9eeee5acde021a4c6643e679531c8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a63e9eeee5acde021a4c6643e679531c8">join</a> (const std::string &amp;joiner, const T &amp;items, const Transform &amp;transform)</td></tr>
-<tr class="separator:a63e9eeee5acde021a4c6643e679531c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cb70a4b78fcbc3a2cfe1bc7b4bc7313"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a6cb70a4b78fcbc3a2cfe1bc7b4bc7313"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a6cb70a4b78fcbc3a2cfe1bc7b4bc7313">join</a> (const std::string &amp;joiner, const T &amp;items)</td></tr>
-<tr class="separator:a6cb70a4b78fcbc3a2cfe1bc7b4bc7313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4b3b46a9b2575322a0a296daac79828"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac4b3b46a9b2575322a0a296daac79828"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ac4b3b46a9b2575322a0a296daac79828">to_upper</a> (const T &amp;s)</td></tr>
-<tr class="separator:ac4b3b46a9b2575322a0a296daac79828"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a976e31871ae699ca28b23136fd728ee5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a976e31871ae699ca28b23136fd728ee5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">to_lower</a> (const T &amp;s)</td></tr>
-<tr class="separator:a976e31871ae699ca28b23136fd728ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a482e8e80d0fd8189b7b0f119afd74c61"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a482e8e80d0fd8189b7b0f119afd74c61"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a482e8e80d0fd8189b7b0f119afd74c61">num_of_occurrences</a> (const T &amp;s, const T &amp;substr)</td></tr>
-<tr class="separator:a482e8e80d0fd8189b7b0f119afd74c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad08c09cde6e4c84be543db4fac49f08c"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename, typename... &gt; class Container, typename... Args&gt; </td></tr>
-<tr class="memitem:ad08c09cde6e4c84be543db4fac49f08c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ad08c09cde6e4c84be543db4fac49f08c">to_vector</a> (const Container&lt; T, Args... &gt; &amp;container)</td></tr>
-<tr class="separator:ad08c09cde6e4c84be543db4fac49f08c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a460fb8ea2a5d11176b40a5dc6ca6f0e7"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename, typename... &gt; class Container, typename... Args&gt; </td></tr>
-<tr class="memitem:a460fb8ea2a5d11176b40a5dc6ca6f0e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::set&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a460fb8ea2a5d11176b40a5dc6ca6f0e7">to_set</a> (const Container&lt; T, Args... &gt; &amp;container)</td></tr>
-<tr class="separator:a460fb8ea2a5d11176b40a5dc6ca6f0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff6c8cb44c715f0dbfe5f0ace8701cdd"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 &gt; </td></tr>
-<tr class="memitem:aff6c8cb44c715f0dbfe5f0ace8701cdd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aff6c8cb44c715f0dbfe5f0ace8701cdd">is_subset</a> (const T1 &amp;subset, const T2 &amp;superset)</td></tr>
-<tr class="separator:aff6c8cb44c715f0dbfe5f0ace8701cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dc7269ce8c132b4969efcdf7b3a97b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a0dc7269ce8c132b4969efcdf7b3a97b5">get_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</td></tr>
+<tr class="separator:a0dc7269ce8c132b4969efcdf7b3a97b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a703ec944dd53f83e70bf47bb4a28f6cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a703ec944dd53f83e70bf47bb4a28f6cb">set_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</td></tr>
+<tr class="separator:a703ec944dd53f83e70bf47bb4a28f6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d5831382e2e999a96ec634265c9c982"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a1d5831382e2e999a96ec634265c9c982">clear_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</td></tr>
+<tr class="separator:a1d5831382e2e999a96ec634265c9c982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af67a60df0e55165117fe74ebe2b7396e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#af67a60df0e55165117fe74ebe2b7396e">toggle_bit</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> value, const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</td></tr>
+<tr class="separator:af67a60df0e55165117fe74ebe2b7396e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46784a6ffa4b1474ffa4bfaad6f2948"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aa46784a6ffa4b1474ffa4bfaad6f2948"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aa46784a6ffa4b1474ffa4bfaad6f2948">ends_with</a> (const T &amp;s, const T &amp;end)</td></tr>
+<tr class="separator:aa46784a6ffa4b1474ffa4bfaad6f2948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c3b3c6a9bb67ebc924ddbe2989c4624"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5c3b3c6a9bb67ebc924ddbe2989c4624"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a5c3b3c6a9bb67ebc924ddbe2989c4624">starts_with</a> (const T &amp;s, const T &amp;start)</td></tr>
+<tr class="separator:a5c3b3c6a9bb67ebc924ddbe2989c4624"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e4d29d84c6e4683a71e0767b189427c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1e4d29d84c6e4683a71e0767b189427c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a1e4d29d84c6e4683a71e0767b189427c">is_digits</a> (const T &amp;s)</td></tr>
+<tr class="separator:a1e4d29d84c6e4683a71e0767b189427c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1ed788367eeb31ddfadfab86e6ae9ce"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af1ed788367eeb31ddfadfab86e6ae9ce"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#af1ed788367eeb31ddfadfab86e6ae9ce">is_integer</a> (const T &amp;s)</td></tr>
+<tr class="separator:af1ed788367eeb31ddfadfab86e6ae9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772421aed42cd1ebe50eb26005672548"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a772421aed42cd1ebe50eb26005672548"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a772421aed42cd1ebe50eb26005672548">is_floating_point</a> (const T &amp;s)</td></tr>
+<tr class="separator:a772421aed42cd1ebe50eb26005672548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af452307d35980f28eb3f8d118e1f77a0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af452307d35980f28eb3f8d118e1f77a0"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#af452307d35980f28eb3f8d118e1f77a0">split</a> (const T &amp;s, const char delim, bool obey_brackets=false)</td></tr>
+<tr class="separator:af452307d35980f28eb3f8d118e1f77a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b7fa1f18aea8ce88f0570686f564b39"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7b7fa1f18aea8ce88f0570686f564b39"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a7b7fa1f18aea8ce88f0570686f564b39">ltrim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
+<tr class="separator:a7b7fa1f18aea8ce88f0570686f564b39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d32cdb295a9c65b74c5b2db155fba52"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1d32cdb295a9c65b74c5b2db155fba52"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a1d32cdb295a9c65b74c5b2db155fba52">rtrim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
+<tr class="separator:a1d32cdb295a9c65b74c5b2db155fba52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc3e55de1af050c4d02459c6ef0782c6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:afc3e55de1af050c4d02459c6ef0782c6"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#afc3e55de1af050c4d02459c6ef0782c6">trim</a> (const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</td></tr>
+<tr class="separator:afc3e55de1af050c4d02459c6ef0782c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bff5617da4a76a5938d643a8c3b8481"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a1bff5617da4a76a5938d643a8c3b8481"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a1bff5617da4a76a5938d643a8c3b8481">replace</a> (const T &amp;str, const T &amp;search, const T &amp;replace)</td></tr>
+<tr class="separator:a1bff5617da4a76a5938d643a8c3b8481"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a471955b034f428be2bd6bfa5dfa85624"><td class="memTemplParams" colspan="2">template&lt;typename Iterator , class Transform &gt; </td></tr>
+<tr class="memitem:a471955b034f428be2bd6bfa5dfa85624"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a471955b034f428be2bd6bfa5dfa85624">join</a> (const std::string &amp;joiner, const Iterator &amp;begin, const Iterator &amp;end, const Transform &amp;transform)</td></tr>
+<tr class="separator:a471955b034f428be2bd6bfa5dfa85624"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb305474aa5f3ed169ba3e7302b599b0"><td class="memTemplParams" colspan="2">template&lt;typename T , class Transform &gt; </td></tr>
+<tr class="memitem:acb305474aa5f3ed169ba3e7302b599b0"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#acb305474aa5f3ed169ba3e7302b599b0">join</a> (const std::string &amp;joiner, const T &amp;items, const Transform &amp;transform)</td></tr>
+<tr class="separator:acb305474aa5f3ed169ba3e7302b599b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a225a26f5e36dec40ef94eff0eee8858d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a225a26f5e36dec40ef94eff0eee8858d"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a225a26f5e36dec40ef94eff0eee8858d">join</a> (const std::string &amp;joiner, const T &amp;items)</td></tr>
+<tr class="separator:a225a26f5e36dec40ef94eff0eee8858d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa5be6c31e461ddf2e69b44d85d39bb6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aaa5be6c31e461ddf2e69b44d85d39bb6"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aaa5be6c31e461ddf2e69b44d85d39bb6">to_upper</a> (const T &amp;s)</td></tr>
+<tr class="separator:aaa5be6c31e461ddf2e69b44d85d39bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac849ed8f13bec503f9d223d5a87af9dd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ac849ed8f13bec503f9d223d5a87af9dd"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ac849ed8f13bec503f9d223d5a87af9dd">to_lower</a> (const T &amp;s)</td></tr>
+<tr class="separator:ac849ed8f13bec503f9d223d5a87af9dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a0e8fb7af28a7df31f8a1a0b6d968fb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a2a0e8fb7af28a7df31f8a1a0b6d968fb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a2a0e8fb7af28a7df31f8a1a0b6d968fb">num_of_occurrences</a> (const T &amp;s, const T &amp;substr)</td></tr>
+<tr class="separator:a2a0e8fb7af28a7df31f8a1a0b6d968fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab23286230cc054fcaa3dcffdd4f2c1d1"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename, typename... &gt; class Container, typename... Args&gt; </td></tr>
+<tr class="memitem:ab23286230cc054fcaa3dcffdd4f2c1d1"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ab23286230cc054fcaa3dcffdd4f2c1d1">to_vector</a> (const Container&lt; T, Args... &gt; &amp;container)</td></tr>
+<tr class="separator:ab23286230cc054fcaa3dcffdd4f2c1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30b65329ad766ecd57098546dacccc09"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename, typename... &gt; class Container, typename... Args&gt; </td></tr>
+<tr class="memitem:a30b65329ad766ecd57098546dacccc09"><td class="memTemplItemLeft" align="right" valign="top">std::set&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a30b65329ad766ecd57098546dacccc09">to_set</a> (const Container&lt; T, Args... &gt; &amp;container)</td></tr>
+<tr class="separator:a30b65329ad766ecd57098546dacccc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40789c535648827f0844e5275ddfe36f"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 &gt; </td></tr>
+<tr class="memitem:a40789c535648827f0844e5275ddfe36f"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a40789c535648827f0844e5275ddfe36f">is_subset</a> (const T1 &amp;subset, const T2 &amp;superset)</td></tr>
+<tr class="separator:a40789c535648827f0844e5275ddfe36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbdd92cdaa605c9686aa1afc89ccd289"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#acbdd92cdaa605c9686aa1afc89ccd289">file_exists</a> (const std::string &amp;filename)</td></tr>
+<tr class="separator:acbdd92cdaa605c9686aa1afc89ccd289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a841fbbc1aae2637aedb4970f07ef95"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a0a841fbbc1aae2637aedb4970f07ef95">folder_exists_and_is_accessible</a> (const std::filesystem::path &amp;path)</td></tr>
+<tr class="separator:a0a841fbbc1aae2637aedb4970f07ef95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b0a5b8e62f97d9e4ce5eefc428b0a2f"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">which</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::string &amp;path=&quot;&quot;)</td></tr>
+<tr class="separator:a2b0a5b8e62f97d9e4ce5eefc428b0a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae9f42db99741088a4f442129ac332c3"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aae9f42db99741088a4f442129ac332c3">get_binary_directory</a> ()</td></tr>
+<tr class="separator:aae9f42db99741088a4f442129ac332c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a596f16ce81c40fb40fe94dd41d5b5ab7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a596f16ce81c40fb40fe94dd41d5b5ab7">get_base_directory</a> ()</td></tr>
+<tr class="separator:a596f16ce81c40fb40fe94dd41d5b5ab7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23c89e12c9dca94e778f13090de02f09"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a23c89e12c9dca94e778f13090de02f09">get_library_directory</a> ()</td></tr>
+<tr class="separator:a23c89e12c9dca94e778f13090de02f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1974cb00df4f8ecb41f85ab1cb1e5df7"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a1974cb00df4f8ecb41f85ab1cb1e5df7">get_share_directory</a> ()</td></tr>
+<tr class="separator:a1974cb00df4f8ecb41f85ab1cb1e5df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeed9440c9520fc5c1297906c2487253b"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aeed9440c9520fc5c1297906c2487253b">get_user_share_directory</a> ()</td></tr>
+<tr class="separator:aeed9440c9520fc5c1297906c2487253b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04466a8dc8315116fb04b5181d8e234a"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a04466a8dc8315116fb04b5181d8e234a">get_config_directory</a> ()</td></tr>
+<tr class="separator:a04466a8dc8315116fb04b5181d8e234a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af26065b993bd3dcb5d3a0ab60db751f3"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#af26065b993bd3dcb5d3a0ab60db751f3">get_user_config_directory</a> ()</td></tr>
+<tr class="separator:af26065b993bd3dcb5d3a0ab60db751f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35ff967d30ff87d1273d853db1e488d8"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a35ff967d30ff87d1273d853db1e488d8">get_default_log_directory</a> (std::filesystem::path source_file=&quot;&quot;)</td></tr>
+<tr class="separator:a35ff967d30ff87d1273d853db1e488d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1faa0b1fbf4a02f7cd2f9640ebf4989"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ab1faa0b1fbf4a02f7cd2f9640ebf4989">get_gate_library_directories</a> ()</td></tr>
+<tr class="separator:ab1faa0b1fbf4a02f7cd2f9640ebf4989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0b52723214e8a9dbff003c362155fac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#ab0b52723214e8a9dbff003c362155fac">get_plugin_directories</a> ()</td></tr>
+<tr class="separator:ab0b52723214e8a9dbff003c362155fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ecafc501af44b5a045df327490d4c2"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a38ecafc501af44b5a045df327490d4c2">get_first_directory_exists</a> (std::vector&lt; std::filesystem::path &gt; path_hints)</td></tr>
+<tr class="separator:a38ecafc501af44b5a045df327490d4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f382fca6115b61ad29b49e960495742"><td class="memItemLeft" align="right" valign="top">std::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a3f382fca6115b61ad29b49e960495742">get_file</a> (std::string file_name, std::vector&lt; std::filesystem::path &gt; path_hints)</td></tr>
+<tr class="separator:a3f382fca6115b61ad29b49e960495742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56ad6ff5b170e8601914b52d775e4e28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::filesystem::path &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a56ad6ff5b170e8601914b52d775e4e28">get_unique_temp_directory</a> (const std::string &amp;prefix=&quot;&quot;, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> max_attempts=5)</td></tr>
+<tr class="separator:a56ad6ff5b170e8601914b52d775e4e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4955372961aa67900c3baf70d82cb7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a5e4955372961aa67900c3baf70d82cb7">get_open_source_licenses</a> ()</td></tr>
+<tr class="separator:a5e4955372961aa67900c3baf70d82cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a271ac91bac082463dd18a36b99480a01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a271ac91bac082463dd18a36b99480a01">wrapped_stoull</a> (const std::string &amp;s, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> base=10)</td></tr>
+<tr class="separator:a271ac91bac082463dd18a36b99480a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2893ae118ab942b7fb48452c8d63cae4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a2893ae118ab942b7fb48452c8d63cae4">wrapped_stoul</a> (const std::string &amp;s, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> base=10)</td></tr>
+<tr class="separator:a2893ae118ab942b7fb48452c8d63cae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a99df1ac028bf7f9696ea4c631ff0ff38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99df1ac028bf7f9696ea4c631ff0ff38">&#9670;&nbsp;</a></span>clear_bit()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains general-purpose utility functions for strings, containers, bit manipulation, and file system paths. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a1d5831382e2e999a96ec634265c9c982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d5831382e2e999a96ec634265c9c982">&#9670;&nbsp;</a></span>clear_bit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -222,7 +226,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::clear_bit </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::clear_bit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td>
           <td class="paramname"><em>value</em>, </td>
@@ -255,12 +259,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00122">122</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00124">124</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>.</p>
 
 </div>
 </div>
-<a id="a0de77a47a2551c69619fd6e3fce84674"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0de77a47a2551c69619fd6e3fce84674">&#9670;&nbsp;</a></span>ends_with()</h2>
+<a id="aa46784a6ffa4b1474ffa4bfaad6f2948"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa46784a6ffa4b1474ffa4bfaad6f2948">&#9670;&nbsp;</a></span>ends_with()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,7 +274,7 @@ Functions</h2></td></tr>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::ends_with </td>
+          <td class="memname">bool hal::utils::ends_with </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -294,22 +300,22 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>s</code> ends with <code>end</code>, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> ends with <code>end</code>, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00147">147</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00149">149</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00103">hal::plugin_manager::has_valid_file_extension()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00103">hal::plugin_manager::has_valid_file_extension()</a>.</p>
 
 </div>
 </div>
-<a id="ae94b0047d0de8da3d4e54a9d55ccd327"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae94b0047d0de8da3d4e54a9d55ccd327">&#9670;&nbsp;</a></span>file_exists()</h2>
+<a id="acbdd92cdaa605c9686aa1afc89ccd289"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbdd92cdaa605c9686aa1afc89ccd289">&#9670;&nbsp;</a></span>file_exists()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::file_exists </td>
+          <td class="memname">bool hal::utils::file_exists </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
@@ -324,20 +330,22 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if file exists, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if file exists, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00031">31</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00031">31</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__perf__test_8cpp_source.html#l00308">hal::CliExtensionsPerfTest::handle_cli_call()</a>.</p>
 
 </div>
 </div>
-<a id="ad382fe6e6a03a05ea538803c92cae5f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad382fe6e6a03a05ea538803c92cae5f6">&#9670;&nbsp;</a></span>folder_exists_and_is_accessible()</h2>
+<a id="a0a841fbbc1aae2637aedb4970f07ef95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a841fbbc1aae2637aedb4970f07ef95">&#9670;&nbsp;</a></span>folder_exists_and_is_accessible()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::folder_exists_and_is_accessible </td>
+          <td class="memname">bool hal::utils::folder_exists_and_is_accessible </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -352,20 +360,20 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>path</code> exists and is accessible, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>path</code> exists and is accessible, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00037">37</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00037">37</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a72e02a1147a8fcfa1228245909557904"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72e02a1147a8fcfa1228245909557904">&#9670;&nbsp;</a></span>get_base_directory()</h2>
+<a id="a596f16ce81c40fb40fe94dd41d5b5ab7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a596f16ce81c40fb40fe94dd41d5b5ab7">&#9670;&nbsp;</a></span>get_base_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_base_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_base_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -382,22 +390,22 @@ template&lt;typename T &gt; </div>
 </ol>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00100">100</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">100</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00094">die</a>, <a class="el" href="utils_8cpp_source.html#l00070">get_binary_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00243">which()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00094">die</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00070">get_binary_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00243">which()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="utils_8cpp_source.html#l00164">get_config_directory()</a>, <a class="el" href="utils_8cpp_source.html#l00129">get_library_directory()</a>, <a class="el" href="utils_8cpp_source.html#l00149">get_share_directory()</a>, and <a class="el" href="test_2hgl__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00164">get_config_directory()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00129">get_library_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00149">get_share_directory()</a>.</p>
 
 </div>
 </div>
-<a id="afb615f0cc47727167aa44158da41fe14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afb615f0cc47727167aa44158da41fe14">&#9670;&nbsp;</a></span>get_binary_directory()</h2>
+<a id="aae9f42db99741088a4f442129ac332c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae9f42db99741088a4f442129ac332c3">&#9670;&nbsp;</a></span>get_binary_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_binary_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_binary_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -407,14 +415,16 @@ template&lt;typename T &gt; </div>
 <p>Get the path to the executable of HAL.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00070">70</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00070">70</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
+<p class="reference">References <a class="el" href="candidate__search_8cpp_source.html#l00062">size</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
 
 </div>
 </div>
-<a id="a5bb3205d9597f2279b18a99fdd7affa6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5bb3205d9597f2279b18a99fdd7affa6">&#9670;&nbsp;</a></span>get_bit()</h2>
+<a id="a0dc7269ce8c132b4969efcdf7b3a97b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dc7269ce8c132b4969efcdf7b3a97b5">&#9670;&nbsp;</a></span>get_bit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -423,7 +433,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::get_bit </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::get_bit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td>
           <td class="paramname"><em>value</em>, </td>
@@ -456,18 +466,20 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The specified bit (0 or 1). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00098">98</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00100">100</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>.</p>
 
 </div>
 </div>
-<a id="a30cc2ed597f07309d8bc36935880e803"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30cc2ed597f07309d8bc36935880e803">&#9670;&nbsp;</a></span>get_config_directory()</h2>
+<a id="a04466a8dc8315116fb04b5181d8e234a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04466a8dc8315116fb04b5181d8e234a">&#9670;&nbsp;</a></span>get_config_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_config_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_config_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -478,20 +490,20 @@ template&lt;typename T &gt; </div>
  The resulting path is relative to the binary directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00164">164</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00164">164</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00100">get_base_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00207">get_first_directory_exists()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00207">get_first_directory_exists()</a>.</p>
 
 </div>
 </div>
-<a id="acc1ab1edf5587b57530713faa040fb92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc1ab1edf5587b57530713faa040fb92">&#9670;&nbsp;</a></span>get_default_log_directory()</h2>
+<a id="a35ff967d30ff87d1273d853db1e488d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35ff967d30ff87d1273d853db1e488d8">&#9670;&nbsp;</a></span>get_default_log_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_default_log_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_default_log_directory </td>
           <td>(</td>
           <td class="paramtype">std::filesystem::path&#160;</td>
           <td class="paramname"><em>source_file</em> = <code>&quot;&quot;</code></td><td>)</td>
@@ -500,7 +512,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Get the path to the default directory for log files.<br  />
- If an netlist source file is provided, the function returns the parent directory.</p>
+ If a netlist source file is provided, the function returns the parent directory, otherwise <code><a class="el" href="namespacehal_1_1utils.html#aeed9440c9520fc5c1297906c2487253b">get_user_share_directory()</a> / "log"</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">source_file</td><td>- The netlist source file. </td></tr>
@@ -509,22 +521,22 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00179">179</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00179">179</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>.</p>
 
 </div>
 </div>
-<a id="afbfe0cd7b2ec80643d4c16e4ffb7a7d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">&#9670;&nbsp;</a></span>get_file()</h2>
+<a id="a3f382fca6115b61ad29b49e960495742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f382fca6115b61ad29b49e960495742">&#9670;&nbsp;</a></span>get_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_file </td>
+          <td class="memname">std::filesystem::path hal::utils::get_file </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>file_name</em>, </td>
@@ -552,20 +564,20 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The first to match or an empty string if no match is found. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00220">220</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00220">220</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00175">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00092">hal::plugin_manager::get_plugin_path()</a>.</p>
 
 </div>
 </div>
-<a id="a40c0b4ef1b9b45b5c766ce9811e7aba3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40c0b4ef1b9b45b5c766ce9811e7aba3">&#9670;&nbsp;</a></span>get_first_directory_exists()</h2>
+<a id="a38ecafc501af44b5a045df327490d4c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38ecafc501af44b5a045df327490d4c2">&#9670;&nbsp;</a></span>get_first_directory_exists()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_first_directory_exists </td>
+          <td class="memname">std::filesystem::path hal::utils::get_first_directory_exists </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; std::filesystem::path &gt;&#160;</td>
           <td class="paramname"><em>path_hints</em></td><td>)</td>
@@ -582,20 +594,20 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The first existing path or an empty string if none of them exists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00207">207</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00207">207</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utils_8cpp_source.html#l00164">get_config_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00149">get_share_directory()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00164">get_config_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00149">get_share_directory()</a>.</p>
 
 </div>
 </div>
-<a id="a71212a14f5936988deadcdba0596bd2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71212a14f5936988deadcdba0596bd2d">&#9670;&nbsp;</a></span>get_gate_library_directories()</h2>
+<a id="ab1faa0b1fbf4a02f7cd2f9640ebf4989"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1faa0b1fbf4a02f7cd2f9640ebf4989">&#9670;&nbsp;</a></span>get_gate_library_directories()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt; std::filesystem::path &gt; hal::utils::get_gate_library_directories </td>
+          <td class="memname">std::vector&lt; std::filesystem::path &gt; hal::utils::get_gate_library_directories </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -603,25 +615,25 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Get the paths to the locations where gate libraries are searched.<br  />
-</p>
+ Contains the share and user share directories.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of paths. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00186">186</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00186">186</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00149">get_share_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00149">get_share_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00134">hal::gate_library_manager::get_all_path()</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00175">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00114">hal::gate_library_manager::load_all()</a>.</p>
 
 </div>
 </div>
-<a id="a7de316388e4d4baf69a170c67a6efd57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7de316388e4d4baf69a170c67a6efd57">&#9670;&nbsp;</a></span>get_library_directory()</h2>
+<a id="a23c89e12c9dca94e778f13090de02f09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23c89e12c9dca94e778f13090de02f09">&#9670;&nbsp;</a></span>get_library_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_library_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_library_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -632,22 +644,22 @@ template&lt;typename T &gt; </div>
  The resulting path is relative to the binary directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00129">129</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00129">129</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="utils_8cpp_source.html#l00195">get_plugin_directories()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00195">get_plugin_directories()</a>, and <a class="el" href="python__context_8cpp_source.html#l00099">hal::PythonContext::initializeContext()</a>.</p>
 
 </div>
 </div>
-<a id="a7b4623be57665e39318991c7344de89d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b4623be57665e39318991c7344de89d">&#9670;&nbsp;</a></span>get_open_source_licenses()</h2>
+<a id="a5e4955372961aa67900c3baf70d82cb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e4955372961aa67900c3baf70d82cb7">&#9670;&nbsp;</a></span>get_open_source_licenses()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string hal::utils::get_open_source_licenses </td>
+          <td class="memname">std::string hal::utils::get_open_source_licenses </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -657,20 +669,20 @@ template&lt;typename T &gt; </div>
 <p>Get the licenses of all embedded OpenSource Projects.</p>
 <dl class="section return"><dt>Returns</dt><dd>The open source licenses. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00299">299</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00299">299</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="about__dialog_8cpp_source.html#l00008">hal::AboutDialog::AboutDialog()</a>.</p>
 
 </div>
 </div>
-<a id="aa84f04771420e5c67784826253d48901"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa84f04771420e5c67784826253d48901">&#9670;&nbsp;</a></span>get_plugin_directories()</h2>
+<a id="ab0b52723214e8a9dbff003c362155fac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0b52723214e8a9dbff003c362155fac">&#9670;&nbsp;</a></span>get_plugin_directories()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt; std::filesystem::path &gt; hal::utils::get_plugin_directories </td>
+          <td class="memname">std::vector&lt; std::filesystem::path &gt; hal::utils::get_plugin_directories </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -678,25 +690,25 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Get the paths to the locations where plugins are searched.<br  />
-</p>
+ Contains the library and user share directories.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of paths. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00195">195</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00195">195</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00129">get_library_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00129">get_library_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00157">get_user_share_directory()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="python__context_8cpp_source.html#l00099">hal::PythonContext::initializeContext()</a>.</p>
 
 </div>
 </div>
-<a id="a56092ec04728c373dc56e7b6dd9f162a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56092ec04728c373dc56e7b6dd9f162a">&#9670;&nbsp;</a></span>get_share_directory()</h2>
+<a id="a1974cb00df4f8ecb41f85ab1cb1e5df7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1974cb00df4f8ecb41f85ab1cb1e5df7">&#9670;&nbsp;</a></span>get_share_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_share_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_share_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -707,22 +719,22 @@ template&lt;typename T &gt; </div>
  The resulting path is relative to the binary directory.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00149">149</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00149">149</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8cpp_source.html#l00100">get_base_directory()</a>, and <a class="el" href="utils_8cpp_source.html#l00207">get_first_directory_exists()</a>.</p>
+<p class="reference">References <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00207">get_first_directory_exists()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="utils_8cpp_source.html#l00186">get_gate_library_directories()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00186">get_gate_library_directories()</a>.</p>
 
 </div>
 </div>
-<a id="a57de478cba76d9207aeed95d5f2982f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57de478cba76d9207aeed95d5f2982f5">&#9670;&nbsp;</a></span>get_unique_temp_directory()</h2>
+<a id="a56ad6ff5b170e8601914b52d775e4e28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56ad6ff5b170e8601914b52d775e4e28">&#9670;&nbsp;</a></span>get_unique_temp_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::filesystem::path &gt; hal::utils::get_unique_temp_directory </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::filesystem::path &gt; hal::utils::get_unique_temp_directory </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>prefix</em> = <code>&quot;&quot;</code>, </td>
@@ -730,7 +742,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>max_attempts</em> = <code>5</code>&#160;</td>
         </tr>
         <tr>
@@ -744,26 +756,28 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>- A prefix that is added in front of the unique identifier. Defaults to an empty string. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">max_attmeps</td><td>- The maximum amount of attempts before the function fails. Defaults to <code>5</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_attempts</td><td>- The maximum amount of attempts before the function fails. Defaults to <code>5</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK and the created directory path on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00276">276</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00276">276</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="resynthesis_8cpp_source.html#l01268">hal::resynthesis::generate_resynth_netlist_for_boolean_functions()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00857">hal::resynthesis::resynthesize_gate()</a>, <a class="el" href="resynthesis_8cpp_source.html#l00914">hal::resynthesis::resynthesize_gates()</a>, and <a class="el" href="resynthesis_8cpp_source.html#l01021">hal::resynthesis::resynthesize_subgraph()</a>.</p>
 
 </div>
 </div>
-<a id="a90b1bccb0d75d10c94b959cdebf2ce36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90b1bccb0d75d10c94b959cdebf2ce36">&#9670;&nbsp;</a></span>get_user_config_directory()</h2>
+<a id="af26065b993bd3dcb5d3a0ab60db751f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af26065b993bd3dcb5d3a0ab60db751f3">&#9670;&nbsp;</a></span>get_user_config_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_user_config_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_user_config_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -771,23 +785,23 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Get the path to the configuration directory of the user.<br  />
-</p>
+ This is <code>~/.config/hal</code> on Unix.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00172">172</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00172">172</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00167">hal::PluginGui::exec()</a>, and <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>.</p>
 
 </div>
 </div>
-<a id="a38383c74e49cb831f05ce87992e69c9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38383c74e49cb831f05ce87992e69c9d">&#9670;&nbsp;</a></span>get_user_share_directory()</h2>
+<a id="aeed9440c9520fc5c1297906c2487253b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeed9440c9520fc5c1297906c2487253b">&#9670;&nbsp;</a></span>get_user_share_directory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::get_user_share_directory </td>
+          <td class="memname">std::filesystem::path hal::utils::get_user_share_directory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -795,17 +809,17 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Get the path to shared objects and files provided by the user.<br  />
-</p>
+ This is <code>~/.local/share/hal</code> on Unix.</p>
 <dl class="section return"><dt>Returns</dt><dd>The path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00157">157</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00157">157</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="utils_8cpp_source.html#l00179">get_default_log_directory()</a>, <a class="el" href="utils_8cpp_source.html#l00186">get_gate_library_directories()</a>, and <a class="el" href="utils_8cpp_source.html#l00195">get_plugin_directories()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="core__utils_8cpp_source.html#l00005">hal::core_utils_init()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00179">get_default_log_directory()</a>, <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00186">get_gate_library_directories()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00195">get_plugin_directories()</a>.</p>
 
 </div>
 </div>
-<a id="a0fc4367e2b10cb8ed7c83998e231797d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0fc4367e2b10cb8ed7c83998e231797d">&#9670;&nbsp;</a></span>is_digits()</h2>
+<a id="a1e4d29d84c6e4683a71e0767b189427c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e4d29d84c6e4683a71e0767b189427c">&#9670;&nbsp;</a></span>is_digits()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -813,7 +827,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::is_digits </td>
+          <td class="memname">bool hal::utils::is_digits </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -828,14 +842,14 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>s</code> contains only digits, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains only digits, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00186">186</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00188">188</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="ac066333866ab6d67d66f1d9ec5671d79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac066333866ab6d67d66f1d9ec5671d79">&#9670;&nbsp;</a></span>is_floating_point()</h2>
+<a id="a772421aed42cd1ebe50eb26005672548"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a772421aed42cd1ebe50eb26005672548">&#9670;&nbsp;</a></span>is_floating_point()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -843,7 +857,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::is_floating_point </td>
+          <td class="memname">bool hal::utils::is_floating_point </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -858,14 +872,14 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>s</code> contains a real number, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains a real number, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00218">218</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00220">220</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="a94d00e2a6c7e4945e1301d5e96377459"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94d00e2a6c7e4945e1301d5e96377459">&#9670;&nbsp;</a></span>is_integer()</h2>
+<a id="af1ed788367eeb31ddfadfab86e6ae9ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1ed788367eeb31ddfadfab86e6ae9ce">&#9670;&nbsp;</a></span>is_integer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -873,7 +887,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::is_integer </td>
+          <td class="memname">bool hal::utils::is_integer </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -888,14 +902,14 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>s</code> contains an integer, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> contains an integer, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00198">198</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00200">200</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="aff6c8cb44c715f0dbfe5f0ace8701cdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff6c8cb44c715f0dbfe5f0ace8701cdd">&#9670;&nbsp;</a></span>is_subset()</h2>
+<a id="a40789c535648827f0844e5275ddfe36f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40789c535648827f0844e5275ddfe36f">&#9670;&nbsp;</a></span>is_subset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -903,7 +917,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T1 , typename T2 &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::is_subset </td>
+          <td class="memname">bool hal::utils::is_subset </td>
           <td>(</td>
           <td class="paramtype">const T1 &amp;&#160;</td>
           <td class="paramname"><em>subset</em>, </td>
@@ -929,14 +943,16 @@ template&lt;typename T1 , typename T2 &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the subset container actually is a subset of the superset. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the subset container actually is a subset of the superset, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00539">539</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00541">541</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>.</p>
 
 </div>
 </div>
-<a id="a6da84185634d8a00ea82c3b3bf6798b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6da84185634d8a00ea82c3b3bf6798b3">&#9670;&nbsp;</a></span>join() <span class="overload">[1/3]</span></h2>
+<a id="a471955b034f428be2bd6bfa5dfa85624"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a471955b034f428be2bd6bfa5dfa85624">&#9670;&nbsp;</a></span>join() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -944,7 +960,7 @@ template&lt;typename T1 , typename T2 &gt; </div>
 template&lt;typename Iterator , class Transform &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string hal::utils::join </td>
+          <td class="memname">std::string hal::utils::join </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>joiner</em>, </td>
@@ -986,14 +1002,14 @@ template&lt;typename Iterator , class Transform &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00412">412</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">414</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="utils_8h_source.html#l00438">join()</a>, <a class="el" href="program__options_8cpp_source.html#l00027">hal::ProgramOptions::parse()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00053">hal::ProgramArguments::set_option()</a>, and <a class="el" href="result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="create__functional__candidates_8cpp_source.html#l02066">hal::module_identification::FunctionalCandidate::add_all_shifted_operand()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l01920">hal::module_identification::FunctionalCandidate::add_selected_shifted_operand()</a>, <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="functional__candidate_8cpp_source.html#l00061">hal::module_identification::FunctionalCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00048">hal::module_identification::VerifiedCandidate::get_candidate_info()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00186">hal::module_identification::VerifiedCandidate::get_name()</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00440">join()</a>, <a class="el" href="program__options_8cpp_source.html#l00027">hal::ProgramOptions::parse()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00053">hal::ProgramArguments::set_option()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00346">hal::dataflow::Result::write_txt()</a>.</p>
 
 </div>
 </div>
-<a id="a6cb70a4b78fcbc3a2cfe1bc7b4bc7313"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6cb70a4b78fcbc3a2cfe1bc7b4bc7313">&#9670;&nbsp;</a></span>join() <span class="overload">[2/3]</span></h2>
+<a id="a225a26f5e36dec40ef94eff0eee8858d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a225a26f5e36dec40ef94eff0eee8858d">&#9670;&nbsp;</a></span>join() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1001,7 +1017,7 @@ template&lt;typename Iterator , class Transform &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string hal::utils::join </td>
+          <td class="memname">std::string hal::utils::join </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>joiner</em>, </td>
@@ -1029,14 +1045,14 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00451">451</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00453">453</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8h_source.html#l00412">join()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">join()</a>.</p>
 
 </div>
 </div>
-<a id="a63e9eeee5acde021a4c6643e679531c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63e9eeee5acde021a4c6643e679531c8">&#9670;&nbsp;</a></span>join() <span class="overload">[3/3]</span></h2>
+<a id="acb305474aa5f3ed169ba3e7302b599b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb305474aa5f3ed169ba3e7302b599b0">&#9670;&nbsp;</a></span>join() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1044,7 +1060,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T , class Transform &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::string hal::utils::join </td>
+          <td class="memname">std::string hal::utils::join </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>joiner</em>, </td>
@@ -1079,14 +1095,14 @@ template&lt;typename T , class Transform &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The joined string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00438">438</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00440">440</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8h_source.html#l00412">join()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">join()</a>.</p>
 
 </div>
 </div>
-<a id="a25f9f24b47512daf25a4a192486c26c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25f9f24b47512daf25a4a192486c26c4">&#9670;&nbsp;</a></span>ltrim()</h2>
+<a id="a7b7fa1f18aea8ce88f0570686f564b39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b7fa1f18aea8ce88f0570686f564b39">&#9670;&nbsp;</a></span>ltrim()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1094,7 +1110,7 @@ template&lt;typename T , class Transform &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::ltrim </td>
+          <td class="memname">T hal::utils::ltrim </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1122,14 +1138,14 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00314">314</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00316">316</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
 </div>
 </div>
-<a id="a482e8e80d0fd8189b7b0f119afd74c61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a482e8e80d0fd8189b7b0f119afd74c61">&#9670;&nbsp;</a></span>num_of_occurrences()</h2>
+<a id="a2a0e8fb7af28a7df31f8a1a0b6d968fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a0e8fb7af28a7df31f8a1a0b6d968fb">&#9670;&nbsp;</a></span>num_of_occurrences()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1137,7 +1153,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::utils::num_of_occurrences </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::utils::num_of_occurrences </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1165,12 +1181,12 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number of occurrences. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00492">492</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00494">494</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="a0b35fa35b17eeadefc578daab0de6c06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b35fa35b17eeadefc578daab0de6c06">&#9670;&nbsp;</a></span>replace()</h2>
+<a id="a1bff5617da4a76a5938d643a8c3b8481"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bff5617da4a76a5938d643a8c3b8481">&#9670;&nbsp;</a></span>replace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1178,7 +1194,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::replace </td>
+          <td class="memname">T hal::utils::replace </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>str</em>, </td>
@@ -1213,14 +1229,16 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>String with replaced substrings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00382">382</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00384">384</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00014">control::str</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00295">hal::LogicEvaluatorDialog::compile()</a>, <a class="el" href="verilator_8cpp_source.html#l00072">hal::verilator::escape_net_name()</a>, <a class="el" href="simulator_2verilator_2src_2converter_8cpp_source.html#l00103">hal::verilator::converter::get_provided_models()</a>, and <a class="el" href="genlib__writer_8cpp_source.html#l00021">hal::GenlibWriter::write()</a>.</p>
 
 </div>
 </div>
-<a id="a49847bd2008decfefbfeb8edc1c9d0c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49847bd2008decfefbfeb8edc1c9d0c0">&#9670;&nbsp;</a></span>rtrim()</h2>
+<a id="a1d32cdb295a9c65b74c5b2db155fba52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d32cdb295a9c65b74c5b2db155fba52">&#9670;&nbsp;</a></span>rtrim()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1228,7 +1246,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::rtrim </td>
+          <td class="memname">T hal::utils::rtrim </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1256,14 +1274,16 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00336">336</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00338">338</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="python__context_8cpp_source.html#l00469">hal::PythonContext::forwardStdout()</a>.</p>
+
 </div>
 </div>
-<a id="a34ef9fc77538514e7bb5a9fe55275550"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34ef9fc77538514e7bb5a9fe55275550">&#9670;&nbsp;</a></span>set_bit()</h2>
+<a id="a703ec944dd53f83e70bf47bb4a28f6cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a703ec944dd53f83e70bf47bb4a28f6cb">&#9670;&nbsp;</a></span>set_bit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1272,7 +1292,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::set_bit </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::set_bit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td>
           <td class="paramname"><em>value</em>, </td>
@@ -1305,12 +1325,14 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00110">110</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00112">112</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>.</p>
 
 </div>
 </div>
-<a id="a43bf1ffd1c76cf2b5809c2346dd561c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43bf1ffd1c76cf2b5809c2346dd561c4">&#9670;&nbsp;</a></span>split()</h2>
+<a id="af452307d35980f28eb3f8d118e1f77a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af452307d35980f28eb3f8d118e1f77a0">&#9670;&nbsp;</a></span>split()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1318,7 +1340,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;T&gt; hal::utils::split </td>
+          <td class="memname">std::vector&lt;T&gt; hal::utils::split </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1344,7 +1366,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 <p>Split a string into a vector of strings. The split delimiter can be specified by the user.<br  />
  The delimiters are removed in the splitting process.<br  />
- To avoid splitting within brackets, set <code>obey_brackets</code> to <code>true</code>.</p>
+ To avoid splitting within brackets, set <code>obey_brackets</code> to <code><code>true</code></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>- The string to split. </td></tr>
@@ -1355,16 +1377,16 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector of strings. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00237">237</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00239">239</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utils_8cpp_source.html#l00243">which()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l00470">hal::module_identification::FunctionalCandidate::identify_control_signals()</a>, and <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00243">which()</a>.</p>
 
 </div>
 </div>
-<a id="a2ca8da557f49866efbd3d79be8bf5815"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ca8da557f49866efbd3d79be8bf5815">&#9670;&nbsp;</a></span>starts_with()</h2>
+<a id="a5c3b3c6a9bb67ebc924ddbe2989c4624"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c3b3c6a9bb67ebc924ddbe2989c4624">&#9670;&nbsp;</a></span>starts_with()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1372,7 +1394,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::starts_with </td>
+          <td class="memname">bool hal::utils::starts_with </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1398,16 +1420,16 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if <code>s</code> begins with <code>start</code>, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>s</code> begins with <code>start</code>, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00167">167</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00169">169</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00447">hal::dataflow::Result::create_modules()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l01510">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00447">hal::dataflow::Result::create_modules()</a>.</p>
 
 </div>
 </div>
-<a id="a976e31871ae699ca28b23136fd728ee5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a976e31871ae699ca28b23136fd728ee5">&#9670;&nbsp;</a></span>to_lower()</h2>
+<a id="ac849ed8f13bec503f9d223d5a87af9dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac849ed8f13bec503f9d223d5a87af9dd">&#9670;&nbsp;</a></span>to_lower()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1415,7 +1437,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::to_lower </td>
+          <td class="memname">T hal::utils::to_lower </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -1432,7 +1454,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The lower case string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00477">477</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00479">479</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1440,8 +1462,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a460fb8ea2a5d11176b40a5dc6ca6f0e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a460fb8ea2a5d11176b40a5dc6ca6f0e7">&#9670;&nbsp;</a></span>to_set()</h2>
+<a id="a30b65329ad766ecd57098546dacccc09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30b65329ad766ecd57098546dacccc09">&#9670;&nbsp;</a></span>to_set()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1452,7 +1474,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::set&lt;T&gt; hal::utils::to_set </td>
+          <td class="memname">std::set&lt;T&gt; hal::utils::to_set </td>
           <td>(</td>
           <td class="paramtype">const Container&lt; T, Args... &gt; &amp;&#160;</td>
           <td class="paramname"><em>container</em></td><td>)</td>
@@ -1474,12 +1496,12 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The set containing all items copied from the collection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00525">525</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00527">527</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="ac4b3b46a9b2575322a0a296daac79828"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4b3b46a9b2575322a0a296daac79828">&#9670;&nbsp;</a></span>to_upper()</h2>
+<a id="aaa5be6c31e461ddf2e69b44d85d39bb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa5be6c31e461ddf2e69b44d85d39bb6">&#9670;&nbsp;</a></span>to_upper()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1487,7 +1509,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::to_upper </td>
+          <td class="memname">T hal::utils::to_upper </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -1504,14 +1526,14 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The upper case string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00463">463</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00465">465</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
 </div>
 </div>
-<a id="ad08c09cde6e4c84be543db4fac49f08c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad08c09cde6e4c84be543db4fac49f08c">&#9670;&nbsp;</a></span>to_vector()</h2>
+<a id="ab23286230cc054fcaa3dcffdd4f2c1d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab23286230cc054fcaa3dcffdd4f2c1d1">&#9670;&nbsp;</a></span>to_vector()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1522,7 +1544,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::vector&lt;T&gt; hal::utils::to_vector </td>
+          <td class="memname">std::vector&lt;T&gt; hal::utils::to_vector </td>
           <td>(</td>
           <td class="paramtype">const Container&lt; T, Args... &gt; &amp;&#160;</td>
           <td class="paramname"><em>container</em></td><td>)</td>
@@ -1544,14 +1566,14 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The vector containing all items copied from the collection. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00513">513</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00515">515</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00287">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00310">hal::solve_fsm::solve_fsm_brute_force()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__comparison_8cpp_source.html#l00466">hal::z3_utils::compare_netlists()</a>, <a class="el" href="z3__utils_2src_2converter_2converter_8cpp_source.html#l00294">hal::z3_utils::Converter::convert_z3_expr_to_func()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00287">hal::Gate::get_resolved_boolean_function()</a>, <a class="el" href="lut__table__model_8cpp_source.html#l00078">hal::LUTTableModel::setBooleanFunction()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00310">hal::solve_fsm::solve_fsm_brute_force()</a>.</p>
 
 </div>
 </div>
-<a id="a4a7452b760ebd68235319a6db5ff8965"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a7452b760ebd68235319a6db5ff8965">&#9670;&nbsp;</a></span>toggle_bit()</h2>
+<a id="af67a60df0e55165117fe74ebe2b7396e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af67a60df0e55165117fe74ebe2b7396e">&#9670;&nbsp;</a></span>toggle_bit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1560,7 +1582,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::toggle_bit </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> hal::utils::toggle_bit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td>
           <td class="paramname"><em>value</em>, </td>
@@ -1593,12 +1615,14 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The manipulated value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00134">134</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00136">136</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>.</p>
 
 </div>
 </div>
-<a id="a3b3244bd8945cb61cfa299c32686a601"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b3244bd8945cb61cfa299c32686a601">&#9670;&nbsp;</a></span>trim()</h2>
+<a id="afc3e55de1af050c4d02459c6ef0782c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc3e55de1af050c4d02459c6ef0782c6">&#9670;&nbsp;</a></span>trim()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1606,7 +1630,7 @@ template&lt;typename T , template&lt; typename, typename... &gt; class Container
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> T hal::utils::trim </td>
+          <td class="memname">T hal::utils::trim </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1634,7 +1658,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The trimmed string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00358">358</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">360</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -1642,8 +1666,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a99d0bad47b8889780fe90db4c3308b77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99d0bad47b8889780fe90db4c3308b77">&#9670;&nbsp;</a></span>unordered_vector_erase()</h2>
+<a id="ad5404c6eab703aa306f6769ae81ce7ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5404c6eab703aa306f6769ae81ce7ec">&#9670;&nbsp;</a></span>unordered_vector_erase()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1654,7 +1678,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> bool hal::utils::unordered_vector_erase </td>
+          <td class="memname">bool hal::utils::unordered_vector_erase </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>vec</em>, </td>
@@ -1687,7 +1711,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00058">58</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00060">60</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
@@ -1728,20 +1752,18 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the vectors have the same content, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8h_source.html#l00078">78</a> of file <a class="el" href="utils_8h_source.html">utils.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00080">80</a> of file <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">utils.h</a>.</p>
 
 </div>
 </div>
-<a id="abe865cd13e526c5228f269a9c7b2629b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe865cd13e526c5228f269a9c7b2629b">&#9670;&nbsp;</a></span>which()</h2>
+<a id="a2b0a5b8e62f97d9e4ce5eefc428b0a2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b0a5b8e62f97d9e4ce5eefc428b0a2f">&#9670;&nbsp;</a></span>which()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> std::filesystem::path hal::utils::which </td>
+          <td class="memname">std::filesystem::path hal::utils::which </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1769,22 +1791,22 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The path if an executable is found, an empty path otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00243">243</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00243">243</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="utils_8h_source.html#l00237">split()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00239">split()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00100">get_base_directory()</a>.</p>
 
 </div>
 </div>
-<a id="a9394b4d75f96d92ca9ed37e34a0ae281"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9394b4d75f96d92ca9ed37e34a0ae281">&#9670;&nbsp;</a></span>wrapped_stoul()</h2>
+<a id="a2893ae118ab942b7fb48452c8d63cae4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2893ae118ab942b7fb48452c8d63cae4">&#9670;&nbsp;</a></span>wrapped_stoul()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::utils::wrapped_stoul </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::utils::wrapped_stoul </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1792,7 +1814,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>base</em> = <code>10</code>&#160;</td>
         </tr>
         <tr>
@@ -1812,20 +1834,20 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK and an integer on success, an ERROR otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00714">714</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00714">714</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
-<a id="a8a1df8fc6d689dc2e7f74a050282b9f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a1df8fc6d689dc2e7f74a050282b9f7">&#9670;&nbsp;</a></span>wrapped_stoull()</h2>
+<a id="a271ac91bac082463dd18a36b99480a01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a271ac91bac082463dd18a36b99480a01">&#9670;&nbsp;</a></span>wrapped_stoull()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> &gt; hal::utils::wrapped_stoull </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> &gt; hal::utils::wrapped_stoull </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1833,7 +1855,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>base</em> = <code>10</code>&#160;</td>
         </tr>
         <tr>
@@ -1853,9 +1875,9 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>OK and an integer on success, an ERROR otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils_8cpp_source.html#l00696">696</a> of file <a class="el" href="utils_8cpp_source.html">utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utilities_2utils_8cpp_source.html#l00696">696</a> of file <a class="el" href="src_2utilities_2utils_8cpp_source.html">utils.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -1865,7 +1887,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1utils.html">utils</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

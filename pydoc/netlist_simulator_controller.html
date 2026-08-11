@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Simulator Controller &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Netlist Simulator Controller &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -245,7 +245,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>clock_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net that carries the clock signal.</p></li>
 <li><p><strong>frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The clock frequency in hertz.</p></li>
-<li><p><strong>start_at_zero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Initial clock state is 0 if true, 1 otherwise.</p></li>
+<li><p><strong>start_at_zero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Initial clock state is 0 if <code class="docutils literal notranslate"><span class="pre">True</span></code>, 1 otherwise.</p></li>
 </ul>
 </dd>
 </dl>
@@ -260,7 +260,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>clock_net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net that carries the clock signal.</p></li>
 <li><p><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The clock period from rising edge to rising edge in picoseconds.</p></li>
-<li><p><strong>start_at_zero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Initial clock state is 0 if true, 1 otherwise.</p></li>
+<li><p><strong>start_at_zero</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Initial clock state is 0 if <code class="docutils literal notranslate"><span class="pre">True</span></code>, 1 otherwise.</p></li>
 <li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Optional max time limit when showing clock in VCD viewer or editor</p></li>
 </ul>
 </dd>
@@ -411,7 +411,7 @@ Only elements in the simulation set are considered during simulation.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the file gerneration was successful, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the file gerneration was successful, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -530,7 +530,7 @@ Only elements in the simulation set are considered during simulation.</p>
 <dd><p>Get simulated data from engine, either from shared memory or from VCD file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -724,7 +724,7 @@ Does not remove gates/nets from the simulation set.</p>
 <dd><p>Run the simulation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if all simulation steps could be processed successfully, False otherwise</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if all simulation steps could be processed successfully, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>

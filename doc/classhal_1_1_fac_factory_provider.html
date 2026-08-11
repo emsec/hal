@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,16 +93,13 @@ $(document).ready(function(){initNavTree('classhal_1_1_fac_factory_provider.html
 </div><!--header-->
 <div class="contents">
 
-<p>File-Access Factory class.  
- <a href="classhal_1_1_fac_factory_provider.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="fac__extension__interface_8h_source.html">hal_core/plugin_system/fac_extension_interface.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::FacFactoryProvider&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_fac_factory_provider__inherit__graph.png" border="0" usemap="#ahal_1_1_fac_factory_provider_3_01_t_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_fac_factory_provider_3_01_t_01_4_inherit__map" id="ahal_1_1_fac_factory_provider_3_01_t_01_4_inherit__map">
-<area shape="rect" title="File&#45;Access Factory class." alt="" coords="7,145,217,237"/>
+<area shape="rect" title=" " alt="" coords="7,145,217,237"/>
 <area shape="rect" href="classhal_1_1_abstract_factory_provider.html" title=" " alt="" coords="5,5,219,97"/>
 </map>
 </div>
@@ -109,7 +108,7 @@ Collaboration diagram for hal::FacFactoryProvider&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_fac_factory_provider__coll__graph.png" border="0" usemap="#ahal_1_1_fac_factory_provider_3_01_t_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_fac_factory_provider_3_01_t_01_4_coll__map" id="ahal_1_1_fac_factory_provider_3_01_t_01_4_coll__map">
-<area shape="rect" title="File&#45;Access Factory class." alt="" coords="7,145,217,237"/>
+<area shape="rect" title=" " alt="" coords="7,145,217,237"/>
 <area shape="rect" href="classhal_1_1_abstract_factory_provider.html" title=" " alt="" coords="5,5,219,97"/>
 </map>
 </div>
@@ -135,9 +134,9 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class hal::FacFactoryProvider&lt; T &gt;</h3>
 
-<p>File-Access Factory class. </p>
+<p>Holds the factory function that creates instances of the file-access implementation <code>T</code>, e.g., a netlist parser or a gate library writer contributed by a plugin. </p>
 
-<p class="definition">Definition at line <a class="el" href="fac__extension__interface_8h_source.html#l00046">46</a> of file <a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fac__extension__interface_8h_source.html#l00050">50</a> of file <a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a260a14e618f95dd426131d865a96028c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a260a14e618f95dd426131d865a96028c">&#9670;&nbsp;</a></span>FacFactoryProvider()</h2>
@@ -208,14 +207,14 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fac__extension__interface_8h_source.html#l00051">51</a> of file <a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fac__extension__interface_8h_source.html#l00055">55</a> of file <a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00013">hal::HGLParserExtension::HGLParserExtension()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00013">hal::HGLWriterExtension::HGLWriterExtension()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00013">hal::LibertyParserExtension::LibertyParserExtension()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00013">hal::VerilogParserExtension::VerilogParserExtension()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00013">hal::VerilogWriterExtension::VerilogWriterExtension()</a>, and <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00014">hal::VHDLParserExtension::VHDLParserExtension()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__gexf__writer_8cpp_source.html#l00013">hal::GexfWriterExtension::GexfWriterExtension()</a>, <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00013">hal::HGLParserExtension::HGLParserExtension()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00013">hal::HGLWriterExtension::HGLWriterExtension()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00013">hal::LibertyParserExtension::LibertyParserExtension()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00013">hal::VerilogParserExtension::VerilogParserExtension()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00013">hal::VerilogWriterExtension::VerilogWriterExtension()</a>, and <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00014">hal::VHDLParserExtension::VHDLParserExtension()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/plugin_system/<a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a></li>
+<li>include/hal_core/plugin_system/<a class="el" href="fac__extension__interface_8h_source.html">fac_extension_interface.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -223,7 +222,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_fac_factory_provider.html">FacFactoryProvider</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

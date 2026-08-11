@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,17 +94,23 @@ $(document).ready(function(){initNavTree('namespacemembers_func_p.html',''); ini
 : <a class="el" href="namespacehal_1_1gui__utility.html#ab18ab45d5471bc18531142eba0744767">hal::gui_utility</a>
 </li>
 <li>parse()
-: <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager</a>
-, <a class="el" href="namespacehal_1_1netlist__parser__manager.html#a9ff28049722e4a8532867f675aad614e">hal::netlist_parser_manager</a>
+: <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a46c37f29acf3a612781bb66142eaa6ca">hal::gate_library_parser_manager</a>
+, <a class="el" href="namespacehal_1_1netlist__parser__manager.html#aa7456380a91a0312e64f954faecc67b7">hal::netlist_parser_manager</a>
 </li>
 <li>parse_all()
 : <a class="el" href="namespacehal_1_1netlist__parser__manager.html#af1c82137bddfd220906ff6e8a2366b2d">hal::netlist_parser_manager</a>
+</li>
+<li>parse_def_file()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a19b3eaff25a24e863cfe3d76e7c466f2">hal::netlist_preprocessing</a>
 </li>
 <li>parse_with_liberty_grammar()
 : <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a3f360ba1cc4e149de02216cde46d8847">hal::BooleanFunctionParser</a>
 </li>
 <li>parse_with_standard_grammar()
 : <a class="el" href="namespacehal_1_1_boolean_function_parser.html#a3b9615c838e90630ac63d0aee530c673">hal::BooleanFunctionParser</a>
+</li>
+<li>parse_xdc_file()
+: <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa9cbe87076ce843d6b78da1391dad61c">hal::xilinx_toolbox</a>
 </li>
 <li>pin_event_order()
 : <a class="el" href="namespacehal.html#a727315bb04e7d8b01d1b172818a1bb56">hal</a>
@@ -116,6 +124,12 @@ $(document).ready(function(){initNavTree('namespacemembers_func_p.html',''); ini
 <li>positionFromString()
 : <a class="el" href="namespacehal_1_1_content_layout.html#a85162361ddf93adbe2a7328a717a9716">hal::ContentLayout</a>
 </li>
+<li>positionToString()
+: <a class="el" href="namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf">hal::ContentLayout</a>
+</li>
+<li>post_processing()
+: <a class="el" href="namespacehal_1_1module__identification.html#a4b260f4cd4089e5c3c27be3e86ec3f67">hal::module_identification</a>
+</li>
 <li>process()
 : <a class="el" href="namespacehal_1_1dataflow_1_1group__by__control__signals.html#a87febfa7fbde31e6972f5a6920305c5a">hal::dataflow::group_by_control_signals</a>
 , <a class="el" href="namespacehal_1_1dataflow_1_1group__by__input__output__size.html#a4fdbeb0af6e273cd017ccaa7fc1f747d">hal::dataflow::group_by_input_output_size</a>
@@ -128,11 +142,23 @@ $(document).ready(function(){initNavTree('namespacemembers_func_p.html',''); ini
 , <a class="el" href="namespacehal_1_1dataflow_1_1split__by__successor__predecessor__known__groups.html#a0376b9811cb1ceb42f83938dbfc18112">hal::dataflow::split_by_successor_predecessor_known_groups</a>
 , <a class="el" href="namespacehal_1_1dataflow_1_1split__by__successors__predecessors.html#aaaccc4618b6713b6f87282dd0da84d25">hal::dataflow::split_by_successors_predecessors</a>
 </li>
+<li>process_clear_preset_behavior()
+: <a class="el" href="namespacehal_1_1simulation__utils.html#ae50da9e74fadf4924c7be1cc1af8797e">hal::simulation_utils</a>
+</li>
 <li>project_manager_init()
 : <a class="el" href="group__pybind.html#gac072de2b8e9f09d8320090e5873be90d">hal</a>
 </li>
+<li>propagate_bitorder()
+: <a class="el" href="namespacehal_1_1bitorder__propagation.html#af43092380eef3ddf98e3279803cf67da">hal::bitorder_propagation</a>
+</li>
+<li>propagate_constants()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#ab5ea71a783788a35a265a3c908434480">hal::netlist_preprocessing</a>
+</li>
+<li>propagate_module_pingroup_bitorder()
+: <a class="el" href="namespacehal_1_1bitorder__propagation.html#a472227f4e111f0a17c6f47f67f45d07b">hal::bitorder_propagation</a>
+</li>
 <li>PYBIND11_PLUGIN()
-: <a class="el" href="namespacehal.html#a034467b937d9c580d84c198167d00929">hal</a>
+: <a class="el" href="namespacehal.html#ad4f5d8f909211452ac2b4911cc559076">hal</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -140,7 +166,7 @@ $(document).ready(function(){initNavTree('namespacemembers_func_p.html',''); ini
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

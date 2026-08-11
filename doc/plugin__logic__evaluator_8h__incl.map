@@ -1,0 +1,15 @@
+<map id="plugins/logic_evaluator/include/logic_evaluator/plugin_logic_evaluator.h" name="plugins/logic_evaluator/include/logic_evaluator/plugin_logic_evaluator.h">
+<area shape="rect" id="node1" title=" " alt="" coords="378,5,562,61"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="64,109,246,151"/>
+<area shape="rect" id="node9" href="$gui__extension__interface_8h.html" title=" " alt="" coords="372,109,567,151"/>
+<area shape="rect" id="node13" title=" " alt="" coords="592,117,686,143"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="93,288,233,315"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="38,199,168,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="7,288,50,315"/>
+<area shape="rect" id="node7" title=" " alt="" coords="319,288,378,315"/>
+<area shape="rect" id="node8" title=" " alt="" coords="244,206,306,233"/>
+<area shape="rect" id="node5" title=" " alt="" coords="628,288,714,315"/>
+<area shape="rect" id="node10" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="582,206,760,233"/>
+<area shape="rect" id="node11" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="835,199,1062,240"/>
+<area shape="rect" id="node12" href="$plugin__parameter_8h.html" title=" " alt="" coords="382,199,558,240"/>
+</map>

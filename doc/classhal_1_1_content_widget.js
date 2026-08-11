@@ -32,7 +32,5 @@ var classhal_1_1_content_widget =
     [ "mDetachedFrame", "classhal_1_1_content_widget.html#a89b63431c6f7956a5cc04579bb2ae922", null ],
     [ "mSearchAction", "classhal_1_1_content_widget.html#a600bd891c5bc2cf6139761c21c3dd91e", null ],
     [ "mSearchKeysequence", "classhal_1_1_content_widget.html#a0fe07a490c09775afe6b10a4476f6c07", null ],
-    [ "mSearchShortcut", "classhal_1_1_content_widget.html#a967488363abaed7b1509455c8bd4be21", null ],
-    [ "iconPath", "classhal_1_1_content_widget.html#a0c08c7f76d96fcb6837d296e4fcf785e", null ],
-    [ "iconStyle", "classhal_1_1_content_widget.html#ae9d83cafdfaf9cb855db2eca66d767a9", null ]
+    [ "mSearchShortcut", "classhal_1_1_content_widget.html#a967488363abaed7b1509455c8bd4be21", null ]
 ];

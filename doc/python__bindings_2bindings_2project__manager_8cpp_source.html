@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/python_bindings/bindings/project_manager.cpp Source File</title>
+<title>HAL: src/python_bindings/bindings/project_manager.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -116,9 +118,9 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">        py_project_directory.def(</span><span class="stringliteral">&quot;get_default_filename&quot;</span>, &amp;<a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">ProjectDirectory::get_default_filename</a>, py::arg(<span class="stringliteral">&quot;extension&quot;</span>) = std::string(), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">            Returns the default file name for the project directory.</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">            Returns the default file name for the project directory, which is a file with the same name as the project directory plus an extension.</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">            :param str extension: Extension of the default file name. If empty, &#39;.hal&#39; is assumed.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">            :param str extension: Extension of the default file name. If empty, &#39;``.hal``&#39; is assumed.</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">            :returns: The absolute path to the default file.</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -134,7 +136,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">        py_project_directory.def(</span><span class="stringliteral">&quot;get_shadow_filename&quot;</span>, &amp;<a class="code" href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">ProjectDirectory::get_shadow_filename</a>, py::arg(<span class="stringliteral">&quot;extension&quot;</span>) = std::string(), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            Returns the file name within the autosave (shadow) directory.</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            :param str extension: Extension of the shadow file name. If empty, &#39;.hal&#39; is assumed.</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            :param str extension: Extension of the shadow file name. If empty, &#39;``.hal``&#39; is assumed.</span></div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">            :returns: The absolute path to the shadow file.</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -214,8 +216,8 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">            Serialize the netlist and all dependent data to the project directory.</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">            :param hal_py.Netlist netlist: The netlist.</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">            :param bool shadow: Set to True if function is called from autosave procedure, False otherwise. Defaults to False.</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">            :returns: True if serialization of the netlist was successful, False otherwise.</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">            :param bool shadow: Set to ``True`` if function is called from autosave procedure, ``False`` otherwise. Defaults to ``False``.</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">            :returns: ``True`` if serialization of the netlist was successful, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral"></span> </div>
@@ -223,7 +225,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">            Open the project specified by the provided directory path.</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">            :param str path: The path to the project directory. Can be omitted if the path was previously set using `ProjectManager::set_project_directory`.</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">            :returns: True on success, False otherwise.</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">            :returns: ``True`` on success, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral"></span> </div>
@@ -247,14 +249,14 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">            The project directory must not exist.</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">            :param str path: The path to the new project directory.</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">            :returns: True on success, False otherwise.</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">            :returns: ``True`` on success, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="stringliteral">        py_project_manager.def(</span><span class="stringliteral">&quot;remove_project_directory&quot;</span>, &amp;<a class="code" href="classhal_1_1_project_manager.html#abab7b72e2024d037dfa40ee45250c70a">ProjectManager::remove_project_directory</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="stringliteral">            Remove the existing project directory and clear the path member variable.</span></div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">            :returns: True on success, False otherwise.</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">            :returns: ``True`` on success, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral"></span> </div>
@@ -269,7 +271,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a05266d178bc1bb73cea16768ae75d269"><div class="ttname"><a href="classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269">hal::ProjectDirectory::get_filename</a></div><div class="ttdeci">std::filesystem::path get_filename(const std::string &amp;relative_filename) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00047">project_directory.cpp:47</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a21fb3c3899dab62d526717562c13bd7d"><div class="ttname"><a href="classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d">hal::ProjectDirectory::get_relative_file_path</a></div><div class="ttdeci">std::filesystem::path get_relative_file_path(const std::string &amp;filename) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00074">project_directory.cpp:74</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a2ce61d5bf709b4e75b00dce4e5ffa392"><div class="ttname"><a href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">hal::ProjectDirectory::get_canonical_path</a></div><div class="ttdeci">std::filesystem::path get_canonical_path() const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00031">project_directory.cpp:31</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_directory_html_a59f7d3aed28585c1722faa89c12b3679"><div class="ttname"><a href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">hal::ProjectDirectory::s_shadow_dir</a></div><div class="ttdeci">static const std::string s_shadow_dir</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00111">project_directory.h:111</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_directory_html_a59f7d3aed28585c1722faa89c12b3679"><div class="ttname"><a href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">hal::ProjectDirectory::s_shadow_dir</a></div><div class="ttdeci">static const std::string s_shadow_dir</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00110">project_directory.h:110</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a66c2e74a77bef4d0eab40bbc221c9897"><div class="ttname"><a href="classhal_1_1_project_directory.html#a66c2e74a77bef4d0eab40bbc221c9897">hal::ProjectDirectory::generate_random</a></div><div class="ttdeci">static ProjectDirectory generate_random()</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00015">project_directory.cpp:15</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_ac9cbda73428844614b413450ba1685ff"><div class="ttname"><a href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">hal::ProjectDirectory::get_shadow_filename</a></div><div class="ttdeci">std::filesystem::path get_shadow_filename(const std::string &amp;extension=std::string()) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00058">project_directory.cpp:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_adc4b09f2b9e56e57813bc00e447fc004"><div class="ttname"><a href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">hal::ProjectDirectory::get_default_filename</a></div><div class="ttdeci">std::filesystem::path get_default_filename(const std::string &amp;extension=std::string()) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00038">project_directory.cpp:38</a></div></div>
@@ -288,7 +290,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div class="ttc" id="aclasshal_1_1_project_manager_html_ae3e31c378bef8edc9b63f3308029c3eb"><div class="ttname"><a href="classhal_1_1_project_manager.html#ae3e31c378bef8edc9b63f3308029c3eb">hal::ProjectManager::set_project_directory</a></div><div class="ttdeci">void set_project_directory(const std::string &amp;path)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2project__manager_8cpp_source.html#l00086">project_manager.cpp:86</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gac072de2b8e9f09d8320090e5873be90d"><div class="ttname"><a href="group__pybind.html#gac072de2b8e9f09d8320090e5873be90d">hal::project_manager_init</a></div><div class="ttdeci">void project_manager_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">project_manager.cpp:5</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -296,7 +298,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2project__m
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2project__manager_8cpp.html">project_manager.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

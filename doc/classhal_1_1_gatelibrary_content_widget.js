@@ -31,14 +31,5 @@ var classhal_1_1_gatelibrary_content_widget =
     [ "triggerDeleteType", "classhal_1_1_gatelibrary_content_widget.html#a97c3f9fc2e4e6728af0556ffb03c75da", null ],
     [ "triggerDoubleClicked", "classhal_1_1_gatelibrary_content_widget.html#a56b4d56c1964a265e4a44ca7dbd9ecec", null ],
     [ "triggerEditType", "classhal_1_1_gatelibrary_content_widget.html#a25023717b7600cc2295181f9713409ec", null ],
-    [ "GateLibraryManager", "classhal_1_1_gatelibrary_content_widget.html#af6f5e9b156af5d6829c49e345f2f1880", null ],
-    [ "addTypeIconPath", "classhal_1_1_gatelibrary_content_widget.html#a76812656017053cde40f992e22a540a2", null ],
-    [ "deleteIconPath", "classhal_1_1_gatelibrary_content_widget.html#a1f34fcd09006632d2a479060bbede8cc", null ],
-    [ "deleteIconStyle", "classhal_1_1_gatelibrary_content_widget.html#a79e53a755fa486224f01c29cd1f2be27", null ],
-    [ "disabledIconStyle", "classhal_1_1_gatelibrary_content_widget.html#ad098557fac133e8a095e55d17f3768c2", null ],
-    [ "editTypeIconPath", "classhal_1_1_gatelibrary_content_widget.html#a07b80b0fa5ea8df0a3d8c4197b5eea2e", null ],
-    [ "enabledIconStyle", "classhal_1_1_gatelibrary_content_widget.html#a28e8efe596b448e3ab39b2a30290ace3", null ],
-    [ "searchActiveIconStyle", "classhal_1_1_gatelibrary_content_widget.html#a26dc0477f9f1d40b52db70a0eff7434e", null ],
-    [ "searchIconPath", "classhal_1_1_gatelibrary_content_widget.html#ac97ce293c074490b6c4e8cb7944d717d", null ],
-    [ "searchIconStyle", "classhal_1_1_gatelibrary_content_widget.html#aadac3ac96825e0f5274d1ff6db6116e2", null ]
+    [ "GateLibraryManager", "classhal_1_1_gatelibrary_content_widget.html#af6f5e9b156af5d6829c49e345f2f1880", null ]
 ];

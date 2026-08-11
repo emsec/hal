@@ -1,6 +1,6 @@
 var dir_521e0a67f0f6ccf539d1fe300f576c15 =
 [
-    [ "configuration.h", "evaluation_2configuration_8h.html", [
+    [ "configuration.h", "dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h.html", [
       [ "Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", "structhal_1_1dataflow_1_1evaluation_1_1_configuration" ]
     ] ],
     [ "context.h", "evaluation_2context_8h.html", [

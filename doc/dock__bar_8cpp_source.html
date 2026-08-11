@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/docking_system/dock_bar.cpp Source File</title>
+<title>HAL: plugins/gui/src/docking_system/dock_bar.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -428,7 +430,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        }</div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
 <div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
-<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">  343</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">DockBar::addButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">  343</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">DockBar::addButton</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    {</div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <a class="code" href="classhal_1_1_dock_button.html">DockButton</a>* button = <span class="keyword">new</span> <a class="code" href="classhal_1_1_dock_button.html">DockButton</a>(widget, mButtonOrientation, <span class="keyword">this</span>, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <span class="keywordflow">if</span> (mButtonOrientation == <a class="code" href="group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f">button_orientation::horizontal</a>)</div>
@@ -464,7 +466,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
 <div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
-<div class="line"><a name="l00379"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a21963ee3bbcf3adf7e5161e225d72804">  379</a></span>&#160;    <span class="keywordtype">bool</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">DockBar::isHidden</a>(<span class="keywordtype">int</span> index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#a21963ee3bbcf3adf7e5161e225d72804">  379</a></span>&#160;    <span class="keywordtype">bool</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">DockBar::isHidden</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        {</div>
@@ -474,7 +476,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
-<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#adc2fb001432e3849fadfbfb5abfb7b9e">  389</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">DockBar::removeButton</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#adc2fb001432e3849fadfbfb5abfb7b9e">  389</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_dock_bar.html#a0e224001ed07b05a8b4e5ed9ed782f58">DockBar::removeButton</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    {</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        {</div>
@@ -548,14 +550,14 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        }</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;    }</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
-<div class="line"><a name="l00463"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">  463</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">DockBar::widgetAt</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00463"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">  463</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">DockBar::widgetAt</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    {</div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        <span class="keywordflow">if</span> (0 &lt;= <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &amp;&amp; <a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; mButtons.size())</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            <span class="keywordflow">return</span> mButtons.at(<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a>)-&gt;widget();</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;    }</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160; </div>
-<div class="line"><a name="l00470"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">  470</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">DockBar::nextAvailableWidget</a>(<span class="keywordtype">int</span> index)</div>
+<div class="line"><a name="l00470"></a><span class="lineno"><a class="line" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">  470</a></span>&#160;    <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* <a class="code" href="classhal_1_1_dock_bar.html#aca9c3635fd18322a6dfe4496c13170e4">DockBar::nextAvailableWidget</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)</div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    {</div>
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_dock_bar.html#a43cda23224cf8c376b67fc1ca93474ce">index</a> &lt; 0)</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        {</div>
@@ -621,7 +623,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">hide</a>();</div>
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    }</div>
 <div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00053">content_anchor.h:54</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00056">content_anchor.h:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_anchor_html_a122685a9eb05e3a34b8ede51f5f81a49"><div class="ttname"><a href="classhal_1_1_content_anchor.html#a122685a9eb05e3a34b8ede51f5f81a49">hal::ContentAnchor::add</a></div><div class="ttdeci">virtual void add(ContentWidget *widget, int index)=0</div></div>
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a3caaf3a7ed45298de28483db823564da"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a3caaf3a7ed45298de28483db823564da">hal::ContentDragRelay::relayDragEnd</a></div><div class="ttdeci">void relayDragEnd()</div><div class="ttdef"><b>Definition:</b> <a href="content__drag__relay_8cpp_source.html#l00016">content_drag_relay.cpp:16</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a561c07b5247a2f14972803cc1f3be4a0"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a561c07b5247a2f14972803cc1f3be4a0">hal::ContentDragRelay::relayDragStart</a></div><div class="ttdeci">void relayDragStart()</div><div class="ttdef"><b>Definition:</b> <a href="content__drag__relay_8cpp_source.html#l00011">content_drag_relay.cpp:11</a></div></div>
@@ -674,7 +676,8 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div class="ttc" id="adock__mime__data_8h_html"><div class="ttname"><a href="dock__mime__data_8h.html">dock_mime_data.h</a></div></div>
 <div class="ttc" id="agroup__docking_html_ga96c899c45d7192341d04caf575c7f02c"><div class="ttname"><a href="group__docking.html#ga96c899c45d7192341d04caf575c7f02c">hal::button_orientation</a></div><div class="ttdeci">button_orientation</div><div class="ttdef"><b>Definition:</b> <a href="dock__button_8h_source.html#l00040">dock_button.h:41</a></div></div>
 <div class="ttc" id="agroup__docking_html_gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f"><div class="ttname"><a href="group__docking.html#gga96c899c45d7192341d04caf575c7f02ca4505cad087312551a6fbbe6ebe163e0f">hal::button_orientation::horizontal</a></div><div class="ttdeci">@ horizontal</div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqabstractanimation_html_DeletionPolicy-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#DeletionPolicy-enum">QAbstractAnimation::DeleteWhenStopped</a></div><div class="ttdeci">DeleteWhenStopped</div></div>
 <div class="ttc" id="aqabstractanimation_html_start"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractanimation.html#start">QAbstractAnimation::start</a></div><div class="ttdeci">void start(QAbstractAnimation::DeletionPolicy policy)</div></div>
 <div class="ttc" id="aqabstractbutton_html_checked-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked</a></div><div class="ttdeci">void setChecked(bool)</div></div>
@@ -732,7 +735,7 @@ $(document).ready(function(){initNavTree('dock__bar_8cpp_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_723f710d3e1503255229013675f4a73b.html">docking_system</a></li><li class="navelem"><a class="el" href="dock__bar_8cpp.html">dock_bar.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

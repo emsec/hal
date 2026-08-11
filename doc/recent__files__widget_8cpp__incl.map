@@ -1,22 +1,38 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/welcome_screen/recent_files_widget.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/welcome_screen/recent_files_widget.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="973,5,1153,76"/>
-<area shape="rect" id="node2" href="$recent__files__widget_8h.html" title=" " alt="" coords="142,124,306,165"/>
-<area shape="rect" id="node5" href="$project__manager_8h.html" title=" " alt="" coords="511,124,681,165"/>
-<area shape="rect" id="node10" href="$file__manager_8h.html" title=" " alt="" coords="985,124,1140,165"/>
-<area shape="rect" id="node11" title=" " alt="" coords="1032,221,1083,247"/>
-<area shape="rect" id="node12" href="$gui__globals_8h.html" title=" " alt="" coords="727,131,859,158"/>
-<area shape="rect" id="node13" title=" " alt="" coords="912,221,997,247"/>
-<area shape="rect" id="node14" href="$recent__file__item_8h.html" title=" " alt="" coords="332,124,487,165"/>
-<area shape="rect" id="node15" title=" " alt="" coords="1165,131,1262,158"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1287,131,1367,158"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1391,131,1446,158"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1470,131,1535,158"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1559,131,1670,158"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1695,131,1769,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="187,221,261,247"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,221,163,247"/>
-<area shape="rect" id="node6" href="$defines_8h.html" title=" " alt="" coords="462,303,602,329"/>
-<area shape="rect" id="node7" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="709,221,888,247"/>
-<area shape="rect" id="node8" href="$json__write__document_8h.html" title=" " alt="" coords="507,213,685,255"/>
-<area shape="rect" id="node9" href="$project__directory_8h.html" title=" " alt="" coords="285,213,432,255"/>
+<map id="plugins/gui/src/welcome_screen/recent_files_widget.cpp" name="plugins/gui/src/welcome_screen/recent_files_widget.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="3137,5,3366,47"/>
+<area shape="rect" id="node2" href="$recent__files__widget_8h.html" title=" " alt="" coords="2986,95,3150,136"/>
+<area shape="rect" id="node5" href="$project__manager_8h.html" title=" " alt="" coords="230,95,401,136"/>
+<area shape="rect" id="node13" href="$file__manager_8h.html" title=" " alt="" coords="952,95,1106,136"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1004,191,1054,218"/>
+<area shape="rect" id="node18" href="$gui__globals_8h.html" title=" " alt="" coords="2011,102,2143,129"/>
+<area shape="rect" id="node20" title=" " alt="" coords="2647,273,2702,300"/>
+<area shape="rect" id="node29" title=" " alt="" coords="2880,191,2965,218"/>
+<area shape="rect" id="node30" href="$recent__file__item_8h.html" title=" " alt="" coords="3174,95,3329,136"/>
+<area shape="rect" id="node32" title=" " alt="" coords="3404,102,3502,129"/>
+<area shape="rect" id="node33" title=" " alt="" coords="3526,102,3606,129"/>
+<area shape="rect" id="node34" title=" " alt="" coords="3631,102,3696,129"/>
+<area shape="rect" id="node35" title=" " alt="" coords="3720,102,3831,129"/>
+<area shape="rect" id="node36" title=" " alt="" coords="3856,102,3930,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="3171,191,3244,218"/>
+<area shape="rect" id="node4" title=" " alt="" coords="2989,191,3146,218"/>
+<area shape="rect" id="node6" href="$defines_8h.html" title=" " alt="" coords="678,273,818,300"/>
+<area shape="rect" id="node7" title=" " alt="" coords="520,348,610,375"/>
+<area shape="rect" id="node8" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="289,191,468,218"/>
+<area shape="rect" id="node9" title=" " alt="" coords="409,273,468,300"/>
+<area shape="rect" id="node10" title=" " alt="" coords="63,273,187,300"/>
+<area shape="rect" id="node11" href="$json__write__document_8h.html" title=" " alt="" coords="36,184,214,225"/>
+<area shape="rect" id="node12" href="$project__directory_8h.html" title=" " alt="" coords="492,184,638,225"/>
+<area shape="rect" id="node14" href="$program__arguments_8h.html" title=" " alt="" coords="662,184,833,225"/>
+<area shape="rect" id="node15" title=" " alt="" coords="1848,273,1922,300"/>
+<area shape="rect" id="node16" title=" " alt="" coords="908,191,979,218"/>
+<area shape="rect" id="node19" href="$file__status__manager_8h.html" title=" " alt="" coords="2488,184,2666,225"/>
+<area shape="rect" id="node21" href="$graph__context__manager_8h.html" title=" " alt="" coords="1274,184,1448,225"/>
+<area shape="rect" id="node22" href="$content__manager_8h.html" title=" " alt="" coords="1524,184,1684,225"/>
+<area shape="rect" id="node23" href="$netlist__relay_8h.html" title=" " alt="" coords="1708,184,1880,225"/>
+<area shape="rect" id="node24" href="$plugin__relay_8h.html" title=" " alt="" coords="1078,184,1249,225"/>
+<area shape="rect" id="node25" href="$python__context_8h.html" title=" " alt="" coords="2074,191,2282,218"/>
+<area shape="rect" id="node26" href="$selection__relay_8h.html" title=" " alt="" coords="1904,184,2050,225"/>
+<area shape="rect" id="node27" href="$gui__api_8h.html" title=" " alt="" coords="2307,191,2463,218"/>
+<area shape="rect" id="node28" href="$comment__manager_8h.html" title=" " alt="" coords="2691,184,2855,225"/>
+<area shape="rect" id="node31" href="$action__open__netlist__file_8h.html" title=" " alt="" coords="3269,184,3434,225"/>
 </map>

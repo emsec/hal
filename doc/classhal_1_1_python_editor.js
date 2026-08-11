@@ -86,21 +86,5 @@ var classhal_1_1_python_editor =
     [ "toggleMinimapIconStyle", "classhal_1_1_python_editor.html#a4e393da8441bca6a5001cf0f66579469", null ],
     [ "toggleSearchbar", "classhal_1_1_python_editor.html#a66bb948156ad697793a654835e3a7a22", null ],
     [ "unnamedFilename", "classhal_1_1_python_editor.html#af1b281f6fe716081de82205d393c5f0b", null ],
-    [ "updateSearchIcon", "classhal_1_1_python_editor.html#a9f0a709f9d53a878587a2be6e98833f3", null ],
-    [ "disabledIconStyle", "classhal_1_1_python_editor.html#affc9e3c3c2ceff320f24c91da73e4291", null ],
-    [ "newFileIconPath", "classhal_1_1_python_editor.html#adc0fa3e3fabd196a7fa9df95add1633b", null ],
-    [ "newFileIconStyle", "classhal_1_1_python_editor.html#a541ea352e19da48118b5efb725445e85", null ],
-    [ "openIconPath", "classhal_1_1_python_editor.html#a342f7192b64538cf6da7073c2ef4fc97", null ],
-    [ "openIconStyle", "classhal_1_1_python_editor.html#ad4ac43e0473bb42b8b00fa0c5d05d50c", null ],
-    [ "runIconPath", "classhal_1_1_python_editor.html#ac628125539572fdd23670a472638fcef", null ],
-    [ "runIconStyle", "classhal_1_1_python_editor.html#a738016becc85154f578ae7ab8504f256", null ],
-    [ "saveAsIconPath", "classhal_1_1_python_editor.html#a704f6a6abd4d30019ebde92ecf82f543", null ],
-    [ "saveAsIconStyle", "classhal_1_1_python_editor.html#a90a9b4503d994e8773e0896fd1fee7eb", null ],
-    [ "saveIconPath", "classhal_1_1_python_editor.html#a07e5c226eac0a9cc320604bae8f05931", null ],
-    [ "saveIconStyle", "classhal_1_1_python_editor.html#a24e9186677e35391819ef0927bc2b852", null ],
-    [ "searchActiveIconStyle", "classhal_1_1_python_editor.html#a46d1589e173b928ed8ddffe3c181bdd6", null ],
-    [ "searchIconPath", "classhal_1_1_python_editor.html#a6523c30f58b9203c49c94c37acdf36ef", null ],
-    [ "searchIconStyle", "classhal_1_1_python_editor.html#a8b7b343cc66a9b60f93384b3f1a2653c", null ],
-    [ "toggleMinimapIconPath", "classhal_1_1_python_editor.html#a60a026d517b99e892810a17dca1643a7", null ],
-    [ "toggleMinimapIconStyle", "classhal_1_1_python_editor.html#adfd527e3a3d5e11b55a41d1c9e717c4c", null ]
+    [ "updateSearchIcon", "classhal_1_1_python_editor.html#a9f0a709f9d53a878587a2be6e98833f3", null ]
 ];

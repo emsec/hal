@@ -29,15 +29,5 @@ var classhal_1_1_file_actions =
     [ "setOpenProjIconStyle", "classhal_1_1_file_actions.html#a2ced9c6c3fec67b05e212db6217773c1", null ],
     [ "setSaveAsIconPath", "classhal_1_1_file_actions.html#a841a3c27e433000b53a26e9ff4025236", null ],
     [ "setSaveIconPath", "classhal_1_1_file_actions.html#a8a6acbbfa96320bb9c12aed8f51295f4", null ],
-    [ "setup", "classhal_1_1_file_actions.html#a3859b500a0fa4af8306558ed503de5f0", null ],
-    [ "closeIconPath", "classhal_1_1_file_actions.html#a7d9ac3151ee8c8c0553d0ae26607ec3a", null ],
-    [ "closeIconStyle", "classhal_1_1_file_actions.html#a6e8720d2be9c93cf29e63a0cbe596732", null ],
-    [ "disabledIconStyle", "classhal_1_1_file_actions.html#a240db700e4c347e82176dd343492078b", null ],
-    [ "enabledIconStyle", "classhal_1_1_file_actions.html#ae872524fcf855ca54d64ca7087ff3d43", null ],
-    [ "newFileIconPath", "classhal_1_1_file_actions.html#a1327faa64987cbe8115c897803057a55", null ],
-    [ "newFileIconStyle", "classhal_1_1_file_actions.html#ab49c3c3a2077a180a55988539f54c260", null ],
-    [ "openProjIconPath", "classhal_1_1_file_actions.html#adf21e8e97e9f6805a0079e152d3944ae", null ],
-    [ "openProjIconStyle", "classhal_1_1_file_actions.html#a077f1afe09fd1609da00151fac4eb602", null ],
-    [ "saveAsIconPath", "classhal_1_1_file_actions.html#a83d42325beb1bdaea40b90bc7ee7c841", null ],
-    [ "saveIconPath", "classhal_1_1_file_actions.html#ac5f87101095b116b3a5cc8d3d636c697", null ]
+    [ "setup", "classhal_1_1_file_actions.html#a3859b500a0fa4af8306558ed503de5f0", null ]
 ];

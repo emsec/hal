@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -94,7 +96,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_gate_select_history.html'
 <p>The <a class="el" href="classhal_1_1_gate_select_history.html" title="The GateSelectHistory class singleton comprises a list of user selected modules.">GateSelectHistory</a> class singleton comprises a list of user selected modules.  
  <a href="classhal_1_1_gate_select_history.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gate__select__model_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/module_dialog/gate_select_model.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GateSelectHistory:</div>
 <div class="dyncontent">
@@ -116,7 +118,7 @@ Collaboration diagram for hal::GateSelectHistory:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a50f888fe68aef1188dac2ae54664a964"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_history.html#a50f888fe68aef1188dac2ae54664a964">add</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
+<tr class="memitem:a50f888fe68aef1188dac2ae54664a964"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_history.html#a50f888fe68aef1188dac2ae54664a964">add</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a50f888fe68aef1188dac2ae54664a964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qlist"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qlist')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qlist.html">QList&lt; u32 &gt;</a></td></tr>
 <tr class="memitem:QList inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#QList">QList</a> ()</td></tr>
@@ -181,13 +183,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:takeFirst inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:takeLast inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#takeLast">takeLast</a> ()</td></tr>
 <tr class="separator:takeLast inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:move inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#move">move</a> (int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>, int to)</td></tr>
+<tr class="memitem:move inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#move">move</a> (int from, int to)</td></tr>
 <tr class="separator:move inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:swapItemsAt inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#swapItemsAt">swapItemsAt</a> (int i, int j)</td></tr>
 <tr class="separator:swapItemsAt inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:indexOf inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#indexOf">indexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#value">value</a>, int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>) const const</td></tr>
+<tr class="memitem:indexOf inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#indexOf">indexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#value">value</a>, int from) const const</td></tr>
 <tr class="separator:indexOf inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:lastIndexOf inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#lastIndexOf">lastIndexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#value">value</a>, int <a class="el" href="_apache_01_license_8txt.html#aaf8226a059307a1b18aac1295b5cf3a2">from</a>) const const</td></tr>
+<tr class="memitem:lastIndexOf inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#lastIndexOf">lastIndexOf</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#value">value</a>, int from) const const</td></tr>
 <tr class="separator:lastIndexOf inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:contains inherit pub_methods_qlist"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#contains">contains</a> (const T &amp;<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#value">value</a>) const const</td></tr>
 <tr class="separator:contains inherit pub_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -311,7 +313,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="inherit_header pub_static_methods_qlist"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_qlist')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qlist.html">QList&lt; u32 &gt;</a></td></tr>
 <tr class="memitem:fromVector inherit pub_static_methods_qlist"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#fromVector">fromVector</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html">QVector</a>&lt; T &gt; &amp;vector)</td></tr>
 <tr class="separator:fromVector inherit pub_static_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:fromSet inherit pub_static_methods_qlist"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#fromSet">fromSet</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; T &gt; &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a54668b8acf643faa27c9af0ef8ab3b2b">set</a>)</td></tr>
+<tr class="memitem:fromSet inherit pub_static_methods_qlist"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#fromSet">fromSet</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; T &gt; &amp;set)</td></tr>
 <tr class="separator:fromSet inherit pub_static_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:fromStdList inherit pub_static_methods_qlist"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#fromStdList">fromStdList</a> (const std::list&lt; T &gt; &amp;list)</td></tr>
 <tr class="separator:fromStdList inherit pub_static_methods_qlist"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -345,7 +347,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classhal_1_1_gate_select_history.html" title="The GateSelectHistory class singleton comprises a list of user selected modules.">GateSelectHistory</a> class singleton comprises a list of user selected modules. </p>
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8h_source.html#l00148">148</a> of file <a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8h_source.html#l00152">152</a> of file <a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a50f888fe68aef1188dac2ae54664a964"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50f888fe68aef1188dac2ae54664a964">&#9670;&nbsp;</a></span>add()</h2>
@@ -356,7 +358,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GateSelectHistory::add </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -401,8 +403,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/module_dialog/<a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/module_dialog/<a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a></li>
+<li>plugins/gui/include/gui/module_dialog/<a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a></li>
+<li>plugins/gui/src/module_dialog/<a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -410,7 +412,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_select_history.html">GateSelectHistory</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,5 +1,5 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h">
-<area shape="rect" id="node1" title=" " alt="" coords="244,5,496,76"/>
+<map id="plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h" name="plugins/gui/include/gui/graph_widget/items/nodes/modules/graphics_module.h">
+<area shape="rect" id="node1" title=" " alt="" coords="278,5,462,76"/>
 <area shape="rect" id="node2" href="$graphics__node_8h.html" title=" " alt="" coords="132,124,307,165"/>
 <area shape="rect" id="node6" title=" " alt="" coords="331,131,409,158"/>
 <area shape="rect" id="node7" href="$sort_8h.html" title=" " alt="" coords="433,131,576,158"/>

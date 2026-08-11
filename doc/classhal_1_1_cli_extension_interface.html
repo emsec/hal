@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,15 +92,18 @@ $(document).ready(function(){initNavTree('classhal_1_1_cli_extension_interface.h
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="cli__extension__interface_8h_source.html">hal_core/plugin_system/cli_extension_interface.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::CliExtensionInterface:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_cli_extension_interface__inherit__graph.png" border="0" usemap="#ahal_1_1_cli_extension_interface_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_cli_extension_interface_inherit__map" id="ahal_1_1_cli_extension_interface_inherit__map">
-<area shape="rect" title=" " alt="" coords="28,145,217,252"/>
-<area shape="rect" href="classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="28,300,217,407"/>
-<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="5,5,240,97"/>
+<area shape="rect" title=" " alt="" coords="340,145,529,252"/>
+<area shape="rect" href="classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="5,307,195,414"/>
+<area shape="rect" href="classhal_1_1_cli_extension_python_shell.html" title=" " alt="" coords="219,300,435,421"/>
+<area shape="rect" href="classhal_1_1_cli_extensions_gui.html" title=" " alt="" coords="459,300,627,421"/>
+<area shape="rect" href="classhal_1_1_cli_extensions_perf_test.html" title=" " alt="" coords="651,307,842,414"/>
+<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="317,5,552,97"/>
 </map>
 </div>
 <div class="dynheader">
@@ -126,8 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751b42cfec9354dc5d576a207557229e inherit pub_methods_classhal_1_1_abstract_extension_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="cli__extension__interface_8h_source.html#l00032">32</a> of file <a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a>.</p>
+<div class="textblock"><p>A plugin extension that adds a command line interface to a plugin. It declares the options that the plugin accepts and provides the entry point that is called when one of them is used. </p>
+
+<p class="definition">Definition at line <a class="el" href="cli__extension__interface_8h_source.html#l00036">36</a> of file <a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a03fd979987ab178c8aa5d2bfaf7adaca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a03fd979987ab178c8aa5d2bfaf7adaca">&#9670;&nbsp;</a></span>CliExtensionInterface()</h2>
@@ -152,7 +158,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="cli__extension__interface_8h_source.html#l00035">35</a> of file <a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="cli__extension__interface_8h_source.html#l00039">39</a> of file <a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a>.</p>
 
 </div>
 </div>
@@ -182,7 +188,7 @@ Public Member Functions</h2></td></tr>
 <p>Returns command line interface options</p>
 <dl class="section return"><dt>Returns</dt><dd>The program options description. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_cli_extension_dataflow.html#ae219a740812f153be5fa2df859c4bf0d">hal::CliExtensionDataflow</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_cli_extension_python_shell.html#a05f3cae68009728b3d9adc8b96750335">hal::CliExtensionPythonShell</a>, <a class="el" href="classhal_1_1_cli_extensions_perf_test.html#a80ce013db3c034d282705630f15cba23">hal::CliExtensionsPerfTest</a>, <a class="el" href="classhal_1_1_cli_extensions_gui.html#a6373a5dfd5c794d14433b2b65fe39ff0">hal::CliExtensionsGui</a>, and <a class="el" href="classhal_1_1_cli_extension_dataflow.html#ae219a740812f153be5fa2df859c4bf0d">hal::CliExtensionDataflow</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
 
@@ -229,14 +235,14 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_cli_extension_dataflow.html#a0b4f2dac46ce9a475a4076d8b67e77ca">hal::CliExtensionDataflow</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_cli_extension_dataflow.html#a0b4f2dac46ce9a475a4076d8b67e77ca">hal::CliExtensionDataflow</a>, <a class="el" href="classhal_1_1_cli_extension_python_shell.html#a22879b854b1476c9359d135d87cbdefc">hal::CliExtensionPythonShell</a>, <a class="el" href="classhal_1_1_cli_extensions_gui.html#a4ebada5a634eedca7e48cc3ff9f9756d">hal::CliExtensionsGui</a>, and <a class="el" href="classhal_1_1_cli_extensions_perf_test.html#aaa773c037a97423399d3b7dca7c9df50">hal::CliExtensionsPerfTest</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/plugin_system/<a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a></li>
+<li>include/hal_core/plugin_system/<a class="el" href="cli__extension__interface_8h_source.html">cli_extension_interface.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -244,7 +250,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_cli_extension_interface.html">CliExtensionInterface</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

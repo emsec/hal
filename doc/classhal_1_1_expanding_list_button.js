@@ -15,9 +15,5 @@ var classhal_1_1_expanding_list_button =
     [ "setIconStyle", "classhal_1_1_expanding_list_button.html#a42913a11de423a54caf29fc063ad9679", null ],
     [ "setSelected", "classhal_1_1_expanding_list_button.html#a06f2797f7fc177bc7e353481952cf6b7", null ],
     [ "setText", "classhal_1_1_expanding_list_button.html#a9c1583606e5897d4b052469ccbc0eebf", null ],
-    [ "text", "classhal_1_1_expanding_list_button.html#a38a3e11b7e4d7f93d41339d8dca1136c", null ],
-    [ "hover", "classhal_1_1_expanding_list_button.html#aadee1ae499cc2e50f598d96220a39611", null ],
-    [ "iconStyle", "classhal_1_1_expanding_list_button.html#a6da932428e095e768d3a0b51787af046", null ],
-    [ "level", "classhal_1_1_expanding_list_button.html#afcd8efbfba28bb3592233642003025c3", null ],
-    [ "selected", "classhal_1_1_expanding_list_button.html#a0dee28b46b13de71b977e716aced51b8", null ]
+    [ "text", "classhal_1_1_expanding_list_button.html#a38a3e11b7e4d7f93d41339d8dca1136c", null ]
 ];

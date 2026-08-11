@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/channel_manager/channel_model.cpp Source File</title>
+<title>HAL: plugins/gui/src/channel_manager/channel_model.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -115,7 +117,7 @@ $(document).ready(function(){initNavTree('channel__model_8cpp_source.html',''); 
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> &amp;s_model;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    }</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">   30</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">ChannelModel::data</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index, <span class="keywordtype">int</span> role)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">   30</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_channel_model.html#a66b5bc857f732ddb6e2a149876a4eaf2">ChannelModel::data</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, <span class="keywordtype">int</span> role)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classhal_1_1_channel_model.html#a7cd59be3d3f99b53ea9b6489eeeebd33">index</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">isValid</a>())</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>();</div>
@@ -127,7 +129,7 @@ $(document).ready(function(){initNavTree('channel__model_8cpp_source.html',''); 
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> item-&gt;<a class="code" href="classhal_1_1_channel_item.html#aa59eb69d0a7c4bba2740c2b3c4553403">name</a>();</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae">   42</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemFlags</a> <a class="code" href="classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae">ChannelModel::flags</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae">   42</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#ItemFlag-enum">Qt::ItemFlags</a> <a class="code" href="classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae">ChannelModel::flags</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classhal_1_1_channel_model.html#a7cd59be3d3f99b53ea9b6489eeeebd33">index</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">isValid</a>())</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">return</span> 0;</div>
@@ -297,8 +299,9 @@ $(document).ready(function(){initNavTree('channel__model_8cpp_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_log_manager_html_ad7f16741dd004b289a2d353b9d2e56f8"><div class="ttname"><a href="classhal_1_1_log_manager.html#ad7f16741dd004b289a2d353b9d2e56f8">hal::LogManager::get_gui_callback</a></div><div class="ttdeci">CallbackHook&lt; void(const spdlog::level::level_enum &amp;, const std::string &amp;, const std::string &amp;)&gt; &amp; get_gui_callback()</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00431">log.cpp:431</a></div></div>
 <div class="ttc" id="aclasshal_1_1_log_manager_html_af1c1ea487f46dea99bc09d5286b8be37"><div class="ttname"><a href="classhal_1_1_log_manager.html#af1c1ea487f46dea99bc09d5286b8be37">hal::LogManager::get_instance</a></div><div class="ttdeci">static LogManager * get_instance(const std::filesystem::path &amp;file_name=&quot;&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="utilities_2log_8cpp_source.html#l00061">log.cpp:61</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqabstractitemmodel_html_beginInsertRows"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">QAbstractItemModel::beginInsertRows</a></div><div class="ttdeci">void beginInsertRows(const QModelIndex &amp;parent, int first, int last)</div></div>
 <div class="ttc" id="aqabstractitemmodel_html_beginRemoveRows"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows</a></div><div class="ttdeci">void beginRemoveRows(const QModelIndex &amp;parent, int first, int last)</div></div>
 <div class="ttc" id="aqabstractitemmodel_html_createIndex"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex</a></div><div class="ttdeci">QModelIndex createIndex(int row, int column, void *ptr) const const</div></div>
@@ -327,7 +330,7 @@ $(document).ready(function(){initNavTree('channel__model_8cpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_473c6ace55deaa3175b28cb9bb76a481.html">channel_manager</a></li><li class="navelem"><a class="el" href="channel__model_8cpp.html">channel_model.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

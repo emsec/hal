@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_grouping_table_entry.html
 <p>An entry within a <a class="el" href="classhal_1_1_grouping_table_model.html" title="Table that holds information about all groupings.">GroupingTableModel</a>.  
  <a href="classhal_1_1_grouping_table_entry.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="grouping__table__model_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/grouping/grouping_table_model.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::GroupingTableEntry:</div>
 <div class="dyncontent">
@@ -107,11 +109,11 @@ Collaboration diagram for hal::GroupingTableEntry:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae620437a3a81bef2b83bba661054135e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">GroupingTableEntry</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;n)</td></tr>
 <tr class="separator:ae620437a3a81bef2b83bba661054135e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a7b41bbacfe16d7cce06e07aa9ac903"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#a5a7b41bbacfe16d7cce06e07aa9ac903">GroupingTableEntry</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> existingId)</td></tr>
+<tr class="memitem:a5a7b41bbacfe16d7cce06e07aa9ac903"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#a5a7b41bbacfe16d7cce06e07aa9ac903">GroupingTableEntry</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> existingId)</td></tr>
 <tr class="separator:a5a7b41bbacfe16d7cce06e07aa9ac903"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37d49df1d50dc47ef28cc039bd29a18a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#a37d49df1d50dc47ef28cc039bd29a18a">GroupingTableEntry</a> (<a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp)</td></tr>
 <tr class="separator:a37d49df1d50dc47ef28cc039bd29a18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecb836980aa746e5c0dcdf73f8009b7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#aecb836980aa746e5c0dcdf73f8009b7c">id</a> () const</td></tr>
+<tr class="memitem:aecb836980aa746e5c0dcdf73f8009b7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#aecb836980aa746e5c0dcdf73f8009b7c">id</a> () const</td></tr>
 <tr class="separator:aecb836980aa746e5c0dcdf73f8009b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac043abd22acc805a0d12739882f8bf9d"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_table_entry.html#ac043abd22acc805a0d12739882f8bf9d">name</a> () const</td></tr>
 <tr class="separator:ac043abd22acc805a0d12739882f8bf9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,7 +158,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="grouping__table__model_8cpp_source.html#l00016">16</a> of file <a class="el" href="grouping__table__model_8cpp_source.html">grouping_table_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00671">hal::Netlist::create_grouping()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00671">hal::Netlist::create_grouping()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
 </div>
 </div>
@@ -169,7 +171,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">hal::GroupingTableEntry::GroupingTableEntry </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>existingId</em></td><td>)</td>
           <td></td>
         </tr>
@@ -186,7 +188,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="grouping__table__model_8cpp_source.html#l00022">22</a> of file <a class="el" href="grouping__table__model_8cpp_source.html">grouping_table_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00691">hal::Netlist::get_grouping_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00691">hal::Netlist::get_grouping_by_id()</a>, and <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>.</p>
 
 </div>
 </div>
@@ -218,12 +220,11 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">grp</td><td>- The grouping to represent </td></tr>
-    <tr><td class="paramname">c</td><td>- The color of the grouping </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="grouping__table__model_8h_source.html#l00075">75</a> of file <a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="grouping__table__model_8h_source.html#l00074">74</a> of file <a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a>.</p>
 
 </div>
 </div>
@@ -278,7 +279,7 @@ Public Member Functions</h2></td></tr>
 <p>Accesses the grouping this entry represents.</p>
 <dl class="section return"><dt>Returns</dt><dd>the grouping </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="grouping__table__model_8h_source.html#l00118">118</a> of file <a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="grouping__table__model_8h_source.html#l00117">117</a> of file <a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00212">hal::GroupingTableModel::addDefaultEntry()</a>, and <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>.</p>
 
@@ -291,7 +292,7 @@ Public Member Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GroupingTableEntry::id </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GroupingTableEntry::id </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -388,13 +389,13 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="grouping__table__model_8cpp_source.html#l00046">46</a> of file <a class="el" href="grouping__table__model_8cpp_source.html">grouping_table_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>, and <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00027">hal::Grouping::set_name()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00027">hal::Grouping::set_name()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/grouping/<a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/grouping/<a class="el" href="grouping__table__model_8cpp_source.html">grouping_table_model.cpp</a></li>
+<li>plugins/gui/include/gui/grouping/<a class="el" href="grouping__table__model_8h_source.html">grouping_table_model.h</a></li>
+<li>plugins/gui/src/grouping/<a class="el" href="grouping__table__model_8cpp_source.html">grouping_table_model.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -402,7 +403,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_grouping_table_entry.html">GroupingTableEntry</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

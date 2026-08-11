@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/netlist/netlist_writer/netlist_writer.h Source File</title>
+<title>HAL: include/hal_core/netlist/netlist_writer/netlist_writer.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -123,33 +125,32 @@ $(document).ready(function(){initNavTree('netlist__writer_8h_source.html',''); i
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">/* forward declaration*/</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">class </span>Netlist;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html">   41</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_writer.html">NetlistWriter</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">   44</a></span>&#160;        <a class="code" href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">NetlistWriter</a>()          = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da">   45</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da">~NetlistWriter</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">   54</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> <a class="code" href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">write</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, <span class="keyword">const</span> std::filesystem::path&amp; file_path) = 0;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html">   44</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_writer.html">NetlistWriter</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">   47</a></span>&#160;        <a class="code" href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">NetlistWriter</a>()          = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da">   48</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da">~NetlistWriter</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">   57</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> <a class="code" href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">write</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <span class="keyword">const</span> std::filesystem::path&amp; file_path) = 0;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    };</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00030">arch_linux.h:30</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:56</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_writer_html"><div class="ttname"><a href="classhal_1_1_netlist_writer.html">hal::NetlistWriter</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__writer_8h_source.html#l00041">netlist_writer.h:42</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_writer_html"><div class="ttname"><a href="classhal_1_1_netlist_writer.html">hal::NetlistWriter</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__writer_8h_source.html#l00044">netlist_writer.h:45</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_writer_html_a145a1be44dddd25fd30f3d7d34007e9e"><div class="ttname"><a href="classhal_1_1_netlist_writer.html#a145a1be44dddd25fd30f3d7d34007e9e">hal::NetlistWriter::write</a></div><div class="ttdeci">virtual Result&lt; std::monostate &gt; write(Netlist *netlist, const std::filesystem::path &amp;file_path)=0</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_writer_html_a3f9c6797526b4848681da7ac8bcd4818"><div class="ttname"><a href="classhal_1_1_netlist_writer.html#a3f9c6797526b4848681da7ac8bcd4818">hal::NetlistWriter::NetlistWriter</a></div><div class="ttdeci">NetlistWriter()=default</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_writer_html_a50d8c5cb49c9fc13a3873b6ca53e69da"><div class="ttname"><a href="classhal_1_1_netlist_writer.html#a50d8c5cb49c9fc13a3873b6ca53e69da">hal::NetlistWriter::~NetlistWriter</a></div><div class="ttdeci">virtual ~NetlistWriter()=default</div></div>
-<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00063">result.h:64</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00070">result.h:71</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html">result.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00027">test_multiple.py:27</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_e38d30ad5fdfbbbb9f510436ddb9cdb4.html">netlist_writer</a></li><li class="navelem"><a class="el" href="netlist__writer_8h.html">netlist_writer.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,9 +1,9 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_compound.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_compound.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="119,5,299,76"/>
-<area shape="rect" id="node2" href="$user__action__compound_8h.html" title=" " alt="" coords="35,124,191,165"/>
-<area shape="rect" id="node5" href="$layout__locker_8h.html" title=" " alt="" coords="216,124,395,165"/>
-<area shape="rect" id="node3" href="$user__action_8h.html" title=" " alt="" coords="5,213,115,240"/>
-<area shape="rect" id="node4" title=" " alt="" coords="139,213,194,240"/>
-<area shape="rect" id="node6" title=" " alt="" coords="248,213,301,240"/>
-<area shape="rect" id="node7" href="$defines_8h.html" title=" " alt="" coords="326,213,466,240"/>
+<map id="plugins/gui/src/user_action/user_action_compound.cpp" name="plugins/gui/src/user_action/user_action_compound.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="84,5,335,47"/>
+<area shape="rect" id="node2" href="$user__action__compound_8h.html" title=" " alt="" coords="35,95,191,136"/>
+<area shape="rect" id="node5" href="$layout__locker_8h.html" title=" " alt="" coords="216,95,395,136"/>
+<area shape="rect" id="node3" href="$user__action_8h.html" title=" " alt="" coords="5,184,115,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="139,184,194,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="248,184,301,211"/>
+<area shape="rect" id="node7" href="$defines_8h.html" title=" " alt="" coords="326,184,466,211"/>
 </map>

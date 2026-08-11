@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/user_action/user_action.cpp Source File</title>
+<title>HAL: plugins/gui/src/user_action/user_action.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -138,7 +140,7 @@ $(document).ready(function(){initNavTree('user__action_8cpp_source.html',''); in
 <div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_user_action.html#a8b5381839b1a0dd3dfaa508e9120f1f0">   50</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_user_action.html#a8b5381839b1a0dd3dfaa508e9120f1f0">UserAction::setToText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> &amp;set)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> retval;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> : <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#ab82c4a0c8d16239d7759e7daf5784ea9">set</a>)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span> : <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">set</a>)</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <span class="keywordflow">if</span> (!retval.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>()) retval += <span class="charliteral">&#39;,&#39;</span>;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            retval += <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number</a>(<span class="keywordtype">id</span>);</div>
@@ -149,8 +151,8 @@ $(document).ready(function(){initNavTree('user__action_8cpp_source.html',''); in
 <div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classhal_1_1_user_action.html#aac8393ba15248d9da8a315256cb88860">   61</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> <a class="code" href="classhal_1_1_user_action.html#aac8393ba15248d9da8a315256cb88860">UserAction::setFromText</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; s)</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    {</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> retval;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">for</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> x : s.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring-obsolete.html#split-1">split</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(<span class="charliteral">&#39;,&#39;</span>)))</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            retval.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(x.toInt());</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">for</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="netlist__preprocessing_8cpp.html#a04498d52117f705673d513847d9e0e6b">x</a> : s.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring-obsolete.html#split-1">split</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(<span class="charliteral">&#39;,&#39;</span>)))</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            retval.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="netlist__preprocessing_8cpp.html#a04498d52117f705673d513847d9e0e6b">x</a>.toInt());</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">return</span> retval;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
@@ -277,11 +279,12 @@ $(document).ready(function(){initNavTree('user__action_8cpp_source.html',''); in
 <div class="ttc" id="aclasshal_1_1_user_action_object_html_aa49b775a9eccd8f261b2ec2a2713bfca"><div class="ttname"><a href="classhal_1_1_user_action_object.html#aa49b775a9eccd8f261b2ec2a2713bfca">hal::UserActionObject::debugDump</a></div><div class="ttdeci">QString debugDump() const</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8cpp_source.html#l00097">user_action_object.cpp:97</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_object_html_acf15334af2fe764397770e03085e7b87"><div class="ttname"><a href="classhal_1_1_user_action_object.html#acf15334af2fe764397770e03085e7b87">hal::UserActionObject::type</a></div><div class="ttdeci">UserActionObjectType::ObjectType type() const</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8h_source.html#l00107">user_action_object.h:107</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_object_type_html_a2de00e63df4cf86816f688fad6754d79a346d187418673823318b04bb3a4b0d1d"><div class="ttname"><a href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a346d187418673823318b04bb3a4b0d1d">hal::UserActionObjectType::None</a></div><div class="ttdeci">@ None</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8h_source.html#l00050">user_action_object.h:50</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a4fac8393f1437113df74c148fdd8889d"><div class="ttname"><a href="namespacehal.html#a4fac8393f1437113df74c148fdd8889d">hal::gFileStatusManager</a></div><div class="ttdeci">FileStatusManager * gFileStatusManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00084">plugin_gui.cpp:84</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
-<div class="ttc" id="aplugins_2gui_2_c_make_lists_8txt_html_ab82c4a0c8d16239d7759e7daf5784ea9"><div class="ttname"><a href="plugins_2gui_2_c_make_lists_8txt.html#ab82c4a0c8d16239d7759e7daf5784ea9">set</a></div><div class="ttdeci">include set(SRCROOT ${CMAKE_CURRENT_SOURCE_DIR}/src) set(UIROOT $</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2gui_2_c_make_lists_8txt_source.html#l00045">CMakeLists.txt:45</a></div></div>
+<div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::PinType::set</a></div><div class="ttdeci">@ set</div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_a04498d52117f705673d513847d9e0e6b"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a04498d52117f705673d513847d9e0e6b">x</a></div><div class="ttdeci">u64 x</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l02204">netlist_preprocessing.cpp:2204</a></div></div>
 <div class="ttc" id="aqbytearray_html_toHex"><div class="ttname"><a href="https://doc.qt.io/qt-5/qbytearray.html#toHex">QByteArray::toHex</a></div><div class="ttdeci">QByteArray toHex() const const</div></div>
 <div class="ttc" id="aqchar_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qchar.html">QChar</a></div></div>
 <div class="ttc" id="aqcryptographichash_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcryptographichash.html">QCryptographicHash</a></div></div>
@@ -318,7 +321,7 @@ $(document).ready(function(){initNavTree('user__action_8cpp_source.html',''); in
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_5e8fab963b6d7d6d8891b5cad4f241a7.html">user_action</a></li><li class="navelem"><a class="el" href="user__action_8cpp.html">user_action.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['max_5fchannel_5fentires_41388',['MAX_CHANNEL_ENTIRES',['../channel__item_8cpp.html#adb305243e2213b319240e3f98afd7142',1,'channel_item.cpp']]],
-  ['max_5ftemp_5fchannels_41389',['MAX_TEMP_CHANNELS',['../channel__model_8cpp.html#a405a1573a8f433b0df87f28e4cfd0401',1,'channel_model.cpp']]],
-  ['measure_5fblock_5ftime_41390',['measure_block_time',['../timing__utils_8h.html#a3660b31540d5b2f2fb7f3b750aaf3549',1,'timing_utils.h']]],
-  ['merge_5f_41391',['MERGE_',['../timing__utils_8h.html#a5e0ed544eb8b857620dfc3b912710fb8',1,'timing_utils.h']]]
+  ['label_5f_44194',['LABEL_',['../timing__utils_8h.html#af36adc407b65851bc28fd14fa37ed4f0',1,'timing_utils.h']]],
+  ['library_5ffile_5fextension_44195',['LIBRARY_FILE_EXTENSION',['../arch__linux_8h.html#a8482578c5c42538609e6e0abedcfc132',1,'LIBRARY_FILE_EXTENSION():&#160;arch_linux.h'],['../arch__mac_8h.html#a8482578c5c42538609e6e0abedcfc132',1,'LIBRARY_FILE_EXTENSION():&#160;arch_mac.h'],['../arch__win_8h.html#a8482578c5c42538609e6e0abedcfc132',1,'LIBRARY_FILE_EXTENSION():&#160;arch_win.h']]],
+  ['log_5fchannel_44196',['LOG_CHANNEL',['../log_8h.html#ab459fae788a7a0b6e60d70c6bb53a5d2',1,'log.h']]]
 ];

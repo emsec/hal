@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Module &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -15,8 +15,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Module Pin" href="module_pin.html" />
-    <link rel="prev" title="Grouping" href="grouping.html" /> 
+    <link rel="next" title="Module Base Pin" href="module_base_pin.html" />
+    <link rel="prev" title="Log Manager" href="log_manager.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -190,7 +196,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Module.contains_module">
-<span class="sig-name descname"><span class="pre">contains_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">recusive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Module.contains_module" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">contains_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Module.contains_module" title="Permalink to this definition"></a></dt>
 <dd><p>Checks whether another module is a submodule of this module.
 If recursive is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, all indirect submodules are also included.</p>
 <dl class="field-list simple">
@@ -237,9 +243,9 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <ol class="arabic">
 <li><p>create_pin(self: hal_py.Module, id: int, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True, force_name: bool = False) -&gt; hal_py.ModulePin</p>
 <blockquote>
-<div><p>Manually assign a module pin to a net.
+<div><p>Manually create a module pin and assign it to a net.
 Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_net</span></code>.
+Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_nets</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">create_group</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the pin will not be added to a pin group.</p>
 <p>WARNING: can only be used when automatic net checks have been disabled using <code class="docutils literal notranslate"><span class="pre">hal_py.Netlist.enable_automatic_net_checks</span></code>.</p>
 <dl class="field-list simple">
@@ -259,7 +265,7 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt class="field-even">param bool force_name</dt>
-<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 <dt class="field-odd">returns</dt>
 <dd class="field-odd"><p>The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -272,10 +278,10 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 </li>
 <li><p>create_pin(self: hal_py.Module, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True, force_name: bool = False) -&gt; hal_py.ModulePin</p>
 <blockquote>
-<div><p>Manually assign a module pin to a net.
+<div><p>Manually create a module pin and assign it to a net.
 The ID of the pin is set automatically.
 Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_net</span></code>.
+Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_nets</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">create_group</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the pin will not be added to a pin group.</p>
 <p>WARNING: can only be used when automatic net checks have been disabled using <code class="docutils literal notranslate"><span class="pre">hal_py.Netlist.enable_automatic_net_checks</span></code>.</p>
 <dl class="field-list simple">
@@ -292,7 +298,7 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 </dd>
 <dt class="field-odd">param bool force_name</dt>
-<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -376,7 +382,7 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dd class="field-even"><p>The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
 </dd>
 <dt class="field-odd">param bool delete_empty_groups</dt>
-<dd class="field-odd"><p>Set <cite>True`</cite> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dd class="field-odd"><p>Set <code class="docutils literal notranslate"><span class="pre">True`</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">`False`</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">`True`</span></code>.</p>
 </dd>
 <dt class="field-even">param bool force_name</dt>
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
@@ -411,13 +417,13 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -460,7 +466,7 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
@@ -500,7 +506,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The gate if found, None otherwise.</p>
+<dd class="field-even"><p>The gate if found, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
@@ -750,7 +756,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <dt class="sig sig-object py" id="hal_py.Module.get_parent_module">
 <span class="sig-name descname"><span class="pre">get_parent_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></span><a class="headerlink" href="#hal_py.Module.get_parent_module" title="Permalink to this definition"></a></dt>
 <dd><p>Get the parent module of this module.
-For the top module, None is returned.</p>
+For the top module, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The parent module.</p>
@@ -899,7 +905,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>An ordered list of pins.</p>
+<dd class="field-odd"><p>An ordered list of pin names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
@@ -910,14 +916,14 @@ The optional filter is evaluated on every candidate such that the result only co
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Module.get_pins">
 <span class="sig-name descname"><span class="pre">get_pins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><span class="pre">hal_py.ModulePin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><span class="pre">hal_py.ModulePin</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.Module.get_pins" title="Permalink to this definition"></a></dt>
-<dd><p>Get the (ordered) pins of the module.
+<dd><p>Get an ordered list of all pins of the module.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of pins.</p>
+<dd class="field-even"><p>An ordered list of pins.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a>]</p>
@@ -1012,12 +1018,12 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the entry exists, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the entry exists, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1165,13 +1171,16 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the module is a submodule of the specified module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Module.is_top_module">
 <span class="sig-name descname"><span class="pre">is_top_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Module.is_top_module" title="Permalink to this definition"></a></dt>
-<dd><p>Returns true only if the module is the top module of the netlist.</p>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> only if the module is the top module of the netlist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the module is the top module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
@@ -1295,7 +1304,7 @@ The indices of some other pins within the group will be incremented or decrement
 <dt class="sig sig-object py" id="hal_py.Module.parent_module">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent_module</span></span><a class="headerlink" href="#hal_py.Module.parent_module" title="Permalink to this definition"></a></dt>
 <dd><p>The parent module of this module.
-Is set to None for the top module, but cannot be set to None by the user.</p>
+Is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for the top module, but cannot be set to <code class="docutils literal notranslate"><span class="pre">None</span></code> by the user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#hal_py.Module" title="hal_py.Module">hal_py.Module</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
@@ -1413,7 +1422,7 @@ May overwrite an existing entry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data type.</p></li>
 <li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data value.</p></li>
@@ -1421,7 +1430,7 @@ May overwrite an existing entry.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1528,7 +1537,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin.</p></li>
 <li><p><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name to be assigned to the pin.</p></li>
-<li><p><strong>force_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>force_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1596,7 +1605,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <dl class="py property">
 <dt class="sig sig-object py" id="hal_py.Module.top_module">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top_module</span></span><a class="headerlink" href="#hal_py.Module.top_module" title="Permalink to this definition"></a></dt>
-<dd><p>True only if the module is the top module of the netlist.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> only if the module is the top module of the netlist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1621,14 +1630,6 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <dd><p>Iterates over all nets connected to at least one gate of the module to update the nets, internal nets, input nets, and output nets of the module.
 Has no effect on module pins.</p>
 <p>WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1639,8 +1640,8 @@ Has no effect on module pins.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="grouping.html" class="btn btn-neutral float-left" title="Grouping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="module_pin.html" class="btn btn-neutral float-right" title="Module Pin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="log_manager.html" class="btn btn-neutral float-left" title="Log Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="module_base_pin.html" class="btn btn-neutral float-right" title="Module Base Pin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

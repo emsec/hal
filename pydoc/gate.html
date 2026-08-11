@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Gate &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -15,7 +15,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gate Library" href="gate_library.html" />
+    <link rel="next" title="Gate Base Pin" href="gate_base_pin.html" />
     <link rel="prev" title="Endpoint" href="endpoint.html" /> 
 </head>
 
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -121,7 +127,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -158,13 +164,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -241,7 +247,7 @@ This name can for example be an output pin of the gate or any other user-defined
 <li><p>get_boolean_function(self: hal_py.Gate, pin: hal_py.GatePin = None) -&gt; hal::BooleanFunction</p>
 <blockquote>
 <div><p>Get the Boolean function corresponding to the given output pin.
-If pin is None, the Boolean function of the first output pin is returned.</p>
+If pin is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the Boolean function of the first output pin is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.GatePin pin</dt>
 <dd class="field-odd"><p>The pin.</p>
@@ -261,13 +267,13 @@ If pin is None, the Boolean function of the first output pin is returned.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.Gate.get_boolean_functions">
 <span class="sig-name descname"><span class="pre">get_boolean_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_custom_functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict[str,</span> <span class="pre">hal::BooleanFunction]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_boolean_functions" title="Permalink to this definition"></a></dt>
-<dd><p>Get a dictionary from function name to Boolean function for all boolean functions associated with this gate.</p>
+<dd><p>Get a dict from function name to Boolean function for all boolean functions associated with this gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>only_custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – If true, this returns only the functions which were set via <a class="reference internal" href="#hal_py.Gate.add_boolean_function" title="hal_py.Gate.add_boolean_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_boolean_function()</span></code></a>.</p>
+<dd class="field-odd"><p><strong>only_custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get only Boolean functions that are local to the gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A map from function name to function.</p>
+<dd class="field-even"><p>A dict from function name to function on success, an empty dict otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]</p>
@@ -282,7 +288,7 @@ If pin is None, the Boolean function of the first output pin is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
@@ -322,7 +328,7 @@ If pin is None, the Boolean function of the first output pin is returned.</p>
 <dd class="field-odd"><p>The input pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -338,7 +344,7 @@ If pin is None, the Boolean function of the first output pin is returned.</p>
 <dd class="field-odd"><p>The input pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -354,7 +360,7 @@ If pin is None, the Boolean function of the first output pin is returned.</p>
 <dd class="field-odd"><p>The input net.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -416,7 +422,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The input pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The fan-in net on success, None otherwise.</p>
+<dd class="field-even"><p>The fan-in net on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Net or None</p>
@@ -432,7 +438,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The input pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The fan-in net on success, None otherwise.</p>
+<dd class="field-even"><p>The fan-in net on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Net or None</p>
@@ -494,7 +500,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The output pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -510,7 +516,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The output pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -526,7 +532,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The output net.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -588,7 +594,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The output pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The fan-out net on success, None otherwise.</p>
+<dd class="field-even"><p>The fan-out net on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Net or None</p>
@@ -604,7 +610,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dd class="field-odd"><p>The output pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The fan-out net on success, None otherwise.</p>
+<dd class="field-even"><p>The fan-out net on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Net or None</p>
@@ -657,7 +663,7 @@ The filter is evaluated on every candidate such that the result only contains th
 <dt class="sig sig-object py" id="hal_py.Gate.get_grouping">
 <span class="sig-name descname"><span class="pre">get_grouping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Grouping</span></span></span><a class="headerlink" href="#hal_py.Gate.get_grouping" title="Permalink to this definition"></a></dt>
 <dd><p>Gets the grouping in which this gate is contained.
-If no grouping contains this gate, <em>None</em> is returned.</p>
+If no grouping contains this gate, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The grouping.</p>
@@ -676,7 +682,7 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The unique id.</p>
 </dd>
-<dt class="field-even">Type</dt>
+<dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
@@ -760,13 +766,13 @@ If no valid physical location y-coordinate is assigned, a negative value is retu
 <dt class="sig sig-object py" id="hal_py.Gate.get_modules">
 <span class="sig-name descname"><span class="pre">get_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.Gate,</span> <span class="pre">filter:</span> <span class="pre">Callable[[hal::Module],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">recursive:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List[hal::Module]</span></span></span><a class="headerlink" href="#hal_py.Gate.get_modules" title="Permalink to this definition"></a></dt>
 <dd><p>Get all modules that contain this gate, either directly or as parent of another module.
-If recursive is set to True, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
+If recursive is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filter</strong> (<em>lambda</em>) – An optional filter.</p></li>
-<li><p><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set True to include indirect parents as well, False otherwise.</p></li>
+<li><p><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to include indirect parents as well, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -820,7 +826,7 @@ Fails if there are no or more than one predecessors.</p>
 <dd class="field-odd"><p>The input pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The predecessor endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The predecessor endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -837,7 +843,7 @@ Fails if there are no or more than one predecessors.</p>
 <dd class="field-odd"><p>The input pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The predecessor endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The predecessor endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -858,7 +864,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s input pin as well as the predecessor endpoint.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of predecessors endpoints.</p>
+<dd class="field-even"><p>A list of predecessor endpoints.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="endpoint.html#hal_py.Endpoint" title="hal_py.Endpoint">hal_py.Endpoint</a>]</p>
@@ -901,7 +907,7 @@ Fails if there are no or more than one successors.</p>
 <dd class="field-odd"><p>The output pin name.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The successor endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The successor endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -918,7 +924,7 @@ Fails if there are no or more than one successors.</p>
 <dd class="field-odd"><p>The output pin.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>The successor endpoint on success, None otherwise.</p>
+<dd class="field-even"><p>The successor endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>hal_py.Endpoint or None</p>
@@ -953,7 +959,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>Get the type of the gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The gate’s type.</p>
+<dd class="field-odd"><p>The type.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>hal_py.Gate_type</p>
@@ -971,7 +977,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s input pin as well as the predecessor endpoint.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of unique predecessors endpoints.</p>
+<dd class="field-even"><p>A list of unique predecessor gates.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
@@ -989,7 +995,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter being evaluated on the gate’s output pin as well as the successor endpoint.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of unique successor endpoints.</p>
+<dd class="field-even"><p>A list of unique successor gates.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
@@ -1004,12 +1010,12 @@ The optional filter is evaluated on every candidate such that the result only co
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the entry exists, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the entry exists, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1023,7 +1029,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>Checks whether the gate’s location in the layout is available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if valid location data is available, false otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if valid location data is available, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1051,7 +1057,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the net is a fan-in of the gate, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is a fan-in of the gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1068,7 +1074,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the net is a fan-out of the gate, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is a fan-out of the gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1082,7 +1088,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>Checks whether this gate is a global gnd gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the gate is a global gnd gate, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate is a global gnd gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1096,7 +1102,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd><p>Checks whether this gate is a global vcc gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the gate is a global vcc gate, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate is a global vcc gate, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1145,7 +1151,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <dd><p>Mark this gate as a global gnd gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1159,7 +1165,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <dd><p>Mark this gate as a global vcc gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1230,7 +1236,7 @@ May overwrite an existing entry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data type.</p></li>
 <li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data value.</p></li>
@@ -1238,7 +1244,7 @@ May overwrite an existing entry.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1256,7 +1262,7 @@ An error is returned in case the gate does not hold any INIT data.</p>
 <dd class="field-odd"><p><strong>init_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – The INIT data as a list.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1361,7 +1367,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <dd><p>Unmark this gate as a global gnd gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1375,7 +1381,7 @@ Only positive values are valid, negative values will be regarded as no location 
 <dd><p>Unmark this gate as a global vcc gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -1392,7 +1398,7 @@ Only positive values are valid, negative values will be regarded as no location 
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="endpoint.html" class="btn btn-neutral float-left" title="Endpoint" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="gate_library.html" class="btn btn-neutral float-right" title="Gate Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gate_base_pin.html" class="btn btn-neutral float-right" title="Gate Base Pin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

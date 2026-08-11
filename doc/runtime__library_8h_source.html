@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/plugin_system/runtime_library.h Source File</title>
+<title>HAL: include/hal_core/plugin_system/runtime_library.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -130,33 +132,33 @@ $(document).ready(function(){initNavTree('runtime__library_8h_source.html',''); 
 <div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="namespacehal.html#a974188318f6c3613e6fa1993cea21a1e">   42</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacehal.html#a974188318f6c3613e6fa1993cea21a1e">handle_ptr_t</a> = <span class="keywordtype">void</span>*;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classhal_1_1_runtime_library.html">   48</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a>();</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        ~<a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_runtime_library.html">   50</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a> <a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a>();</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">bool</span> load_library(<span class="keyword">const</span> std::string&amp; file_name);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        std::string get_file_name() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">bool</span> unload_library();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="code" href="namespacehal.html#a618c6a05a78f79aa047ae4309ea75f3a">lib_fn_ptr_t</a> get_function(<span class="keyword">const</span> std::string&amp; function_name);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// stores the file name of the library</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        std::string m_file_name;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="comment">// stores the handle_ptr_t to the library</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="namespacehal.html#a974188318f6c3613e6fa1993cea21a1e">handle_ptr_t</a> m_handle;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    };</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        ~<a class="code" href="classhal_1_1_runtime_library.html">RuntimeLibrary</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">bool</span> load_library(<span class="keyword">const</span> std::string&amp; file_name);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        std::string get_file_name() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordtype">bool</span> unload_library();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <a class="code" href="namespacehal.html#a618c6a05a78f79aa047ae4309ea75f3a">lib_fn_ptr_t</a> get_function(<span class="keyword">const</span> std::string&amp; function_name);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="comment">// stores the file name of the library</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        std::string m_file_name;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="comment">// stores the handle_ptr_t to the library</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="code" href="namespacehal.html#a974188318f6c3613e6fa1993cea21a1e">handle_ptr_t</a> m_handle;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    };</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aarch__linux_8h_html_afea66f9a6812c2354b544f31910fd72f"><div class="ttname"><a href="arch__linux_8h.html#afea66f9a6812c2354b544f31910fd72f">CORE_API</a></div><div class="ttdeci">#define CORE_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00028">arch_linux.h:28</a></div></div>
-<div class="ttc" id="aclasshal_1_1_runtime_library_html"><div class="ttname"><a href="classhal_1_1_runtime_library.html">hal::RuntimeLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="runtime__library_8h_source.html#l00048">runtime_library.h:49</a></div></div>
+<div class="ttc" id="aclasshal_1_1_runtime_library_html"><div class="ttname"><a href="classhal_1_1_runtime_library.html">hal::RuntimeLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="runtime__library_8h_source.html#l00050">runtime_library.h:51</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a618c6a05a78f79aa047ae4309ea75f3a"><div class="ttname"><a href="namespacehal.html#a618c6a05a78f79aa047ae4309ea75f3a">hal::lib_fn_ptr_t</a></div><div class="ttdeci">void(*)() lib_fn_ptr_t</div><div class="ttdef"><b>Definition:</b> <a href="runtime__library_8h_source.html#l00041">runtime_library.h:41</a></div></div>
 <div class="ttc" id="anamespacehal_html_a974188318f6c3613e6fa1993cea21a1e"><div class="ttname"><a href="namespacehal.html#a974188318f6c3613e6fa1993cea21a1e">hal::handle_ptr_t</a></div><div class="ttdeci">void * handle_ptr_t</div><div class="ttdef"><b>Definition:</b> <a href="runtime__library_8h_source.html#l00042">runtime_library.h:42</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -165,7 +167,7 @@ $(document).ready(function(){initNavTree('runtime__library_8h_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="runtime__library_8h.html">runtime_library.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

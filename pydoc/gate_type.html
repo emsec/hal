@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate Type &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Gate Type &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -115,7 +121,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.add_boolean_function">
-<span class="sig-name descname"><span class="pre">add_boolean_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pin_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function:</span> <span class="pre">hal::BooleanFunction</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_function" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_boolean_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.GateType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function:</span> <span class="pre">hal::BooleanFunction</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.GateType.add_boolean_function" title="Permalink to this definition"></a></dt>
 <dd><p>Add a Boolean function with the specified name to the gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -261,7 +267,7 @@ The ID of the pin is set automatically.</p>
 <ol class="arabic">
 <li><p>create_pin_group(self: hal_py.GateType, id: int, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
-<div><p>Create a gate pin group with the given name.</p>
+<div><p>Create a pin group with the given name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param int id</dt>
 <dd class="field-odd"><p>The ID of the pin group.</p>
@@ -298,7 +304,7 @@ The ID of the pin is set automatically.</p>
 </li>
 <li><p>create_pin_group(self: hal_py.GateType, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
-<div><p>Create a gate pin group with the given name.
+<div><p>Create a pin group with the given name.
 The ID of the pin group is set automatically.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param str name</dt>
@@ -387,7 +393,7 @@ This name can for example be an output pin of the gate or any other user-defined
 <li><p>get_boolean_function(self: hal_py.GateType, pin: hal::GatePin = None) -&gt; hal::BooleanFunction</p>
 <blockquote>
 <div><p>Get the Boolean function corresponding to the given output pin.
-If pin is a None, the Boolean function of the first output pin is returned.</p>
+If pin is a <code class="docutils literal notranslate"><span class="pre">None</span></code>, the Boolean function of the first output pin is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.GatePin pin</dt>
 <dd class="field-odd"><p>The pin.</p>
@@ -422,13 +428,13 @@ If pin is a None, the Boolean function of the first output pin is returned.</p>
 <dt class="sig sig-object py" id="hal_py.GateType.get_component">
 <span class="sig-name descname"><span class="pre">get_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self:</span> <span class="pre">hal_py.GateType,</span> <span class="pre">filter:</span> <span class="pre">Callable[[hal::GateTypeComponent],</span> <span class="pre">bool]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GateTypeComponent</span></span></span><a class="headerlink" href="#hal_py.GateType.get_component" title="Permalink to this definition"></a></dt>
 <dd><p>Get a single component matching the filter condition (if provided).
-Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
+Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filter</strong> (<em>lambda</em>) – The filter applied to all candidate components.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The component or None.</p>
+<dd class="field-even"><p>The component or <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent" title="hal_py.GateTypeComponent">hal_py.GateTypeComponent</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
@@ -651,7 +657,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-even"><p><strong>filter</strong> (<em>lambda</em>) – An optional filter.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>An ordered list of pins.</p>
+<dd class="field-odd"><p>An ordered list of pin names.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
@@ -714,7 +720,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p><strong>type</strong> (<a class="reference internal" href="gate_type_component.html#hal_py.GateTypeComponent.ComponentType" title="hal_py.GateTypeComponent.ComponentType"><em>hal_py.GateTypeComponent.ComponentType</em></a>) – The component type to check for.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the gate type contains a component of the speciifed type, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate type contains a component of the speciifed type, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -724,14 +730,14 @@ The optional filter is evaluated on every candidate such that the result only co
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GateType.has_property">
-<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">has_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.GateType" title="hal_py.GateType"><span class="pre">hal_py.GateType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><span class="pre">hal_py.GateTypeProperty</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.GateType.has_property" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether the gate type has the specified property.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>type</strong> (<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><em>hal_py.GateTypeProperty</em></a>) – The property to check for.</p>
+<dd class="field-odd"><p><strong>property</strong> (<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty"><em>hal_py.GateTypeProperty</em></a>) – The property to check for.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the gate type has the specified property, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate type has the specified property, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>

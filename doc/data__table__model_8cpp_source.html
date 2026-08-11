@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/data_table_model.cpp Source File</title>
+<title>HAL: plugins/gui/src/selection_details_widget/data_table_model.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -113,7 +115,7 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordflow">return</span> mDataEntries.size();</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">   28</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">DataTableModel::data</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index, <span class="keywordtype">int</span> role)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">   28</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_data_table_model.html#aa40b1c400d113367caf7b5e613dd694f">DataTableModel::data</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, <span class="keywordtype">int</span> role)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="structhal_1_1_data_table_model_1_1_data_entry.html">DataEntry</a> entry = mDataEntries[<a class="codeRef" href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">index</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">row</a>()];</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        RowStyle style = mEntryToRowStyle[<a class="codeRef" href="https://doc.qt.io/qt-5/qpair.html">QPair</a>(entry.<a class="code" href="structhal_1_1_data_table_model_1_1_data_entry.html#af7e68c53d77d4add4fc55e6f415f0378">category</a>, entry.<a class="code" href="structhal_1_1_data_table_model_1_1_data_entry.html#a1597272aee9e50f09ecb40e2b7eb6ee3">key</a>)];</div>
@@ -181,7 +183,7 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>();</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48">   96</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48">DataTableModel::setData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value, <span class="keywordtype">int</span> role)</div>
+<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48">   96</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_data_table_model.html#a27cca4722117c4bc76f2113e0466cb48">DataTableModel::setData</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value, <span class="keywordtype">int</span> role)</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        Q_UNUSED(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">index</a>)</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        Q_UNUSED(<a class="code" href="classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ffa9025fc417d01de26110fe5d21cc1747e">value</a>)</div>
@@ -301,7 +303,8 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div class="ttc" id="aclasshal_1_1_data_table_model_html_ac19f40bce20d0329fc949287117e5ee2"><div class="ttname"><a href="classhal_1_1_data_table_model.html#ac19f40bce20d0329fc949287117e5ee2">hal::DataTableModel::headerData</a></div><div class="ttdeci">QVariant headerData(int section, Qt::Orientation orientation, int role) const override</div><div class="ttdef"><b>Definition:</b> <a href="data__table__model_8cpp_source.html#l00083">data_table_model.cpp:83</a></div></div>
 <div class="ttc" id="aclasshal_1_1_data_table_model_html_afe4127671e9f5045744d961e98679c53"><div class="ttname"><a href="classhal_1_1_data_table_model.html#afe4127671e9f5045744d961e98679c53">hal::DataTableModel::rowCount</a></div><div class="ttdeci">int rowCount(const QModelIndex &amp;parent=QModelIndex()) const override</div><div class="ttdef"><b>Definition:</b> <a href="data__table__model_8cpp_source.html#l00022">data_table_model.cpp:22</a></div></div>
 <div class="ttc" id="adata__table__model_8h_html"><div class="ttname"><a href="data__table__model_8h.html">data_table_model.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="apython__qss__adapter_8h_html"><div class="ttname"><a href="python__qss__adapter_8h.html">python_qss_adapter.h</a></div></div>
 <div class="ttc" id="aqabstractitemmodel_html_layoutAboutToBeChanged"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#layoutAboutToBeChanged">QAbstractItemModel::layoutAboutToBeChanged</a></div><div class="ttdeci">void layoutAboutToBeChanged(const QList&lt; QPersistentModelIndex &gt; &amp;parents, QAbstractItemModel::LayoutChangeHint hint)</div></div>
 <div class="ttc" id="aqabstracttablemodel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstracttablemodel.html">QAbstractTableModel</a></div></div>
@@ -335,7 +338,7 @@ $(document).ready(function(){initNavTree('data__table__model_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="data__table__model_8cpp.html">data_table_model.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

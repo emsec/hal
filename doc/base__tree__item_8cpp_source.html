@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/basic_tree_model/base_tree_item.cpp Source File</title>
+<title>HAL: plugins/gui/src/basic_tree_model/base_tree_item.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -130,12 +132,12 @@ $(document).ready(function(){initNavTree('base__tree__item_8cpp_source.html','')
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.append(child);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">   45</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">BaseTreeItem::insertChild</a>(<span class="keywordtype">int</span> index, <a class="code" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">   45</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">BaseTreeItem::insertChild</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, <a class="code" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        child-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a822d876a5ce069f3c0599ac680283065">setParent</a>(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">if</span> (index &gt; <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.size())</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            index = <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.size();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.insert(index, child);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> &gt; <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.size())</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.size();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.insert(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, child);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#a6c2cffc3bda3bce36ce7ae795252aff6">   53</a></span>&#160;    <a class="code" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a>* <a class="code" href="classhal_1_1_base_tree_item.html#a6c2cffc3bda3bce36ce7ae795252aff6">BaseTreeItem::removeChildAtPos</a>(<span class="keywordtype">int</span> row)</div>
@@ -152,12 +154,12 @@ $(document).ready(function(){initNavTree('base__tree__item_8cpp_source.html','')
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122">   65</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122">BaseTreeItem::removeChild</a>(<a class="code" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">int</span> index = <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.indexOf(child);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">if</span>(index == -1)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.indexOf(child);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> == -1)</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.removeAt(index);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.removeAt(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>);</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
@@ -169,16 +171,16 @@ $(document).ready(function(){initNavTree('base__tree__item_8cpp_source.html','')
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#a011563224a55c86cc45741c6e278518a">   82</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_base_tree_item.html#a011563224a55c86cc45741c6e278518a">BaseTreeItem::getRowForChild</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">int</span> index = -1;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = -1;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.size(); i++)</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        {</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordflow">if</span>(<a class="code" href="classhal_1_1_base_tree_item.html#aff9f18c5c60f36f91aa11377073acf8a">mChildren</a>.at(i) == child)</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                index = i;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = i;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span> index;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classhal_1_1_base_tree_item.html#a9e2cf91642c7d88838da658b09bb1d48">   96</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_base_tree_item.html#a9e2cf91642c7d88838da658b09bb1d48">BaseTreeItem::getOwnRow</a>()</div>
@@ -238,8 +240,9 @@ $(document).ready(function(){initNavTree('base__tree__item_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_root_tree_item_html_a431ce51e01e7397db6657e07630d728d"><div class="ttname"><a href="classhal_1_1_root_tree_item.html#a431ce51e01e7397db6657e07630d728d">hal::RootTreeItem::setDataAtColumn</a></div><div class="ttdeci">void setDataAtColumn(int column, QVariant &amp;data) override</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8cpp_source.html#l00119">base_tree_item.cpp:119</a></div></div>
 <div class="ttc" id="aclasshal_1_1_root_tree_item_html_a88e9575183c4ffdf6bf7ca0c91624c14"><div class="ttname"><a href="classhal_1_1_root_tree_item.html#a88e9575183c4ffdf6bf7ca0c91624c14">hal::RootTreeItem::appendData</a></div><div class="ttdeci">void appendData(QVariant data) override</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8cpp_source.html#l00126">base_tree_item.cpp:126</a></div></div>
 <div class="ttc" id="aclasshal_1_1_root_tree_item_html_ac6e354b8b9d650ae73c7c22657782260"><div class="ttname"><a href="classhal_1_1_root_tree_item.html#ac6e354b8b9d650ae73c7c22657782260">hal::RootTreeItem::setData</a></div><div class="ttdeci">void setData(QList&lt; QVariant &gt; data) override</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8cpp_source.html#l00111">base_tree_item.cpp:111</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::PinType::data</a></div><div class="ttdeci">@ data</div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aqlist_html_at"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#at">QList::at</a></div><div class="ttdeci">const T &amp; at(int i) const const</div></div>
 <div class="ttc" id="aqlist_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#clear">QList::clear</a></div><div class="ttdeci">void clear()</div></div>
@@ -252,7 +255,7 @@ $(document).ready(function(){initNavTree('base__tree__item_8cpp_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_8b51047a26b3c61d3de57fe14342149a.html">basic_tree_model</a></li><li class="navelem"><a class="el" href="base__tree__item_8cpp.html">base_tree_item.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

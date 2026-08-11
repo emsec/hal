@@ -10,7 +10,5 @@ var classhal_1_1_expanding_list_item =
     [ "repolish", "classhal_1_1_expanding_list_item.html#a09fb27b61b01976b6b0df6f1de2c3e25", null ],
     [ "resizeEvent", "classhal_1_1_expanding_list_item.html#aca2ef25456ea4fbf68bfb71761c3c886", null ],
     [ "setFixedHeight", "classhal_1_1_expanding_list_item.html#a02a490d7327660cad4c92cf7733155c3", null ],
-    [ "sizeHint", "classhal_1_1_expanding_list_item.html#af73af7a4b2d2ba91b125f10b6da8c15f", null ],
-    [ "expanded", "classhal_1_1_expanding_list_item.html#a2ecd1f8f06fccb1374c63c23ebf1e3cc", null ],
-    [ "fixedHeight", "classhal_1_1_expanding_list_item.html#ad3384e9860dd575bec2c6718e0bb9bcf", null ]
+    [ "sizeHint", "classhal_1_1_expanding_list_item.html#af73af7a4b2d2ba91b125f10b6da8c15f", null ]
 ];

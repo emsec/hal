@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_python_serializer.html','
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="python__editor_8h_source.html">python_editor.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="python__editor_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/python/python_editor.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::PythonSerializer:</div>
 <div class="dyncontent">
@@ -126,7 +128,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a93781cbd7812f0e31d90e0f47551b0de"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_serializer.html#a93781cbd7812f0e31d90e0f47551b0de">serialize_control</a> (const std::filesystem::path &amp;savedir=std::filesystem::path(), bool isAutosave=false)</td></tr>
 <tr class="separator:a93781cbd7812f0e31d90e0f47551b0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_project_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_project_serializer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_project_serializer.html">hal::ProjectSerializer</a></td></tr>
-<tr class="memitem:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920">ProjectSerializer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920">ProjectSerializer</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae89d4f762270f68bb1aa6aaaa55463e6 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#ae89d4f762270f68bb1aa6aaaa55463e6">~ProjectSerializer</a> ()</td></tr>
 <tr class="separator:ae89d4f762270f68bb1aa6aaaa55463e6 inherit pub_methods_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,8 +147,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3530c29f02a63a9edcf608e95f2d60db inherit pro_attribs_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00061">61</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
+<div class="textblock"><p>Stores the python scripts that are open in the editor together with the project. </p>
+
+<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00064">64</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa07b52bd178d5ef2ad7bfed50b306a83"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa07b52bd178d5ef2ad7bfed50b306a83">&#9670;&nbsp;</a></span>PythonSerializer()</h2>
@@ -165,7 +168,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__editor_8cpp_source.html#l00041">41</a> of file <a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="project__directory_8cpp_source.html#l00047">hal::ProjectDirectory::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00129">hal::ProjectManager::get_project_status()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="project__serializer_8h_source.html#l00039">hal::ProjectSerializer::m_name</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="project__directory_8cpp_source.html#l00047">hal::ProjectDirectory::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00129">hal::ProjectManager::get_project_status()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="project__serializer_8h_source.html#l00043">hal::ProjectSerializer::m_name</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>.</p>
 
 </div>
 </div>
@@ -215,7 +218,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__editor_8cpp_source.html#l00141">141</a> of file <a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="project__serializer_8h_source.html#l00039">hal::ProjectSerializer::m_name</a>, and <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, and <a class="el" href="project__serializer_8h_source.html#l00043">hal::ProjectSerializer::m_name</a>.</p>
 
 </div>
 </div>
@@ -279,7 +282,7 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>The netlist to be serialized </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">savedir</td><td>Target project directory </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">isAutosave</td><td>True if serialize call was issued from autosave, false otherwise </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">isAutosave</td><td><code>true</code> if serialize call was issued from autosave, <code>false</code> otherwise </td></tr>
   </table>
   </dd>
 </dl>
@@ -289,7 +292,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__editor_8cpp_source.html#l00058">58</a> of file <a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00160">hal::ContentManager::getPythonEditorWidget()</a>, <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>, <a class="el" href="python__editor_8cpp_source.html#l00745">hal::PythonEditor::saveAllTabs()</a>, <a class="el" href="python__editor_8cpp_source.html#l00096">serialize_control()</a>, <a class="el" href="python__editor_8h_source.html#l00086">sPythonRelDir</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00160">hal::ContentManager::getPythonEditorWidget()</a>, <a class="el" href="python__editor_8cpp_source.html#l00745">hal::PythonEditor::saveAllTabs()</a>, <a class="el" href="python__editor_8cpp_source.html#l00096">serialize_control()</a>, <a class="el" href="python__editor_8h_source.html#l00092">sPythonRelDir</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
 </div>
 </div>
@@ -321,7 +324,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__editor_8cpp_source.html#l00096">96</a> of file <a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="python__editor_8cpp_source.html#l00738">hal::PythonEditor::autosaveFilename()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#currentWidget">QTabWidget::currentWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="project__directory_8cpp_source.html#l00031">hal::ProjectDirectory::get_canonical_path()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="python__editor_8cpp_source.html#l00608">hal::PythonEditor::getPythonEditor()</a>, <a class="el" href="content__manager_8cpp_source.html#l00160">hal::ContentManager::getPythonEditorWidget()</a>, <a class="el" href="python__code__editor_8cpp_source.html#l00308">hal::PythonCodeEditor::getRelFilename()</a>, <a class="el" href="python__editor_8cpp_source.html#l00759">hal::PythonEditor::getTabWidget()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#mid">QString::mid()</a>, <a class="el" href="python__editor_8h_source.html#l00087">sControlFileName</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#size">QString::size()</a>, <a class="el" href="python__editor_8h_source.html#l00086">sPythonRelDir</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#startsWith">QString::startsWith()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00733">hal::PythonEditor::unnamedFilename()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absolutePath">QDir::absolutePath()</a>, <a class="el" href="python__editor_8cpp_source.html#l00738">hal::PythonEditor::autosaveFilename()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#count-prop">QTabWidget::count</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtabwidget.html#currentWidget">QTabWidget::currentWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="project__directory_8cpp_source.html#l00031">hal::ProjectDirectory::get_canonical_path()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="python__editor_8cpp_source.html#l00608">hal::PythonEditor::getPythonEditor()</a>, <a class="el" href="content__manager_8cpp_source.html#l00160">hal::ContentManager::getPythonEditorWidget()</a>, <a class="el" href="python__code__editor_8cpp_source.html#l00308">hal::PythonCodeEditor::getRelFilename()</a>, <a class="el" href="python__editor_8cpp_source.html#l00759">hal::PythonEditor::getTabWidget()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#mid">QString::mid()</a>, <a class="el" href="python__editor_8h_source.html#l00093">sControlFileName</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#size">QString::size()</a>, <a class="el" href="python__editor_8h_source.html#l00092">sPythonRelDir</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#startsWith">QString::startsWith()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00733">hal::PythonEditor::unnamedFilename()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00754">hal::PythonEditor::saveControl()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00058">serialize()</a>.</p>
 
@@ -348,7 +351,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00087">87</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00093">93</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00096">serialize_control()</a>.</p>
 
@@ -374,15 +377,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00086">86</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__editor_8h_source.html#l00092">92</a> of file <a class="el" href="python__editor_8h_source.html">python_editor.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__editor_8cpp_source.html#l00058">serialize()</a>, and <a class="el" href="python__editor_8cpp_source.html#l00096">serialize_control()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/python/<a class="el" href="python__editor_8h_source.html">python_editor.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/python/<a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a></li>
+<li>plugins/gui/include/gui/python/<a class="el" href="python__editor_8h_source.html">python_editor.h</a></li>
+<li>plugins/gui/src/python/<a class="el" href="python__editor_8cpp_source.html">python_editor.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -390,7 +393,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_python_serializer.html">PythonSerializer</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

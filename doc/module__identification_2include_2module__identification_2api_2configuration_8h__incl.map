@@ -1,0 +1,15 @@
+<map id="plugins/module_identification/include/module_identification/api/configuration.h" name="plugins/module_identification/include/module_identification/api/configuration.h">
+<area shape="rect" id="node1" title="This file contains the struct Configuration for module identification analysis." alt="" coords="353,5,572,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
+<area shape="rect" id="node7" href="$candidate__types_8h.html" title="This file contains the enumeration and constants for the candidate types used in the module identific..." alt="" coords="435,117,621,158"/>
+<area shape="rect" id="node9" title=" " alt="" coords="398,221,461,247"/>
+<area shape="rect" id="node10" href="$multithreading__types_8h.html" title="This file contains the enum class for multithreading strategies in the module identification process." alt="" coords="197,109,360,165"/>
+<area shape="rect" id="node12" title=" " alt="" coords="645,124,688,151"/>
+<area shape="rect" id="node13" title=" " alt="" coords="712,124,776,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,377,96,404"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,377,207,404"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,377,318,404"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,377,413,404"/>
+<area shape="rect" id="node8" title=" " alt="" coords="400,303,451,329"/>
+<area shape="rect" id="node11" href="$enums_8h.html" title=" " alt="" coords="213,213,344,255"/>
+</map>

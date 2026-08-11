@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -96,7 +98,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_user_action.html',''); in
 <p>The <a class="el" href="classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions.">UserAction</a> class is the abstract base class for user interactions.  
  <a href="classhal_1_1_user_action.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="user__action_8h_source.html">user_action.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="user__action_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/user_action/user_action.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::UserAction:</div>
 <div class="dyncontent">
@@ -180,9 +182,9 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
-<tr class="memitem:a8b5381839b1a0dd3dfaa508e9120f1f0"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action.html#a8b5381839b1a0dd3dfaa508e9120f1f0">setToText</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;set)</td></tr>
+<tr class="memitem:a8b5381839b1a0dd3dfaa508e9120f1f0"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action.html#a8b5381839b1a0dd3dfaa508e9120f1f0">setToText</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;set)</td></tr>
 <tr class="separator:a8b5381839b1a0dd3dfaa508e9120f1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac8393ba15248d9da8a315256cb88860"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action.html#aac8393ba15248d9da8a315256cb88860">setFromText</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;s)</td></tr>
+<tr class="memitem:aac8393ba15248d9da8a315256cb88860"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action.html#aac8393ba15248d9da8a315256cb88860">setFromText</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;s)</td></tr>
 <tr class="separator:aac8393ba15248d9da8a315256cb88860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40cf24ca7394f5976d20987f57801b31"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action.html#a40cf24ca7394f5976d20987f57801b31">gridToText</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html">QHash</a>&lt; <a class="el" href="classhal_1_1_node.html">hal::Node</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &gt; &amp;grid)</td></tr>
 <tr class="separator:a40cf24ca7394f5976d20987f57801b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -426,8 +428,8 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Executes user interaction and returns true on success. Note: Each implementation of <a class="el" href="classhal_1_1_user_action.html#a98334eceabb245cd2683628439f8d7e7">exec()</a> must include a call to the <a class="el" href="classhal_1_1_user_action.html#a98334eceabb245cd2683628439f8d7e7">exec()</a> method of base class to store the <a class="el" href="classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions.">UserAction</a> object in history and to transfer its ownership.</p>
-<dl class="section return"><dt>Returns</dt><dd>True on success, False otherwise. </dd></dl>
+<p>Executes user interaction and returns <code>true</code> on success. Note: Each implementation of <a class="el" href="classhal_1_1_user_action.html#a98334eceabb245cd2683628439f8d7e7">exec()</a> must include a call to the <a class="el" href="classhal_1_1_user_action.html#a98334eceabb245cd2683628439f8d7e7">exec()</a> method of base class to store the <a class="el" href="classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions.">UserAction</a> object in history and to transfer its ownership.</p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_user_action_compound.html#abdbb64e6236796c3784d1d66ba3bc2e6">hal::UserActionCompound</a>, <a class="el" href="classhal_1_1_action_unfold_module.html#a92bc84758efc491f8e9da200db9b5159">hal::ActionUnfoldModule</a>, <a class="el" href="classhal_1_1_action_set_selection_focus.html#a42a03daf861a1f270a2a772fd9c5a0e8">hal::ActionSetSelectionFocus</a>, <a class="el" href="classhal_1_1_action_set_object_type.html#abba7ad952c39ef8367f02f67327b2fab">hal::ActionSetObjectType</a>, <a class="el" href="classhal_1_1_action_set_object_data.html#a5877877a8888e409288676ffcf13b2bd">hal::ActionSetObjectData</a>, <a class="el" href="classhal_1_1_action_set_object_color.html#a4e5c9560a8e0aaa27c605608cab3fd6d">hal::ActionSetObjectColor</a>, <a class="el" href="classhal_1_1_action_rename_object.html#adb5117279248a652098c0a03f087955f">hal::ActionRenameObject</a>, <a class="el" href="classhal_1_1_action_remove_items_from_object.html#ad2fe5592b507da3212c62108f13c3db0">hal::ActionRemoveItemsFromObject</a>, <a class="el" href="classhal_1_1_action_pingroup.html#af0412505d21b3a1448ee7b31ff37a269">hal::ActionPingroup</a>, <a class="el" href="classhal_1_1_action_open_netlist_file.html#a5175b3539536a2b8581ec9026215cf58">hal::ActionOpenNetlistFile</a>, <a class="el" href="classhal_1_1_action_move_node.html#a4a142d83ad6c3f4b25070d1f305bf5cb">hal::ActionMoveNode</a>, <a class="el" href="classhal_1_1_action_move_item.html#a8aae4b09ef66c45113f334cb50922d3d">hal::ActionMoveItem</a>, <a class="el" href="classhal_1_1_action_fold_module.html#a903a400bc41911f4023762a6c9f61659">hal::ActionFoldModule</a>, <a class="el" href="classhal_1_1_action_delete_object.html#a867ee660cc80913284cbb679dcfff8fd">hal::ActionDeleteObject</a>, <a class="el" href="classhal_1_1_action_create_object.html#a6f7dd46b2c8e88628374f913dddd40f9">hal::ActionCreateObject</a>, <a class="el" href="classhal_1_1_action_add_items_to_object.html#a694fce180fe6fc756a70ca35d0542510">hal::ActionAddItemsToObject</a>, and <a class="el" href="classhal_1_1_action_add_boolean_function.html#a1f117f9334c36fee6317c515d363dbbc">hal::ActionAddBooleanFunction</a>.</p>
 
@@ -525,7 +527,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Executing this action will modify the project thus a warning pops up when leaving hal without saving. </p><dl class="section return"><dt>Returns</dt><dd>True if executing the action will modify the project, false otherwise. </dd></dl>
+<p>Executing this action will modify the project thus a warning pops up when leaving hal without saving. </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if executing the action will modify the project, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00179">179</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
 
@@ -693,7 +695,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::UserAction::setFromText </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::UserAction::setFromText </td>
           <td>(</td>
           <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
@@ -709,7 +711,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="user__action_8cpp_source.html#l00061">61</a> of file <a class="el" href="user__action_8cpp_source.html">user_action.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring-obsolete.html#split-1">QString::split()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring-obsolete.html#split-1">QString::split()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02204">x</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00075">hal::ActionAddItemsToObject::readFromXml()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00053">hal::ActionRemoveItemsFromObject::readFromXml()</a>, and <a class="el" href="action__set__selection__focus_8cpp_source.html#l00059">hal::ActionSetSelectionFocus::readFromXml()</a>.</p>
 
@@ -844,7 +846,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::UserAction::setToText </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>set</em></td><td>)</td>
           <td></td>
         </tr>
@@ -858,7 +860,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="user__action_8cpp_source.html#l00050">50</a> of file <a class="el" href="user__action_8cpp_source.html">user_action.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, and <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00045">set()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00032">hal::ActionAddItemsToObject::addToHash()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00029">hal::ActionRemoveItemsFromObject::addToHash()</a>, <a class="el" href="action__set__selection__focus_8cpp_source.html#l00026">hal::ActionSetSelectionFocus::addToHash()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00044">hal::ActionAddItemsToObject::writeToXml()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00041">hal::ActionRemoveItemsFromObject::writeToXml()</a>, and <a class="el" href="action__set__selection__focus_8cpp_source.html#l00038">hal::ActionSetSelectionFocus::writeToXml()</a>.</p>
 
@@ -950,7 +952,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the action to reverse last action (nullptr if action cant be undone).</p>
+<p>Get the action to reverse last action (<code>nullptr</code> if action cant be undone).</p>
 <dl class="section return"><dt>Returns</dt><dd>The reverse action. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="user__action_8h_source.html#l00152">152</a> of file <a class="el" href="user__action_8h_source.html">user_action.h</a>.</p>
@@ -1249,8 +1251,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/user_action/<a class="el" href="user__action_8h_source.html">user_action.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/user_action/<a class="el" href="user__action_8cpp_source.html">user_action.cpp</a></li>
+<li>plugins/gui/include/gui/user_action/<a class="el" href="user__action_8h_source.html">user_action.h</a></li>
+<li>plugins/gui/src/user_action/<a class="el" href="user__action_8cpp_source.html">user_action.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1258,7 +1260,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_user_action.html">UserAction</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

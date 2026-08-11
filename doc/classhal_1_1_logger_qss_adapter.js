@@ -29,20 +29,5 @@ var classhal_1_1_logger_qss_adapter =
     [ "traceColor", "classhal_1_1_logger_qss_adapter.html#a2854005e9863b7cb9bae6d519033c227", null ],
     [ "traceHighlight", "classhal_1_1_logger_qss_adapter.html#a27649191e993f0c1c86d78bbf81dd0c7", null ],
     [ "warningColor", "classhal_1_1_logger_qss_adapter.html#a2f5f9f9f522a349e659fa572e5daf584", null ],
-    [ "warningHighlight", "classhal_1_1_logger_qss_adapter.html#ab978b6db4aadfc454a2083ea2196dac2", null ],
-    [ "criticalColor", "classhal_1_1_logger_qss_adapter.html#ad111ddd4eefd56a1a8d385673b71b98a", null ],
-    [ "criticalHighlight", "classhal_1_1_logger_qss_adapter.html#a23bcf7d3759972e984b8fd9de0ce0840", null ],
-    [ "debugColor", "classhal_1_1_logger_qss_adapter.html#a114faf92cfa83a7c15a8337f6811253f", null ],
-    [ "debugHighlight", "classhal_1_1_logger_qss_adapter.html#ae77251bcdec30c15ba012b1ab87d6843", null ],
-    [ "defaultColor", "classhal_1_1_logger_qss_adapter.html#aa1b9e5116ee41bcb11c0985dfdf4d29d", null ],
-    [ "defaultHighlight", "classhal_1_1_logger_qss_adapter.html#abc0e56faea0919448c9c2f4f2c542eb6", null ],
-    [ "errorColor", "classhal_1_1_logger_qss_adapter.html#ae9a37368d44515ae5d34da53716cd241", null ],
-    [ "errorHighlight", "classhal_1_1_logger_qss_adapter.html#af34da13611c9e477d5da6e8ec6f14f26", null ],
-    [ "infoColor", "classhal_1_1_logger_qss_adapter.html#a98b782ed1d256d056fd981fab4e8d974", null ],
-    [ "infoHighlight", "classhal_1_1_logger_qss_adapter.html#ab1a9bc6c2a15f2894242a6ed8a191f0c", null ],
-    [ "markerColor", "classhal_1_1_logger_qss_adapter.html#a7a115f5f78b01947472a137cdb5e19c5", null ],
-    [ "traceColor", "classhal_1_1_logger_qss_adapter.html#a5a5090e47077b72aa8f7fcdd1ea31662", null ],
-    [ "traceHighlight", "classhal_1_1_logger_qss_adapter.html#a9863f0ebcbb9caf2d322479b734aaf1c", null ],
-    [ "warningColor", "classhal_1_1_logger_qss_adapter.html#acda4f1dad7faa2181a7be14d5226cdc6", null ],
-    [ "warningHighlight", "classhal_1_1_logger_qss_adapter.html#a5b2d9e4de68941751d0522aef840ca6f", null ]
+    [ "warningHighlight", "classhal_1_1_logger_qss_adapter.html#ab978b6db4aadfc454a2083ea2196dac2", null ]
 ];

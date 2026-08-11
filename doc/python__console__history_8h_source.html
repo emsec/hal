@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/python/python_console_history.h Source File</title>
+<title>HAL: plugins/gui/include/gui/python/python_console_history.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -125,16 +127,16 @@ $(document).ready(function(){initNavTree('python__console__history_8h_source.htm
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">~PythonConsoleHistory</a>();</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">addHistory</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">addHistory</a>(<span class="keyword">const</span> std::string&amp; command);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">const</span> std::string&amp; <a class="code" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">getHistoryItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">const</span> std::string&amp; <a class="code" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">getHistoryItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">size</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_console_history.html#a021bb1e36c8440c11f354d1b00039f40">updateFromFile</a>();</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">void</span> appendToFile(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">void</span> appendToFile(<span class="keyword">const</span> std::string&amp; command);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::string mFileName;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
@@ -148,15 +150,15 @@ $(document).ready(function(){initNavTree('python__console__history_8h_source.htm
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_aa475c3d950cf6297b6aef02132b4ae8b"><div class="ttname"><a href="classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b">hal::PythonConsoleHistory::~PythonConsoleHistory</a></div><div class="ttdeci">~PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00014">python_console_history.cpp:14</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_ad6c9a158ab9448a7b42725a4cf920cd3"><div class="ttname"><a href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">hal::PythonConsoleHistory::addHistory</a></div><div class="ttdeci">void addHistory(const std::string &amp;command)</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00018">python_console_history.cpp:18</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_console_history_html_add8d28f16071f60c44d2f91a70e27fbf"><div class="ttname"><a href="classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf">hal::PythonConsoleHistory::PythonConsoleHistory</a></div><div class="ttdeci">PythonConsoleHistory()</div><div class="ttdef"><b>Definition:</b> <a href="python__console__history_8cpp_source.html#l00009">python_console_history.cpp:9</a></div></div>
-<div class="ttc" id="anamespacecontrol_html_afd9eb2b1b752938d8b63684f7d1fecde"><div class="ttname"><a href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">control.command</a></div><div class="ttdeci">string command</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00076">control.py:76</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_7c750ac7d7398768b8029f5632912b7a.html">python</a></li><li class="navelem"><a class="el" href="python__console__history_8h.html">python_console_history.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

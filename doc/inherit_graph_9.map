@@ -1,15 +1,35 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="5,284,185,311"/>
-<area shape="rect" id="node2" href="$classhal_1_1_boolean_influence_plugin.html" title="Plugin interface for the Boolean influence plugin." alt="" coords="233,5,436,32"/>
-<area shape="rect" id="node3" href="$classhal_1_1_dataflow_plugin.html" title="Plugin interface for the dataflow analysis plugin (DANA)." alt="" coords="261,56,409,83"/>
-<area shape="rect" id="node4" href="$classhal_1_1_graph_algorithm_plugin.html" title="Plugin interface for graph algorithms." alt="" coords="238,107,431,133"/>
-<area shape="rect" id="node5" href="$classhal_1_1_h_g_l_parser_plugin.html" title=" " alt="" coords="256,157,413,184"/>
-<area shape="rect" id="node6" href="$classhal_1_1_h_g_l_writer_plugin.html" title=" " alt="" coords="257,208,413,235"/>
-<area shape="rect" id="node7" href="$classhal_1_1_liberty_parser_plugin.html" title=" " alt="" coords="247,259,422,285"/>
-<area shape="rect" id="node8" href="$classhal_1_1_py_base_plugin_interface.html" title=" " alt="" coords="237,309,433,336"/>
-<area shape="rect" id="node9" href="$classhal_1_1_solve_fsm_plugin.html" title="Plugin interface for the solve FSM plugin." alt="" coords="257,360,412,387"/>
-<area shape="rect" id="node10" href="$classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="253,411,416,437"/>
-<area shape="rect" id="node11" href="$classhal_1_1_v_h_d_l_parser_plugin.html" title=" " alt="" coords="251,461,418,488"/>
-<area shape="rect" id="node12" href="$classhal_1_1_verilog_parser_plugin.html" title=" " alt="" coords="247,512,422,539"/>
-<area shape="rect" id="node13" href="$classhal_1_1_verilog_writer_plugin.html" title=" " alt="" coords="247,563,422,589"/>
+<area shape="rect" id="node1" href="$classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="5,786,185,813"/>
+<area shape="rect" id="node2" href="$classhal_1_1_bitorder_propagation_plugin.html" title="Plugin interface for the BitorderPropagationPlugin." alt="" coords="265,5,445,47"/>
+<area shape="rect" id="node3" href="$classhal_1_1_boolean_influence_plugin.html" title="Plugin interface for the Boolean influence plugin." alt="" coords="253,71,456,98"/>
+<area shape="rect" id="node4" href="$classhal_1_1_dataflow_plugin.html" title="Plugin interface for the dataflow analysis plugin (DANA)." alt="" coords="281,122,429,149"/>
+<area shape="rect" id="node5" href="$classhal_1_1_dot_viewer_plugin.html" title="Plugin interface for the DotViewerPlugin." alt="" coords="275,173,434,199"/>
+<area shape="rect" id="node6" href="$classhal_1_1_genlib_writer_plugin.html" title=" " alt="" coords="269,223,441,250"/>
+<area shape="rect" id="node7" href="$classhal_1_1_gexf_writer_plugin.html" title=" " alt="" coords="274,274,435,301"/>
+<area shape="rect" id="node8" href="$classhal_1_1_graph_algorithm_plugin.html" title="Plugin interface for graph algorithms." alt="" coords="258,325,451,351"/>
+<area shape="rect" id="node9" href="$classhal_1_1_gui_extension_demo_plugin.html" title=" " alt="" coords="247,375,462,402"/>
+<area shape="rect" id="node10" href="$classhal_1_1_h_g_l_parser_plugin.html" title=" " alt="" coords="276,426,433,453"/>
+<area shape="rect" id="node11" href="$classhal_1_1_h_g_l_writer_plugin.html" title=" " alt="" coords="277,477,433,503"/>
+<area shape="rect" id="node12" href="$classhal_1_1_hawkeye_plugin.html" title="Plugin interface for HAWKEYE." alt="" coords="279,527,430,554"/>
+<area shape="rect" id="node13" href="$classhal_1_1_liberty_parser_plugin.html" title=" " alt="" coords="267,578,442,605"/>
+<area shape="rect" id="node14" href="$classhal_1_1_logic_evaluator_plugin.html" title=" " alt="" coords="261,629,448,655"/>
+<area shape="rect" id="node15" href="$classhal_1_1_module_identification_plugin.html" title="Plugin for identifying functional modules within a netlist." alt="" coords="263,680,446,721"/>
+<area shape="rect" id="node16" href="$classhal_1_1_netlist_preprocessing_plugin.html" title="Plugin interface for netlist preprocessing." alt="" coords="263,745,447,787"/>
+<area shape="rect" id="node17" href="$classhal_1_1_netlist_simulator_controller_plugin.html" title=" " alt="" coords="245,811,465,852"/>
+<area shape="rect" id="node18" href="$classhal_1_1_netlist_simulator_plugin.html" title=" " alt="" coords="257,877,453,903"/>
+<area shape="rect" id="node19" href="$classhal_1_1_perf_test_plugin.html" title=" " alt="" coords="283,927,426,954"/>
+<area shape="rect" id="node20" href="$classhal_1_1_py_base_plugin_interface.html" title=" " alt="" coords="257,978,453,1005"/>
+<area shape="rect" id="node21" href="$classhal_1_1_resynthesis_plugin.html" title="Plugin interface for the netlist resynthesis plugin." alt="" coords="270,1029,439,1055"/>
+<area shape="rect" id="node22" href="$classhal_1_1_sequential_symbolic_execution_plugin.html" title="Plugin interface for HAWKEYE." alt="" coords="233,1080,476,1121"/>
+<area shape="rect" id="node23" href="$classhal_1_1_solve_fsm_plugin.html" title="Plugin interface for the solve FSM plugin." alt="" coords="277,1146,432,1173"/>
+<area shape="rect" id="node24" href="$classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="273,1197,436,1223"/>
+<area shape="rect" id="node27" href="$classhal_1_1_v_h_d_l_parser_plugin.html" title=" " alt="" coords="271,1247,438,1274"/>
+<area shape="rect" id="node28" href="$classhal_1_1_verilator_simulator_plugin.html" title=" " alt="" coords="251,1298,459,1325"/>
+<area shape="rect" id="node29" href="$classhal_1_1_verilog_parser_plugin.html" title=" " alt="" coords="267,1349,442,1375"/>
+<area shape="rect" id="node30" href="$classhal_1_1_verilog_writer_plugin.html" title=" " alt="" coords="267,1399,442,1426"/>
+<area shape="rect" id="node31" href="$classhal_1_1_waveform_viewer_plugin.html" title=" " alt="" coords="253,1450,456,1477"/>
+<area shape="rect" id="node32" href="$classhal_1_1_xilinx_toolbox_plugin.html" title="Plugin interface for the Xilinx toolbox." alt="" coords="266,1501,443,1527"/>
+<area shape="rect" id="node33" href="$classhal_1_1_z3_utils_plugin.html" title=" " alt="" coords="286,1551,423,1578"/>
+<area shape="rect" id="node25" href="$classhal_1_1_plugin_gui.html" title=" " alt="" coords="551,1171,663,1198"/>
+<area shape="rect" id="node26" href="$classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="524,1222,691,1249"/>
 </map>

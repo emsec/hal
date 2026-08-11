@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/gatelibrary_management/gatelibrary_table_model.h Source File</title>
+<title>HAL: plugins/gui/include/gui/gatelibrary_management/gatelibrary_table_model.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -140,22 +142,21 @@ $(document).ready(function(){initNavTree('gatelibrary__table__model_8h_source.ht
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#ab5fc5eebafca02480d424935bb868fee">data</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; <a class="codeRef" href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">index</a>, <span class="keywordtype">int</span> role) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">//bool setData(const QModelIndex &amp;index, const QVariant &amp;value, int role);</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a3db2a9ef3a17c2d7c16baba75a39fa97">headerData</a>(<span class="keywordtype">int</span> section, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Orientation</a> orientation, <span class="keywordtype">int</span> role) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#adf3084991201c312263fb06a9ef8d79d">clear</a>();</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a24dcc4ee52641f51c8639cd16d4de81b">loadFile</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a407cd1b2e0780883bf9455a075ee50cb">getGateTypeAtIndex</a>(<span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">index</a>);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;GateType*&gt;</a> mEntries;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;};</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a3db2a9ef3a17c2d7c16baba75a39fa97">headerData</a>(<span class="keywordtype">int</span> section, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Orientation</a> orientation, <span class="keywordtype">int</span> role) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#adf3084991201c312263fb06a9ef8d79d">clear</a>();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a24dcc4ee52641f51c8639cd16d4de81b">loadFile</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* g);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* <a class="code" href="classhal_1_1_gatelibrary_table_model.html#a407cd1b2e0780883bf9455a075ee50cb">getGateTypeAtIndex</a>(<span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">index</a>);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;GateType*&gt;</a> mEntries;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;};</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00043">gate_library.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00051">gate_type.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gatelibrary_table_model_html"><div class="ttname"><a href="classhal_1_1_gatelibrary_table_model.html">hal::GatelibraryTableModel</a></div><div class="ttdoc">A model to display loaded gatelibraries.</div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__table__model_8h_source.html#l00044">gatelibrary_table_model.h:45</a></div></div>
@@ -170,8 +171,7 @@ $(document).ready(function(){initNavTree('gatelibrary__table__model_8h_source.ht
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::ItemType::Net</a></div><div class="ttdeci">@ Net</div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqabstracttablemodel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstracttablemodel.html">QAbstractTableModel</a></div></div>
 <div class="ttc" id="aqabstracttablemodel_html_index"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">QAbstractTableModel::index</a></div><div class="ttdeci">virtual QModelIndex index(int row, int column, const QModelIndex &amp;parent) const const override</div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
@@ -187,7 +187,7 @@ $(document).ready(function(){initNavTree('gatelibrary__table__model_8h_source.ht
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_4252469b3ac735c304362e15e3ea1050.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="gatelibrary__table__model_8h.html">gatelibrary_table_model.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

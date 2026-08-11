@@ -1,13 +1,13 @@
-<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/processing/pass_collection.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/processing/pass_collection.h">
-<area shape="rect" id="node1" title=" " alt="" coords="142,5,337,91"/>
-<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="139,139,339,180"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,317,145,344"/>
-<area shape="rect" id="node11" title=" " alt="" coords="363,146,449,173"/>
-<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="427,228,627,269"/>
-<area shape="rect" id="node5" title=" " alt="" coords="210,317,253,344"/>
-<area shape="rect" id="node6" title=" " alt="" coords="319,317,443,344"/>
-<area shape="rect" id="node7" title=" " alt="" coords="489,317,603,344"/>
-<area shape="rect" id="node8" title=" " alt="" coords="665,317,728,344"/>
-<area shape="rect" id="node9" title=" " alt="" coords="214,235,265,262"/>
-<area shape="rect" id="node10" title=" " alt="" coords="289,235,403,262"/>
+<map id="plugins/dataflow_analysis/include/dataflow_analysis/processing/pass_collection.h" name="plugins/dataflow_analysis/include/dataflow_analysis/processing/pass_collection.h">
+<area shape="rect" id="node1" title=" " alt="" coords="133,5,345,61"/>
+<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="139,109,339,151"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,288,145,315"/>
+<area shape="rect" id="node11" title=" " alt="" coords="363,117,449,143"/>
+<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="427,199,627,240"/>
+<area shape="rect" id="node5" title=" " alt="" coords="210,288,253,315"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,288,443,315"/>
+<area shape="rect" id="node7" title=" " alt="" coords="489,288,603,315"/>
+<area shape="rect" id="node8" title=" " alt="" coords="665,288,728,315"/>
+<area shape="rect" id="node9" title=" " alt="" coords="214,206,265,233"/>
+<area shape="rect" id="node10" title=" " alt="" coords="289,206,403,233"/>
 </map>

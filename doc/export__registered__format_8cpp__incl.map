@@ -1,22 +1,33 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/export/export_registered_format.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/export/export_registered_format.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="539,5,726,76"/>
-<area shape="rect" id="node2" href="$export__registered__format_8h.html" title=" " alt="" coords="5,131,212,173"/>
-<area shape="rect" id="node5" title=" " alt="" coords="236,139,333,165"/>
-<area shape="rect" id="node6" title=" " alt="" coords="358,139,409,165"/>
-<area shape="rect" id="node7" title=" " alt="" coords="433,139,539,165"/>
-<area shape="rect" id="node8" title=" " alt="" coords="563,139,617,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="642,139,709,165"/>
-<area shape="rect" id="node10" title=" " alt="" coords="733,139,813,165"/>
-<area shape="rect" id="node11" title=" " alt="" coords="837,139,951,165"/>
-<area shape="rect" id="node12" href="$gui__globals_8h.html" title=" " alt="" coords="976,139,1108,165"/>
-<area shape="rect" id="node20" href="$netlist__writer__manager_8h.html" title=" " alt="" coords="1132,124,1299,180"/>
-<area shape="rect" id="node3" title=" " alt="" coords="783,317,877,344"/>
-<area shape="rect" id="node4" title=" " alt="" coords="147,235,292,262"/>
-<area shape="rect" id="node13" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="337,235,515,262"/>
-<area shape="rect" id="node14" href="$file__status__manager_8h.html" title=" " alt="" coords="539,228,718,269"/>
-<area shape="rect" id="node15" href="$graph__context__manager_8h.html" title=" " alt="" coords="743,228,917,269"/>
-<area shape="rect" id="node16" href="$content__manager_8h.html" title=" " alt="" coords="942,228,1102,269"/>
-<area shape="rect" id="node17" href="$netlist__relay_8h.html" title=" " alt="" coords="1127,228,1299,269"/>
-<area shape="rect" id="node18" href="$plugin__relay_8h.html" title=" " alt="" coords="1323,228,1494,269"/>
-<area shape="rect" id="node19" href="$python__context_8h.html" title=" " alt="" coords="1518,235,1726,262"/>
+<map id="plugins/gui/src/export/export_registered_format.cpp" name="plugins/gui/src/export/export_registered_format.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="2418,5,2637,47"/>
+<area shape="rect" id="node2" href="$export__registered__format_8h.html" title=" " alt="" coords="85,102,292,143"/>
+<area shape="rect" id="node5" title=" " alt="" coords="2329,109,2427,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="2451,109,2502,136"/>
+<area shape="rect" id="node7" title=" " alt="" coords="2527,109,2632,136"/>
+<area shape="rect" id="node8" title=" " alt="" coords="2656,109,2711,136"/>
+<area shape="rect" id="node9" title=" " alt="" coords="2735,109,2802,136"/>
+<area shape="rect" id="node10" title=" " alt="" coords="2826,109,2906,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="2930,109,3045,136"/>
+<area shape="rect" id="node12" href="$gui__globals_8h.html" title=" " alt="" coords="1240,109,1372,136"/>
+<area shape="rect" id="node29" href="$netlist__writer__manager_8h.html" title=" " alt="" coords="2139,95,2305,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="259,288,353,315"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,206,151,233"/>
+<area shape="rect" id="node13" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2006,206,2185,233"/>
+<area shape="rect" id="node19" href="$file__status__manager_8h.html" title=" " alt="" coords="1310,199,1489,240"/>
+<area shape="rect" id="node20" href="$graph__context__manager_8h.html" title=" " alt="" coords="643,199,817,240"/>
+<area shape="rect" id="node21" href="$content__manager_8h.html" title=" " alt="" coords="226,199,386,240"/>
+<area shape="rect" id="node22" href="$netlist__relay_8h.html" title=" " alt="" coords="1513,199,1685,240"/>
+<area shape="rect" id="node23" href="$plugin__relay_8h.html" title=" " alt="" coords="1710,199,1881,240"/>
+<area shape="rect" id="node24" href="$python__context_8h.html" title=" " alt="" coords="410,206,618,233"/>
+<area shape="rect" id="node25" href="$selection__relay_8h.html" title=" " alt="" coords="1140,199,1285,240"/>
+<area shape="rect" id="node26" href="$gui__api_8h.html" title=" " alt="" coords="2260,206,2416,233"/>
+<area shape="rect" id="node27" href="$comment__manager_8h.html" title=" " alt="" coords="841,199,1005,240"/>
+<area shape="rect" id="node28" title=" " alt="" coords="1030,206,1115,233"/>
+<area shape="rect" id="node14" href="$defines_8h.html" title=" " alt="" coords="1737,288,1877,315"/>
+<area shape="rect" id="node15" title=" " alt="" coords="2124,288,2211,315"/>
+<area shape="rect" id="node16" title=" " alt="" coords="2266,288,2325,315"/>
+<area shape="rect" id="node17" title=" " alt="" coords="2364,288,2419,315"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1915,288,2039,315"/>
+<area shape="rect" id="node30" href="$program__options_8h.html" title=" " alt="" coords="2492,199,2640,240"/>
+<area shape="rect" id="node31" title=" " alt="" coords="2626,288,2669,315"/>
 </map>

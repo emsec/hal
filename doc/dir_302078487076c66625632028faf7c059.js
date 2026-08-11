@@ -1,6 +1,6 @@
 var dir_302078487076c66625632028faf7c059 =
 [
-    [ "configuration.h", "api_2configuration_8h.html", [
+    [ "configuration.h", "dataflow__analysis_2include_2dataflow__analysis_2api_2configuration_8h.html", [
       [ "Configuration", "structhal_1_1dataflow_1_1_configuration.html", "structhal_1_1dataflow_1_1_configuration" ]
     ] ],
     [ "dataflow.h", "dataflow_8h.html", "dataflow_8h" ],

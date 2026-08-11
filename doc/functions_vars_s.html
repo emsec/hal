@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,6 +92,7 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 </li>
 <li>s_progress_indicator_function
 : <a class="el" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">hal::GuiExtensionDataflow</a>
+, <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a44060d68b4d55a5129be46a328341593">hal::GuiExtensionModuleIdentification</a>
 </li>
 <li>s_project_file
 : <a class="el" href="classhal_1_1_project_manager.html#a7d1e867b1a24286085ed197e85e76ba8">hal::ProjectManager</a>
@@ -100,11 +103,17 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 <li>sAlpha
 : <a class="el" href="classhal_1_1_separated_graphics_net.html#acc4f44552645830293b2e38c2b1197b9">hal::SeparatedGraphicsNet</a>
 </li>
+<li>sBackgroundColor
+: <a class="el" href="classhal_1_1_wave_item.html#ae7d55195311b174d158e5ae846a4cc15">hal::WaveItem</a>
+</li>
 <li>sBinary
 : <a class="el" href="struct_abc___frame__t__.html#addd4f552d895d90d59a01afcd76ddae8">Abc_Frame_t_</a>
 </li>
 <li>sBrush
 : <a class="el" href="classhal_1_1_graphics_net.html#ab03ad7e2de61bb94aa48e6e629dc9aea">hal::GraphicsNet</a>
+</li>
+<li>sComposedBaseKey
+: <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#acd43e9cdcf17386b38af8f5ca7bdae01">hal::SaleaeDirectoryNetEntry</a>
 </li>
 <li>sConnectedNetColumn
 : <a class="el" href="classhal_1_1_gate_pins_tree_model.html#abc8de1ff5849979b2abc8b100203a59f">hal::GatePinsTreeModel</a>
@@ -150,11 +159,18 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 <li>sIconSizeSetting
 : <a class="el" href="classhal_1_1_selection_details_icon_provider.html#a7c8a210c0727720f08cb7b05bf86d9cb">hal::SelectionDetailsIconProvider</a>
 </li>
+<li>sIdent
+: <a class="el" href="classhal_1_1_saleae_header.html#a4f8d68dd8c518f5b3085e8b774841b10">hal::SaleaeHeader</a>
+</li>
 <li>sink_type
 : <a class="el" href="structhal_1_1_log_manager_1_1log__sink.html#a105f6ac5b730584b21bdc0f994f13e62">hal::LogManager::log_sink</a>
 </li>
+<li>sInstance
+: <a class="el" href="classhal_1_1_gui_extension_context.html#a94be9c2cff4dbea09d34139f3d607910">hal::GuiExtensionContext</a>
+</li>
 <li>size
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#a6460e3ba8a6f0091f1c8d98f6aa0fb39">hal::BooleanFunction::Node</a>
+, <a class="el" href="structhal_1_1_saleae_directory_1_1_list_entry.html#a5b8965f3ff2e42af8a1888da751c8940">hal::SaleaeDirectory::ListEntry</a>
 </li>
 <li>Sle
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#a41833087ec6b1848ee01eed5e81f8bc6">hal::BooleanFunction::NodeType</a>
@@ -167,6 +183,9 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 </li>
 <li>sLod
 : <a class="el" href="classhal_1_1_graphics_item.html#ad5026cc90c226228638bfeafc276a9cf">hal::GraphicsItem</a>
+</li>
+<li>sLogFilename
+: <a class="el" href="classhal_1_1_simulation_process_log.html#a785f359fd1be4c0ace5372e26dce78e2">hal::SimulationProcessLog</a>
 </li>
 <li>Slt
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#a39c83575d0cf1fb736bb137da924c4b7">hal::BooleanFunction::NodeType</a>
@@ -187,8 +206,14 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 <li>sPen
 : <a class="el" href="classhal_1_1_graphics_net.html#a9dc3c21acbe126bcc3d9e01679b26f3d">hal::GraphicsNet</a>
 </li>
+<li>sPersistFile
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a89122fdc938419241070cfb442e43208">hal::NetlistSimulatorController</a>
+</li>
 <li>sPythonRelDir
 : <a class="el" href="classhal_1_1_python_serializer.html#aefdc0b124dad463dbdfd5ba423f14c28">hal::PythonSerializer</a>
+</li>
+<li>sReadError
+: <a class="el" href="classhal_1_1_saleae_data_tuple.html#a09e78b8491458ee5978fe8f3c3b6eddc">hal::SaleaeDataTuple</a>
 </li>
 <li>Srem
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#a4f11f23d527f0eb92dff9d046ab2fc2a">hal::BooleanFunction::NodeType</a>
@@ -223,6 +248,18 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 <li>sShapeWidth
 : <a class="el" href="classhal_1_1_graphics_net.html#ab20e5e48bba9256340ebed5d2939c6bc">hal::GraphicsNet</a>
 </li>
+<li>sSimulationSettings
+: <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#a4865bea1883c0191058fb54ed3667c35">hal::NetlistSimulatorControllerPlugin</a>
+</li>
+<li>sSimulatorSerializer
+: <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#ac021666f42bc1bb4204376759afcd9ae">hal::NetlistSimulatorControllerPlugin</a>
+</li>
+<li>sStateColor
+: <a class="el" href="classhal_1_1_wave_tree_model.html#a67fef48ed3f880ad12cd9e8bd290f0db">hal::WaveTreeModel</a>
+</li>
+<li>start_at_zero
+: <a class="el" href="structhal_1_1_simulation_input_1_1_clock.html#a089ca824ce58791e59cd9d0e7a828638">hal::SimulationInput::Clock</a>
+</li>
 <li>state
 : <a class="el" href="classhal_1_1_s_m_t_1_1_symbolic_execution.html#ad5cce99a9383913eacb947e0d496a8a5">hal::SMT::SymbolicExecution</a>
 </li>
@@ -237,6 +274,12 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 </li>
 <li>sTextFontHeight
 : <a class="el" href="classhal_1_1_graphics_node.html#a526d0b3f2e6c54e6bbfbd77399332156">hal::GraphicsNode</a>
+</li>
+<li>sTimeScaleFactor
+: <a class="el" href="classhal_1_1_saleae_parser.html#aad08c3dea5e081bf5e482f257b9f6c26">hal::SaleaeParser</a>
+</li>
+<li>sTooManyTransitions
+: <a class="el" href="classhal_1_1_wave_group_value.html#a1ccbce02bdf4606f5bcb893c30a533fa">hal::WaveGroupValue</a>
 </li>
 <li>string
 : <a class="el" href="structhal_1_1_token.html#a851dd465345e9aab0ed6b974170b7d0c">hal::Token&lt; T &gt;</a>
@@ -257,13 +300,22 @@ $(document).ready(function(){initNavTree('functions_vars_s.html',''); initResiza
 <li>sVersion
 : <a class="el" href="struct_abc___frame__t__.html#a643c4b85ff7bfd8a2af3f1560dc6fe4d">Abc_Frame_t_</a>
 </li>
+<li>sWidth
+: <a class="el" href="classhal_1_1_wave_cursor.html#ae5d6e9e86d0c4065d882aac55e4da39c">hal::WaveCursor</a>
+</li>
+<li>switch_time
+: <a class="el" href="structhal_1_1_simulation_input_1_1_clock.html#aa7ea893e48f2e35c87b713b57df68690">hal::SimulationInput::Clock</a>
+</li>
+<li>sWriteDisabled
+: <a class="el" href="classhal_1_1_saleae_directory_store_request.html#a704136d02808c87c5cddb070d93cacce">hal::SaleaeDirectoryStoreRequest</a>
+</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

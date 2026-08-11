@@ -1,0 +1,27 @@
+var classhal_1_1module__identification_1_1_functional_candidate =
+[
+    [ "FunctionalCandidate", "classhal_1_1module__identification_1_1_functional_candidate.html#ae62ac8ad9abb08b481e091e043c9ad9e", null ],
+    [ "add_additional_data", "classhal_1_1module__identification_1_1_functional_candidate.html#afaa5dde70891a25d5ebd3ca6f4f37520", null ],
+    [ "check", "classhal_1_1module__identification_1_1_functional_candidate.html#af707e0ab57ab198ceb1d9c93c6d54ff3", null ],
+    [ "get_all_additional_data", "classhal_1_1module__identification_1_1_functional_candidate.html#a3d257c1490dc54b62b45a577a29df19e", null ],
+    [ "get_candidate_info", "classhal_1_1module__identification_1_1_functional_candidate.html#a485a94392af2277c256ee12b5ebaef15", null ],
+    [ "m_additional_data", "classhal_1_1module__identification_1_1_functional_candidate.html#acff03fbeab7d171418265b6795903699", null ],
+    [ "m_base_gates", "classhal_1_1module__identification_1_1_functional_candidate.html#a6d97068aca49fdb1009a58575d033880", null ],
+    [ "m_candidate_type", "classhal_1_1module__identification_1_1_functional_candidate.html#ae1b3f829efebc8042563ffaec22c033a", null ],
+    [ "m_control_mapping", "classhal_1_1module__identification_1_1_functional_candidate.html#ab940e28e59e794aca595029641924502", null ],
+    [ "m_control_signals", "classhal_1_1module__identification_1_1_functional_candidate.html#a96555b846893a6320827970274ff5078", null ],
+    [ "m_ctrl_to_operand_net", "classhal_1_1module__identification_1_1_functional_candidate.html#ae7df9f2cf67376baddde9809afd9d130", null ],
+    [ "m_gates", "classhal_1_1module__identification_1_1_functional_candidate.html#a12ed9f56bb3b15712a2b8ffe474bd4cd", null ],
+    [ "m_influence_count_to_input_nets", "classhal_1_1module__identification_1_1_functional_candidate.html#a4351bb4f7a58c49976ae527e3ee587a8", null ],
+    [ "m_input_count_to_output_nets", "classhal_1_1module__identification_1_1_functional_candidate.html#aaf35f71669513e1cac88693b38dabd07", null ],
+    [ "m_input_nets", "classhal_1_1module__identification_1_1_functional_candidate.html#a8b90b5a393f4f910df53a1107dac8d36", null ],
+    [ "m_max_control_signals", "classhal_1_1module__identification_1_1_functional_candidate.html#ad0834d03d3979ec91a577088b97b1a51", null ],
+    [ "m_max_operands", "classhal_1_1module__identification_1_1_functional_candidate.html#ae55135f8625afa9cd4b0ed420a33ba66", null ],
+    [ "m_operands", "classhal_1_1module__identification_1_1_functional_candidate.html#afcb2997f7c65cfce49d8fccc38e91563", null ],
+    [ "m_output_nets", "classhal_1_1module__identification_1_1_functional_candidate.html#a289fce47adb7af3744a342a7327c0443", null ],
+    [ "m_permuted_single_pairs", "classhal_1_1module__identification_1_1_functional_candidate.html#a164a328051ff4aefd89e5628925eb68d", null ],
+    [ "m_sign_nets", "classhal_1_1module__identification_1_1_functional_candidate.html#ad2e40ad4a83b75739e50cbfba8f5588c", null ],
+    [ "m_single_input_to_output", "classhal_1_1module__identification_1_1_functional_candidate.html#a2467deb73255ba357a9b361f2357df4e", null ],
+    [ "m_structural_candidate", "classhal_1_1module__identification_1_1_functional_candidate.html#a48188e12f06365160a5a4325a3c0ccfa", null ],
+    [ "m_timings", "classhal_1_1module__identification_1_1_functional_candidate.html#a4613a98961f696c04be0babd37429a59", null ]
+];

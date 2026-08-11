@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_s_m_t_1_1_solver.html',''
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="solver_8h_source.html">solver.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="solver_8h_source.html">hal_core/netlist/boolean_function/solver.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::SMT::Solver:</div>
 <div class="dyncontent">
@@ -122,7 +124,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a57ae56afb290b41fa360779c268d379e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a57ae56afb290b41fa360779c268d379e">has_local_solver_for</a> (<a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> call)</td></tr>
+<tr class="memitem:a57ae56afb290b41fa360779c268d379e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a57ae56afb290b41fa360779c268d379e">has_local_solver_for</a> (<a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> call)</td></tr>
 <tr class="separator:a57ae56afb290b41fa360779c268d379e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9625735be5f2bfa25b5b9d892a628798"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="structhal_1_1_s_m_t_1_1_solver_result.html">SolverResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a9625735be5f2bfa25b5b9d892a628798">query_local_with_smt2</a> (const <a class="el" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a> &amp;config, const std::string &amp;smt2)</td></tr>
 <tr class="separator:a9625735be5f2bfa25b5b9d892a628798"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -260,7 +262,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00401">401</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00427">query_local()</a>, and <a class="el" href="solver_8cpp_source.html#l00450">query_remote()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="solver_8cpp_source.html#l00427">query_local()</a>, and <a class="el" href="solver_8cpp_source.html#l00450">query_remote()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00439">query_local_with_smt2()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00406">hal::solve_fsm::solve_fsm()</a>.</p>
 
@@ -292,7 +294,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00427">427</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="solver_8cpp_source.html#l00439">query_local_with_smt2()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="solver_8cpp_source.html#l00439">query_local_with_smt2()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00401">query()</a>.</p>
 
@@ -343,7 +345,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00439">439</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00069">hal::SMT::QueryConfig::call</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00401">query()</a>, and <a class="el" href="types_8h_source.html#l00067">hal::SMT::QueryConfig::solver</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00072">hal::SMT::QueryConfig::call</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>, <a class="el" href="solver_8cpp_source.html#l00401">query()</a>, and <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00070">hal::SMT::QueryConfig::solver</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00427">query_local()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -376,7 +378,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="solver_8cpp_source.html#l00450">450</a> of file <a class="el" href="solver_8cpp_source.html">solver.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="solver_8cpp_source.html#l00401">query()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
@@ -471,8 +473,8 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/<a class="el" href="solver_8h_source.html">solver.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/boolean_function/<a class="el" href="solver_8cpp_source.html">solver.cpp</a></li>
+<li>include/hal_core/netlist/boolean_function/<a class="el" href="solver_8h_source.html">solver.h</a></li>
+<li>src/netlist/boolean_function/<a class="el" href="solver_8cpp_source.html">solver.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -480,7 +482,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

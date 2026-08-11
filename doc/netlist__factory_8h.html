@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/netlist/netlist_factory.h File Reference</title>
+<title>HAL: include/hal_core/netlist/netlist_factory.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -98,21 +100,21 @@ $(document).ready(function(){initNavTree('netlist__factory_8h.html',''); initRes
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for netlist_factory.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="netlist__factory_8h__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2netlist__factory_8h" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2netlist__factory_8h" id="a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2netlist__factory_8h">
-<area shape="rect" title="This file contains various functions to create and load netlists." alt="" coords="331,5,506,61"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="507,206,647,233"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="148,109,311,151"/>
-<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="345,109,493,151"/>
-<area shape="rect" title=" " alt="" coords="688,288,779,315"/>
-<area shape="rect" title=" " alt="" coords="371,288,458,315"/>
-<area shape="rect" title=" " alt="" coords="482,288,569,315"/>
-<area shape="rect" title=" " alt="" coords="593,288,663,315"/>
-<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="37,199,192,240"/>
-<area shape="rect" title=" " alt="" coords="204,288,255,315"/>
-<area shape="rect" title=" " alt="" coords="115,288,157,315"/>
-<area shape="rect" title=" " alt="" coords="32,288,91,315"/>
-<area shape="rect" title=" " alt="" coords="267,206,330,233"/>
+<div class="center"><img src="netlist__factory_8h__incl.png" border="0" usemap="#ainclude_2hal__core_2netlist_2netlist__factory_8h" alt=""/></div>
+<map name="ainclude_2hal__core_2netlist_2netlist__factory_8h" id="ainclude_2hal__core_2netlist_2netlist__factory_8h">
+<area shape="rect" title="This file contains various functions to create and load netlists." alt="" coords="332,5,505,47"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="507,191,647,218"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="148,95,311,136"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="345,95,493,136"/>
+<area shape="rect" title=" " alt="" coords="688,273,779,300"/>
+<area shape="rect" title=" " alt="" coords="371,273,458,300"/>
+<area shape="rect" title=" " alt="" coords="482,273,569,300"/>
+<area shape="rect" title=" " alt="" coords="593,273,663,300"/>
+<area shape="rect" href="gate__type_8h.html" title=" " alt="" coords="37,184,192,225"/>
+<area shape="rect" title=" " alt="" coords="204,273,255,300"/>
+<area shape="rect" title=" " alt="" coords="115,273,157,300"/>
+<area shape="rect" title=" " alt="" coords="32,273,91,300"/>
+<area shape="rect" title=" " alt="" coords="267,191,330,218"/>
 </map>
 </div>
 </div>
@@ -129,27 +131,27 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a02885346f0ee983f70af158fdb0f3968"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">hal::netlist_factory::create_netlist</a> (const GateLibrary *gate_library)</td></tr>
-<tr class="memdesc:a02885346f0ee983f70af158fdb0f3968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new empty netlist using the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">More...</a><br /></td></tr>
-<tr class="separator:a02885346f0ee983f70af158fdb0f3968"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1936406d857961060f9d68f062f42fb"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
-<tr class="memdesc:ad1936406d857961060f9d68f062f42fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file.  <a href="namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb">More...</a><br /></td></tr>
-<tr class="separator:ad1936406d857961060f9d68f062f42fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b3635b1b1984783eb47789ae043e246"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a6b3635b1b1984783eb47789ae043e246">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, GateLibrary *gate_library)</td></tr>
-<tr class="memdesc:a6b3635b1b1984783eb47789ae043e246"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file trying to parse it with the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#a6b3635b1b1984783eb47789ae043e246">More...</a><br /></td></tr>
-<tr class="separator:a6b3635b1b1984783eb47789ae043e246"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a561fda40b97dc6a3816c7a34ceb0a5bf">hal::netlist_factory::load_netlist_from_string</a> (const std::string &amp;netlist_string, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
-<tr class="memdesc:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given string.  <a href="namespacehal_1_1netlist__factory.html#a561fda40b97dc6a3816c7a34ceb0a5bf">More...</a><br /></td></tr>
-<tr class="separator:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29f519d89089b47622ae2eeaf1e76a13"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">hal::netlist_factory::load_hal_project</a> (const std::filesystem::path &amp;project_dir)</td></tr>
-<tr class="memdesc:a29f519d89089b47622ae2eeaf1e76a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given hal project.  <a href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">More...</a><br /></td></tr>
-<tr class="separator:a29f519d89089b47622ae2eeaf1e76a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55e30d51a833c10779ce28eb7a398e52"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52">hal::netlist_factory::load_netlist</a> (const ProjectDirectory &amp;pdir, const ProgramArguments &amp;args)</td></tr>
-<tr class="memdesc:a55e30d51a833c10779ce28eb7a398e52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist using information specified in command line arguments on startup.  <a href="namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52">More...</a><br /></td></tr>
-<tr class="separator:a55e30d51a833c10779ce28eb7a398e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adde865496a1d7f325a4801e3cbfd8533"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; Netlist &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">hal::netlist_factory::load_netlists</a> (const std::filesystem::path &amp;netlist_file)</td></tr>
-<tr class="memdesc:adde865496a1d7f325a4801e3cbfd8533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from a given file for each matching pre-loaded gate library.  <a href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">More...</a><br /></td></tr>
-<tr class="separator:adde865496a1d7f325a4801e3cbfd8533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc13d9558ff3e518372ae92e5d65ea0"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#aabc13d9558ff3e518372ae92e5d65ea0">hal::netlist_factory::create_netlist</a> (const GateLibrary *gate_library)</td></tr>
+<tr class="memdesc:aabc13d9558ff3e518372ae92e5d65ea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new empty netlist using the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#aabc13d9558ff3e518372ae92e5d65ea0">More...</a><br /></td></tr>
+<tr class="separator:aabc13d9558ff3e518372ae92e5d65ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab32fbdd68c9e8e39dae2691b5ae666dd"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#ab32fbdd68c9e8e39dae2691b5ae666dd">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
+<tr class="memdesc:ab32fbdd68c9e8e39dae2691b5ae666dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file.  <a href="namespacehal_1_1netlist__factory.html#ab32fbdd68c9e8e39dae2691b5ae666dd">More...</a><br /></td></tr>
+<tr class="separator:ab32fbdd68c9e8e39dae2691b5ae666dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d30de09135e5ff3234f16f1bcd9895f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a5d30de09135e5ff3234f16f1bcd9895f">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, GateLibrary *gate_library)</td></tr>
+<tr class="memdesc:a5d30de09135e5ff3234f16f1bcd9895f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file trying to parse it with the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#a5d30de09135e5ff3234f16f1bcd9895f">More...</a><br /></td></tr>
+<tr class="separator:a5d30de09135e5ff3234f16f1bcd9895f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c3596eee3df24e450d908bacf442456"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a9c3596eee3df24e450d908bacf442456">hal::netlist_factory::load_netlist_from_string</a> (const std::string &amp;netlist_string, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
+<tr class="memdesc:a9c3596eee3df24e450d908bacf442456"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given string.  <a href="namespacehal_1_1netlist__factory.html#a9c3596eee3df24e450d908bacf442456">More...</a><br /></td></tr>
+<tr class="separator:a9c3596eee3df24e450d908bacf442456"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26c0b658a7b4bce27e518ce53f546d6f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a26c0b658a7b4bce27e518ce53f546d6f">hal::netlist_factory::load_hal_project</a> (const std::filesystem::path &amp;project_dir)</td></tr>
+<tr class="memdesc:a26c0b658a7b4bce27e518ce53f546d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given hal project.  <a href="namespacehal_1_1netlist__factory.html#a26c0b658a7b4bce27e518ce53f546d6f">More...</a><br /></td></tr>
+<tr class="separator:a26c0b658a7b4bce27e518ce53f546d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9074761d81df810d8529ad08e11d82ad"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a9074761d81df810d8529ad08e11d82ad">hal::netlist_factory::load_netlist</a> (const ProjectDirectory &amp;pdir, const ProgramArguments &amp;args)</td></tr>
+<tr class="memdesc:a9074761d81df810d8529ad08e11d82ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist using information specified in command line arguments on startup.  <a href="namespacehal_1_1netlist__factory.html#a9074761d81df810d8529ad08e11d82ad">More...</a><br /></td></tr>
+<tr class="separator:a9074761d81df810d8529ad08e11d82ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31695690be4c9e34e3e2324c1966805f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; Netlist &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a31695690be4c9e34e3e2324c1966805f">hal::netlist_factory::load_netlists</a> (const std::filesystem::path &amp;netlist_file)</td></tr>
+<tr class="memdesc:a31695690be4c9e34e3e2324c1966805f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from a given file for each matching pre-loaded gate library.  <a href="namespacehal_1_1netlist__factory.html#a31695690be4c9e34e3e2324c1966805f">More...</a><br /></td></tr>
+<tr class="separator:a31695690be4c9e34e3e2324c1966805f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains various functions to create and load netlists. </p>
@@ -161,7 +163,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="netlist__factory_8h.html">netlist_factory.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

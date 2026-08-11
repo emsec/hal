@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -89,11 +91,11 @@ $(document).ready(function(){initNavTree('classhal_1_1_project_directory.html','
 <a href="#friends">Friends</a> &#124;
 <a href="classhal_1_1_project_directory-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::ProjectDirectory Class Reference</div>  </div>
+<div class="title">hal::ProjectDirectory Class Reference<div class="ingroups"><a class="el" href="group__core.html">HAL Core</a> &raquo; <a class="el" href="group__utilities.html">Utilities</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="project__directory_8h_source.html">project_directory.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="project__directory_8h_source.html">hal_core/utilities/project_directory.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::ProjectDirectory:</div>
 <div class="dyncontent">
@@ -146,8 +148,9 @@ Friends</h2></td></tr>
 <tr class="separator:aa860c957116c15c1b786357fbcd19fc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00037">37</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
+<div class="textblock"><p>Represents a project directory. </p>
+
+<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00042">42</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6eedb87774801b9838792d12720ad181"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6eedb87774801b9838792d12720ad181">&#9670;&nbsp;</a></span>ProjectDirectory()</h2>
@@ -164,10 +167,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="classhal_1_1_project_directory.html">ProjectDirectory</a> constructor.</p>
+<p>Constructs a <a class="el" href="classhal_1_1_project_directory.html">ProjectDirectory</a> object.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">path</td><td>- Path to hal project. If path has an extension (like .v or .hal) the extension will be removed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>- Path to the project directory. If the path has an extension (like <code>.v</code> or <code>.hal</code>) the extension will be removed. </td></tr>
   </table>
   </dd>
 </dl>
@@ -201,8 +204,8 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generate a directory name in current working directory which contains a four digit random number</p>
-<dl class="section return"><dt>Returns</dt><dd>Absolute path to directory </dd></dl>
+<p>Generates a random directory name in the current working directory.</p>
+<dl class="section return"><dt>Returns</dt><dd>The absolute path to the generated directory. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00015">15</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
@@ -226,8 +229,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Project directories canonical path. Other than std::filesystem::canonical this method will return an empty path if no project path given.</p>
-<dl class="section return"><dt>Returns</dt><dd>Absolute canonical path to project directory </dd></dl>
+<p>Returns the canonical path to the project directory.</p>
+<dl class="section return"><dt>Returns</dt><dd>The absolute canonical path to the project directory. If no project path is given, an empty path is returned. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00031">31</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
@@ -250,14 +253,14 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the default file name which is a file with the same as the name as the project directory plus an extension.</p>
+<p>Returns the default file name for the project directory, which is a file with the same name as the project directory plus an extension.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">extension</td><td>- Extension of default file name. If empty, '.hal' is assumed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">extension</td><td>- Extension of the default file name. If empty, <code>.hal</code> is assumed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Absolute path to file </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The absolute path to the default file. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00038">38</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
@@ -282,14 +285,14 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns absolute path to file within project directory</p>
+<p>Returns the absolute path to a file within the project directory.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">relative_filename</td><td>- Relative file name in project directory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">relative_filename</td><td>- The relative file name within the project directory. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Absolute path of file </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The absolute path to the file. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00047">47</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
@@ -314,20 +317,20 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>If filename is within project directory the relative file name will be returned. Otherwise this method will return parameter filename without modifications.</p>
+<p>Returns the relative file path if the file is within the project directory.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>- Absolute path to file </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">filename</td><td>- The absolute path to the file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Relative file name if file in project directory </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The relative file path if the file is within the project directory; otherwise, the original filename. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00074">74</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, <a class="el" href="dot__viewer__factory_8cpp_source.html#l00035">hal::DotViewerFactory::serialize()</a>, and <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00028">hal::SimulatorSerializer::serialize()</a>.</p>
 
 </div>
 </div>
@@ -345,12 +348,12 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get autosave directory path</p>
-<dl class="section return"><dt>Returns</dt><dd>Absolute path to autosave directory </dd></dl>
+<p>Returns the path to the autosave (shadow) directory.</p>
+<dl class="section return"><dt>Returns</dt><dd>The absolute path to the autosave directory. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00067">67</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>, and <a class="el" href="project__directory_8h_source.html#l00111">s_shadow_dir</a>.</p>
+<p class="reference">References <a class="el" href="project__directory_8cpp_source.html#l00031">get_canonical_path()</a>, and <a class="el" href="project__directory_8h_source.html#l00110">s_shadow_dir</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00091">hal::FileManager::autosave()</a>, <a class="el" href="project__directory_8cpp_source.html#l00058">get_shadow_filename()</a>, <a class="el" href="file__manager_8cpp_source.html#l00451">hal::FileManager::openProject()</a>, and <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>.</p>
 
@@ -371,14 +374,14 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Similar to <a class="el" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename()</a> but will return file name which is located in the autosave (aka shadow) directory.</p>
+<p>Returns the file name within the autosave (shadow) directory.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">extension</td><td>- Extension of shadow file name. If empty '.hal' is assumed </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">extension</td><td>- Extension of the shadow file name. If empty, <code>.hal</code> is assumed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Absolute path to file </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The absolute path to the shadow file. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="project__directory_8cpp_source.html#l00058">58</a> of file <a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a>.</p>
 
@@ -409,7 +412,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00039">39</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00044">44</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
 
 </div>
 </div>
@@ -435,15 +438,15 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Name of autosave subdirectory </p>
 
-<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00111">111</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="project__directory_8h_source.html#l00110">110</a> of file <a class="el" href="project__directory_8h_source.html">project_directory.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2project__manager_8cpp_source.html#l00096">hal::ProjectManager::create_project_directory()</a>, <a class="el" href="project__directory_8cpp_source.html#l00067">get_shadow_dir()</a>, <a class="el" href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">hal::project_manager_init()</a>, and <a class="el" href="netlist_2project__manager_8cpp_source.html#l00174">hal::ProjectManager::restore_project_file_from_autosave()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="project__directory_8h_source.html">project_directory.h</a></li>
-<li>/home/runner/work/hal/hal/src/utilities/<a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a></li>
+<li>include/hal_core/utilities/<a class="el" href="project__directory_8h_source.html">project_directory.h</a></li>
+<li>src/utilities/<a class="el" href="project__directory_8cpp_source.html">project_directory.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -451,7 +454,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_project_directory.html">ProjectDirectory</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

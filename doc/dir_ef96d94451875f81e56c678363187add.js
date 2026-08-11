@@ -13,9 +13,7 @@ var dir_ef96d94451875f81e56c678363187add =
     [ "endpoint.h", "endpoint_8h.html", null ],
     [ "gate.h", "gate_8h.html", null ],
     [ "grouping.h", "include_2hal__core_2netlist_2grouping_8h.html", null ],
-    [ "module.h", "module_8h.html", [
-      [ "Module", "classhal_1_1_module.html", "classhal_1_1_module" ]
-    ] ],
+    [ "module.h", "module_8h.html", null ],
     [ "net.h", "net_8h.html", null ],
     [ "netlist.h", "include_2hal__core_2netlist_2netlist_8h.html", null ],
     [ "netlist_factory.h", "netlist__factory_8h.html", "netlist__factory_8h" ],

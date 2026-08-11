@@ -13,9 +13,5 @@ var classhal_1_1_general_info_wizard_page =
     [ "setDisabledIconStyle", "classhal_1_1_general_info_wizard_page.html#a4d3ef4a49dc1c1b133742c3c0b7c1e8c", null ],
     [ "setEnabledIconStyle", "classhal_1_1_general_info_wizard_page.html#afb8e6e711b94dcba78c7ca5c73a9575c", null ],
     [ "setLeftArrowIconPath", "classhal_1_1_general_info_wizard_page.html#a0fea2b92d4b17c404541e7c444919427", null ],
-    [ "setRightArrowIconPath", "classhal_1_1_general_info_wizard_page.html#a6d5838b056432992d0205202ad4a2c74", null ],
-    [ "disabledIconStyle", "classhal_1_1_general_info_wizard_page.html#afc5ce7ae95a1b875aee195fc518a6a80", null ],
-    [ "enabledIconStyle", "classhal_1_1_general_info_wizard_page.html#acb39e1eacb43f074472da824454e5790", null ],
-    [ "leftArrowIconPath", "classhal_1_1_general_info_wizard_page.html#a56c60c97e4b930e6a7b15bcf5d2be10a", null ],
-    [ "rightArrowIconPath", "classhal_1_1_general_info_wizard_page.html#a7bbd79d62f0f1018fd98a5d00310e956", null ]
+    [ "setRightArrowIconPath", "classhal_1_1_general_info_wizard_page.html#a6d5838b056432992d0205202ad4a2c74", null ]
 ];

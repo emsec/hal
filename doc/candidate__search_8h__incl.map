@@ -1,0 +1,15 @@
+<map id="plugins/hawkeye/include/hawkeye/candidate_search.h" name="plugins/hawkeye/include/hawkeye/candidate_search.h">
+<area shape="rect" id="node1" title="This file contains the function for HAWKEYE&#39;s candidate search as well as a struct for configuring th..." alt="" coords="225,5,440,47"/>
+<area shape="rect" id="node2" href="$enums_8h.html" title=" " alt="" coords="74,95,205,136"/>
+<area shape="rect" id="node6" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="245,184,375,225"/>
+<area shape="rect" id="node11" href="$register__candidate_8h.html" title="This file contains the class that holds all information on a register candidate." alt="" coords="297,102,515,129"/>
+<area shape="rect" id="node13" title=" " alt="" coords="539,102,601,129"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,363,145,389"/>
+<area shape="rect" id="node4" title=" " alt="" coords="65,191,145,218"/>
+<area shape="rect" id="node5" title=" " alt="" coords="169,191,219,218"/>
+<area shape="rect" id="node7" href="$error_8h.html" title=" " alt="" coords="113,273,243,315"/>
+<area shape="rect" id="node8" title=" " alt="" coords="268,281,355,307"/>
+<area shape="rect" id="node9" title=" " alt="" coords="379,281,471,307"/>
+<area shape="rect" id="node10" title=" " alt="" coords="495,281,563,307"/>
+<area shape="rect" id="node12" title=" " alt="" coords="399,191,442,218"/>
+</map>

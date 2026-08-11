@@ -17,8 +17,5 @@ var classhal_1_1_dock_button =
     [ "setTextColor", "classhal_1_1_dock_button.html#ae25c55381bd50f4978ed4656882678f9", null ],
     [ "show", "classhal_1_1_dock_button.html#a7536247e6a82798c519814ecf907ad79", null ],
     [ "textColor", "classhal_1_1_dock_button.html#a332de6fd7433080ca029e943d22ae7c2", null ],
-    [ "widget", "classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2", null ],
-    [ "checkedColor", "classhal_1_1_dock_button.html#a9571738e6406a932c6b4c3753ae0c6a0", null ],
-    [ "hoverColor", "classhal_1_1_dock_button.html#a191bd3dafe877d763dfbfcee0874fc48", null ],
-    [ "textColor", "classhal_1_1_dock_button.html#a6d8c4ad276f05efb9e7a4c91d393c3a5", null ]
+    [ "widget", "classhal_1_1_dock_button.html#acf760eb6637d2cb20222e99b618243c2", null ]
 ];

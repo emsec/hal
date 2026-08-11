@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_netlist_traversal_decorat
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="netlist__traversal__decorator_8h_source.html">hal_core/netlist/decorators/netlist_traversal_decorator.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::NetlistTraversalDecorator:</div>
 <div class="dyncontent">
@@ -104,17 +106,17 @@ Collaboration diagram for hal::NetlistTraversalDecorator:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a126a3148fa0457449c524263444dce28"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a126a3148fa0457449c524263444dce28">NetlistTraversalDecorator</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &amp;netlist)</td></tr>
 <tr class="separator:a126a3148fa0457449c524263444dce28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad05f6a29311a3a78bdcfe0190b044836"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ad05f6a29311a3a78bdcfe0190b044836">get_next_matching_gates</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_match=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:ad05f6a29311a3a78bdcfe0190b044836"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90aee674ce67e68f6dce2f4509ce96aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a90aee674ce67e68f6dce2f4509ce96aa">get_next_matching_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_match=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:a90aee674ce67e68f6dce2f4509ce96aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a701f97708037268a15cdf5ba34641dc3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a701f97708037268a15cdf5ba34641dc3">get_next_matching_gates_until</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_mismatch=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:a701f97708037268a15cdf5ba34641dc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4791be865b5cf52424b3c8b74eb064e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac4791be865b5cf52424b3c8b74eb064e">get_next_matching_gates_until</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_mismatch=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:ac4791be865b5cf52424b3c8b74eb064e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4fbd6366666a6cbf4c079a4e2be8594"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa4fbd6366666a6cbf4c079a4e2be8594">get_next_matching_gates_until_depth</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> max_depth, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter=nullptr) const</td></tr>
+<tr class="memitem:a386ec552b68d4e0d8220fa3b5e5c0859"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a386ec552b68d4e0d8220fa3b5e5c0859">get_next_matching_gates</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_match=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:a386ec552b68d4e0d8220fa3b5e5c0859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fe26441b61a515744dfcace48c3337c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a7fe26441b61a515744dfcace48c3337c">get_next_matching_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_match=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:a7fe26441b61a515744dfcace48c3337c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1459985cc317dcf26510b2331a850b63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a1459985cc317dcf26510b2331a850b63">get_next_matching_gates_until</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_mismatch=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:a1459985cc317dcf26510b2331a850b63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb811634ef40a3ac5f0143a06002c7a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#adb811634ef40a3ac5f0143a06002c7a9">get_next_matching_gates_until</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter, bool continue_on_mismatch=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:adb811634ef40a3ac5f0143a06002c7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4fbd6366666a6cbf4c079a4e2be8594"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa4fbd6366666a6cbf4c079a4e2be8594">get_next_matching_gates_until_depth</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> max_depth, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter=nullptr) const</td></tr>
 <tr class="separator:aa4fbd6366666a6cbf4c079a4e2be8594"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f1f940e001d182c0bfdc3836fc2e5ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a3f1f940e001d182c0bfdc3836fc2e5ee">get_next_matching_gates_until_depth</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> max_depth, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter=nullptr) const</td></tr>
+<tr class="memitem:a3f1f940e001d182c0bfdc3836fc2e5ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a3f1f940e001d182c0bfdc3836fc2e5ee">get_next_matching_gates_until_depth</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> max_depth, const std::function&lt; bool(const <a class="el" href="classhal_1_1_gate.html">Gate</a> *)&gt; &amp;target_gate_filter=nullptr) const</td></tr>
 <tr class="separator:a3f1f940e001d182c0bfdc3836fc2e5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cc3a9a04e6ac8328e7f26b3a953eb98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a9cc3a9a04e6ac8328e7f26b3a953eb98">get_next_sequential_gates</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, bool successors, const std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;forbidden_pins={}, std::unordered_map&lt; const <a class="el" href="classhal_1_1_net.html">Net</a> *, std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; *cache=nullptr) const</td></tr>
 <tr class="separator:a9cc3a9a04e6ac8328e7f26b3a953eb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,10 +128,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac9019a807f99e85e2efd6434b44d02d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3677964003410e4de7c04f302ec5abf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ae3677964003410e4de7c04f302ec5abf">get_next_combinational_gates</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, bool successors, const std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;forbidden_pins={}, std::unordered_map&lt; const <a class="el" href="classhal_1_1_net.html">Net</a> *, std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; *cache=nullptr) const</td></tr>
 <tr class="separator:ae3677964003410e4de7c04f302ec5abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8400ffb54852c929241fc3d83f61ab8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac8400ffb54852c929241fc3d83f61ab8">get_shortest_path_distance</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:ac8400ffb54852c929241fc3d83f61ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1d89f5a3aa73e8cb94a5bb924663e85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac1d89f5a3aa73e8cb94a5bb924663e85">get_shortest_path</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
-<tr class="separator:ac1d89f5a3aa73e8cb94a5bb924663e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f881d3f790b23eecfb90d93e47c34f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ae9f881d3f790b23eecfb90d93e47c34f">get_shortest_path_distance</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:ae9f881d3f790b23eecfb90d93e47c34f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48225221197ade6cf2bda52593c91392"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a48225221197ade6cf2bda52593c91392">get_shortest_path</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *start_gate, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *end_gate, const <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;exit_endpoint_filter=nullptr, const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;entry_endpoint_filter=nullptr) const</td></tr>
+<tr class="separator:a48225221197ade6cf2bda52593c91392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A netlist decorator that provides functionality to traverse the associated netlist without making any modifications. </p>
@@ -201,11 +203,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates. Continue traversal as long as further combinational gates are found and stop at gates that are not combinational. All combinational gates found during traversal are added to the result. Provide a cache to speed up traversal when calling this function multiple times on the same netlist.</p>
+<p>Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates. Continue traversal as long as further combinational gates are found and stop at gates that are not combinational. All combinational gates found during traversal are added to the result. Provide a cache to speed up traversal when calling this function multiple times on the same netlist. Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- Start gate. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">successors</td><td>- Set <code>true</code> to get successors, set <code>false</code> to get predecessors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">cache</td><td>- An optional cache that can be used for better performance on repeated calls. Defaults to a <code>nullptr</code>. </td></tr>
   </table>
   </dd>
@@ -214,7 +217,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00653">653</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">get_next_combinational_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">get_next_combinational_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -255,11 +258,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates. Continue traversal as long as further combinational gates are found and stop at gates that are not combinational. All combinational gates found during traversal are added to the result. Provide a cache to speed up traversal when calling this function multiple times on the same netlist.</p>
+<p>Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates. Continue traversal as long as further combinational gates are found and stop at gates that are not combinational. All combinational gates found during traversal are added to the result. Provide a cache to speed up traversal when calling this function multiple times on the same netlist. Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>- Start net. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">successors</td><td>- Set <code>true</code> to get successors, set <code>false</code> to get predecessors. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">cache</td><td>- An optional cache that can be used for better performance on repeated calls. Defaults to a <code>nullptr</code>. </td></tr>
   </table>
   </dd>
@@ -268,20 +272,20 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">549</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">hal::combinational</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00148">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00101">hal::GateType::has_property()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">hal::combinational</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00150">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00101">hal::GateType::has_property()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00653">get_next_combinational_gates()</a>.</p>
 
 </div>
 </div>
-<a id="a90aee674ce67e68f6dce2f4509ce96aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a90aee674ce67e68f6dce2f4509ce96aa">&#9670;&nbsp;</a></span>get_next_matching_gates() <span class="overload">[1/2]</span></h2>
+<a id="a7fe26441b61a515744dfcace48c3337c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fe26441b61a515744dfcace48c3337c">&#9670;&nbsp;</a></span>get_next_matching_gates() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::set&lt;<a class="el" href="classhal_1_1_gate.html">Gate</a>*&gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
           <td class="paramname"><em>gate</em>, </td>
@@ -307,13 +311,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -337,16 +341,20 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The next gates fulfilling the target gate filter condition on success, an error otherwise. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00101">101</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00012">get_next_matching_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
 </div>
 </div>
-<a id="ad05f6a29311a3a78bdcfe0190b044836"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad05f6a29311a3a78bdcfe0190b044836">&#9670;&nbsp;</a></span>get_next_matching_gates() <span class="overload">[2/2]</span></h2>
+<a id="a386ec552b68d4e0d8220fa3b5e5c0859"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a386ec552b68d4e0d8220fa3b5e5c0859">&#9670;&nbsp;</a></span>get_next_matching_gates() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::set&lt;<a class="el" href="classhal_1_1_gate.html">Gate</a>*&gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_net.html">Net</a> *&#160;</td>
           <td class="paramname"><em>net</em>, </td>
@@ -372,13 +380,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -402,16 +410,22 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The next gates fulfilling the target gate filter condition on success, an error otherwise. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00012">12</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2module__identification_2src_2utils_2utils_8cpp_source.html#l00113">hal::module_identification::find_neighboring_registers()</a>, and <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00101">get_next_matching_gates()</a>.</p>
+
 </div>
 </div>
-<a id="ac4791be865b5cf52424b3c8b74eb064e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4791be865b5cf52424b3c8b74eb064e">&#9670;&nbsp;</a></span>get_next_matching_gates_until() <span class="overload">[1/2]</span></h2>
+<a id="adb811634ef40a3ac5f0143a06002c7a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb811634ef40a3ac5f0143a06002c7a9">&#9670;&nbsp;</a></span>get_next_matching_gates_until() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::set&lt;<a class="el" href="classhal_1_1_gate.html">Gate</a>*&gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates_until </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates_until </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
           <td class="paramname"><em>gate</em>, </td>
@@ -437,13 +451,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -467,16 +481,20 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The next gates fulfilling the target gate filter condition on success, an error otherwise. </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00228">228</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00138">get_next_matching_gates_until()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
 </div>
 </div>
-<a id="a701f97708037268a15cdf5ba34641dc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a701f97708037268a15cdf5ba34641dc3">&#9670;&nbsp;</a></span>get_next_matching_gates_until() <span class="overload">[2/2]</span></h2>
+<a id="a1459985cc317dcf26510b2331a850b63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1459985cc317dcf26510b2331a850b63">&#9670;&nbsp;</a></span>get_next_matching_gates_until() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::set&lt;<a class="el" href="classhal_1_1_gate.html">Gate</a>*&gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates_until </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::NetlistTraversalDecorator::get_next_matching_gates_until </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_net.html">Net</a> *&#160;</td>
           <td class="paramname"><em>net</em>, </td>
@@ -502,13 +520,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -531,6 +549,12 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The next gates fulfilling the target gate filter condition on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00138">138</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00228">get_next_matching_gates_until()</a>.</p>
 
 </div>
 </div>
@@ -555,7 +579,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>max_depth</em>, </td>
         </tr>
         <tr>
@@ -585,7 +609,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00340">340</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">get_next_matching_gates_until_depth()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">get_next_matching_gates_until_depth()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -610,7 +634,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>max_depth</em>, </td>
         </tr>
         <tr>
@@ -640,7 +664,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">265</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00340">get_next_matching_gates_until_depth()</a>.</p>
 
@@ -688,7 +712,7 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- Start gate. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">successors</td><td>- Set <code>true</code> to get successors, set <code>false</code> to get predecessors. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. Defaults to an empty set. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">cache</td><td>- An optional cache that can be used for better performance on repeated calls. Defaults to a <code>nullptr</code>. </td></tr>
   </table>
   </dd>
@@ -697,7 +721,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00480">480</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">get_next_sequential_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">get_next_sequential_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -743,7 +767,7 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>- Start net. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">successors</td><td>- Set <code>true</code> to get successors, set <code>false</code> to get predecessors. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. Defaults to an empty set. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">cache</td><td>- An optional cache that can be used for better performance on repeated calls. Defaults to a <code>nullptr</code>. </td></tr>
   </table>
   </dd>
@@ -752,7 +776,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">367</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00148">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00101">hal::GateType::has_property()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa6ec7489017b25b5fff20d353b6d2162e">hal::sequential</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00653">hal::Gate::get_fan_in_endpoints()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00797">hal::Gate::get_fan_out_endpoints()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00150">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00101">hal::GateType::has_property()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa6ec7489017b25b5fff20d353b6d2162e">hal::sequential</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="boolean__influence_8cpp_source.html#l00586">hal::boolean_influence::get_ff_dependency_matrix()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00480">get_next_sequential_gates()</a>, and <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00528">get_next_sequential_gates_map()</a>.</p>
 
@@ -787,7 +811,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">successors</td><td>- Set <code>true</code> to get successors, set <code>false</code> to get predecessors. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">forbidden_pins</td><td>- Sequential gates reached through these pins will not be part of the result. Defaults to an empty set. </td></tr>
   </table>
   </dd>
 </dl>
@@ -795,12 +819,12 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00528">528</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">get_next_sequential_gates()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">get_next_sequential_gates()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
-<a id="ac1d89f5a3aa73e8cb94a5bb924663e85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1d89f5a3aa73e8cb94a5bb924663e85">&#9670;&nbsp;</a></span>get_shortest_path()</h2>
+<a id="a48225221197ade6cf2bda52593c91392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48225221197ade6cf2bda52593c91392">&#9670;&nbsp;</a></span>get_shortest_path()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -826,13 +850,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -853,22 +877,22 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An optional vector of gates that connect the start with end gate incase of successs, an error otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional vector of gates that connect the start with end gate on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00813">813</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00053">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
 </div>
 </div>
-<a id="ac8400ffb54852c929241fc3d83f61ab8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8400ffb54852c929241fc3d83f61ab8">&#9670;&nbsp;</a></span>get_shortest_path_distance()</h2>
+<a id="ae9f881d3f790b23eecfb90d93e47c34f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9f881d3f790b23eecfb90d93e47c34f">&#9670;&nbsp;</a></span>get_shortest_path_distance()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::NetlistTraversalDecorator::get_shortest_path_distance </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::optional&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &gt; hal::NetlistTraversalDecorator::get_shortest_path_distance </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
           <td class="paramname"><em>start_gate</em>, </td>
@@ -888,13 +912,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>exit_endpoint_filter</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> current_depth)&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::function&lt; bool(const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> current_depth)&gt; &amp;&#160;</td>
           <td class="paramname"><em>entry_endpoint_filter</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
@@ -915,17 +939,17 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An optional unsigned integer representing the shortest distance between the start and end gate incase of success, an erro otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional unsigned integer representing the shortest distance between the start and end gate on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00704">704</a> of file <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00052">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="enums_8h_source.html#l00053">hal::enum_to_string()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00100">hal::Gate::get_netlist()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">hal::inout</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/decorators/<a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/decorators/<a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a></li>
+<li>include/hal_core/netlist/decorators/<a class="el" href="netlist__traversal__decorator_8h_source.html">netlist_traversal_decorator.h</a></li>
+<li>src/netlist/decorators/<a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -933,7 +957,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_netlist_traversal_decorator.html">NetlistTraversalDecorator</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

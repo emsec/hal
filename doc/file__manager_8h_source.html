@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/file_manager/file_manager.h Source File</title>
+<title>HAL: plugins/gui/include/gui/file_manager/file_manager.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -138,7 +140,7 @@ $(document).ready(function(){initNavTree('file__manager_8h_source.html',''); ini
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_manager.html#a51911b152e62571cfa09fe845e247ca7">watchFile</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="classhal_1_1_file_manager.html#a8312db0a378b313493625354ceb80997">fileName</a>);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_manager.html#a4261d768f7a4e6563bf0b9f45de2b2ae">emitProjectSaved</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; projectDir, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>);</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_manager.html#a4261d768f7a4e6563bf0b9f45de2b2ae">emitProjectSaved</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; projectDir, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; file);</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">   93</a></span>&#160;        <span class="keyword">enum</span> <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2">DirectoryStatus</a> { <a class="code" href="classhal_1_1_project_directory.html">ProjectDirectory</a>=2, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7c502b37a0e93bea1722a43d5869818e">OtherDirectory</a>=1, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab9413e30a2dc5d068a0c37524463eebe">IsFile</a>=0, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2ab5d01d34fae69e2983a508afec60cfa7">NotExisting</a>=-1, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a8eda01ea9e29e21e06ff3a9848d67181">InvalidExtension</a>=-2, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7c623d46780452fa6c77c4c795593717">ParseError</a>=-3,</div>
 <div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a757fc6ec3efb014850d383aa09dbef7c">   94</a></span>&#160;                               <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a7f9a882277e5c739dc6ce58bf61ee736">NetlistError</a>=-4, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a757fc6ec3efb014850d383aa09dbef7c">GatelibError</a>=-5, <a class="code" href="classhal_1_1_file_manager.html#a5911170f4c0730fb3a214d4d3e7788f2a8922a75c41864121a3b89ef279fcdfa5">UnknownDirectoryEntry</a>=-6  };</div>
@@ -183,11 +185,11 @@ $(document).ready(function(){initNavTree('file__manager_8h_source.html',''); ini
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <a class="code" href="classhal_1_1_file_manager.html">FileManager</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> fileSuccessfullyLoaded(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> fileSuccessfullyLoaded(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> file);</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordtype">void</span> projectSuccessfullyLoaded(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; projectDir, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordtype">void</span> projectSuccessfullyLoaded(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; projectDir, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; file);</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordtype">void</span> updateRecentFiles(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordtype">void</span> updateRecentFiles(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; file) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keywordtype">void</span> displayErrorMessage(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> error_message);</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
@@ -206,7 +208,6 @@ $(document).ready(function(){initNavTree('file__manager_8h_source.html',''); ini
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <a class="code" href="classhal_1_1_settings_item_spinbox.html">SettingsItemSpinbox</a>* mSettingAutosaveInterval;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    };</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;}</div>
-<div class="ttc" id="a_apache_01_license_8txt_html_a54c3aaa43358b77e4f57f4f72cbe56c6"><div class="ttname"><a href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a></div><div class="ttdeci">then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00109">Apache License.txt:109</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html"><div class="ttname"><a href="classhal_1_1_file_manager.html">hal::FileManager</a></div><div class="ttdoc">Stores information about the currently opened netlist.</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8h_source.html#l00047">file_manager.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html_a17cef7f3f9a862c36e085fc56d627b95"><div class="ttname"><a href="classhal_1_1_file_manager.html#a17cef7f3f9a862c36e085fc56d627b95">hal::FileManager::importFile</a></div><div class="ttdeci">void importFile(QString filename)</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8cpp_source.html#l00329">file_manager.cpp:329</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html_a2756fd1c1686723bf5688ddb4465b071"><div class="ttname"><a href="classhal_1_1_file_manager.html#a2756fd1c1686723bf5688ddb4465b071">hal::FileManager::fileDirectoryChanged</a></div><div class="ttdeci">void fileDirectoryChanged(const QString &amp;path)</div></div>
@@ -237,10 +238,10 @@ $(document).ready(function(){initNavTree('file__manager_8h_source.html',''); ini
 <div class="ttc" id="aclasshal_1_1_file_manager_html_ad0826acdc85c5fb03e0eae1259822635"><div class="ttname"><a href="classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635">hal::FileManager::projectOpened</a></div><div class="ttdeci">void projectOpened(QString projectDir, QString fileName)</div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html_adce89ed0fffaecd53904a06ced3010f0"><div class="ttname"><a href="classhal_1_1_file_manager.html#adce89ed0fffaecd53904a06ced3010f0">hal::FileManager::fileOpened</a></div><div class="ttdeci">void fileOpened(const QString &amp;fileName)</div></div>
 <div class="ttc" id="aclasshal_1_1_file_manager_html_afde93a6dfaa879b6c66e6402fd58f580"><div class="ttname"><a href="classhal_1_1_file_manager.html#afde93a6dfaa879b6c66e6402fd58f580">hal::FileManager::directoryStatusText</a></div><div class="ttdeci">static QString directoryStatusText(DirectoryStatus stat)</div><div class="ttdef"><b>Definition:</b> <a href="file__manager_8cpp_source.html#l00224">file_manager.cpp:224</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_directory_html"><div class="ttname"><a href="classhal_1_1_project_directory.html">hal::ProjectDirectory</a></div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00037">project_directory.h:38</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_directory_html"><div class="ttname"><a href="classhal_1_1_project_directory.html">hal::ProjectDirectory</a></div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00042">project_directory.h:43</a></div></div>
 <div class="ttc" id="aclasshal_1_1_settings_item_checkbox_html"><div class="ttname"><a href="classhal_1_1_settings_item_checkbox.html">hal::SettingsItemCheckbox</a></div><div class="ttdoc">A SettingsItem representing a Checkbox.</div><div class="ttdef"><b>Definition:</b> <a href="settings__item__checkbox_8h_source.html#l00039">settings_item_checkbox.h:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_settings_item_spinbox_html"><div class="ttname"><a href="classhal_1_1_settings_item_spinbox.html">hal::SettingsItemSpinbox</a></div><div class="ttdoc">A SettingsItem that represents a spinbox.</div><div class="ttdef"><b>Definition:</b> <a href="settings__item__spinbox_8h_source.html#l00037">settings_item_spinbox.h:38</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aprogram__arguments_8h_html"><div class="ttname"><a href="program__arguments_8h.html">program_arguments.h</a></div></div>
 <div class="ttc" id="aqdir_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdir.html">QDir</a></div></div>
 <div class="ttc" id="aqfilesystemwatcher_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfilesystemwatcher.html">QFileSystemWatcher</a></div></div>
@@ -257,7 +258,7 @@ $(document).ready(function(){initNavTree('file__manager_8h_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_211d0708befd7ecf30b0a5f684cde5b3.html">file_manager</a></li><li class="navelem"><a class="el" href="file__manager_8h.html">file_manager.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,12 +1,12 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/gate_details_widget/lut_table_model.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/gate_details_widget/lut_table_model.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="578,5,765,91"/>
-<area shape="rect" id="node2" href="$lut__table__model_8h.html" title=" " alt="" coords="291,139,486,195"/>
-<area shape="rect" id="node8" href="$log_8h.html" title=" " alt="" coords="541,146,671,187"/>
-<area shape="rect" id="node9" title=" " alt="" coords="695,153,781,180"/>
-<area shape="rect" id="node10" title=" " alt="" coords="805,153,873,180"/>
-<area shape="rect" id="node3" href="$gate_8h.html" title=" " alt="" coords="5,243,172,269"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="140,317,280,344"/>
-<area shape="rect" id="node5" title=" " alt="" coords="247,243,407,269"/>
-<area shape="rect" id="node6" title=" " alt="" coords="432,243,503,269"/>
-<area shape="rect" id="node7" title=" " alt="" coords="527,243,600,269"/>
+<map id="plugins/gui/src/selection_details_widget/gate_details_widget/lut_table_model.cpp" name="plugins/gui/src/selection_details_widget/gate_details_widget/lut_table_model.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="567,5,776,61"/>
+<area shape="rect" id="node2" href="$lut__table__model_8h.html" title=" " alt="" coords="291,109,486,165"/>
+<area shape="rect" id="node8" href="$log_8h.html" title=" " alt="" coords="541,117,671,158"/>
+<area shape="rect" id="node9" title=" " alt="" coords="695,124,781,151"/>
+<area shape="rect" id="node10" title=" " alt="" coords="805,124,873,151"/>
+<area shape="rect" id="node3" href="$gate_8h.html" title=" " alt="" coords="5,213,172,240"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="140,288,280,315"/>
+<area shape="rect" id="node5" title=" " alt="" coords="247,213,407,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="432,213,503,240"/>
+<area shape="rect" id="node7" title=" " alt="" coords="527,213,600,240"/>
 </map>

@@ -1,0 +1,4 @@
+<map id="hal::SaleaeDirectoryComposedEntry" name="hal::SaleaeDirectoryComposedEntry">
+<area shape="rect" id="node1" title="The SaleaeDirectoryComposedEntry class represents a composed waveform. There are currently three type..." alt="" coords="5,263,260,443"/>
+<area shape="rect" id="node2" href="$classhal_1_1_saleae_directory_net_entry.html" title="The SaleaeDirectoryNetEntry class represents a regular waveform for a single simulated net...." alt="" coords="23,5,242,215"/>
+</map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['internal_41383',['INTERNAL',['../defines_8h.html#a02c5e2eafaed44878fd8e6c54c8dde4d',1,'defines.h']]]
+  ['hal_5fcandidate_5fcontext_44191',['HAL_CANDIDATE_CONTEXT',['../candidate__context_8h.html#a2a13306ade8398a535ad27faff459e44',1,'candidate_context.h']]]
 ];

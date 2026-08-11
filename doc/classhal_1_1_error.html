@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_error.html',''); initResi
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="error_8h_source.html">error.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="error_8h_source.html">hal_core/utilities/error.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::Error:</div>
 <div class="dyncontent">
@@ -110,20 +112,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a32bfdc1b4e70f7c3d12df849565027b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56fda25d24c87b0b8c4d892d176388c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_error.html">Error</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#a56fda25d24c87b0b8c4d892d176388c4">operator=</a> (<a class="el" href="classhal_1_1_error.html">Error</a> &amp;&amp;)=default</td></tr>
 <tr class="separator:a56fda25d24c87b0b8c4d892d176388c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0baa82f7cffb7cc2fa165c01cc7082e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#ac0baa82f7cffb7cc2fa165c01cc7082e">Error</a> (const std::string &amp;<a class="el" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> line, const std::string &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>)</td></tr>
+<tr class="memitem:ac0baa82f7cffb7cc2fa165c01cc7082e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#ac0baa82f7cffb7cc2fa165c01cc7082e">Error</a> (const std::string &amp;file, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> line, const std::string &amp;message)</td></tr>
 <tr class="separator:ac0baa82f7cffb7cc2fa165c01cc7082e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a193bdea603b5381650f023a7a518518b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#a193bdea603b5381650f023a7a518518b">Error</a> (const <a class="el" href="classhal_1_1_error.html">Error</a> &amp;error)</td></tr>
 <tr class="separator:a193bdea603b5381650f023a7a518518b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41d8976f0ad9c6a0cb0df4f4edaa917f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#a41d8976f0ad9c6a0cb0df4f4edaa917f">Error</a> (const std::string &amp;<a class="el" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> line, const <a class="el" href="classhal_1_1_error.html">Error</a> &amp;error)</td></tr>
+<tr class="memitem:a41d8976f0ad9c6a0cb0df4f4edaa917f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#a41d8976f0ad9c6a0cb0df4f4edaa917f">Error</a> (const std::string &amp;file, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> line, const <a class="el" href="classhal_1_1_error.html">Error</a> &amp;error)</td></tr>
 <tr class="separator:a41d8976f0ad9c6a0cb0df4f4edaa917f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaca325bc641b495ceed76817d8177006"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#aaca325bc641b495ceed76817d8177006">Error</a> (const std::string &amp;<a class="el" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> line, const <a class="el" href="classhal_1_1_error.html">Error</a> &amp;error, const std::string &amp;<a class="el" href="plugins_2gui_2_c_make_lists_8txt.html#a0f85e1d15de90d7e8c90ac2c8a621575">message</a>)</td></tr>
+<tr class="memitem:aaca325bc641b495ceed76817d8177006"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#aaca325bc641b495ceed76817d8177006">Error</a> (const std::string &amp;file, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> line, const <a class="el" href="classhal_1_1_error.html">Error</a> &amp;error, const std::string &amp;message)</td></tr>
 <tr class="separator:aaca325bc641b495ceed76817d8177006"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e4b14d0e534342b55fa0ba6821385ab"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_error.html#a2e4b14d0e534342b55fa0ba6821385ab">get</a> () const</td></tr>
 <tr class="separator:a2e4b14d0e534342b55fa0ba6821385ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00032">32</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<div class="textblock"><p>Describes a single error, comprising a message and the source location at which the error occurred. Errors are propagated through the API using <code><a class="el" href="classhal_1_1_result.html">Result</a></code>, and can be chained to preserve the context of a failure. </p>
+
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00036">36</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aee3d123004493cb43af376db3f880cba"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee3d123004493cb43af376db3f880cba">&#9670;&nbsp;</a></span>Error() <span class="overload">[1/6]</span></h2>
@@ -194,7 +197,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>line</em>, </td>
         </tr>
         <tr>
@@ -225,7 +228,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00048">48</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00052">52</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 </div>
 </div>
@@ -260,7 +263,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00055">55</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00059">59</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282">hal::error</a>.</p>
 
@@ -284,7 +287,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>line</em>, </td>
         </tr>
         <tr>
@@ -315,7 +318,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00066">66</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00070">70</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282">hal::error</a>.</p>
 
@@ -339,7 +342,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>line</em>, </td>
         </tr>
         <tr>
@@ -377,7 +380,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00076">76</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00080">80</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282">hal::error</a>.</p>
 
@@ -409,7 +412,7 @@ Public Member Functions</h2></td></tr>
 <p>Get the error message.</p>
 <dl class="section return"><dt>Returns</dt><dd>The error message. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00083">83</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="error_8h_source.html#l00087">87</a> of file <a class="el" href="error_8h_source.html">error.h</a>.</p>
 
 </div>
 </div>
@@ -466,7 +469,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="error_8h_source.html">error.h</a></li>
+<li>include/hal_core/utilities/<a class="el" href="error_8h_source.html">error.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -474,7 +477,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_error.html">Error</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

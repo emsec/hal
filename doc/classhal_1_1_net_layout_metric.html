@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_net_layout_metric.html','
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="net__layout__point_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/net_layout_point.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::NetLayoutMetric:</div>
 <div class="dyncontent">
@@ -102,9 +104,9 @@ Collaboration diagram for hal::NetLayoutMetric:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3c196f8694c636c0a313190376bd1487"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_metric.html#a3c196f8694c636c0a313190376bd1487">NetLayoutMetric</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const <a class="el" href="classhal_1_1_net_layout_connection.html">NetLayoutConnection</a> *con)</td></tr>
+<tr class="memitem:a3c196f8694c636c0a313190376bd1487"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_metric.html#a3c196f8694c636c0a313190376bd1487">NetLayoutMetric</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>, const <a class="el" href="classhal_1_1_net_layout_connection.html">NetLayoutConnection</a> *con)</td></tr>
 <tr class="separator:a3c196f8694c636c0a313190376bd1487"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49e5daa88dbd3a01829813edeec5c1bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_metric.html#a49e5daa88dbd3a01829813edeec5c1bc">getId</a> () const</td></tr>
+<tr class="memitem:a49e5daa88dbd3a01829813edeec5c1bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_metric.html#a49e5daa88dbd3a01829813edeec5c1bc">getId</a> () const</td></tr>
 <tr class="separator:a49e5daa88dbd3a01829813edeec5c1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfeecf1dabcf380845c39bc8dd571a24"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_metric.html#abfeecf1dabcf380845c39bc8dd571a24">firstMoment</a> () const</td></tr>
 <tr class="separator:abfeecf1dabcf380845c39bc8dd571a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,8 +116,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adfa4313c3dd61d2782f8dfdb698100ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00132">132</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
+<div class="textblock"><p>The routing cost of one connection, used to route the more constrained nets first. </p>
+
+<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00148">148</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3c196f8694c636c0a313190376bd1487"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c196f8694c636c0a313190376bd1487">&#9670;&nbsp;</a></span>NetLayoutMetric()</h2>
@@ -126,7 +129,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">hal::NetLayoutMetric::NetLayoutMetric </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
@@ -145,7 +148,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="net__layout__point_8cpp_source.html#l00341">341</a> of file <a class="el" href="net__layout__point_8cpp_source.html">net_layout_point.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#insert">QMap::insert()</a>, <a class="el" href="net__layout__point_8h_source.html#l00097">hal::NetLayoutWire::SourcePoint</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#insert">QMap::insert()</a>, <a class="el" href="net__layout__point_8h_source.html#l00109">hal::NetLayoutWire::SourcePoint</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
 
 </div>
 </div>
@@ -173,7 +176,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00137">137</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00153">153</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
 
 </div>
 </div>
@@ -187,7 +190,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::NetLayoutMetric::getId </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::NetLayoutMetric::getId </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -200,7 +203,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00136">136</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00152">152</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
 
 </div>
 </div>
@@ -247,13 +250,13 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00138">138</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__point_8h_source.html#l00154">154</a> of file <a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/<a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/graph_widget/layouters/<a class="el" href="net__layout__point_8cpp_source.html">net_layout_point.cpp</a></li>
+<li>plugins/gui/include/gui/graph_widget/layouters/<a class="el" href="net__layout__point_8h_source.html">net_layout_point.h</a></li>
+<li>plugins/gui/src/graph_widget/layouters/<a class="el" href="net__layout__point_8cpp_source.html">net_layout_point.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -261,7 +264,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net_layout_metric.html">NetLayoutMetric</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

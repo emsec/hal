@@ -1,0 +1,52 @@
+<map id="plugins/gui/src/python/python_editor.cpp" name="plugins/gui/src/python/python_editor.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="3986,5,4152,47"/>
+<area shape="rect" id="node2" href="$python__editor_8h.html" title=" " alt="" coords="1038,109,1234,136"/>
+<area shape="rect" id="node3" href="$action_8h.html" title=" " alt="" coords="26,206,168,233"/>
+<area shape="rect" id="node4" title=" " alt="" coords="6,288,79,315"/>
+<area shape="rect" id="node18" href="$python__syntax__highlighter_8h.html" title=" " alt="" coords="2167,95,2366,151"/>
+<area shape="rect" id="node20" href="$file__manager_8h.html" title=" " alt="" coords="2389,102,2544,143"/>
+<area shape="rect" id="node21" title=" " alt="" coords="2528,206,2578,233"/>
+<area shape="rect" id="node22" href="$graph__context_8h.html" title=" " alt="" coords="2618,102,2813,143"/>
+<area shape="rect" id="node23" href="$gui__globals_8h.html" title=" " alt="" coords="2838,109,2970,136"/>
+<area shape="rect" id="node24" href="$graphics_8h.html" title=" " alt="" coords="2994,109,3166,136"/>
+<area shape="rect" id="node25" href="$python__code__editor_8h.html" title=" " alt="" coords="508,102,686,143"/>
+<area shape="rect" id="node26" href="$python__editor__code__completion__dialog_8h.html" title=" " alt="" coords="3190,102,3388,143"/>
+<area shape="rect" id="node27" href="$searchbar_8h.html" title=" " alt="" coords="3413,109,3602,136"/>
+<area shape="rect" id="node28" href="$settings__item__checkbox_8h.html" title=" " alt="" coords="3627,95,3786,151"/>
+<area shape="rect" id="node29" href="$settings__item__keybind_8h.html" title=" " alt="" coords="1739,95,1898,151"/>
+<area shape="rect" id="node30" href="$settings__item__spinbox_8h.html" title=" " alt="" coords="3810,95,3968,151"/>
+<area shape="rect" id="node31" href="$splitter_8h.html" title=" " alt="" coords="3992,109,4146,136"/>
+<area shape="rect" id="node32" href="$toolbar_8h.html" title=" " alt="" coords="4170,109,4323,136"/>
+<area shape="rect" id="node33" href="$log_8h.html" title=" " alt="" coords="4348,102,4478,143"/>
+<area shape="rect" id="node34" href="$include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="4398,199,4529,240"/>
+<area shape="rect" id="node35" title=" " alt="" coords="4553,109,4628,136"/>
+<area shape="rect" id="node36" title=" " alt="" coords="4652,109,4793,136"/>
+<area shape="rect" id="node37" title=" " alt="" coords="4818,109,4915,136"/>
+<area shape="rect" id="node38" title=" " alt="" coords="4940,109,5020,136"/>
+<area shape="rect" id="node39" title=" " alt="" coords="5044,109,5112,136"/>
+<area shape="rect" id="node40" title=" " alt="" coords="5136,109,5223,136"/>
+<area shape="rect" id="node41" title=" " alt="" coords="5247,109,5323,136"/>
+<area shape="rect" id="node42" title=" " alt="" coords="5347,109,5535,136"/>
+<area shape="rect" id="node43" title=" " alt="" coords="5560,109,5666,136"/>
+<area shape="rect" id="node44" title=" " alt="" coords="5690,109,5792,136"/>
+<area shape="rect" id="node45" title=" " alt="" coords="5816,109,5927,136"/>
+<area shape="rect" id="node46" title=" " alt="" coords="5952,109,6018,136"/>
+<area shape="rect" id="node47" title=" " alt="" coords="6043,109,6116,136"/>
+<area shape="rect" id="node48" href="$project__manager_8h.html" title=" " alt="" coords="1922,102,2093,143"/>
+<area shape="rect" id="node49" href="$project__directory_8h.html" title=" " alt="" coords="2149,199,2296,240"/>
+<area shape="rect" id="node50" title=" " alt="" coords="6140,109,6334,136"/>
+<area shape="rect" id="node5" href="$code__editor_8h.html" title=" " alt="" coords="193,199,350,240"/>
+<area shape="rect" id="node6" href="$content__widget_8h.html" title=" " alt="" coords="374,199,521,240"/>
+<area shape="rect" id="node7" href="$file__modified__bar_8h.html" title=" " alt="" coords="596,199,755,240"/>
+<area shape="rect" id="node8" title=" " alt="" coords="564,288,670,315"/>
+<area shape="rect" id="node9" href="$python__context__subscriber_8h.html" title=" " alt="" coords="779,199,975,240"/>
+<area shape="rect" id="node10" href="$project__serializer_8h.html" title=" " alt="" coords="1050,199,1221,240"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1578,288,1669,315"/>
+<area shape="rect" id="node12" href="$json__write__document_8h.html" title=" " alt="" coords="1896,199,2074,240"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1245,206,1314,233"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1338,206,1496,233"/>
+<area shape="rect" id="node15" title=" " alt="" coords="1812,206,1872,233"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1520,206,1634,233"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1659,206,1788,233"/>
+<area shape="rect" id="node19" title=" " alt="" coords="2320,206,2474,233"/>
+</map>

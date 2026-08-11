@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/gate_details_widget/boolean_function_table.cpp Source File</title>
+<title>HAL: plugins/gui/src/selection_details_widget/gate_details_widget/boolean_function_table.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -126,10 +128,10 @@ $(document).ready(function(){initNavTree('boolean__function__table_8cpp_source.h
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#update">update</a>();</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_table.html#ae7e3e5f32291d5b1d2c6aec7cff2a9d2">   41</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_boolean_function_table.html#ae7e3e5f32291d5b1d2c6aec7cff2a9d2">BooleanFunctionTable::setGateInformation</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a> *<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>)</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_table.html#ae7e3e5f32291d5b1d2c6aec7cff2a9d2">   41</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_boolean_function_table.html#ae7e3e5f32291d5b1d2c6aec7cff2a9d2">BooleanFunctionTable::setGateInformation</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a> *g)</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        mCurrentGate = <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        mCurrentGateId = <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> ? <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id() : 0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        mCurrentGate = g;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        mCurrentGateId = g ? g-&gt;<a class="code" href="classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81">get_id</a>() : 0;</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> BooleanFunctionTable::resizeEvent(<a class="codeRef" href="https://doc.qt.io/qt-5/qresizeevent.html">QResizeEvent</a> *event)</div>
@@ -227,10 +229,10 @@ $(document).ready(function(){initNavTree('boolean__function__table_8cpp_source.h
 <div class="ttc" id="aclasshal_1_1_boolean_function_table_model_html_a50b279f165b56e4fbe2995cb39be2aac"><div class="ttname"><a href="classhal_1_1_boolean_function_table_model.html#a50b279f165b56e4fbe2995cb39be2aac">hal::BooleanFunctionTableModel::setEntries</a></div><div class="ttdeci">void setEntries(QVector&lt; QSharedPointer&lt; BooleanFunctionTableEntry &gt;&gt; entries)</div><div class="ttdef"><b>Definition:</b> <a href="boolean__function__table__model_8cpp_source.html#l00211">boolean_function_table_model.cpp:211</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_table_model_html_a9279575b4ac94f1eb161abacfdf07b1e"><div class="ttname"><a href="classhal_1_1_boolean_function_table_model.html#a9279575b4ac94f1eb161abacfdf07b1e">hal::BooleanFunctionTableModel::rowCount</a></div><div class="ttdeci">int rowCount(const QModelIndex &amp;parent=QModelIndex()) const override</div><div class="ttdef"><b>Definition:</b> <a href="boolean__function__table__model_8cpp_source.html#l00142">boolean_function_table_model.cpp:142</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00057">gate.h:58</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_html_afc66cb905518bd5b03c1323caea00b81"><div class="ttname"><a href="classhal_1_1_gate.html#afc66cb905518bd5b03c1323caea00b81">hal::Gate::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00095">gate.cpp:95</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="ainput__dialog_8h_html"><div class="ttname"><a href="input__dialog_8h.html">input_dialog.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apy__code__provider_8h_html"><div class="ttname"><a href="py__code__provider_8h.html">py_code_provider.h</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_SelectionMode-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::NoSelection</a></div><div class="ttdeci">NoSelection</div></div>
 <div class="ttc" id="aqabstractitemview_html_clearSelection"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#clearSelection">QAbstractItemView::clearSelection</a></div><div class="ttdeci">void clearSelection()</div></div>
@@ -288,7 +290,7 @@ $(document).ready(function(){initNavTree('boolean__function__table_8cpp_source.h
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_78f3dec0c5ef157ac74258fc012bc3cd.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="dir_42e05bd9637b80495264a1929f470918.html">gate_details_widget</a></li><li class="navelem"><a class="el" href="boolean__function__table_8cpp.html">boolean_function_table.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

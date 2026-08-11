@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_common_successor_predeces
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="common__successor__predecessor_8h_source.html">common_successor_predecessor.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="common__successor__predecessor_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/gui_utils/common_successor_predecessor.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::CommonSuccessorPredecessor:</div>
 <div class="dyncontent">
@@ -102,14 +104,15 @@ Collaboration diagram for hal::CommonSuccessorPredecessor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad826d36a7c51987dd6d7b7d150aca764"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_common_successor_predecessor.html#ad826d36a7c51987dd6d7b7d150aca764">CommonSuccessorPredecessor</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gateIds, bool forw, int maxRound)</td></tr>
+<tr class="memitem:ad826d36a7c51987dd6d7b7d150aca764"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_common_successor_predecessor.html#ad826d36a7c51987dd6d7b7d150aca764">CommonSuccessorPredecessor</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;gateIds, bool forw, int maxRound)</td></tr>
 <tr class="separator:ad826d36a7c51987dd6d7b7d150aca764"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e5c6a2f93987f70411e2aee23774c52"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_common_successor_predecessor.html#a8e5c6a2f93987f70411e2aee23774c52">result</a> () const</td></tr>
 <tr class="separator:a8e5c6a2f93987f70411e2aee23774c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="common__successor__predecessor_8h_source.html#l00051">51</a> of file <a class="el" href="common__successor__predecessor_8h_source.html">common_successor_predecessor.h</a>.</p>
+<div class="textblock"><p>Finds the gates that are reachable from all of the given gates within a maximum depth. </p>
+
+<p class="definition">Definition at line <a class="el" href="common__successor__predecessor_8h_source.html#l00057">57</a> of file <a class="el" href="common__successor__predecessor_8h_source.html">common_successor_predecessor.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad826d36a7c51987dd6d7b7d150aca764"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad826d36a7c51987dd6d7b7d150aca764">&#9670;&nbsp;</a></span>CommonSuccessorPredecessor()</h2>
@@ -120,7 +123,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">hal::CommonSuccessorPredecessor::CommonSuccessorPredecessor </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gateIds</em>, </td>
         </tr>
         <tr>
@@ -145,7 +148,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="common__successor__predecessor_8cpp_source.html#l00046">46</a> of file <a class="el" href="common__successor__predecessor_8cpp_source.html">common_successor_predecessor.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="common__successor__predecessor_8h_source.html#l00047">hal::CommonSuccessorPredecessorGateQueue::mask()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="common__successor__predecessor_8h_source.html#l00050">hal::CommonSuccessorPredecessorGateQueue::mask()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
 
 </div>
 </div>
@@ -167,13 +170,13 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="common__successor__predecessor_8cpp_source.html#l00084">84</a> of file <a class="el" href="common__successor__predecessor_8cpp_source.html">common_successor_predecessor.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/gui_utils/<a class="el" href="common__successor__predecessor_8h_source.html">common_successor_predecessor.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/gui_utils/<a class="el" href="common__successor__predecessor_8cpp_source.html">common_successor_predecessor.cpp</a></li>
+<li>plugins/gui/include/gui/gui_utils/<a class="el" href="common__successor__predecessor_8h_source.html">common_successor_predecessor.h</a></li>
+<li>plugins/gui/src/gui_utils/<a class="el" href="common__successor__predecessor_8cpp_source.html">common_successor_predecessor.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -181,7 +184,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_common_successor_predecessor.html">CommonSuccessorPredecessor</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -11,8 +11,5 @@ var classhal_1_1_get_in_touch_item =
     [ "repolish", "classhal_1_1_get_in_touch_item.html#ad13e864346ed80896cbb1032c1e72eb0", null ],
     [ "setHoverActive", "classhal_1_1_get_in_touch_item.html#a93b05f16592d5b52164084ad80953fb8", null ],
     [ "setIconPath", "classhal_1_1_get_in_touch_item.html#a43b79c5220feca624f25879e47443175", null ],
-    [ "setIconStyle", "classhal_1_1_get_in_touch_item.html#a6e9f9bc56cf10fc6567ac97e85089e20", null ],
-    [ "hover", "classhal_1_1_get_in_touch_item.html#a8cc6cb92fe52b822d7f0537028ff3f93", null ],
-    [ "iconPath", "classhal_1_1_get_in_touch_item.html#acf7321f0e5c366cf7e0192399f4ad39a", null ],
-    [ "iconStyle", "classhal_1_1_get_in_touch_item.html#ae09a501a033c83ee3ec3d6277606eb67", null ]
+    [ "setIconStyle", "classhal_1_1_get_in_touch_item.html#a6e9f9bc56cf10fc6567ac97e85089e20", null ]
 ];

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,28 +93,30 @@ $(document).ready(function(){initNavTree('namespacehal_1_1event__log.html',''); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abc9b57a9c5d5fe789cf9dda93688ce77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#abc9b57a9c5d5fe789cf9dda93688ce77">enable_event_log</a> (bool enable)</td></tr>
-<tr class="separator:abc9b57a9c5d5fe789cf9dda93688ce77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a6b73c923956b16b893065851018de5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a6a6b73c923956b16b893065851018de5">handle_gate_event</a> (<a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fb">GateEvent::event</a> event, <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
-<tr class="separator:a6a6b73c923956b16b893065851018de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6479a1ef5747ac3ea868e14d808ceef5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a6479a1ef5747ac3ea868e14d808ceef5">handle_net_event</a> (<a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579df">NetEvent::event</a> event, <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
-<tr class="separator:a6479a1ef5747ac3ea868e14d808ceef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7265c534b5272bea85516cda491be3bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a7265c534b5272bea85516cda491be3bc">handle_netlist_event</a> (<a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accaf">NetlistEvent::event</a> event, <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
-<tr class="separator:a7265c534b5272bea85516cda491be3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab94621b448bdd7561067cadc29e6201e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#ab94621b448bdd7561067cadc29e6201e">handle_grouping_event</a> (<a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8">GroupingEvent::event</a> event, <a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
-<tr class="separator:ab94621b448bdd7561067cadc29e6201e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad54c40d629da033f523fb43d86007c1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#ad54c40d629da033f523fb43d86007c1f">handle_module_event</a> (<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53f">ModuleEvent::event</a> event, <a class="el" href="classhal_1_1_module.html">Module</a> *module, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> associated_data)</td></tr>
-<tr class="separator:ad54c40d629da033f523fb43d86007c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a1dc4e3b60dc07c643838a327fae20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a67a1dc4e3b60dc07c643838a327fae20">handle_gate_event</a> (<a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fb">GateEvent::event</a> event, <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> associated_data)</td></tr>
+<tr class="separator:a67a1dc4e3b60dc07c643838a327fae20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b281d8fb4a70a4e0273c9725e6881be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a8b281d8fb4a70a4e0273c9725e6881be">handle_net_event</a> (<a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579df">NetEvent::event</a> event, <a class="el" href="classhal_1_1_net.html">Net</a> *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> associated_data)</td></tr>
+<tr class="separator:a8b281d8fb4a70a4e0273c9725e6881be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03bccc03867cb585d296858254d7849"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#ac03bccc03867cb585d296858254d7849">handle_netlist_event</a> (<a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accaf">NetlistEvent::event</a> event, <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> associated_data)</td></tr>
+<tr class="separator:ac03bccc03867cb585d296858254d7849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce4930ecb7c52f54c22f5b25da27c0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#adce4930ecb7c52f54c22f5b25da27c0d">handle_grouping_event</a> (<a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8">GroupingEvent::event</a> event, <a class="el" href="classhal_1_1_grouping.html">Grouping</a> *grp, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> associated_data)</td></tr>
+<tr class="separator:adce4930ecb7c52f54c22f5b25da27c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e7e7b664110661341e5695ae1566414"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a6e7e7b664110661341e5695ae1566414">handle_module_event</a> (<a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53f">ModuleEvent::event</a> event, <a class="el" href="classhal_1_1_module.html">Module</a> *module, <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> associated_data)</td></tr>
+<tr class="separator:a6e7e7b664110661341e5695ae1566414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1173026c7030154bb50826f89064680b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1event__log.html#a1173026c7030154bb50826f89064680b">enable_event_log</a> (bool enable)</td></tr>
+<tr class="separator:a1173026c7030154bb50826f89064680b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="abc9b57a9c5d5fe789cf9dda93688ce77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc9b57a9c5d5fe789cf9dda93688ce77">&#9670;&nbsp;</a></span>enable_event_log()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains the callbacks that write every netlist event into the log. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a1173026c7030154bb50826f89064680b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1173026c7030154bb50826f89064680b">&#9670;&nbsp;</a></span>enable_event_log()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::enable_event_log </td>
+          <td class="memname">void hal::event_log::enable_event_log </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>enable</em></td><td>)</td>
@@ -131,16 +135,18 @@ Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00062">hal::MainWindow::MainWindow()</a>.</p>
+
 </div>
 </div>
-<a id="a6a6b73c923956b16b893065851018de5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a6b73c923956b16b893065851018de5">&#9670;&nbsp;</a></span>handle_gate_event()</h2>
+<a id="a67a1dc4e3b60dc07c643838a327fae20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67a1dc4e3b60dc07c643838a327fae20">&#9670;&nbsp;</a></span>handle_gate_event()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::handle_gate_event </td>
+          <td class="memname">void hal::event_log::handle_gate_event </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fb">GateEvent::event</a>&#160;</td>
           <td class="paramname"><em>event</em>, </td>
@@ -154,7 +160,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>associated_data</em>&#160;</td>
         </tr>
         <tr>
@@ -181,14 +187,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab94621b448bdd7561067cadc29e6201e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab94621b448bdd7561067cadc29e6201e">&#9670;&nbsp;</a></span>handle_grouping_event()</h2>
+<a id="adce4930ecb7c52f54c22f5b25da27c0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adce4930ecb7c52f54c22f5b25da27c0d">&#9670;&nbsp;</a></span>handle_grouping_event()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::handle_grouping_event </td>
+          <td class="memname">void hal::event_log::handle_grouping_event </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8">GroupingEvent::event</a>&#160;</td>
           <td class="paramname"><em>event</em>, </td>
@@ -202,7 +208,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>associated_data</em>&#160;</td>
         </tr>
         <tr>
@@ -223,20 +229,20 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="event__log_8cpp_source.html#l00159">159</a> of file <a class="el" href="event__log_8cpp_source.html">event_log.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3657ad381110b05b25b1ddfa4221ae09">hal::GroupingEvent::color_changed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ae2fa538867c3830a859a5b17ab24644b">hal::GroupingEvent::created</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25">hal::GroupingEvent::gate_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5bf6888f7204acd17fd29978733807dd">hal::GroupingEvent::gate_removed</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00047">hal::Grouping::get_color()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00022">hal::Grouping::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00042">hal::Grouping::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00064">hal::Grouping::get_netlist()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5829a61ba2f7ba0ac089960b4c326861">hal::GroupingEvent::module_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b">hal::GroupingEvent::module_removed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ac2c85b49688a09eae85e889227c4f3ab">hal::GroupingEvent::name_changed</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a239fa5c81d08e83fc00aefb42c050a55">hal::GroupingEvent::net_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8abc1c2da0450a73fe0e28bc16a9202a1c">hal::GroupingEvent::net_removed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711">hal::GroupingEvent::removed</a>, and <a class="el" href="utils_8h_source.html#l00786">hal::utils::Color::toString()</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3657ad381110b05b25b1ddfa4221ae09">hal::GroupingEvent::color_changed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ae2fa538867c3830a859a5b17ab24644b">hal::GroupingEvent::created</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25">hal::GroupingEvent::gate_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5bf6888f7204acd17fd29978733807dd">hal::GroupingEvent::gate_removed</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00047">hal::Grouping::get_color()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00022">hal::Grouping::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00042">hal::Grouping::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00064">hal::Grouping::get_netlist()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5829a61ba2f7ba0ac089960b4c326861">hal::GroupingEvent::module_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b">hal::GroupingEvent::module_removed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ac2c85b49688a09eae85e889227c4f3ab">hal::GroupingEvent::name_changed</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a239fa5c81d08e83fc00aefb42c050a55">hal::GroupingEvent::net_assigned</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8abc1c2da0450a73fe0e28bc16a9202a1c">hal::GroupingEvent::net_removed</a>, <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711">hal::GroupingEvent::removed</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00792">hal::utils::Color::toString()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="event__handler_8cpp_source.html#l00118">hal::EventHandler::notify()</a>.</p>
 
 </div>
 </div>
-<a id="ad54c40d629da033f523fb43d86007c1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad54c40d629da033f523fb43d86007c1f">&#9670;&nbsp;</a></span>handle_module_event()</h2>
+<a id="a6e7e7b664110661341e5695ae1566414"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e7e7b664110661341e5695ae1566414">&#9670;&nbsp;</a></span>handle_module_event()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::handle_module_event </td>
+          <td class="memname">void hal::event_log::handle_module_event </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53f">ModuleEvent::event</a>&#160;</td>
           <td class="paramname"><em>event</em>, </td>
@@ -250,7 +256,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>associated_data</em>&#160;</td>
         </tr>
         <tr>
@@ -277,14 +283,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6479a1ef5747ac3ea868e14d808ceef5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6479a1ef5747ac3ea868e14d808ceef5">&#9670;&nbsp;</a></span>handle_net_event()</h2>
+<a id="a8b281d8fb4a70a4e0273c9725e6881be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b281d8fb4a70a4e0273c9725e6881be">&#9670;&nbsp;</a></span>handle_net_event()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::handle_net_event </td>
+          <td class="memname">void hal::event_log::handle_net_event </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579df">NetEvent::event</a>&#160;</td>
           <td class="paramname"><em>event</em>, </td>
@@ -298,7 +304,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>associated_data</em>&#160;</td>
         </tr>
         <tr>
@@ -325,14 +331,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7265c534b5272bea85516cda491be3bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7265c534b5272bea85516cda491be3bc">&#9670;&nbsp;</a></span>handle_netlist_event()</h2>
+<a id="ac03bccc03867cb585d296858254d7849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac03bccc03867cb585d296858254d7849">&#9670;&nbsp;</a></span>handle_netlist_event()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::event_log::handle_netlist_event </td>
+          <td class="memname">void hal::event_log::handle_netlist_event </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accaf">NetlistEvent::event</a>&#160;</td>
           <td class="paramname"><em>event</em>, </td>
@@ -346,7 +352,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>associated_data</em>&#160;</td>
         </tr>
         <tr>
@@ -367,7 +373,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="event__log_8cpp_source.html#l00092">92</a> of file <a class="el" href="event__log_8cpp_source.html">event_log.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae467c908d5b6ab4b9b95a0fc501431ad">hal::NetlistEvent::design_name_changed</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa54c19a7638e6a10048068c56718d2705">hal::NetlistEvent::device_name_changed</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa345f6b747543361dfb7b89089544d3bd">hal::NetlistEvent::id_changed</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa63d74b0173b42a41a974c3d670876701">hal::NetlistEvent::input_filename_changed</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa03d741d2d3bb7a68147ace80caa01a82">hal::NetlistEvent::marked_global_gnd</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf483783b5cb1b87407dd87879cedaa4a">hal::NetlistEvent::marked_global_input</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae8c6c35b23ca8b21ff8acd068b2deada">hal::NetlistEvent::marked_global_output</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa8d7473106168a64c8a421dc4a327a9de">hal::NetlistEvent::marked_global_vcc</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa5841f8cc9174ea3d44605f9d51a5a033">hal::NetlistEvent::unmarked_global_gnd</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafad9cc107ff1da372cce7da6ef0636af22">hal::NetlistEvent::unmarked_global_input</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0">hal::NetlistEvent::unmarked_global_output</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa7886a106649a2a997bf8590b40cbf80e">hal::NetlistEvent::unmarked_global_vcc</a>.</p>
+<p class="reference">References <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae467c908d5b6ab4b9b95a0fc501431ad">hal::NetlistEvent::design_name_changed</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa54c19a7638e6a10048068c56718d2705">hal::NetlistEvent::device_name_changed</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00104">hal::Netlist::get_design_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00118">hal::Netlist::get_device_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00075">hal::Netlist::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00090">hal::Netlist::get_input_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa345f6b747543361dfb7b89089544d3bd">hal::NetlistEvent::id_changed</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa63d74b0173b42a41a974c3d670876701">hal::NetlistEvent::input_filename_changed</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa03d741d2d3bb7a68147ace80caa01a82">hal::NetlistEvent::marked_global_gnd</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafaf483783b5cb1b87407dd87879cedaa4a">hal::NetlistEvent::marked_global_input</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafae8c6c35b23ca8b21ff8acd068b2deada">hal::NetlistEvent::marked_global_output</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa8d7473106168a64c8a421dc4a327a9de">hal::NetlistEvent::marked_global_vcc</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa5841f8cc9174ea3d44605f9d51a5a033">hal::NetlistEvent::unmarked_global_gnd</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafad9cc107ff1da372cce7da6ef0636af22">hal::NetlistEvent::unmarked_global_input</a>, <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa20774fbd2429c44f20bef3cbbe7edde0">hal::NetlistEvent::unmarked_global_output</a>, and <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accafa7886a106649a2a997bf8590b40cbf80e">hal::NetlistEvent::unmarked_global_vcc</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler::notify()</a>.</p>
 
@@ -379,7 +385,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1event__log.html">event_log</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

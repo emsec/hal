@@ -30,11 +30,5 @@ var classhal_1_1_code_editor =
     [ "setLineWrapEnabled", "classhal_1_1_code_editor.html#a3a9d6a2db9cdcc1ae858a903ded50f1a", null ],
     [ "setMinimapEnabled", "classhal_1_1_code_editor.html#a9c6cfbcbd9af22116c8584ae9579be4d", null ],
     [ "toggleLineNumbers", "classhal_1_1_code_editor.html#adc989bcc20fc0d9181e3ead94567cc54", null ],
-    [ "toggleMinimap", "classhal_1_1_code_editor.html#a9374065d21dbf14aaca6b848f8285ad2", null ],
-    [ "currentLineBackground", "classhal_1_1_code_editor.html#af011e9640d2c14e6b8bc59c139c6ff3d", null ],
-    [ "lineNumberBackground", "classhal_1_1_code_editor.html#ab4aa65cee4558014418ae3a0459ac793", null ],
-    [ "lineNumberColor", "classhal_1_1_code_editor.html#a430414c360beb8ec0faaa33b96da9566", null ],
-    [ "lineNumberFont", "classhal_1_1_code_editor.html#ae049e77c698f0380d677f708275866e7", null ],
-    [ "lineNumberHighlightBackground", "classhal_1_1_code_editor.html#a9b277ee91d2db456c134c3f13d5475fd", null ],
-    [ "lineNumberHighlightColor", "classhal_1_1_code_editor.html#a20a9449f044841ef54950cd5851b72a7", null ]
+    [ "toggleMinimap", "classhal_1_1_code_editor.html#a9374065d21dbf14aaca6b848f8285ad2", null ]
 ];

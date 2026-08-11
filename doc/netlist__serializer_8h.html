@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/netlist/persistent/netlist_serializer.h File Reference</title>
+<title>HAL: include/hal_core/netlist/persistent/netlist_serializer.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,14 +95,14 @@ $(document).ready(function(){initNavTree('netlist__serializer_8h.html',''); init
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for netlist_serializer.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="netlist__serializer_8h__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2persistent_2netlist__serializer_8h" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2persistent_2netlist__serializer_8h" id="a_2home_2runner_2work_2hal_2hal_2include_2hal__core_2netlist_2persistent_2netlist__serializer_8h">
-<area shape="rect" title=" " alt="" coords="128,5,309,76"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,124,289,151"/>
-<area shape="rect" title=" " alt="" coords="5,199,96,225"/>
-<area shape="rect" title=" " alt="" coords="121,199,207,225"/>
-<area shape="rect" title=" " alt="" coords="231,199,318,225"/>
-<area shape="rect" title=" " alt="" coords="342,199,413,225"/>
+<div class="center"><img src="netlist__serializer_8h__incl.png" border="0" usemap="#ainclude_2hal__core_2netlist_2persistent_2netlist__serializer_8h" alt=""/></div>
+<map name="ainclude_2hal__core_2netlist_2persistent_2netlist__serializer_8h" id="ainclude_2hal__core_2netlist_2persistent_2netlist__serializer_8h">
+<area shape="rect" title=" " alt="" coords="111,5,326,47"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,95,289,121"/>
+<area shape="rect" title=" " alt="" coords="5,169,96,196"/>
+<area shape="rect" title=" " alt="" coords="121,169,207,196"/>
+<area shape="rect" title=" " alt="" coords="231,169,318,196"/>
+<area shape="rect" title=" " alt="" coords="342,169,413,196"/>
 </map>
 </div>
 </div>
@@ -117,12 +119,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a71a6e82f53ef9ed518f35c56f396e838"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#a71a6e82f53ef9ed518f35c56f396e838">hal::netlist_serializer::serialize_to_file</a> (const Netlist *nl, const std::filesystem::path &amp;hal_file)</td></tr>
-<tr class="separator:a71a6e82f53ef9ed518f35c56f396e838"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3335bf7ed9163c5fd585811fa213ab2"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#af3335bf7ed9163c5fd585811fa213ab2">hal::netlist_serializer::deserialize_from_file</a> (const std::filesystem::path &amp;hal_file, GateLibrary *gatelib)</td></tr>
-<tr class="separator:af3335bf7ed9163c5fd585811fa213ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adab393c4f4d35b9a8d00ab719239a377"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#adab393c4f4d35b9a8d00ab719239a377">hal::netlist_serializer::deserialize_from_string</a> (const std::string &amp;hal_string, GateLibrary *gatelib)</td></tr>
-<tr class="separator:adab393c4f4d35b9a8d00ab719239a377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab461cdea128f07c4e2e9ca32774bcdb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#ab461cdea128f07c4e2e9ca32774bcdb0">hal::netlist_serializer::serialize_to_file</a> (const Netlist *netlist, const std::filesystem::path &amp;hal_file)</td></tr>
+<tr class="separator:ab461cdea128f07c4e2e9ca32774bcdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad14a8adbbfe36c02d6ab63e54a22b566"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#ad14a8adbbfe36c02d6ab63e54a22b566">hal::netlist_serializer::deserialize_from_file</a> (const std::filesystem::path &amp;hal_file, GateLibrary *gate_lib=nullptr)</td></tr>
+<tr class="separator:ad14a8adbbfe36c02d6ab63e54a22b566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ed187249b3589e6ec363ab9a8c8bb18"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__serializer.html#a1ed187249b3589e6ec363ab9a8c8bb18">hal::netlist_serializer::deserialize_from_string</a> (const std::string &amp;hal_string, GateLibrary *gate_lib=nullptr)</td></tr>
+<tr class="separator:a1ed187249b3589e6ec363ab9a8c8bb18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -130,7 +132,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_9d5aa8f5d55c8fc5f304c77a5f176a8c.html">persistent</a></li><li class="navelem"><a class="el" href="netlist__serializer_8h.html">netlist_serializer.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

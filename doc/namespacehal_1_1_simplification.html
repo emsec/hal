@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -96,7 +98,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a596c449cefc0ec052c5ce6d8691e825e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1_simplification.html#a596c449cefc0ec052c5ce6d8691e825e">abc_simplification</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;function)</td></tr>
 <tr class="separator:a596c449cefc0ec052c5ce6d8691e825e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains the rewrite rules and helpers used to symbolically simplify a Boolean function. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a596c449cefc0ec052c5ce6d8691e825e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a596c449cefc0ec052c5ce6d8691e825e">&#9670;&nbsp;</a></span>abc_simplification()</h2>
 
@@ -123,7 +127,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="simplification__abc_8cpp_source.html#l00970">970</a> of file <a class="el" href="simplification__abc_8cpp_source.html">simplification_abc.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="symbolic__execution_8cpp_source.html#l00017">hal::SMT::ConstantPropagation::And()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00074">hal::SMT::ConstantPropagation::Not()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00046">hal::SMT::ConstantPropagation::Or()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9acb44549b41563697bb490144ec6258">hal::status</a>, and <a class="el" href="symbolic__execution_8cpp_source.html#l00103">hal::SMT::ConstantPropagation::Xor()</a>.</p>
+<p class="reference">References <a class="el" href="symbolic__execution_8cpp_source.html#l00017">hal::SMT::ConstantPropagation::And()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="z3__utils_8cpp_source.html#l00481">hal::z3_utils::get_variable_names()</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00074">hal::SMT::ConstantPropagation::Not()</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00046">hal::SMT::ConstantPropagation::Or()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9acb44549b41563697bb490144ec6258">hal::status</a>, and <a class="el" href="symbolic__execution_8cpp_source.html#l00103">hal::SMT::ConstantPropagation::Xor()</a>.</p>
 
 </div>
 </div>
@@ -153,7 +157,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="simplification__local_8cpp_source.html#l00006">6</a> of file <a class="el" href="simplification__local_8cpp_source.html">simplification_local.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00552">hal::SMT::SymbolicExecution::evaluate()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="symbolic__execution_8cpp_source.html#l00552">hal::SMT::SymbolicExecution::evaluate()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01096">hal::BooleanFunction::simplify()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l01105">hal::BooleanFunction::simplify_local()</a>.</p>
 
@@ -165,7 +169,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_simplification.html">Simplification</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/data_table_model.h Source File</title>
+<title>HAL: plugins/gui/include/gui/selection_details_widget/data_table_model.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -162,22 +164,22 @@ $(document).ready(function(){initNavTree('data__table__model_8h_source.html','')
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_data_table_model.html#abaf721eefeb1e848ea710a7d94513c2e">updateData</a>(<span class="keyword">const</span> std::map&lt;std::tuple&lt;std::string, std::string&gt;, std::tuple&lt;std::string, std::string&gt;&gt;&amp; dc);</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keyword">struct </span>RowStyle</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        {</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfont.html">QFont</a> keyFont;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> valueColor;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> valueString;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> keyToolTip;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> valueToolTip;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        };</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        RowStyle getRowStyleByEntry(<span class="keyword">const</span> DataEntry&amp; entry, <span class="keywordtype">int</span> rowIdx) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="comment">// Map: [category, key] -&gt; row style of the respective entry</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QPair&lt;QString, QString&gt;</a>, RowStyle&gt; mEntryToRowStyle;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;DataEntry&gt;</a> mDataEntries;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    };</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;}</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keyword">struct </span>RowStyle</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        {</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfont.html">QFont</a> keyFont;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> valueColor;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> valueString;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> keyToolTip;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> valueToolTip;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        };</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        RowStyle getRowStyleByEntry(<span class="keyword">const</span> DataEntry&amp; entry, <span class="keywordtype">int</span> rowIdx) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="comment">// Map: [category, key] -&gt; row style of the respective entry</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QPair&lt;QString, QString&gt;</a>, RowStyle&gt; mEntryToRowStyle;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;DataEntry&gt;</a> mDataEntries;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    };</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_data_table_model_html"><div class="ttname"><a href="classhal_1_1_data_table_model.html">hal::DataTableModel</a></div><div class="ttdoc">A model to display the data of a DataContainer.</div><div class="ttdef"><b>Definition:</b> <a href="data__table__model_8h_source.html#l00047">data_table_model.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_data_table_model_html_a08b70f2dcd41cf19c8a0d533568fb9b9"><div class="ttname"><a href="classhal_1_1_data_table_model.html#a08b70f2dcd41cf19c8a0d533568fb9b9">hal::DataTableModel::DataTableModel</a></div><div class="ttdeci">DataTableModel(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="data__table__model_8cpp_source.html#l00011">data_table_model.cpp:11</a></div></div>
 <div class="ttc" id="aclasshal_1_1_data_table_model_html_a1e7dbd4076ddf7a6f85825e964bc36ff"><div class="ttname"><a href="classhal_1_1_data_table_model.html#a1e7dbd4076ddf7a6f85825e964bc36ff">hal::DataTableModel::propertyType</a></div><div class="ttdeci">propertyType</div><div class="ttdef"><b>Definition:</b> <a href="data__table__model_8h_source.html#l00055">data_table_model.h:55</a></div></div>
@@ -196,7 +198,7 @@ $(document).ready(function(){initNavTree('data__table__model_8h_source.html','')
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="gate_8h.html">gate.h</a></div></div>
 <div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="aqabstracttablemodel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstracttablemodel.html">QAbstractTableModel</a></div></div>
 <div class="ttc" id="aqabstracttablemodel_html_index"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstracttablemodel.html#index">QAbstractTableModel::index</a></div><div class="ttdeci">virtual QModelIndex index(int row, int column, const QModelIndex &amp;parent) const const override</div></div>
@@ -223,7 +225,7 @@ $(document).ready(function(){initNavTree('data__table__model_8h_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_a35da49c385fb45d333860c108c1de8d.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="data__table__model_8h.html">data_table_model.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

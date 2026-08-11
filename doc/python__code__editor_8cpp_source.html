@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/python/python_code_editor.cpp Source File</title>
+<title>HAL: plugins/gui/src/python/python_code_editor.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -151,7 +153,7 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a>.movePosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::StartOfLine</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::KeepAnchor</a>);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            current_line = <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a>.selectedText();</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_spaces = 0;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_spaces = 0;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : current_line)</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        {</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">if</span> (c != <span class="charliteral">&#39; &#39;</span>)</div>
@@ -169,7 +171,7 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        num_spaces -= num_spaces % 4;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#insertPlainText">insertPlainText</a>(<span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i = 0; i &lt; num_spaces / 4; ++i)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i = 0; i &lt; num_spaces / 4; ++i)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        {</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#insertPlainText">insertPlainText</a>(<span class="stringliteral">&quot;    &quot;</span>);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
@@ -230,7 +232,7 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="comment">// auto col    = cursor.positionInBlock();</span></div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a>.movePosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::Start</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveMode-enum">QTextCursor::KeepAnchor</a>);</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            <span class="keyword">auto</span> text       = <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#cursor-prop">cursor</a>.selectedText().replace(<a class="codeRef" href="https://doc.qt.io/qt-5/qchar.html">QChar</a>(0x2029), <span class="charliteral">&#39;\n&#39;</span>);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keyword">auto</span> candidates = <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;complete(text, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keyword">auto</span> candidates = <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;<a class="code" href="classhal_1_1_python_context.html#a06a1663cbc5ef7d74af360194d1fb234">complete</a>(text, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">if</span> (candidates.size() == 1)</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            {</div>
@@ -440,12 +442,13 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div class="ttc" id="aclasshal_1_1_python_code_editor_html_a7e14fead5da4e9bb6544c50fc6c3e2e0"><div class="ttname"><a href="classhal_1_1_python_code_editor.html#a7e14fead5da4e9bb6544c50fc6c3e2e0">hal::PythonCodeEditor::PythonCodeEditor</a></div><div class="ttdeci">PythonCodeEditor(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__code__editor_8cpp_source.html#l00018">python_code_editor.cpp:18</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_code_editor_html_a9b96ad8d9bb656172ff8e29f542f709c"><div class="ttname"><a href="classhal_1_1_python_code_editor.html#a9b96ad8d9bb656172ff8e29f542f709c">hal::PythonCodeEditor::getUuid</a></div><div class="ttdeci">QUuid getUuid() const</div><div class="ttdef"><b>Definition:</b> <a href="python__code__editor_8cpp_source.html#l00340">python_code_editor.cpp:340</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_code_editor_html_afd95d63343cc5c9713a54f5643520cc1"><div class="ttname"><a href="classhal_1_1_python_code_editor.html#afd95d63343cc5c9713a54f5643520cc1">hal::PythonCodeEditor::getRelFilename</a></div><div class="ttdeci">QString getRelFilename() const</div><div class="ttdef"><b>Definition:</b> <a href="python__code__editor_8cpp_source.html#l00308">python_code_editor.cpp:308</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_context_html_a06a1663cbc5ef7d74af360194d1fb234"><div class="ttname"><a href="classhal_1_1_python_context.html#a06a1663cbc5ef7d74af360194d1fb234">hal::PythonContext::complete</a></div><div class="ttdeci">std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; complete(const QString &amp;text, bool use_console_context)</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00490">python_context.cpp:490</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_editor_code_completion_dialog_html_aae39d19ee17ac9a2db53de7b8a246883"><div class="ttname"><a href="classhal_1_1_python_editor_code_completion_dialog.html#aae39d19ee17ac9a2db53de7b8a246883">hal::PythonEditorCodeCompletionDialog::completionSelected</a></div><div class="ttdeci">void completionSelected(std::tuple&lt; std::string, std::string &gt; selected)</div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00088">plugin_gui.cpp:88</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
 <div class="ttc" id="aproject__manager_8h_html"><div class="ttname"><a href="project__manager_8h.html">project_manager.h</a></div></div>
 <div class="ttc" id="apython__code__editor_8h_html"><div class="ttname"><a href="python__code__editor_8h.html">python_code_editor.h</a></div></div>
@@ -502,7 +505,7 @@ $(document).ready(function(){initNavTree('python__code__editor_8cpp_source.html'
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__code__editor_8cpp.html">python_code_editor.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

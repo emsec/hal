@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_program_arguments.html','
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="program__arguments_8h_source.html">program_arguments.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="program__arguments_8h_source.html">hal_core/utilities/program_arguments.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::ProgramArguments:</div>
 <div class="dyncontent">
@@ -250,6 +252,8 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__arguments_8cpp_source.html#l00019">19</a> of file <a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="plugin__gui_8cpp_source.html#l00167">hal::PluginGui::exec()</a>.</p>
+
 </div>
 </div>
 <a id="adae86e00300f9752b2b4e49c78d574c1"></a>
@@ -281,6 +285,8 @@ Public Member Functions</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="program__arguments_8cpp_source.html#l00116">116</a> of file <a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="program__arguments_8cpp_source.html#l00126">get_parameters()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, <a class="el" href="plugin__perf__test_8cpp_source.html#l00308">hal::CliExtensionsPerfTest::handle_cli_call()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00060">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">hal::LogManager::handle_options()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00125">hal::netlist_factory::load_netlist()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00185">hal::netlist_parser_manager::parse()</a>, and <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00090">hal::netlist_writer_manager::write()</a>.</p>
 
 </div>
 </div>
@@ -363,9 +369,11 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the user entered a flag for this option. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code>, if the user entered a flag for this option, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="program__arguments_8cpp_source.html#l00030">30</a> of file <a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__python__shell_8cpp_source.html#l00040">hal::PluginPythonShell::exec()</a>, <a class="el" href="plugin__perf__test_8cpp_source.html#l00308">hal::CliExtensionsPerfTest::handle_cli_call()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00060">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">hal::LogManager::handle_options()</a>, <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00125">hal::netlist_factory::load_netlist()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00185">hal::netlist_parser_manager::parse()</a>, and <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00090">hal::netlist_writer_manager::write()</a>.</p>
 
 </div>
 </div>
@@ -409,11 +417,11 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the flags were not found in multiple disjunct options already. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code>, if the flags were not found in multiple disjunct options already, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="program__arguments_8cpp_source.html#l00053">53</a> of file <a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8h_source.html#l00412">hal::utils::join()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">hal::utils::join()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
 </div>
 </div>
@@ -453,7 +461,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__arguments_8cpp_source.html#l00043">43</a> of file <a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="program__arguments_8cpp_source.html#l00048">set_option()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="program__options_8cpp_source.html#l00027">hal::ProgramOptions::parse()</a>, and <a class="el" href="program__arguments_8cpp_source.html#l00048">set_option()</a>.</p>
 
 </div>
 </div>
@@ -498,8 +506,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="program__arguments_8h_source.html">program_arguments.h</a></li>
-<li>/home/runner/work/hal/hal/src/utilities/<a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a></li>
+<li>include/hal_core/utilities/<a class="el" href="program__arguments_8h_source.html">program_arguments.h</a></li>
+<li>src/utilities/<a class="el" href="program__arguments_8cpp_source.html">program_arguments.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -507,7 +515,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

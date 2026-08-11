@@ -17,10 +17,5 @@ var classhal_1_1_recent_file_item =
     [ "setIconPath", "classhal_1_1_recent_file_item.html#ad6e9237537525e4512a5d779db1561b0", null ],
     [ "setIconStyle", "classhal_1_1_recent_file_item.html#a3acd7fa17d644e3c181c32d13c2f0e1a", null ],
     [ "setMissing", "classhal_1_1_recent_file_item.html#abf53f74bf7bddd3afef1463547b8149d", null ],
-    [ "sizeHint", "classhal_1_1_recent_file_item.html#aa3230bbc1117767314698d6eeef23dde", null ],
-    [ "hover", "classhal_1_1_recent_file_item.html#a08911388b5df507deee4910102a667b8", null ],
-    [ "iconPath", "classhal_1_1_recent_file_item.html#ace21bce12087ede7676b6349d85de975", null ],
-    [ "iconStyle", "classhal_1_1_recent_file_item.html#a63a8ab21d8b28abf56de650f8c55b9db", null ],
-    [ "isProject", "classhal_1_1_recent_file_item.html#a3aa68986ca2e461980e4d5e0b5dd23ae", null ],
-    [ "missing", "classhal_1_1_recent_file_item.html#aad0eb17ef35b31c7cdcfe2f0abb7f562", null ]
+    [ "sizeHint", "classhal_1_1_recent_file_item.html#aa3230bbc1117767314698d6eeef23dde", null ]
 ];

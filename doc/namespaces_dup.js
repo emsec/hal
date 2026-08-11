@@ -1,32 +1,5 @@
 var namespaces_dup =
 [
-    [ "configuration", "namespaceconfiguration.html", [
-      [ "default_gate_libraries", "namespaceconfiguration.html#a5a123c74ea94988ed0c7a9d048918e28", null ],
-      [ "netlists", "namespaceconfiguration.html#a0b70cb37f9be75fa209ff3098e577a06", null ],
-      [ "netlists_paper", "namespaceconfiguration.html#a4b92b624f8c93792895c9c36e1a5b5cd", null ],
-      [ "path_dataflow_out", "namespaceconfiguration.html#aea5654c928ae5c50dea39b6b7872d448", null ],
-      [ "path_to_core_collection", "namespaceconfiguration.html#a61dc9e651d71dec1e45e67e10e15ca78", null ],
-      [ "path_to_hal", "namespaceconfiguration.html#abe29b3e7c2c694b884bcb0f08ca5d735", null ],
-      [ "path_to_hal_bin", "namespaceconfiguration.html#af8b91841e8b69f378cfcfd63a4011fdc", null ],
-      [ "path_to_hal_build", "namespaceconfiguration.html#ad3110e365ddfe565d25aadfbae67e871", null ],
-      [ "special_gate_libraries", "namespaceconfiguration.html#a7759a656bd3a598250ceeea5bbdc4751", null ],
-      [ "username", "namespaceconfiguration.html#a33bda6c339428a78619a091574f9c7c7", null ]
-    ] ],
-    [ "control", "namespacecontrol.html", [
-      [ "expect", "namespacecontrol.html#ac4d5ea3df4ff89b90985e778546a5284", null ],
-      [ "action", "namespacecontrol.html#a27d3a5443c46266e0263e8ccbb40d0a9", null ],
-      [ "args", "namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46", null ],
-      [ "command", "namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde", null ],
-      [ "designs", "namespacecontrol.html#a8fee8fcbeebbbe7d8a9ee07c830334ae", null ],
-      [ "help", "namespacecontrol.html#afef4feaf1a5e192dd8cbab7cd711c701", null ],
-      [ "input_design", "namespacecontrol.html#adc0c2dfcac1b02d9ee3b82a35c8b795b", null ],
-      [ "metavar", "namespacecontrol.html#a29a6fd4d96fc9cac8271e669a18a2dd3", null ],
-      [ "parser", "namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445", null ],
-      [ "return_ninja", "namespacecontrol.html#a69f7d76484861b3c416508c14987b7e2", null ],
-      [ "str", "namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735", null ],
-      [ "synthesizers", "namespacecontrol.html#aabd3ce2ac95b8163354394dc5a24979d", null ],
-      [ "type", "namespacecontrol.html#a83d2dd7bc3c232a13fa9f62a01b5ba80", null ]
-    ] ],
     [ "hal", "namespacehal.html", "namespacehal" ],
     [ "netlist_factory", "namespacenetlist__factory.html", null ],
     [ "netlist_serializer", "namespacenetlist__serializer.html", null ],
@@ -1368,36 +1341,5 @@ var namespaces_dup =
       [ "ZAxis", "https://doc.qt.io/qt-5/qt.html#Axis-enum", null ],
       [ "ZoomNativeGesture", "https://doc.qt.io/qt-5/qt.html#NativeGestureType-enum", null ]
     ] ],
-    [ "std", "namespacestd.html", "namespacestd" ],
-    [ "test", "namespacetest.html", [
-      [ "inf", "namespacetest.html#ade4b74e569e08d34aeb580d0380e44de", null ],
-      [ "n", "namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090", null ]
-    ] ],
-    [ "test_multiple", "namespacetest__multiple.html", [
-      [ "dir_path", "namespacetest__multiple.html#acc4677858c72770ae76519b4ccc47178", null ],
-      [ "files", "namespacetest__multiple.html#aa1726891f96105ae41d3f40a15e96b75", null ],
-      [ "gate_library_path", "namespacetest__multiple.html#ae231762a69fc3d6b78a3d8ba62544d67", null ],
-      [ "hal_base_path", "namespacetest__multiple.html#a543d66d31f760784516bf673780bf12b", null ],
-      [ "inf", "namespacetest__multiple.html#a04dab7e5a4ab4a23c010b5df93732bbd", null ],
-      [ "netlist", "namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1", null ]
-    ] ],
-    [ "test_plugin", "namespacetest__plugin.html", [
-      [ "base_path", "namespacetest__plugin.html#a0cdd8d0a4db94689375f04ce4546f816", null ],
-      [ "fsm_mod", "namespacetest__plugin.html#a7efa8a9ff852d172d85bb93479bc913b", null ],
-      [ "g", "namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740", null ],
-      [ "graph_path", "namespacetest__plugin.html#a2bf2b4c4b4a2cc5295fb68bbc4f39a42", null ],
-      [ "initial_state", "namespacetest__plugin.html#a8cd40629c5013844954ad61ed2ab0f9f", null ],
-      [ "netlist", "namespacetest__plugin.html#ad09c016caf9f059f6d8c9eb9f3c0f3d9", null ],
-      [ "pl_fsm", "namespacetest__plugin.html#a79feb4c3846c15acf42a9a2908ecefec", null ],
-      [ "state_gates", "namespacetest__plugin.html#ae1adf1f65b9b3fb48bbe3118597914dd", null ],
-      [ "timeout", "namespacetest__plugin.html#aa3a2af994aa8c91f5227558bb4c57542", null ],
-      [ "transition_gates", "namespacetest__plugin.html#aa70027ccf79a6a3022ae58e8db5e5e01", null ]
-    ] ],
-    [ "utils", "namespaceutils.html", [
-      [ "execute_hal", "namespaceutils.html#aa90a982da713aa1685244f1571726474", null ],
-      [ "expect", "namespaceutils.html#a7e19e574a5f811561885dd1916859f10", null ],
-      [ "get_gate_library", "namespaceutils.html#a1b7a816300f9b0080fed658cb0c47415", null ],
-      [ "round_float", "namespaceutils.html#a2ce293f005324ca40c79dc61d4590154", null ],
-      [ "round_float_1", "namespaceutils.html#a0860ac768970797cc9cdf448625067a9", null ]
-    ] ]
+    [ "std", "namespacestd.html", "namespacestd" ]
 ];

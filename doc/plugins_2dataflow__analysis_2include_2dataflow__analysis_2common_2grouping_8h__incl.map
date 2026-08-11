@@ -1,12 +1,12 @@
-<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/grouping.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/grouping.h">
-<area shape="rect" id="node1" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="431,5,648,76"/>
-<area shape="rect" id="node2" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="277,124,477,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,221,145,247"/>
-<area shape="rect" id="node5" title=" " alt="" coords="170,221,213,247"/>
-<area shape="rect" id="node6" title=" " alt="" coords="452,221,576,247"/>
-<area shape="rect" id="node7" title=" " alt="" coords="601,221,715,247"/>
-<area shape="rect" id="node8" title=" " alt="" coords="740,221,803,247"/>
-<area shape="rect" id="node9" title=" " alt="" coords="653,131,703,158"/>
-<area shape="rect" id="node10" title=" " alt="" coords="727,131,842,158"/>
-<area shape="rect" id="node4" href="$pin__type_8h.html" title=" " alt="" coords="237,213,428,255"/>
+<map id="plugins/dataflow_analysis/include/dataflow_analysis/common/grouping.h" name="plugins/dataflow_analysis/include/dataflow_analysis/common/grouping.h">
+<area shape="rect" id="node1" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="442,5,637,61"/>
+<area shape="rect" id="node2" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="277,109,477,151"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,206,145,233"/>
+<area shape="rect" id="node5" title=" " alt="" coords="170,206,213,233"/>
+<area shape="rect" id="node6" title=" " alt="" coords="452,206,576,233"/>
+<area shape="rect" id="node7" title=" " alt="" coords="601,206,715,233"/>
+<area shape="rect" id="node8" title=" " alt="" coords="740,206,803,233"/>
+<area shape="rect" id="node9" title=" " alt="" coords="653,117,703,143"/>
+<area shape="rect" id="node10" title=" " alt="" coords="727,117,842,143"/>
+<area shape="rect" id="node4" href="$pin__type_8h.html" title=" " alt="" coords="237,199,428,240"/>
 </map>

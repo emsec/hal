@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_net.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="net_8h_source.html">net.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::Net:</div>
 <div class="dyncontent">
@@ -119,13 +121,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abfba749f0cff7a316dbe1d5715113d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa02ab8f0bac9d569c43f6bf67cd3ab9c"><td class="memItemLeft" align="right" valign="top">ssize_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#aa02ab8f0bac9d569c43f6bf67cd3ab9c">get_hash</a> () const</td></tr>
 <tr class="separator:aa02ab8f0bac9d569c43f6bf67cd3ab9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a086e0fa561405ac8b0beae95d8caa69d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a> () const</td></tr>
+<tr class="memitem:a086e0fa561405ac8b0beae95d8caa69d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a> () const</td></tr>
 <tr class="separator:a086e0fa561405ac8b0beae95d8caa69d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a102810d0ac7d3950505b4361616ae243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a102810d0ac7d3950505b4361616ae243">get_netlist</a> () const</td></tr>
 <tr class="separator:a102810d0ac7d3950505b4361616ae243"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4627e0be693c99fece29559be12898bd"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a4627e0be693c99fece29559be12898bd">get_name</a> () const</td></tr>
 <tr class="separator:a4627e0be693c99fece29559be12898bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1703f0e71b660976800a3329264106cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a1703f0e71b660976800a3329264106cc">set_name</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:a1703f0e71b660976800a3329264106cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a1703f0e71b660976800a3329264106cc">set_name</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a1703f0e71b660976800a3329264106cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a871510d25bdfd08d2b40e5013868a13c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_grouping.html">Grouping</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a871510d25bdfd08d2b40e5013868a13c">get_grouping</a> () const</td></tr>
 <tr class="separator:a871510d25bdfd08d2b40e5013868a13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acd0ea32c1e5c8b38a91df4f2cacf5c42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb8b62f05fcde99527519a5b3f5d63e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#afb8b62f05fcde99527519a5b3f5d63e0">is_a_source</a> (const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep) const</td></tr>
 <tr class="separator:afb8b62f05fcde99527519a5b3f5d63e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0533048a763403dee9e8b43a0fd4e143"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">get_num_of_sources</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
+<tr class="memitem:a0533048a763403dee9e8b43a0fd4e143"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">get_num_of_sources</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:a0533048a763403dee9e8b43a0fd4e143"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af62cd3da438ede28f00f3076fd949fac"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#af62cd3da438ede28f00f3076fd949fac">get_sources</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:af62cd3da438ede28f00f3076fd949fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7c490a8377dcc972ae6df8af0a8ac833"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a697422061ac796a43c34672d0ff41804"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#a697422061ac796a43c34672d0ff41804">is_a_destination</a> (const <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep) const</td></tr>
 <tr class="separator:a697422061ac796a43c34672d0ff41804"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa76dff7b223ce4676dfb8e4232ae2488"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">get_num_of_destinations</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
+<tr class="memitem:aa76dff7b223ce4676dfb8e4232ae2488"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">get_num_of_destinations</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:aa76dff7b223ce4676dfb8e4232ae2488"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8947aa24e7c234b984da284a20558c7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net.html#ab8947aa24e7c234b984da284a20558c7">get_destinations</a> (const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;filter=nullptr) const</td></tr>
 <tr class="separator:ab8947aa24e7c234b984da284a20558c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,7 +270,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00318">hal::GateType::get_pin_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00800">hal::netlist_utils::remove_unused_lut_endpoints()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l01637">hal::netlist_preprocessing::propagate_constants()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00800">hal::netlist_utils::remove_unused_lut_endpoints()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00027">hal::netlist_preprocessing::remove_unused_lut_inputs()</a>, <a class="el" href="resynthesis_8cpp_source.html#l01118">hal::resynthesis::replace_subgraph_with_netlist()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00112">hal::xilinx_toolbox::split_shift_registers()</a>.</p>
 
 </div>
 </div>
@@ -350,7 +352,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00318">hal::GateType::get_pin_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, and <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="resynthesis_8cpp_source.html#l01118">hal::resynthesis::replace_subgraph_with_netlist()</a>, <a class="el" href="preprocessing_8cpp_source.html#l00112">hal::xilinx_toolbox::split_shift_registers()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02483">hal::netlist_preprocessing::unify_ff_outputs()</a>.</p>
 
 </div>
 </div>
@@ -419,7 +421,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00426">426</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">hal::NetlistTraversalDecorator::get_next_combinational_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">hal::NetlistTraversalDecorator::get_next_matching_gates_until_depth()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">hal::NetlistTraversalDecorator::get_next_sequential_gates()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">hal::NetlistTraversalDecorator::get_next_combinational_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00012">hal::NetlistTraversalDecorator::get_next_matching_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00138">hal::NetlistTraversalDecorator::get_next_matching_gates_until()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">hal::NetlistTraversalDecorator::get_next_matching_gates_until_depth()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">hal::NetlistTraversalDecorator::get_next_sequential_gates()</a>, <a class="el" href="graph__context_8cpp_source.html#l00421">hal::GraphContext::getNetDestination()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00285">hal::SelectionRelay::navigateDown()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00192">hal::SelectionRelay::navigateUp()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">hal::Netlist::unmark_global_input_net()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">hal::Netlist::unmark_global_output_net()</a>.</p>
 
 </div>
 </div>
@@ -438,12 +440,12 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get the grouping in which this net is contained. <br  />
- If no grouping contains this gate, a nullptr is returned.</p>
+ If no grouping contains this gate, a <code>nullptr</code> is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The grouping. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00117">117</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="grouping__table__model_8cpp_source.html#l00341">hal::GroupingTableModel::colorForItem()</a>, and <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
 
 </div>
 </div>
@@ -477,7 +479,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::Net::get_id </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Net::get_id </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -489,7 +491,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00088">88</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">hal::BooleanFunctionNetDecorator::get_boolean_variable_name()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2pins_2module__pin_8cpp_source.html#l00009">hal::ModulePin::operator==()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="wave__data_8cpp_source.html#l01033">hal::WaveDataGroup::addNet()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00295">hal::LogicEvaluatorDialog::compile()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="action__create__object_8cpp_source.html#l00060">hal::ActionCreateObject::exec()</a>, <a class="el" href="wavedata__table__editor_8cpp_source.html#l00324">hal::WavedataTableEditor::generateSimulationInput()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">hal::BooleanFunctionNetDecorator::get_boolean_variable_name()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00640">hal::NetlistSimulatorController::get_waveform_by_net()</a>, <a class="el" href="graphics__gate_8cpp_source.html#l00008">hal::GraphicsGate::GraphicsGate()</a>, <a class="el" href="module__pins__tree_8cpp_source.html#l00077">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00623">hal::GraphContextManager::handleNetDestinationAdded()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00636">hal::GraphContextManager::handleNetDestinationRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00588">hal::GraphContextManager::handleNetNameChanged()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00581">hal::GraphContextManager::handleNetRemoved()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00595">hal::GraphContextManager::handleNetSourceAdded()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00608">hal::GraphContextManager::handleNetSourceRemoved()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="wavedata__table__editor_8cpp_source.html#l00058">hal::WavedataTableEditor::loadWaveData()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2pins_2module__pin_8cpp_source.html#l00009">hal::ModulePin::operator==()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l00856">hal::bitorder_propagation::propagate_module_pingroup_bitorder()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00094">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="resynthesis_8cpp_source.html#l01118">hal::resynthesis::replace_subgraph_with_netlist()</a>, <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00107">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">hal::Netlist::unmark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">hal::Netlist::unmark_global_output_net()</a>, and <a class="el" href="wave__data_8cpp_source.html#l01640">hal::WaveDataList::waveDataByNet()</a>.</p>
 
 </div>
 </div>
@@ -512,7 +514,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00098">98</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00418">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="src_2verilog__parser_8cpp_source.html#l00238">hal::VerilogParser::instantiate()</a>, <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>, and <a class="el" href="module__model_8cpp_source.html#l00834">hal::ModuleModel::updateNetName()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00096">hal::NetlistRelay::changeElementNameDialog()</a>, <a class="el" href="logic__evaluator__dialog_8cpp_source.html#l00295">hal::LogicEvaluatorDialog::compile()</a>, <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="wavedata__table__editor_8cpp_source.html#l00324">hal::WavedataTableEditor::generateSimulationInput()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00418">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="verilog__parser_8cpp_source.html#l00238">hal::VerilogParser::instantiate()</a>, <a class="el" href="vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="wavedata__table__editor_8cpp_source.html#l00058">hal::WavedataTableEditor::loadWaveData()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="module__item_8cpp_source.html#l00012">hal::ModuleItem::ModuleItem()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="wave__widget_8cpp_source.html#l00100">hal::WaveWidget::refreshNetNames()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l00094">hal::netlist_preprocessing::remove_buffers()</a>, <a class="el" href="resynthesis_8cpp_source.html#l01118">hal::resynthesis::replace_subgraph_with_netlist()</a>, <a class="el" href="gate__pins__tree__model_8cpp_source.html#l00107">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">hal::Netlist::unmark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">hal::Netlist::unmark_global_output_net()</a>, and <a class="el" href="module__model_8cpp_source.html#l00834">hal::ModuleModel::updateNetName()</a>.</p>
 
 </div>
 </div>
@@ -535,7 +537,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00093">93</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2module__identification_2src_2utils_2utils_8cpp_source.html#l00113">hal::module_identification::find_neighboring_registers()</a>, and <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
 
 </div>
 </div>
@@ -546,7 +548,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::Net::get_num_of_destinations </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Net::get_num_of_destinations </td>
           <td>(</td>
           <td class="paramtype">const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;&#160;</td>
           <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
@@ -565,7 +567,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00408">408</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="src_2vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="vhdl__parser_8cpp_source.html#l00241">hal::VHDLParser::instantiate()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00112">hal::xilinx_toolbox::split_shift_registers()</a>.</p>
 
 </div>
 </div>
@@ -576,7 +578,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::Net::get_num_of_sources </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Net::get_num_of_sources </td>
           <td>(</td>
           <td class="paramtype">const std::function&lt; bool(<a class="el" href="classhal_1_1_endpoint.html">Endpoint</a> *ep)&gt; &amp;&#160;</td>
           <td class="paramname"><em>filter</em> = <code>nullptr</code></td><td>)</td>
@@ -625,7 +627,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00264">264</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">hal::NetlistTraversalDecorator::get_next_combinational_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">hal::NetlistTraversalDecorator::get_next_matching_gates_until_depth()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">hal::NetlistTraversalDecorator::get_next_sequential_gates()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00549">hal::NetlistTraversalDecorator::get_next_combinational_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00012">hal::NetlistTraversalDecorator::get_next_matching_gates()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00138">hal::NetlistTraversalDecorator::get_next_matching_gates_until()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00265">hal::NetlistTraversalDecorator::get_next_matching_gates_until_depth()</a>, <a class="el" href="netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html#l00367">hal::NetlistTraversalDecorator::get_next_sequential_gates()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="graph__context_8cpp_source.html#l00410">hal::GraphContext::getNetSource()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00387">hal::Netlist::mark_global_input_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00417">hal::Netlist::mark_global_output_net()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00447">hal::Netlist::unmark_global_input_net()</a>, and <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00478">hal::Netlist::unmark_global_output_net()</a>.</p>
 
 </div>
 </div>
@@ -716,7 +718,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Check whether an endpoint is a destination of the net. The endpoint is specified by a tuple of a gate and an input pin of that gate.</p>
+<p>Check whether an endpoint is a destination of the net. The endpoint is specified by a tuple of a gate and an input pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -860,7 +862,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Check whether an endpoint is a source of the net. The endpoint is specified by a tuple of a gate and an output pin of that gate.</p>
+<p>Check whether an endpoint is a source of the net. The endpoint is specified by a tuple of a gate and an output pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -938,7 +940,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00509">hal::Netlist::is_global_input_net()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00235">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00371">hal::SubgraphNetlistDecorator::get_subgraph_function()</a>, <a class="el" href="netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html#l00481">hal::SubgraphNetlistDecorator::get_subgraph_function_inputs()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>.</p>
 
 </div>
 </div>
@@ -963,7 +965,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00514">hal::Netlist::is_global_output_net()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l00235">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="netlist_2net_8cpp_source.html#l00026">operator==()</a>.</p>
 
 </div>
 </div>
@@ -986,7 +988,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00450">450</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00112">hal::xilinx_toolbox::split_shift_registers()</a>.</p>
 
 </div>
 </div>
@@ -1032,7 +1034,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00455">455</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00112">hal::xilinx_toolbox::split_shift_registers()</a>.</p>
 
 </div>
 </div>
@@ -1108,7 +1110,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both nets are unequal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if both nets are unequal, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00078">78</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
@@ -1138,7 +1140,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both nets are equal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if both nets are equal, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00026">26</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
@@ -1163,7 +1165,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a destination endpoint from the net.</p>
+<p>Remove a destination endpoint from the net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endpoint. </td></tr>
@@ -1201,7 +1203,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a destination endpoint from the net. The endpoint is specified by a tuple of a gate and an input pin of that gate.</p>
+<p>Remove a destination endpoint from the net. The endpoint is specified by a tuple of a gate and an input pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -1240,7 +1242,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a destination endpoint from the net. The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.</p>
+<p>Remove a destination endpoint from the net. The endpoint is specified by a tuple of a gate and the name of an input pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -1254,7 +1256,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00318">hal::GateType::get_pin_by_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00611">hal::netlist_utils::remove_buffers()</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l00094">hal::netlist_preprocessing::remove_buffers()</a>.</p>
 
 </div>
 </div>
@@ -1273,7 +1275,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a source endpoint from the net.</p>
+<p>Remove a source endpoint from the net.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ep</td><td>- The endpoint. </td></tr>
@@ -1311,7 +1313,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a source endpoint from the net. The endpoint is specified by a tuple of a gate and an output pin of that gate.</p>
+<p>Remove a source endpoint from the net. The endpoint is specified by a tuple of a gate and an output pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -1350,7 +1352,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>TODO test Remove a source endpoint from the net. The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.</p>
+<p>Remove a source endpoint from the net. The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
@@ -1393,9 +1395,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2net_8cpp_source.html#l00103">103</a> of file <a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfac2c85b49688a09eae85e889227c4f3ab">hal::NetEvent::name_changed</a>, <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler::notify()</a>, and <a class="el" href="utils_8h_source.html#l00358">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579dfac2c85b49688a09eae85e889227c4f3ab">hal::NetEvent::name_changed</a>, <a class="el" href="event__handler_8cpp_source.html#l00081">hal::EventHandler::notify()</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">hal::utils::trim()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__preprocessing_8cpp_source.html#l02461">hal::netlist_preprocessing::create_nets_at_unconnected_pins()</a>, <a class="el" href="python__bindings_2bindings_2net_8cpp_source.html#l00005">hal::net_init()</a>, and <a class="el" href="resynthesis_8cpp_source.html#l01118">hal::resynthesis::replace_subgraph_with_netlist()</a>.</p>
 
 </div>
 </div>
@@ -1475,8 +1477,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/<a class="el" href="net_8h_source.html">net.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/<a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a></li>
+<li>include/hal_core/netlist/<a class="el" href="net_8h_source.html">net.h</a></li>
+<li>src/netlist/<a class="el" href="netlist_2net_8cpp_source.html">net.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1484,7 +1486,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net.html">Net</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

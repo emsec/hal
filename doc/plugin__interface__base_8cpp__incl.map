@@ -1,12 +1,12 @@
-<map id="/home/runner/work/hal/hal/src/plugin_system/plugin_interface_base.cpp" name="/home/runner/work/hal/hal/src/plugin_system/plugin_interface_base.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="245,5,441,61"/>
-<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="190,199,371,240"/>
-<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="36,288,167,329"/>
-<area shape="rect" id="node9" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="518,109,744,151"/>
-<area shape="rect" id="node10" href="$plugin__interface__ui_8h.html" title=" " alt="" coords="318,109,494,151"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="381,467,521,493"/>
-<area shape="rect" id="node6" title=" " alt="" coords="28,467,71,493"/>
-<area shape="rect" id="node7" title=" " alt="" coords="122,467,180,493"/>
-<area shape="rect" id="node8" title=" " alt="" coords="262,467,325,493"/>
-<area shape="rect" id="node5" href="$program__options_8h.html" title=" " alt="" coords="189,377,337,419"/>
+<map id="src/plugin_system/plugin_interface_base.cpp" name="src/plugin_system/plugin_interface_base.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="251,5,435,47"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="190,184,371,225"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="36,273,167,315"/>
+<area shape="rect" id="node9" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="518,95,744,136"/>
+<area shape="rect" id="node10" href="$plugin__interface__ui_8h.html" title=" " alt="" coords="318,95,494,136"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="381,452,521,479"/>
+<area shape="rect" id="node6" title=" " alt="" coords="28,452,71,479"/>
+<area shape="rect" id="node7" title=" " alt="" coords="122,452,180,479"/>
+<area shape="rect" id="node8" title=" " alt="" coords="262,452,325,479"/>
+<area shape="rect" id="node5" href="$program__options_8h.html" title=" " alt="" coords="189,363,337,404"/>
 </map>

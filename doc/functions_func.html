@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -85,8 +87,20 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 &#160;
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>abort()
+: <a class="el" href="classhal_1_1_wave_value_thread.html#a76d1f5409a309be9536fa5a7d2e81bd6">hal::WaveValueThread</a>
+</li>
 <li>abortLayout()
 : <a class="el" href="classhal_1_1_graph_context.html#aeeeccca33af0ed710fe70f8dffb19451">hal::GraphContext</a>
+</li>
+<li>abortLoader()
+: <a class="el" href="classhal_1_1_wave_item.html#a222b1083c55164d20a45c3cb5cbc4be2">hal::WaveItem</a>
+</li>
+<li>abortThread()
+: <a class="el" href="classhal_1_1_python_context.html#a7e8983bd05f933ccb2a97f1030d200c0">hal::PythonContext</a>
+</li>
+<li>abortThreadAndWait()
+: <a class="el" href="classhal_1_1_python_context.html#ab8db3ca6ff438e9f3fc2cbda3dd746e6">hal::PythonContext</a>
 </li>
 <li>abortThreadWidget()
 : <a class="el" href="classhal_1_1_python_console.html#a530e84d63c4c7277a08a9193c052b69b">hal::PythonConsole</a>
@@ -107,16 +121,20 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 : <a class="el" href="classhal_1_1_gate_dialog.html#a859dbfff70d0e5c2edadd7237420495d">hal::GateDialog</a>
 , <a class="el" href="classhal_1_1_gate_library_wizard.html#acbd3bab5adbac584ed8d16c3e06d7866">hal::GateLibraryWizard</a>
 , <a class="el" href="classhal_1_1_grouping_dialog.html#a1ff2fca06615e414f8b0391c844cd5a0">hal::GroupingDialog</a>
+, <a class="el" href="classhal_1_1_logic_evaluator_select_gates.html#a3c7a557b1f6af0f6aefbf8b2267c470b">hal::LogicEvaluatorSelectGates</a>
 , <a class="el" href="classhal_1_1_module_dialog.html#ac027f6732cb87c237d51f55da5dbea3c">hal::ModuleDialog</a>
 , <a class="el" href="classhal_1_1_plugin_parameter_dialog.html#a2751ee1072ad1b4eb22fb44bf3244e7a">hal::PluginParameterDialog</a>
 , <a class="el" href="classhal_1_1_project_dir_dialog.html#a07c9c0071a03844e36182bda3c0f79bf">hal::ProjectDirDialog</a>
 , <a class="el" href="classhal_1_1_search_column_dialog.html#a3a9a4aed1f59083ae748e4b471b5fb11">hal::SearchColumnDialog</a>
 </li>
+<li>acceptGate()
+: <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#ab2c4222566f08acc3988f7eb5a4cc23f">hal::GuiExtensionLogicEvaluator</a>
+</li>
 <li>acceptValue()
 : <a class="el" href="classhal_1_1_settings_widget.html#a8d810a11d91fdf6c8b9a8c21aacbc27b">hal::SettingsWidget</a>
 </li>
 <li>Action()
-: <a class="el" href="classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994">hal::Action</a>
+: <a class="el" href="classhal_1_1_action.html#ad665511fca2220953c45b982309538e1">hal::Action</a>
 </li>
 <li>ActionAddBooleanFunction()
 : <a class="el" href="classhal_1_1_action_add_boolean_function.html#a449b638c4f293e555ee5bb7d9ff53481">hal::ActionAddBooleanFunction</a>
@@ -155,7 +173,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 : <a class="el" href="classhal_1_1_action_move_item_factory.html#a17119ca3f8e2e5695ef8c71f6e86b16e">hal::ActionMoveItemFactory</a>
 </li>
 <li>ActionMoveNode()
-: <a class="el" href="classhal_1_1_action_move_node.html#af568020e20979acdb871bd115dce3520">hal::ActionMoveNode</a>
+: <a class="el" href="classhal_1_1_action_move_node.html#ad17917d6bde9fca4255099adcb214c45">hal::ActionMoveNode</a>
 </li>
 <li>ActionMoveNodeFactory()
 : <a class="el" href="classhal_1_1_action_move_node_factory.html#a79971e706395549d577ba1c9511eb08f">hal::ActionMoveNodeFactory</a>
@@ -167,7 +185,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 : <a class="el" href="classhal_1_1_action_open_netlist_file_factory.html#afa4b83298bdfbd53994936638a13111e">hal::ActionOpenNetlistFileFactory</a>
 </li>
 <li>ActionPingroup()
-: <a class="el" href="classhal_1_1_action_pingroup.html#a6f830d5d8f5e7a1dbe91c8a9619f7a41">hal::ActionPingroup</a>
+: <a class="el" href="classhal_1_1_action_pingroup.html#a3eccb312956a18ba689367c3b92db79a">hal::ActionPingroup</a>
 </li>
 <li>ActionPingroupFactory()
 : <a class="el" href="classhal_1_1_action_pingroup_factory.html#aae5a77a1c5cc139726f65f50f1b6779a">hal::ActionPingroupFactory</a>
@@ -240,6 +258,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 , <a class="el" href="classhal_1_1_graph_layouter.html#a51184898aba8a3359b1cb4ec8ea29843">hal::GraphLayouter</a>
 , <a class="el" href="classhal_1_1_graph_shader.html#a4099553e7de5803daabf65e220a44f6d">hal::GraphShader</a>
 , <a class="el" href="classhal_1_1_grouping_table_history.html#a7f10dafd795664cf937f62c28768ecea">hal::GroupingTableHistory</a>
+, <a class="el" href="classhal_1_1hawkeye_1_1_s_box_database.html#a1cd208d310be1d5bb4a8b0489af77292">hal::hawkeye::SBoxDatabase</a>
 , <a class="el" href="classhal_1_1_module_select_history.html#a865980d8af2af37217576a445ad3a04a">hal::ModuleSelectHistory</a>
 , <a class="el" href="classhal_1_1_module_shader.html#a6ecd7b56c71a7a5aff1c096a13988de7">hal::ModuleShader</a>
 , <a class="el" href="classhal_1_1_net_layout_connection.html#aaf868a578dae4e0e6453a07b2355d8e2">hal::NetLayoutConnection</a>
@@ -249,10 +268,24 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 , <a class="el" href="classhal_1_1_standard_graph_layouter.html#a4509682aefe2211500fa3d0316b5cc24">hal::StandardGraphLayouter</a>
 , <a class="el" href="classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f">hal::TabWidget</a>
 , <a class="el" href="classhal_1_1_wait_to_be_seated_list.html#a1f6f3589eba031742502197d42c9e6cf">hal::WaitToBeSeatedList</a>
+, <a class="el" href="classhal_1_1_wave_data_list.html#a2c646ae6399b4716eab3a489563e41de">hal::WaveDataList</a>
+, <a class="el" href="classhal_1_1_wave_form_primitive_filled.html#a3af684e86916544bd3aab64308b764b8">hal::WaveFormPrimitiveFilled</a>
+</li>
+<li>add_additional_data()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#afaa5dde70891a25d5ebd3ca6f4f37520">hal::module_identification::FunctionalCandidate</a>
+</li>
+<li>add_all_shifted_operand()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#a4718762bc2b14c64c71940181256f342">hal::module_identification::FunctionalCandidate</a>
 </li>
 <li>add_array()
 : <a class="el" href="classhal_1_1_json_write_array.html#ac79dac82fe052a8863362b6acc701bc7">hal::JsonWriteArray</a>
 , <a class="el" href="classhal_1_1_json_write_object.html#ae9ec2743a37d19ebee6754d1639f9a6b">hal::JsonWriteObject</a>
+</li>
+<li>add_boolean_accept_list_waveform()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a808cfff9d04feeb9a22c9cda327eb010">hal::NetlistSimulatorController</a>
+</li>
+<li>add_boolean_expression_waveform()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a9a0db60fdafe656a06e15ef2ea70fb5c">hal::NetlistSimulatorController</a>
 </li>
 <li>add_boolean_function()
 : <a class="el" href="classhal_1_1_gate.html#a06d2932ecc4c3ad6886c84fec319c12a">hal::Gate</a>
@@ -262,30 +295,101 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 : <a class="el" href="classhal_1_1_gate_type.html#ac2c99cd64ec542bfb38b17225d5af901">hal::GateType</a>
 </li>
 <li>add_callback()
-: <a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">hal::CallbackHook&lt; R(ArgTypes...)&gt;</a>
+: <a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a019075e67c518ef91aeb9e9cbb2ed109">hal::CallbackHook&lt; R(ArgTypes...)&gt;</a>
 </li>
 <li>add_channel()
 : <a class="el" href="classhal_1_1_log_manager.html#a1af82acd668588c8a9e31ae61e166ce2">hal::LogManager</a>
 </li>
+<li>add_child()
+: <a class="el" href="classhal_1_1_saleae_directory_composed_entry.html#a010dfbbca6f4a3335460f91d1b385fe4">hal::SaleaeDirectoryComposedEntry</a>
+</li>
+<li>add_clock()
+: <a class="el" href="classhal_1_1_simulation_input.html#adc2388a525dba8c4d743c7f9a040affb">hal::SimulationInput</a>
+</li>
+<li>add_clock_frequency()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a0b4963ce5804753930b1f5600968aa90">hal::NetlistSimulatorController</a>
+</li>
+<li>add_clock_period()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a7044f71b1af8a803bb4f9c17460b1a5f">hal::NetlistSimulatorController</a>
+</li>
 <li>add_destination()
 : <a class="el" href="classhal_1_1_net.html#a10bc7c36d93e2de9faf274c4a694529f">hal::Net</a>
+</li>
+<li>add_directory_entry()
+: <a class="el" href="classhal_1_1_saleae_writer.html#a56f2eae891fa6068f8445aff01f5e396">hal::SaleaeWriter</a>
 </li>
 <li>add_edges()
 : <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30">hal::graph_algorithm::NetlistGraph</a>
 </li>
+<li>add_event()
+: <a class="el" href="classhal_1_1_simulation.html#ab5d505cf79cbd92e79c337a6db568f99">hal::Simulation</a>
+</li>
+<li>add_gate_context()
+: <a class="el" href="classhal_1_1_gui_extension_context.html#a6652abd2b7610a118b188185e9d9dd53">hal::GuiExtensionContext</a>
+, <a class="el" href="classhal_1_1_gui_extension_python_base.html#a777f93e3c761b9918ebbf99ab75d92a1">hal::GuiExtensionPythonBase</a>
+</li>
+<li>add_gates()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a33d42ec29d290b7283a572f1008f3845">hal::NetlistSimulatorController</a>
+, <a class="el" href="classhal_1_1_simulation_input.html#ab18188e80a3aa36b2b677d4f2b263f4e">hal::SimulationInput</a>
+</li>
 <li>add_include()
-: <a class="el" href="classhal_1_1_gate_library.html#a8a704f948603b277844a8f8bb20fa6a9">hal::GateLibrary</a>
+: <a class="el" href="classhal_1_1_gate_library.html#aec2e0c91dd62658869660b6f51d82920">hal::GateLibrary</a>
+</li>
+<li>add_main_menu()
+: <a class="el" href="classhal_1_1_gui_extension_context.html#ad87dd5dbd289a643b7d9171e39ca7622">hal::GuiExtensionContext</a>
+, <a class="el" href="classhal_1_1_gui_extension_python_base.html#a37ad59bd627d261fa666ee94970f4b9c">hal::GuiExtensionPythonBase</a>
 </li>
 <li>add_member()
 : <a class="el" href="classhal_1_1_json_write_document.html#a9d258f0623495af2d9a8a8dfc4ffde20">hal::JsonWriteDocument</a>
 , <a class="el" href="classhal_1_1_json_write_object.html#ac08f7fad27e184acacb469db32151aa5">hal::JsonWriteObject</a>
 </li>
+<li>add_module_context()
+: <a class="el" href="classhal_1_1_gui_extension_context.html#a96cce87f6eb73254b81061c6b9048f6a">hal::GuiExtensionContext</a>
+, <a class="el" href="classhal_1_1_gui_extension_python_base.html#a80a8e5cd1c55ef498d50c14c4297ccc8">hal::GuiExtensionPythonBase</a>
+</li>
+<li>add_n_shifted_operands()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#ab14f754d6c3c8d27c2642d1920a8057e">hal::module_identification::FunctionalCandidate</a>
+</li>
+<li>add_net_context()
+: <a class="el" href="classhal_1_1_gui_extension_context.html#a002f5a09daaa0d74c3777e3481902c66">hal::GuiExtensionContext</a>
+, <a class="el" href="classhal_1_1_gui_extension_python_base.html#a9a283a5f8839a6949f47de653fd4462c">hal::GuiExtensionPythonBase</a>
+</li>
 <li>add_object()
 : <a class="el" href="classhal_1_1_json_write_array.html#a58914d1cf060b522fe5a0e370b1c6161">hal::JsonWriteArray</a>
 , <a class="el" href="classhal_1_1_json_write_object.html#a1a1b4d59eeb1288cbf21db1bd166c009">hal::JsonWriteObject</a>
 </li>
+<li>add_or_replace_composed()
+: <a class="el" href="classhal_1_1_saleae_directory.html#abf62481c0b7b45f33c236d62636f3e99">hal::SaleaeDirectory</a>
+</li>
+<li>add_or_replace_net()
+: <a class="el" href="classhal_1_1_saleae_directory.html#a4ef3670ed70c7e866a04bb7cc2dd7af4">hal::SaleaeDirectory</a>
+</li>
+<li>add_or_replace_waveform()
+: <a class="el" href="classhal_1_1_saleae_writer.html#a8d0e5f43fa5784301522c655f3569713">hal::SaleaeWriter</a>
+</li>
+<li>add_selected_shifted_operand()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#a3af3e897f019122136bd9c3cbe1b11b5">hal::module_identification::FunctionalCandidate</a>
+</li>
+<li>add_single_input_signals()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#a308edcc7fac0a5446dc02c3b243dbc6b">hal::module_identification::FunctionalCandidate</a>
+</li>
 <li>add_source()
 : <a class="el" href="classhal_1_1_net.html#a43001069500ebb42e6ac86b865d25947">hal::Net</a>
+</li>
+<li>add_stat()
+: <a class="el" href="structhal_1_1module__identification_1_1_statistics.html#a3758c170070f769989add64db41b43ca">hal::module_identification::Statistics</a>
+</li>
+<li>add_trigger_time()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a767abe687a38b54dc93d3b7958ce6b90">hal::NetlistSimulatorController</a>
+</li>
+<li>add_waveform()
+: <a class="el" href="classhal_1_1_wave_data_group.html#ab0e86b353075a7db5f08f6ef81db0ad7">hal::WaveDataGroup</a>
+</li>
+<li>add_waveform_group()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller.html#a91b55ce9063909e91914303a7f1aa18d">hal::NetlistSimulatorController</a>
+</li>
+<li>addableEntries()
+: <a class="el" href="classhal_1_1_wave_widget.html#a0842844a34cad8cb5244f45d63123ef4">hal::WaveWidget</a>
 </li>
 <li>addAction()
 : <a class="el" href="classhal_1_1_user_action_compound.html#a382766f52ee778cef7ca3a49295ccc65">hal::UserActionCompound</a>
@@ -302,6 +406,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>addChildModuleDialog()
 : <a class="el" href="classhal_1_1_netlist_relay.html#a31b104d19049d0e85c3bf8004f35ef57">hal::NetlistRelay</a>
 </li>
+<li>addColumn()
+: <a class="el" href="classhal_1_1_logic_evaluator_truthtable_model.html#aedaf4ceaf8e5f768a37f3b2cfda7d16e">hal::LogicEvaluatorTruthtableModel</a>
+</li>
 <li>addComment()
 : <a class="el" href="classhal_1_1_comment_manager.html#a5d61928110c75b910a1e351d38c39d01">hal::CommentManager</a>
 </li>
@@ -312,6 +419,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 </li>
 <li>addContext()
 : <a class="el" href="classhal_1_1_context_tree_model.html#ac8689792e97e8b3e0cc18025c84dd5a4">hal::ContextTreeModel</a>
+</li>
+<li>addController()
+: <a class="el" href="classhal_1_1_netlist_simulator_controller_map.html#ad7aa631aeb1336f866e477c13c7cdcd7">hal::NetlistSimulatorControllerMap</a>
 </li>
 <li>addDefaultEntry()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#ac2fb5fccdbbb8ebf826fa1363baf3eb3">hal::GroupingTableModel</a>
@@ -353,6 +463,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>addHistory()
 : <a class="el" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">hal::PythonConsoleHistory</a>
 </li>
+<li>addIndex()
+: <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#ade2ad998cd58fc0a9aaa56f820ef77c7">hal::SaleaeDirectoryNetEntry</a>
+</li>
 <li>addInput()
 : <a class="el" href="classhal_1_1_arrow_separated_net.html#adb0622226f94078f291c8c1ba6468669">hal::ArrowSeparatedNet</a>
 , <a class="el" href="classhal_1_1_circle_separated_net.html#a8fbb624c8dc588353e1b6916b8168666">hal::CircleSeparatedNet</a>
@@ -375,6 +488,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>addNet()
 : <a class="el" href="classhal_1_1_module_model.html#a4402cda06af16279b4960a282e5e9079">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_selection_relay.html#ae557ac19f17ee737d6a54bf790c98dfa">hal::SelectionRelay</a>
+, <a class="el" href="classhal_1_1_wave_data_group.html#a5f9c2d5d44498efe56de29e3c9706036">hal::WaveDataGroup</a>
 </li>
 <li>addNetSubmenu()
 : <a class="el" href="classhal_1_1_module_context_menu.html#afc0d30130241e24076cba1abf70e9fe8">hal::ModuleContextMenu</a>
@@ -384,6 +498,10 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 </li>
 <li>AddOrMerge()
 : <a class="el" href="classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#ac86a81f7d54facafee5a4036104538bd">hal::NetLayoutJunctionOccupiedHash::AddOrMerge</a>
+</li>
+<li>addOrReplace()
+: <a class="el" href="classhal_1_1_wave_data_list.html#a52abeff92b2521e73c70e6ec95c77093">hal::WaveDataList</a>
+, <a class="el" href="classhal_1_1_wave_item_hash.html#affea38e22cf4012eef69770c16fd789a">hal::WaveItemHash</a>
 </li>
 <li>addOutput()
 : <a class="el" href="classhal_1_1_arrow_separated_net.html#a2627c351f361e1140fc14f0aed362d3e">hal::ArrowSeparatedNet</a>
@@ -412,8 +530,17 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>addRecursively()
 : <a class="el" href="classhal_1_1_module_model.html#a1e5a1a1dbd4f163ee61617861110d9c2">hal::ModuleModel</a>
 </li>
+<li>addResults()
+: <a class="el" href="classhal_1_1_wave_widget.html#a0480ac0fb2803f6e7e6a4ecbafff204d">hal::WaveWidget</a>
+</li>
+<li>addSelectedResults()
+: <a class="el" href="classhal_1_1_wave_widget.html#a752c896d0d58de0d4a45748abd4affd1">hal::WaveWidget</a>
+</li>
 <li>addSpacer()
 : <a class="el" href="classhal_1_1_toolbar.html#aa6c31190221a870e24a222ab323a10dd">hal::Toolbar</a>
+</li>
+<li>addSubscriber()
+: <a class="el" href="classhal_1_1_wave_data.html#a80eda6e786a8f855b22965e47670d986">hal::WaveData</a>
 </li>
 <li>addTab()
 : <a class="el" href="classhal_1_1_details_tab_widget.html#a722d0f82e70df1cd657da4e8a757521a">hal::DetailsTabWidget</a>
@@ -451,18 +578,28 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 : <a class="el" href="classhal_1_1_input_dialog.html#a3594898589f47aecddcc8651d381061a">hal::InputDialog</a>
 , <a class="el" href="classhal_1_1_stacked_validator.html#a6ed78dbbf884452cfe80c250b6c58cae">hal::StackedValidator</a>
 </li>
+<li>addWaves()
+: <a class="el" href="classhal_1_1_wave_data_group.html#a62a50973db158638d07db88c5bcea45b">hal::WaveDataGroup</a>
+, <a class="el" href="classhal_1_1_wave_tree_model.html#a14d4439db4110f51490a6332e209a298">hal::WaveTreeModel</a>
+</li>
+<li>addWavesToGroup()
+: <a class="el" href="classhal_1_1_wave_data_list.html#a17a040381fd345438056b0f9c4b4b013">hal::WaveDataList</a>
+</li>
 <li>addWidget()
 : <a class="el" href="classhal_1_1_settings_display.html#ad89eb5883b9d85e373f8c0f1b6d2c9d1">hal::SettingsDisplay</a>
 </li>
 <li>addWire()
 : <a class="el" href="classhal_1_1_net_layout_junction_net.html#a8032a6ddf23c0375d74bd9042e527716">hal::NetLayoutJunctionNet</a>
 </li>
+<li>adjust()
+: <a class="el" href="classhal_1_1_wave_scrollbar.html#a0155cee6fcffad7660d90f2e55ca1952">hal::WaveScrollbar</a>
+</li>
 <li>adjustSize()
 : <a class="el" href="classhal_1_1_dock_button.html#ae39e6d11344f231ee8f3758a6cfb30a0">hal::DockButton</a>
 , <a class="el" href="classhal_1_1_general_table_widget.html#a1c9acbc4c4fe91f40c4d8487894f68f6">hal::GeneralTableWidget</a>
 </li>
 <li>adjustSliderHeight()
-: <a class="el" href="classhal_1_1_code_editor_minimap.html#a251c350b9c80fc7eaa2dcd0a3da17589">hal::CodeEditorMinimap</a>
+: <a class="el" href="classhal_1_1_code_editor_minimap.html#a05f68266b5e269a7b69be9986a3ad737">hal::CodeEditorMinimap</a>
 </li>
 <li>allocator()
 : <a class="el" href="classhal_1_1_json_write_data.html#abffaab0f8e493ffcf3c7c3e09e948556">hal::JsonWriteData</a>
@@ -529,6 +666,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>assign()
 : <a class="el" href="classhal_1_1_assigned_keybind_map.html#a0ed41dadbeafeeb51c87f0d5a2cf9039">hal::AssignedKeybindMap</a>
 </li>
+<li>assign_base_candidates_to_iterations()
+: <a class="el" href="structhal_1_1module__identification_1_1_result.html#a93b0a66e4dc8c33723e1dae1ca37e18d">hal::module_identification::Result</a>
+</li>
 <li>assign_gate()
 : <a class="el" href="classhal_1_1_grouping.html#a5aeceac13528e3d7f1d8e166aaec24b0">hal::Grouping</a>
 , <a class="el" href="classhal_1_1_module.html#a7446c45dc94cefbf49a51261e0299e1d">hal::Module</a>
@@ -589,7 +729,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

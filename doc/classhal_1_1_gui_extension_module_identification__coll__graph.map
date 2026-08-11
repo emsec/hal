@@ -1,0 +1,5 @@
+<map id="hal::GuiExtensionModuleIdentification" name="hal::GuiExtensionModuleIdentification">
+<area shape="rect" id="node1" title="GUI extension interface for the module identification plugin." alt="" coords="5,344,275,509"/>
+<area shape="rect" id="node2" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="28,145,252,296"/>
+<area shape="rect" id="node3" href="$classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="23,5,257,97"/>
+</map>

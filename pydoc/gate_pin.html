@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gate Pin &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Gate Pin &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -107,7 +113,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="hal_py.GatePin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">GatePin</span></span><a class="headerlink" href="#hal_py.GatePin" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">hal_py.GateBasePin</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><code class="xref py py-class docutils literal notranslate"><span class="pre">hal_py.GateBasePin</span></code></a></p>
 <p>The pin of a gate type. Each pin has a name, a direction, and a type.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="hal_py.GatePin.direction">
@@ -122,7 +128,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GatePin.get_direction">
-<span class="sig-name descname"><span class="pre">get_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateBasePin</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><span class="pre">hal_py.PinDirection</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_direction" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><span class="pre">hal_py.GateBasePin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><span class="pre">hal_py.PinDirection</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_direction" title="Permalink to this definition"></a></dt>
 <dd><p>Get the direction of the pin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -136,7 +142,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GatePin.get_group">
-<span class="sig-name descname"><span class="pre">get_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateBasePin</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple[hal::PinGroup&lt;hal::GatePin&gt;,</span> <span class="pre">int]</span></span></span><a class="headerlink" href="#hal_py.GatePin.get_group" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><span class="pre">hal_py.GateBasePin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple[hal::PinGroup&lt;hal::GatePin&gt;,</span> <span class="pre">int]</span></span></span><a class="headerlink" href="#hal_py.GatePin.get_group" title="Permalink to this definition"></a></dt>
 <dd><p>Get the group of the pin as well as the index of the pin within the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -150,7 +156,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GatePin.get_id">
-<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateBasePin</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><span class="pre">hal_py.GateBasePin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the ID of the gate pin. The ID is unique within a gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -164,7 +170,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GatePin.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateBasePin</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><span class="pre">hal_py.GateBasePin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_name" title="Permalink to this definition"></a></dt>
 <dd><p>Get the name of the pin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -178,7 +184,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.GatePin.get_type">
-<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateBasePin</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><span class="pre">hal_py.PinType</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_type" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_base_pin.html#hal_py.GateBasePin" title="hal_py.GateBasePin"><span class="pre">hal_py.GateBasePin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><span class="pre">hal_py.PinType</span></a></span></span><a class="headerlink" href="#hal_py.GatePin.get_type" title="Permalink to this definition"></a></dt>
 <dd><p>Get the type of the pin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>

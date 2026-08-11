@@ -5,9 +5,13 @@ var hierarchy =
     [ "Abc_Obj_t_", "struct_abc___obj__t__.html", null ],
     [ "hal::AbstractExtensionInterface", "classhal_1_1_abstract_extension_interface.html", [
       [ "hal::CliExtensionInterface", "classhal_1_1_cli_extension_interface.html", [
-        [ "hal::CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", null ]
+        [ "hal::CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", null ],
+        [ "hal::CliExtensionPythonShell", "classhal_1_1_cli_extension_python_shell.html", null ],
+        [ "hal::CliExtensionsGui", "classhal_1_1_cli_extensions_gui.html", null ],
+        [ "hal::CliExtensionsPerfTest", "classhal_1_1_cli_extensions_perf_test.html", null ]
       ] ],
       [ "hal::FacExtensionInterface", "classhal_1_1_fac_extension_interface.html", [
+        [ "hal::GexfWriterExtension", "classhal_1_1_gexf_writer_extension.html", null ],
         [ "hal::HGLParserExtension", "classhal_1_1_h_g_l_parser_extension.html", null ],
         [ "hal::HGLWriterExtension", "classhal_1_1_h_g_l_writer_extension.html", null ],
         [ "hal::LibertyParserExtension", "classhal_1_1_liberty_parser_extension.html", null ],
@@ -16,7 +20,12 @@ var hierarchy =
         [ "hal::VerilogWriterExtension", "classhal_1_1_verilog_writer_extension.html", null ]
       ] ],
       [ "hal::GuiExtensionInterface", "classhal_1_1_gui_extension_interface.html", [
-        [ "hal::GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", null ]
+        [ "hal::GuiExtensionContext", "classhal_1_1_gui_extension_context.html", null ],
+        [ "hal::GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", null ],
+        [ "hal::GuiExtensionDotViewer", "classhal_1_1_gui_extension_dot_viewer.html", null ],
+        [ "hal::GuiExtensionLogicEvaluator", "classhal_1_1_gui_extension_logic_evaluator.html", null ],
+        [ "hal::GuiExtensionModuleIdentification", "classhal_1_1_gui_extension_module_identification.html", null ],
+        [ "hal::GuiExtensionSimulator", "classhal_1_1_gui_extension_simulator.html", null ]
       ] ]
     ] ],
     [ "hal::AbstractFactoryProvider", "classhal_1_1_abstract_factory_provider.html", [
@@ -27,6 +36,7 @@ var hierarchy =
     [ "spdlog::sinks::base_sink", null, [
       [ "hal::log_gui_sink", "classhal_1_1log__gui__sink.html", null ]
     ] ],
+    [ "hal::module_identification::BaseCandidate", "classhal_1_1module__identification_1_1_base_candidate.html", null ],
     [ "hal::BasePin< T >", "classhal_1_1_base_pin.html", null ],
     [ "hal::BasePin< GatePin >", "classhal_1_1_base_pin.html", [
       [ "hal::GatePin", "classhal_1_1_gate_pin.html", null ]
@@ -35,23 +45,46 @@ var hierarchy =
       [ "hal::ModulePin", "classhal_1_1_module_pin.html", null ]
     ] ],
     [ "hal::BasePluginInterface", "classhal_1_1_base_plugin_interface.html", [
+      [ "hal::BitorderPropagationPlugin", "classhal_1_1_bitorder_propagation_plugin.html", null ],
       [ "hal::BooleanInfluencePlugin", "classhal_1_1_boolean_influence_plugin.html", null ],
       [ "hal::DataflowPlugin", "classhal_1_1_dataflow_plugin.html", null ],
+      [ "hal::DotViewerPlugin", "classhal_1_1_dot_viewer_plugin.html", null ],
+      [ "hal::GenlibWriterPlugin", "classhal_1_1_genlib_writer_plugin.html", null ],
+      [ "hal::GexfWriterPlugin", "classhal_1_1_gexf_writer_plugin.html", null ],
       [ "hal::GraphAlgorithmPlugin", "classhal_1_1_graph_algorithm_plugin.html", null ],
+      [ "hal::GuiExtensionDemoPlugin", "classhal_1_1_gui_extension_demo_plugin.html", null ],
       [ "hal::HGLParserPlugin", "classhal_1_1_h_g_l_parser_plugin.html", null ],
       [ "hal::HGLWriterPlugin", "classhal_1_1_h_g_l_writer_plugin.html", null ],
+      [ "hal::HawkeyePlugin", "classhal_1_1_hawkeye_plugin.html", null ],
       [ "hal::LibertyParserPlugin", "classhal_1_1_liberty_parser_plugin.html", null ],
+      [ "hal::LogicEvaluatorPlugin", "classhal_1_1_logic_evaluator_plugin.html", null ],
+      [ "hal::ModuleIdentificationPlugin", "classhal_1_1_module_identification_plugin.html", null ],
+      [ "hal::NetlistPreprocessingPlugin", "classhal_1_1_netlist_preprocessing_plugin.html", null ],
+      [ "hal::NetlistSimulatorControllerPlugin", "classhal_1_1_netlist_simulator_controller_plugin.html", null ],
+      [ "hal::NetlistSimulatorPlugin", "classhal_1_1_netlist_simulator_plugin.html", null ],
+      [ "hal::PerfTestPlugin", "classhal_1_1_perf_test_plugin.html", null ],
       [ "hal::PyBasePluginInterface", "classhal_1_1_py_base_plugin_interface.html", null ],
+      [ "hal::ResynthesisPlugin", "classhal_1_1_resynthesis_plugin.html", null ],
+      [ "hal::SequentialSymbolicExecutionPlugin", "classhal_1_1_sequential_symbolic_execution_plugin.html", null ],
       [ "hal::SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", null ],
-      [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", null ],
+      [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", [
+        [ "hal::PluginGui", "classhal_1_1_plugin_gui.html", null ],
+        [ "hal::PluginPythonShell", "classhal_1_1_plugin_python_shell.html", null ]
+      ] ],
       [ "hal::VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", null ],
+      [ "hal::VerilatorSimulatorPlugin", "classhal_1_1_verilator_simulator_plugin.html", null ],
       [ "hal::VerilogParserPlugin", "classhal_1_1_verilog_parser_plugin.html", null ],
-      [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ]
+      [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ],
+      [ "hal::WaveformViewerPlugin", "classhal_1_1_waveform_viewer_plugin.html", null ],
+      [ "hal::XilinxToolboxPlugin", "classhal_1_1_xilinx_toolbox_plugin.html", null ],
+      [ "hal::Z3UtilsPlugin", "classhal_1_1_z3_utils_plugin.html", null ]
     ] ],
     [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
       [ "hal::ContextTreeItem", "classhal_1_1_context_tree_item.html", null ],
       [ "hal::GatePinsTreeItem", "classhal_1_1_gate_pins_tree_item.html", null ],
-      [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
+      [ "hal::ModuleItem", "classhal_1_1_module_item.html", [
+        [ "hal::SelectGateItem", "classhal_1_1_select_gate_item.html", null ]
+      ] ],
       [ "hal::ModulePinsTreeItem", "classhal_1_1_module_pins_tree_item.html", null ],
       [ "hal::PinItem", "classhal_1_1_pin_item.html", null ],
       [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
@@ -74,11 +107,15 @@ var hierarchy =
     [ "hal::CallbackHook< void(ModuleEvent::event, hal::Module *, u32)>", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< void(NetEvent::event, hal::Net *, u32)>", "classhal_1_1_callback_hook.html", null ],
     [ "hal::CallbackHook< void(NetlistEvent::event, hal::Netlist *, u32)>", "classhal_1_1_callback_hook.html", null ],
+    [ "hal::module_identification::CandidateContext", "structhal_1_1module__identification_1_1_candidate_context.html", null ],
+    [ "hal::xilinx_toolbox::CellData", "structhal_1_1xilinx__toolbox_1_1_cell_data.html", null ],
     [ "hal::ChannelEntry", "structhal_1_1_channel_entry.html", null ],
     [ "hal::ChannelItem", "classhal_1_1_channel_item.html", null ],
     [ "std::char_traits", null, [
       [ "hal::core_strings::CaseInsensitiveCharTraits", "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html", null ]
     ] ],
+    [ "hal::SimulationInput::Clock", "structhal_1_1_simulation_input_1_1_clock.html", null ],
+    [ "hal::ClockTreeExtractorInteractionRegistration", "classhal_1_1_clock_tree_extractor_interaction_registration.html", null ],
     [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
     [ "hal::CommentEntry", "classhal_1_1_comment_entry.html", null ],
     [ "hal::CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", null ],
@@ -86,24 +123,34 @@ var hierarchy =
     [ "hal::dataflow::Configuration", "structhal_1_1dataflow_1_1_configuration.html", null ],
     [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
     [ "hal::dataflow::processing::Configuration", "structhal_1_1dataflow_1_1processing_1_1_configuration.html", null ],
+    [ "hal::module_identification::Configuration", "structhal_1_1module__identification_1_1_configuration.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
       [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
     ] ],
-    [ "hal::ContentFactory", "classhal_1_1_content_factory.html", null ],
+    [ "hal::ContentFactory", "classhal_1_1_content_factory.html", [
+      [ "hal::DotViewerFactory", "classhal_1_1_dot_viewer_factory.html", null ],
+      [ "hal::WaveformViewerFactory", "classhal_1_1_waveform_viewer_factory.html", null ]
+    ] ],
     [ "hal::ContentWidgetPlacement", "structhal_1_1_content_widget_placement.html", null ],
     [ "hal::dataflow::evaluation::Context", "structhal_1_1dataflow_1_1evaluation_1_1_context.html", null ],
     [ "hal::dataflow::processing::Context", "structhal_1_1dataflow_1_1processing_1_1_context.html", null ],
     [ "hal::ContextDirectory", "classhal_1_1_context_directory.html", null ],
     [ "hal::ContextMenuContribution", "structhal_1_1_context_menu_contribution.html", null ],
+    [ "hal::z3_utils::Converter", "classhal_1_1z3__utils_1_1_converter.html", [
+      [ "hal::z3_utils::Cpp_Converter", "classhal_1_1z3__utils_1_1_cpp___converter.html", null ],
+      [ "hal::z3_utils::VerilogConverter", "classhal_1_1z3__utils_1_1_verilog_converter.html", null ]
+    ] ],
     [ "hal::DataContainer", "classhal_1_1_data_container.html", [
       [ "hal::Gate", "classhal_1_1_gate.html", null ],
       [ "hal::Module", "classhal_1_1_module.html", null ],
       [ "hal::Net", "classhal_1_1_net.html", null ]
     ] ],
     [ "hal::DataTableModel::DataEntry", "structhal_1_1_data_table_model_1_1_data_entry.html", null ],
+    [ "hal::DataflowInteractionRegistration", "classhal_1_1_dataflow_interaction_registration.html", null ],
     [ "hal::DetailsTableUtilities", "classhal_1_1_details_table_utilities.html", null ],
+    [ "hal::hawkeye::DetectionConfiguration", "structhal_1_1hawkeye_1_1_detection_configuration.html", null ],
     [ "hal::utils::DirectoryRange", "classhal_1_1utils_1_1_directory_range.html", null ],
     [ "hal::Endpoint", "classhal_1_1_endpoint.html", null ],
     [ "hal::EnumStrings< T, typename >", "structhal_1_1_enum_strings.html", null ],
@@ -111,6 +158,7 @@ var hierarchy =
     [ "hal::Error", "classhal_1_1_error.html", null ],
     [ "hal::EventHandler", "classhal_1_1_event_handler.html", null ],
     [ "hal::ExportRegisteredFormat", "classhal_1_1_export_registered_format.html", null ],
+    [ "hal::module_identification::FunctionalCandidate", "classhal_1_1module__identification_1_1_functional_candidate.html", null ],
     [ "hal::GateEvent", "classhal_1_1_gate_event.html", null ],
     [ "hal::GateLibrary", "classhal_1_1_gate_library.html", null ],
     [ "hal::GateLibraryParser", "classhal_1_1_gate_library_parser.html", [
@@ -119,6 +167,7 @@ var hierarchy =
     ] ],
     [ "hal::GateLibrarySelectionEntry", "classhal_1_1_gate_library_selection_entry.html", null ],
     [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", [
+      [ "hal::GenlibWriter", "classhal_1_1_genlib_writer.html", null ],
       [ "hal::HGLWriter", "classhal_1_1_h_g_l_writer.html", null ]
     ] ],
     [ "hal::GateSelectEntry", "classhal_1_1_gate_select_entry.html", null ],
@@ -140,12 +189,18 @@ var hierarchy =
     [ "hal::Grouping", "classhal_1_1_grouping.html", null ],
     [ "hal::GroupingEvent", "classhal_1_1_grouping_event.html", null ],
     [ "hal::GroupingTableEntry", "classhal_1_1_grouping_table_entry.html", null ],
+    [ "hal::GuiExtensionPythonBase", "classhal_1_1_gui_extension_python_base.html", null ],
     [ "hal::dataflow::GuiLayoutLocker", "classhal_1_1dataflow_1_1_gui_layout_locker.html", null ],
+    [ "hal::module_identification::GuiLayoutLocker", "classhal_1_1module__identification_1_1_gui_layout_locker.html", null ],
     [ "hal::GuiPluginEntry", "classhal_1_1_gui_plugin_entry.html", null ],
     [ "std::hash< hal::core_strings::CaseInsensitiveString >", "structstd_1_1hash_3_01hal_1_1core__strings_1_1_case_insensitive_string_01_4.html", null ],
     [ "hal::StandardGraphicsNet::HLine", "structhal_1_1_standard_graphics_net_1_1_h_line.html", null ],
     [ "Hop_Man_t_", "struct_hop___man__t__.html", null ],
     [ "Hop_Obj_t_", "struct_hop___obj__t__.html", null ],
+    [ "std::ifstream", null, [
+      [ "hal::SaleaeInputFile", "classhal_1_1_saleae_input_file.html", null ]
+    ] ],
+    [ "hal::NetlistSimulatorController::InputColumnHeader", "structhal_1_1_netlist_simulator_controller_1_1_input_column_header.html", null ],
     [ "hal::JsonWriteData", "classhal_1_1_json_write_data.html", [
       [ "hal::JsonWriteComplex", "classhal_1_1_json_write_complex.html", [
         [ "hal::JsonWriteArray", "classhal_1_1_json_write_array.html", null ],
@@ -158,9 +213,12 @@ var hierarchy =
     [ "hal::LayoutLocker", "classhal_1_1_layout_locker.html", null ],
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
+    [ "hal::SaleaeDirectory::ListEntry", "structhal_1_1_saleae_directory_1_1_list_entry.html", null ],
     [ "hal::ListPropertyModel::ListPropertyEntry", "structhal_1_1_list_property_model_1_1_list_property_entry.html", null ],
+    [ "hal::xilinx_toolbox::LOC", "structhal_1_1xilinx__toolbox_1_1_l_o_c.html", null ],
     [ "hal::LogManager::log_sink", "structhal_1_1_log_manager_1_1log__sink.html", null ],
     [ "hal::LoggerSettings", "structhal_1_1_logger_settings.html", null ],
+    [ "hal::LogicEvaluatorTruthtableColumn", "classhal_1_1_logic_evaluator_truthtable_column.html", null ],
     [ "hal::LogManager", "classhal_1_1_log_manager.html", null ],
     [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
@@ -171,6 +229,7 @@ var hierarchy =
     [ "hal::ModuleSelectEntry", "classhal_1_1_module_select_entry.html", null ],
     [ "hal::ModuleSelectExclude", "classhal_1_1_module_select_exclude.html", null ],
     [ "hal::NetEvent", "classhal_1_1_net_event.html", null ],
+    [ "hal::SimulationInput::NetGroup", "structhal_1_1_simulation_input_1_1_net_group.html", null ],
     [ "hal::NetLayoutConnectionFactory", "classhal_1_1_net_layout_connection_factory.html", null ],
     [ "hal::NetLayoutDirection", "classhal_1_1_net_layout_direction.html", null ],
     [ "hal::NetLayoutJunction", "classhal_1_1_net_layout_junction.html", null ],
@@ -193,12 +252,16 @@ var hierarchy =
     ] ],
     [ "hal::NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", null ],
     [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", [
+      [ "hal::GexfWriter", "classhal_1_1_gexf_writer.html", null ],
       [ "hal::VerilogWriter", "classhal_1_1_verilog_writer.html", null ]
     ] ],
     [ "hal::BooleanFunction::Node", "structhal_1_1_boolean_function_1_1_node.html", null ],
     [ "hal::Node", "classhal_1_1_node.html", null ],
     [ "hal::NodeBox", "classhal_1_1_node_box.html", null ],
     [ "hal::BooleanFunction::NodeType", "structhal_1_1_boolean_function_1_1_node_type.html", null ],
+    [ "std::ofstream", null, [
+      [ "hal::SaleaeOutputFile", "classhal_1_1_saleae_output_file.html", null ]
+    ] ],
     [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
@@ -208,10 +271,13 @@ var hierarchy =
     [ "hal::PinChangedEvent", "classhal_1_1_pin_changed_event.html", null ],
     [ "hal::PinChangedEventScope", "classhal_1_1_pin_changed_event_scope.html", null ],
     [ "hal::PinGroup< T >", "classhal_1_1_pin_group.html", null ],
+    [ "hal::PinGroup< hal::GatePin >", "classhal_1_1_pin_group.html", null ],
+    [ "hal::PinGroup< hal::ModulePin >", "classhal_1_1_pin_group.html", null ],
     [ "hal::PlacementEntry", "classhal_1_1_placement_entry.html", null ],
     [ "hal::PlacementHint", "classhal_1_1_placement_hint.html", null ],
     [ "hal::plugin_manager::PluginFeature", "structhal_1_1plugin__manager_1_1_plugin_feature.html", null ],
     [ "hal::PluginParameter", "classhal_1_1_plugin_parameter.html", null ],
+    [ "hal::NetlistSimulator::SimulationGateRAM::Port", "structhal_1_1_netlist_simulator_1_1_simulation_gate_r_a_m_1_1_port.html", null ],
     [ "hal::PositionGenerator", "classhal_1_1_position_generator.html", null ],
     [ "hal::ProgramArguments", "classhal_1_1_program_arguments.html", null ],
     [ "hal::ProgramOptions", "classhal_1_1_program_options.html", null ],
@@ -220,11 +286,13 @@ var hierarchy =
     [ "hal::ProjectManager", "classhal_1_1_project_manager.html", null ],
     [ "hal::ProjectSerializer", "classhal_1_1_project_serializer.html", [
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
+      [ "hal::DotViewerFactory", "classhal_1_1_dot_viewer_factory.html", null ],
       [ "hal::GraphContextSerializer", "classhal_1_1_graph_context_serializer.html", null ],
       [ "hal::GroupingColorSerializer", "classhal_1_1_grouping_color_serializer.html", null ],
       [ "hal::GroupingSerializer", "classhal_1_1_grouping_serializer.html", null ],
       [ "hal::ModuleColorSerializer", "classhal_1_1_module_color_serializer.html", null ],
-      [ "hal::PythonSerializer", "classhal_1_1_python_serializer.html", null ]
+      [ "hal::PythonSerializer", "classhal_1_1_python_serializer.html", null ],
+      [ "hal::SimulatorSerializer", "classhal_1_1_simulator_serializer.html", null ]
     ] ],
     [ "hal::PyCodeProvider", "classhal_1_1_py_code_provider.html", null ],
     [ "hal::PythonConsoleHistory", "classhal_1_1_python_console_history.html", null ],
@@ -258,6 +326,11 @@ var hierarchy =
       ] ],
       [ "hal::NodeDragShadow", "classhal_1_1_node_drag_shadow.html", null ]
     ] ],
+    [ "QGVInteraction", null, [
+      [ "hal::ClockTreeExtractorInteraction", "classhal_1_1_clock_tree_extractor_interaction.html", null ],
+      [ "hal::DataflowInteraction", "classhal_1_1_dataflow_interaction.html", null ],
+      [ "hal::SolveFsmInteraction", "classhal_1_1_solve_fsm_interaction.html", null ]
+    ] ],
     [ "QHash< hal::Node, CoordinateFromData >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::CoordinateFromDataMap", "classhal_1_1_coordinate_from_data_map.html", null ]
     ] ],
@@ -269,6 +342,9 @@ var hierarchy =
     ] ],
     [ "QHash< Node, QPoint >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::GridPlacement", "classhal_1_1_grid_placement.html", null ]
+    ] ],
+    [ "QHash< WaveItemIndex, WaveItem * >", "https://doc.qt.io/qt-5/qhash.html", [
+      [ "hal::WaveItemHash", "classhal_1_1_wave_item_hash.html", null ]
     ] ],
     [ "QIconEngine", "https://doc.qt.io/qt-5/qiconengine.html", [
       [ "hal::SvgIconEngine", "classhal_1_1_svg_icon_engine.html", null ]
@@ -296,6 +372,9 @@ var hierarchy =
     [ "QList< WaitToBeSeatedEntry * >", "https://doc.qt.io/qt-5/qlist.html", [
       [ "hal::WaitToBeSeatedList", "classhal_1_1_wait_to_be_seated_list.html", null ]
     ] ],
+    [ "QList< WaveData * >", "https://doc.qt.io/qt-5/qlist.html", [
+      [ "hal::WaveDataList", "classhal_1_1_wave_data_list.html", null ]
+    ] ],
     [ "QMap< NetLayoutMetric, NetLayoutConnection * >", "https://doc.qt.io/qt-5/qmap.html", [
       [ "hal::NetLayoutConnectionMetric", "classhal_1_1_net_layout_connection_metric.html", null ]
     ] ],
@@ -309,7 +388,9 @@ var hierarchy =
         ] ],
         [ "QStyledItemDelegate", "https://doc.qt.io/qt-5/qstyleditemdelegate.html", [
           [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ],
-          [ "hal::PinDelegate", "classhal_1_1_pin_delegate.html", null ]
+          [ "hal::PinDelegate", "classhal_1_1_pin_delegate.html", null ],
+          [ "hal::WaveDeleteDelegate", "classhal_1_1_wave_delete_delegate.html", null ],
+          [ "hal::WaveValueDelegate", "classhal_1_1_wave_value_delegate.html", null ]
         ] ]
       ] ],
       [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
@@ -342,16 +423,22 @@ var hierarchy =
           [ "hal::GuiPluginTable", "classhal_1_1_gui_plugin_table.html", null ],
           [ "hal::LUTTableModel", "classhal_1_1_l_u_t_table_model.html", null ],
           [ "hal::ListPropertyModel", "classhal_1_1_list_property_model.html", null ],
+          [ "hal::LogicEvaluatorTruthtableModel", "classhal_1_1_logic_evaluator_truthtable_model.html", null ],
           [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
-          [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ]
+          [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ],
+          [ "hal::WaveEditTable", "classhal_1_1_wave_edit_table.html", null ],
+          [ "hal::WaveSelectionTable", "classhal_1_1_wave_selection_table.html", null ]
         ] ],
         [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
           [ "hal::ContextTreeModel", "classhal_1_1_context_tree_model.html", null ],
           [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
-          [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
+          [ "hal::ModuleModel", "classhal_1_1_module_model.html", [
+            [ "hal::SelectGateModel", "classhal_1_1_select_gate_model.html", null ]
+          ] ],
           [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ],
           [ "hal::PinModel", "classhal_1_1_pin_model.html", null ]
-        ] ]
+        ] ],
+        [ "hal::WaveTreeModel", "classhal_1_1_wave_tree_model.html", null ]
       ] ],
       [ "QAction", "https://doc.qt.io/qt-5/qaction.html", [
         [ "hal::Action", "classhal_1_1_action.html", null ]
@@ -365,17 +452,26 @@ var hierarchy =
       [ "QMimeData", "https://doc.qt.io/qt-5/qmimedata.html", [
         [ "hal::DockMimeData", "classhal_1_1_dock_mime_data.html", null ]
       ] ],
+      [ "QSettings", "https://doc.qt.io/qt-5/qsettings.html", [
+        [ "hal::SimulationSettings", "classhal_1_1_simulation_settings.html", null ]
+      ] ],
       [ "QSyntaxHighlighter", "https://doc.qt.io/qt-5/qsyntaxhighlighter.html", [
         [ "hal::PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", null ]
       ] ],
       [ "QThread", "https://doc.qt.io/qt-5/qthread.html", [
         [ "hal::DrawNetThread", "classhal_1_1_draw_net_thread.html", null ],
         [ "hal::JunctionThread", "classhal_1_1_junction_thread.html", null ],
-        [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ]
+        [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ],
+        [ "hal::SimulationProcess", "classhal_1_1_simulation_process.html", null ],
+        [ "hal::SimulationThread", "classhal_1_1_simulation_thread.html", null ],
+        [ "hal::WaveLoaderBackbone", "classhal_1_1_wave_loader_backbone.html", null ],
+        [ "hal::WaveLoaderThread", "classhal_1_1_wave_loader_thread.html", null ],
+        [ "hal::WaveValueThread", "classhal_1_1_wave_value_thread.html", null ]
       ] ],
       [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", [
         [ "QAbstractButton", "https://doc.qt.io/qt-5/qabstractbutton.html", [
           [ "QCheckBox", "https://doc.qt.io/qt-5/qcheckbox.html", [
+            [ "hal::LogicEvaluatorCheckBox", "classhal_1_1_logic_evaluator_check_box.html", null ],
             [ "hal::SeveritySelector", "classhal_1_1_severity_selector.html", null ]
           ] ],
           [ "QPushButton", "https://doc.qt.io/qt-5/qpushbutton.html", [
@@ -387,7 +483,13 @@ var hierarchy =
         ] ],
         [ "QAbstractSlider", "https://doc.qt.io/qt-5/qabstractslider.html", [
           [ "QScrollBar", "https://doc.qt.io/qt-5/qscrollbar.html", [
-            [ "hal::CodeEditorScrollbar", "classhal_1_1_code_editor_scrollbar.html", null ]
+            [ "hal::CodeEditorScrollbar", "classhal_1_1_code_editor_scrollbar.html", null ],
+            [ "hal::WaveScrollbar", "classhal_1_1_wave_scrollbar.html", null ]
+          ] ]
+        ] ],
+        [ "QAbstractSpinBox", "https://doc.qt.io/qt-5/qabstractspinbox.html", [
+          [ "QSpinBox", "https://doc.qt.io/qt-5/qspinbox.html", [
+            [ "hal::LogicEvaluatorHexSpinbox", "classhal_1_1_logic_evaluator_hex_spinbox.html", null ]
           ] ]
         ] ],
         [ "QComboBox", "https://doc.qt.io/qt-5/qcombobox.html", [
@@ -399,25 +501,37 @@ var hierarchy =
             [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
           ] ],
           [ "QWizard", "https://doc.qt.io/qt-5/qwizard.html", [
-            [ "hal::GateLibraryWizard", "classhal_1_1_gate_library_wizard.html", null ]
+            [ "hal::GateLibraryWizard", "classhal_1_1_gate_library_wizard.html", null ],
+            [ "hal::Wizard", "classhal_1_1_wizard.html", null ]
           ] ],
           [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
+          [ "hal::BooleanDialog", "classhal_1_1_boolean_dialog.html", null ],
+          [ "hal::ClockSetDialog", "classhal_1_1_clock_set_dialog.html", null ],
           [ "hal::ComboboxDialog", "classhal_1_1_combobox_dialog.html", [
             [ "hal::PingroupSelectorDialog", "classhal_1_1_pingroup_selector_dialog.html", null ]
           ] ],
           [ "hal::CommentColorPicker", "classhal_1_1_comment_color_picker.html", null ],
           [ "hal::CommentDialog", "classhal_1_1_comment_dialog.html", null ],
           [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
+          [ "hal::GateSelectionDialog", "classhal_1_1_gate_selection_dialog.html", null ],
           [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
           [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
           [ "hal::ImportProjectDialog", "classhal_1_1_import_project_dialog.html", null ],
           [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
+          [ "hal::LogicEvaluatorDialog", "classhal_1_1_logic_evaluator_dialog.html", null ],
+          [ "hal::LogicEvaluatorSelectGates", "classhal_1_1_logic_evaluator_select_gates.html", null ],
+          [ "hal::LogicEvaluatorTruthtable", "classhal_1_1_logic_evaluator_truthtable.html", null ],
+          [ "hal::LogicEvaluatorTruthtableSort", "classhal_1_1_logic_evaluator_truthtable_sort.html", null ],
           [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
           [ "hal::NewProjectDialog", "classhal_1_1_new_project_dialog.html", null ],
           [ "hal::PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
           [ "hal::SearchColumnDialog", "classhal_1_1_search_column_dialog.html", null ],
-          [ "hal::SearchOptionsDialog", "classhal_1_1_search_options_dialog.html", null ]
+          [ "hal::SearchOptionsDialog", "classhal_1_1_search_options_dialog.html", null ],
+          [ "hal::SimulationSettingDialog", "classhal_1_1_simulation_setting_dialog.html", null ],
+          [ "hal::TriggerDialog", "classhal_1_1_trigger_dialog.html", null ],
+          [ "hal::WaveEditDialog", "classhal_1_1_wave_edit_dialog.html", null ],
+          [ "hal::WaveSelectionDialog", "classhal_1_1_wave_selection_dialog.html", null ]
         ] ],
         [ "QFrame", "https://doc.qt.io/qt-5/qframe.html", [
           [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
@@ -429,7 +543,9 @@ var hierarchy =
                     [ "hal::ModuleInfoTable", "classhal_1_1_module_info_table.html", null ],
                     [ "hal::NetInfoTable", "classhal_1_1_net_info_table.html", null ]
                   ] ],
-                  [ "hal::GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", null ]
+                  [ "hal::GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", null ],
+                  [ "hal::SimulationSettingPropertiesTab", "classhal_1_1_simulation_setting_properties_tab.html", null ],
+                  [ "hal::WavedataTableEditor", "classhal_1_1_wavedata_table_editor.html", null ]
                 ] ],
                 [ "hal::BooleanFunctionTable", "classhal_1_1_boolean_function_table.html", null ],
                 [ "hal::DataTableWidget", "classhal_1_1_data_table_widget.html", null ],
@@ -452,10 +568,12 @@ var hierarchy =
                 [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ],
                 [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
                 [ "hal::PinTreeView", "classhal_1_1_pin_tree_view.html", null ],
-                [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ]
+                [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ],
+                [ "hal::WaveTreeView", "classhal_1_1_wave_tree_view.html", null ]
               ] ]
             ] ],
             [ "QGraphicsView", "https://doc.qt.io/qt-5/qgraphicsview.html", [
+              [ "hal::DotGraphicsView", "classhal_1_1_dot_graphics_view.html", null ],
               [ "hal::GatelibraryGraphicsView", "classhal_1_1_gatelibrary_graphics_view.html", null ],
               [ "hal::GraphGraphicsView", "classhal_1_1_graph_graphics_view.html", null ]
             ] ],
@@ -470,7 +588,8 @@ var hierarchy =
             ] ],
             [ "QTextEdit", "https://doc.qt.io/qt-5/qtextedit.html", [
               [ "hal::PythonConsole", "classhal_1_1_python_console.html", null ]
-            ] ]
+            ] ],
+            [ "hal::WaveGraphicsCanvas", "classhal_1_1_wave_graphics_canvas.html", null ]
           ] ],
           [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
             [ "hal::GateLibraryLabel", "classhal_1_1_gate_library_label.html", null ],
@@ -478,7 +597,8 @@ var hierarchy =
             [ "hal::SearchableLabel", "classhal_1_1_searchable_label.html", null ]
           ] ],
           [ "QSplitter", "https://doc.qt.io/qt-5/qsplitter.html", [
-            [ "hal::Splitter", "classhal_1_1_splitter.html", null ]
+            [ "hal::Splitter", "classhal_1_1_splitter.html", null ],
+            [ "hal::WaveWidget", "classhal_1_1_wave_widget.html", null ]
           ] ],
           [ "hal::AbstractBusyIndicator", "classhal_1_1_abstract_busy_indicator.html", [
             [ "hal::BusyIndicator", "classhal_1_1_busy_indicator.html", null ],
@@ -508,6 +628,7 @@ var hierarchy =
           [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
           [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
           [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
+          [ "hal::LogicEvaluatorPingroup", "classhal_1_1_logic_evaluator_pingroup.html", null ],
           [ "hal::OpenFileWidget", "classhal_1_1_open_file_widget.html", null ],
           [ "hal::Overlay", "classhal_1_1_overlay.html", [
             [ "hal::WidgetOverlay", "classhal_1_1_widget_overlay.html", null ]
@@ -551,6 +672,13 @@ var hierarchy =
           [ "hal::InitWizardPage", "classhal_1_1_init_wizard_page.html", null ],
           [ "hal::LUTWizardPage", "classhal_1_1_l_u_t_wizard_page.html", null ],
           [ "hal::LatchWizardPage", "classhal_1_1_latch_wizard_page.html", null ],
+          [ "hal::PageClock", "classhal_1_1_page_clock.html", null ],
+          [ "hal::PageEngine", "classhal_1_1_page_engine.html", null ],
+          [ "hal::PageEngineProperties", "classhal_1_1_page_engine_properties.html", null ],
+          [ "hal::PageInputData", "classhal_1_1_page_input_data.html", null ],
+          [ "hal::PageLoadResults", "classhal_1_1_page_load_results.html", null ],
+          [ "hal::PageRunSimulation", "classhal_1_1_page_run_simulation.html", null ],
+          [ "hal::PageSelectGates", "classhal_1_1_page_select_gates.html", null ],
           [ "hal::PinsWizardPage", "classhal_1_1_pins_wizard_page.html", null ],
           [ "hal::RAMPortWizardPage", "classhal_1_1_r_a_m_port_wizard_page.html", null ],
           [ "hal::RAMWizardPage", "classhal_1_1_r_a_m_wizard_page.html", null ],
@@ -574,6 +702,7 @@ var hierarchy =
         [ "hal::KeyValueTable", "classhal_1_1_key_value_table.html", null ],
         [ "hal::LineNumberArea", "classhal_1_1_line_number_area.html", null ],
         [ "hal::LoggerQssAdapter", "classhal_1_1_logger_qss_adapter.html", null ],
+        [ "hal::LogicEvaluatorValue", "classhal_1_1_logic_evaluator_value.html", null ],
         [ "hal::MainSettingsWidget", "classhal_1_1_main_settings_widget.html", null ],
         [ "hal::MainWindow", "classhal_1_1_main_window.html", null ],
         [ "hal::MinimapScrollbar", "classhal_1_1_minimap_scrollbar.html", null ],
@@ -581,11 +710,19 @@ var hierarchy =
         [ "hal::PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", null ],
         [ "hal::PythonConsoleQssAdapter", "classhal_1_1_python_console_qss_adapter.html", null ],
         [ "hal::PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", null ],
+        [ "hal::SimulationSettingColorTab", "classhal_1_1_simulation_setting_color_tab.html", null ],
+        [ "hal::SimulationSettingGlobalTab", "classhal_1_1_simulation_setting_global_tab.html", null ],
         [ "hal::SpinnerWidget", "classhal_1_1_spinner_widget.html", null ],
+        [ "hal::WaveCursor", "classhal_1_1_wave_cursor.html", null ],
+        [ "hal::WaveRenderEngine", "classhal_1_1_wave_render_engine.html", null ],
+        [ "hal::WaveTimescale", "classhal_1_1_wave_timescale.html", null ],
         [ "hal::Widget", "classhal_1_1_widget.html", [
           [ "hal::ContentWidget", "classhal_1_1_content_widget.html", [
             [ "hal::ContextManagerWidget", "classhal_1_1_context_manager_widget.html", null ],
-            [ "hal::ExternalContentWidget", "classhal_1_1_external_content_widget.html", null ],
+            [ "hal::ExternalContentWidget", "classhal_1_1_external_content_widget.html", [
+              [ "hal::DotViewer", "classhal_1_1_dot_viewer.html", null ],
+              [ "hal::WaveformViewer", "classhal_1_1_waveform_viewer.html", null ]
+            ] ],
             [ "hal::GraphTabWidget", "classhal_1_1_graph_tab_widget.html", null ],
             [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ],
             [ "hal::GroupingManagerWidget", "classhal_1_1_grouping_manager_widget.html", null ],
@@ -601,6 +738,7 @@ var hierarchy =
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
       [ "hal::ContentDragRelay", "classhal_1_1_content_drag_relay.html", null ],
       [ "hal::ContentManager", "classhal_1_1_content_manager.html", null ],
+      [ "hal::DotViewerCallFromThread", "classhal_1_1_dot_viewer_call_from_thread.html", null ],
       [ "hal::DragController", "classhal_1_1_drag_controller.html", null ],
       [ "hal::FileManager", "classhal_1_1_file_manager.html", null ],
       [ "hal::FileStatusManager", "classhal_1_1_file_status_manager.html", null ],
@@ -624,8 +762,11 @@ var hierarchy =
         [ "hal::PythonModuleSelectionReceiver", "classhal_1_1_python_module_selection_receiver.html", null ]
       ] ],
       [ "hal::NetlistRelay", "classhal_1_1_netlist_relay.html", null ],
+      [ "hal::NetlistSimulatorController", "classhal_1_1_netlist_simulator_controller.html", null ],
+      [ "hal::NetlistSimulatorControllerMap", "classhal_1_1_netlist_simulator_controller_map.html", null ],
       [ "hal::PinActionType", "classhal_1_1_pin_action_type.html", null ],
       [ "hal::PluginRelay", "classhal_1_1_plugin_relay.html", null ],
+      [ "hal::PythonContext", "classhal_1_1_python_context.html", null ],
       [ "hal::SelectionDetailsIconProvider", "classhal_1_1_selection_details_icon_provider.html", null ],
       [ "hal::SelectionRelay", "classhal_1_1_selection_relay.html", null ],
       [ "hal::SettingsItem", "classhal_1_1_settings_item.html", [
@@ -637,10 +778,17 @@ var hierarchy =
         [ "hal::SettingsItemText", "classhal_1_1_settings_item_text.html", null ]
       ] ],
       [ "hal::SettingsManager", "classhal_1_1_settings_manager.html", null ],
+      [ "hal::SimulationLogReceiver", "classhal_1_1_simulation_log_receiver.html", [
+        [ "hal::SimulationProcessOutput", "classhal_1_1_simulation_process_output.html", null ]
+      ] ],
+      [ "hal::SimulationProcessLog", "classhal_1_1_simulation_process_log.html", null ],
       [ "hal::SpecialLogContentManager", "classhal_1_1_special_log_content_manager.html", null ],
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
       [ "hal::UserActionManager", "classhal_1_1_user_action_manager.html", null ],
-      [ "hal::UserActionObjectType", "classhal_1_1_user_action_object_type.html", null ]
+      [ "hal::UserActionObjectType", "classhal_1_1_user_action_object_type.html", null ],
+      [ "hal::VcdSerializer", "classhal_1_1_vcd_serializer.html", null ],
+      [ "hal::WaveDataList", "classhal_1_1_wave_data_list.html", null ],
+      [ "hal::WaveItem", "classhal_1_1_wave_item.html", null ]
     ] ],
     [ "QPaintDevice", "https://doc.qt.io/qt-5/qpaintdevice.html", [
       [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", null ]
@@ -658,32 +806,67 @@ var hierarchy =
     ] ],
     [ "hal::RAMPortWizardPage::RAMPort", "structhal_1_1_r_a_m_port_wizard_page_1_1_r_a_m_port.html", null ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::hawkeye::RegisterCandidate", "classhal_1_1hawkeye_1_1_register_candidate.html", null ],
+    [ "hal::WaveTreeModel::ReorderRequest", "classhal_1_1_wave_tree_model_1_1_reorder_request.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::Result", "classhal_1_1dataflow_1_1_result.html", null ],
+    [ "hal::module_identification::Result", "structhal_1_1module__identification_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::hawkeye::RoundCandidate", "classhal_1_1hawkeye_1_1_round_candidate.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
+    [ "hal::SaleaeDataBuffer", "classhal_1_1_saleae_data_buffer.html", null ],
+    [ "hal::SaleaeDataTuple", "classhal_1_1_saleae_data_tuple.html", null ],
+    [ "hal::SaleaeDirectory", "classhal_1_1_saleae_directory.html", null ],
+    [ "hal::SaleaeDirectoryFileIndex", "classhal_1_1_saleae_directory_file_index.html", null ],
+    [ "hal::SaleaeDirectoryNetEntry", "classhal_1_1_saleae_directory_net_entry.html", [
+      [ "hal::SaleaeDirectoryComposedEntry", "classhal_1_1_saleae_directory_composed_entry.html", null ]
+    ] ],
+    [ "hal::SaleaeDirectoryStoreRequest", "classhal_1_1_saleae_directory_store_request.html", null ],
+    [ "hal::SaleaeHeader", "classhal_1_1_saleae_header.html", null ],
+    [ "hal::SaleaeParser", "classhal_1_1_saleae_parser.html", null ],
+    [ "hal::SaleaeStatus", "classhal_1_1_saleae_status.html", null ],
+    [ "hal::SaleaeWriter", "classhal_1_1_saleae_writer.html", null ],
+    [ "hal::hawkeye::SBoxCandidate", "classhal_1_1hawkeye_1_1_s_box_candidate.html", null ],
+    [ "hal::hawkeye::SBoxDatabase", "classhal_1_1hawkeye_1_1_s_box_database.html", null ],
     [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
     [ "hal::GraphShader::Shading", "structhal_1_1_graph_shader_1_1_shading.html", null ],
+    [ "hal::Simulation", "classhal_1_1_simulation.html", null ],
+    [ "hal::SimulationEngine", "classhal_1_1_simulation_engine.html", [
+      [ "hal::SimulationEngineEventDriven", "classhal_1_1_simulation_engine_event_driven.html", [
+        [ "hal::NetlistSimulator", "classhal_1_1_netlist_simulator.html", null ]
+      ] ],
+      [ "hal::SimulationEngineScripted", "classhal_1_1_simulation_engine_scripted.html", [
+        [ "hal::DummyEngine", "classhal_1_1_dummy_engine.html", null ],
+        [ "hal::verilator::VerilatorEngine", "classhal_1_1verilator_1_1_verilator_engine.html", null ]
+      ] ]
+    ] ],
+    [ "hal::SimulationEngineFactory", "classhal_1_1_simulation_engine_factory.html", [
+      [ "hal::DummyEngineFactory", "classhal_1_1_dummy_engine_factory.html", null ],
+      [ "hal::NetlistSimulatorFactory", "classhal_1_1_netlist_simulator_factory.html", null ],
+      [ "hal::verilator::VerilatorEngineFactory", "classhal_1_1verilator_1_1_verilator_engine_factory.html", null ]
+    ] ],
+    [ "hal::SimulationInput", "classhal_1_1_simulation_input.html", null ],
+    [ "smallset_t", "classsmallset__t.html", null ],
+    [ "hal::SolveFsmInteractionRegistration", "classhal_1_1_solve_fsm_interaction_registration.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
     [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
+    [ "hal::module_identification::Statistics", "structhal_1_1module__identification_1_1_statistics.html", null ],
+    [ "hal::module_identification::StructuralCandidate", "classhal_1_1module__identification_1_1_structural_candidate.html", null ],
     [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],
     [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
     [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
-    [ "testing::Test", null, [
-      [ "hal::HGLParserTest", "classhal_1_1_h_g_l_parser_test.html", null ],
-      [ "hal::HGLWriterTest", "classhal_1_1_h_g_l_writer_test.html", null ],
-      [ "hal::LibertyParserTest", "classhal_1_1_liberty_parser_test.html", null ],
-      [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ],
-      [ "hal::VerilogParserTest", "classhal_1_1_verilog_parser_test.html", null ],
-      [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ]
-    ] ],
+    [ "TESTB< VA >", "class_t_e_s_t_b.html", null ],
+    [ "hal::TimeInterval", "classhal_1_1_time_interval.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< T >::TokenStreamException", "structhal_1_1_token_stream_1_1_token_stream_exception.html", null ],
+    [ "std::unordered_map", null, [
+      [ "hal::SimulationInputNetEvent", "classhal_1_1_simulation_input_net_event.html", null ]
+    ] ],
     [ "hal::UserAction", "classhal_1_1_user_action.html", [
       [ "hal::ActionAddBooleanFunction", "classhal_1_1_action_add_boolean_function.html", null ],
       [ "hal::ActionAddItemsToObject", "classhal_1_1_action_add_items_to_object.html", null ],
@@ -731,12 +914,53 @@ var hierarchy =
       [ "hal::StackedValidator", "classhal_1_1_stacked_validator.html", null ],
       [ "hal::UniqueStringValidator", "classhal_1_1_unique_string_validator.html", null ]
     ] ],
+    [ "hal::VcdSerializerElement", "classhal_1_1_vcd_serializer_element.html", null ],
     [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
+    [ "std::vector", null, [
+      [ "hal::SimulationEngineFactories", "classhal_1_1_simulation_engine_factories.html", null ]
+    ] ],
+    [ "hal::module_identification::VerifiedCandidate", "classhal_1_1module__identification_1_1_verified_candidate.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
-    [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
+    [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ],
+    [ "hal::WaveData", "classhal_1_1_wave_data.html", [
+      [ "hal::WaveDataBoolean", "classhal_1_1_wave_data_boolean.html", null ],
+      [ "hal::WaveDataClock", "classhal_1_1_wave_data_clock.html", null ],
+      [ "hal::WaveDataGroup", "classhal_1_1_wave_data_group.html", [
+        [ "hal::WaveDataRoot", "classhal_1_1_wave_data_root.html", null ]
+      ] ],
+      [ "hal::WaveDataTrigger", "classhal_1_1_wave_data_trigger.html", null ]
+    ] ],
+    [ "hal::WaveDataGroupIndex", "classhal_1_1_wave_data_group_index.html", null ],
+    [ "hal::WaveDataProvider", "classhal_1_1_wave_data_provider.html", [
+      [ "hal::WaveDataProviderClock", "classhal_1_1_wave_data_provider_clock.html", null ],
+      [ "hal::WaveDataProviderFile", "classhal_1_1_wave_data_provider_file.html", null ],
+      [ "hal::WaveDataProviderGroup", "classhal_1_1_wave_data_provider_group.html", [
+        [ "hal::WaveDataProviderBoolean", "classhal_1_1_wave_data_provider_boolean.html", null ]
+      ] ],
+      [ "hal::WaveDataProviderMap", "classhal_1_1_wave_data_provider_map.html", null ],
+      [ "hal::WaveDataProviderTrigger", "classhal_1_1_wave_data_provider_trigger.html", null ]
+    ] ],
+    [ "hal::WaveDataTimeframe", "classhal_1_1_wave_data_timeframe.html", null ],
+    [ "hal::WaveEvent", "structhal_1_1_wave_event.html", null ],
+    [ "hal::WaveFormPainted", "classhal_1_1_wave_form_painted.html", null ],
+    [ "hal::WaveFormPrimitive", "classhal_1_1_wave_form_primitive.html", [
+      [ "hal::WaveFormPrimitiveFilled", "classhal_1_1_wave_form_primitive_filled.html", null ],
+      [ "hal::WaveFormPrimitiveHline", "classhal_1_1_wave_form_primitive_hline.html", null ],
+      [ "hal::WaveFormPrimitiveTransition", "classhal_1_1_wave_form_primitive_transition.html", null ],
+      [ "hal::WaveFormPrimitiveTrigger", "classhal_1_1_wave_form_primitive_trigger.html", null ],
+      [ "hal::WaveFormPrimitiveUndefined", "classhal_1_1_wave_form_primitive_undefined.html", null ],
+      [ "hal::WaveFormPrimitiveValue", "classhal_1_1_wave_form_primitive_value.html", null ]
+    ] ],
+    [ "hal::WaveGroupValue", "classhal_1_1_wave_group_value.html", null ],
+    [ "hal::WaveItemIndex", "classhal_1_1_wave_item_index.html", null ],
+    [ "hal::WaveLogicTimescale", "classhal_1_1_wave_logic_timescale.html", null ],
+    [ "hal::WaveSelectionEntry", "classhal_1_1_wave_selection_entry.html", null ],
+    [ "hal::WaveTransform", "classhal_1_1_wave_transform.html", null ],
+    [ "hal::WaveZoomShift", "classhal_1_1_wave_zoom_shift.html", null ],
+    [ "hal::module_identification::WordLevelOperation", "structhal_1_1module__identification_1_1_word_level_operation.html", null ]
 ];

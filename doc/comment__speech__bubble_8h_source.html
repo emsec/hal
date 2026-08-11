@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/comment_system/comment_speech_bubble.h Source File</title>
+<title>HAL: plugins/gui/include/gui/comment_system/comment_speech_bubble.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -118,33 +120,33 @@ $(document).ready(function(){initNavTree('comment__speech__bubble_8h_source.html
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">class </span>GraphContext;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classhal_1_1_comment_speech_bubble.html">   33</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_comment_speech_bubble.html">CommentSpeechBubble</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html">QGraphicsItem</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordtype">bool</span> mHover;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> mBubble;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mText;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="classhal_1_1_node.html">Node</a> mNode;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* mContext;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> paintText(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keywordtype">int</span> maxWidth);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sBubbleWidth = 75;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sTextMargin = 4;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sTextHeight = 27;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sBubbleWidthExtension = 350;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#abfc9589d3e042245f6e2695eaf85e07c">hoverEnterEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenehoverevent.html">QGraphicsSceneHoverEvent</a> *event) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#ac3053c3060206a2b6df806e50c643b30">hoverLeaveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenehoverevent.html">QGraphicsSceneHoverEvent</a> *event) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classhal_1_1_comment_speech_bubble.html#a3c9f0ead833406f4c02c12e08b266764">CommentSpeechBubble</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt, <span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; nd, <a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a90a3d9b6d1b6925914dcede4f8e45778">boundingRect</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a502455d1ead2d233da4a215bab641840">shape</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#abae25e6cd9f30d5129e4c86d2958d3fd">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a4269436a927099bac0bb76255e2e94a2">option</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a366b2f32c06827a902d36dd171853e08">mouseDoubleClickEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a> *event) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_comment_speech_bubble_html"><div class="ttname"><a href="classhal_1_1_comment_speech_bubble.html">hal::CommentSpeechBubble</a></div><div class="ttdef"><b>Definition:</b> <a href="comment__speech__bubble_8h_source.html#l00033">comment_speech_bubble.h:34</a></div></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_comment_speech_bubble.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_comment_speech_bubble.html">CommentSpeechBubble</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html">QGraphicsItem</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">bool</span> mHover;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> mBubble;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mText;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="classhal_1_1_node.html">Node</a> mNode;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* mContext;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">void</span> paintText(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keywordtype">int</span> maxWidth);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sBubbleWidth = 75;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sTextMargin = 4;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sTextHeight = 27;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sBubbleWidthExtension = 350;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#abfc9589d3e042245f6e2695eaf85e07c">hoverEnterEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenehoverevent.html">QGraphicsSceneHoverEvent</a> *event) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#ac3053c3060206a2b6df806e50c643b30">hoverLeaveEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenehoverevent.html">QGraphicsSceneHoverEvent</a> *event) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_comment_speech_bubble.html#a3c9f0ead833406f4c02c12e08b266764">CommentSpeechBubble</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt, <span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; nd, <a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a90a3d9b6d1b6925914dcede4f8e45778">boundingRect</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a502455d1ead2d233da4a215bab641840">shape</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#abae25e6cd9f30d5129e4c86d2958d3fd">paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *option, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_comment_speech_bubble.html#a366b2f32c06827a902d36dd171853e08">mouseDoubleClickEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a> *event) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_comment_speech_bubble_html"><div class="ttname"><a href="classhal_1_1_comment_speech_bubble.html">hal::CommentSpeechBubble</a></div><div class="ttdef"><b>Definition:</b> <a href="comment__speech__bubble_8h_source.html#l00036">comment_speech_bubble.h:37</a></div></div>
 <div class="ttc" id="aclasshal_1_1_comment_speech_bubble_html_a366b2f32c06827a902d36dd171853e08"><div class="ttname"><a href="classhal_1_1_comment_speech_bubble.html#a366b2f32c06827a902d36dd171853e08">hal::CommentSpeechBubble::mouseDoubleClickEvent</a></div><div class="ttdeci">void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override</div><div class="ttdef"><b>Definition:</b> <a href="comment__speech__bubble_8cpp_source.html#l00045">comment_speech_bubble.cpp:45</a></div></div>
 <div class="ttc" id="aclasshal_1_1_comment_speech_bubble_html_a3c9f0ead833406f4c02c12e08b266764"><div class="ttname"><a href="classhal_1_1_comment_speech_bubble.html#a3c9f0ead833406f4c02c12e08b266764">hal::CommentSpeechBubble::CommentSpeechBubble</a></div><div class="ttdeci">CommentSpeechBubble(const QString &amp;txt, const Node &amp;nd, GraphContext *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="comment__speech__bubble_8cpp_source.html#l00011">comment_speech_bubble.cpp:11</a></div></div>
 <div class="ttc" id="aclasshal_1_1_comment_speech_bubble_html_a502455d1ead2d233da4a215bab641840"><div class="ttname"><a href="classhal_1_1_comment_speech_bubble.html#a502455d1ead2d233da4a215bab641840">hal::CommentSpeechBubble::shape</a></div><div class="ttdeci">QPainterPath shape() const override</div><div class="ttdef"><b>Definition:</b> <a href="comment__speech__bubble_8cpp_source.html#l00024">comment_speech_bubble.cpp:24</a></div></div>
@@ -155,8 +157,7 @@ $(document).ready(function(){initNavTree('comment__speech__bubble_8h_source.html
 <div class="ttc" id="aclasshal_1_1_graph_context_html"><div class="ttname"><a href="classhal_1_1_graph_context.html">hal::GraphContext</a></div><div class="ttdoc">Logical container for modules, gates, and nets.</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8h_source.html#l00054">graph_context.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00060">gui_def.h:61</a></div></div>
 <div class="ttc" id="agui__def_8h_html"><div class="ttname"><a href="gui__def_8h.html">gui_def.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="aplugins_2gui_2_c_make_lists_8txt_html_a4269436a927099bac0bb76255e2e94a2"><div class="ttname"><a href="plugins_2gui_2_c_make_lists_8txt.html#a4269436a927099bac0bb76255e2e94a2">option</a></div><div class="ttdeci">option(PL_GUI &quot;PL_GUI&quot; ON) if(PL_GUI OR BUILD_ALL_PLUGINS) cmake_minimum_required(VERSION 3.5.0) if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR) set(Qt5_DIR &quot;/usr/local/opt/qt@5/lib/cmake&quot;) endif(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR) find_package(Qt5 COMPONENTS Core REQUIRED) find_package(Qt5 COMPONENTS Widgets REQUIRED) if(Qt5Widgets_FOUND) message(VERBOSE &quot;Qt5Widgets_INCLUDE_DIRS</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2gui_2_c_make_lists_8txt_source.html#l00001">CMakeLists.txt:1</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqgraphicsitem_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html">QGraphicsItem</a></div></div>
 <div class="ttc" id="aqgraphicsscenehoverevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscenehoverevent.html">QGraphicsSceneHoverEvent</a></div></div>
 <div class="ttc" id="aqgraphicsscenemouseevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscenemouseevent.html">QGraphicsSceneMouseEvent</a></div></div>
@@ -172,7 +173,7 @@ $(document).ready(function(){initNavTree('comment__speech__bubble_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_ee965e57fa437527b3e79cbc5a8dfbfc.html">comment_system</a></li><li class="navelem"><a class="el" href="comment__speech__bubble_8h.html">comment_speech_bubble.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

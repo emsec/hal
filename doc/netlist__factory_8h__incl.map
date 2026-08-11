@@ -1,15 +1,15 @@
-<map id="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_factory.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_factory.h">
-<area shape="rect" id="node1" title="This file contains various functions to create and load netlists." alt="" coords="331,5,506,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="507,206,647,233"/>
-<area shape="rect" id="node7" href="$gate__library_8h.html" title=" " alt="" coords="148,109,311,151"/>
-<area shape="rect" id="node13" href="$program__options_8h.html" title=" " alt="" coords="345,109,493,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="688,288,779,315"/>
-<area shape="rect" id="node4" title=" " alt="" coords="371,288,458,315"/>
-<area shape="rect" id="node5" title=" " alt="" coords="482,288,569,315"/>
-<area shape="rect" id="node6" title=" " alt="" coords="593,288,663,315"/>
-<area shape="rect" id="node8" href="$gate__type_8h.html" title=" " alt="" coords="37,199,192,240"/>
-<area shape="rect" id="node9" title=" " alt="" coords="204,288,255,315"/>
-<area shape="rect" id="node10" title=" " alt="" coords="115,288,157,315"/>
-<area shape="rect" id="node11" title=" " alt="" coords="32,288,91,315"/>
-<area shape="rect" id="node12" title=" " alt="" coords="267,206,330,233"/>
+<map id="include/hal_core/netlist/netlist_factory.h" name="include/hal_core/netlist/netlist_factory.h">
+<area shape="rect" id="node1" title="This file contains various functions to create and load netlists." alt="" coords="332,5,505,47"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="507,191,647,218"/>
+<area shape="rect" id="node7" href="$gate__library_8h.html" title=" " alt="" coords="148,95,311,136"/>
+<area shape="rect" id="node13" href="$program__options_8h.html" title=" " alt="" coords="345,95,493,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="688,273,779,300"/>
+<area shape="rect" id="node4" title=" " alt="" coords="371,273,458,300"/>
+<area shape="rect" id="node5" title=" " alt="" coords="482,273,569,300"/>
+<area shape="rect" id="node6" title=" " alt="" coords="593,273,663,300"/>
+<area shape="rect" id="node8" href="$gate__type_8h.html" title=" " alt="" coords="37,184,192,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="204,273,255,300"/>
+<area shape="rect" id="node10" title=" " alt="" coords="115,273,157,300"/>
+<area shape="rect" id="node11" title=" " alt="" coords="32,273,91,300"/>
+<area shape="rect" id="node12" title=" " alt="" coords="267,191,330,218"/>
 </map>

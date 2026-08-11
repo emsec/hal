@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -96,7 +98,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_graph_context.html',''); 
 <p>Logical container for modules, gates, and nets.  
  <a href="classhal_1_1_graph_context.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="graph__context_8h_source.html">graph_context.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="graph__context_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/contexts/graph_context.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GraphContext:</div>
 <div class="dyncontent">
@@ -125,12 +127,12 @@ Public Slots</h2></td></tr>
 Signals</h2></td></tr>
 <tr class="memitem:ac705654c3f51c4117dc30a8c9fbf69a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged</a> ()</td></tr>
 <tr class="separator:ac705654c3f51c4117dc30a8c9fbf69a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ef2f80b1abe0488cab9d98f4cad6c03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> old_id)</td></tr>
+<tr class="memitem:a7ef2f80b1abe0488cab9d98f4cad6c03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> old_id)</td></tr>
 <tr class="separator:a7ef2f80b1abe0488cab9d98f4cad6c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac5d06178660e25f24c3a5d5e3943ab2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ac5d06178660e25f24c3a5d5e3943ab2e">GraphContext</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> id_, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_graph_context.html#aea2f27a5a0c94855351e9f7031eb6694">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
+<tr class="memitem:ac5d06178660e25f24c3a5d5e3943ab2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ac5d06178660e25f24c3a5d5e3943ab2e">GraphContext</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> id_, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_graph_context.html#aea2f27a5a0c94855351e9f7031eb6694">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:ac5d06178660e25f24c3a5d5e3943ab2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38129eb4e0c7ab1bb6d6e2d2a8b01c59"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a38129eb4e0c7ab1bb6d6e2d2a8b01c59">~GraphContext</a> ()</td></tr>
 <tr class="separator:a38129eb4e0c7ab1bb6d6e2d2a8b01c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,41 +140,41 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a13df27071c670c4bd04c08be3058afe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad395230edea0ff1dd586145ef2c45c67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ad395230edea0ff1dd586145ef2c45c67">endChange</a> ()</td></tr>
 <tr class="separator:ad395230edea0ff1dd586145ef2c45c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65460fd497821ff48e6106590a71bb83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a65460fd497821ff48e6106590a71bb83">add</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>, <a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a> placement=<a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a>())</td></tr>
+<tr class="memitem:a65460fd497821ff48e6106590a71bb83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a65460fd497821ff48e6106590a71bb83">add</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>, <a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a> placement=<a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a>())</td></tr>
 <tr class="separator:a65460fd497821ff48e6106590a71bb83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a043cfb76b04cffb4e801cf4cb688db7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a043cfb76b04cffb4e801cf4cb688db7e">remove</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>)</td></tr>
+<tr class="memitem:a043cfb76b04cffb4e801cf4cb688db7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a043cfb76b04cffb4e801cf4cb688db7e">remove</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>)</td></tr>
 <tr class="separator:a043cfb76b04cffb4e801cf4cb688db7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65bc0bd69534ca9b2cb3e9f1dfe38b28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a65bc0bd69534ca9b2cb3e9f1dfe38b28">clear</a> ()</td></tr>
 <tr class="separator:a65bc0bd69534ca9b2cb3e9f1dfe38b28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0219fc146717ebddc0a45c8091985c6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0219fc146717ebddc0a45c8091985c6c">isGateUnfolded</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gateId) const</td></tr>
+<tr class="memitem:a0219fc146717ebddc0a45c8091985c6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0219fc146717ebddc0a45c8091985c6c">isGateUnfolded</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId) const</td></tr>
 <tr class="separator:a0219fc146717ebddc0a45c8091985c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00ae714ff83079561b0d3987189754f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a00ae714ff83079561b0d3987189754f4">isModuleUnfolded</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId) const</td></tr>
+<tr class="memitem:a00ae714ff83079561b0d3987189754f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a00ae714ff83079561b0d3987189754f4">isModuleUnfolded</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> moduleId) const</td></tr>
 <tr class="separator:a00ae714ff83079561b0d3987189754f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a06f0c1a3d34fc32e85f76565ece5d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a1a06f0c1a3d34fc32e85f76565ece5d3">refreshModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId)</td></tr>
+<tr class="memitem:a1a06f0c1a3d34fc32e85f76565ece5d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a1a06f0c1a3d34fc32e85f76565ece5d3">refreshModule</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> moduleId)</td></tr>
 <tr class="separator:a1a06f0c1a3d34fc32e85f76565ece5d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d619c8a12ba665f0c16ac85246909af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0d619c8a12ba665f0c16ac85246909af">unfoldModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a> &amp;plc)</td></tr>
+<tr class="memitem:a0d619c8a12ba665f0c16ac85246909af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0d619c8a12ba665f0c16ac85246909af">unfoldModule</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="el" href="classhal_1_1_placement_hint.html">PlacementHint</a> &amp;plc)</td></tr>
 <tr class="separator:a0d619c8a12ba665f0c16ac85246909af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a666418e4708edff1a2e3af19b55ca184"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a666418e4708edff1a2e3af19b55ca184">empty</a> () const</td></tr>
 <tr class="separator:a666418e4708edff1a2e3af19b55ca184"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad488d810a5db9b76266b04105e53dd20"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ad488d810a5db9b76266b04105e53dd20">willBeEmptied</a> () const</td></tr>
 <tr class="separator:ad488d810a5db9b76266b04105e53dd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a626a035c9c81932ed90f3400293f217a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a626a035c9c81932ed90f3400293f217a">isShowingModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>) const</td></tr>
+<tr class="memitem:a626a035c9c81932ed90f3400293f217a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a626a035c9c81932ed90f3400293f217a">isShowingModule</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>) const</td></tr>
 <tr class="separator:a626a035c9c81932ed90f3400293f217a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a806b1fe7afef46e9a0f7186880f70cc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a806b1fe7afef46e9a0f7186880f70cc6">isShowingModule</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;minus_modules, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;minus_gates, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;plus_modules, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;plus_gates) const</td></tr>
+<tr class="memitem:a806b1fe7afef46e9a0f7186880f70cc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a806b1fe7afef46e9a0f7186880f70cc6">isShowingModule</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;minus_modules, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;minus_gates, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;plus_modules, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;plus_gates) const</td></tr>
 <tr class="separator:a806b1fe7afef46e9a0f7186880f70cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c90b9becca87c6e744a9d391d561c26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a4c90b9becca87c6e744a9d391d561c26">isShowingModuleExclusively</a> ()</td></tr>
 <tr class="separator:a4c90b9becca87c6e744a9d391d561c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcb936b1fe9ec475adb15019e87a3a91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#afcb936b1fe9ec475adb15019e87a3a91">getModuleChildrenRecursively</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; *<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; *<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>) const</td></tr>
+<tr class="memitem:afcb936b1fe9ec475adb15019e87a3a91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#afcb936b1fe9ec475adb15019e87a3a91">getModuleChildrenRecursively</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> moduleId, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; *<a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; *<a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a>) const</td></tr>
 <tr class="separator:afcb936b1fe9ec475adb15019e87a3a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8889a0c74139f131610e6e8606579f6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a8889a0c74139f131610e6e8606579f6a">storeViewport</a> ()</td></tr>
 <tr class="separator:a8889a0c74139f131610e6e8606579f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69a089e64ad1a68b354c6fa315b7372b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a69a089e64ad1a68b354c6fa315b7372b">layoutProgress</a> (int percent) const</td></tr>
 <tr class="separator:a69a089e64ad1a68b354c6fa315b7372b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a752666f0e3b3552d81ab76186980b7bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd">testIfAffected</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> *moduleId, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> *gateId)</td></tr>
+<tr class="memitem:a752666f0e3b3552d81ab76186980b7bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a752666f0e3b3552d81ab76186980b7bd">testIfAffected</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> *moduleId, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> *gateId)</td></tr>
 <tr class="separator:a752666f0e3b3552d81ab76186980b7bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af41355727163680dd88cc3dc2a04e901"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#af41355727163680dd88cc3dc2a04e901">isShowingNetSource</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mNetId) const</td></tr>
+<tr class="memitem:af41355727163680dd88cc3dc2a04e901"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#af41355727163680dd88cc3dc2a04e901">isShowingNetSource</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> mNetId) const</td></tr>
 <tr class="separator:af41355727163680dd88cc3dc2a04e901"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc3db090653def123d9a6180e9e4b1ad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#afc3db090653def123d9a6180e9e4b1ad">isShowingNetDestination</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mNetId) const</td></tr>
+<tr class="memitem:afc3db090653def123d9a6180e9e4b1ad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#afc3db090653def123d9a6180e9e4b1ad">isShowingNetDestination</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> mNetId) const</td></tr>
 <tr class="separator:afc3db090653def123d9a6180e9e4b1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a8f4ada859fda102cd5cb92fa5460b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a5a8f4ada859fda102cd5cb92fa5460b2">isShowingFoldedTopModule</a> () const</td></tr>
 <tr class="separator:a5a8f4ada859fda102cd5cb92fa5460b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,11 +182,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4c2adbdcefa3d2173e9026fdb081e6e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c91ba6077f73370061bb6c8c47e1994"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node.html">Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a6c91ba6077f73370061bb6c8c47e1994">getNetDestination</a> (const <a class="el" href="classhal_1_1_net.html">Net</a> *n) const</td></tr>
 <tr class="separator:a6c91ba6077f73370061bb6c8c47e1994"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70f5d15c9cd808c74abd1d392e7dad5a"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a> () const</td></tr>
+<tr class="memitem:a70f5d15c9cd808c74abd1d392e7dad5a"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a70f5d15c9cd808c74abd1d392e7dad5a">modules</a> () const</td></tr>
 <tr class="separator:a70f5d15c9cd808c74abd1d392e7dad5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e32cfa5e0c18cb334c716cd3861b052"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a> () const</td></tr>
+<tr class="memitem:a6e32cfa5e0c18cb334c716cd3861b052"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a6e32cfa5e0c18cb334c716cd3861b052">gates</a> () const</td></tr>
 <tr class="separator:a6e32cfa5e0c18cb334c716cd3861b052"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebc853db4f86676847f34362e07eb609"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aebc853db4f86676847f34362e07eb609">nets</a> () const</td></tr>
+<tr class="memitem:aebc853db4f86676847f34362e07eb609"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aebc853db4f86676847f34362e07eb609">nets</a> () const</td></tr>
 <tr class="separator:aebc853db4f86676847f34362e07eb609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a340ab5d411727f1ad31b02e644865c8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_graphics_scene.html">GraphicsScene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a340ab5d411727f1ad31b02e644865c8b">scene</a> ()</td></tr>
 <tr class="separator:a340ab5d411727f1ad31b02e644865c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,7 +194,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aea2f27a5a0c94855351e9f7031eb6694"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade740c83f6b95b1fe4e6452a4605788e"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ade740c83f6b95b1fe4e6452a4605788e">getNameWithDirtyState</a> () const</td></tr>
 <tr class="separator:ade740c83f6b95b1fe4e6452a4605788e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecccd028104e704aca70dc383c386477"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a> () const</td></tr>
+<tr class="memitem:aecccd028104e704aca70dc383c386477"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a> () const</td></tr>
 <tr class="separator:aecccd028104e704aca70dc383c386477"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae73212d0e220914595f086399034a5c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#ae73212d0e220914595f086399034a5c0">setLayouter</a> (<a class="el" href="classhal_1_1_graph_layouter.html">GraphLayouter</a> *layouter)</td></tr>
 <tr class="separator:ae73212d0e220914595f086399034a5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,7 +208,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afb1c916ca177184eb92ff02bedd8209c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fe95e9258400d311c60c7fc3a2ad50d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7fe95e9258400d311c60c7fc3a2ad50d">scheduleSceneUpdate</a> ()</td></tr>
 <tr class="separator:a7fe95e9258400d311c60c7fc3a2ad50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dcb0526cd46447fed703890a31ec9e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node.html">Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7dcb0526cd46447fed703890a31ec9e7">nodeForGate</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>) const</td></tr>
+<tr class="memitem:a7dcb0526cd46447fed703890a31ec9e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node.html">Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7dcb0526cd46447fed703890a31ec9e7">nodeForGate</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>) const</td></tr>
 <tr class="separator:a7dcb0526cd46447fed703890a31ec9e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8de86725cd7c23dcc355ece981833502"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a8de86725cd7c23dcc355ece981833502">getTimestamp</a> () const</td></tr>
 <tr class="separator:a8de86725cd7c23dcc355ece981833502"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,9 +226,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a71f9ecdd50c82999a2d9d21ac5e78a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7869fa5e5577268e6d4ee36e09eb07a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a7869fa5e5577268e6d4ee36e09eb07a3">setParentWidget</a> (<a class="el" href="classhal_1_1_graph_widget.html">GraphWidget</a> *gw)</td></tr>
 <tr class="separator:a7869fa5e5577268e6d4ee36e09eb07a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae22ec813db1a5886a44bd710ce6730"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0ae22ec813db1a5886a44bd710ce6730">getExclusiveModuleId</a> () const</td></tr>
+<tr class="memitem:a0ae22ec813db1a5886a44bd710ce6730"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a0ae22ec813db1a5886a44bd710ce6730">getExclusiveModuleId</a> () const</td></tr>
 <tr class="separator:a0ae22ec813db1a5886a44bd710ce6730"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63ccc1d38d4a7b893efaa20c9ff0882b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a63ccc1d38d4a7b893efaa20c9ff0882b">setExclusiveModuleId</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, bool emitSignal=true)</td></tr>
+<tr class="memitem:a63ccc1d38d4a7b893efaa20c9ff0882b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a63ccc1d38d4a7b893efaa20c9ff0882b">setExclusiveModuleId</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">id</a>, bool emitSignal=true)</td></tr>
 <tr class="separator:a63ccc1d38d4a7b893efaa20c9ff0882b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c1e9c1fb667e4eab9ff027e0fff96ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a1c1e9c1fb667e4eab9ff027e0fff96ba">exclusiveModuleCheck</a> ()</td></tr>
 <tr class="separator:a1c1e9c1fb667e4eab9ff027e0fff96ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,7 +236,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1bc78b394375158c1212190231f1de1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf23ce353b6c765a4bd012fc35985367"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#aaf23ce353b6c765a4bd012fc35985367">updateNets</a> ()</td></tr>
 <tr class="separator:aaf23ce353b6c765a4bd012fc35985367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a841564959c72fba77346c516904d01f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a841564959c72fba77346c516904d01f8">setScheduleRemove</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;mods, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gats)</td></tr>
+<tr class="memitem:a841564959c72fba77346c516904d01f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a841564959c72fba77346c516904d01f8">setScheduleRemove</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;mods, const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;gats)</td></tr>
 <tr class="separator:a841564959c72fba77346c516904d01f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d6c8ba76c1dcb72d667d4a98b2c497a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_context.html#a8d6c8ba76c1dcb72d667d4a98b2c497a">isScheduledRemove</a> (const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;nd)</td></tr>
 <tr class="separator:a8d6c8ba76c1dcb72d667d4a98b2c497a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,7 +253,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:eventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">objectName</a> () const const</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:objectName-prop inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#objectName-prop">setObjectName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:objectName-prop inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:isWidgetType inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#isWidgetType">isWidgetType</a> () const const</td></tr>
 <tr class="separator:isWidgetType inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,9 +273,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:startTimer-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:killTimer inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#killTimer">killTimer</a> (int <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:killTimer inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChild">findChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
+<tr class="memitem:findChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#findChildren">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:findChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#findChildren-1">findChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#FindChildOption-enum">Qt::FindChildOptions</a> options) const const</td></tr>
 <tr class="separator:findChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,7 +289,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:installEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:removeEventFilter inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#removeEventFilter">removeEventFilter</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj)</td></tr>
 <tr class="separator:removeEventFilter inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const const</td></tr>
+<tr class="memitem:connect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-2">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>) const const</td></tr>
 <tr class="separator:connect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect-2 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect-2">disconnect</a> (const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method) const const</td></tr>
 <tr class="separator:disconnect-2 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,9 +303,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:dumpObjectTree inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dumpObjectInfo inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dumpObjectInfo">dumpObjectInfo</a> () const const</td></tr>
 <tr class="separator:dumpObjectInfo inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
+<tr class="memitem:setProperty inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#setProperty">setProperty</a> (const char *<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;value)</td></tr>
 <tr class="separator:setProperty inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const const</td></tr>
+<tr class="memitem:property inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#property">property</a> (const char *<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>) const const</td></tr>
 <tr class="separator:property inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:dynamicPropertyNames inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html">QByteArray</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#dynamicPropertyNames">dynamicPropertyNames</a> () const const</td></tr>
 <tr class="separator:dynamicPropertyNames inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,13 +329,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:qobject_cast inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qobject_cast-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qobject_cast-1">qobject_cast</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *object)</td></tr>
 <tr class="separator:qobject_cast-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:qFindChild inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChild">qFindChild</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChild inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:qFindChildren inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#qFindChildren">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:qFindChildren inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:qFindChildren-1 inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#qFindChildren-1">qFindChildren</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *obj, const <a class="elRef" href="https://doc.qt.io/qt-5/qregexp.html">QRegExp</a> &amp;regExp)</td></tr>
 <tr class="separator:qFindChildren-1 inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:Q_CLASSINFO inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_CLASSINFO">Q_CLASSINFO</a> (<a class="el" href="_source_01_code_01_pro_2_o_f_l_8txt.html#ab8c4e1691900f535f811392285674316">Name</a>, Value)</td></tr>
+<tr class="memitem:Q_CLASSINFO inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_CLASSINFO">Q_CLASSINFO</a> (Name, Value)</td></tr>
 <tr class="separator:Q_CLASSINFO inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:Q_INTERFACES inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_INTERFACES">Q_INTERFACES</a> (...)</td></tr>
 <tr class="separator:Q_INTERFACES inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -392,15 +394,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:tr inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:trUtf8 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject-obsolete.html#trUtf8">trUtf8</a> (const char *sourceText, const char *disambiguation, int n)</td></tr>
 <tr class="separator:trUtf8 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
+<tr class="memitem:connect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>)</td></tr>
 <tr class="separator:connect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
+<tr class="memitem:connect-1 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-1">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const <a class="elRef" href="https://doc.qt.io/qt-5/qmetamethod.html">QMetaMethod</a> &amp;method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>)</td></tr>
 <tr class="separator:connect-1 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
+<tr class="memitem:connect-3 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-3">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>)</td></tr>
 <tr class="separator:connect-3 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:connect-4 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-4">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, Functor functor)</td></tr>
 <tr class="separator:connect-4 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>)</td></tr>
+<tr class="memitem:connect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject-connection.html">QMetaObject::Connection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect-5">connect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *context, Functor functor, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ConnectionType-enum">Qt::ConnectionType</a> <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>)</td></tr>
 <tr class="separator:connect-5 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">disconnect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, const char *signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, const char *method)</td></tr>
 <tr class="separator:disconnect inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -456,7 +458,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">hal::GraphContext::GraphContext </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id_</em>, </td>
         </tr>
         <tr>
@@ -495,7 +497,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00026">26</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#currentDateTime">QDateTime::currentDateTime()</a>, <a class="el" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_settings_item_dropdown.html#a81507fdb71ae980c3c1ca1c0e8a42f02">hal::SettingsItemDropdown::intChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#aab996ad30d23ed458721a333621a70e1">hal::NetlistRelay::moduleNameChanged()</a>, and <a class="el" href="main__window_8h_source.html#l00302">hal::MainWindow::sSettingStyle</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#currentDateTime">QDateTime::currentDateTime()</a>, <a class="el" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost()</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_settings_item_dropdown.html#a81507fdb71ae980c3c1ca1c0e8a42f02">hal::SettingsItemDropdown::intChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#aab996ad30d23ed458721a333621a70e1">hal::NetlistRelay::moduleNameChanged()</a>, and <a class="el" href="main__window_8h_source.html#l00302">hal::MainWindow::sSettingStyle</a>.</p>
 
 </div>
 </div>
@@ -562,13 +564,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::add </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>modules</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gates</em>, </td>
         </tr>
         <tr>
@@ -596,7 +598,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00090">90</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00238">hal::PlacementHint::mode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="gui__def_8h_source.html#l00241">hal::PlacementHint::mode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="action__add__items__to__object_8cpp_source.html#l00103">hal::ActionAddItemsToObject::exec()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00185">unfoldModule()</a>.</p>
 
@@ -691,7 +693,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Check if the context is empty i.e. does not contain <a class="el" href="classhal_1_1_module.html">Module</a>s or <a class="el" href="classhal_1_1_gate.html">Gate</a>s.</p>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context is empty. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the context is empty, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00235">235</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -757,7 +759,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::exclusiveModuleLost </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>old_id</em></td><td>)</td>
           <td></td>
         </tr>
@@ -780,7 +782,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp; hal::GraphContext::gates </td>
+          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp; hal::GraphContext::gates </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -806,7 +808,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GraphContext::getExclusiveModuleId </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GraphContext::getExclusiveModuleId </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -821,7 +823,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the exclusive module id.</p>
 <dl class="section return"><dt>Returns</dt><dd>The exclusive module id. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00427">427</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00428">428</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00594">hal::GuiApiClasses::View::addTo()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00134">hal::ContextTreeModel::data()</a>, and <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>.</p>
 
@@ -849,10 +851,10 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get the used <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a>. Returns a <em>nullptr</em> if no layouter was configured yet.</p>
+<p>Get the used <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a>. Returns a <code>nullptr</code> if no layouter was configured yet.</p>
 <dl class="section return"><dt>Returns</dt><dd>the used <a class="el" href="classhal_1_1_graph_layouter.html" title="Base class for all specific layouters.">GraphLayouter</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00322">322</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00323">323</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00013">hal::DragController::clear()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00412">hal::GraphGraphicsView::dropEvent()</a>, <a class="el" href="action__add__items__to__object_8cpp_source.html#l00103">hal::ActionAddItemsToObject::exec()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="action__fold__module_8cpp_source.html#l00035">hal::ActionFoldModule::exec()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, <a class="el" href="action__remove__items__from__object_8cpp_source.html#l00068">hal::ActionRemoveItemsFromObject::exec()</a>, <a class="el" href="action__unfold__module_8cpp_source.html#l00051">hal::ActionUnfoldModule::exec()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00213">hal::DragController::finalGridPlacement()</a>, <a class="el" href="gui__api_8cpp_source.html#l00981">hal::GuiApiClasses::View::getGridPlacement()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00182">hal::DragController::isDropAllowed()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00156">hal::DragController::move()</a>, <a class="el" href="graph__context_8cpp_source.html#l00485">refreshModule()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00166">hal::GraphWidget::showProgress()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00201">hal::GraphWidget::storeViewport()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00837">writeToFile()</a>.</p>
 
@@ -867,19 +869,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::getModuleChildrenRecursively </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>moduleId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; *&#160;</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; *&#160;</td>
           <td class="paramname"><em>gates</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; *&#160;</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; *&#160;</td>
           <td class="paramname"><em>modules</em>&#160;</td>
         </tr>
         <tr>
@@ -901,7 +903,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00335">335</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="graph__context_8cpp_source.html#l00166">isModuleUnfolded()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00393">hal::Module::get_gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="graph__context_8cpp_source.html#l00166">isModuleUnfolded()</a>, and <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00298">isShowingModule()</a>.</p>
 
@@ -922,7 +924,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Get the name of the context with dirty state.</p>
-<dl class="section return"><dt>Returns</dt><dd>the context's name with an asterisk if the dirty is set to true. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the context's name with an asterisk if the dirty is set to <code>true</code>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00462">462</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -952,11 +954,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> The first visibible destination node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> The first visibible destination node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a>, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00421">421</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00313">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00184">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00340">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00184">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00426">hal::Net::get_destinations()</a>, and <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>.</p>
 
 </div>
 </div>
@@ -982,11 +984,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> The first visibible source node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> The first visibible source node, might be <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">Node::None</a>, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00410">410</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00313">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00184">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>, and <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00340">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00184">hal::NodeBoxes::boxForGate()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00264">hal::Net::get_sources()</a>, and <a class="el" href="node__box_8h_source.html#l00075">hal::NodeBox::getNode()</a>.</p>
 
 </div>
 </div>
@@ -1015,7 +1017,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the special update state.</p>
 <dl class="section return"><dt>Returns</dt><dd>The special update state. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00408">408</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00409">409</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +1051,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::GraphContext::id </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::GraphContext::id </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1090,7 +1092,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the dirty state.</p>
 <dl class="section return"><dt>Returns</dt><dd>The dirty state. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00393">393</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00394">394</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 </div>
 </div>
@@ -1103,7 +1105,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isGateUnfolded </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>gateId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1132,7 +1134,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isModuleUnfolded </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>moduleId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1148,7 +1150,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00166">166</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, and <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context_8cpp_source.html#l00335">getModuleChildrenRecursively()</a>.</p>
 
@@ -1191,7 +1193,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks whether there is only the folded top_module in the context which makes other time consumptive tests unnecessary </p><dl class="section return"><dt>Returns</dt><dd><b>true</b> If here is only the folded top_module in the context </dd></dl>
+<p>Checks whether there is only the folded top_module in the context which makes other time consumptive tests unnecessary </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> If here is only the folded top_module in the context, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00326">326</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -1208,7 +1210,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isShowingModule </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1221,7 +1223,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context shows the content of the module </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the context shows the content of the module, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00293">293</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -1238,31 +1240,31 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isShowingModule </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>minus_modules</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>minus_gates</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>plus_modules</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>plus_gates</em>&#160;</td>
         </tr>
         <tr>
@@ -1273,7 +1275,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Checks if the context represents the content of the given module i.e. after double-clicking the module item. <br  />
- In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the netlist and the affected GraphContexts should be discovered now. Since the comparison is done on the current netlist but the context does not contain the gate yet, this function will falsely return <b>false</b> even on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing it in the minus_gates list. <br  />
+ In some cases it is necessary that the check is performed on a previous state e.g. if a gate was newly assigned to the netlist and the affected GraphContexts should be discovered now. Since the comparison is done on the current netlist but the context does not contain the gate yet, this function will falsely return <code>false</code> even on the right GraphContexts. Therefore the new gate must be manually removed from the comparison by passing it in the minus_gates list. <br  />
  Accordingly, it is also possible to add <a class="el" href="classhal_1_1_gate.html">Gate</a>s to the comparison (e.g. after removing them from the module) as well as adding and removing <a class="el" href="classhal_1_1_module.html">Module</a>s (i.e. submodules).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1285,7 +1287,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context Shows the content of the module. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the context Shows the content of the module, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00298">298</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -1326,7 +1328,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isShowingNetDestination </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>mNetId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1339,11 +1341,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> if a destination gate of the net is shown </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a destination gate of the net is shown, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00393">393</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
 
 </div>
 </div>
@@ -1356,7 +1358,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">bool hal::GraphContext::isShowingNetSource </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>mNetId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1369,11 +1371,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> if a source gate of the net is shown </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a source gate of the net is shown, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00376">376</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
 
 </div>
 </div>
@@ -1414,7 +1416,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp; hal::GraphContext::modules </td>
+          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp; hal::GraphContext::modules </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1460,7 +1462,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp; hal::GraphContext::nets </td>
+          <td class="memname">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp; hal::GraphContext::nets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1485,7 +1487,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classhal_1_1_node.html">Node</a> hal::GraphContext::nodeForGate </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1505,7 +1507,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00497">497</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00125">hal::Module::get_parent_module()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00174">hal::Gate::get_module()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00125">hal::Module::get_parent_module()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, and <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>.</p>
 
 </div>
 </div>
@@ -1531,11 +1533,11 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if reading was successful, false otherwise </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if reading was successful, <code>false</code> otherwise </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00746">746</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">QJsonArray::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#begin-1">QSet::begin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00938">setExclusiveModuleId()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00131">hal::GraphLayouter::setNodePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">QJsonArray::size()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">QJsonValue::toObject()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#at">QJsonArray::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#begin-1">QSet::begin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#fromString">QDateTime::fromString()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00938">setExclusiveModuleId()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00131">hal::GraphLayouter::setNodePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">QJsonArray::size()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsonvalue.html#toObject-1">QJsonValue::toObject()</a>, <a class="el" href="netlist__preprocessing_8cpp_source.html#l02204">x</a>, and <a class="el" href="netlist__preprocessing_8cpp_source.html#l02205">y</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__context__manager_8cpp_source.html#l00727">hal::GraphContextManager::restoreFromFile()</a>.</p>
 
@@ -1550,7 +1552,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::refreshModule </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>moduleId</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1559,7 +1561,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00485">485</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00313">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00200">hal::NodeBoxes::boxForNode()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__context_8h_source.html#l00322">getLayouter()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00124">hal::NodeBox::item()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graphics__module_8cpp_source.html#l00041">hal::GraphicsModule::setModuleLabel()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
+<p class="reference">References <a class="el" href="graph__layouter_8h_source.html#l00340">hal::GraphLayouter::boxes()</a>, <a class="el" href="node__box_8h_source.html#l00200">hal::NodeBoxes::boxForNode()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="graph__context_8h_source.html#l00323">getLayouter()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="node__box_8h_source.html#l00124">hal::NodeBox::item()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graphics__module_8cpp_source.html#l00041">hal::GraphicsModule::setModuleLabel()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
 
 </div>
 </div>
@@ -1572,13 +1574,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::remove </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>modules</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gates</em>&#160;</td>
         </tr>
         <tr>
@@ -1645,7 +1647,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns whether the scene is in an updating process (i.e. layouter process) or not.</p>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> while the scene updates. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> while the scene updates, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00468">468</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -1715,7 +1717,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::setExclusiveModuleId </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
@@ -1800,7 +1802,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00417">417</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graph__context_8h_source.html#l00418">418</a> of file <a class="el" href="graph__context_8h_source.html">graph_context.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00059">hal::GraphWidget::GraphWidget()</a>.</p>
 
@@ -1815,13 +1817,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::setScheduleRemove </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>mods</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qset.html">QSet</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gats</em>&#160;</td>
         </tr>
         <tr>
@@ -1954,19 +1956,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::testIfAffected </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> *&#160;</td>
           <td class="paramname"><em>moduleId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> *&#160;</td>
           <td class="paramname"><em>gateId</em>&#160;</td>
         </tr>
         <tr>
@@ -2001,7 +2003,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GraphContext::unfoldModule </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>, </td>
         </tr>
         <tr>
@@ -2021,13 +2023,14 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>- The id of the module to unfold </td></tr>
+    <tr><td class="paramname">plc</td><td>- Hint on where to place the gates and submodules that replace the module </td></tr>
   </table>
   </dd>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00185">185</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00090">add()</a>, <a class="el" href="gui__def_8h_source.html#l00278">hal::PlacementHint::addGridPosition()</a>, <a class="el" href="graph__context_8cpp_source.html#l00075">beginChange()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00080">endChange()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="gui__def_8h_source.html#l00217">hal::PlacementHint::GridPosition</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="net__layout__point_8h_source.html#l00085">hal::NetLayoutPoint::isUndefined()</a>, <a class="el" href="gui__def_8h_source.html#l00238">hal::PlacementHint::mode()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00297">hal::GraphLayouter::prepareRollback()</a>, <a class="el" href="graph__context_8cpp_source.html#l00118">remove()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
+<p class="reference">References <a class="el" href="graph__context_8cpp_source.html#l00090">add()</a>, <a class="el" href="gui__def_8h_source.html#l00281">hal::PlacementHint::addGridPosition()</a>, <a class="el" href="graph__context_8cpp_source.html#l00075">beginChange()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#empty">QSet::empty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00080">endChange()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="graph__context_8cpp_source.html#l00437">gates()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00261">hal::Module::get_submodules()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="gui__def_8h_source.html#l00220">hal::PlacementHint::GridPosition</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="net__layout__point_8h_source.html#l00095">hal::NetLayoutPoint::isUndefined()</a>, <a class="el" href="gui__def_8h_source.html#l00241">hal::PlacementHint::mode()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__context_8cpp_source.html#l00432">modules()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00297">hal::GraphLayouter::prepareRollback()</a>, <a class="el" href="graph__context_8cpp_source.html#l00118">remove()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
 </div>
 </div>
@@ -2049,7 +2052,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00639">639</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00542">hal::Module::get_input_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00547">hal::Module::get_output_nets()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00542">hal::Module::get_input_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00547">hal::Module::get_output_nets()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
 
 </div>
 </div>
@@ -2097,7 +2100,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks whether the context will be empty after pending changes are applied. </p><dl class="section return"><dt>Returns</dt><dd><b>true</b> if the context is empty. </dd></dl>
+<p>Checks whether the context will be empty after pending changes are applied. </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if the context is empty, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00240">240</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
@@ -2134,7 +2137,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">json</td><td>- The object to write to </td></tr>
-    <tr><td class="paramname">int</td><td>- ParentId of the graphContext. </td></tr>
+    <tr><td class="paramname">parentId</td><td>- ParentId of the graphContext. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2144,7 +2147,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="graph__context_8cpp_source.html#l00837">837</a> of file <a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">QJsonArray::append()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00165">hal::ContentManager::getGraphTabWidget()</a>, <a class="el" href="graph__context_8h_source.html#l00322">getLayouter()</a>, <a class="el" href="net__layout__point_8h_source.html#l00085">hal::NetLayoutPoint::isUndefined()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00308">hal::GraphTabWidget::visibleStatus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qjsonarray.html#append">QJsonArray::append()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00165">hal::ContentManager::getGraphTabWidget()</a>, <a class="el" href="graph__context_8h_source.html#l00323">getLayouter()</a>, <a class="el" href="net__layout__point_8h_source.html#l00095">hal::NetLayoutPoint::isUndefined()</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00885">setDirty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#toString-1">QDateTime::toString()</a>, <a class="el" href="graph__tab__widget_8cpp_source.html#l00308">hal::GraphTabWidget::visibleStatus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
 
 </div>
 </div>
@@ -2198,8 +2201,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/contexts/<a class="el" href="graph__context_8h_source.html">graph_context.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/graph_widget/contexts/<a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a></li>
+<li>plugins/gui/include/gui/graph_widget/contexts/<a class="el" href="graph__context_8h_source.html">graph_context.h</a></li>
+<li>plugins/gui/src/graph_widget/contexts/<a class="el" href="graph__context_8cpp_source.html">graph_context.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -2207,7 +2210,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_context.html">GraphContext</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/src/plugin_dataflow.cpp File Reference</title>
+<title>HAL: plugins/dataflow_analysis/src/plugin_dataflow.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp.html',''); initR
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="plugin__dataflow_8h_source.html">dataflow_analysis/plugin_dataflow.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gui__layout__locker_8h_source.html">dataflow_analysis/utils/gui_layout_locker.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2utils_2gui__layout__locker_8h_source.html">dataflow_analysis/utils/gui_layout_locker.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="timing__utils_8h_source.html">dataflow_analysis/utils/timing_utils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugin__manager_8h_source.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
@@ -100,28 +102,31 @@ $(document).ready(function(){initNavTree('plugin__dataflow_8cpp.html',''); initR
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for plugin_dataflow.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="plugin__dataflow_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp">
-<area shape="rect" title=" " alt="" coords="1075,5,1314,61"/>
-<area shape="rect" href="plugin__dataflow_8h.html" title=" " alt="" coords="411,109,594,151"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="196,377,396,419"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="1259,288,1389,329"/>
-<area shape="rect" href="gui__layout__locker_8h.html" title=" " alt="" coords="28,288,199,329"/>
-<area shape="rect" href="timing__utils_8h.html" title=" " alt="" coords="1288,109,1459,151"/>
-<area shape="rect" title=" " alt="" coords="1437,206,1504,233"/>
-<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="1000,109,1176,151"/>
-<area shape="rect" title=" " alt="" coords="1533,117,1597,143"/>
-<area shape="rect" href="dataflow_8h.html" title="This file contains the function that analyses the dataflow of a gate&#45;level netlist." alt="" coords="147,199,309,240"/>
-<area shape="rect" title=" " alt="" coords="375,467,438,493"/>
-<area shape="rect" href="cli__extension__interface_8h.html" title=" " alt="" coords="435,199,624,240"/>
-<area shape="rect" href="gui__extension__interface_8h.html" title=" " alt="" coords="420,377,615,419"/>
-<area shape="rect" href="plugin__interface__base_8h.html" title=" " alt="" coords="648,199,829,240"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="638,467,778,493"/>
-<area shape="rect" title=" " alt="" coords="1171,467,1221,493"/>
-<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="690,377,838,419"/>
-<area shape="rect" title=" " alt="" coords="1255,467,1342,493"/>
-<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="1233,377,1364,419"/>
-<area shape="rect" href="fac__extension__interface_8h.html" title=" " alt="" coords="913,377,1108,419"/>
+<div class="center"><img src="plugin__dataflow_8cpp__incl.png" border="0" usemap="#aplugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp" alt=""/></div>
+<map name="aplugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp" id="aplugins_2dataflow__analysis_2src_2plugin__dataflow_8cpp">
+<area shape="rect" title=" " alt="" coords="854,5,1045,47"/>
+<area shape="rect" href="plugin__dataflow_8h.html" title=" " alt="" coords="425,95,607,136"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="336,363,536,404"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1153,273,1284,315"/>
+<area shape="rect" href="dataflow__analysis_2include_2dataflow__analysis_2utils_2gui__layout__locker_8h.html" title=" " alt="" coords="5,273,176,315"/>
+<area shape="rect" href="timing__utils_8h.html" title=" " alt="" coords="925,95,1096,136"/>
+<area shape="rect" title=" " alt="" coords="907,191,973,218"/>
+<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="1251,95,1427,136"/>
+<area shape="rect" title=" " alt="" coords="1451,102,1515,129"/>
+<area shape="rect" href="dataflow_8h.html" title="This file contains the function that analyses the dataflow of a gate&#45;level netlist." alt="" coords="251,184,413,225"/>
+<area shape="rect" title=" " alt="" coords="515,452,578,479"/>
+<area shape="rect" href="cli__extension__interface_8h.html" title=" " alt="" coords="488,184,677,225"/>
+<area shape="rect" href="gui__extension__interface_8h.html" title=" " alt="" coords="560,363,755,404"/>
+<area shape="rect" href="plugin__interface__base_8h.html" title=" " alt="" coords="701,184,883,225"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="747,452,887,479"/>
+<area shape="rect" title=" " alt="" coords="1031,452,1081,479"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="982,363,1130,404"/>
+<area shape="rect" title=" " alt="" coords="1843,452,1920,479"/>
+<area shape="rect" title=" " alt="" coords="1471,452,1529,479"/>
+<area shape="rect" title=" " alt="" coords="1191,452,1246,479"/>
+<area shape="rect" title=" " alt="" coords="1667,452,1754,479"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="1256,363,1387,404"/>
+<area shape="rect" href="fac__extension__interface_8h.html" title=" " alt="" coords="1613,363,1808,404"/>
 </map>
 </div>
 </div>
@@ -134,8 +139,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa8127688230d54c42984bdd3c2bb1f72"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; BasePluginInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">hal::create_plugin_instance</a> ()</td></tr>
-<tr class="separator:aa8127688230d54c42984bdd3c2bb1f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a520a82c66e9e539acaa3fb2d6ce6578a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; BasePluginInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a520a82c66e9e539acaa3fb2d6ce6578a">hal::create_plugin_instance</a> ()</td></tr>
+<tr class="separator:a520a82c66e9e539acaa3fb2d6ce6578a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -143,7 +148,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="plugin__dataflow_8cpp.html">plugin_dataflow.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

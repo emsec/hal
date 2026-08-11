@@ -1,11 +1,11 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/gatelibrary_management/gatelibrary_proxy_model.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/gatelibrary_management/gatelibrary_proxy_model.h">
-<area shape="rect" id="node1" title=" " alt="" coords="283,5,497,76"/>
-<area shape="rect" id="node2" href="$sort_8h.html" title=" " alt="" coords="59,131,201,158"/>
-<area shape="rect" id="node6" href="$search__proxy__model_8h.html" title=" " alt="" coords="311,124,469,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="493,131,661,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="271,288,325,315"/>
-<area shape="rect" id="node4" title=" " alt="" coords="25,213,96,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="120,213,279,240"/>
-<area shape="rect" id="node7" title=" " alt="" coords="303,213,477,240"/>
-<area shape="rect" id="node8" href="$searchoptions_8h.html" title=" " alt="" coords="501,213,719,240"/>
+<map id="plugins/gui/include/gui/gatelibrary_management/gatelibrary_proxy_model.h" name="plugins/gui/include/gui/gatelibrary_management/gatelibrary_proxy_model.h">
+<area shape="rect" id="node1" title=" " alt="" coords="283,5,497,61"/>
+<area shape="rect" id="node2" href="$sort_8h.html" title=" " alt="" coords="59,117,201,143"/>
+<area shape="rect" id="node6" href="$search__proxy__model_8h.html" title=" " alt="" coords="311,109,469,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="493,117,661,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="271,273,325,300"/>
+<area shape="rect" id="node4" title=" " alt="" coords="25,199,96,225"/>
+<area shape="rect" id="node5" title=" " alt="" coords="120,199,279,225"/>
+<area shape="rect" id="node7" title=" " alt="" coords="303,199,477,225"/>
+<area shape="rect" id="node8" href="$searchoptions_8h.html" title=" " alt="" coords="501,199,719,225"/>
 </map>

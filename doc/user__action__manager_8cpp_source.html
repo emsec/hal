@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_manager.cpp Source File</title>
+<title>HAL: plugins/gui/src/user_action/user_action_manager.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -186,18 +188,18 @@ $(document).ready(function(){initNavTree('user__action__manager_8cpp_source.html
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
 <div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classhal_1_1_user_action_manager.html#abafecd55ef7291cce1570df93623dc9e">   99</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::StandardButton</a> UserActionManager::setStopRecording(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; macroFilename)</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = mActionHistory.size();</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>&gt;mStartRecording &amp;&amp; !macroFilename.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordtype">int</span> n = mActionHistory.size();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">if</span> (n&gt;mStartRecording &amp;&amp; !macroFilename.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> <a class="code" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a>(macroFilename);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a>.open(<a class="codeRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>))</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> of(macroFilename);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">if</span> (of.<a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html#open">open</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>))</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            {</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html">QXmlStreamWriter</a> xmlOut(&amp;<a class="code" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html">QXmlStreamWriter</a> xmlOut(&amp;of);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                xmlOut.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#setAutoFormatting">setAutoFormatting</a>(<span class="keyword">true</span>);</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                xmlOut.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeStartDocument-1">writeStartDocument</a>();</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                xmlOut.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeStartElement-1">writeStartElement</a>(<span class="stringliteral">&quot;actions&quot;</span>);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=mStartRecording; i&lt;<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>; i++)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=mStartRecording; i&lt;n; i++)</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                {</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classhal_1_1_user_action.html">UserAction</a>* act = mActionHistory.at(i);</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                    xmlOut.<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeStartElement-1">writeStartElement</a>(act-&gt;<a class="code" href="classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b">tagname</a>());</div>
@@ -361,18 +363,17 @@ $(document).ready(function(){initNavTree('user__action__manager_8cpp_source.html
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            undoList.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(lastAction-&gt;<a class="code" href="classhal_1_1_user_action.html#ad867eaa35212e5066de06e57fdb62b21">undoAction</a>());</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            <span class="keywordflow">if</span> (lastAction-&gt;<a class="code" href="classhal_1_1_user_action.html#a43279ab1a608a840ea2fc66890e55aa9">compoundOrder</a>() &lt;= 0) <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        }</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = mActionHistory.size();</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordtype">int</span> n = mActionHistory.size();</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_user_action.html">UserAction</a>* act : undoList)</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            act-&gt;exec();</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">while</span> (mActionHistory.size() &gt; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">while</span> (mActionHistory.size() &gt; n)</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            mActionHistory.takeLast();</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        testUndo();</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    }</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;}</div>
-<div class="ttc" id="a_apache_01_license_8txt_html_a7ee731f5d60b203ffeb5c274118c106a"><div class="ttname"><a href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a></div><div class="ttdeci">Apache License January AND DISTRIBUTION Definitions License shall mean the terms and conditions for and distribution as defined by Sections through of this document Licensor shall mean the copyright owner or entity authorized by the copyright owner that is granting the License Legal Entity shall mean the union of the acting entity and all other entities that control are controlled by or are under common control with that entity For the purposes of this definition control direct or to cause the direction or management of such whether by contract or including but not limited to software source documentation and configuration files Object form shall mean any form resulting from mechanical transformation or translation of a Source including but not limited to compiled object generated and conversions to other media types Work shall mean the work of whether in Source or Object made available under the as indicated by a copyright notice that is included in or attached to the whether in Source or Object that is based or other modifications as a an original work of authorship For the purposes of this Derivative Works shall not include works that remain separable or merely the Work and Derivative Works thereof Contribution shall mean any work of including the original version of the Work and any modifications or additions to that Work or Derivative Works that is intentionally submitted to Licensor for inclusion in the Work by the copyright owner or by an individual or Legal Entity authorized to submit on behalf of the copyright owner For the purposes of this submitted means any form of or written communication sent to the Licensor or its including but not limited to communication on electronic mailing source code control and issue tracking systems that are managed or on behalf of</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00057">Apache License.txt:57</a></div></div>
 <div class="ttc" id="aaction__open__netlist__file_8h_html"><div class="ttname"><a href="action__open__netlist__file_8h.html">action_open_netlist_file.h</a></div></div>
 <div class="ttc" id="aaction__unfold__module_8h_html"><div class="ttname"><a href="action__unfold__module_8h.html">action_unfold_module.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_thread_html"><div class="ttname"><a href="classhal_1_1_python_thread.html">hal::PythonThread</a></div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00058">python_thread.h:59</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_thread_html"><div class="ttname"><a href="classhal_1_1_python_thread.html">hal::PythonThread</a></div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00061">python_thread.h:62</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_factory_html"><div class="ttname"><a href="classhal_1_1_user_action_factory.html">hal::UserActionFactory</a></div><div class="ttdoc">The UserActionFactory is the abstract base class for registration.</div><div class="ttdef"><b>Definition:</b> <a href="user__action_8h_source.html#l00224">user_action.h:225</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_factory_html_a218bcaeabde2d8e8eb6266aea7607452"><div class="ttname"><a href="classhal_1_1_user_action_factory.html#a218bcaeabde2d8e8eb6266aea7607452">hal::UserActionFactory::newAction</a></div><div class="ttdeci">virtual UserAction * newAction() const =0</div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_factory_html_af2ef4aba6443e8290f2505b2c8324152"><div class="ttname"><a href="classhal_1_1_user_action_factory.html#af2ef4aba6443e8290f2505b2c8324152">hal::UserActionFactory::tagname</a></div><div class="ttdeci">QString tagname() const</div><div class="ttdef"><b>Definition:</b> <a href="user__action_8h_source.html#l00242">user_action.h:242</a></div></div>
@@ -395,11 +396,11 @@ $(document).ready(function(){initNavTree('user__action__manager_8cpp_source.html
 <div class="ttc" id="aclasshal_1_1_user_action_object_html_a96a7f41168cf0fd3d6192ee423d341c8"><div class="ttname"><a href="classhal_1_1_user_action_object.html#a96a7f41168cf0fd3d6192ee423d341c8">hal::UserActionObject::writeToXml</a></div><div class="ttdeci">void writeToXml(QXmlStreamWriter &amp;xmlOut) const</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8cpp_source.html#l00106">user_action_object.cpp:106</a></div></div>
 <div class="ttc" id="agroup__utilities_html_gaccc921ec8323d53efb57a21a8d4be735"><div class="ttname"><a href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a></div><div class="ttdeci">#define log_warning(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00076">log.h:76</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31"><div class="ttname"><a href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::GateTypeProperty::ff</a></div><div class="ttdeci">@ ff</div></div>
-<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00006">test.py:6</a></div></div>
 <div class="ttc" id="apython__thread_8h_html"><div class="ttname"><a href="python__thread_8h.html">python_thread.h</a></div></div>
 <div class="ttc" id="aqfile_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html">QFile</a></div></div>
+<div class="ttc" id="aqfile_html_open"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open</a></div><div class="ttdeci">virtual bool open(QIODevice::OpenMode mode) override</div></div>
 <div class="ttc" id="aqiodevice_html_OpenModeFlag-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a></div><div class="ttdeci">WriteOnly</div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
@@ -446,7 +447,7 @@ $(document).ready(function(){initNavTree('user__action__manager_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_5e8fab963b6d7d6d8891b5cad4f241a7.html">user_action</a></li><li class="navelem"><a class="el" href="user__action__manager_8cpp.html">user_action_manager.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,14 +92,16 @@ $(document).ready(function(){initNavTree('classhal_1_1_u_i_plugin_interface.html
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="plugin__interface__ui_8h_source.html">plugin_interface_ui.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="plugin__interface__ui_8h_source.html">hal_core/plugin_system/plugin_interface_ui.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::UIPluginInterface:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_u_i_plugin_interface__inherit__graph.png" border="0" usemap="#ahal_1_1_u_i_plugin_interface_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_u_i_plugin_interface_inherit__map" id="ahal_1_1_u_i_plugin_interface_inherit__map">
-<area shape="rect" title=" " alt="" coords="14,204,185,325"/>
-<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="5,5,193,156"/>
+<area shape="rect" title=" " alt="" coords="94,204,265,325"/>
+<area shape="rect" href="classhal_1_1_plugin_gui.html" title=" " alt="" coords="5,373,167,539"/>
+<area shape="rect" href="classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="191,388,357,524"/>
+<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="85,5,273,156"/>
 </map>
 </div>
 <div class="dynheader">
@@ -244,7 +248,9 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
+
+<p>Implemented in <a class="el" href="classhal_1_1_plugin_python_shell.html#a88ffacd0fbe6cf0268a23b30eb249fbb">hal::PluginPythonShell</a>, and <a class="el" href="classhal_1_1_plugin_gui.html#a4a2326cb6bf9c78d28a7ae82655c15ca">hal::PluginGui</a>.</p>
 
 </div>
 </div>
@@ -274,17 +280,19 @@ Additional Inherited Members</h2></td></tr>
 <p>Generic call to block layouter.</p>
 <p>Can be enabled multiple times, but each enable must be match by disable to remove the lock. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>Enable lock on true, disable on false </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>Enable lock on <code>true</code>, disable on <code>false</code> </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="gui__layout__locker_8cpp_source.html#l00010">hal::dataflow::GuiLayoutLocker::GuiLayoutLocker()</a>, and <a class="el" href="gui__layout__locker_8cpp_source.html#l00019">hal::dataflow::GuiLayoutLocker::~GuiLayoutLocker()</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_plugin_python_shell.html#ac5d65944c63a447e13a1109c61fd51d3">hal::PluginPythonShell</a>, and <a class="el" href="classhal_1_1_plugin_gui.html#a5754fbe00cb285211d388dc52ed77cb0">hal::PluginGui</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow__analysis_2src_2utils_2gui__layout__locker_8cpp_source.html#l00010">hal::dataflow::GuiLayoutLocker::GuiLayoutLocker()</a>, <a class="el" href="module__identification_2src_2utils_2gui__layout__locker_8cpp_source.html#l00010">hal::module_identification::GuiLayoutLocker::GuiLayoutLocker()</a>, <a class="el" href="dataflow__analysis_2src_2utils_2gui__layout__locker_8cpp_source.html#l00019">hal::dataflow::GuiLayoutLocker::~GuiLayoutLocker()</a>, and <a class="el" href="module__identification_2src_2utils_2gui__layout__locker_8cpp_source.html#l00017">hal::module_identification::GuiLayoutLocker::~GuiLayoutLocker()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/plugin_system/<a class="el" href="plugin__interface__ui_8h_source.html">plugin_interface_ui.h</a></li>
+<li>include/hal_core/plugin_system/<a class="el" href="plugin__interface__ui_8h_source.html">plugin_interface_ui.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -292,7 +300,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_u_i_plugin_interface.html">UIPluginInterface</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

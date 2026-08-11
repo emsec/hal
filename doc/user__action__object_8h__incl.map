@@ -1,20 +1,20 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/user_action/user_action_object.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/user_action/user_action_object.h">
-<area shape="rect" id="node1" title=" " alt="" coords="564,5,768,76"/>
-<area shape="rect" id="node2" href="$gui__def_8h.html" title=" " alt="" coords="240,213,345,240"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="270,377,410,404"/>
-<area shape="rect" id="node10" href="$selection__relay_8h.html" title=" " alt="" coords="538,124,684,165"/>
-<area shape="rect" id="node13" title=" " alt="" coords="939,213,1014,240"/>
-<area shape="rect" id="node17" title=" " alt="" coords="760,131,910,158"/>
-<area shape="rect" id="node18" title=" " alt="" coords="934,131,1080,158"/>
-<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="26,288,156,329"/>
-<area shape="rect" id="node5" title=" " alt="" coords="180,295,255,322"/>
-<area shape="rect" id="node6" title=" " alt="" coords="280,295,345,322"/>
-<area shape="rect" id="node7" title=" " alt="" coords="369,295,434,322"/>
-<area shape="rect" id="node8" title=" " alt="" coords="667,295,720,322"/>
-<area shape="rect" id="node9" title=" " alt="" coords="458,295,553,322"/>
-<area shape="rect" id="node11" title=" " alt="" coords="816,213,916,240"/>
-<area shape="rect" id="node12" title=" " alt="" coords="369,213,424,240"/>
-<area shape="rect" id="node14" title=" " alt="" coords="448,213,504,240"/>
-<area shape="rect" id="node15" title=" " alt="" coords="529,213,602,240"/>
-<area shape="rect" id="node16" title=" " alt="" coords="626,213,689,240"/>
+<map id="plugins/gui/include/gui/user_action/user_action_object.h" name="plugins/gui/include/gui/user_action/user_action_object.h">
+<area shape="rect" id="node1" title=" " alt="" coords="587,5,744,61"/>
+<area shape="rect" id="node2" href="$gui__def_8h.html" title=" " alt="" coords="240,199,345,225"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="270,363,410,389"/>
+<area shape="rect" id="node10" href="$selection__relay_8h.html" title=" " alt="" coords="538,109,684,151"/>
+<area shape="rect" id="node13" title=" " alt="" coords="939,199,1014,225"/>
+<area shape="rect" id="node17" title=" " alt="" coords="760,117,910,143"/>
+<area shape="rect" id="node18" title=" " alt="" coords="934,117,1080,143"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="26,273,156,315"/>
+<area shape="rect" id="node5" title=" " alt="" coords="180,281,255,307"/>
+<area shape="rect" id="node6" title=" " alt="" coords="280,281,345,307"/>
+<area shape="rect" id="node7" title=" " alt="" coords="369,281,434,307"/>
+<area shape="rect" id="node8" title=" " alt="" coords="667,281,720,307"/>
+<area shape="rect" id="node9" title=" " alt="" coords="458,281,553,307"/>
+<area shape="rect" id="node11" title=" " alt="" coords="816,199,916,225"/>
+<area shape="rect" id="node12" title=" " alt="" coords="369,199,424,225"/>
+<area shape="rect" id="node14" title=" " alt="" coords="448,199,504,225"/>
+<area shape="rect" id="node15" title=" " alt="" coords="529,199,602,225"/>
+<area shape="rect" id="node16" title=" " alt="" coords="626,199,689,225"/>
 </map>

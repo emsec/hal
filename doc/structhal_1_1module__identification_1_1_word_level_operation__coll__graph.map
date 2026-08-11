@@ -1,0 +1,4 @@
+<map id="hal::module_identification::WordLevelOperation" name="hal::module_identification::WordLevelOperation">
+<area shape="rect" id="node1" title="Represents a word&#45;level operation with its operands, control signals, and the operation implemented a..." alt="" coords="5,307,196,413"/>
+<area shape="rect" id="node2" href="$classhal_1_1_boolean_function.html" title=" " alt="" coords="21,5,180,244"/>
+</map>

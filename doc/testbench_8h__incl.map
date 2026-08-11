@@ -1,0 +1,9 @@
+<map id="plugins/simulator/verilator/test_files/netlists/counter/testbench.h" name="plugins/simulator/verilator/test_files/netlists/counter/testbench.h">
+<area shape="rect" id="node1" title=" " alt="" coords="226,5,421,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,76,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="101,109,167,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="191,109,327,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="352,109,425,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="450,109,530,136"/>
+<area shape="rect" id="node7" title=" " alt="" coords="554,109,613,136"/>
+</map>

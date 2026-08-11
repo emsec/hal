@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/plugin_gui.cpp File Reference</title>
+<title>HAL: plugins/gui/src/plugin_gui.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -111,7 +113,7 @@ $(document).ready(function(){initNavTree('plugin__gui_8cpp.html',''); initResiza
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugin__manager_8h_source.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="project__manager_8h_source.html">hal_core/netlist/project_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="project__directory_8h_source.html">hal_core/utilities/project_directory.h</a>&quot;</code><br />
 <code>#include &lt;QDir&gt;</code><br />
@@ -125,6 +127,63 @@ $(document).ready(function(){initNavTree('plugin__gui_8cpp.html',''); initResiza
 <code>#include &lt;QString&gt;</code><br />
 <code>#include &lt;QDebug&gt;</code><br />
 <code>#include &lt;signal.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for plugin_gui.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="plugin__gui_8cpp__incl.png" border="0" usemap="#aplugins_2gui_2src_2plugin__gui_8cpp" alt=""/></div>
+<map name="aplugins_2gui_2src_2plugin__gui_8cpp" id="aplugins_2gui_2src_2plugin__gui_8cpp">
+<area shape="rect" title=" " alt="" coords="3319,5,3479,47"/>
+<area shape="rect" href="plugin__gui_8h.html" title=" " alt="" coords="667,109,792,136"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="5,288,184,315"/>
+<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="1712,102,1872,143"/>
+<area shape="rect" href="file__manager_8h.html" title=" " alt="" coords="3995,102,4149,143"/>
+<area shape="rect" title=" " alt="" coords="3911,206,3961,233"/>
+<area shape="rect" href="file__status__manager_8h.html" title=" " alt="" coords="3109,102,3288,143"/>
+<area shape="rect" title=" " alt="" coords="3674,206,3745,233"/>
+<area shape="rect" href="graph__context__manager_8h.html" title=" " alt="" coords="2079,102,2254,143"/>
+<area shape="rect" href="gui__api_8h.html" title=" " alt="" coords="2499,109,2655,136"/>
+<area shape="rect" href="main__window_8h.html" title=" " alt="" coords="1527,199,1700,240"/>
+<area shape="rect" href="netlist__relay_8h.html" title=" " alt="" coords="3313,102,3485,143"/>
+<area shape="rect" href="plugin__relay_8h.html" title=" " alt="" coords="2527,199,2697,240"/>
+<area shape="rect" href="gui__plugin__manager_8h.html" title=" " alt="" coords="2934,102,3085,143"/>
+<area shape="rect" href="plugin__manager_8h.html" title=" " alt="" coords="2849,199,3025,240"/>
+<area shape="rect" href="python__context_8h.html" title=" " alt="" coords="3509,109,3717,136"/>
+<area shape="rect" href="selection__relay_8h.html" title=" " alt="" coords="2278,102,2423,143"/>
+<area shape="rect" href="user__action__manager_8h.html" title=" " alt="" coords="938,199,1091,240"/>
+<area shape="rect" href="settings__item__dropdown_8h.html" title=" " alt="" coords="1897,95,2055,151"/>
+<area shape="rect" href="style_8h.html" title=" " alt="" coords="3742,109,3869,136"/>
+<area shape="rect" href="layout__locker_8h.html" title=" " alt="" coords="2680,102,2859,143"/>
+<area shape="rect" href="comment__manager_8h.html" title=" " alt="" coords="1167,199,1331,240"/>
+<area shape="rect" href="gate__library__manager_8h.html" title=" " alt="" coords="4379,95,4533,151"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="4173,102,4304,143"/>
+<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="4327,199,4457,240"/>
+<area shape="rect" href="project__manager_8h.html" title=" " alt="" coords="120,102,291,143"/>
+<area shape="rect" href="project__directory_8h.html" title=" " alt="" coords="132,199,279,240"/>
+<area shape="rect" title=" " alt="" coords="4558,109,4663,136"/>
+<area shape="rect" title=" " alt="" coords="4687,109,4742,136"/>
+<area shape="rect" title=" " alt="" coords="4766,109,4826,136"/>
+<area shape="rect" title=" " alt="" coords="4851,109,4973,136"/>
+<area shape="rect" title=" " alt="" coords="4998,109,5093,136"/>
+<area shape="rect" title=" " alt="" coords="5117,109,5209,136"/>
+<area shape="rect" title=" " alt="" coords="5233,109,5319,136"/>
+<area shape="rect" title=" " alt="" coords="5343,109,5417,136"/>
+<area shape="rect" title=" " alt="" coords="5442,109,5515,136"/>
+<area shape="rect" href="plugin__interface__ui_8h.html" title=" " alt="" coords="516,199,692,240"/>
+<area shape="rect" href="cli__extension__interface_8h.html" title=" " alt="" coords="303,199,492,240"/>
+<area shape="rect" title=" " alt="" coords="1222,288,1277,315"/>
+<area shape="rect" title=" " alt="" coords="2401,288,2476,315"/>
+<area shape="rect" title=" " alt="" coords="1724,206,1852,233"/>
+<area shape="rect" title=" " alt="" coords="2257,206,2351,233"/>
+<area shape="rect" title=" " alt="" coords="3101,206,3161,233"/>
+<area shape="rect" href="special__log__content__manager_8h.html" title=" " alt="" coords="1927,199,2108,240"/>
+<area shape="rect" href="content__widget_8h.html" title=" " alt="" coords="767,199,913,240"/>
+<area shape="rect" href="content__anchor_8h.html" title=" " alt="" coords="1356,199,1503,240"/>
+<area shape="rect" title=" " alt="" coords="2133,206,2233,233"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="4132,199,4303,240"/>
+<area shape="rect" title=" " alt="" coords="4037,206,4107,233"/>
+<area shape="rect" title=" " alt="" coords="2772,206,2825,233"/>
+</map>
+</div>
 </div>
 <p><a href="plugin__gui_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -135,10 +194,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a38887b161c4caa1ab4c0f1ff1d1bb873"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a38887b161c4caa1ab4c0f1ff1d1bb873">hal::myMessageOutput</a> (QtMsgType <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmessagelogcontext.html">QMessageLogContext</a> &amp;context, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;msg)</td></tr>
+<tr class="memitem:a38887b161c4caa1ab4c0f1ff1d1bb873"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a38887b161c4caa1ab4c0f1ff1d1bb873">hal::myMessageOutput</a> (QtMsgType <a class="el" href="netlist__preprocessing_8cpp.html#a75b160f574a0be26114bae2c7686a5e1">type</a>, const <a class="elRef" href="https://doc.qt.io/qt-5/qmessagelogcontext.html">QMessageLogContext</a> &amp;context, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;msg)</td></tr>
 <tr class="separator:a38887b161c4caa1ab4c0f1ff1d1bb873"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8127688230d54c42984bdd3c2bb1f72"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; BasePluginInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">hal::create_plugin_instance</a> ()</td></tr>
-<tr class="separator:aa8127688230d54c42984bdd3c2bb1f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a520a82c66e9e539acaa3fb2d6ce6578a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; BasePluginInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#a520a82c66e9e539acaa3fb2d6ce6578a">hal::create_plugin_instance</a> ()</td></tr>
+<tr class="separator:a520a82c66e9e539acaa3fb2d6ce6578a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -151,7 +210,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="plugin__gui_8cpp.html">plugin_gui.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

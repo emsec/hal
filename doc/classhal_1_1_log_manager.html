@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_log_manager.html',''); in
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="log_8h_source.html">log.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::LogManager:</div>
 <div class="dyncontent">
@@ -158,8 +160,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7a579bc42a1298b213b27fc4fef9925d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00104">104</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
+<div class="textblock"><p>The log manager takes care of the log channels of HAL and the sinks (e.g., stdout, log file, GUI) that they write to. </p>
+
+<p class="definition">Definition at line <a class="el" href="log_8h_source.html#l00106">106</a> of file <a class="el" href="log_8h_source.html">log.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a8f6283f60bea0a12479347f443a65430"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f6283f60bea0a12479347f443a65430">&#9670;&nbsp;</a></span>activate_all_channels()</h2>
@@ -181,7 +184,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -213,7 +216,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="resynthesis_8cpp_source.html#l01268">hal::resynthesis::generate_resynth_netlist_for_boolean_functions()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -263,7 +266,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00075">get_channel()</a>, <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, and <a class="el" href="utilities_2log_8cpp_source.html#l00291">set_file_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00075">get_channel()</a>, <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00287">hal::PluginGui::initialize_logging()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00032">hal::NetlistSimulatorController::NetlistSimulatorController()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00048">hal::LogicEvaluatorPlugin::on_load()</a>, <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00291">set_file_name()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
 
 </div>
 </div>
@@ -306,7 +309,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">file_name</td><td>- The file name. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">truncate</td><td>- Flag whether the file should be overwritten(true) or appended to(false). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">truncate</td><td>- Flag whether the file should be overwritten(<code>true</code>) or appended to(<code>false</code>). </td></tr>
   </table>
   </dd>
 </dl>
@@ -316,7 +319,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00061">get_instance()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, and <a class="el" href="utilities_2log_8cpp_source.html#l00291">set_file_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00287">hal::PluginGui::initialize_logging()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00048">hal::LogicEvaluatorPlugin::on_load()</a>, <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00291">set_file_name()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
 
 </div>
 </div>
@@ -347,7 +350,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00274">274</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, and <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00287">hal::PluginGui::initialize_logging()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00048">hal::LogicEvaluatorPlugin::on_load()</a>, <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
 
 </div>
 </div>
@@ -377,7 +380,7 @@ Static Public Member Functions</h2></td></tr>
 <p>Create a new logging sink which prints to stdout.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">colored</td><td>- If true, the output will be colored depending on the severity. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">colored</td><td>- If <code>true</code>, the output will be colored depending on the severity. </td></tr>
   </table>
   </dd>
 </dl>
@@ -387,7 +390,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, and <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00287">hal::PluginGui::initialize_logging()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00048">hal::LogicEvaluatorPlugin::on_load()</a>, <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>, and <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>.</p>
 
 </div>
 </div>
@@ -411,7 +414,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>, and <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>.</p>
 
 </div>
 </div>
@@ -442,7 +445,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="resynthesis_8cpp_source.html#l01268">hal::resynthesis::generate_resynth_netlist_for_boolean_functions()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -465,7 +468,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00283">283</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -497,7 +500,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00100">add_channel()</a>, and <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -516,11 +519,11 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Returns all channels' names.</p>
-<dl class="section return"><dt>Returns</dt><dd>A set of the names. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of channel names. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00090">90</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00353">get_option_descriptions()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00353">get_option_descriptions()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -543,7 +546,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00204">204</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -606,7 +609,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00061">61</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00247">create_file_sink()</a>, <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00439">hal::log_gui_sink::sink_it_()</a>, and <a class="el" href="channel__model_8cpp_source.html#l00019">hal::ChannelModel::~ChannelModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00247">create_file_sink()</a>, <a class="el" href="resynthesis_8cpp_source.html#l01268">hal::resynthesis::generate_resynth_netlist_for_boolean_functions()</a>, <a class="el" href="event__log_8cpp_source.html#l00302">hal::initialize()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">hal::BasePluginInterface::initialize_logging()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00287">hal::PluginGui::initialize_logging()</a>, <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00032">hal::NetlistSimulatorController::NetlistSimulatorController()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00048">hal::LogicEvaluatorPlugin::on_load()</a>, <a class="el" href="plugin__netlist__simulator__controller_8cpp_source.html#l00173">hal::NetlistSimulatorControllerPlugin::on_load()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00439">hal::log_gui_sink::sink_it_()</a>, <a class="el" href="waveform__viewer_8cpp_source.html#l00062">hal::WaveformViewer::WaveformViewer()</a>, and <a class="el" href="channel__model_8cpp_source.html#l00019">hal::ChannelModel::~ChannelModel()</a>.</p>
 
 </div>
 </div>
@@ -688,7 +691,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00374">374</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00178">activate_channel()</a>, <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00191">deactivate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00090">get_channels()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
+<p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00178">activate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00191">deactivate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00090">get_channels()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00116">hal::ProgramArguments::get_parameter()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00030">hal::ProgramArguments::is_option_set()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, and <a class="el" href="utilities_2log_8cpp_source.html#l00164">set_level_of_channel()</a>.</p>
 
 </div>
 </div>
@@ -746,7 +749,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00209">209</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -778,7 +781,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="utilities_2log_8cpp_source.html#l00100">add_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00247">create_file_sink()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00145">get_level_of_channel()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, and <a class="el" href="utilities_2log_8cpp_source.html#l00133">remove_channel()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
@@ -846,13 +849,13 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="utilities_2log_8cpp_source.html#l00164">164</a> of file <a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00183">activate_all_channels()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00178">activate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">add_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00196">deactivate_all_channels()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00191">deactivate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00009">hal::log_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00183">activate_all_channels()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00178">activate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00100">add_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00196">deactivate_all_channels()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00191">deactivate_channel()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00374">handle_options()</a>, and <a class="el" href="python__bindings_2bindings_2log_8cpp_source.html#l00041">hal::log_init()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="log_8h_source.html">log.h</a></li>
-<li>/home/runner/work/hal/hal/src/utilities/<a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a></li>
+<li>include/hal_core/utilities/<a class="el" href="log_8h_source.html">log.h</a></li>
+<li>src/utilities/<a class="el" href="utilities_2log_8cpp_source.html">log.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -860,7 +863,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_log_manager.html">LogManager</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

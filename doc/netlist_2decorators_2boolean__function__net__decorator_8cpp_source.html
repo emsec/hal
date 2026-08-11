@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/netlist/decorators/boolean_function_net_decorator.cpp Source File</title>
+<title>HAL: src/netlist/decorators/boolean_function_net_decorator.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -108,7 +110,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordflow">return</span> VAR_NET_PREFIX + std::to_string(m_net.<a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>());</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    }</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_net_decorator.html#a82f13a3008073fc252c5f4bfd3f6c396">   23</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, <span class="keyword">const</span> std::string&amp; var_name)</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_net_decorator.html#a82f13a3008073fc252c5f4bfd3f6c396">   23</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <span class="keyword">const</span> std::string&amp; var_name)</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordflow">if</span> (var_name.rfind(VAR_NET_PREFIX, 0) != 0)</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        {</div>
@@ -117,7 +119,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">try</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(<a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>-&gt;get_net_by_id(std::stoul(var_name.substr(VAR_NET_PREFIX.size()))));</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(std::stoul(var_name.substr(VAR_NET_PREFIX.size()))));</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        }</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::invalid_argument&amp; e)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        {</div>
@@ -129,11 +131,11 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">   44</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; var)</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">   44</a></span>&#160;    <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">BooleanFunctionNetDecorator::get_net_from</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; var)</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; var_name_res = var.<a class="code" href="classhal_1_1_boolean_function.html#a3ba7994a1373d72e56be76bd2e8b4d3d">get_variable_name</a>(); var_name_res.is_ok())</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; net_res = <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">get_net_from</a>(<a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, var_name_res.get()); net_res.is_ok())</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; net_res = <a class="code" href="classhal_1_1_boolean_function_net_decorator.html#a184623934c0570c3c9443640bac90b12">get_net_from</a>(netlist, var_name_res.get()); net_res.is_ok())</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            {</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                <span class="keywordflow">return</span> net_res;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            }</div>
@@ -157,7 +159,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">try</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>((<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>) std::stoul(var_name.substr(VAR_NET_PREFIX.size())));</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>((<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>) std::stoul(var_name.substr(VAR_NET_PREFIX.size())));</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::invalid_argument&amp; e)</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        {</div>
@@ -201,14 +203,14 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_html_a086e0fa561405ac8b0beae95d8caa69d"><div class="ttname"><a href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">hal::Net::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2net_8cpp_source.html#l00088">net.cpp:88</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:56</a></div></div>
-<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00063">result.h:64</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_html_ab5e29819702448bdd0315d3282e2eaae"><div class="ttname"><a href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist::get_net_by_id</a></div><div class="ttdeci">Net * get_net_by_id(u32 net_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00353">netlist.cpp:353</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00070">result.h:71</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
-<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00053">result.h:53</a></div></div>
-<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00049">result.h:49</a></div></div>
-<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_af20e293cf442ddedc129f87bbb6a69e9"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a></div><div class="ttdeci">#define ERR_APPEND(prev_error, message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00057">result.h:57</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00027">test_multiple.py:27</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a1c3e89a5c947d0af52de06b706adcf09"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a></div><div class="ttdeci">#define ERR(message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00060">result.h:60</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00056">result.h:56</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_af20e293cf442ddedc129f87bbb6a69e9"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a></div><div class="ttdeci">#define ERR_APPEND(prev_error, message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00064">result.h:64</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a504c73ff1a68c50e5435dece66bc2772"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a></div><div class="ttdeci">Net * net</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -216,7 +218,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_8b970151d598b4fae8bb0815b2681fca.html">decorators</a></li><li class="navelem"><a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp.html">boolean_function_net_decorator.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

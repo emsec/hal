@@ -1,0 +1,12 @@
+<map id="plugins/simulator/hal_simulator/src/simulation_gate/simulation_gate.cpp" name="plugins/simulator/hal_simulator/src/simulation_gate/simulation_gate.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="288,5,483,61"/>
+<area shape="rect" id="node2" href="$netlist__simulator_8h.html" title=" " alt="" coords="297,109,474,151"/>
+<area shape="rect" id="node3" href="$gate_8h.html" title=" " alt="" coords="121,213,287,240"/>
+<area shape="rect" id="node4" href="$gate__type_8h.html" title=" " alt="" coords="43,303,197,344"/>
+<area shape="rect" id="node5" title=" " alt="" coords="268,392,319,419"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,392,120,419"/>
+<area shape="rect" id="node7" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="363,199,527,255"/>
+<area shape="rect" id="node8" href="$net_8h.html" title=" " alt="" coords="273,310,431,337"/>
+<area shape="rect" id="node9" href="$simulation_8h.html" title=" " alt="" coords="603,213,821,240"/>
+<area shape="rect" id="node10" href="$simulation__engine_8h.html" title=" " alt="" coords="845,206,1046,247"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="hal::module_identification::StructuralCandidate" name="hal::module_identification::StructuralCandidate">
+<area shape="rect" id="node1" title="A class representing a structural candidate for module identification." alt="" coords="79,491,269,583"/>
+<area shape="rect" id="node2" href="$classhal_1_1module__identification_1_1_base_candidate.html" title="Represents a base candidate in the module identification process." alt="" coords="5,277,196,369"/>
+<area shape="rect" id="node3" href="$structhal_1_1module__identification_1_1_candidate_context.html" title="This struct manages the context of a candidate during module identification, including caches for all..." alt="" coords="221,219,434,428"/>
+<area shape="rect" id="node4" href="$classhal_1_1_netlist.html" title=" " alt="" coords="265,5,389,156"/>
+</map>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ok_41394',['OK',['../include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7',1,'result.h']]]
+  ['netlist_5fapi_44201',['NETLIST_API',['../arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_linux.h'],['../arch__mac_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_mac.h'],['../arch__win_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_win.h']]],
+  ['not_5fexported_44202',['NOT_EXPORTED',['../defines_8h.html#a7a18783e5822ba5ea364d35854897085',1,'defines.h']]]
 ];

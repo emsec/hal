@@ -1,11 +1,11 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/pin_model/pin_delegate.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/pin_model/pin_delegate.h">
-<area shape="rect" id="node1" title=" " alt="" coords="316,5,535,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,109,289,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,109,421,136"/>
-<area shape="rect" id="node8" title=" " alt="" coords="445,109,523,136"/>
-<area shape="rect" id="node9" title=" " alt="" coords="548,109,711,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,184,96,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,184,207,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,184,318,211"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,184,413,211"/>
+<map id="plugins/gui/include/gui/pin_model/pin_delegate.h" name="plugins/gui/include/gui/pin_model/pin_delegate.h">
+<area shape="rect" id="node1" title=" " alt="" coords="316,5,535,47"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,95,289,121"/>
+<area shape="rect" id="node7" title=" " alt="" coords="313,95,421,121"/>
+<area shape="rect" id="node8" title=" " alt="" coords="445,95,523,121"/>
+<area shape="rect" id="node9" title=" " alt="" coords="548,95,711,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,96,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,169,207,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,169,318,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,169,413,196"/>
 </map>

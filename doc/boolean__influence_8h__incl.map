@@ -1,17 +1,21 @@
-<map id="/home/runner/work/hal/hal/plugins/boolean_influence/include/boolean_influence/boolean_influence.h" name="/home/runner/work/hal/hal/plugins/boolean_influence/include/boolean_influence/boolean_influence.h">
-<area shape="rect" id="node1" title=" " alt="" coords="494,5,717,76"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
-<area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,124,453,165"/>
-<area shape="rect" id="node12" title=" " alt="" coords="477,131,616,158"/>
-<area shape="rect" id="node13" title=" " alt="" coords="640,131,691,158"/>
-<area shape="rect" id="node14" title=" " alt="" coords="715,131,839,158"/>
-<area shape="rect" id="node15" title=" " alt="" coords="863,131,926,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,377,96,404"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,377,207,404"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,377,318,404"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,377,413,404"/>
-<area shape="rect" id="node8" href="$error_8h.html" title=" " alt="" coords="256,213,387,255"/>
-<area shape="rect" id="node9" title=" " alt="" coords="411,221,498,247"/>
-<area shape="rect" id="node10" title=" " alt="" coords="522,221,614,247"/>
-<area shape="rect" id="node11" title=" " alt="" coords="638,221,706,247"/>
+<map id="plugins/boolean_influence/include/boolean_influence/boolean_influence.h" name="plugins/boolean_influence/include/boolean_influence/boolean_influence.h">
+<area shape="rect" id="node1" title=" " alt="" coords="300,5,495,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="410,452,550,479"/>
+<area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="649,273,780,315"/>
+<area shape="rect" id="node12" href="$z3__utils_8h.html" title=" " alt="" coords="201,109,340,136"/>
+<area shape="rect" id="node15" title=" " alt="" coords="60,281,111,307"/>
+<area shape="rect" id="node17" title=" " alt="" coords="349,281,473,307"/>
+<area shape="rect" id="node18" title=" " alt="" coords="805,281,867,307"/>
+<area shape="rect" id="node3" title=" " alt="" coords="267,527,357,553"/>
+<area shape="rect" id="node4" title=" " alt="" coords="382,527,469,553"/>
+<area shape="rect" id="node5" title=" " alt="" coords="493,527,579,553"/>
+<area shape="rect" id="node6" title=" " alt="" coords="603,527,674,553"/>
+<area shape="rect" id="node8" href="$error_8h.html" title=" " alt="" coords="837,363,968,404"/>
+<area shape="rect" id="node9" title=" " alt="" coords="518,370,605,397"/>
+<area shape="rect" id="node10" title=" " alt="" coords="629,370,721,397"/>
+<area shape="rect" id="node11" title=" " alt="" coords="745,370,813,397"/>
+<area shape="rect" id="node13" href="$boolean__function_8h.html" title=" " alt="" coords="245,184,424,225"/>
+<area shape="rect" id="node14" title=" " alt="" coords="135,281,206,307"/>
+<area shape="rect" id="node16" title=" " alt="" coords="231,281,273,307"/>
+<area shape="rect" id="node19" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="499,191,677,218"/>
 </map>

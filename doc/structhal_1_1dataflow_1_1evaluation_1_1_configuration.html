@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('structhal_1_1dataflow_1_1evaluation_1_
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="evaluation_2configuration_8h_source.html">configuration.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html">/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/configuration.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::dataflow::evaluation::Configuration:</div>
 <div class="dyncontent">
@@ -102,14 +104,15 @@ Collaboration diagram for hal::dataflow::evaluation::Configuration:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac5e6fc9cf9ce30376e457b3d8246e9cf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_configuration.html#ac5e6fc9cf9ce30376e457b3d8246e9cf">prioritized_sizes</a></td></tr>
+<tr class="memitem:ac5e6fc9cf9ce30376e457b3d8246e9cf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_configuration.html#ac5e6fc9cf9ce30376e457b3d8246e9cf">prioritized_sizes</a></td></tr>
 <tr class="separator:ac5e6fc9cf9ce30376e457b3d8246e9cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18b2ce111f6a284e6d7d353ab4047ce9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_configuration.html#a18b2ce111f6a284e6d7d353ab4047ce9">min_group_size</a></td></tr>
+<tr class="memitem:a18b2ce111f6a284e6d7d353ab4047ce9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_configuration.html#a18b2ce111f6a284e6d7d353ab4047ce9">min_group_size</a></td></tr>
 <tr class="separator:a18b2ce111f6a284e6d7d353ab4047ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="evaluation_2configuration_8h_source.html#l00036">36</a> of file <a class="el" href="evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
+<div class="textblock"><p>The configuration of the evaluation phase of dataflow analysis, e.g., the group sizes that are prioritized. </p>
+
+<p class="definition">Definition at line <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html#l00039">39</a> of file <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a18b2ce111f6a284e6d7d353ab4047ce9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a18b2ce111f6a284e6d7d353ab4047ce9">&#9670;&nbsp;</a></span>min_group_size</h2>
@@ -118,12 +121,13 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::dataflow::evaluation::Configuration::min_group_size</td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::dataflow::evaluation::Configuration::min_group_size</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The minimum number of gates that a group must contain to be part of the result. </p>
 
-<p class="definition">Definition at line <a class="el" href="evaluation_2configuration_8h_source.html#l00039">39</a> of file <a class="el" href="evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html#l00045">45</a> of file <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>.</p>
 
@@ -136,19 +140,20 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; hal::dataflow::evaluation::Configuration::prioritized_sizes</td>
+          <td class="memname">std::vector&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&gt; hal::dataflow::evaluation::Configuration::prioritized_sizes</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The group sizes that are preferred when candidate groupings are ranked against each other. </p>
 
-<p class="definition">Definition at line <a class="el" href="evaluation_2configuration_8h_source.html#l00038">38</a> of file <a class="el" href="evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html#l00042">42</a> of file <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html">configuration.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/<a class="el" href="evaluation_2configuration_8h_source.html">configuration.h</a></li>
+<li>plugins/dataflow_analysis/include/dataflow_analysis/evaluation/<a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2evaluation_2configuration_8h_source.html">configuration.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -156,7 +161,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow_1_1evaluation.html">evaluation</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1evaluation_1_1_configuration.html">Configuration</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

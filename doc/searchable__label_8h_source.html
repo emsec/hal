@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/searchbar/searchable_label.h Source File</title>
+<title>HAL: plugins/gui/include/gui/searchbar/searchable_label.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -122,35 +124,34 @@ $(document).ready(function(){initNavTree('searchable__label_8h_source.html','');
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_searchable_label.html">   37</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_searchable_label.html">SearchableLabel</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_searchable_label.html#a99d05dbcedad12ed6c795275ab4d968c">paintEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a>* ev) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_searchable_label.html#ad1cf7116066b7951bb7a2a1f85771c59">handleSearchChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <span class="keywordtype">string</span>, <span class="keywordtype">int</span> <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a4269436a927099bac0bb76255e2e94a2">option</a>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_searchable_label.html#a3e53089e9dfff3d584ef42c1a74ed824">SearchableLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="classhal_1_1_searchable_label.html#a3e53089e9dfff3d584ef42c1a74ed824">SearchableLabel</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_searchable_label.html#a7bbb99f81cee7b47c018ec751908f9cc">hasMatch</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> drawSubstring(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>&amp; painter, <span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>, <span class="keywordtype">int</span> len, <span class="keywordtype">bool</span> hilite);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">bool</span> exactWordMatch(<span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>, <span class="keywordtype">int</span> len) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QPair&lt;int,int&gt;</a> &gt; mMatchPositions;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfontmetrics.html">QFontMetrics</a>* mMetrics;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">int</span> xText;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">int</span> yText;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sHiliteOffset = 2;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_searchable_label_html"><div class="ttname"><a href="classhal_1_1_searchable_label.html">hal::SearchableLabel</a></div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8h_source.html#l00037">searchable_label.h:38</a></div></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_searchable_label.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_searchable_label.html">SearchableLabel</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_searchable_label.html#a99d05dbcedad12ed6c795275ab4d968c">paintEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpaintevent.html">QPaintEvent</a>* ev) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_searchable_label.html#ad1cf7116066b7951bb7a2a1f85771c59">handleSearchChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <span class="keywordtype">string</span>, <span class="keywordtype">int</span> option);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_searchable_label.html#a3e53089e9dfff3d584ef42c1a74ed824">SearchableLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="classhal_1_1_searchable_label.html#a3e53089e9dfff3d584ef42c1a74ed824">SearchableLabel</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_searchable_label.html#a7bbb99f81cee7b47c018ec751908f9cc">hasMatch</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> drawSubstring(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>&amp; painter, <span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>, <span class="keywordtype">int</span> len, <span class="keywordtype">bool</span> hilite);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">bool</span> exactWordMatch(<span class="keywordtype">int</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#pos-prop">pos</a>, <span class="keywordtype">int</span> len) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QPair&lt;int,int&gt;</a> &gt; mMatchPositions;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfontmetrics.html">QFontMetrics</a>* mMetrics;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">int</span> xText;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">int</span> yText;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sHiliteOffset = 2;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_searchable_label_html"><div class="ttname"><a href="classhal_1_1_searchable_label.html">hal::SearchableLabel</a></div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8h_source.html#l00040">searchable_label.h:41</a></div></div>
 <div class="ttc" id="aclasshal_1_1_searchable_label_html_a3e53089e9dfff3d584ef42c1a74ed824"><div class="ttname"><a href="classhal_1_1_searchable_label.html#a3e53089e9dfff3d584ef42c1a74ed824">hal::SearchableLabel::SearchableLabel</a></div><div class="ttdeci">SearchableLabel(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8cpp_source.html#l00014">searchable_label.cpp:14</a></div></div>
 <div class="ttc" id="aclasshal_1_1_searchable_label_html_a7bbb99f81cee7b47c018ec751908f9cc"><div class="ttname"><a href="classhal_1_1_searchable_label.html#a7bbb99f81cee7b47c018ec751908f9cc">hal::SearchableLabel::hasMatch</a></div><div class="ttdeci">bool hasMatch() const</div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8cpp_source.html#l00085">searchable_label.cpp:85</a></div></div>
 <div class="ttc" id="aclasshal_1_1_searchable_label_html_a99d05dbcedad12ed6c795275ab4d968c"><div class="ttname"><a href="classhal_1_1_searchable_label.html#a99d05dbcedad12ed6c795275ab4d968c">hal::SearchableLabel::paintEvent</a></div><div class="ttdeci">void paintEvent(QPaintEvent *ev) override</div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8cpp_source.html#l00018">searchable_label.cpp:18</a></div></div>
 <div class="ttc" id="aclasshal_1_1_searchable_label_html_ad1cf7116066b7951bb7a2a1f85771c59"><div class="ttname"><a href="classhal_1_1_searchable_label.html#ad1cf7116066b7951bb7a2a1f85771c59">hal::SearchableLabel::handleSearchChanged</a></div><div class="ttdeci">void handleSearchChanged(const QString &amp;string, int option)</div><div class="ttdef"><b>Definition:</b> <a href="searchable__label_8cpp_source.html#l00090">searchable_label.cpp:90</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="aplugins_2gui_2_c_make_lists_8txt_html_a4269436a927099bac0bb76255e2e94a2"><div class="ttname"><a href="plugins_2gui_2_c_make_lists_8txt.html#a4269436a927099bac0bb76255e2e94a2">option</a></div><div class="ttdeci">option(PL_GUI &quot;PL_GUI&quot; ON) if(PL_GUI OR BUILD_ALL_PLUGINS) cmake_minimum_required(VERSION 3.5.0) if(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR) set(Qt5_DIR &quot;/usr/local/opt/qt@5/lib/cmake&quot;) endif(APPLE AND CMAKE_HOST_APPLE AND NOT Qt5_DIR) find_package(Qt5 COMPONENTS Core REQUIRED) find_package(Qt5 COMPONENTS Widgets REQUIRED) if(Qt5Widgets_FOUND) message(VERBOSE &quot;Qt5Widgets_INCLUDE_DIRS</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2gui_2_c_make_lists_8txt_source.html#l00001">CMakeLists.txt:1</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqfontmetrics_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfontmetrics.html">QFontMetrics</a></div></div>
 <div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
@@ -168,7 +169,7 @@ $(document).ready(function(){initNavTree('searchable__label_8h_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_2255beb432c96c2dabe5df3d52820610.html">searchbar</a></li><li class="navelem"><a class="el" href="searchable__label_8h.html">searchable_label.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

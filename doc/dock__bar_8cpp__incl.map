@@ -1,22 +1,28 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/docking_system/dock_bar.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/docking_system/dock_bar.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1198,5,1419,61"/>
-<area shape="rect" id="node2" href="$dock__bar_8h.html" title=" " alt="" coords="106,109,258,151"/>
-<area shape="rect" id="node7" href="$content__frame_8h.html" title=" " alt="" coords="623,109,818,151"/>
-<area shape="rect" id="node8" href="$content__widget_8h.html" title=" " alt="" coords="282,109,429,151"/>
-<area shape="rect" id="node9" href="$content__drag__relay_8h.html" title=" " alt="" coords="843,109,1004,151"/>
-<area shape="rect" id="node10" href="$dock__mime__data_8h.html" title=" " alt="" coords="1029,109,1181,151"/>
-<area shape="rect" id="node11" title=" " alt="" coords="1111,206,1211,233"/>
-<area shape="rect" id="node12" href="$content__anchor_8h.html" title=" " alt="" coords="453,109,599,151"/>
-<area shape="rect" id="node13" title=" " alt="" coords="1256,117,1361,143"/>
-<area shape="rect" id="node14" title=" " alt="" coords="1385,117,1448,143"/>
-<area shape="rect" id="node15" title=" " alt="" coords="1472,117,1607,143"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1631,117,1731,143"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1755,117,1857,143"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1882,117,1994,143"/>
-<area shape="rect" id="node19" title=" " alt="" coords="2018,117,2095,143"/>
-<area shape="rect" id="node20" title=" " alt="" coords="2119,117,2274,143"/>
-<area shape="rect" id="node3" href="$dock__button_8h.html" title=" " alt="" coords="103,199,255,240"/>
-<area shape="rect" id="node4" href="$widget_8h.html" title=" " alt="" coords="280,206,431,233"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,206,79,233"/>
-<area shape="rect" id="node6" title=" " alt="" coords="455,206,509,233"/>
+<map id="plugins/gui/src/docking_system/dock_bar.cpp" name="plugins/gui/src/docking_system/dock_bar.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="1264,5,1435,47"/>
+<area shape="rect" id="node2" href="$dock__bar_8h.html" title=" " alt="" coords="317,95,469,136"/>
+<area shape="rect" id="node8" href="$content__frame_8h.html" title=" " alt="" coords="1077,95,1272,136"/>
+<area shape="rect" id="node11" href="$content__widget_8h.html" title=" " alt="" coords="119,95,265,136"/>
+<area shape="rect" id="node13" href="$content__drag__relay_8h.html" title=" " alt="" coords="665,95,826,136"/>
+<area shape="rect" id="node15" href="$dock__mime__data_8h.html" title=" " alt="" coords="851,95,1003,136"/>
+<area shape="rect" id="node16" title=" " alt="" coords="962,191,1062,218"/>
+<area shape="rect" id="node17" href="$content__anchor_8h.html" title=" " alt="" coords="493,95,640,136"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1297,102,1402,129"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1426,102,1489,129"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1513,102,1647,129"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1671,102,1771,129"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1795,102,1898,129"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1923,102,2035,129"/>
+<area shape="rect" id="node25" title=" " alt="" coords="2059,102,2136,129"/>
+<area shape="rect" id="node26" title=" " alt="" coords="2160,102,2315,129"/>
+<area shape="rect" id="node3" href="$dock__button_8h.html" title=" " alt="" coords="529,184,681,225"/>
+<area shape="rect" id="node4" href="$widget_8h.html" title=" " alt="" coords="89,191,239,218"/>
+<area shape="rect" id="node5" title=" " alt="" coords="263,191,337,218"/>
+<area shape="rect" id="node6" title=" " alt="" coords="450,191,505,218"/>
+<area shape="rect" id="node7" title=" " alt="" coords="361,191,426,218"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1227,191,1293,218"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1126,191,1202,218"/>
+<area shape="rect" id="node12" title=" " alt="" coords="5,191,64,218"/>
+<area shape="rect" id="node14" title=" " alt="" coords="833,191,908,218"/>
+<area shape="rect" id="node18" title=" " alt="" coords="706,191,809,218"/>
 </map>

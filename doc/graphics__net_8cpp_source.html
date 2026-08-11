@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/graph_widget/items/nets/graphics_net.cpp Source File</title>
+<title>HAL: plugins/gui/src/graph_widget/items/nets/graphics_net.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -109,7 +111,7 @@ $(document).ready(function(){initNavTree('graphics__net_8cpp_source.html',''); i
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="classhal_1_1_graphics_net.html#a9dc3c21acbe126bcc3d9e01679b26f3d">sPen</a>.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setJoinStyle">setJoinStyle</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#PenJoinStyle-enum">Qt::MiterJoin</a>);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_net.html#a4a277a42c6bdd527a66a8b9fce7b5246">   24</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_net.html#a4a277a42c6bdd527a66a8b9fce7b5246">GraphicsNet::GraphicsNet</a>(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) : <a class="code" href="classhal_1_1_graphics_item.html">GraphicsItem</a>(<a class="code" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a>::<a class="code" href="classhal_1_1_net.html">Net</a>, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>-&gt;get_id())</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_net.html#a4a277a42c6bdd527a66a8b9fce7b5246">   24</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_net.html#a4a277a42c6bdd527a66a8b9fce7b5246">GraphicsNet::GraphicsNet</a>(<a class="code" href="classhal_1_1_net.html">Net</a>* n) : <a class="code" href="classhal_1_1_graphics_item.html">GraphicsItem</a>(<a class="code" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a>::<a class="code" href="classhal_1_1_net.html">Net</a>, n-&gt;get_id())</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
@@ -154,8 +156,7 @@ $(document).ready(function(){initNavTree('graphics__net_8cpp_source.html',''); i
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:58</a></div></div>
 <div class="ttc" id="agraphics__net_8h_html"><div class="ttname"><a href="graphics__net_8h.html">graphics_net.h</a></div></div>
 <div class="ttc" id="agroup__gui_html_gaab0cd38a41c1215ae70822b1d501daa1"><div class="ttname"><a href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">hal::ItemType</a></div><div class="ttdeci">ItemType</div><div class="ttdoc">The ItemType enum provides the enum type to classify graphic items into Modules, Gates or Nets....</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00044">gui_def.h:45</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00006">test.py:6</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="aqbrush_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qbrush.html">QBrush</a></div></div>
 <div class="ttc" id="aqgraphicsitem_html_setVisible"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#setVisible">QGraphicsItem::setVisible</a></div><div class="ttdeci">void setVisible(bool visible)</div></div>
@@ -178,7 +179,7 @@ $(document).ready(function(){initNavTree('graphics__net_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_d567a330f572ed0886077de5e2105e8c.html">items</a></li><li class="navelem"><a class="el" href="dir_809491f59a91bb0efc1a53a1bc131183.html">nets</a></li><li class="navelem"><a class="el" href="graphics__net_8cpp.html">graphics_net.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

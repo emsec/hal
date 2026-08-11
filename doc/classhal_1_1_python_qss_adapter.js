@@ -29,14 +29,5 @@ var classhal_1_1_python_qss_adapter =
     [ "mNumberFormat", "classhal_1_1_python_qss_adapter.html#a6bde19b86be9782c50ef70d64653b214", null ],
     [ "mOperatorFormat", "classhal_1_1_python_qss_adapter.html#af456bc67c5202547b935594d38c29866", null ],
     [ "mSelfFormat", "classhal_1_1_python_qss_adapter.html#afb83edd66f419becf57fb490214ff692", null ],
-    [ "mSingleQuotedStringFormat", "classhal_1_1_python_qss_adapter.html#a985d2f41ad36d7c21f9e196b40a5cbf8", null ],
-    [ "braceColor", "classhal_1_1_python_qss_adapter.html#a573880840a601e67ee717cca04d104c4", null ],
-    [ "commentColor", "classhal_1_1_python_qss_adapter.html#a1477a9dfd48969c014d514b66bdae21c", null ],
-    [ "defclassColor", "classhal_1_1_python_qss_adapter.html#a86c49319490457a3107483447563c939", null ],
-    [ "doubleQuotedStringColor", "classhal_1_1_python_qss_adapter.html#ab447e9c2ef626df1f3e6afe127db108f", null ],
-    [ "keywordColor", "classhal_1_1_python_qss_adapter.html#a2e80576d06401a248ca93118ca053618", null ],
-    [ "numberColor", "classhal_1_1_python_qss_adapter.html#adce06b14c4df3ea04d32253a415b58f1", null ],
-    [ "operator_color", "classhal_1_1_python_qss_adapter.html#a41f505071fa354698731d206cefd9646", null ],
-    [ "selfColor", "classhal_1_1_python_qss_adapter.html#a0b712dfe4fdac1ccf12cf285242c015a", null ],
-    [ "singleQuotedStringColor", "classhal_1_1_python_qss_adapter.html#a5ccb6fd90f65b9059c820071350ca464", null ]
+    [ "mSingleQuotedStringFormat", "classhal_1_1_python_qss_adapter.html#a985d2f41ad36d7c21f9e196b40a5cbf8", null ]
 ];

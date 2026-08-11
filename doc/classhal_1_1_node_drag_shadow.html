@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -96,7 +98,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_node_drag_shadow.html',''
 <p>An item that is drawn when a node is dragged through the scene.  
  <a href="classhal_1_1_node_drag_shadow.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="node__drag__shadow_8h_source.html">node_drag_shadow.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="node__drag__shadow_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/utility_items/node_drag_shadow.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::NodeDragShadow:</div>
 <div class="dyncontent">
@@ -236,7 +238,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:setSelected inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#acceptDrops">acceptDrops</a> () const const</td></tr>
 <tr class="separator:acceptDrops inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptDrops">setAcceptDrops</a> (bool <a class="el" href="_apache_01_license_8txt.html#a99e0c7c6bd1082fe4cf97f0912e847d7">on</a>)</td></tr>
+<tr class="memitem:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptDrops">setAcceptDrops</a> (bool on)</td></tr>
 <tr class="separator:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:opacity inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#opacity">opacity</a> () const const</td></tr>
 <tr class="separator:opacity inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -360,7 +362,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:setTransformations inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:transformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#transformOriginPoint">transformOriginPoint</a> () const const</td></tr>
 <tr class="separator:transformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint">setTransformOriginPoint</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;origin)</td></tr>
+<tr class="memitem:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint">setTransformOriginPoint</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>)</td></tr>
 <tr class="separator:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:setTransformOriginPoint-1 inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint-1">setTransformOriginPoint</a> (qreal <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#x">x</a>, qreal <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#y">y</a>)</td></tr>
 <tr class="separator:setTransformOriginPoint-1 inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -536,7 +538,7 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a85231cf0a75c0475da2c636b5899cc9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">paint</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, const <a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *<a class="el" href="plugins_2liberty__parser_2_c_make_lists_8txt.html#a0b15f71f691b5d99bcd0267d8e190d1a">option</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget=nullptr) override</td></tr>
+<tr class="memitem:a85231cf0a75c0475da2c636b5899cc9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">paint</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, const <a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *option, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget=nullptr) override</td></tr>
 <tr class="separator:a85231cf0a75c0475da2c636b5899cc9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6691e533a255ad3797e0649ea1c32fa3"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">boundingRect</a> () const override</td></tr>
 <tr class="separator:a6691e533a255ad3797e0649ea1c32fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -900,7 +902,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="node__drag__shadow_8cpp_source.html#l00092">92</a> of file <a class="el" href="node__drag__shadow_8cpp_source.html">node_drag_shadow.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#drawRect">QPainter::drawRect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">QPainter::fillRect()</a>, <a class="el" href="plugins_2gui_2_c_make_lists_8txt_source.html#l00001">option()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpen.html#setColor">QPen::setColor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">QPainter::setPen()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#drawRect">QPainter::drawRect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">QPainter::fillRect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpen.html#setColor">QPen::setColor()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">QPainter::setPen()</a>.</p>
 
 </div>
 </div>
@@ -1037,8 +1039,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/utility_items/<a class="el" href="node__drag__shadow_8h_source.html">node_drag_shadow.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/graph_widget/items/utility_items/<a class="el" href="node__drag__shadow_8cpp_source.html">node_drag_shadow.cpp</a></li>
+<li>plugins/gui/include/gui/graph_widget/items/utility_items/<a class="el" href="node__drag__shadow_8h_source.html">node_drag_shadow.h</a></li>
+<li>plugins/gui/src/graph_widget/items/utility_items/<a class="el" href="node__drag__shadow_8cpp_source.html">node_drag_shadow.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1046,7 +1048,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_node_drag_shadow.html">NodeDragShadow</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

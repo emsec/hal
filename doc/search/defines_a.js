@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['netlist_5fapi_41392',['NETLIST_API',['../arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_linux.h'],['../arch__mac_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_mac.h'],['../arch__win_8h.html#a3541b40303f35100314d8bb7efd18371',1,'NETLIST_API():&#160;arch_win.h']]],
-  ['not_5fexported_41393',['NOT_EXPORTED',['../defines_8h.html#a7a18783e5822ba5ea364d35854897085',1,'defines.h']]]
+  ['max_5fchannel_5fentires_44197',['MAX_CHANNEL_ENTIRES',['../channel__item_8cpp.html#adb305243e2213b319240e3f98afd7142',1,'channel_item.cpp']]],
+  ['max_5ftemp_5fchannels_44198',['MAX_TEMP_CHANNELS',['../channel__model_8cpp.html#a405a1573a8f433b0df87f28e4cfd0401',1,'channel_model.cpp']]],
+  ['measure_5fblock_5ftime_44199',['measure_block_time',['../timing__utils_8h.html#a3660b31540d5b2f2fb7f3b750aaf3549',1,'measure_block_time():&#160;timing_utils.h'],['../netlist__simulator_8cpp.html#a3660b31540d5b2f2fb7f3b750aaf3549',1,'measure_block_time():&#160;netlist_simulator.cpp']]],
+  ['merge_5f_44200',['MERGE_',['../timing__utils_8h.html#a5e0ed544eb8b857620dfc3b912710fb8',1,'timing_utils.h']]]
 ];

@@ -58,5 +58,7 @@ var dir_6b8756a038d2bd8b7f4f32095327c07b =
     [ "doxy_groups.h", "plugins_2gui_2include_2gui_2doxy__groups_8h.html", null ],
     [ "gui_def.h", "gui__def_8h.html", "gui__def_8h" ],
     [ "gui_globals.h", "gui__globals_8h.html", "gui__globals_8h" ],
-    [ "plugin_gui.h", "plugin__gui_8h.html", "plugin__gui_8h" ]
+    [ "plugin_gui.h", "plugin__gui_8h.html", [
+      [ "CliExtensionsGui", "classhal_1_1_cli_extensions_gui.html", "classhal_1_1_cli_extensions_gui" ]
+    ] ]
 ];

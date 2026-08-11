@@ -11,9 +11,5 @@ var classhal_1_1_comment_dialog =
     [ "setGreenColor", "classhal_1_1_comment_dialog.html#a442ee0c3cedea9fd30640af7f7500b84", null ],
     [ "setRedColor", "classhal_1_1_comment_dialog.html#af5f49bdc8c75dc96a9ffec1030d1cd92", null ],
     [ "setYellowColor", "classhal_1_1_comment_dialog.html#a2ca93f06c1dcd5292e1576bf9e5a1b2f", null ],
-    [ "yellowColor", "classhal_1_1_comment_dialog.html#ac47b88a015cd4b566399b242de2a8aca", null ],
-    [ "defaultColor", "classhal_1_1_comment_dialog.html#ad8fa287606d599f9907c4b3f899aa9ad", null ],
-    [ "greenColor", "classhal_1_1_comment_dialog.html#a1070c10067626f942ae4ce7dbb99c578", null ],
-    [ "redColor", "classhal_1_1_comment_dialog.html#a1612aa369de6bce9e49861563179bfcd", null ],
-    [ "yellowColor", "classhal_1_1_comment_dialog.html#abcf9a266df7ecaf63b5c01157642a98f", null ]
+    [ "yellowColor", "classhal_1_1_comment_dialog.html#ac47b88a015cd4b566399b242de2a8aca", null ]
 ];

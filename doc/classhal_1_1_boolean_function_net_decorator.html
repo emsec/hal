@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_boolean_function_net_deco
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="boolean__function__net__decorator_8h_source.html">boolean_function_net_decorator.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="boolean__function__net__decorator_8h_source.html">hal_core/netlist/decorators/boolean_function_net_decorator.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::BooleanFunctionNetDecorator:</div>
 <div class="dyncontent">
@@ -116,9 +118,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a184623934c0570c3c9443640bac90b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f13a3008073fc252c5f4bfd3f6c396"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a82f13a3008073fc252c5f4bfd3f6c396">get_net_from</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::string &amp;var_name)</td></tr>
 <tr class="separator:a82f13a3008073fc252c5f4bfd3f6c396"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a09460ce6c2af3c0026033b07f3181b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">get_net_id_from</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;var)</td></tr>
+<tr class="memitem:a1a09460ce6c2af3c0026033b07f3181b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a1a09460ce6c2af3c0026033b07f3181b">get_net_id_from</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;var)</td></tr>
 <tr class="separator:a1a09460ce6c2af3c0026033b07f3181b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cdeeb518c6358b237e3183be89ac10b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a3cdeeb518c6358b237e3183be89ac10b">get_net_id_from</a> (const std::string &amp;var_name)</td></tr>
+<tr class="memitem:a3cdeeb518c6358b237e3183be89ac10b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html#a3cdeeb518c6358b237e3183be89ac10b">get_net_id_from</a> (const std::string &amp;var_name)</td></tr>
 <tr class="separator:a3cdeeb518c6358b237e3183be89ac10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -175,7 +177,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">get_boolean_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00251">hal::BooleanFunction::Var()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00406">hal::solve_fsm::solve_fsm()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, <a class="el" href="verified__candidate_8cpp_source.html#l00196">hal::module_identification::VerifiedCandidate::get_merged_word_level_operation()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00406">hal::solve_fsm::solve_fsm()</a>.</p>
 
 </div>
 </div>
@@ -200,7 +202,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="reference">References <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00222">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00013">get_boolean_variable()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00310">hal::solve_fsm::solve_fsm_brute_force()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l01421">hal::module_identification::FunctionalCandidate::early_abort()</a>, <a class="el" href="bitorder__propagation_8cpp_source.html#l01485">hal::bitorder_propagation::export_bitorder_propagation_information()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00222">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00013">get_boolean_variable()</a>, <a class="el" href="sbox__lookup_8cpp_source.html#l00291">hal::hawkeye::identify_sbox()</a>, and <a class="el" href="solve__fsm_8cpp_source.html#l00310">hal::solve_fsm::solve_fsm_brute_force()</a>.</p>
 
 </div>
 </div>
@@ -249,9 +251,9 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">44</a> of file <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00765">hal::BooleanFunction::get_variable_name()</a>, <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00024">hal::BooleanFunction::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00765">hal::BooleanFunction::get_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00024">hal::BooleanFunction::to_string()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00101">hal::BooleanFunctionDecorator::substitute_module_pins()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00016">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">hal::boolean_function_net_decorator_init()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l00144">hal::module_identification::FunctionalCandidate::create_sign_extension_variants()</a>, <a class="el" href="create__functional__candidates_8cpp_source.html#l00105">hal::module_identification::FunctionalCandidate::find_control_signals()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00101">hal::BooleanFunctionDecorator::substitute_module_pins()</a>, and <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00016">hal::BooleanFunctionDecorator::substitute_power_ground_nets()</a>.</p>
 
 </div>
 </div>
@@ -300,7 +302,7 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00023">23</a> of file <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -314,7 +316,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::BooleanFunctionNetDecorator::get_net_id_from </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::BooleanFunctionNetDecorator::get_net_id_from </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
           <td class="paramname"><em>var</em></td><td>)</td>
@@ -338,7 +340,9 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00084">84</a> of file <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00765">hal::BooleanFunction::get_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00024">hal::BooleanFunction::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00765">hal::BooleanFunction::get_variable_name()</a>, and <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00024">hal::BooleanFunction::to_string()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="z3__utils_8cpp_source.html#l00525">hal::z3_utils::extract_net_ids()</a>.</p>
 
 </div>
 </div>
@@ -352,7 +356,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::BooleanFunctionNetDecorator::get_net_id_from </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::BooleanFunctionNetDecorator::get_net_id_from </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>var_name</em></td><td>)</td>
@@ -376,13 +380,13 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00063">63</a> of file <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/decorators/<a class="el" href="boolean__function__net__decorator_8h_source.html">boolean_function_net_decorator.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/decorators/<a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a></li>
+<li>include/hal_core/netlist/decorators/<a class="el" href="boolean__function__net__decorator_8h_source.html">boolean_function_net_decorator.h</a></li>
+<li>src/netlist/decorators/<a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html">boolean_function_net_decorator.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -390,7 +394,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_boolean_function_net_decorator.html">BooleanFunctionNetDecorator</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

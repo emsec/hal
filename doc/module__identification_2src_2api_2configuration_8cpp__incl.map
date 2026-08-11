@@ -1,0 +1,10 @@
+<map id="plugins/module_identification/src/api/configuration.cpp" name="plugins/module_identification/src/api/configuration.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="344,5,559,47"/>
+<area shape="rect" id="node2" href="$module__identification_2include_2module__identification_2api_2configuration_8h.html" title="This file contains the struct Configuration for module identification analysis." alt="" coords="370,95,533,136"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,199,145,225"/>
+<area shape="rect" id="node4" href="$candidate__types_8h.html" title="This file contains the enumeration and constants for the candidate types used in the module identific..." alt="" coords="169,191,355,233"/>
+<area shape="rect" id="node5" title=" " alt="" coords="296,288,359,315"/>
+<area shape="rect" id="node6" href="$multithreading__types_8h.html" title="This file contains the enum class for multithreading strategies in the module identification process." alt="" coords="430,184,593,240"/>
+<area shape="rect" id="node7" title=" " alt="" coords="617,199,659,225"/>
+<area shape="rect" id="node8" title=" " alt="" coords="683,199,747,225"/>
+</map>

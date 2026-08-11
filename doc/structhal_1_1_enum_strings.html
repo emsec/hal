@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('structhal_1_1_enum_strings.html',''); 
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="enums_8h_source.html">enums.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="enums_8h_source.html">hal_core/utilities/enums.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::EnumStrings&lt; T, typename &gt;:</div>
 <div class="dyncontent">
@@ -103,6 +105,34 @@ Collaboration diagram for hal::EnumStrings&lt; T, typename &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SMT::SolverType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aac4d18e0cde9bf64b399e9085e4737d7">data</a></td></tr>
+<tr class="separator:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b5a14575a72e7ffe9c29749a829183"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0">SMT::SolverResultType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a53b5a14575a72e7ffe9c29749a829183">data</a></td></tr>
+<tr class="separator:a53b5a14575a72e7ffe9c29749a829183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a870dd48f045a6eafdacb1599fa0117ae"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a870dd48f045a6eafdacb1599fa0117ae">data</a></td></tr>
+<tr class="separator:a870dd48f045a6eafdacb1599fa0117ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44cbc4bfbd928916eea91a0a5a0b3225"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accaf">NetlistEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a44cbc4bfbd928916eea91a0a5a0b3225">data</a></td></tr>
+<tr class="separator:a44cbc4bfbd928916eea91a0a5a0b3225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5be59578433d5f7d604d8479495ff06d"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fb">GateEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a5be59578433d5f7d604d8479495ff06d">data</a></td></tr>
+<tr class="separator:a5be59578433d5f7d604d8479495ff06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc987b7b9297a600b55cfe161b9c850b"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579df">NetEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#afc987b7b9297a600b55cfe161b9c850b">data</a></td></tr>
+<tr class="separator:afc987b7b9297a600b55cfe161b9c850b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30989f1c98a37debd75c570fbe8a30fa"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53f">ModuleEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a30989f1c98a37debd75c570fbe8a30fa">data</a></td></tr>
+<tr class="separator:a30989f1c98a37debd75c570fbe8a30fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16c8db0028329267826cc3209eda4c30"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8">GroupingEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a16c8db0028329267826cc3209eda4c30">data</a></td></tr>
+<tr class="separator:a16c8db0028329267826cc3209eda4c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add991d59bc7851695be21452f5b639fb"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83">AsyncSetResetBehavior</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#add991d59bc7851695be21452f5b639fb">data</a></td></tr>
+<tr class="separator:add991d59bc7851695be21452f5b639fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d0777845c66606744b9982e94103cba"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a8d0777845c66606744b9982e94103cba">data</a></td></tr>
+<tr class="separator:a8d0777845c66606744b9982e94103cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9182fc77a55b52db0407961d739e1bfc"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a9182fc77a55b52db0407961d739e1bfc">data</a></td></tr>
+<tr class="separator:a9182fc77a55b52db0407961d739e1bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84574e17c2a64a2ef221930cd43c036"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250">PinEvent</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#ac84574e17c2a64a2ef221930cd43c036">data</a></td></tr>
+<tr class="separator:ac84574e17c2a64a2ef221930cd43c036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28901a293a7c1966a2e8d53f7af02f5e"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e">data</a></td></tr>
+<tr class="separator:a28901a293a7c1966a2e8d53f7af02f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee875702a9d377079d6c923a3eae8386"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">GateTypeComponent::ComponentType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386">data</a></td></tr>
+<tr class="separator:aee875702a9d377079d6c923a3eae8386"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SMT::SolverType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aac4d18e0cde9bf64b399e9085e4737d7">data</a></td></tr>
 <tr class="separator:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac92f0713f9046f000de96f18ac431f3"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SMT::SolverCall</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aac92f0713f9046f000de96f18ac431f3">data</a></td></tr>
@@ -137,34 +167,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9eca2860a581204c06dcdd242e977962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eca2860a581204c06dcdd242e977962"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">graph_algorithm::NetlistGraph::Direction</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a9eca2860a581204c06dcdd242e977962">data</a></td></tr>
 <tr class="separator:a9eca2860a581204c06dcdd242e977962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SMT::SolverType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aac4d18e0cde9bf64b399e9085e4737d7">data</a></td></tr>
-<tr class="separator:aac4d18e0cde9bf64b399e9085e4737d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53b5a14575a72e7ffe9c29749a829183"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0">SMT::SolverResultType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a53b5a14575a72e7ffe9c29749a829183">data</a></td></tr>
-<tr class="separator:a53b5a14575a72e7ffe9c29749a829183"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a870dd48f045a6eafdacb1599fa0117ae"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fb">BooleanFunction::Value</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a870dd48f045a6eafdacb1599fa0117ae">data</a></td></tr>
-<tr class="separator:a870dd48f045a6eafdacb1599fa0117ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44cbc4bfbd928916eea91a0a5a0b3225"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_netlist_event.html#ac84fda7a0788fbcc3bb1ca1f1c6accaf">NetlistEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a44cbc4bfbd928916eea91a0a5a0b3225">data</a></td></tr>
-<tr class="separator:a44cbc4bfbd928916eea91a0a5a0b3225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5be59578433d5f7d604d8479495ff06d"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_gate_event.html#afdc7242126c9534b4ec92e285983c6fb">GateEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a5be59578433d5f7d604d8479495ff06d">data</a></td></tr>
-<tr class="separator:a5be59578433d5f7d604d8479495ff06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc987b7b9297a600b55cfe161b9c850b"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_net_event.html#a3ca22a15fd2d33990c22eadb808579df">NetEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#afc987b7b9297a600b55cfe161b9c850b">data</a></td></tr>
-<tr class="separator:afc987b7b9297a600b55cfe161b9c850b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30989f1c98a37debd75c570fbe8a30fa"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53f">ModuleEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a30989f1c98a37debd75c570fbe8a30fa">data</a></td></tr>
-<tr class="separator:a30989f1c98a37debd75c570fbe8a30fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16c8db0028329267826cc3209eda4c30"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8">GroupingEvent::event</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a16c8db0028329267826cc3209eda4c30">data</a></td></tr>
-<tr class="separator:a16c8db0028329267826cc3209eda4c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add991d59bc7851695be21452f5b639fb"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83">AsyncSetResetBehavior</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#add991d59bc7851695be21452f5b639fb">data</a></td></tr>
-<tr class="separator:add991d59bc7851695be21452f5b639fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d0777845c66606744b9982e94103cba"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a8d0777845c66606744b9982e94103cba">data</a></td></tr>
-<tr class="separator:a8d0777845c66606744b9982e94103cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9182fc77a55b52db0407961d739e1bfc"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec">PinDirection</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a9182fc77a55b52db0407961d739e1bfc">data</a></td></tr>
-<tr class="separator:a9182fc77a55b52db0407961d739e1bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84574e17c2a64a2ef221930cd43c036"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250">PinEvent</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#ac84574e17c2a64a2ef221930cd43c036">data</a></td></tr>
-<tr class="separator:ac84574e17c2a64a2ef221930cd43c036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28901a293a7c1966a2e8d53f7af02f5e"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a28901a293a7c1966a2e8d53f7af02f5e">data</a></td></tr>
-<tr class="separator:a28901a293a7c1966a2e8d53f7af02f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee875702a9d377079d6c923a3eae8386"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">GateTypeComponent::ComponentType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#aee875702a9d377079d6c923a3eae8386">data</a></td></tr>
-<tr class="separator:aee875702a9d377079d6c923a3eae8386"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67e3e863142785b878fafa7ac6bd22f3"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a67e3e863142785b878fafa7ac6bd22f3">data</a></td></tr>
+<tr class="separator:a67e3e863142785b878fafa7ac6bd22f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8737416f990ff491fe59c4891648ffa5"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a8737416f990ff491fe59c4891648ffa5">data</a></td></tr>
+<tr class="separator:a8737416f990ff491fe59c4891648ffa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67e3e863142785b878fafa7ac6bd22f3"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a67e3e863142785b878fafa7ac6bd22f3">data</a></td></tr>
+<tr class="separator:a67e3e863142785b878fafa7ac6bd22f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8737416f990ff491fe59c4891648ffa5"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a8737416f990ff491fe59c4891648ffa5">data</a></td></tr>
+<tr class="separator:a8737416f990ff491fe59c4891648ffa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57b089656859bffdfd62efb57d4bd66b"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddc">module_identification::CandidateType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a57b089656859bffdfd62efb57d4bd66b">data</a></td></tr>
+<tr class="separator:a57b089656859bffdfd62efb57d4bd66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3ea54e3e7a2f752ae4400e02d87629"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a7f3ea54e3e7a2f752ae4400e02d87629">data</a></td></tr>
+<tr class="separator:a7f3ea54e3e7a2f752ae4400e02d87629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3f0dbec8057930a9d153737f5bbf377"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#ad3f0dbec8057930a9d153737f5bbf377">data</a></td></tr>
+<tr class="separator:ad3f0dbec8057930a9d153737f5bbf377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3ea54e3e7a2f752ae4400e02d87629"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#a7f3ea54e3e7a2f752ae4400e02d87629">data</a></td></tr>
+<tr class="separator:a7f3ea54e3e7a2f752ae4400e02d87629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3f0dbec8057930a9d153737f5bbf377"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1_enum_strings.html#ad3f0dbec8057930a9d153737f5bbf377">data</a></td></tr>
+<tr class="separator:ad3f0dbec8057930a9d153737f5bbf377"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -175,12 +195,12 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;::type&gt;<br />
 struct hal::EnumStrings&lt; T, typename &gt;</h3>
 
-<p>Container storing the string description of an enum. Must be declared for every enum to be supported. </p>
+<p>Holds the string representations of the values of an enum type. Specialize this template for an enum to make it usable with <code>enum_to_string</code> and <code>enum_from_string</code>. Must be declared for every enum. </p>
 
-<p class="definition">Definition at line <a class="el" href="enums_8h_source.html#l00040">40</a> of file <a class="el" href="enums_8h_source.html">enums.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enums_8h_source.html#l00041">41</a> of file <a class="el" href="enums_8h_source.html">enums.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a870dd48f045a6eafdacb1599fa0117ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a870dd48f045a6eafdacb1599fa0117ae">&#9670;&nbsp;</a></span>data() <span class="overload">[1/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a870dd48f045a6eafdacb1599fa0117ae">&#9670;&nbsp;</a></span>data() <span class="overload">[1/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +216,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="aac4d18e0cde9bf64b399e9085e4737d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac4d18e0cde9bf64b399e9085e4737d7">&#9670;&nbsp;</a></span>data() <span class="overload">[2/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aac4d18e0cde9bf64b399e9085e4737d7">&#9670;&nbsp;</a></span>data() <span class="overload">[2/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,12 +227,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00384">384</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00387">387</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
 <a id="a53b5a14575a72e7ffe9c29749a829183"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53b5a14575a72e7ffe9c29749a829183">&#9670;&nbsp;</a></span>data() <span class="overload">[3/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b5a14575a72e7ffe9c29749a829183">&#9670;&nbsp;</a></span>data() <span class="overload">[3/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -223,12 +243,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00387">387</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00390">390</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
 <a id="a44cbc4bfbd928916eea91a0a5a0b3225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44cbc4bfbd928916eea91a0a5a0b3225">&#9670;&nbsp;</a></span>data() <span class="overload">[4/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a44cbc4bfbd928916eea91a0a5a0b3225">&#9670;&nbsp;</a></span>data() <span class="overload">[4/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,12 +259,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00063">63</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00066">66</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
 <a id="a5be59578433d5f7d604d8479495ff06d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5be59578433d5f7d604d8479495ff06d">&#9670;&nbsp;</a></span>data() <span class="overload">[5/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5be59578433d5f7d604d8479495ff06d">&#9670;&nbsp;</a></span>data() <span class="overload">[5/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,12 +275,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00079">79</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00085">85</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
 <a id="afc987b7b9297a600b55cfe161b9c850b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc987b7b9297a600b55cfe161b9c850b">&#9670;&nbsp;</a></span>data() <span class="overload">[6/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afc987b7b9297a600b55cfe161b9c850b">&#9670;&nbsp;</a></span>data() <span class="overload">[6/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -271,12 +291,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00097">97</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00106">106</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
 <a id="a30989f1c98a37debd75c570fbe8a30fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30989f1c98a37debd75c570fbe8a30fa">&#9670;&nbsp;</a></span>data() <span class="overload">[7/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a30989f1c98a37debd75c570fbe8a30fa">&#9670;&nbsp;</a></span>data() <span class="overload">[7/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,12 +307,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00122">122</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00134">134</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
 <a id="a16c8db0028329267826cc3209eda4c30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16c8db0028329267826cc3209eda4c30">&#9670;&nbsp;</a></span>data() <span class="overload">[8/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a16c8db0028329267826cc3209eda4c30">&#9670;&nbsp;</a></span>data() <span class="overload">[8/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -303,12 +323,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00143">143</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="event__handler_8h_source.html#l00158">158</a> of file <a class="el" href="event__handler_8h_source.html">event_handler.h</a>.</p>
 
 </div>
 </div>
 <a id="add991d59bc7851695be21452f5b639fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add991d59bc7851695be21452f5b639fb">&#9670;&nbsp;</a></span>data() <span class="overload">[9/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#add991d59bc7851695be21452f5b639fb">&#9670;&nbsp;</a></span>data() <span class="overload">[9/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -324,7 +344,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a8d0777845c66606744b9982e94103cba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d0777845c66606744b9982e94103cba">&#9670;&nbsp;</a></span>data() <span class="overload">[10/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d0777845c66606744b9982e94103cba">&#9670;&nbsp;</a></span>data() <span class="overload">[10/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -340,7 +360,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a9182fc77a55b52db0407961d739e1bfc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9182fc77a55b52db0407961d739e1bfc">&#9670;&nbsp;</a></span>data() <span class="overload">[11/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9182fc77a55b52db0407961d739e1bfc">&#9670;&nbsp;</a></span>data() <span class="overload">[11/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,7 +376,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="ac84574e17c2a64a2ef221930cd43c036"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac84574e17c2a64a2ef221930cd43c036">&#9670;&nbsp;</a></span>data() <span class="overload">[12/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84574e17c2a64a2ef221930cd43c036">&#9670;&nbsp;</a></span>data() <span class="overload">[12/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +392,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a28901a293a7c1966a2e8d53f7af02f5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28901a293a7c1966a2e8d53f7af02f5e">&#9670;&nbsp;</a></span>data() <span class="overload">[13/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a28901a293a7c1966a2e8d53f7af02f5e">&#9670;&nbsp;</a></span>data() <span class="overload">[13/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,7 +408,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="aee875702a9d377079d6c923a3eae8386"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee875702a9d377079d6c923a3eae8386">&#9670;&nbsp;</a></span>data() <span class="overload">[14/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aee875702a9d377079d6c923a3eae8386">&#9670;&nbsp;</a></span>data() <span class="overload">[14/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -404,7 +424,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a9eca2860a581204c06dcdd242e977962"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9eca2860a581204c06dcdd242e977962">&#9670;&nbsp;</a></span>data() <span class="overload">[15/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eca2860a581204c06dcdd242e977962">&#9670;&nbsp;</a></span>data() <span class="overload">[15/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -415,12 +435,12 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00397">397</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00400">400</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
 
 </div>
 </div>
 <a id="a9eca2860a581204c06dcdd242e977962"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9eca2860a581204c06dcdd242e977962">&#9670;&nbsp;</a></span>data() <span class="overload">[16/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eca2860a581204c06dcdd242e977962">&#9670;&nbsp;</a></span>data() <span class="overload">[16/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -437,8 +457,162 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 
 </div>
 </div>
+<a id="a67e3e863142785b878fafa7ac6bd22f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67e3e863142785b878fafa7ac6bd22f3">&#9670;&nbsp;</a></span>data() <span class="overload">[17/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00138">138</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+
+</div>
+</div>
+<a id="a8737416f990ff491fe59c4891648ffa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8737416f990ff491fe59c4891648ffa5">&#9670;&nbsp;</a></span>data() <span class="overload">[18/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="candidate__search_8h_source.html#l00141">141</a> of file <a class="el" href="candidate__search_8h_source.html">candidate_search.h</a>.</p>
+
+</div>
+</div>
+<a id="a67e3e863142785b878fafa7ac6bd22f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67e3e863142785b878fafa7ac6bd22f3">&#9670;&nbsp;</a></span>data() <span class="overload">[19/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4">hawkeye::DetectionConfiguration::Control</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00664">664</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a892d0ad001a9cb665acf32ca2a283164">hal::hawkeye::DetectionConfiguration::CHECK_FF</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a0ce179a75f85a32d2405a507163496b3">hal::hawkeye::DetectionConfiguration::CHECK_NETS</a>, <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4ab9a860c74b65955b371c87dcdf1e1d7b">hal::hawkeye::DetectionConfiguration::CHECK_PINS</a>, and <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a376b95438df6636fdb3adc90137b56b4a1aa0a5df002be76db44700a337b3fc21">hal::hawkeye::DetectionConfiguration::CHECK_TYPE</a>.</p>
+
+</div>
+</div>
+<a id="a8737416f990ff491fe59c4891648ffa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8737416f990ff491fe59c4891648ffa5">&#9670;&nbsp;</a></span>data() <span class="overload">[20/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75b">hawkeye::DetectionConfiguration::Components</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="candidate__search_8cpp_source.html#l00671">671</a> of file <a class="el" href="candidate__search_8cpp_source.html">candidate_search.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75ba56814936837b9404d981d6cb5236171f">hal::hawkeye::DetectionConfiguration::CHECK_SCC</a>, and <a class="el" href="structhal_1_1hawkeye_1_1_detection_configuration.html#a9e9749311c2d2215d725cf53c6bcf75bab50339a10e1de285ac99d4c3990b8693">hal::hawkeye::DetectionConfiguration::NONE</a>.</p>
+
+</div>
+</div>
+<a id="a57b089656859bffdfd62efb57d4bd66b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57b089656859bffdfd62efb57d4bd66b">&#9670;&nbsp;</a></span>data() <span class="overload">[21/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddc">module_identification::CandidateType</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddc">module_identification::CandidateType</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="module__identification_2src_2api_2configuration_8cpp_source.html#l00055">55</a> of file <a class="el" href="module__identification_2src_2api_2configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcadc4d53aa0d117d8b189b36d161af4e96">hal::module_identification::absolute</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca2b2ae8740b2b5403b5075bd7cbc6ceaa">hal::module_identification::addition</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca420dddcb965cdd0002490a2f2cfd04de">hal::module_identification::addition_offset</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcae96712af70d9de6a497237a21a3a7271">hal::module_identification::constant_multiplication</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcaf9da11abbd3f0d984feaa8a6e3ac63b7">hal::module_identification::constant_multiplication_offset</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca886bb73b3156b0aa24aac99d2de0b238">hal::module_identification::counter</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca465289687a70db7aa7217cc240c29f0f">hal::module_identification::equal</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca77932225fb35fc4b74dc8fabf0992dac">hal::module_identification::less_equal</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca7875e44acb1bebecb46c929deb43cef4">hal::module_identification::less_than</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca1d770934d44de09b0d24f04fd01708ba">hal::module_identification::mixed</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca5a12847d9b6e756c1ed20d8e70b880d6">hal::module_identification::negation</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca334c4a4c42fdb79d7ebc3e73b517e6f8">hal::module_identification::none</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca3c676290f42b9ae6142dfa1add799058">hal::module_identification::signed_less_equal</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcae9cd7028f29a04ad654d85033433d9ee">hal::module_identification::signed_less_than</a>, <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddca8dbc6b791baca47628ecf531ca019a14">hal::module_identification::subtraction</a>, and <a class="el" href="namespacehal_1_1module__identification.html#ab76dbbd69c5ec25fadc76e4056f96ddcace54b53f2690fd51765ab1b610304413">hal::module_identification::value_check</a>.</p>
+
+</div>
+</div>
+<a id="a7f3ea54e3e7a2f752ae4400e02d87629"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f3ea54e3e7a2f752ae4400e02d87629">&#9670;&nbsp;</a></span>data() <span class="overload">[22/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00101">101</a> of file <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html">types.h</a>.</p>
+
+</div>
+</div>
+<a id="ad3f0dbec8057930a9d153737f5bbf377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f0dbec8057930a9d153737f5bbf377">&#9670;&nbsp;</a></span>data() <span class="overload">[23/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00104">104</a> of file <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html">types.h</a>.</p>
+
+</div>
+</div>
+<a id="a7f3ea54e3e7a2f752ae4400e02d87629"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f3ea54e3e7a2f752ae4400e02d87629">&#9670;&nbsp;</a></span>data() <span class="overload">[24/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#aa862b06513e0bd183a51129d3db87e51">xilinx_toolbox::BELType</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2xilinx__toolbox_2src_2types_8cpp_source.html#l00008">8</a> of file <a class="el" href="plugins_2xilinx__toolbox_2src_2types_8cpp_source.html">types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00040">hal::xilinx_toolbox::A5FF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00025">hal::xilinx_toolbox::A5LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00021">hal::xilinx_toolbox::A6LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00036">hal::xilinx_toolbox::AFF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00041">hal::xilinx_toolbox::B5FF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00026">hal::xilinx_toolbox::B5LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00022">hal::xilinx_toolbox::B6LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00037">hal::xilinx_toolbox::BFF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00045">hal::xilinx_toolbox::BUFG</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00042">hal::xilinx_toolbox::C5FF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00027">hal::xilinx_toolbox::C5LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00023">hal::xilinx_toolbox::C6LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00034">hal::xilinx_toolbox::CARRY4</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00038">hal::xilinx_toolbox::CFF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00043">hal::xilinx_toolbox::D5FF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00028">hal::xilinx_toolbox::D5LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00024">hal::xilinx_toolbox::D6LUT</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00039">hal::xilinx_toolbox::DFF</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00030">hal::xilinx_toolbox::F7AMUX</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00031">hal::xilinx_toolbox::F7BMUX</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00032">hal::xilinx_toolbox::F8MUX</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00046">hal::xilinx_toolbox::INBUF_EN</a>, and <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00047">hal::xilinx_toolbox::OUTBUF</a>.</p>
+
+</div>
+</div>
+<a id="ad3f0dbec8057930a9d153737f5bbf377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f0dbec8057930a9d153737f5bbf377">&#9670;&nbsp;</a></span>data() <span class="overload">[25/40]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a>, std::string &gt; <a class="el" href="structhal_1_1_enum_strings.html">hal::EnumStrings</a>&lt; <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a0e338163becdb40d57a89352258b4475">xilinx_toolbox::LOCType</a> &gt;::data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2xilinx__toolbox_2src_2types_8cpp_source.html#l00035">35</a> of file <a class="el" href="plugins_2xilinx__toolbox_2src_2types_8cpp_source.html">types.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00058">hal::xilinx_toolbox::BUFGCTRL</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00060">hal::xilinx_toolbox::PIN</a>, <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00057">hal::xilinx_toolbox::RAMB36</a>, and <a class="el" href="plugins_2xilinx__toolbox_2include_2xilinx__toolbox_2types_8h_source.html#l00056">hal::xilinx_toolbox::SLICE</a>.</p>
+
+</div>
+</div>
 <a id="a870dd48f045a6eafdacb1599fa0117ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a870dd48f045a6eafdacb1599fa0117ae">&#9670;&nbsp;</a></span>data() <span class="overload">[17/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a870dd48f045a6eafdacb1599fa0117ae">&#9670;&nbsp;</a></span>data() <span class="overload">[26/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -454,7 +628,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="aac4d18e0cde9bf64b399e9085e4737d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac4d18e0cde9bf64b399e9085e4737d7">&#9670;&nbsp;</a></span>data() <span class="overload">[18/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aac4d18e0cde9bf64b399e9085e4737d7">&#9670;&nbsp;</a></span>data() <span class="overload">[27/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -465,14 +639,14 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00353">353</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00353">353</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa98254531be138d1bf820b43b303a64d4">hal::SMT::Bitwuzla</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aab22590d74202761c89aa802522a21110">hal::SMT::Boolector</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4aa70e31ac6776e733109977f8afdd234ed">hal::SMT::Z3</a>.</p>
 
 </div>
 </div>
 <a id="aac92f0713f9046f000de96f18ac431f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac92f0713f9046f000de96f18ac431f3">&#9670;&nbsp;</a></span>data() <span class="overload">[19/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aac92f0713f9046f000de96f18ac431f3">&#9670;&nbsp;</a></span>data() <span class="overload">[28/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -483,14 +657,14 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00359">359</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00359">359</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6a6ce976e8f061b2b5cfe4d0c50c3405dd">hal::SMT::Binary</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6a4d70254b3a8e2bc38b6147fa6ee813be">hal::SMT::Library</a>.</p>
 
 </div>
 </div>
 <a id="a53b5a14575a72e7ffe9c29749a829183"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53b5a14575a72e7ffe9c29749a829183">&#9670;&nbsp;</a></span>data() <span class="overload">[20/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a53b5a14575a72e7ffe9c29749a829183">&#9670;&nbsp;</a></span>data() <span class="overload">[29/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,14 +675,14 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00362">362</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00362">362</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a13c7d2d737f81f7bf89aed9fbcd0ad55">hal::SMT::Sat</a>, <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a88183b946cc5f0e8c96b2e66e1c74a7e">hal::SMT::Unknown</a>, and <a class="el" href="namespacehal_1_1_s_m_t.html#a72d121f9b521b20e4b6c3d1fc6bbe7b0a6114aae03b5a0bec62af95481167e1f6">hal::SMT::UnSat</a>.</p>
 
 </div>
 </div>
 <a id="a44cbc4bfbd928916eea91a0a5a0b3225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44cbc4bfbd928916eea91a0a5a0b3225">&#9670;&nbsp;</a></span>data() <span class="overload">[21/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a44cbc4bfbd928916eea91a0a5a0b3225">&#9670;&nbsp;</a></span>data() <span class="overload">[30/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -526,7 +700,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a5be59578433d5f7d604d8479495ff06d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5be59578433d5f7d604d8479495ff06d">&#9670;&nbsp;</a></span>data() <span class="overload">[22/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5be59578433d5f7d604d8479495ff06d">&#9670;&nbsp;</a></span>data() <span class="overload">[31/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -544,7 +718,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="afc987b7b9297a600b55cfe161b9c850b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc987b7b9297a600b55cfe161b9c850b">&#9670;&nbsp;</a></span>data() <span class="overload">[23/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afc987b7b9297a600b55cfe161b9c850b">&#9670;&nbsp;</a></span>data() <span class="overload">[32/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -562,7 +736,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a30989f1c98a37debd75c570fbe8a30fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30989f1c98a37debd75c570fbe8a30fa">&#9670;&nbsp;</a></span>data() <span class="overload">[24/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a30989f1c98a37debd75c570fbe8a30fa">&#9670;&nbsp;</a></span>data() <span class="overload">[33/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -580,7 +754,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a16c8db0028329267826cc3209eda4c30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16c8db0028329267826cc3209eda4c30">&#9670;&nbsp;</a></span>data() <span class="overload">[25/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a16c8db0028329267826cc3209eda4c30">&#9670;&nbsp;</a></span>data() <span class="overload">[34/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -598,7 +772,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="add991d59bc7851695be21452f5b639fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add991d59bc7851695be21452f5b639fb">&#9670;&nbsp;</a></span>data() <span class="overload">[26/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#add991d59bc7851695be21452f5b639fb">&#9670;&nbsp;</a></span>data() <span class="overload">[35/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -616,7 +790,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a8d0777845c66606744b9982e94103cba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d0777845c66606744b9982e94103cba">&#9670;&nbsp;</a></span>data() <span class="overload">[27/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d0777845c66606744b9982e94103cba">&#9670;&nbsp;</a></span>data() <span class="overload">[36/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -634,7 +808,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a9182fc77a55b52db0407961d739e1bfc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9182fc77a55b52db0407961d739e1bfc">&#9670;&nbsp;</a></span>data() <span class="overload">[28/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9182fc77a55b52db0407961d739e1bfc">&#9670;&nbsp;</a></span>data() <span class="overload">[37/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -652,7 +826,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="ac84574e17c2a64a2ef221930cd43c036"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac84574e17c2a64a2ef221930cd43c036">&#9670;&nbsp;</a></span>data() <span class="overload">[29/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84574e17c2a64a2ef221930cd43c036">&#9670;&nbsp;</a></span>data() <span class="overload">[38/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -670,7 +844,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="a28901a293a7c1966a2e8d53f7af02f5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28901a293a7c1966a2e8d53f7af02f5e">&#9670;&nbsp;</a></span>data() <span class="overload">[30/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a28901a293a7c1966a2e8d53f7af02f5e">&#9670;&nbsp;</a></span>data() <span class="overload">[39/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -688,7 +862,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 </div>
 </div>
 <a id="aee875702a9d377079d6c923a3eae8386"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee875702a9d377079d6c923a3eae8386">&#9670;&nbsp;</a></span>data() <span class="overload">[31/31]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aee875702a9d377079d6c923a3eae8386">&#9670;&nbsp;</a></span>data() <span class="overload">[40/40]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -728,12 +902,12 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="enums_8h_source.html#l00042">42</a> of file <a class="el" href="enums_8h_source.html">enums.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="enums_8h_source.html#l00043">43</a> of file <a class="el" href="enums_8h_source.html">enums.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="enums_8h_source.html">enums.h</a></li>
+<li>include/hal_core/utilities/<a class="el" href="enums_8h_source.html">enums.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -741,7 +915,7 @@ template&lt;typename T , typename  = typename std::enable_if&lt;std::is_enum&lt;
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="structhal_1_1_enum_strings.html">EnumStrings</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

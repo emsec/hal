@@ -43,22 +43,7 @@ var group__utility__widgets_context =
       [ "setSearchIconPath", "classhal_1_1_context_manager_widget.html#abfcaa5b5894c47e93512cadc39b4aed0", null ],
       [ "setSearchIconStyle", "classhal_1_1_context_manager_widget.html#a102cc40249df51849fcd0417a0d26389", null ],
       [ "setupToolbar", "classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024", null ],
-      [ "updateSearchIcon", "classhal_1_1_context_manager_widget.html#ad697005c27e0e8de830815e20779dbc0", null ],
-      [ "deleteIconPath", "classhal_1_1_context_manager_widget.html#a6ca3b122b7eeb780f2e022356d0ebdb6", null ],
-      [ "deleteIconStyle", "classhal_1_1_context_manager_widget.html#a66d5dcc3804bd97be4c639563be5344a", null ],
-      [ "disabledIconStyle", "classhal_1_1_context_manager_widget.html#a8ccb134ea0b8dfe8e06ab0c5b19232ee", null ],
-      [ "duplicateIconPath", "classhal_1_1_context_manager_widget.html#ad458cd90596e426b2753b31187ad68fc", null ],
-      [ "duplicateIconStyle", "classhal_1_1_context_manager_widget.html#a8587904f9354f77549088e11cf509d8d", null ],
-      [ "newDirIconPath", "classhal_1_1_context_manager_widget.html#ae5673e4059a900322f4da89daefd98cd", null ],
-      [ "newViewIconPath", "classhal_1_1_context_manager_widget.html#a9de803568d5fbd5cd8b62a7db9805e81", null ],
-      [ "newViewIconStyle", "classhal_1_1_context_manager_widget.html#a3d414fbdeab27db25c1822f11bf67867", null ],
-      [ "openIconPath", "classhal_1_1_context_manager_widget.html#afc47f9bca19d1eb066dce00f0a5c2f1b", null ],
-      [ "openIconStyle", "classhal_1_1_context_manager_widget.html#ad7ee2f2e138cb106acd738a891c6e954", null ],
-      [ "renameIconPath", "classhal_1_1_context_manager_widget.html#a4c9bcac5cd529f1d2b0bc035ac120869", null ],
-      [ "renameIconStyle", "classhal_1_1_context_manager_widget.html#a48f7f53f553a622e0bae95bba5d80933", null ],
-      [ "searchActiveIconStyle", "classhal_1_1_context_manager_widget.html#a093c492eb903276b7680f08c63f58f30", null ],
-      [ "searchIconPath", "classhal_1_1_context_manager_widget.html#a179ba7977459665d8fb9dbb9f6af6c73", null ],
-      [ "searchIconStyle", "classhal_1_1_context_manager_widget.html#ab925843b2236f9be3ffc7ad55dff96ba", null ]
+      [ "updateSearchIcon", "classhal_1_1_context_manager_widget.html#ad697005c27e0e8de830815e20779dbc0", null ]
     ] ],
     [ "ContextProxyModel", "classhal_1_1_context_proxy_model.html", [
       [ "ContextProxyModel", "classhal_1_1_context_proxy_model.html#ab26896bbedffaea5894415dd641c7d9c", null ],

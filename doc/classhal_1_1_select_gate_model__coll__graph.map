@@ -1,0 +1,5 @@
+<map id="hal::SelectGateModel" name="hal::SelectGateModel">
+<area shape="rect" id="node1" title=" " alt="" coords="5,652,167,803"/>
+<area shape="rect" id="node2" href="$classhal_1_1_module_model.html" title="A model for displaying multiple netlist elements." alt="" coords="6,409,166,604"/>
+<area shape="rect" id="node3" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="8,5,164,361"/>
+</map>

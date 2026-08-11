@@ -1,8 +1,8 @@
-<map id="/home/runner/work/hal/hal/plugins/hgl_parser/src/plugin_hgl_parser.cpp" name="/home/runner/work/hal/hal/plugins/hgl_parser/src/plugin_hgl_parser.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="189,5,380,61"/>
-<area shape="rect" id="node2" href="$plugin__hgl__parser_8h.html" title=" " alt="" coords="63,109,224,151"/>
-<area shape="rect" id="node4" href="$hgl__parser_8h.html" title=" " alt="" coords="234,206,335,233"/>
-<area shape="rect" id="node5" href="$gate__library__parser_8h.html" title=" " alt="" coords="179,288,390,344"/>
-<area shape="rect" id="node3" href="$plugin__interface__base_8h.html" title=" " alt="" coords="29,199,210,240"/>
-<area shape="rect" id="node6" href="$fac__extension__interface_8h.html" title=" " alt="" coords="41,392,235,433"/>
+<map id="plugins/hgl_parser/src/plugin_hgl_parser.cpp" name="plugins/hgl_parser/src/plugin_hgl_parser.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="189,5,380,47"/>
+<area shape="rect" id="node2" href="$plugin__hgl__parser_8h.html" title=" " alt="" coords="63,95,224,136"/>
+<area shape="rect" id="node4" href="$hgl__parser_8h.html" title=" " alt="" coords="234,191,335,218"/>
+<area shape="rect" id="node5" href="$gate__library__parser_8h.html" title=" " alt="" coords="179,273,390,329"/>
+<area shape="rect" id="node3" href="$plugin__interface__base_8h.html" title=" " alt="" coords="29,184,210,225"/>
+<area shape="rect" id="node6" href="$fac__extension__interface_8h.html" title=" " alt="" coords="41,377,235,419"/>
 </map>

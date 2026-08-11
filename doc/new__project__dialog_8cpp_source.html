@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/file_manager/new_project_dialog.cpp Source File</title>
+<title>HAL: plugins/gui/src/file_manager/new_project_dialog.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -150,11 +152,11 @@ $(document).ready(function(){initNavTree('new__project__dialog_8cpp_source.html'
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#layout">layout</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qlayout.html#addWidget">addWidget</a>(labGatelib, irow++, 0, <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignLeft</a>);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1">mComboGatelib</a> = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html">QComboBox</a>(<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1">mComboGatelib</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#addItem">addItem</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>());</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> std::filesystem::path&amp; path : <a class="code" href="namespacehal_1_1gate__library__manager.html#a661cfae97344483fc6e57309e38a1f64">gate_library_manager::get_all_path</a>())</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> std::filesystem::path&amp; path : <a class="code" href="namespacehal_1_1gate__library__manager.html#a42742908dd94507e9fed0fce740662fa">gate_library_manager::get_all_path</a>())</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>         = mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordtype">int</span> n         = mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>();</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> qName = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(path.filename());</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            mGateLibraryMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(qName, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            mGateLibraryMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(qName, n);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> qPath = <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(path.string());</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(qPath);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">if</span> (qPath == suggestedGateLibraryPath)</div>
@@ -165,8 +167,8 @@ $(document).ready(function(){initNavTree('new__project__dialog_8cpp_source.html'
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="comment">// suggested gate library not found in default path</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html">QFileInfo</a> info(suggestedGateLibraryPath);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            suggestedGateLibraryName = info.<a class="codeRef" href="https://doc.qt.io/qt-5/qfileinfo.html#fileName">fileName</a>();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>                    = mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            mGateLibraryMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(suggestedGateLibraryName, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordtype">int</span> n                    = mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#size">size</a>();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            mGateLibraryMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#insert">insert</a>(suggestedGateLibraryName, n);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            mGateLibraryPath.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#append">append</a>(suggestedGateLibraryPath);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        }</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <a class="code" href="new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1">mComboGatelib</a>-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html#addItems">addItems</a>(mGateLibraryMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#keys">keys</a>());</div>
@@ -242,10 +244,9 @@ $(document).ready(function(){initNavTree('new__project__dialog_8cpp_source.html'
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="agate__library__manager_8h_html"><div class="ttname"><a href="gate__library__manager_8h.html">gate_library_manager.h</a></div></div>
 <div class="ttc" id="agraphics_8h_html"><div class="ttname"><a href="graphics_8h.html">graphics.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a661cfae97344483fc6e57309e38a1f64"><div class="ttname"><a href="namespacehal_1_1gate__library__manager.html#a661cfae97344483fc6e57309e38a1f64">hal::gate_library_manager::get_all_path</a></div><div class="ttdeci">std::vector&lt; std::filesystem::path &gt; get_all_path()</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00134">gate_library_manager.cpp:134</a></div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__manager_html_a42742908dd94507e9fed0fce740662fa"><div class="ttname"><a href="namespacehal_1_1gate__library__manager.html#a42742908dd94507e9fed0fce740662fa">hal::gate_library_manager::get_all_path</a></div><div class="ttdeci">std::vector&lt; std::filesystem::path &gt; get_all_path()</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00134">gate_library_manager.cpp:134</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gui__utility_html_a23e27c6df089a9e860e00ac4577a1894"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a23e27c6df089a9e860e00ac4577a1894">hal::gui_utility::getStyledSvgIcon</a></div><div class="ttdeci">QIcon getStyledSvgIcon(const QString &amp;from_to_colors_enabled, const QString &amp;svg_path, QString from_to_colors_disabled=QString())</div><div class="ttdef"><b>Definition:</b> <a href="graphics_8cpp_source.html#l00060">graphics.cpp:60</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00006">test.py:6</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anew__project__dialog_8cpp_html_a691d8699a6b31a63463c65c7daf8a2bd"><div class="ttname"><a href="new__project__dialog_8cpp.html#a691d8699a6b31a63463c65c7daf8a2bd">mEditProjectdir</a></div><div class="ttdeci">QLineEdit * mEditProjectdir</div><div class="ttdef"><b>Definition:</b> <a href="new__project__dialog_8cpp_source.html#l00022">new_project_dialog.cpp:22</a></div></div>
 <div class="ttc" id="anew__project__dialog_8cpp_html_abc9b27e1fa553c3966121c0f430557c1"><div class="ttname"><a href="new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1">mComboGatelib</a></div><div class="ttdeci">QComboBox * mComboGatelib</div><div class="ttdef"><b>Definition:</b> <a href="new__project__dialog_8cpp_source.html#l00023">new_project_dialog.cpp:23</a></div></div>
 <div class="ttc" id="anew__project__dialog_8h_html"><div class="ttname"><a href="new__project__dialog_8h.html">new_project_dialog.h</a></div></div>
@@ -313,7 +314,7 @@ $(document).ready(function(){initNavTree('new__project__dialog_8cpp_source.html'
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7c60c7799a36d4b54909bd1a1d09337f.html">file_manager</a></li><li class="navelem"><a class="el" href="new__project__dialog_8cpp.html">new_project_dialog.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

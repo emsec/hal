@@ -1,0 +1,4 @@
+<map id="hal::ModuleIdentificationPlugin" name="hal::ModuleIdentificationPlugin">
+<area shape="rect" id="node1" title="Plugin for identifying functional modules within a netlist." alt="" coords="5,204,236,369"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="27,5,215,156"/>
+</map>

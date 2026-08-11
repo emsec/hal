@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Traversal Decorator &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Netlist Traversal Decorator &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -138,7 +144,7 @@ Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front o
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
 </dd>
 <dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
-<dd class="field-odd"><p>Netlist traversal stops at these pins.</p>
+<dd class="field-odd"><p>Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -163,7 +169,7 @@ Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front o
 <dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
 </dd>
 <dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
-<dd class="field-odd"><p>Netlist traversal stops at these pins.</p>
+<dd class="field-odd"><p>Traversal stops at pins of these types, i.e., gates reached through such a pin are not part of the result. Defaults to an empty set.</p>
 </dd>
 <dt class="field-even">returns</dt>
 <dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
@@ -486,7 +492,7 @@ If there is no such path, <code class="docutils literal notranslate"><span class
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to start from.</p></li>
 <li><p><strong>end_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to connect to.</p></li>
-<li><p><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code>, or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p></li>
+<li><p><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code> or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p></li>
 <li><p><strong>exit_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p></li>
 <li><p><strong>entry_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p></li>
 </ul>
@@ -511,7 +517,7 @@ Computing only the shortest distance to a gate is faster than computing the shor
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to start from.</p></li>
 <li><p><strong>end_gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to connect to.</p></li>
-<li><p><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code>, or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p></li>
+<li><p><strong>direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to search in. Can be <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.input</span></code>, <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.output</span></code> or <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.inout</span></code> to search both directions and return the shorter one.</p></li>
 <li><p><strong>exit_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p></li>
 <li><p><strong>entry_endpoint_filter</strong> (<em>lambda</em>) – Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p></li>
 </ul>

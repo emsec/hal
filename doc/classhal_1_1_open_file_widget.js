@@ -9,8 +9,5 @@ var classhal_1_1_open_file_widget =
     [ "iconStyle", "classhal_1_1_open_file_widget.html#a8a717e67e7b361d77350fc42a9b13038", null ],
     [ "repolish", "classhal_1_1_open_file_widget.html#a30bf5665a4ed8a4fffe610c0d2a0b387", null ],
     [ "setIconPath", "classhal_1_1_open_file_widget.html#a4395d5ddba7ae110dfa76bd9e9437bc4", null ],
-    [ "setIconStyle", "classhal_1_1_open_file_widget.html#ad52808414feb1120be90d900feceeb04", null ],
-    [ "dragActive", "classhal_1_1_open_file_widget.html#a6cf3ab2dfa9081ca4bb107227220ed26", null ],
-    [ "iconPath", "classhal_1_1_open_file_widget.html#a6b7d4a8846925293b08f4ee2a6f0beff", null ],
-    [ "iconStyle", "classhal_1_1_open_file_widget.html#a89800c39d3542b4ff1899f681d6b64d8", null ]
+    [ "setIconStyle", "classhal_1_1_open_file_widget.html#ad52808414feb1120be90d900feceeb04", null ]
 ];

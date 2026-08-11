@@ -15,9 +15,5 @@ var classhal_1_1_comment_item =
     [ "setDeleteCommentIconStyle", "classhal_1_1_comment_item.html#aded12e1e8621b6c77c120f9ed33c2361", null ],
     [ "setModifyCommentIconPath", "classhal_1_1_comment_item.html#af57e201856153d79f38d94d924e6c8f3", null ],
     [ "setModifyCommentIconStyle", "classhal_1_1_comment_item.html#aec53c3af7f21568ce090451180e5cf66", null ],
-    [ "updateCurrentEntry", "classhal_1_1_comment_item.html#afe35277a51fa912e23abfbacffee98de", null ],
-    [ "deleteCommentIconPath", "classhal_1_1_comment_item.html#a8f00e40b42ae2b84853106844a749712", null ],
-    [ "deleteCommentIconStyle", "classhal_1_1_comment_item.html#ab492bee784852760f424f2f436af5e5a", null ],
-    [ "modifyCommentIconPath", "classhal_1_1_comment_item.html#a8ef06d40ecfaced7aeabfff16d5d5954", null ],
-    [ "modifyCommentIconStyle", "classhal_1_1_comment_item.html#afba2a8e711bb10336a2e0aa20d83c5f1", null ]
+    [ "updateCurrentEntry", "classhal_1_1_comment_item.html#afe35277a51fa912e23abfbacffee98de", null ]
 ];

@@ -1,22 +1,52 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/tree_navigation/selection_tree_view.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/tree_navigation/selection_tree_view.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1170,5,1361,91"/>
-<area shape="rect" id="node2" href="$selection__tree__view_8h.html" title=" " alt="" coords="38,139,216,195"/>
-<area shape="rect" id="node6" href="$graph__context_8h.html" title=" " alt="" coords="452,250,647,291"/>
-<area shape="rect" id="node7" href="$graph__tab__widget_8h.html" title=" " alt="" coords="291,146,454,187"/>
-<area shape="rect" id="node8" href="$gui__globals_8h.html" title=" " alt="" coords="478,153,610,180"/>
-<area shape="rect" id="node9" href="$context__manager__widget_8h.html" title=" " alt="" coords="634,139,825,195"/>
-<area shape="rect" id="node10" title=" " alt="" coords="892,257,960,284"/>
-<area shape="rect" id="node11" href="$module__context__menu_8h.html" title=" " alt="" coords="901,139,1076,195"/>
-<area shape="rect" id="node12" href="$gui__plugin__manager_8h.html" title=" " alt="" coords="1100,146,1250,187"/>
-<area shape="rect" id="node13" href="$action__create__object_8h.html" title=" " alt="" coords="1275,146,1440,187"/>
-<area shape="rect" id="node14" href="$action__add__items__to__object_8h.html" title=" " alt="" coords="1218,250,1394,291"/>
-<area shape="rect" id="node15" href="$user__action__compound_8h.html" title=" " alt="" coords="1516,146,1672,187"/>
-<area shape="rect" id="node16" href="$include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="1696,153,1891,180"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1916,153,2021,180"/>
-<area shape="rect" id="node18" title=" " alt="" coords="2045,153,2140,180"/>
-<area shape="rect" id="node19" title=" " alt="" coords="2164,153,2274,180"/>
-<area shape="rect" id="node20" title=" " alt="" coords="2299,153,2411,180"/>
-<area shape="rect" id="node3" href="$gui__def_8h.html" title=" " alt="" coords="497,347,602,373"/>
-<area shape="rect" id="node4" href="$module__model_8h.html" title=" " alt="" coords="29,250,225,291"/>
-<area shape="rect" id="node5" href="$selection__tree__proxy_8h.html" title=" " alt="" coords="250,243,428,299"/>
+<map id="plugins/gui/src/selection_details_widget/tree_navigation/selection_tree_view.cpp" name="plugins/gui/src/selection_details_widget/tree_navigation/selection_tree_view.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="2707,5,2938,61"/>
+<area shape="rect" id="node2" href="$selection__tree__view_8h.html" title=" " alt="" coords="209,317,388,373"/>
+<area shape="rect" id="node12" href="$graph__context_8h.html" title=" " alt="" coords="1879,325,2073,366"/>
+<area shape="rect" id="node20" href="$graph__tab__widget_8h.html" title=" " alt="" coords="1776,221,1939,262"/>
+<area shape="rect" id="node24" href="$gui__globals_8h.html" title=" " alt="" coords="838,436,970,463"/>
+<area shape="rect" id="node26" href="$context__manager__widget_8h.html" title=" " alt="" coords="2301,109,2491,165"/>
+<area shape="rect" id="node34" title=" " alt="" coords="2470,525,2538,552"/>
+<area shape="rect" id="node35" href="$module__context__menu_8h.html" title=" " alt="" coords="1259,421,1434,477"/>
+<area shape="rect" id="node36" href="$gui__plugin__manager_8h.html" title=" " alt="" coords="2927,429,3078,470"/>
+<area shape="rect" id="node43" href="$action__create__object_8h.html" title=" " alt="" coords="2800,117,2965,158"/>
+<area shape="rect" id="node44" href="$action__add__items__to__object_8h.html" title=" " alt="" coords="1459,429,1635,470"/>
+<area shape="rect" id="node45" href="$user__action__compound_8h.html" title=" " alt="" coords="3041,117,3197,158"/>
+<area shape="rect" id="node46" href="$include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="3221,124,3416,151"/>
+<area shape="rect" id="node47" title=" " alt="" coords="3441,124,3546,151"/>
+<area shape="rect" id="node48" title=" " alt="" coords="3570,124,3665,151"/>
+<area shape="rect" id="node49" title=" " alt="" coords="3689,124,3799,151"/>
+<area shape="rect" id="node50" title=" " alt="" coords="3824,124,3936,151"/>
+<area shape="rect" id="node3" href="$gui__def_8h.html" title=" " alt="" coords="1619,525,1725,552"/>
+<area shape="rect" id="node7" href="$module__model_8h.html" title=" " alt="" coords="566,429,762,470"/>
+<area shape="rect" id="node9" href="$selection__tree__proxy_8h.html" title=" " alt="" coords="147,421,325,477"/>
+<area shape="rect" id="node10" title=" " alt="" coords="400,436,491,463"/>
+<area shape="rect" id="node11" title=" " alt="" coords="43,436,122,463"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="938,600,1078,627"/>
+<area shape="rect" id="node5" title=" " alt="" coords="2037,600,2102,627"/>
+<area shape="rect" id="node6" title=" " alt="" coords="1645,600,1699,627"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1839,525,1918,552"/>
+<area shape="rect" id="node13" href="$graph__layouter_8h.html" title=" " alt="" coords="1970,429,2169,470"/>
+<area shape="rect" id="node15" title=" " alt="" coords="2371,525,2445,552"/>
+<area shape="rect" id="node16" href="$graph__shader_8h.html" title=" " alt="" coords="1045,429,1235,470"/>
+<area shape="rect" id="node17" href="$base__tree__item_8h.html" title=" " alt="" coords="1811,436,1946,463"/>
+<area shape="rect" id="node18" title=" " alt="" coords="2563,525,2659,552"/>
+<area shape="rect" id="node19" title=" " alt="" coords="2193,436,2295,463"/>
+<area shape="rect" id="node14" title=" " alt="" coords="2286,525,2346,552"/>
+<area shape="rect" id="node21" href="$content__widget_8h.html" title=" " alt="" coords="2655,429,2801,470"/>
+<area shape="rect" id="node23" href="$graph__widget_8h.html" title=" " alt="" coords="1585,325,1759,366"/>
+<area shape="rect" id="node25" href="$graphics__scene_8h.html" title=" " alt="" coords="942,325,1135,366"/>
+<area shape="rect" id="node22" title=" " alt="" coords="2683,525,2741,552"/>
+<area shape="rect" id="node27" href="$context__tree__model_8h.html" title=" " alt="" coords="1573,213,1752,269"/>
+<area shape="rect" id="node28" href="$context__proxy__model_8h.html" title=" " alt="" coords="2013,213,2192,269"/>
+<area shape="rect" id="node29" href="$searchbar_8h.html" title=" " alt="" coords="2368,228,2557,255"/>
+<area shape="rect" id="node30" href="$settings__item__keybind_8h.html" title=" " alt="" coords="2370,421,2529,477"/>
+<area shape="rect" id="node31" title=" " alt="" coords="2581,228,2683,255"/>
+<area shape="rect" id="node32" title=" " alt="" coords="3591,525,3689,552"/>
+<area shape="rect" id="node33" title=" " alt="" coords="2707,228,2813,255"/>
+<area shape="rect" id="node37" title=" " alt="" coords="3095,525,3161,552"/>
+<area shape="rect" id="node38" title=" " alt="" coords="3185,525,3279,552"/>
+<area shape="rect" id="node39" title=" " alt="" coords="3303,525,3383,552"/>
+<area shape="rect" id="node40" title=" " alt="" coords="3407,525,3567,552"/>
+<area shape="rect" id="node41" title=" " alt="" coords="2949,525,3070,552"/>
+<area shape="rect" id="node42" href="$plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html" title=" " alt="" coords="2766,525,2925,552"/>
 </map>

@@ -26,37 +26,47 @@ var NAVTREE =
 [
   [ "HAL", "index.html", [
     [ "Welcome to HAL!", "index.html", [
-      [ "Navigation", "index.html#autotoc_md27", null ],
-      [ "Introduction", "index.html#autotoc_md28", [
-        [ "What the hell is HAL?", "index.html#autotoc_md29", null ],
-        [ "Shipped Plugins", "index.html#autotoc_md30", null ],
-        [ "Documentation", "index.html#autotoc_md31", null ]
+      [ "Navigation", "index.html#autotoc_md35", null ],
+      [ "Introduction", "index.html#autotoc_md36", [
+        [ "What the hell is HAL?", "index.html#autotoc_md37", null ],
+        [ "Shipped Plugins", "index.html#autotoc_md38", null ],
+        [ "Documentation", "index.html#autotoc_md39", null ]
       ] ],
-      [ "Build Instructions", "index.html#autotoc_md32", null ],
-      [ "Quickstart Guide", "index.html#autotoc_md33", null ],
-      [ "Contributing", "index.html#autotoc_md34", [
-        [ "Run static checks and clang format locally", "index.html#autotoc_md35", null ],
-        [ "Generate Changelog", "index.html#autotoc_md36", null ]
+      [ "Build Instructions", "index.html#autotoc_md40", null ],
+      [ "Quickstart Guide", "index.html#autotoc_md41", null ],
+      [ "Contributing", "index.html#autotoc_md42", [
+        [ "Run static checks and clang format locally", "index.html#autotoc_md43", null ],
+        [ "Generate Changelog", "index.html#autotoc_md44", null ]
       ] ],
-      [ "Academic Context", "index.html#autotoc_md37", null ],
-      [ "Licensing", "index.html#autotoc_md38", null ],
-      [ "Disclaimer", "index.html#autotoc_md39", null ]
+      [ "Academic Context", "index.html#autotoc_md45", null ],
+      [ "Licensing", "index.html#autotoc_md46", null ],
+      [ "Disclaimer", "index.html#autotoc_md47", null ]
     ] ],
-    [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
-      [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md13", [
-        [ "Preamble", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md14", null ],
-        [ "Definitions", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md15", null ],
-        [ "Permission & Conditions", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md16", null ],
-        [ "Termination", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md17", null ]
+    [ "Dataflow Analysis (DANA)", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html", [
+      [ "Running the plugin", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md11", null ],
+      [ "Recreating the paper results", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md12", null ],
+      [ "Want to create your own pass?", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md13", null ],
+      [ "Future Plans", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md14", null ],
+      [ "Get in touch", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md15", null ],
+      [ "Directory Overview", "md_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md16", null ]
+    ] ],
+    [ "LICENSE", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
+      [ "SIL Open Font License v1.1", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md21", [
+        [ "Preamble", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md22", null ],
+        [ "Definitions", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md23", null ],
+        [ "Permission & Conditions", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md24", null ],
+        [ "Termination", "md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md25", null ]
       ] ]
     ] ],
-    [ "Dataflow Analysis (DANA)", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html", [
-      [ "Running the plugin", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md19", null ],
-      [ "Recreating the paper results", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md20", null ],
-      [ "Want to create your own pass?", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md21", null ],
-      [ "Future Plans", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md22", null ],
-      [ "Get in touch", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md23", null ],
-      [ "Directory Overview", "md__home_runner_work_hal_hal_plugins_dataflow_analysis__r_e_a_d_m_e.html#autotoc_md24", null ]
+    [ "HAWKEYE", "md_plugins_hawkeye__r_e_a_d_m_e.html", null ],
+    [ "module_identification", "md_plugins_module_identification__r_e_a_d_m_e.html", [
+      [ "Install plugin", "md_plugins_module_identification__r_e_a_d_m_e.html#autotoc_md28", null ],
+      [ "Name", "md_plugins_module_identification__r_e_a_d_m_e.html#autotoc_md29", null ],
+      [ "Function", "md_plugins_module_identification__r_e_a_d_m_e.html#autotoc_md30", null ]
+    ] ],
+    [ "Netlist Simulator Plugin", "md_plugins_simulator_hal_simulator_readme.html", [
+      [ "Quickstart Guide", "md_plugins_simulator_hal_simulator_readme.html#autotoc_md32", null ],
+      [ "Known Issues / TODOs", "md_plugins_simulator_hal_simulator_readme.html#autotoc_md33", null ]
     ] ],
     [ "Deprecated List", "deprecated.html", null ],
     [ "Modules", "modules.html", "modules" ],
@@ -81,8 +91,7 @@ var NAVTREE =
         [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerations", "functions_enum.html", null ],
-        [ "Enumerator", "functions_eval.html", null ],
-        [ "Properties", "functions_prop.html", "functions_prop" ],
+        [ "Enumerator", "functions_eval.html", "functions_eval" ],
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
@@ -103,51 +112,61 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"classhal_1_1_action_create_object.html#a56a6156b4ac1fbb6434ab66d55f2784b",
-"classhal_1_1_boolean_function.html#a483a5528c57c0561ee9ec5dacecf41cd",
-"classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8",
-"classhal_1_1_context_manager_widget.html#ac9c9f540f1429a103a9c571915082024",
-"classhal_1_1_expanding_list_button.html#a38a3e11b7e4d7f93d41339d8dca1136c",
-"classhal_1_1_gate.html#a515a1ba7f4f74ec80bf68856cfa8d2aa",
-"classhal_1_1_gate_select_proxy.html#aeba438ce717b356584e16ef9d5becefa",
-"classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03",
-"classhal_1_1_graphics_gate.html",
-"classhal_1_1_grouping_manager_widget.html#a7d6db916e0e8398c849e05f1d5467536",
-"classhal_1_1_gui_plugin_manager.html#a82d54e8cb092eac9cc11e5aae936d019",
-"classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5a8d137d1292c32d5eb3ba1ae8d00b0037",
-"classhal_1_1_main_window.html#a913d7268afde9aa3f569425d6a6025f5",
-"classhal_1_1_module_pins_tree_item.html#ac1fc4ed237b24ddec9d803e5ad445e52",
-"classhal_1_1_net_layout_direction.html#abeda4dd68246a2bbd823d7186110601e",
-"classhal_1_1_netlist_relay.html#a1386c8a55dee80d82f38269186dfb14a",
-"classhal_1_1_pin_item.html#a82eff399afd1a3a9fff149f8500030e5",
-"classhal_1_1_python_console_qss_adapter.html",
-"classhal_1_1_recent_file_item.html#a3521d3fa589b9b1679de68a1a41655a8",
-"classhal_1_1_selection_relay.html#ac96ff181d5558937b66fb13d6e8f7048",
-"classhal_1_1_stacked_validator.html#a77a3abfeb668b1a0b1bc14554a2dff05",
-"classhal_1_1_verilog_writer.html#a7797209e784a32a1d198bc61a8dd2ebb",
-"context__proxy__model_8cpp.html",
-"dir_a3c86f1e877becb5671321c9fbe5901d.html",
-"functions_func_w.html",
-"gatelibrary__tab__general_8h_source.html",
-"group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821",
-"labeled__frame_8h.html",
-"namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a456167f78b7e11fcf6219adbe8fa47d0",
-"namespacehal_1_1dataflow_1_1group__by__control__signals.html",
-"namespacemembers_func_l.html",
-"netlist__modification__decorator_8h.html",
-"plugin__gui_8cpp.html#a38887b161c4caa1ab4c0f1ff1d1bb873",
-"python__bindings_2bindings_2netlist__traversal__decorator_8cpp.html",
-"qt.html#CursorShape-enum",
-"qt.html#ItemFlag-enum",
+"about__dialog_8cpp.html",
+"channel__item_8h_source.html",
+"classhal_1_1_base_pin.html#ae15c1c51c834484c60e7d953af31a2f0",
+"classhal_1_1_cli_extension_dataflow.html#ae219a740812f153be5fa2df859c4bf0d",
+"classhal_1_1_content_manager.html#a98450da2fb6963ca4c510f86280bb6b8",
+"classhal_1_1_dock_button.html#ae25c55381bd50f4978ed4656882678f9",
+"classhal_1_1_file_actions.html#a9a18c6bf40ac37d79d240e22e7d14fe2",
+"classhal_1_1_gate_library_selection_table.html#af9484aea8c8dc3a0eb5ac29c746a9f09",
+"classhal_1_1_gatelibrary_proxy_model.html#ade522b2738f50288644a62f7c617fd27",
+"classhal_1_1_graph_layouter.html#a3d77007d14091c414fd9374e629b7557",
+"classhal_1_1_grouping.html#a1de1077d5f9a8b30614fb1b32dd92db0",
+"classhal_1_1_gui_extension_dataflow.html#a0c0f6db712446d1dde9650921d4bf1cd",
+"classhal_1_1_input_dialog.html#aebb7014985e7cd810c7688ea860c6f0f",
+"classhal_1_1_logger_qss_adapter.html#acf64a25002344f8657d449ba410b1b78",
+"classhal_1_1_module.html#a92322b292485d719d98f11fb1102b2b9",
+"classhal_1_1_module_table_model.html#a9dfef6b58efa427b38535f9d56f0248e",
+"classhal_1_1_net_layout_point.html#a852f2acc5385430ba2bc8254f5fc99a6",
+"classhal_1_1_netlist_simulator_controller.html#a0ab277745f16b8ee60698f8c4e356f27",
+"classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a7967ef09452d243d2f14c3103bf89778",
+"classhal_1_1_project_json.html#a3e34bce3728ed6800a6567a3c78dbb27a719eff567dfb189cccbb9fbd624f5cd7",
+"classhal_1_1_python_qss_adapter.html#af6c44b2b5acfbecd98c7f4a9d7c5a388",
+"classhal_1_1_saleae_header.html#a60fcc0058b2d1a29ec345fa63dca497c",
+"classhal_1_1_selection_tree_view.html#a1ab58314a44ddeb92e3ba91918d23dc8",
+"classhal_1_1_simulation_input.html",
+"classhal_1_1_token_stream.html#aaeabe8f9d40cf8bf44ecf598b0d39e03",
+"classhal_1_1_wave_data.html#add4b5442f28451602f3604857fcd6177",
+"classhal_1_1_wave_form_primitive.html#a889f7d64a603d8fb93e83d88e0c88274",
+"classhal_1_1_wave_tree_model.html#a8935985a6f8b7abf0d42fb9eb12557a3",
+"classhal_1_1hawkeye_1_1_round_candidate.html#a0c1b15c7c506af6a856d9d13c39e8df6",
+"content__frame_8h.html",
+"dir_68849dddfdf047b2e33d383b055c9582.html",
+"dot__viewer_8h_source.html",
+"gate__library__manager_8h.html#a42742908dd94507e9fed0fce740662fa",
+"graph__context_8cpp_source.html",
+"group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466",
+"latch__function_8cpp.html#a1cd9de1b793056c3d02f27d1202e58f3",
+"namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d",
+"namespacehal_1_1_s_m_t_1_1_z3.html",
+"namespacehal_1_1netlist__utils.html#a1ebaa80d5e0b2e73d48b71d2f9b3639e",
+"neighborhood_8cpp.html#a452019f83f0f06eb5e17c038cfc9e7a9",
+"netlist__preprocessing_8h.html#a253153ce056212893d6e3b2fd1f2a4ef",
+"plugin__dataflow_8cpp.html#a520a82c66e9e539acaa3fb2d6ce6578a",
+"plugins_2module__identification_2include_2module__identification_2utils_2utils_8h.html#a24ec989f8931f99488ceb26999e5d9d1",
+"python__bindings_8h.html#gaab97b444976a9d5305e3efc20b8bfad6",
+"qt.html#DayOfWeek-enum",
 "qt.html#Key-enum",
-"qt.html#LayoutDirection-enum",
+"qt.html#Key-enum",
+"qt.html#MouseButton-enum",
 "qt.html#WidgetAttribute-enum",
-"searchbar_8h.html",
-"sort_8h.html#a1e42f7d639871593e9c5a2fbecd1f579",
-"struct_abc___obj__t__.html#a3991862b21208a1584e1c89acfd81886",
-"structhal_1_1_standard_graphics_net_1_1_v_line.html#a17fad40fc55af7b9c17065c917a23c4e",
-"test__multiple_8py_source.html"
+"saleae__file_8h_source.html",
+"simplification__abc_8cpp.html#a8ed9a2201236df31868097ab3c99b159",
+"standard__graphics__module_8cpp.html",
+"structhal_1_1_boolean_function_1_1_node.html#ae164b1cfbfb7acac586710a68fa39d2b",
+"structhal_1_1dataflow_1_1_configuration.html#af07c6ae25da79e9e4d36fcfe866451ac",
+"toolbar_8cpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

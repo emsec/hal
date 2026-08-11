@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h Source File</title>
+<title>HAL: plugins/gui/include/gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -124,36 +126,36 @@ $(document).ready(function(){initNavTree('pins__wizardpage_8h_source.html',''); 
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">class </span>GateLibraryWizard;</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_pins_wizard_page.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_pins_wizard_page.html">PinsWizardPage</a>:<span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwizardpage.html">QWizardPage</a>{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhal_1_1_pins_wizard_page.html#a7baa29765d779bf7b421e4f02e747109">PinsWizardPage</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classhal_1_1_pins_wizard_page.html#ae938c954c8f26b45c2ce31d8159e5cac">   43</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#ae938c954c8f26b45c2ce31d8159e5cac">setGateType</a>(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#adce47181e9e48f208735f2f62e2dc611">initializePage</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#a82453129b924e18f0f182f0c34d1a732">isComplete</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;PinItem*&gt;</a> <a class="code" href="classhal_1_1_pins_wizard_page.html#ac7902875db080a884f6e1d048a107c7f">getPingroups</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#a2e2da6b644fbfe6ba00b67a40efa41fd">handleDeleteClicked</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#ad4830bc5215ec0788161cdd243cdd016">handlePinModelChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;topLeft, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;bottomRight);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classhal_1_1_gate_library_wizard.html">GateLibraryWizard</a>* mWizard;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* mPinModel;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>* mPinsTreeView;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* mGateLibrary;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">bool</span> mGateset;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classhal_1_1_gate_library_tab_pin.html">GateLibraryTabPin</a>* mPinTab;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mDelBtn;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mAddBtn;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    };</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_pins_wizard_page.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_pins_wizard_page.html">PinsWizardPage</a>:<span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwizardpage.html">QWizardPage</a>{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classhal_1_1_pins_wizard_page.html#a7baa29765d779bf7b421e4f02e747109">PinsWizardPage</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhal_1_1_pins_wizard_page.html#ae938c954c8f26b45c2ce31d8159e5cac">   46</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#ae938c954c8f26b45c2ce31d8159e5cac">setGateType</a>(<a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gate);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#adce47181e9e48f208735f2f62e2dc611">initializePage</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#a82453129b924e18f0f182f0c34d1a732">isComplete</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;PinItem*&gt;</a> <a class="code" href="classhal_1_1_pins_wizard_page.html#ac7902875db080a884f6e1d048a107c7f">getPingroups</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#a2e2da6b644fbfe6ba00b67a40efa41fd">handleDeleteClicked</a>();</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_pins_wizard_page.html#ad4830bc5215ec0788161cdd243cdd016">handlePinModelChanged</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;topLeft, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;bottomRight);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_gate_library_wizard.html">GateLibraryWizard</a>* mWizard;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classhal_1_1_pin_model.html">PinModel</a>* mPinModel;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>* mPinsTreeView;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* mGateLibrary;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">bool</span> mGateset;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classhal_1_1_gate_library_tab_pin.html">GateLibraryTabPin</a>* mPinTab;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mDelBtn;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mAddBtn;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_gate_library_html"><div class="ttname"><a href="classhal_1_1_gate_library.html">hal::GateLibrary</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__library_8h_source.html#l00043">gate_library.h:44</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html">hal::GateLibraryTabPin</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00057">gatelibrary_tab_pin.h:58</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_library_wizard_html"><div class="ttname"><a href="classhal_1_1_gate_library_wizard.html">hal::GateLibraryWizard</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__wizard_8h_source.html#l00046">gatelibrary_wizard.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_library_tab_pin_html"><div class="ttname"><a href="classhal_1_1_gate_library_tab_pin.html">hal::GateLibraryTabPin</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__tab__pin_8h_source.html#l00060">gatelibrary_tab_pin.h:61</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_library_wizard_html"><div class="ttname"><a href="classhal_1_1_gate_library_wizard.html">hal::GateLibraryWizard</a></div><div class="ttdef"><b>Definition:</b> <a href="gatelibrary__wizard_8h_source.html#l00049">gatelibrary_wizard.h:50</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_html"><div class="ttname"><a href="classhal_1_1_gate_type.html">hal::GateType</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type_8h_source.html#l00051">gate_type.h:52</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_model_html"><div class="ttname"><a href="classhal_1_1_pin_model.html">hal::PinModel</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8h_source.html#l00049">pin_model.h:50</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pins_wizard_page_html"><div class="ttname"><a href="classhal_1_1_pins_wizard_page.html">hal::PinsWizardPage</a></div><div class="ttdef"><b>Definition:</b> <a href="pins__wizardpage_8h_source.html#l00039">pins_wizardpage.h:39</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_model_html"><div class="ttname"><a href="classhal_1_1_pin_model.html">hal::PinModel</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__model_8h_source.html#l00052">pin_model.h:53</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pins_wizard_page_html"><div class="ttname"><a href="classhal_1_1_pins_wizard_page.html">hal::PinsWizardPage</a></div><div class="ttdef"><b>Definition:</b> <a href="pins__wizardpage_8h_source.html#l00042">pins_wizardpage.h:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pins_wizard_page_html_a2e2da6b644fbfe6ba00b67a40efa41fd"><div class="ttname"><a href="classhal_1_1_pins_wizard_page.html#a2e2da6b644fbfe6ba00b67a40efa41fd">hal::PinsWizardPage::handleDeleteClicked</a></div><div class="ttdeci">void handleDeleteClicked()</div><div class="ttdef"><b>Definition:</b> <a href="pins__wizardpage_8cpp_source.html#l00040">pins_wizardpage.cpp:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pins_wizard_page_html_a7baa29765d779bf7b421e4f02e747109"><div class="ttname"><a href="classhal_1_1_pins_wizard_page.html#a7baa29765d779bf7b421e4f02e747109">hal::PinsWizardPage::PinsWizardPage</a></div><div class="ttdeci">PinsWizardPage(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="pins__wizardpage_8cpp_source.html#l00008">pins_wizardpage.cpp:8</a></div></div>
 <div class="ttc" id="aclasshal_1_1_pins_wizard_page_html_a82453129b924e18f0f182f0c34d1a732"><div class="ttname"><a href="classhal_1_1_pins_wizard_page.html#a82453129b924e18f0f182f0c34d1a732">hal::PinsWizardPage::isComplete</a></div><div class="ttdeci">bool isComplete() const override</div><div class="ttdef"><b>Definition:</b> <a href="pins__wizardpage_8cpp_source.html#l00057">pins_wizardpage.cpp:57</a></div></div>
@@ -164,7 +166,7 @@ $(document).ready(function(){initNavTree('pins__wizardpage_8h_source.html',''); 
 <div class="ttc" id="agatelibrary__tab__general_8h_html"><div class="ttname"><a href="gatelibrary__tab__general_8h.html">gatelibrary_tab_general.h</a></div></div>
 <div class="ttc" id="agatelibrary__tab__pin_8h_html"><div class="ttname"><a href="gatelibrary__tab__pin_8h.html">gatelibrary_tab_pin.h</a></div></div>
 <div class="ttc" id="agatelibrary__tab__truth__table_8h_html"><div class="ttname"><a href="gatelibrary__tab__truth__table_8h.html">gatelibrary_tab_truth_table.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -180,7 +182,7 @@ $(document).ready(function(){initNavTree('pins__wizardpage_8h_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_4252469b3ac735c304362e15e3ea1050.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="dir_3fde5c1a65a4f8535fbb34ee7cec6f2a.html">gatelibrary_pages</a></li><li class="navelem"><a class="el" href="pins__wizardpage_8h.html">pins_wizardpage.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

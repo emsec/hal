@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/settings/settings_manager.cpp File Reference</title>
+<title>HAL: plugins/gui/src/settings/settings_manager.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -89,7 +91,7 @@ $(document).ready(function(){initNavTree('settings__manager_8cpp.html',''); init
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="settings__manager_8h_source.html">gui/settings/settings_manager.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html">hal_core/utilities/utils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="content__widget_8h_source.html">gui/content_widget/content_widget.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="content__frame_8h_source.html">gui/content_frame/content_frame.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="content__manager_8h_source.html">gui/content_manager/content_manager.h</a>&quot;</code><br />
@@ -100,28 +102,45 @@ $(document).ready(function(){initNavTree('settings__manager_8cpp.html',''); init
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for settings_manager.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="settings__manager_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2settings_2settings__manager_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2settings_2settings__manager_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2gui_2src_2settings_2settings__manager_8cpp">
-<area shape="rect" title=" " alt="" coords="991,5,1217,61"/>
-<area shape="rect" href="settings__manager_8h.html" title=" " alt="" coords="673,109,828,151"/>
-<area shape="rect" href="utils_8h.html" title=" " alt="" coords="852,109,983,151"/>
-<area shape="rect" href="content__widget_8h.html" title=" " alt="" coords="5,199,152,240"/>
-<area shape="rect" href="content__frame_8h.html" title=" " alt="" coords="1007,109,1201,151"/>
-<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="224,109,384,151"/>
-<area shape="rect" title=" " alt="" coords="1225,117,1276,143"/>
-<area shape="rect" title=" " alt="" coords="1301,117,1406,143"/>
-<area shape="rect" title=" " alt="" coords="1430,117,1562,143"/>
-<area shape="rect" title=" " alt="" coords="1587,117,1648,143"/>
-<area shape="rect" title=" " alt="" coords="609,288,684,315"/>
-<area shape="rect" title=" " alt="" coords="222,288,277,315"/>
-<area shape="rect" title=" " alt="" coords="1197,206,1283,233"/>
-<area shape="rect" href="settings__item_8h.html" title=" " alt="" coords="848,199,1019,240"/>
-<area shape="rect" href="content__anchor_8h.html" title=" " alt="" coords="176,199,323,240"/>
-<area shape="rect" href="logger__settings_8h.html" title=" " alt="" coords="448,206,651,233"/>
-<area shape="rect" title=" " alt="" coords="675,206,741,233"/>
-<area shape="rect" title=" " alt="" coords="765,206,824,233"/>
-<area shape="rect" title=" " alt="" coords="1043,206,1122,233"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1307,206,1447,233"/>
+<div class="center"><img src="settings__manager_8cpp__incl.png" border="0" usemap="#aplugins_2gui_2src_2settings_2settings__manager_8cpp" alt=""/></div>
+<map name="aplugins_2gui_2src_2settings_2settings__manager_8cpp" id="aplugins_2gui_2src_2settings_2settings__manager_8cpp">
+<area shape="rect" title=" " alt="" coords="2500,5,2672,47"/>
+<area shape="rect" href="settings__manager_8h.html" title=" " alt="" coords="1491,95,1646,136"/>
+<area shape="rect" href="include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="2334,95,2465,136"/>
+<area shape="rect" href="content__widget_8h.html" title=" " alt="" coords="71,184,218,225"/>
+<area shape="rect" href="content__frame_8h.html" title=" " alt="" coords="2489,95,2683,136"/>
+<area shape="rect" href="content__manager_8h.html" title=" " alt="" coords="570,95,730,136"/>
+<area shape="rect" title=" " alt="" coords="2707,102,2758,129"/>
+<area shape="rect" title=" " alt="" coords="2783,102,2888,129"/>
+<area shape="rect" title=" " alt="" coords="2912,102,3044,129"/>
+<area shape="rect" title=" " alt="" coords="3069,102,3130,129"/>
+<area shape="rect" title=" " alt="" coords="995,273,1070,300"/>
+<area shape="rect" title=" " alt="" coords="767,273,821,300"/>
+<area shape="rect" title=" " alt="" coords="1579,191,1665,218"/>
+<area shape="rect" href="settings__item_8h.html" title=" " alt="" coords="1198,184,1369,225"/>
+<area shape="rect" href="content__anchor_8h.html" title=" " alt="" coords="721,184,867,225"/>
+<area shape="rect" href="logger__settings_8h.html" title=" " alt="" coords="1689,191,1891,218"/>
+<area shape="rect" title=" " alt="" coords="1967,191,2032,218"/>
+<area shape="rect" title=" " alt="" coords="1393,191,1451,218"/>
+<area shape="rect" title=" " alt="" coords="1476,191,1555,218"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="2017,273,2157,300"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="2107,184,2238,225"/>
+<area shape="rect" title=" " alt="" coords="2215,273,2301,300"/>
+<area shape="rect" title=" " alt="" coords="2313,191,2398,218"/>
+<area shape="rect" title=" " alt="" coords="2422,191,2465,218"/>
+<area shape="rect" title=" " alt="" coords="2489,191,2563,218"/>
+<area shape="rect" title=" " alt="" coords="2587,191,2646,218"/>
+<area shape="rect" title=" " alt="" coords="2670,191,2785,218"/>
+<area shape="rect" title=" " alt="" coords="2809,191,2872,218"/>
+<area shape="rect" href="widget_8h.html" title=" " alt="" coords="5,273,156,300"/>
+<area shape="rect" title=" " alt="" coords="181,273,239,300"/>
+<area shape="rect" title=" " alt="" coords="2897,191,2963,218"/>
+<area shape="rect" title=" " alt="" coords="2988,191,3064,218"/>
+<area shape="rect" title=" " alt="" coords="451,191,579,218"/>
+<area shape="rect" title=" " alt="" coords="603,191,697,218"/>
+<area shape="rect" title=" " alt="" coords="243,191,303,218"/>
+<area shape="rect" href="special__log__content__manager_8h.html" title=" " alt="" coords="942,184,1123,225"/>
+<area shape="rect" title=" " alt="" coords="327,191,427,218"/>
 </map>
 </div>
 </div>
@@ -138,7 +157,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_203e78a72855f1f3788475126339bf32.html">settings</a></li><li class="navelem"><a class="el" href="settings__manager_8cpp.html">settings_manager.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

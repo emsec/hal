@@ -1,5 +1,7 @@
 <map id="hal::ExternalContentWidget" name="hal::ExternalContentWidget">
-<area shape="rect" id="node1" title=" " alt="" coords="5,667,215,773"/>
-<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="20,175,200,619"/>
-<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="56,5,164,127"/>
+<area shape="rect" id="node1" title=" " alt="" coords="145,637,354,744"/>
+<area shape="rect" id="node4" href="$classhal_1_1_dot_viewer.html" title=" " alt="" coords="5,807,243,1001"/>
+<area shape="rect" id="node5" href="$classhal_1_1_waveform_viewer.html" title=" " alt="" coords="267,792,485,1016"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="159,175,339,589"/>
+<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="195,5,303,127"/>
 </map>

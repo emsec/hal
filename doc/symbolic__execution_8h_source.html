@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/symbolic_execution.h Source File</title>
+<title>HAL: include/hal_core/netlist/boolean_function/symbolic_execution.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -115,7 +117,7 @@ $(document).ready(function(){initNavTree('symbolic__execution_8h_source.html',''
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="boolean__function_8h.html">hal_core/netlist/boolean_function.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="symbolic__state_8h.html">hal_core/netlist/boolean_function/symbolic_state.h</a>&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="types_8h.html">hal_core/netlist/boolean_function/types.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2boolean__function_2types_8h.html">hal_core/netlist/boolean_function/types.h</a>&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;optional&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
@@ -155,24 +157,24 @@ $(document).ready(function(){initNavTree('symbolic__execution_8h_source.html',''
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aboolean__function_8h_html"><div class="ttname"><a href="boolean__function_8h.html">boolean_function.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
-<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00063">result.h:64</a></div></div>
+<div class="ttc" id="aclasshal_1_1_result_html"><div class="ttname"><a href="classhal_1_1_result.html">hal::Result</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00070">result.h:71</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_execution_html"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_execution.html">hal::SMT::SymbolicExecution</a></div><div class="ttdef"><b>Definition:</b> <a href="symbolic__execution_8h_source.html#l00042">symbolic_execution.h:43</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_execution_html_a5eef23bb946657f5306619ea9cfd8053"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_execution.html#a5eef23bb946657f5306619ea9cfd8053">hal::SMT::SymbolicExecution::SymbolicExecution</a></div><div class="ttdeci">SymbolicExecution(const std::vector&lt; BooleanFunction &gt; &amp;variables={})</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__execution_8cpp_source.html#l00548">symbolic_execution.cpp:548</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_execution_html_a6e9b75773ce64d6ed89a9124c6d739e4"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_execution.html#a6e9b75773ce64d6ed89a9124c6d739e4">hal::SMT::SymbolicExecution::evaluate</a></div><div class="ttdeci">Result&lt; BooleanFunction &gt; evaluate(const BooleanFunction &amp;function) const</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__execution_8cpp_source.html#l00552">symbolic_execution.cpp:552</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_execution_html_ad5cce99a9383913eacb947e0d496a8a5"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_execution.html#ad5cce99a9383913eacb947e0d496a8a5">hal::SMT::SymbolicExecution::state</a></div><div class="ttdeci">SymbolicState state</div><div class="ttdoc">The current symbolic state.</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__execution_8h_source.html#l00050">symbolic_execution.h:50</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html">hal::SMT::SymbolicState</a></div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8h_source.html#l00040">symbolic_state.h:41</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2netlist_2boolean__function_2types_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2boolean__function_2types_8h.html">types.h</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="astructhal_1_1_boolean_function_1_1_node_html"><div class="ttname"><a href="structhal_1_1_boolean_function_1_1_node.html">hal::BooleanFunction::Node</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00986">boolean_function.h:987</a></div></div>
-<div class="ttc" id="astructhal_1_1_s_m_t_1_1_constraint_html"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_constraint.html">hal::SMT::Constraint</a></div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00147">types.h:148</a></div></div>
+<div class="ttc" id="astructhal_1_1_s_m_t_1_1_constraint_html"><div class="ttname"><a href="structhal_1_1_s_m_t_1_1_constraint.html">hal::SMT::Constraint</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00150">types.h:151</a></div></div>
 <div class="ttc" id="asymbolic__state_8h_html"><div class="ttname"><a href="symbolic__state_8h.html">symbolic_state.h</a></div></div>
-<div class="ttc" id="atypes_8h_html"><div class="ttname"><a href="types_8h.html">types.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_eae2d6668cd0aabfd48a71937eff4c1c.html">boolean_function</a></li><li class="navelem"><a class="el" href="symbolic__execution_8h.html">symbolic_execution.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

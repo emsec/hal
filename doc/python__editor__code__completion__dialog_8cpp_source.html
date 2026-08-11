@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/python/python_editor_code_completion_dialog.cpp Source File</title>
+<title>HAL: plugins/gui/src/python/python_editor_code_completion_dialog.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -160,8 +162,8 @@ $(document).ready(function(){initNavTree('python__editor__code__completion__dial
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>-&gt;key() == <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Enter</a> || <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#event">event</a>-&gt;key() == <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#Key-enum">Qt::Key_Return</a>)</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keyword">auto</span> index = mTable-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#currentRow">currentRow</a>();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_python_editor_code_completion_dialog.html#aae39d19ee17ac9a2db53de7b8a246883">completionSelected</a>(m_completions.at(index));</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keyword">auto</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = mTable-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qtablewidget.html#currentRow">currentRow</a>();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_python_editor_code_completion_dialog.html#aae39d19ee17ac9a2db53de7b8a246883">completionSelected</a>(m_completions.at(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>));</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#close">close</a>();</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
@@ -188,7 +190,8 @@ $(document).ready(function(){initNavTree('python__editor__code__completion__dial
 <div class="ttc" id="aclasshal_1_1_python_editor_code_completion_dialog_html_aae39d19ee17ac9a2db53de7b8a246883"><div class="ttname"><a href="classhal_1_1_python_editor_code_completion_dialog.html#aae39d19ee17ac9a2db53de7b8a246883">hal::PythonEditorCodeCompletionDialog::completionSelected</a></div><div class="ttdeci">void completionSelected(std::tuple&lt; std::string, std::string &gt; selected)</div></div>
 <div class="ttc" id="aclasshal_1_1_python_editor_code_completion_dialog_html_adf5bcb6cad87cedb4942575e47588325"><div class="ttname"><a href="classhal_1_1_python_editor_code_completion_dialog.html#adf5bcb6cad87cedb4942575e47588325">hal::PythonEditorCodeCompletionDialog::PythonEditorCodeCompletionDialog</a></div><div class="ttdeci">PythonEditorCodeCompletionDialog(QWidget *parent, std::vector&lt; std::tuple&lt; std::string, std::string &gt;&gt; completions)</div><div class="ttdef"><b>Definition:</b> <a href="python__editor__code__completion__dialog_8cpp_source.html#l00016">python_editor_code_completion_dialog.cpp:16</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="apython__editor__code__completion__dialog_8h_html"><div class="ttname"><a href="python__editor__code__completion__dialog_8h.html">python_editor_code_completion_dialog.h</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_EditTrigger-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#EditTrigger-enum">QAbstractItemView::NoEditTriggers</a></div><div class="ttdeci">NoEditTriggers</div></div>
 <div class="ttc" id="aqabstractitemview_html_SelectionBehavior-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionBehavior-enum">QAbstractItemView::SelectRows</a></div><div class="ttdeci">SelectRows</div></div>
@@ -244,7 +247,7 @@ $(document).ready(function(){initNavTree('python__editor__code__completion__dial
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__editor__code__completion__dialog_8cpp.html">python_editor_code_completion_dialog.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

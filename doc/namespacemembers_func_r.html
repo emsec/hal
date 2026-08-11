@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -85,34 +87,92 @@ $(document).ready(function(){initNavTree('namespacemembers_func_r.html',''); ini
 &#160;
 
 <h3><a id="index_r"></a>- r -</h3><ul>
+<li>reconstruct_indexed_ff_identifiers()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#aeba531d7452793af68138725b2d32d2d">hal::netlist_preprocessing</a>
+</li>
+<li>reconstruct_top_module_pin_groups()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a90cec7c506602c93b4483b47dcb031ba">hal::netlist_preprocessing</a>
+</li>
 <li>reduce_to_smt2()
 : <a class="el" href="namespacehal_1_1_s_m_t_1_1_translator.html#a50d1fbb237c473754b22a8c481e3b05f">hal::SMT::Translator</a>
 </li>
 <li>register_parser()
-: <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">hal::gate_library_parser_manager</a>
-, <a class="el" href="namespacehal_1_1netlist__parser__manager.html#a8a4ff1e425ebe75804844cf22c96dca7">hal::netlist_parser_manager</a>
+: <a class="el" href="namespacehal_1_1gate__library__parser__manager.html#a12d000bf49f6de3906abf535087d82b0">hal::gate_library_parser_manager</a>
+, <a class="el" href="namespacehal_1_1netlist__parser__manager.html#a4e5c20961cc7019c6e983cabee8df76a">hal::netlist_parser_manager</a>
 </li>
 <li>register_writer()
-: <a class="el" href="namespacehal_1_1gate__library__writer__manager.html#acdde9e39af8ee8f532da34c4b80432b3">hal::gate_library_writer_manager</a>
-, <a class="el" href="namespacehal_1_1netlist__writer__manager.html#ada281488258c1fb92351e44a9d8ff60c">hal::netlist_writer_manager</a>
+: <a class="el" href="namespacehal_1_1gate__library__writer__manager.html#affc203c9503f3adbad47ef7dc61b6f85">hal::gate_library_writer_manager</a>
+, <a class="el" href="namespacehal_1_1netlist__writer__manager.html#afcfbc6d60bfc0a45ada8199f606fc32c">hal::netlist_writer_manager</a>
 </li>
 <li>remove()
-: <a class="el" href="namespacehal_1_1gate__library__manager.html#a4fa2e4277540de2a0dcd6e9db517ed9b">hal::gate_library_manager</a>
+: <a class="el" href="namespacehal_1_1gate__library__manager.html#a51c46b4cdbdc6330ce1012f35eac67f0">hal::gate_library_manager</a>
 </li>
 <li>remove_buffers()
-: <a class="el" href="namespacehal_1_1netlist__utils.html#af985cd5c5eb7aa39f151f9fc890e6005">hal::netlist_utils</a>
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#aaed1c4941851f0d87dbf17202d5e4c7a">hal::netlist_preprocessing</a>
+, <a class="el" href="namespacehal_1_1netlist__utils.html#a4cf477c0c0dfc61a6187d79d38a3ef4d">hal::netlist_utils</a>
+</li>
+<li>remove_consecutive_inverters()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#aeeb87ca0ed5bdfd7d15989ef165c3f83">hal::netlist_preprocessing</a>
 </li>
 <li>remove_model_changed_callback()
 : <a class="el" href="namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3">hal::plugin_manager</a>
 </li>
+<li>remove_redundant_gates()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a926dc5e4f4ea3099519a5f15d3ca20d3">hal::netlist_preprocessing</a>
+</li>
+<li>remove_redundant_logic_trees()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a744a3acfaaae736ac526458cdd2560a4">hal::netlist_preprocessing</a>
+</li>
+<li>remove_redundant_loops()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a5d9d632b96e6b54e7ca1057440946246">hal::netlist_preprocessing</a>
+</li>
+<li>remove_unconnected_gates()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a1989a8353f281ca2fbff11d9d64048ae">hal::netlist_preprocessing</a>
+</li>
+<li>remove_unconnected_looped()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#adcf4bd9cc324d6fd5605a85394cec83e">hal::netlist_preprocessing</a>
+</li>
+<li>remove_unconnected_nets()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#ae4ce786f9754756f93e96fd805b4322b">hal::netlist_preprocessing</a>
+</li>
 <li>remove_unused_lut_endpoints()
-: <a class="el" href="namespacehal_1_1netlist__utils.html#ab4c23f16593143c305d3d5de79dcb196">hal::netlist_utils</a>
+: <a class="el" href="namespacehal_1_1netlist__utils.html#a0f3e95b97b15ab4a8388495115fd923b">hal::netlist_utils</a>
+</li>
+<li>remove_unused_lut_inputs()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#ac7306052489ca31bcb191899f2c727c8">hal::netlist_preprocessing</a>
+</li>
+<li>remove_unwanted_parameters_from_netlist()
+: <a class="el" href="namespacehal_1_1verilator.html#abe6a81bb83e5fce7d4a449ac3be62e57">hal::verilator</a>
+</li>
+<li>reorder_commutative_operands()
+: <a class="el" href="namespacehal_1_1module__identification.html#a53f6d8080e70a84931e5d54d73c541d5">hal::module_identification</a>
+</li>
+<li>reorder_module_pin_groups()
+: <a class="el" href="namespacehal_1_1bitorder__propagation.html#a336563b59cbda829ba5c6d7ed1b1e872">hal::bitorder_propagation</a>
 </li>
 <li>replace()
-: <a class="el" href="namespacehal_1_1utils.html#a0b35fa35b17eeadefc578daab0de6c06">hal::utils</a>
+: <a class="el" href="namespacehal_1_1utils.html#a1bff5617da4a76a5938d643a8c3b8481">hal::utils</a>
 </li>
 <li>replace_gate()
-: <a class="el" href="namespacehal_1_1netlist__utils.html#a91da9ccb1b2005faf2ec66b2e0618aba">hal::netlist_utils</a>
+: <a class="el" href="namespacehal_1_1netlist__utils.html#ac697b6f91cdf40de86672f35d0317237">hal::netlist_utils</a>
+</li>
+<li>replace_subgraph_with_netlist()
+: <a class="el" href="namespacehal_1_1resynthesis.html#a2a8facff4208648646c10ed0997a6b68">hal::resynthesis</a>
+</li>
+<li>resynthesize_gate()
+: <a class="el" href="namespacehal_1_1resynthesis.html#a51373d59f7a0694d5237c031b2a68a11">hal::resynthesis</a>
+</li>
+<li>resynthesize_gates()
+: <a class="el" href="namespacehal_1_1resynthesis.html#a00ec5cc82b15fd2c8fdede5211d1f749">hal::resynthesis</a>
+</li>
+<li>resynthesize_gates_of_type()
+: <a class="el" href="namespacehal_1_1resynthesis.html#af42ca61a8c3140d35e5774dc6a77a953">hal::resynthesis</a>
+</li>
+<li>resynthesize_subgraph()
+: <a class="el" href="namespacehal_1_1resynthesis.html#ae71c83133d92d2b0dfd51f016cdf85ee">hal::resynthesis</a>
+</li>
+<li>resynthesize_subgraph_of_type()
+: <a class="el" href="namespacehal_1_1resynthesis.html#a9e3042fdd0a5d15989a1be74b59f2eb8">hal::resynthesis</a>
 </li>
 <li>reverse_polish_notation()
 : <a class="el" href="namespacehal_1_1_boolean_function_parser.html#acb1d0557110fa82ed1491d10f55cd598">hal::BooleanFunctionParser</a>
@@ -123,14 +183,8 @@ $(document).ready(function(){initNavTree('namespacemembers_func_r.html',''); ini
 <li>Ror()
 : <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#ac042eed4f1d0b0d86c8681aad9d0a473">hal::SMT::ConstantPropagation</a>
 </li>
-<li>round_float()
-: <a class="el" href="namespaceutils.html#a2ce293f005324ca40c79dc61d4590154">utils</a>
-</li>
-<li>round_float_1()
-: <a class="el" href="namespaceutils.html#a0860ac768970797cc9cdf448625067a9">utils</a>
-</li>
 <li>rtrim()
-: <a class="el" href="namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">hal::utils</a>
+: <a class="el" href="namespacehal_1_1utils.html#a1d32cdb295a9c65b74c5b2db155fba52">hal::utils</a>
 </li>
 <li>run()
 : <a class="el" href="namespacehal_1_1dataflow_1_1evaluation.html#a330b7657cc5402f7f9c2f1fc7724ee8f">hal::dataflow::evaluation</a>
@@ -146,7 +200,7 @@ $(document).ready(function(){initNavTree('namespacemembers_func_r.html',''); ini
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

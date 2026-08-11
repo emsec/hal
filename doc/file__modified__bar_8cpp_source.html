@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/file_modified_bar/file_modified_bar.cpp Source File</title>
+<title>HAL: plugins/gui/src/file_modified_bar/file_modified_bar.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -129,9 +131,9 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
 <div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">   42</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">FileModifiedBar::handleFileChanged</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> path)</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> <a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>(path);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html">QFile</a> file(path);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a>.exists())</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">if</span>(file.<a class="codeRef" href="https://doc.qt.io/qt-5/qfile.html#exists-1">exists</a>())</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            handleFileContentModified(path);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            handleFileMovOrDel(path);</div>
@@ -171,7 +173,7 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">// FIXME why are we using FileModifiedBar for aborting a python script?</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">void</span> FileModifiedBar::handleAbortClicked()</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;abortThread();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;<a class="code" href="classhal_1_1_python_context.html#a7e8983bd05f933ccb2a97f1030d200c0">abortThread</a>();</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    </div>
@@ -190,22 +192,23 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="code" href="classhal_1_1_file_modified_bar.html#ac3db2ec34627250bb2fe45a05613d2ac">okClicked</a>();</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
-<div class="ttc" id="a_apache_01_license_8txt_html_a54c3aaa43358b77e4f57f4f72cbe56c6"><div class="ttname"><a href="_apache_01_license_8txt.html#a54c3aaa43358b77e4f57f4f72cbe56c6">file</a></div><div class="ttdeci">then any Derivative Works that You distribute must include a readable copy of the attribution notices contained within such NOTICE file</div><div class="ttdef"><b>Definition:</b> <a href="_apache_01_license_8txt_source.html#l00109">Apache License.txt:109</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a029c1adea62ceddbe62d5e8820c30ae1"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a029c1adea62ceddbe62d5e8820c30ae1">hal::FileModifiedBar::handleFileChanged</a></div><div class="ttdeci">void handleFileChanged(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00042">file_modified_bar.cpp:42</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a093c51f8634ebc269373a1f3dfc04bd4"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a093c51f8634ebc269373a1f3dfc04bd4">hal::FileModifiedBar::handleScriptExecute</a></div><div class="ttdeci">void handleScriptExecute(QString path)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00052">file_modified_bar.cpp:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a75691e8da7478a0b51ed1c94a5f089bd"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a75691e8da7478a0b51ed1c94a5f089bd">hal::FileModifiedBar::ignoreClicked</a></div><div class="ttdeci">void ignoreClicked()</div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_a83eaeacecb7df7b4b3228e1cbe891adc"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#a83eaeacecb7df7b4b3228e1cbe891adc">hal::FileModifiedBar::FileModifiedBar</a></div><div class="ttdeci">FileModifiedBar(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="file__modified__bar_8cpp_source.html#l00010">file_modified_bar.cpp:10</a></div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_ac3db2ec34627250bb2fe45a05613d2ac"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#ac3db2ec34627250bb2fe45a05613d2ac">hal::FileModifiedBar::okClicked</a></div><div class="ttdeci">void okClicked()</div></div>
 <div class="ttc" id="aclasshal_1_1_file_modified_bar_html_af2db32d4bfd379041a5cf3a17e10737e"><div class="ttname"><a href="classhal_1_1_file_modified_bar.html#af2db32d4bfd379041a5cf3a17e10737e">hal::FileModifiedBar::reloadClicked</a></div><div class="ttdeci">void reloadClicked()</div></div>
+<div class="ttc" id="aclasshal_1_1_python_context_html_a7e8983bd05f933ccb2a97f1030d200c0"><div class="ttname"><a href="classhal_1_1_python_context.html#a7e8983bd05f933ccb2a97f1030d200c0">hal::PythonContext::abortThread</a></div><div class="ttdeci">void abortThread()</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00085">python_context.cpp:85</a></div></div>
 <div class="ttc" id="afile__modified__bar_8h_html"><div class="ttname"><a href="file__modified__bar_8h.html">file_modified_bar.h</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a178bb1ac9a8ee6bbbec41ddb2e84250a"><div class="ttname"><a href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">hal::gPythonContext</a></div><div class="ttdeci">PythonContext * gPythonContext</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00088">plugin_gui.cpp:88</a></div></div>
 <div class="ttc" id="apython__context_8h_html"><div class="ttname"><a href="python__context_8h.html">python_context.h</a></div></div>
 <div class="ttc" id="apython__thread_8h_html"><div class="ttname"><a href="python__thread_8h.html">python_thread.h</a></div></div>
 <div class="ttc" id="aqabstractbutton_html_clicked"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QAbstractButton::clicked</a></div><div class="ttdeci">void clicked(bool checked)</div></div>
 <div class="ttc" id="aqboxlayout_html_addWidget"><div class="ttname"><a href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget</a></div><div class="ttdeci">void addWidget(QWidget *widget, int stretch, Qt::Alignment alignment)</div></div>
 <div class="ttc" id="aqfile_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html">QFile</a></div></div>
+<div class="ttc" id="aqfile_html_exists-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfile.html#exists-1">QFile::exists</a></div><div class="ttdeci">bool exists() const const</div></div>
 <div class="ttc" id="aqhboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a></div></div>
 <div class="ttc" id="aqlabel_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a></div></div>
 <div class="ttc" id="aqlabel_html_text-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText</a></div><div class="ttdeci">void setText(const QString &amp;)</div></div>
@@ -225,7 +228,7 @@ $(document).ready(function(){initNavTree('file__modified__bar_8cpp_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_789103a3fceb0fc143b85dbe9979f451.html">file_modified_bar</a></li><li class="navelem"><a class="el" href="file__modified__bar_8cpp.html">file_modified_bar.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

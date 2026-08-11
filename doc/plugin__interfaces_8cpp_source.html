@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/python_bindings/bindings/plugin_interfaces.cpp Source File</title>
+<title>HAL: src/python_bindings/bindings/plugin_interfaces.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -127,62 +129,64 @@ $(document).ready(function(){initNavTree('plugin__interfaces_8cpp_source.html','
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7">   40</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7">plugin_interfaces_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m)</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        py::class_&lt;BasePluginInterface, RawPtrWrapper&lt;BasePluginInterface&gt;, <a class="code" href="classhal_1_1_py_base_plugin_interface.html">PyBasePluginInterface</a>&gt; py_base_plugin_interface(m, <span class="stringliteral">&quot;BasePluginInterface&quot;</span>);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        py_base_plugin_interface.def_property_readonly(<span class="stringliteral">&quot;name&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">BasePluginInterface::get_name</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral">            The name of the plugin.</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_name&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">BasePluginInterface::get_name</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral">            Get the name of the plugin.</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            :returns: The name of the plugin.</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;version&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">BasePluginInterface::get_version</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral">            The version of the plugin.</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_version&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">BasePluginInterface::get_version</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">            Get the version of the plugin.</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            :returns: The version of the plugin.</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;description&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb">BasePluginInterface::get_description</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            The description of the plugin.</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_description&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb">BasePluginInterface::get_description</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">            Get the description of the plugin.</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            :returns: The description of the plugin.</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;dependencies&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">BasePluginInterface::get_dependencies</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            The plugins that this plugin depends on.</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            :type: set[str]</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_dependencies&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">BasePluginInterface::get_dependencies</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">            Get all dependencies of this plugin.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            :returns: The plugins that this plugin depends on.</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
-<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00056">plugin_interface_base.h:57</a></div></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        py::class_&lt;BasePluginInterface, RawPtrWrapper&lt;BasePluginInterface&gt;, <a class="code" href="classhal_1_1_py_base_plugin_interface.html">PyBasePluginInterface</a>&gt; py_base_plugin_interface(m, <span class="stringliteral">&quot;BasePluginInterface&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">            The base class for all HAL plugins. Every plugin has to derive from this class and implement at least ``get_name`` and ``get_version``.</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;name&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">BasePluginInterface::get_name</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="stringliteral">            The name of the plugin.</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_name&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">BasePluginInterface::get_name</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="stringliteral">            Get the name of the plugin.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="stringliteral">            :returns: The name of the plugin.</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;version&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">BasePluginInterface::get_version</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral">            The version of the plugin.</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_version&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">BasePluginInterface::get_version</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            Get the version of the plugin.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">            :returns: The version of the plugin.</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;description&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb">BasePluginInterface::get_description</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            The description of the plugin.</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_description&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb">BasePluginInterface::get_description</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            Get the description of the plugin.</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">            :returns: The description of the plugin.</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def_property_readonly(</span><span class="stringliteral">&quot;dependencies&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">BasePluginInterface::get_dependencies</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            The plugins that this plugin depends on.</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">            :type: set[str]</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">        py_base_plugin_interface.def(</span><span class="stringliteral">&quot;get_dependencies&quot;</span>, &amp;<a class="code" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">BasePluginInterface::get_dependencies</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            Get all dependencies of this plugin.</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            :returns: The plugins that this plugin depends on.</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">            :rtype: set[str]</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a17ecf8929723bb20a2b154420e4e6560"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">hal::BasePluginInterface::get_dependencies</a></div><div class="ttdeci">virtual std::set&lt; std::string &gt; get_dependencies() const</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8cpp_source.html#l00024">plugin_interface_base.cpp:24</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a3818f63c15ebe39ad595abddbb471e4a"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">hal::BasePluginInterface::get_name</a></div><div class="ttdeci">virtual std::string get_name() const =0</div></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html_a62b8952ddf1eed557797fddbef818bfb"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb">hal::BasePluginInterface::get_description</a></div><div class="ttdeci">virtual std::string get_description() const</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8cpp_source.html#l00019">plugin_interface_base.cpp:19</a></div></div>
@@ -195,7 +199,7 @@ $(document).ready(function(){initNavTree('plugin__interfaces_8cpp_source.html','
 <div class="ttc" id="aclasshal_1_1_py_base_plugin_interface_html_ac12c47cf50b2604250dcc63b487c61a0"><div class="ttname"><a href="classhal_1_1_py_base_plugin_interface.html#ac12c47cf50b2604250dcc63b487c61a0">hal::PyBasePluginInterface::get_version</a></div><div class="ttdeci">std::string get_version() const override</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interfaces_8cpp_source.html#l00018">plugin_interfaces.cpp:18</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gae288c84ff5c0b70e6f9571669aa29eb7"><div class="ttname"><a href="group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7">hal::plugin_interfaces_init</a></div><div class="ttdeci">void plugin_interfaces_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__interfaces_8cpp_source.html#l00040">plugin_interfaces.cpp:40</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -203,7 +207,7 @@ $(document).ready(function(){initNavTree('plugin__interfaces_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="plugin__interfaces_8cpp.html">plugin_interfaces.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

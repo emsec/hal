@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_grouping_serializer.html'
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="grouping__serializer_8h_source.html">grouping_serializer.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="grouping__serializer_8h_source.html">hal_core/netlist/persistent/grouping_serializer.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GroupingSerializer:</div>
 <div class="dyncontent">
@@ -119,7 +121,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3b286be87b2b0f78c988b74a71c71b7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grouping_serializer.html#a3b286be87b2b0f78c988b74a71c71b7d">deserialize</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;loaddir) override</td></tr>
 <tr class="separator:a3b286be87b2b0f78c988b74a71c71b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_project_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_project_serializer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_project_serializer.html">hal::ProjectSerializer</a></td></tr>
-<tr class="memitem:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920">ProjectSerializer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920">ProjectSerializer</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae89d4f762270f68bb1aa6aaaa55463e6 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#ae89d4f762270f68bb1aa6aaaa55463e6">~ProjectSerializer</a> ()</td></tr>
 <tr class="separator:ae89d4f762270f68bb1aa6aaaa55463e6 inherit pub_methods_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,8 +133,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3530c29f02a63a9edcf608e95f2d60db inherit pro_attribs_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="grouping__serializer_8h_source.html#l00034">34</a> of file <a class="el" href="grouping__serializer_8h_source.html">grouping_serializer.h</a>.</p>
+<div class="textblock"><p>A project serializer that stores the groupings of a netlist in a separate file within the project directory. </p>
+
+<p class="definition">Definition at line <a class="el" href="grouping__serializer_8h_source.html#l00037">37</a> of file <a class="el" href="grouping__serializer_8h_source.html">grouping_serializer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae38a650bce70e44b179d5fc3f9b2800b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae38a650bce70e44b179d5fc3f9b2800b">&#9670;&nbsp;</a></span>GroupingSerializer()</h2>
@@ -199,7 +202,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="grouping__serializer_8cpp_source.html#l00069">69</a> of file <a class="el" href="grouping__serializer_8cpp_source.html">grouping_serializer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00069">hal::Grouping::assign_gate()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00243">hal::Grouping::assign_module()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00156">hal::Grouping::assign_net()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="project__serializer_8h_source.html#l00039">hal::ProjectSerializer::m_name</a>, and <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00069">hal::Grouping::assign_gate()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00243">hal::Grouping::assign_module()</a>, <a class="el" href="src_2netlist_2grouping_8cpp_source.html#l00156">hal::Grouping::assign_net()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00671">hal::Netlist::create_grouping()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="project__serializer_8h_source.html#l00043">hal::ProjectSerializer::m_name</a>.</p>
 
 </div>
 </div>
@@ -246,7 +249,7 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td><a class="el" href="classhal_1_1_netlist.html">Netlist</a> that might contain groupings </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">savedir</td><td>Project directory to save to </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">isAutosave</td><td>True if serialize call was issued from autosave, false otherwise </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">isAutosave</td><td><code>true</code> if serialize call was issued from autosave, <code>false</code> otherwise </td></tr>
   </table>
   </dd>
 </dl>
@@ -256,13 +259,13 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="grouping__serializer_8cpp_source.html#l00023">23</a> of file <a class="el" href="grouping__serializer_8cpp_source.html">grouping_serializer.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00114">hal::JsonWriteObject::add_array()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00151">hal::JsonWriteArray::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00084">hal::JsonWriteComplex::close()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>, and <a class="el" href="json__write__document_8cpp_source.html#l00184">hal::JsonWriteDocument::serialize()</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00114">hal::JsonWriteObject::add_array()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00151">hal::JsonWriteArray::add_object()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00084">hal::JsonWriteComplex::close()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00702">hal::Netlist::get_groupings()</a>, and <a class="el" href="json__write__document_8cpp_source.html#l00184">hal::JsonWriteDocument::serialize()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/persistent/<a class="el" href="grouping__serializer_8h_source.html">grouping_serializer.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/persistent/<a class="el" href="grouping__serializer_8cpp_source.html">grouping_serializer.cpp</a></li>
+<li>include/hal_core/netlist/persistent/<a class="el" href="grouping__serializer_8h_source.html">grouping_serializer.h</a></li>
+<li>src/netlist/persistent/<a class="el" href="grouping__serializer_8cpp_source.html">grouping_serializer.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -270,7 +273,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_grouping_serializer.html">GroupingSerializer</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

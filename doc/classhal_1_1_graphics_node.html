@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -99,7 +101,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_graphics_node.html',''); 
 <p>Abstract base class for nodes (e.g. gates, modules)  
  <a href="classhal_1_1_graphics_node.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="graphics__node_8h_source.html">graphics_node.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="graphics__node_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/graphics_node.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GraphicsNode:</div>
 <div class="dyncontent">
@@ -137,29 +139,29 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a63f87d8260451c8658c5cd7616649147"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a63f87d8260451c8658c5cd7616649147">GraphicsNode</a> (const <a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#type">type</a>, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>)</td></tr>
+<tr class="memitem:a63f87d8260451c8658c5cd7616649147"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a63f87d8260451c8658c5cd7616649147">GraphicsNode</a> (const <a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#type">type</a>, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>)</td></tr>
 <tr class="separator:a63f87d8260451c8658c5cd7616649147"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d4e0774a664e45bc3f98893c5545b6a"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a0d4e0774a664e45bc3f98893c5545b6a">boundingRect</a> () const override</td></tr>
 <tr class="separator:a0d4e0774a664e45bc3f98893c5545b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47570fe158d7dde76d220547393544bb"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a47570fe158d7dde76d220547393544bb">shape</a> () const override</td></tr>
 <tr class="separator:a47570fe158d7dde76d220547393544bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abff0f4f7a3f5ce78c49b666b6569295b"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#abff0f4f7a3f5ce78c49b666b6569295b">getInputScenePosition</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mNetId, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;pin_type) const =0</td></tr>
+<tr class="memitem:abff0f4f7a3f5ce78c49b666b6569295b"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#abff0f4f7a3f5ce78c49b666b6569295b">getInputScenePosition</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> mNetId, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;pin_type) const =0</td></tr>
 <tr class="separator:abff0f4f7a3f5ce78c49b666b6569295b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1b15135b8307f3afeb701f007ad6758"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ae1b15135b8307f3afeb701f007ad6758">getOutputScenePosition</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mNetId, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;pin_type) const =0</td></tr>
+<tr class="memitem:ae1b15135b8307f3afeb701f007ad6758"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ae1b15135b8307f3afeb701f007ad6758">getOutputScenePosition</a> (const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> mNetId, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;pin_type) const =0</td></tr>
 <tr class="separator:ae1b15135b8307f3afeb701f007ad6758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac933b353cbb8603cd873a887866f86ac"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ac933b353cbb8603cd873a887866f86ac">endpointPositionByIndex</a> (int index, bool isInput) const =0</td></tr>
+<tr class="memitem:ac933b353cbb8603cd873a887866f86ac"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ac933b353cbb8603cd873a887866f86ac">endpointPositionByIndex</a> (int <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, bool isInput) const =0</td></tr>
 <tr class="separator:ac933b353cbb8603cd873a887866f86ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49d2cbe7e29be17ff636e69a8f11d983"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a49d2cbe7e29be17ff636e69a8f11d983">yEndpointDistance</a> () const =0</td></tr>
 <tr class="separator:a49d2cbe7e29be17ff636e69a8f11d983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50cc2d7100e8f7213317837c28bd6a64"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a50cc2d7100e8f7213317837c28bd6a64">yTopPinDistance</a> () const =0</td></tr>
 <tr class="separator:a50cc2d7100e8f7213317837c28bd6a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8e9f46fdb8f5e23f98694c47bcf489e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ab8e9f46fdb8f5e23f98694c47bcf489e">inputByNet</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> netId) const</td></tr>
+<tr class="memitem:ab8e9f46fdb8f5e23f98694c47bcf489e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ab8e9f46fdb8f5e23f98694c47bcf489e">inputByNet</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> netId) const</td></tr>
 <tr class="separator:ab8e9f46fdb8f5e23f98694c47bcf489e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e3d3da9a3ae76193aa78bf0dd640f50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a6e3d3da9a3ae76193aa78bf0dd640f50">outputByNet</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> netId) const</td></tr>
+<tr class="memitem:a6e3d3da9a3ae76193aa78bf0dd640f50"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a6e3d3da9a3ae76193aa78bf0dd640f50">outputByNet</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> netId) const</td></tr>
 <tr class="separator:a6e3d3da9a3ae76193aa78bf0dd640f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0dd2c100905c7207cc56cbb94d3f9e"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a3b0dd2c100905c7207cc56cbb94d3f9e">inputNets</a> () const</td></tr>
+<tr class="memitem:a3b0dd2c100905c7207cc56cbb94d3f9e"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a3b0dd2c100905c7207cc56cbb94d3f9e">inputNets</a> () const</td></tr>
 <tr class="separator:a3b0dd2c100905c7207cc56cbb94d3f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a667bd6a9056a3cde929d12f82133775f"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a667bd6a9056a3cde929d12f82133775f">outputNets</a> () const</td></tr>
+<tr class="memitem:a667bd6a9056a3cde929d12f82133775f"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a667bd6a9056a3cde929d12f82133775f">outputNets</a> () const</td></tr>
 <tr class="separator:a667bd6a9056a3cde929d12f82133775f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2537c1b96edb0877a2aa144f957a298"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#aa2537c1b96edb0877a2aa144f957a298">setVisuals</a> (const <a class="el" href="structhal_1_1_graphics_node_1_1_visuals.html">Visuals</a> &amp;v)</td></tr>
 <tr class="separator:aa2537c1b96edb0877a2aa144f957a298"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,14 +169,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4ce794805fad439ac26dd10210a67dba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a769c82d74b8943bb2d61ba24df7e4fd1"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a769c82d74b8943bb2d61ba24df7e4fd1">height</a> () const</td></tr>
 <tr class="separator:a769c82d74b8943bb2d61ba24df7e4fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8f804e9331b4a77fd6e4ecd2599f185"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ad8f804e9331b4a77fd6e4ecd2599f185">set_name</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:ad8f804e9331b4a77fd6e4ecd2599f185"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ad8f804e9331b4a77fd6e4ecd2599f185">set_name</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:ad8f804e9331b4a77fd6e4ecd2599f185"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_graphics_item"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_graphics_item')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_graphics_item.html">hal::GraphicsItem</a></td></tr>
-<tr class="memitem:ab8965bbab77c3c96c6fa20a9fa58b7bd inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">GraphicsItem</a> (const <a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#type">type</a>, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>)</td></tr>
+<tr class="memitem:ab8965bbab77c3c96c6fa20a9fa58b7bd inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">GraphicsItem</a> (const <a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#type">type</a>, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>)</td></tr>
 <tr class="separator:ab8965bbab77c3c96c6fa20a9fa58b7bd inherit pub_methods_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7c6eefe2712ea0a2c8f312876b91f7b inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#aa7c6eefe2712ea0a2c8f312876b91f7b">itemType</a> () const</td></tr>
 <tr class="separator:aa7c6eefe2712ea0a2c8f312876b91f7b inherit pub_methods_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af245ab823135383a30a131a8f173f4a0 inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a> () const</td></tr>
+<tr class="memitem:af245ab823135383a30a131a8f173f4a0 inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a> () const</td></tr>
 <tr class="separator:af245ab823135383a30a131a8f173f4a0 inherit pub_methods_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6684eb87b8eaa5a88497afea81f7dee inherit pub_methods_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#ab6684eb87b8eaa5a88497afea81f7dee">setHightlight</a> (bool hl)</td></tr>
 <tr class="separator:ab6684eb87b8eaa5a88497afea81f7dee inherit pub_methods_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,7 +269,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:setSelected inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#acceptDrops">acceptDrops</a> () const const</td></tr>
 <tr class="separator:acceptDrops inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptDrops">setAcceptDrops</a> (bool <a class="el" href="_apache_01_license_8txt.html#a99e0c7c6bd1082fe4cf97f0912e847d7">on</a>)</td></tr>
+<tr class="memitem:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptDrops">setAcceptDrops</a> (bool on)</td></tr>
 <tr class="separator:setAcceptDrops inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:opacity inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#opacity">opacity</a> () const const</td></tr>
 <tr class="separator:opacity inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -391,7 +393,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:setTransformations inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:transformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#transformOriginPoint">transformOriginPoint</a> () const const</td></tr>
 <tr class="separator:transformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint">setTransformOriginPoint</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;origin)</td></tr>
+<tr class="memitem:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint">setTransformOriginPoint</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>)</td></tr>
 <tr class="separator:setTransformOriginPoint inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:setTransformOriginPoint-1 inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setTransformOriginPoint-1">setTransformOriginPoint</a> (qreal <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#x">x</a>, qreal <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#y">y</a>)</td></tr>
 <tr class="separator:setTransformOriginPoint-1 inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -433,7 +435,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:boundingRegionGranularity inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:setBoundingRegionGranularity inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setBoundingRegionGranularity">setBoundingRegionGranularity</a> (qreal granularity)</td></tr>
 <tr class="separator:setBoundingRegionGranularity inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:paint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#paint">paint</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, const <a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *<a class="el" href="plugins_2liberty__parser_2_c_make_lists_8txt.html#a0b15f71f691b5d99bcd0267d8e190d1a">option</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget)=0</td></tr>
+<tr class="memitem:paint inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#paint">paint</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a> *painter, const <a class="elRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a> *option, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *widget)=0</td></tr>
 <tr class="separator:paint inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:update inherit pub_methods_qgraphicsitem"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">update</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> &amp;rect)</td></tr>
 <tr class="separator:update inherit pub_methods_qgraphicsitem"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -650,16 +652,16 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a2b80d47cdbe321446fbcc5e9994fd97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace13e61718b28ae1a2259090966f8434"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#ace13e61718b28ae1a2259090966f8434">mHeight</a></td></tr>
 <tr class="separator:ace13e61718b28ae1a2259090966f8434"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1390747e6f28ac38564d52d8c30e34c4"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a1390747e6f28ac38564d52d8c30e34c4">mInputByNet</a></td></tr>
+<tr class="memitem:a1390747e6f28ac38564d52d8c30e34c4"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a1390747e6f28ac38564d52d8c30e34c4">mInputByNet</a></td></tr>
 <tr class="separator:a1390747e6f28ac38564d52d8c30e34c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2805f9ba01f96991e5d705f01b458282"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a2805f9ba01f96991e5d705f01b458282">mOutputByNet</a></td></tr>
+<tr class="memitem:a2805f9ba01f96991e5d705f01b458282"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_node.html#a2805f9ba01f96991e5d705f01b458282">mOutputByNet</a></td></tr>
 <tr class="separator:a2805f9ba01f96991e5d705f01b458282"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classhal_1_1_graphics_item"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhal_1_1_graphics_item')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhal_1_1_graphics_item.html">hal::GraphicsItem</a></td></tr>
 <tr class="memitem:a4f5bc6af869516d935ec9143aba34409 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#a4f5bc6af869516d935ec9143aba34409">mItemType</a></td></tr>
 <tr class="separator:a4f5bc6af869516d935ec9143aba34409 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bbe21562cfc9d6454fe38b0fb5f9a06 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#a1bbe21562cfc9d6454fe38b0fb5f9a06">mHighlight</a></td></tr>
 <tr class="separator:a1bbe21562cfc9d6454fe38b0fb5f9a06 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c4df4387503cfebc024215ccd177af9 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#a9c4df4387503cfebc024215ccd177af9">mId</a></td></tr>
+<tr class="memitem:a9c4df4387503cfebc024215ccd177af9 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#a9c4df4387503cfebc024215ccd177af9">mId</a></td></tr>
 <tr class="separator:a9c4df4387503cfebc024215ccd177af9 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad62e8e9a97f337bc865bca0b45198b79 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_item.html#ad62e8e9a97f337bc865bca0b45198b79">mColor</a></td></tr>
 <tr class="separator:ad62e8e9a97f337bc865bca0b45198b79 inherit pro_attribs_classhal_1_1_graphics_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -840,7 +842,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>id</em>&#160;</td>
         </tr>
         <tr>
@@ -939,9 +941,9 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>- The index of the pin </td></tr>
-    <tr><td class="paramname">isInput</td><td>- <b>true</b> if the pin is an input pin <br  />
+    <tr><td class="paramname">isInput</td><td>- <code>true</code> if the pin is an input pin <br  />
 <ul>
-<li><b>false</b> if the pin is an output pin </li>
+<li><code>false</code> if the pin is an output pin </li>
 </ul>
 </td></tr>
   </table>
@@ -965,7 +967,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> hal::GraphicsNode::getInputScenePosition </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>mNetId</em>, </td>
         </tr>
         <tr>
@@ -1012,7 +1014,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a> hal::GraphicsNode::getOutputScenePosition </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>mNetId</em>, </td>
         </tr>
         <tr>
@@ -1120,7 +1122,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">int hal::GraphicsNode::inputByNet </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>netId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1149,7 +1151,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::GraphicsNode::inputNets </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::GraphicsNode::inputNets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1168,7 +1170,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
 
 <p class="definition">Definition at line <a class="el" href="graphics__node_8cpp_source.html#l00110">110</a> of file <a class="el" href="graphics__node_8cpp_source.html">graphics_node.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__node_8h_source.html#l00261">mInputByNet</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#toList">QVector::toList()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__node_8h_source.html#l00261">mInputByNet</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#toList">QVector::toList()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="standard__graphics__gate_8cpp_source.html#l00096">hal::StandardGraphicsGate::paint()</a>.</p>
 
@@ -1215,7 +1217,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
         <tr>
           <td class="memname">int hal::GraphicsNode::outputByNet </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>netId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1244,7 +1246,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::GraphicsNode::outputNets </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; hal::GraphicsNode::outputNets </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1263,7 +1265,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
 
 <p class="definition">Definition at line <a class="el" href="graphics__node_8cpp_source.html#l00123">123</a> of file <a class="el" href="graphics__node_8cpp_source.html">graphics_node.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__node_8h_source.html#l00267">mOutputByNet</a>, <a class="el" href="test_8py_source.html#l00006">test::n</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#toList">QVector::toList()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__node_8h_source.html#l00267">mOutputByNet</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvector.html#toList">QVector::toList()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="standard__graphics__gate_8cpp_source.html#l00096">hal::StandardGraphicsGate::paint()</a>.</p>
 
@@ -1530,7 +1532,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>,int&gt; hal::GraphicsNode::mInputByNet</td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>,int&gt; hal::GraphicsNode::mInputByNet</td>
         </tr>
       </table>
   </td>
@@ -1612,7 +1614,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>,int&gt; hal::GraphicsNode::mOutputByNet</td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qmultihash.html">QMultiHash</a>&lt;<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>,int&gt; hal::GraphicsNode::mOutputByNet</td>
         </tr>
       </table>
   </td>
@@ -1766,8 +1768,8 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/items/nodes/<a class="el" href="graphics__node_8h_source.html">graphics_node.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/graph_widget/items/nodes/<a class="el" href="graphics__node_8cpp_source.html">graphics_node.cpp</a></li>
+<li>plugins/gui/include/gui/graph_widget/items/nodes/<a class="el" href="graphics__node_8h_source.html">graphics_node.h</a></li>
+<li>plugins/gui/src/graph_widget/items/nodes/<a class="el" href="graphics__node_8cpp_source.html">graphics_node.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1775,7 +1777,7 @@ If <em>netId=0</em> there is no net connected to the pin at index <em>idx</em>. 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graphics_node.html">GraphicsNode</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

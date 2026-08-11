@@ -7,7 +7,5 @@ var classhal_1_1_new_project_dialog =
     [ "saveIconPath", "classhal_1_1_new_project_dialog.html#a6d5132e875d58132315133941668a485", null ],
     [ "saveIconStyle", "classhal_1_1_new_project_dialog.html#a97874db5235ebbce296f51564e57d978", null ],
     [ "setSaveIconPath", "classhal_1_1_new_project_dialog.html#a93f97dae0b65f576ef7fa9635f162c38", null ],
-    [ "setSaveIconStyle", "classhal_1_1_new_project_dialog.html#a20f2ac86838f17c3af7723f5c86de9b7", null ],
-    [ "saveIconPath", "classhal_1_1_new_project_dialog.html#a40f2c52c8e683cac0060fb88e48fe661", null ],
-    [ "saveIconStyle", "classhal_1_1_new_project_dialog.html#a4d9f960799fa8d6a1e27d7eb1e9b3986", null ]
+    [ "setSaveIconStyle", "classhal_1_1_new_project_dialog.html#a20f2ac86838f17c3af7723f5c86de9b7", null ]
 ];

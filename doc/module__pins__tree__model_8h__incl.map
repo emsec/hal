@@ -1,5 +1,5 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/module_details_widget/module_pins_tree_model.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/module_details_widget/module_pins_tree_model.h">
-<area shape="rect" id="node1" title=" " alt="" coords="605,5,836,91"/>
+<map id="plugins/gui/include/gui/selection_details_widget/module_details_widget/module_pins_tree_model.h" name="plugins/gui/include/gui/selection_details_widget/module_details_widget/module_pins_tree_model.h">
+<area shape="rect" id="node1" title=" " alt="" coords="624,5,817,91"/>
 <area shape="rect" id="node2" href="$base__tree__model_8h.html" title=" " alt="" coords="87,139,248,180"/>
 <area shape="rect" id="node5" href="$pin__direction_8h.html" title=" " alt="" coords="273,139,491,180"/>
 <area shape="rect" id="node8" href="$pin__event_8h.html" title=" " alt="" coords="731,139,929,180"/>

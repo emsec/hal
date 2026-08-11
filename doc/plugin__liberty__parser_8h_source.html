@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/liberty_parser/include/liberty_parser/plugin_liberty_parser.h Source File</title>
+<title>HAL: plugins/liberty_parser/include/liberty_parser/plugin_liberty_parser.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -118,33 +120,33 @@ $(document).ready(function(){initNavTree('plugin__liberty__parser_8h_source.html
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classhal_1_1_liberty_parser_extension.html">   33</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_liberty_parser_extension.html">LibertyParserExtension</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_fac_extension_interface.html">FacExtensionInterface</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_extension.html#a98729b36b1881628645b6d659ea78123">LibertyParserExtension</a>();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    };</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_liberty_parser_plugin.html">   39</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> <a class="code" href="classhal_1_1_liberty_parser_plugin.html">LibertyParserPlugin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_extension.html">LibertyParserExtension</a>* m_extension;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_plugin.html">LibertyParserPlugin</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        std::string get_name() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        std::string get_version() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> on_load() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> on_unload() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    };</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_liberty_parser_extension.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_liberty_parser_extension.html">LibertyParserExtension</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_fac_extension_interface.html">FacExtensionInterface</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_extension.html#a98729b36b1881628645b6d659ea78123">LibertyParserExtension</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    };</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_liberty_parser_plugin.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> <a class="code" href="classhal_1_1_liberty_parser_plugin.html">LibertyParserPlugin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_extension.html">LibertyParserExtension</a>* m_extension;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="classhal_1_1_liberty_parser_plugin.html">LibertyParserPlugin</a>();</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        std::string get_name() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        std::string get_version() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> on_load() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> on_unload() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00032">arch_linux.h:32</a></div></div>
-<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00056">plugin_interface_base.h:57</a></div></div>
-<div class="ttc" id="aclasshal_1_1_fac_extension_interface_html"><div class="ttname"><a href="classhal_1_1_fac_extension_interface.html">hal::FacExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="fac__extension__interface_8h_source.html#l00054">fac_extension_interface.h:55</a></div></div>
-<div class="ttc" id="aclasshal_1_1_liberty_parser_extension_html"><div class="ttname"><a href="classhal_1_1_liberty_parser_extension.html">hal::LibertyParserExtension</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__liberty__parser_8h_source.html#l00033">plugin_liberty_parser.h:34</a></div></div>
+<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:59</a></div></div>
+<div class="ttc" id="aclasshal_1_1_fac_extension_interface_html"><div class="ttname"><a href="classhal_1_1_fac_extension_interface.html">hal::FacExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="fac__extension__interface_8h_source.html#l00062">fac_extension_interface.h:63</a></div></div>
+<div class="ttc" id="aclasshal_1_1_liberty_parser_extension_html"><div class="ttname"><a href="classhal_1_1_liberty_parser_extension.html">hal::LibertyParserExtension</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__liberty__parser_8h_source.html#l00036">plugin_liberty_parser.h:37</a></div></div>
 <div class="ttc" id="aclasshal_1_1_liberty_parser_extension_html_a98729b36b1881628645b6d659ea78123"><div class="ttname"><a href="classhal_1_1_liberty_parser_extension.html#a98729b36b1881628645b6d659ea78123">hal::LibertyParserExtension::LibertyParserExtension</a></div><div class="ttdeci">LibertyParserExtension()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__liberty__parser_8cpp_source.html#l00013">plugin_liberty_parser.cpp:13</a></div></div>
-<div class="ttc" id="aclasshal_1_1_liberty_parser_plugin_html"><div class="ttname"><a href="classhal_1_1_liberty_parser_plugin.html">hal::LibertyParserPlugin</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__liberty__parser_8h_source.html#l00039">plugin_liberty_parser.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_liberty_parser_plugin_html"><div class="ttname"><a href="classhal_1_1_liberty_parser_plugin.html">hal::LibertyParserPlugin</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__liberty__parser_8h_source.html#l00045">plugin_liberty_parser.h:46</a></div></div>
 <div class="ttc" id="afac__extension__interface_8h_html"><div class="ttname"><a href="fac__extension__interface_8h.html">fac_extension_interface.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html"><div class="ttname"><a href="plugin__interface__base_8h.html">plugin_interface_base.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -152,7 +154,7 @@ $(document).ready(function(){initNavTree('plugin__liberty__parser_8h_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_f3958635be81ae354b4b4ed92726f361.html">liberty_parser</a></li><li class="navelem"><a class="el" href="dir_a596ef7f92074a2fbd5b49c918e874d8.html">include</a></li><li class="navelem"><a class="el" href="dir_7484a20fa858ef005c6ed039f2e3f862.html">liberty_parser</a></li><li class="navelem"><a class="el" href="plugin__liberty__parser_8h.html">plugin_liberty_parser.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

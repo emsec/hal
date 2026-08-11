@@ -1,22 +1,36 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_manager.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/user_action/user_action_manager.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="798,5,978,76"/>
-<area shape="rect" id="node2" href="$user__action__manager_8h.html" title=" " alt="" coords="355,317,508,359"/>
-<area shape="rect" id="node6" title=" " alt="" coords="600,407,714,433"/>
-<area shape="rect" id="node7" title=" " alt="" coords="702,139,756,165"/>
-<area shape="rect" id="node8" title=" " alt="" coords="780,139,883,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="908,139,982,165"/>
-<area shape="rect" id="node10" title=" " alt="" coords="1050,235,1128,262"/>
-<area shape="rect" id="node11" title=" " alt="" coords="1283,139,1418,165"/>
-<area shape="rect" id="node12" href="$user__action_8h.html" title=" " alt="" coords="355,228,508,269"/>
-<area shape="rect" id="node13" href="$user__action__compound_8h.html" title=" " alt="" coords="470,131,626,173"/>
-<area shape="rect" id="node14" href="$action__open__netlist__file_8h.html" title=" " alt="" coords="40,131,205,173"/>
-<area shape="rect" id="node15" href="$action__unfold__module_8h.html" title=" " alt="" coords="229,131,394,173"/>
-<area shape="rect" id="node16" href="$settings__item__checkbox_8h.html" title=" " alt="" coords="1442,124,1600,180"/>
-<area shape="rect" id="node17" href="$python__thread_8h.html" title=" " alt="" coords="1058,139,1259,165"/>
-<area shape="rect" id="node18" href="$log_8h.html" title=" " alt="" coords="1625,131,1756,173"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1780,139,1881,165"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1906,139,2011,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="308,407,382,433"/>
-<area shape="rect" id="node4" title=" " alt="" coords="512,407,567,433"/>
-<area shape="rect" id="node5" title=" " alt="" coords="407,407,472,433"/>
+<map id="plugins/gui/src/user_action/user_action_manager.cpp" name="plugins/gui/src/user_action/user_action_manager.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="1199,5,1438,47"/>
+<area shape="rect" id="node2" href="$user__action__manager_8h.html" title=" " alt="" coords="573,288,726,329"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1585,377,1700,404"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1477,109,1531,136"/>
+<area shape="rect" id="node14" title=" " alt="" coords="1555,109,1658,136"/>
+<area shape="rect" id="node15" title=" " alt="" coords="1683,109,1757,136"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1585,206,1663,233"/>
+<area shape="rect" id="node17" title=" " alt="" coords="1782,109,1917,136"/>
+<area shape="rect" id="node18" href="$user__action_8h.html" title=" " alt="" coords="342,199,495,240"/>
+<area shape="rect" id="node22" href="$user__action__compound_8h.html" title=" " alt="" coords="670,102,826,143"/>
+<area shape="rect" id="node23" href="$action__open__netlist__file_8h.html" title=" " alt="" coords="429,102,595,143"/>
+<area shape="rect" id="node24" href="$action__unfold__module_8h.html" title=" " alt="" coords="189,102,355,143"/>
+<area shape="rect" id="node25" href="$settings__item__checkbox_8h.html" title=" " alt="" coords="934,95,1093,151"/>
+<area shape="rect" id="node30" href="$python__thread_8h.html" title=" " alt="" coords="1149,109,1350,136"/>
+<area shape="rect" id="node32" href="$log_8h.html" title=" " alt="" coords="5,288,136,329"/>
+<area shape="rect" id="node33" title=" " alt="" coords="1941,109,2043,136"/>
+<area shape="rect" id="node34" title=" " alt="" coords="2067,109,2173,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="428,377,503,404"/>
+<area shape="rect" id="node4" title=" " alt="" coords="931,377,986,404"/>
+<area shape="rect" id="node5" title=" " alt="" coords="842,377,907,404"/>
+<area shape="rect" id="node6" title=" " alt="" coords="258,377,403,404"/>
+<area shape="rect" id="node7" title=" " alt="" coords="527,377,678,404"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1381,377,1502,404"/>
+<area shape="rect" id="node9" title=" " alt="" coords="702,377,818,404"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1070,377,1143,404"/>
+<area shape="rect" id="node12" href="$defines_8h.html" title=" " alt="" coords="94,377,234,404"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1146,295,1217,322"/>
+<area shape="rect" id="node20" title=" " alt="" coords="161,295,317,322"/>
+<area shape="rect" id="node21" href="$user__action__object_8h.html" title=" " alt="" coords="341,295,497,322"/>
+<area shape="rect" id="node26" title=" " alt="" coords="622,206,719,233"/>
+<area shape="rect" id="node27" href="$settings__item_8h.html" title=" " alt="" coords="744,199,915,240"/>
+<area shape="rect" id="node29" href="$settings__widget_8h.html" title=" " alt="" coords="939,199,1138,240"/>
+<area shape="rect" id="node28" title=" " alt="" coords="999,295,1078,322"/>
+<area shape="rect" id="node31" href="$python__context__subscriber_8h.html" title=" " alt="" coords="1263,199,1459,240"/>
 </map>

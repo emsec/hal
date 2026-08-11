@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GUI API &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>GUI API &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -103,7 +103,7 @@
 <dd class="field-odd"><p><strong>gateId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Gate ID.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Position of gate or None if gate not found in hash.</p>
+<dd class="field-even"><p>Position of gate or <code class="docutils literal notranslate"><span class="pre">None</span></code> if gate not found in hash.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
@@ -120,7 +120,7 @@
 <dd class="field-odd"><p><strong>moduleId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Module ID.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Position of module or None if module not found in hash.</p>
+<dd class="field-even"><p>Position of module or <code class="docutils literal notranslate"><span class="pre">None</span></code> if module not found in hash.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
@@ -530,8 +530,8 @@
 <li><p>select(self: hal_gui.GuiApi, gate: hal_py.Gate, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gate in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gate will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gate will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Gate gate</dt>
 <dd class="field-odd"><p>The gate to be selected.</p>
@@ -548,8 +548,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, net: hal_py.Net, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the net in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the net will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the net will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Net net</dt>
 <dd class="field-odd"><p>The net to be selected.</p>
@@ -566,8 +566,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, module: hal_py.Module, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the module in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the module will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the module will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.module module</dt>
 <dd class="field-odd"><p>The module to be selected.</p>
@@ -584,8 +584,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, gates: List[hal_py.Gate], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gates in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gates will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gates will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] gates</dt>
 <dd class="field-odd"><p>The gates to be selected.</p>
@@ -602,8 +602,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, nets: List[hal_py.Net], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the nets in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the nets will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the nets will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Net] nets</dt>
 <dd class="field-odd"><p>The nets to be selected.</p>
@@ -620,8 +620,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the modules in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the modules will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.module] modules</dt>
 <dd class="field-odd"><p>The modules to be selected.</p>
@@ -638,8 +638,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, gate_ids: List[int], net_ids: List[int], module_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gates, nets and modules with the passed ids in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gates, nets and modules will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gates, nets and modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] gates</dt>
 <dd class="field-odd"><p>The ids of the gates to be selected.</p>
@@ -662,8 +662,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>select(self: hal_gui.GuiApi, gates: List[hal_py.Gate], nets: List[hal_py.Net], modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gates, nets and modules in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gates, nets and modules will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gates, nets and modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] gates</dt>
 <dd class="field-odd"><p>The gates to be selected.</p>
@@ -694,8 +694,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectGate(self: hal_gui.GuiApi, gate_id: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gate with id ‘gate_id’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gate with the id ‘gate_id’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gate with the id ‘gate_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param int gate_id</dt>
 <dd class="field-odd"><p>The gate id of the gate to be selected.</p>
@@ -712,8 +712,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectGate(self: hal_gui.GuiApi, gate: hal_py.Gate, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gate in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gate will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gate will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Gate gate</dt>
 <dd class="field-odd"><p>The gate to be selected.</p>
@@ -730,8 +730,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectGate(self: hal_gui.GuiApi, gate_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gates with the ids in list ‘gate_ids’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gate with the id ‘gate_id’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gate with the id ‘gate_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[int] gate_ids</dt>
 <dd class="field-odd"><p>List of gate ids of the gates to be selected.</p>
@@ -748,8 +748,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectGate(self: hal_gui.GuiApi, gates: List[hal_py.Gate], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the gates in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the gates will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the gates will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Gate] gates</dt>
 <dd class="field-odd"><p>The gates to be selected.</p>
@@ -774,8 +774,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectModule(self: hal_gui.GuiApi, module_id: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the module with id ‘module_id’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the module with the id ‘module_id’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the module with the id ‘module_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param int module_id</dt>
 <dd class="field-odd"><p>The module id of the module to be selected.</p>
@@ -792,8 +792,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectModule(self: hal_gui.GuiApi, module: hal_py.Module, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the module in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the module will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the module will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.module module</dt>
 <dd class="field-odd"><p>The module to be selected.</p>
@@ -810,8 +810,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectModule(self: hal_gui.GuiApi, module_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the modules with the ids in list ‘module_ids’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the module with the id ‘module_id’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the module with the id ‘module_id’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[int] module_ids</dt>
 <dd class="field-odd"><p>List of module ids of the modules to be selected.</p>
@@ -828,8 +828,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectModule(self: hal_gui.GuiApi, modules: List[hal_py.Module], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the modules in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the modules will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the modules will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.module] modules</dt>
 <dd class="field-odd"><p>The modules to be selected.</p>
@@ -854,8 +854,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectNet(self: hal_gui.GuiApi, mNetId: int, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the net with id ‘mNetId’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the net with the id ‘mNetId’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the net with the id ‘mNetId’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param int mNetId</dt>
 <dd class="field-odd"><p>The net id of the net to be selected.</p>
@@ -872,8 +872,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectNet(self: hal_gui.GuiApi, net: hal_py.Net, clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the net in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the net will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the net will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Net net</dt>
 <dd class="field-odd"><p>The net to be selected.</p>
@@ -890,8 +890,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectNet(self: hal_gui.GuiApi, net_ids: List[int], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the nets with the ids in list ‘net_ids’ in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the net with the id ‘mNetId’ will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the net with the id ‘mNetId’ will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[int] net_ids</dt>
 <dd class="field-odd"><p>List of net ids of the nets to be selected.</p>
@@ -908,8 +908,8 @@ If ‘navigate_to_selection’ is false, the graph view will not modify the grap
 <li><p>selectNet(self: hal_gui.GuiApi, nets: List[hal_py.Net], clear_current_selection: bool = True, navigate_to_selection: bool = True) -&gt; None</p>
 <blockquote>
 <div><p>Select the nets in the graph view of the GUI.
-If ‘clear_current_selection’ is false, the nets will be added to the currently existing selection.
-If ‘navigate_to_selection’ is false, the graph view will not modify the graph view camera position to fit all selected items.</p>
+If ‘clear_current_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the nets will be added to the currently existing selection.
+If ‘navigate_to_selection’ is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the graph view will not modify the graph view camera position to fit all selected items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param list[hal_py.Net] nets</dt>
 <dd class="field-odd"><p>The nets to be selected.</p>

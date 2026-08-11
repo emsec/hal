@@ -1,0 +1,25 @@
+<map id="plugins/module_identification/src/candidates/candidate_context.cpp" name="plugins/module_identification/src/candidates/candidate_context.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="879,5,1093,61"/>
+<area shape="rect" id="node2" href="$candidate__context_8h.html" title="This file contains the CandidateContext struct and that is used for optimization purposes during the ..." alt="" coords="645,109,810,165"/>
+<area shape="rect" id="node14" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="294,310,473,337"/>
+<area shape="rect" id="node18" href="$boolean__influence_8h.html" title=" " alt="" coords="1792,117,1988,158"/>
+<area shape="rect" id="node20" href="$gate_8h.html" title=" " alt="" coords="1161,124,1328,151"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="779,481,919,508"/>
+<area shape="rect" id="node4" href="$boolean__function__decorator_8h.html" title=" " alt="" coords="618,213,837,255"/>
+<area shape="rect" id="node6" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="39,392,170,433"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1617,399,1667,426"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1808,399,1871,426"/>
+<area shape="rect" id="node12" href="$boolean__function__net__decorator_8h.html" title=" " alt="" coords="911,213,1157,255"/>
+<area shape="rect" id="node13" href="$subgraph__netlist__decorator_8h.html" title=" " alt="" coords="227,213,441,255"/>
+<area shape="rect" id="node17" href="$log_8h.html" title=" " alt="" coords="655,303,786,344"/>
+<area shape="rect" id="node5" href="$boolean__function_8h.html" title=" " alt="" coords="1117,303,1295,344"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1185,399,1227,426"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1423,399,1547,426"/>
+<area shape="rect" id="node7" title=" " alt="" coords="164,481,251,508"/>
+<area shape="rect" id="node15" href="$event__handler_8h.html" title=" " alt="" coords="397,392,583,433"/>
+<area shape="rect" id="node16" title=" " alt="" coords="607,399,685,426"/>
+<area shape="rect" id="node19" href="$z3__utils_8h.html" title=" " alt="" coords="1282,221,1421,247"/>
+<area shape="rect" id="node21" href="$data__container_8h.html" title=" " alt="" coords="1927,303,2082,344"/>
+<area shape="rect" id="node22" href="$endpoint_8h.html" title=" " alt="" coords="2157,310,2351,337"/>
+<area shape="rect" id="node23" href="$gate__type_8h.html" title=" " alt="" coords="1445,213,1599,255"/>
+</map>

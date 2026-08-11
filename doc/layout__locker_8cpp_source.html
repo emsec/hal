@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/graph_widget/layout_locker.cpp Source File</title>
+<title>HAL: plugins/gui/src/graph_widget/layout_locker.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -114,7 +116,7 @@ $(document).ready(function(){initNavTree('layout__locker_8cpp_source.html',''); 
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">if</span> (mLockCount &lt;= 0 &amp;&amp; !mWaitingRoom.isEmpty())</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> ctxId : mWaitingRoom)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> ctxId : mWaitingRoom)</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx = <a class="code" href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">gGraphContextManager</a>-&gt;<a class="code" href="classhal_1_1_graph_context_manager.html#a3640a87fa70d4cf511cbd5a5a94bede8">getContextById</a>(ctxId);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <span class="keywordflow">if</span> (ctx) ctx-&gt;startSceneUpdate();</div>
@@ -151,20 +153,20 @@ $(document).ready(function(){initNavTree('layout__locker_8cpp_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_graph_context_html"><div class="ttname"><a href="classhal_1_1_graph_context.html">hal::GraphContext</a></div><div class="ttdoc">Logical container for modules, gates, and nets.</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8h_source.html#l00054">graph_context.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_aecccd028104e704aca70dc383c386477"><div class="ttname"><a href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">hal::GraphContext::id</a></div><div class="ttdeci">u32 id() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00452">graph_context.cpp:452</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_manager_html_a3640a87fa70d4cf511cbd5a5a94bede8"><div class="ttname"><a href="classhal_1_1_graph_context_manager.html#a3640a87fa70d4cf511cbd5a5a94bede8">hal::GraphContextManager::getContextById</a></div><div class="ttdeci">GraphContext * getContextById(u32 id) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context__manager_8cpp_source.html#l00253">graph_context_manager.cpp:253</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html">hal::LayoutLockerManager</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00035">layout_locker.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html">hal::LayoutLockerManager</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00038">layout_locker.h:39</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agraph__context_8h_html"><div class="ttname"><a href="graph__context_8h.html">graph_context.h</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="alayout__locker_8h_html"><div class="ttname"><a href="layout__locker_8h.html">layout_locker.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a63d96610e22dcbffc0755f514731d730"><div class="ttname"><a href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">hal::gGraphContextManager</a></div><div class="ttdeci">GraphContextManager * gGraphContextManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00085">plugin_gui.cpp:85</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="layout__locker_8cpp.html">layout_locker.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

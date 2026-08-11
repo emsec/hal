@@ -1,16 +1,16 @@
-<map id="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_parser/netlist_parser_manager.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/netlist_parser/netlist_parser_manager.h">
-<area shape="rect" id="node1" title=" " alt="" coords="465,5,655,76"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="134,303,274,329"/>
-<area shape="rect" id="node7" href="$netlist__parser_8h.html" title=" " alt="" coords="117,124,291,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="339,303,426,329"/>
-<area shape="rect" id="node10" title=" " alt="" coords="531,303,589,329"/>
-<area shape="rect" id="node11" title=" " alt="" coords="645,303,699,329"/>
-<area shape="rect" id="node13" href="$program__options_8h.html" title=" " alt="" coords="598,213,746,255"/>
-<area shape="rect" id="node14" title=" " alt="" coords="768,303,811,329"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,377,96,404"/>
-<area shape="rect" id="node4" title=" " alt="" coords="326,377,413,404"/>
-<area shape="rect" id="node5" title=" " alt="" coords="121,377,207,404"/>
-<area shape="rect" id="node6" title=" " alt="" coords="231,377,302,404"/>
-<area shape="rect" id="node8" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="293,221,472,247"/>
-<area shape="rect" id="node12" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="139,213,269,255"/>
+<map id="include/hal_core/netlist/netlist_parser/netlist_parser_manager.h" name="include/hal_core/netlist/netlist_parser/netlist_parser_manager.h">
+<area shape="rect" id="node1" title=" " alt="" coords="473,5,647,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="134,288,274,315"/>
+<area shape="rect" id="node7" href="$netlist__parser_8h.html" title=" " alt="" coords="117,109,291,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="339,288,426,315"/>
+<area shape="rect" id="node10" title=" " alt="" coords="531,288,589,315"/>
+<area shape="rect" id="node11" title=" " alt="" coords="645,288,699,315"/>
+<area shape="rect" id="node13" href="$program__options_8h.html" title=" " alt="" coords="598,199,746,240"/>
+<area shape="rect" id="node14" title=" " alt="" coords="768,288,811,315"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,363,96,389"/>
+<area shape="rect" id="node4" title=" " alt="" coords="326,363,413,389"/>
+<area shape="rect" id="node5" title=" " alt="" coords="121,363,207,389"/>
+<area shape="rect" id="node6" title=" " alt="" coords="231,363,302,389"/>
+<area shape="rect" id="node8" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="293,206,472,233"/>
+<area shape="rect" id="node12" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="139,199,269,240"/>
 </map>

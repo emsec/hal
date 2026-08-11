@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -112,9 +114,18 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 <li>undoLastAction()
 : <a class="el" href="classhal_1_1_user_action_manager.html#a1806f69156c7a564fcdba056fda7db5d">hal::UserActionManager</a>
 </li>
+<li>undoStateChanged()
+: <a class="el" href="classhal_1_1_wave_graphics_canvas.html#a3f506284480db6a1824c6ab8ae8f1a9d">hal::WaveGraphicsCanvas</a>
+</li>
+<li>undoZoom()
+: <a class="el" href="classhal_1_1_wave_graphics_canvas.html#a0a351af9b55850f0115cbc3b1af616c5">hal::WaveGraphicsCanvas</a>
+</li>
 <li>unfoldModule()
 : <a class="el" href="classhal_1_1_graph_context.html#a0d619c8a12ba665f0c16ac85246909af">hal::GraphContext</a>
 , <a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a21f996a41036ca3e0e4f2a6222dce104">hal::GuiApiClasses::View</a>
+</li>
+<li>uniqueKey()
+: <a class="el" href="classhal_1_1_saleae_directory_net_entry.html#a42bcef45dfb1e7878a98d9996c1965b6">hal::SaleaeDirectoryNetEntry</a>
 </li>
 <li>UniqueStringValidator()
 : <a class="el" href="classhal_1_1_unique_string_validator.html#af312d8ef62d53c1de74f66377de013b0">hal::UniqueStringValidator</a>
@@ -192,6 +203,12 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 , <a class="el" href="classhal_1_1_module_shader.html#ab1112c26afd542e5f10a1ee0ec1836b3">hal::ModuleShader</a>
 , <a class="el" href="classhal_1_1_preview_widget.html#afad7ed7f13ba6b5e3df4e0b40474ffd5">hal::PreviewWidget</a>
 </li>
+<li>update_file_indexes()
+: <a class="el" href="classhal_1_1_saleae_directory.html#adaf8b2cb2f44c189a273010bee77637e">hal::SaleaeDirectory</a>
+</li>
+<li>update_input_output_stats()
+: <a class="el" href="classhal_1_1module__identification_1_1_functional_candidate.html#a91146272299ed4546e04885ddfba1723">hal::module_identification::FunctionalCandidate</a>
+</li>
 <li>update_nets()
 : <a class="el" href="classhal_1_1_module.html#a02af541336529b5ff7a4babadd43bbdb">hal::Module</a>
 </li>
@@ -206,6 +223,9 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 </li>
 <li>updateBottomDockBar()
 : <a class="el" href="classhal_1_1_content_layout_area.html#a97bd4f28826308cfb70c7603300219a0">hal::ContentLayoutArea</a>
+</li>
+<li>updateClocks()
+: <a class="el" href="classhal_1_1_wave_data_list.html#af8d8dc9080b5a9de02aecc37451a8d9c">hal::WaveDataList</a>
 </li>
 <li>updateCurrentEntry()
 : <a class="el" href="classhal_1_1_comment_item.html#afe35277a51fa912e23abfbacffee98de">hal::CommentItem</a>
@@ -225,8 +245,14 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 <li>updateFromLoaded()
 : <a class="el" href="classhal_1_1_gui_plugin_entry.html#ada2fbfe65b4e5ffa91cdda455d056e4f">hal::GuiPluginEntry</a>
 </li>
+<li>updateFromSaleae()
+: <a class="el" href="classhal_1_1_wave_data_list.html#a8f3000bac933ff61655b27d6f1171b70">hal::WaveDataList</a>
+</li>
 <li>updateGateName()
 : <a class="el" href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">hal::ModuleModel</a>
+</li>
+<li>updateGroupName()
+: <a class="el" href="classhal_1_1_wave_data_list.html#a33200347678cda7edb3818033cfe82d6">hal::WaveDataList</a>
 </li>
 <li>updateLeftDockBar()
 : <a class="el" href="classhal_1_1_content_layout_area.html#a79e2d98b43683f2bff0d8a7a6efe28f4">hal::ContentLayoutArea</a>
@@ -239,6 +265,9 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 </li>
 <li>updateModuleType()
 : <a class="el" href="classhal_1_1_module_model.html#a17252e57b28484e5a44a7db7f43c69ec">hal::ModuleModel</a>
+</li>
+<li>updateNetlist()
+: <a class="el" href="classhal_1_1_python_context.html#a75138a2773848f6acfd60b888f54b42a">hal::PythonContext</a>
 </li>
 <li>updateNetName()
 : <a class="el" href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">hal::ModuleModel</a>
@@ -256,8 +285,14 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 <li>updateQss()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#aae997ef2c0bc111111ace31302768e4e">hal::GuiPluginDelegate</a>
 </li>
+<li>updateRequest()
+: <a class="el" href="classhal_1_1_wave_graphics_canvas.html#ab966dd1e161465441d1ea829e6b33617">hal::WaveGraphicsCanvas</a>
+</li>
 <li>updateRightDockBar()
 : <a class="el" href="classhal_1_1_content_layout_area.html#ab5a46be9ba7bb42cccdad98404c780d4">hal::ContentLayoutArea</a>
+</li>
+<li>updateScale()
+: <a class="el" href="classhal_1_1_wave_scrollbar.html#abb959f7f8634afaa4c4a48fa0964ddd9">hal::WaveScrollbar</a>
 </li>
 <li>updateSearchHistory()
 : <a class="el" href="classhal_1_1_searchbar.html#a8e603890e91da31795904dbf85da319c">hal::Searchbar</a>
@@ -266,6 +301,9 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 : <a class="el" href="classhal_1_1_context_manager_widget.html#ad697005c27e0e8de830815e20779dbc0">hal::ContextManagerWidget</a>
 , <a class="el" href="classhal_1_1_module_widget.html#add4e67bd5050b2792b6cb850f62dcbfa">hal::ModuleWidget</a>
 , <a class="el" href="classhal_1_1_python_editor.html#a9f0a709f9d53a878587a2be6e98833f3">hal::PythonEditor</a>
+</li>
+<li>updateSoon()
+: <a class="el" href="classhal_1_1_wave_render_engine.html#a93784a554d9b884df4e4ac267b0c1120">hal::WaveRenderEngine</a>
 </li>
 <li>updateStyle()
 : <a class="el" href="classhal_1_1_python_console_qss_adapter.html#a752d83ac0d4f35fe04b94452d4e9d019">hal::PythonConsoleQssAdapter</a>
@@ -283,6 +321,13 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 </li>
 <li>updateVisuals()
 : <a class="el" href="classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7">hal::GraphicsScene</a>
+</li>
+<li>updateWaveData()
+: <a class="el" href="classhal_1_1_wave_data_group.html#a11b8d250d17313b6e3163b3a55fc613b">hal::WaveDataGroup</a>
+, <a class="el" href="classhal_1_1_wave_data_list.html#af476825272c116c5c2ab7173e4ae2e35">hal::WaveDataList</a>
+</li>
+<li>updateWaveName()
+: <a class="el" href="classhal_1_1_wave_data_list.html#a035d6b137f4faa8f5064d4432e9a6790">hal::WaveDataList</a>
 </li>
 <li>Urem()
 : <a class="el" href="classhal_1_1_boolean_function.html#ab0dbfd8818edece9f567cb906d7f90b8">hal::BooleanFunction</a>
@@ -314,7 +359,7 @@ $(document).ready(function(){initNavTree('functions_func_u.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

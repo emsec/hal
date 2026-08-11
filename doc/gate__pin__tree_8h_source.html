@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/gate_details_widget/gate_pin_tree.h Source File</title>
+<title>HAL: plugins/gui/include/gui/selection_details_widget/gate_details_widget/gate_pin_tree.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -130,9 +132,9 @@ $(document).ready(function(){initNavTree('gate__pin__tree_8h_source.html',''); i
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_gate_pin_tree.html#ac5fd95d1ed5e9a6762aa8ed3fa42b1c8">GatePinTree</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_pin_tree.html#ab8b7406a29952339da46e03bb2d65efa">setGate</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gateID);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_pin_tree.html#ab8b7406a29952339da46e03bb2d65efa">setGate</a>(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateID);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_pin_tree.html#ab8b7406a29952339da46e03bb2d65efa">setGate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_pin_tree.html#ab8b7406a29952339da46e03bb2d65efa">setGate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* g);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gate_pin_tree.html#ac7bd82c3cd94567c35b20ee05ca3a609">removeContent</a>();</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
@@ -155,7 +157,7 @@ $(document).ready(function(){initNavTree('gate__pin__tree_8h_source.html',''); i
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">void</span> buildPythonMenuForPinGroup(<a class="codeRef" href="https://doc.qt.io/qt-5/qmenu.html">QMenu</a> &amp;menu, <a class="code" href="classhal_1_1_gate_pins_tree_item.html">GatePinsTreeItem</a>* clickedPinIGrouptem);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">void</span> addSourceOurDestinationToSelection(<span class="keywordtype">int</span> netId, <span class="keywordtype">bool</span> isInputPin);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">void</span> handleNavigationCloseRequested();</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> handleNavigationJumpRequested(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; origin, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> via_net, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_gates, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_modules);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> handleNavigationJumpRequested(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>, <span class="keyword">const</span> <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> via_net, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_gates, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_modules);</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    };</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
@@ -168,16 +170,16 @@ $(document).ready(function(){initNavTree('gate__pin__tree_8h_source.html',''); i
 <div class="ttc" id="aclasshal_1_1_gate_pin_tree_html_ab8b7406a29952339da46e03bb2d65efa"><div class="ttname"><a href="classhal_1_1_gate_pin_tree.html#ab8b7406a29952339da46e03bb2d65efa">hal::GatePinTree::setGate</a></div><div class="ttdeci">void setGate(u32 gateID)</div><div class="ttdef"><b>Definition:</b> <a href="gate__pin__tree_8cpp_source.html#l00037">gate_pin_tree.cpp:37</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_pin_tree_html_ac5fd95d1ed5e9a6762aa8ed3fa42b1c8"><div class="ttname"><a href="classhal_1_1_gate_pin_tree.html#ac5fd95d1ed5e9a6762aa8ed3fa42b1c8">hal::GatePinTree::GatePinTree</a></div><div class="ttdeci">GatePinTree(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="gate__pin__tree_8cpp_source.html#l00016">gate_pin_tree.cpp:16</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_pin_tree_html_ac7bd82c3cd94567c35b20ee05ca3a609"><div class="ttname"><a href="classhal_1_1_gate_pin_tree.html#ac7bd82c3cd94567c35b20ee05ca3a609">hal::GatePinTree::removeContent</a></div><div class="ttdeci">void removeContent()</div><div class="ttdef"><b>Definition:</b> <a href="gate__pin__tree_8cpp_source.html#l00058">gate_pin_tree.cpp:58</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_pins_tree_item_html"><div class="ttname"><a href="classhal_1_1_gate_pins_tree_item.html">hal::GatePinsTreeItem</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__pins__tree__model_8h_source.html#l00041">gate_pins_tree_model.h:42</a></div></div>
-<div class="ttc" id="aclasshal_1_1_gate_pins_tree_model_html"><div class="ttname"><a href="classhal_1_1_gate_pins_tree_model.html">hal::GatePinsTreeModel</a></div><div class="ttdoc">A model to display the pins of a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gate__pins__tree__model_8h_source.html#l00089">gate_pins_tree_model.h:90</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_pins_tree_item_html"><div class="ttname"><a href="classhal_1_1_gate_pins_tree_item.html">hal::GatePinsTreeItem</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__pins__tree__model_8h_source.html#l00044">gate_pins_tree_model.h:45</a></div></div>
+<div class="ttc" id="aclasshal_1_1_gate_pins_tree_model_html"><div class="ttname"><a href="classhal_1_1_gate_pins_tree_model.html">hal::GatePinsTreeModel</a></div><div class="ttdoc">A model to display the pins of a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gate__pins__tree__model_8h_source.html#l00092">gate_pins_tree_model.h:93</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_navigation_widget_html"><div class="ttname"><a href="classhal_1_1_graph_navigation_widget.html">hal::GraphNavigationWidget</a></div><div class="ttdef"><b>Definition:</b> <a href="graph__navigation__widget_8h_source.html#l00151">graph_navigation_widget.h:152</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00060">gui_def.h:61</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agroup__gui_html_ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16"><div class="ttname"><a href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ItemType::Gate</a></div><div class="ttdeci">@ Gate</div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_a985c304e5c2ab9a0895677493d4cbd0d"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a></div><div class="ttdeci">std::string origin</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01964">netlist_preprocessing.cpp:1964</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#event">QAbstractItemView::event</a></div><div class="ttdeci">virtual bool event(QEvent *event) override</div></div>
 <div class="ttc" id="aqmenu_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmenu.html">QMenu</a></div></div>
 <div class="ttc" id="aqmouseevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a></div></div>
@@ -196,7 +198,7 @@ $(document).ready(function(){initNavTree('gate__pin__tree_8h_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_a35da49c385fb45d333860c108c1de8d.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="dir_d2e4e54da30ebce6aa0f44e5dbbf2c5c.html">gate_details_widget</a></li><li class="navelem"><a class="el" href="gate__pin__tree_8h.html">gate_pin_tree.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

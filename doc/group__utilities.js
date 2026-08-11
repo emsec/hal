@@ -1,7 +1,8 @@
 var group__utilities =
 [
+    [ "CallbackHook", "classhal_1_1_callback_hook.html", null ],
     [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", [
-      [ "add_callback", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45", null ],
+      [ "add_callback", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a019075e67c518ef91aeb9e9cbb2ed109", null ],
       [ "add_callback", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd", null ],
       [ "call", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#aecfd704d440ca0ea5227eeb3d06eb43e", null ],
       [ "call", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#af935dde610707dc0de52d6b814943ae0", null ],
@@ -66,6 +67,16 @@ var group__utilities =
       [ "is_registered", "classhal_1_1_program_options.html#a751129e8ad6e0b07d7258279e3c59b85", null ],
       [ "parse", "classhal_1_1_program_options.html#a92aa887fce50724339aebea1ab3836ee", null ],
       [ "remove", "classhal_1_1_program_options.html#a7946b5dc6662a17e747bdcc65537459b", null ]
+    ] ],
+    [ "ProjectDirectory", "classhal_1_1_project_directory.html", [
+      [ "ProjectDirectory", "classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181", null ],
+      [ "get_canonical_path", "classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392", null ],
+      [ "get_default_filename", "classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004", null ],
+      [ "get_filename", "classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269", null ],
+      [ "get_relative_file_path", "classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d", null ],
+      [ "get_shadow_dir", "classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b", null ],
+      [ "get_shadow_filename", "classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff", null ],
+      [ "ProjectManager", "classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7", null ]
     ] ],
     [ "Token", "structhal_1_1_token.html", [
       [ "Token", "structhal_1_1_token.html#a8cdf807a9ee95404f43c2416a05fc2a3", null ],

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_data_container.html','');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="data__container_8h_source.html">data_container.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="data__container_8h_source.html">hal_core/netlist/data_container.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::DataContainer:</div>
 <div class="dyncontent">
@@ -237,7 +239,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00041">41</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
@@ -286,7 +288,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>, and <a class="el" href="test_2verilog__parser_8cpp_source.html#l01108">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, and <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>.</p>
 
 </div>
 </div>
@@ -348,7 +350,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the entry exists, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the entry exists, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00082">82</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
@@ -380,7 +382,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both data containers are unequal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if both data containers are unequal, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00012">12</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
@@ -410,7 +412,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if both data containers are equal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if both data containers are equal, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00007">7</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
@@ -475,13 +477,13 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2data__container_8cpp_source.html#l00017">17</a> of file <a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="data__container_8h_source.html#l00123">m_data</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00041">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__identification_2src_2api_2result_8cpp_source.html#l00426">hal::module_identification::Result::create_modules_in_netlist()</a>, <a class="el" href="python__bindings_2bindings_2data__container_8cpp_source.html#l00005">hal::data_container_init()</a>, <a class="el" href="action__set__object__data_8cpp_source.html#l00021">hal::ActionSetObjectData::exec()</a>, and <a class="el" href="preprocessing_8cpp_source.html#l00011">hal::xilinx_toolbox::split_luts()</a>.</p>
 
 </div>
 </div>
@@ -544,8 +546,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/<a class="el" href="data__container_8h_source.html">data_container.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/<a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a></li>
+<li>include/hal_core/netlist/<a class="el" href="data__container_8h_source.html">data_container.h</a></li>
+<li>src/netlist/<a class="el" href="netlist_2data__container_8cpp_source.html">data_container.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -553,7 +555,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_data_container.html">DataContainer</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

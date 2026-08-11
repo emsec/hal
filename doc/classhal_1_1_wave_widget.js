@@ -1,0 +1,26 @@
+var classhal_1_1_wave_widget =
+[
+    [ "WaveWidget", "classhal_1_1_wave_widget.html#af2cd0e4d7f0fc592a312ed8a2857634e", null ],
+    [ "~WaveWidget", "classhal_1_1_wave_widget.html#ac0728233cea036daea8108b03fb39d8f", null ],
+    [ "addableEntries", "classhal_1_1_wave_widget.html#a0842844a34cad8cb5244f45d63123ef4", null ],
+    [ "addResults", "classhal_1_1_wave_widget.html#a0480ac0fb2803f6e7e6a4ecbafff204d", null ],
+    [ "addSelectedResults", "classhal_1_1_wave_widget.html#a752c896d0d58de0d4a45748abd4affd1", null ],
+    [ "canImportWires", "classhal_1_1_wave_widget.html#ad03f8da85179f7055ea85f0a33d5894c", null ],
+    [ "controller", "classhal_1_1_wave_widget.html#a1ecad21866f368c267fc364a41fa450a", null ],
+    [ "controllerId", "classhal_1_1_wave_widget.html#a5bd6f61263eadc62360851f5fc534d55", null ],
+    [ "createEngine", "classhal_1_1_wave_widget.html#aad5a5549a9eef32db95b6e5328956eb8", null ],
+    [ "graphicCanvas", "classhal_1_1_wave_widget.html#a0101cea5ec6655edc75b8c301d3e9cd1", null ],
+    [ "hasOwnership", "classhal_1_1_wave_widget.html#aba45fe3eec8dfb30f70d4be660592416", null ],
+    [ "isEmpty", "classhal_1_1_wave_widget.html#a3e1cb205acd8de14bfba3303258281d1", null ],
+    [ "isVisulizeNetState", "classhal_1_1_wave_widget.html#a6c28e74fa4abbbc14286d4dad064343d", null ],
+    [ "refreshNetNames", "classhal_1_1_wave_widget.html#ab2c043e2a625dd7076b36df8599cda64", null ],
+    [ "removeGroup", "classhal_1_1_wave_widget.html#ad6725a6d642014b5c8c23c100fd12027", null ],
+    [ "resizeEvent", "classhal_1_1_wave_widget.html#a746d9cf4c58b94ae1174c43b93cb74da", null ],
+    [ "scrollToYpos", "classhal_1_1_wave_widget.html#af3395307a738738c3beedbd860738e36", null ],
+    [ "setGates", "classhal_1_1_wave_widget.html#a233b0fff3cc1310b165b52b9b419ccd9", null ],
+    [ "setVisualizeNetState", "classhal_1_1_wave_widget.html#a210d72546c5f66f89b7139e55e188c73", null ],
+    [ "state", "classhal_1_1_wave_widget.html#a9d64870fdabc2329bbbe2b287b22b7cc", null ],
+    [ "stateChanged", "classhal_1_1_wave_widget.html#a8bebe40d42c706fc8836993dab1fe631", null ],
+    [ "takeOwnership", "classhal_1_1_wave_widget.html#a830b38394b7a64e7859749608bf9b88f", null ],
+    [ "triggerClose", "classhal_1_1_wave_widget.html#a09076961624ed90a0a28c097eeafc5cf", null ]
+];

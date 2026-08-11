@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/netlist/net.cpp Source File</title>
+<title>HAL: src/netlist/net.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -101,7 +103,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    Net::Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    Net::Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, <span class="keyword">const</span> <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    {</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        assert(internal_manager != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        m_internal_manager = internal_manager;</div>
@@ -173,7 +175,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> (uintptr_t)<span class="keyword">this</span>;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">   88</a></span>&#160;    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">Net::get_id</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">   88</a></span>&#160;    <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">Net::get_id</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">return</span> m_id;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
@@ -190,7 +192,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
 <div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a1703f0e71b660976800a3329264106cc">  103</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_net.html#a1703f0e71b660976800a3329264106cc">Net::set_name</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">utils::trim</a>(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>).empty())</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1utils.html#afc3e55de1af050c4d02459c6ef0782c6">utils::trim</a>(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>).empty())</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;net&quot;</span>, <span class="stringliteral">&quot;net name cannot be empty.&quot;</span>);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordflow">return</span>;</div>
@@ -331,14 +333,14 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keywordflow">return</span> std::find(m_sources_raw.begin(), m_sources_raw.end(), ep) != m_sources_raw.end();</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    }</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">  246</a></span>&#160;    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="code" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">Net::get_num_of_sources</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">  246</a></span>&#160;    <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">Net::get_num_of_sources</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">if</span> (!filter)</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">return</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>)m_sources_raw.size();</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">return</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>)m_sources_raw.size();</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        }</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num = 0;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num = 0;</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> dst : m_sources_raw)</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        {</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="keywordflow">if</span> (filter(dst))</div>
@@ -493,14 +495,14 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">return</span> std::find(m_destinations_raw.begin(), m_destinations_raw.end(), ep) != m_destinations_raw.end();</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    }</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00408"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">  408</a></span>&#160;    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="code" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">Net::get_num_of_destinations</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">  408</a></span>&#160;    <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">Net::get_num_of_destinations</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">if</span> (!filter)</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        {</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            <span class="keywordflow">return</span> (<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>)m_destinations_raw.size();</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            <span class="keywordflow">return</span> (<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>)m_destinations_raw.size();</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        }</div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num = 0;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num = 0;</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> dst : m_destinations_raw)</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        {</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            <span class="keywordflow">if</span> (filter(dst))</div>
@@ -578,7 +580,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="ttc" id="aclasshal_1_1_endpoint_html"><div class="ttname"><a href="classhal_1_1_endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> <a href="endpoint_8h_source.html#l00042">endpoint.h:43</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_a93c74ed50f0ce4d8db33bc156edf7c35"><div class="ttname"><a href="classhal_1_1_endpoint.html#a93c74ed50f0ce4d8db33bc156edf7c35">hal::Endpoint::is_source_pin</a></div><div class="ttdeci">bool is_source_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00043">endpoint.cpp:43</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html_ade1baf1f38d7cf9e518b8564767fcdde"><div class="ttname"><a href="classhal_1_1_endpoint.html#ade1baf1f38d7cf9e518b8564767fcdde">hal::Endpoint::is_destination_pin</a></div><div class="ttdeci">bool is_destination_pin() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00038">endpoint.cpp:38</a></div></div>
-<div class="ttc" id="aclasshal_1_1_event_handler_html_aa927b6131fa523ccb921bcf9377ab80b"><div class="ttname"><a href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">hal::EventHandler::notify</a></div><div class="ttdeci">NETLIST_API void notify(NetlistEvent::event ev, Netlist *netlist, u32 associated_data=0xFFFFFFFF)</div><div class="ttdef"><b>Definition:</b> <a href="event__handler_8cpp_source.html#l00081">event_handler.cpp:81</a></div></div>
+<div class="ttc" id="aclasshal_1_1_event_handler_html_aa927b6131fa523ccb921bcf9377ab80b"><div class="ttname"><a href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">hal::EventHandler::notify</a></div><div class="ttdeci">void notify(NetlistEvent::event ev, Netlist *netlist, u32 associated_data=0xFFFFFFFF)</div><div class="ttdef"><b>Definition:</b> <a href="event__handler_8cpp_source.html#l00081">event_handler.cpp:81</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html"><div class="ttname"><a href="classhal_1_1_gate.html">hal::Gate</a></div><div class="ttdef"><b>Definition:</b> <a href="gate_8h_source.html#l00057">gate.h:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html_a24e1a29c3fc812588acb673c214af128"><div class="ttname"><a href="classhal_1_1_gate.html#a24e1a29c3fc812588acb673c214af128">hal::Gate::get_type</a></div><div class="ttdeci">GateType * get_type() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00125">gate.cpp:125</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_html_a55ca16fc3905a6c0cb87a6427189de31"><div class="ttname"><a href="classhal_1_1_gate.html#a55ca16fc3905a6c0cb87a6427189de31">hal::Gate::get_name</a></div><div class="ttdeci">const std::string &amp; get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2gate_8cpp_source.html#l00105">gate.cpp:105</a></div></div>
@@ -622,6 +624,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="ttc" id="aclasshal_1_1_netlist_html_acb8ef34b9462dd7750958c78dbdc56d6"><div class="ttname"><a href="classhal_1_1_netlist.html#acb8ef34b9462dd7750958c78dbdc56d6">hal::Netlist::is_global_input_net</a></div><div class="ttdeci">bool is_global_input_net(const Net *net) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00509">netlist.cpp:509</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_aef44997a66ed0834dd0893092f2f7bdc"><div class="ttname"><a href="classhal_1_1_netlist.html#aef44997a66ed0834dd0893092f2f7bdc">hal::Netlist::unmark_global_input_net</a></div><div class="ttdeci">bool unmark_global_input_net(Net *net)</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00447">netlist.cpp:447</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_af00e6e1e8fbfe9fd0a066922ef5cf893"><div class="ttname"><a href="classhal_1_1_netlist.html#af00e6e1e8fbfe9fd0a066922ef5cf893">hal::Netlist::is_global_output_net</a></div><div class="ttdeci">bool is_global_output_net(const Net *net) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00514">netlist.cpp:514</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="aendpoint_8h_html"><div class="ttname"><a href="endpoint_8h.html">endpoint.h</a></div></div>
 <div class="ttc" id="aevent__handler_8h_html"><div class="ttname"><a href="event__handler_8h.html">event_handler.h</a></div></div>
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="gate_8h.html">gate.h</a></div></div>
@@ -631,10 +634,9 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div class="ttc" id="ainclude_2hal__core_2netlist_2grouping_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2grouping_8h.html">grouping.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1utils_html_a3b3244bd8945cb61cfa299c32686a601"><div class="ttname"><a href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim</a></div><div class="ttdeci">CORE_API T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00358">utils.h:358</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_1_1utils_html_afc3e55de1af050c4d02459c6ef0782c6"><div class="ttname"><a href="namespacehal_1_1utils.html#afc3e55de1af050c4d02459c6ef0782c6">hal::utils::trim</a></div><div class="ttdeci">T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">utils.h:360</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_ab832d8349a6c8a3927b85c5ada524cb2"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a></div><div class="ttdeci">i32 id</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
 <div class="ttc" id="anetlist__internal__manager_8h_html"><div class="ttname"><a href="netlist__internal__manager_8h.html">netlist_internal_manager.h</a></div></div>
@@ -644,7 +646,7 @@ $(document).ready(function(){initNavTree('netlist_2net_8cpp_source.html',''); in
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2net_8cpp.html">net.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

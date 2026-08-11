@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/docking_system/splitter_anchor.h Source File</title>
+<title>HAL: plugins/gui/include/gui/docking_system/splitter_anchor.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -130,31 +132,31 @@ $(document).ready(function(){initNavTree('splitter__anchor_8h_source.html',''); 
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html#a084a08cbd22e9b43d3cb7698d2f9aefd">SplitterAnchor</a>(<a class="code" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">ContentLayout::Position</a> apos, <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* dockBar, <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* splitter, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a4d2651b9f557d4e64854f731bafbfae9">add</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> index = -1) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1">remove</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_content_frame.html">ContentFrame</a>* <a class="code" href="classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4">detach</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5">reattach</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b">open</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6">close</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49">clear</a>();</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">  123</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">contentChanged</a>();</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mSplitter;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00053">content_anchor.h:54</a></div></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="classhal_1_1_splitter_anchor.html#a084a08cbd22e9b43d3cb7698d2f9aefd">SplitterAnchor</a>(<a class="code" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">ContentLayout::Position</a> apos, <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* dockBar, <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* splitter, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a4d2651b9f557d4e64854f731bafbfae9">add</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = -1) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#aaad6336ad5e5ee230ab6b119542742e1">remove</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_content_frame.html">ContentFrame</a>* <a class="code" href="classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4">detach</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a70454d29c95acabb53ac14c672c76bb5">reattach</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a051641523e0974e6462b08cf5553366b">open</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a287a494e68b7f54ac727c2cc57d2c1e6">close</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#aca0ec543f029b97e6b1cba6e8ee30b49">clear</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">  124</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4">contentChanged</a>();</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <a class="code" href="classhal_1_1_splitter.html">Splitter</a>* mSplitter;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    };</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00056">content_anchor.h:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_frame_html"><div class="ttname"><a href="classhal_1_1_content_frame.html">hal::ContentFrame</a></div><div class="ttdoc">Wraps the ContentWidget class.</div><div class="ttdef"><b>Definition:</b> <a href="content__frame_8h_source.html#l00044">content_frame.h:45</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00050">content_widget.h:51</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html"><div class="ttname"><a href="classhal_1_1_dock_bar.html">hal::DockBar</a></div><div class="ttdoc">Contains and handles DockButtons.</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8h_source.html#l00047">dock_bar.h:48</a></div></div>
@@ -170,8 +172,9 @@ $(document).ready(function(){initNavTree('splitter__anchor_8h_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_splitter_anchor_html_acb1271c9bcfa1e183389b3d7fa7564e4"><div class="ttname"><a href="classhal_1_1_splitter_anchor.html#acb1271c9bcfa1e183389b3d7fa7564e4">hal::SplitterAnchor::detach</a></div><div class="ttdeci">virtual ContentFrame * detach(ContentWidget *widget) override</div><div class="ttdef"><b>Definition:</b> <a href="splitter__anchor_8cpp_source.html#l00049">splitter_anchor.cpp:49</a></div></div>
 <div class="ttc" id="aclasshal_1_1_splitter_html"><div class="ttname"><a href="classhal_1_1_splitter.html">hal::Splitter</a></div><div class="ttdoc">A QSplitter that can be checked if it is unused or not.</div><div class="ttdef"><b>Definition:</b> <a href="splitter_8h_source.html#l00038">splitter.h:39</a></div></div>
 <div class="ttc" id="acontent__anchor_8h_html"><div class="ttname"><a href="content__anchor_8h.html">content_anchor.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00041">content_anchor.h:41</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00044">content_anchor.h:44</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqobject_html_Q_SIGNALS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">QObject::Q_SIGNALS</a></div><div class="ttdeci">Q_SIGNALSQ_SIGNALS</div></div>
@@ -182,7 +185,7 @@ $(document).ready(function(){initNavTree('splitter__anchor_8h_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_5a37b91ad729d978f48b50fcc843fc3d.html">docking_system</a></li><li class="navelem"><a class="el" href="splitter__anchor_8h.html">splitter_anchor.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_python_console_history.ht
 <p>Stores the history of python commands.  
  <a href="classhal_1_1_python_console_history.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="python__console__history_8h_source.html">python_console_history.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="python__console__history_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/python/python_console_history.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::PythonConsoleHistory:</div>
 <div class="dyncontent">
@@ -111,7 +113,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa475c3d950cf6297b6aef02132b4ae8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6c9a158ab9448a7b42725a4cf920cd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3">addHistory</a> (const std::string &amp;command)</td></tr>
 <tr class="separator:ad6c9a158ab9448a7b42725a4cf920cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720587a5ac6d094e2a74e078188bcde6"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">getHistoryItem</a> (const int &amp;index) const</td></tr>
+<tr class="memitem:a720587a5ac6d094e2a74e078188bcde6"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6">getHistoryItem</a> (const int &amp;<a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>) const</td></tr>
 <tr class="separator:a720587a5ac6d094e2a74e078188bcde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44297bb65cdf4fce56747c0b81750da2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_console_history.html#a44297bb65cdf4fce56747c0b81750da2">size</a> () const</td></tr>
 <tr class="separator:a44297bb65cdf4fce56747c0b81750da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,8 +194,6 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="python__console__history_8cpp_source.html#l00018">18</a> of file <a class="el" href="python__console__history_8cpp_source.html">python_console_history.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00076">control::command</a>.</p>
-
 </div>
 </div>
 <a id="a720587a5ac6d094e2a74e078188bcde6"></a>
@@ -221,6 +221,8 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>command at index. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="python__console__history_8cpp_source.html#l00024">24</a> of file <a class="el" href="python__console__history_8cpp_source.html">python_console_history.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>.</p>
 
 </div>
 </div>
@@ -268,8 +270,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/python/<a class="el" href="python__console__history_8h_source.html">python_console_history.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/python/<a class="el" href="python__console__history_8cpp_source.html">python_console_history.cpp</a></li>
+<li>plugins/gui/include/gui/python/<a class="el" href="python__console__history_8h_source.html">python_console_history.h</a></li>
+<li>plugins/gui/src/python/<a class="el" href="python__console__history_8cpp_source.html">python_console_history.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -277,7 +279,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_python_console_history.html">PythonConsoleHistory</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

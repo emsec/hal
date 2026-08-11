@@ -1,0 +1,15 @@
+<map id="plugins/hawkeye/include/hawkeye/sbox_database.h" name="plugins/hawkeye/include/hawkeye/sbox_database.h">
+<area shape="rect" id="node1" title="This file contains the S&#45;box database class that holds and manages known cryptographic S&#45;boxes up to ..." alt="" coords="346,5,545,47"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,273,289,300"/>
+<area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,95,453,136"/>
+<area shape="rect" id="node12" title=" " alt="" coords="477,102,528,129"/>
+<area shape="rect" id="node13" title=" " alt="" coords="553,102,615,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,348,96,375"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,348,207,375"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,348,318,375"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,348,413,375"/>
+<area shape="rect" id="node8" href="$error_8h.html" title=" " alt="" coords="256,184,387,225"/>
+<area shape="rect" id="node9" title=" " alt="" coords="411,191,498,218"/>
+<area shape="rect" id="node10" title=" " alt="" coords="522,191,614,218"/>
+<area shape="rect" id="node11" title=" " alt="" coords="638,191,706,218"/>
+</map>

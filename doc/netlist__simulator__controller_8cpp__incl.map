@@ -1,0 +1,52 @@
+<map id="plugins/simulator/netlist_simulator_controller/src/netlist_simulator_controller.cpp" name="plugins/simulator/netlist_simulator_controller/src/netlist_simulator_controller.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="3618,5,3849,61"/>
+<area shape="rect" id="node2" href="$netlist__simulator__controller_8h.html" title=" " alt="" coords="1624,213,1840,255"/>
+<area shape="rect" id="node5" href="$gate_8h.html" title=" " alt="" coords="844,310,1010,337"/>
+<area shape="rect" id="node13" href="$pin__direction_8h.html" title=" " alt="" coords="623,392,842,433"/>
+<area shape="rect" id="node19" href="$net_8h.html" title=" " alt="" coords="1086,310,1245,337"/>
+<area shape="rect" id="node24" title=" " alt="" coords="2279,310,2399,337"/>
+<area shape="rect" id="node27" href="$simulation__engine_8h.html" title=" " alt="" coords="1850,303,2052,344"/>
+<area shape="rect" id="node28" href="$simulation__input_8h.html" title=" " alt="" coords="1381,392,1582,433"/>
+<area shape="rect" id="node29" href="$wave__data_8h.html" title=" " alt="" coords="2832,303,3033,344"/>
+<area shape="rect" id="node30" href="$saleae__directory_8h.html" title=" " alt="" coords="3744,392,3945,433"/>
+<area shape="rect" id="node31" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="2578,310,2756,337"/>
+<area shape="rect" id="node32" href="$project__manager_8h.html" title=" " alt="" coords="4434,213,4604,255"/>
+<area shape="rect" id="node33" href="$json__write__document_8h.html" title=" " alt="" coords="4344,392,4521,433"/>
+<area shape="rect" id="node34" title=" " alt="" coords="4483,481,4646,508"/>
+<area shape="rect" id="node36" href="$log_8h.html" title=" " alt="" coords="2423,303,2554,344"/>
+<area shape="rect" id="node37" href="$plugin__netlist__simulator__controller_8h.html" title=" " alt="" coords="3273,109,3474,165"/>
+<area shape="rect" id="node41" href="$saleae__parser_8h.html" title=" " alt="" coords="3809,213,4010,255"/>
+<area shape="rect" id="node43" href="$simulation__settings_8h.html" title=" " alt="" coords="3564,117,3765,158"/>
+<area shape="rect" id="node44" href="$vcd__serializer_8h.html" title=" " alt="" coords="4086,213,4288,255"/>
+<area shape="rect" id="node45" title=" " alt="" coords="4272,310,4345,337"/>
+<area shape="rect" id="node46" title=" " alt="" coords="4369,310,4424,337"/>
+<area shape="rect" id="node47" title=" " alt="" coords="4753,124,4946,151"/>
+<area shape="rect" id="node48" title=" " alt="" coords="4970,124,5105,151"/>
+<area shape="rect" id="node49" title=" " alt="" coords="5129,124,5192,151"/>
+<area shape="rect" id="node50" title=" " alt="" coords="5216,124,5291,151"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="2753,481,2893,508"/>
+<area shape="rect" id="node7" title=" " alt="" coords="2448,399,2534,426"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1216,481,1267,508"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1127,399,1204,426"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1758,481,1821,508"/>
+<area shape="rect" id="node12" href="$module_8h.html" title=" " alt="" coords="1639,310,1826,337"/>
+<area shape="rect" id="node20" href="$netlist__writer_8h.html" title=" " alt="" coords="26,392,194,433"/>
+<area shape="rect" id="node21" title=" " alt="" coords="3210,399,3270,426"/>
+<area shape="rect" id="node22" title=" " alt="" coords="2959,399,3034,426"/>
+<area shape="rect" id="node23" title=" " alt="" coords="2762,399,2833,426"/>
+<area shape="rect" id="node25" title=" " alt="" coords="3311,310,3362,337"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1490,310,1564,337"/>
+<area shape="rect" id="node4" title=" " alt="" coords="3207,556,3298,583"/>
+<area shape="rect" id="node6" href="$event__handler_8h.html" title=" " alt="" coords="917,392,1102,433"/>
+<area shape="rect" id="node10" title=" " alt="" coords="3713,481,3837,508"/>
+<area shape="rect" id="node14" href="$gate__library_8h.html" title=" " alt="" coords="1708,392,1871,433"/>
+<area shape="rect" id="node15" title=" " alt="" coords="3380,481,3439,508"/>
+<area shape="rect" id="node16" title=" " alt="" coords="2098,399,2153,426"/>
+<area shape="rect" id="node17" title=" " alt="" coords="2229,399,2321,426"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1424,481,1539,508"/>
+<area shape="rect" id="node35" href="$project__directory_8h.html" title=" " alt="" coords="4071,392,4218,433"/>
+<area shape="rect" id="node38" href="$plugin__interface__base_8h.html" title=" " alt="" coords="3130,213,3311,255"/>
+<area shape="rect" id="node39" href="$gui__extension__interface_8h.html" title=" " alt="" coords="2911,213,3106,255"/>
+<area shape="rect" id="node40" href="$project__serializer_8h.html" title=" " alt="" coords="3498,392,3668,433"/>
+<area shape="rect" id="node42" href="$saleae__file_8h.html" title=" " alt="" coords="3589,303,3790,344"/>
+</map>

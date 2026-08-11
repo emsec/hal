@@ -1,8 +1,8 @@
-<map id="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h" name="/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h">
-<area shape="rect" id="node1" title=" " alt="" coords="15,5,198,91"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="94,139,234,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,213,96,240"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,213,207,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,213,318,240"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,213,413,240"/>
+<map id="include/hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h" name="include/hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,211,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="95,109,235,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="7,184,97,211"/>
+<area shape="rect" id="node4" title=" " alt="" coords="122,184,209,211"/>
+<area shape="rect" id="node5" title=" " alt="" coords="233,184,319,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="343,184,414,211"/>
 </map>

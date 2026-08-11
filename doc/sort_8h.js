@@ -10,6 +10,5 @@ var sort_8h =
     [ "lexicalOrderCompare", "sort_8h.html#aeacb51281299c97ba69b4152275bc686", null ],
     [ "naturalOrderCompare", "sort_8h.html#a4f8333ab2d1d7395a872b3a8280f711e", null ],
     [ "numeratedOrderCompare", "sort_8h.html#a6b35891fb34a786fd160ec0db4833c12", null ],
-    [ "numericStringCompare", "sort_8h.html#a1e95bade9096c47139daec1bd6600432", null ],
-    [ "Q_ENUM_NS", "sort_8h.html#a1e42f7d639871593e9c5a2fbecd1f579", null ]
+    [ "numericStringCompare", "sort_8h.html#a1e95bade9096c47139daec1bd6600432", null ]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['netlist_5ffactory_21356',['netlist_factory',['../namespacenetlist__factory.html',1,'']]],
-  ['netlist_5fserializer_21357',['netlist_serializer',['../namespacenetlist__serializer.html',1,'']]]
+  ['qcolorconstants_22997',['QColorConstants',['https://doc.qt.io/qt-5/qcolorconstants.html',1,'']]],
+  ['qt_22998',['Qt',['https://doc.qt.io/qt-5/qt.html',1,'']]]
 ];

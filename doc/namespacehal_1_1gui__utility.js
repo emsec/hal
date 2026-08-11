@@ -19,6 +19,5 @@ var namespacehal_1_1gui__utility =
     [ "numeratedOrderCompare", "namespacehal_1_1gui__utility.html#a6b35891fb34a786fd160ec0db4833c12", null ],
     [ "numericStringCompare", "namespacehal_1_1gui__utility.html#a1e95bade9096c47139daec1bd6600432", null ],
     [ "parentModules", "namespacehal_1_1gui__utility.html#ab18ab45d5471bc18531142eba0744767", null ],
-    [ "parentModules", "namespacehal_1_1gui__utility.html#ad51f27ed983b775629326cdfc3052fe5", null ],
-    [ "Q_ENUM_NS", "namespacehal_1_1gui__utility.html#a1e42f7d639871593e9c5a2fbecd1f579", null ]
+    [ "parentModules", "namespacehal_1_1gui__utility.html#ad51f27ed983b775629326cdfc3052fe5", null ]
 ];

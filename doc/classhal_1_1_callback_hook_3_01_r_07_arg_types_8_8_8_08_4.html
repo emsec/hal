@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_callback_hook_3_01_r_07_a
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="callback__hook_8h_source.html">hal_core/utilities/callback_hook.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::CallbackHook&lt; R(ArgTypes...)&gt;:</div>
 <div class="dyncontent">
@@ -102,9 +104,9 @@ Collaboration diagram for hal::CallbackHook&lt; R(ArgTypes...)&gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad25b213d27b6ff208e1e2e1563f3fc45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45">add_callback</a> (const std::function&lt; R(ArgTypes...)&gt; &amp;callback, <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>=0x0)</td></tr>
-<tr class="separator:ad25b213d27b6ff208e1e2e1563f3fc45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e2b511bcaa4178194695b83b04898bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd">add_callback</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::function&lt; R(ArgTypes...)&gt; &amp;callback)</td></tr>
+<tr class="memitem:a019075e67c518ef91aeb9e9cbb2ed109"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a019075e67c518ef91aeb9e9cbb2ed109">add_callback</a> (const std::function&lt; R(ArgTypes...)&gt; &amp;callback, <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>=<a class="el" href="callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">CALLBACK_HOOK_INVALID_IDX</a>)</td></tr>
+<tr class="separator:a019075e67c518ef91aeb9e9cbb2ed109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e2b511bcaa4178194695b83b04898bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd">add_callback</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const std::function&lt; R(ArgTypes...)&gt; &amp;callback)</td></tr>
 <tr class="separator:a7e2b511bcaa4178194695b83b04898bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cb65341eec42a8ba1a99e8c96ade910"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a8cb65341eec42a8ba1a99e8c96ade910">remove_callback</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a8cb65341eec42a8ba1a99e8c96ade910"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,7 +120,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aecfd704d440ca0ea5227eeb3d06eb43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a433d1819100f1fdd3df6303e6192edb0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a433d1819100f1fdd3df6303e6192edb0">is_callback_registered</a> (const <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:a433d1819100f1fdd3df6303e6192edb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae342c845680bffcd4169a7810be1bff2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ae342c845680bffcd4169a7810be1bff2">is_callback_registered</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="memitem:ae342c845680bffcd4169a7810be1bff2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ae342c845680bffcd4169a7810be1bff2">is_callback_registered</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:ae342c845680bffcd4169a7810be1bff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabdc555bb9113cdb5e44db70927ce59a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#aabdc555bb9113cdb5e44db70927ce59a">size</a> ()</td></tr>
 <tr class="separator:aabdc555bb9113cdb5e44db70927ce59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,11 +133,12 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><h3>template&lt;class R, class... ArgTypes&gt;<br />
 class hal::CallbackHook&lt; R(ArgTypes...)&gt;</h3>
 
+<p>Manages a set of callback functions that are all invoked with the same arguments. Each callback is identified by an ID or a name so that it can be removed again later on. </p>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00046">46</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00054">54</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad25b213d27b6ff208e1e2e1563f3fc45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad25b213d27b6ff208e1e2e1563f3fc45">&#9670;&nbsp;</a></span>add_callback() <span class="overload">[1/2]</span></h2>
+<a id="a019075e67c518ef91aeb9e9cbb2ed109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a019075e67c518ef91aeb9e9cbb2ed109">&#9670;&nbsp;</a></span>add_callback() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +158,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td>
-          <td class="paramname"><em>id</em> = <code>0x0</code>&#160;</td>
+          <td class="paramname"><em>id</em> = <code><a class="el" href="callback__hook_8h.html#a4730cad3781b97741910fb7abc398b12">CALLBACK_HOOK_INVALID_IDX</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -180,7 +183,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The id of the callback. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00057">57</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00065">65</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 <p class="reference">References <a class="el" href="callback__hook_8h_source.html#l00035">CALLBACK_HOOK_INVALID_IDX</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>.</p>
 
@@ -231,7 +234,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00078">78</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00086">86</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
@@ -283,9 +286,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The return value of the callback function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00167">167</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
-
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00175">175</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -335,9 +336,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The return value of the callback function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00149">149</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
-
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00157">157</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -368,7 +367,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 <p>Get the ids of all registered callbacks.</p>
 <dl class="section return"><dt>Returns</dt><dd>The ids of all registered callback functions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00214">214</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00222">222</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -406,7 +405,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name or an empty string if no callback was registered with the given name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00230">230</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00238">238</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -442,9 +441,9 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the callback function is registered. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code>, if the callback function is registered, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00194">194</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00202">202</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
@@ -482,9 +481,9 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the callback function is registered. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code>, if the callback function is registered, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00183">183</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00191">191</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -521,9 +520,9 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00129">129</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00137">137</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>.</p>
+<p class="reference">References <a class="el" href="candidate__search_8cpp_source.html#l00062">size</a>.</p>
 
 </div>
 </div>
@@ -560,7 +559,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00115">115</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00123">123</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -597,7 +596,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00093">93</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00101">101</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
@@ -628,12 +627,12 @@ template&lt;class R , class... ArgTypes&gt; </div>
 <p>Get the number of registered callbacks.</p>
 <dl class="section return"><dt>Returns</dt><dd>The amount of all registered callback functions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00204">204</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="callback__hook_8h_source.html#l00212">212</a> of file <a class="el" href="callback__hook_8h_source.html">callback_hook.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="callback__hook_8h_source.html">callback_hook.h</a></li>
+<li>include/hal_core/utilities/<a class="el" href="callback__hook_8h_source.html">callback_hook.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -641,7 +640,7 @@ template&lt;class R , class... ArgTypes&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html">CallbackHook&lt; R(ArgTypes...)&gt;</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

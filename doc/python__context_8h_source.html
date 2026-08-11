@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/python/python_context.h Source File</title>
+<title>HAL: plugins/gui/include/gui/python/python_context.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -138,120 +140,127 @@ $(document).ready(function(){initNavTree('python__context_8h_source.html',''); i
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">class </span>PythonThread;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">class </span>LayoutLocker;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html">   53</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_gate_selection_receiver.html">PythonGateSelectionReceiver</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_select_receiver.html">GateSelectReceiver</a></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* mThread;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">   60</a></span>&#160;        <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">PythonGateSelectionReceiver</a>(<a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            : <a class="code" href="classhal_1_1_gate_select_receiver.html">GateSelectReceiver</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>), mThread(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>) {;}</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    };</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html">   64</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_module_selection_receiver.html">PythonModuleSelectionReceiver</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_module_select_receiver.html">ModuleSelectReceiver</a></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* mThread;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">handleModulesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">   71</a></span>&#160;        <a class="code" href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">PythonModuleSelectionReceiver</a>(<a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            : <a class="code" href="classhal_1_1_module_select_receiver.html">ModuleSelectReceiver</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>), mThread(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>) {;}</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">namespace </span>py = pybind11;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">class </span>__attribute__((visibility(&quot;default&quot;))) PythonContext : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        Q_OBJECT</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        PythonContext(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* parent=<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        ~PythonContext();</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">void</span> interpretForeground(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">void</span> interpretBackground(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> multiple_expressions = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">void</span> interpretScript(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> forwardStdout(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">void</span> forwardError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output);</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordtype">void</span> scheduleClear();</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html">   56</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_gate_selection_receiver.html">PythonGateSelectionReceiver</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_select_receiver.html">GateSelectReceiver</a></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* mThread;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">   63</a></span>&#160;        <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">PythonGateSelectionReceiver</a>(<a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            : <a class="code" href="classhal_1_1_gate_select_receiver.html">GateSelectReceiver</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>), mThread(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>) {;}</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html">   70</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_python_module_selection_receiver.html">PythonModuleSelectionReceiver</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_module_select_receiver.html">ModuleSelectReceiver</a></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* mThread;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">handleModulesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">   77</a></span>&#160;        <a class="code" href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">PythonModuleSelectionReceiver</a>(<a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            : <a class="code" href="classhal_1_1_module_select_receiver.html">ModuleSelectReceiver</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>), mThread(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#thread">thread</a>) {;}</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    };</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">namespace </span>py = pybind11;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classhal_1_1_python_context.html">   89</a></span>&#160;    <span class="keyword">class </span>__attribute__((visibility(&quot;default&quot;))) <a class="code" href="classhal_1_1_python_context.html">PythonContext</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        Q_OBJECT</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <a class="code" href="classhal_1_1_python_context.html">PythonContext</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* parent=<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        ~<a class="code" href="classhal_1_1_python_context.html">PythonContext</a>();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">void</span> interpretForeground(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">void</span> interpretBackground(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>, <span class="keywordtype">bool</span> multiple_expressions = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordtype">void</span> interpretScript(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">void</span> forwardStdout(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordtype">void</span> forwardError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>);</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">void</span> scheduleReset();</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordtype">void</span> setConsole(PythonConsole* console);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; complete(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text, <span class="keywordtype">bool</span> use_console_context);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">int</span> checkCompleteStatement(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="comment">//    void set_history_length();</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="comment">//    void read_history_file(const QString&amp; file);</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="comment">//    void write_history_file(const QString&amp; file);</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment"></span>        <span class="keywordtype">void</span> initPython();</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordtype">void</span> closePython();</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">void</span> updateNetlist();</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        PythonThread* pythonThread() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> initializeContext(py::dict* context);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> initializeScript(py::dict* context);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">void</span> abortThread();</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">void</span> abortThreadAndWait();</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordtype">bool</span> isThreadRunning()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mThread != <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keyword">private</span> Q_SLOTS:</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordtype">void</span> handleThreadFinished();</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">void</span> handleScriptOutput(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordtype">void</span> handleScriptError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt);</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordtype">void</span> handleInputRequired(<span class="keywordtype">int</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; prompt, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&amp; defaultValue);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordtype">void</span> handleConsoleInputReceived(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordtype">void</span> handleReset();</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">void</span> handleClear();</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="comment">// these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="comment">// only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        py::dict* mContext;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        PythonContextSubscriber* mSender;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">void</span> scheduleClear();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordtype">void</span> scheduleReset();</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordtype">void</span> setConsole(<a class="code" href="classhal_1_1_python_console.html">PythonConsole</a>* console);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; complete(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text, <span class="keywordtype">bool</span> use_console_context);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordtype">int</span> checkCompleteStatement(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">//    void set_history_length();</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="comment">//    void read_history_file(const QString&amp; file);</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">//    void write_history_file(const QString&amp; file);</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment"></span>        <span class="keywordtype">void</span> initPython();</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keywordtype">void</span> closePython();</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">void</span> updateNetlist();</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* pythonThread() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> initializeContext(py::dict* context);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> initializeScript(py::dict* context);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">void</span> abortThread();</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordtype">void</span> abortThreadAndWait();</div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classhal_1_1_python_context.html#a226b5cdb46419ab827130f62b82c8576">  205</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_python_context.html#a226b5cdb46419ab827130f62b82c8576">isThreadRunning</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mThread != <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keyword">private</span> Q_SLOTS:</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordtype">void</span> handleThreadFinished();</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordtype">void</span> handleScriptOutput(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordtype">void</span> handleScriptError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">void</span> handleInputRequired(<span class="keywordtype">int</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; prompt, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&amp; defaultValue);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordtype">void</span> handleConsoleInputReceived(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input);</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keywordtype">void</span> handleReset();</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordtype">void</span> handleClear();</div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        std::string mHistoryFile;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        PythonConsole* mConsole;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordtype">bool</span> mTriggerReset;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="keywordtype">bool</span> mTriggerClear;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        LayoutLocker* mLayoutLocker;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        PythonThread* mThread;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordtype">bool</span> mThreadAborted;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        PyThreadState* mMainThreadState;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* mInterpreterCaller;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordtype">void</span> startThread(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> singleStatement);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    };</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;}    <span class="comment">// namespace hal</span></div>
-<div class="ttc" id="aclasshal_1_1_gate_select_receiver_html"><div class="ttname"><a href="classhal_1_1_gate_select_receiver.html">hal::GateSelectReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__select__model_8h_source.html#l00114">gate_select_model.h:115</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_select_receiver_html"><div class="ttname"><a href="classhal_1_1_module_select_receiver.html">hal::ModuleSelectReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="module__select__model_8h_source.html#l00146">module_select_model.h:147</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html">hal::PythonGateSelectionReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00053">python_context.h:54</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html_a2137cf458d4473636f070ce616cdc993"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">hal::PythonGateSelectionReceiver::PythonGateSelectionReceiver</a></div><div class="ttdeci">PythonGateSelectionReceiver(PythonThread *thread, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00060">python_context.h:60</a></div></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="comment">// these have to be pointers, otherwise they are destructed after py::finalize_interpreter and segfault</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="comment">// only one object for global and local is needed, as for the console we run it always in global scope wher globals() == locals()</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        py::dict* mContext;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <a class="code" href="classhal_1_1_python_context_subscriber.html">PythonContextSubscriber</a>* mSender;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        std::string mHistoryFile;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <a class="code" href="classhal_1_1_python_console.html">PythonConsole</a>* mConsole;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keywordtype">bool</span> mTriggerReset;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordtype">bool</span> mTriggerClear;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <a class="code" href="classhal_1_1_layout_locker.html">LayoutLocker</a>* mLayoutLocker;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <a class="code" href="classhal_1_1_python_thread.html">PythonThread</a>* mThread;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="keywordtype">bool</span> mThreadAborted;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        PyThreadState* mMainThreadState;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* mInterpreterCaller;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordtype">void</span> startThread(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> singleStatement);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    };</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="ttc" id="aclasshal_1_1_gate_select_receiver_html"><div class="ttname"><a href="classhal_1_1_gate_select_receiver.html">hal::GateSelectReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__select__model_8h_source.html#l00118">gate_select_model.h:119</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_html"><div class="ttname"><a href="classhal_1_1_layout_locker.html">hal::LayoutLocker</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00057">layout_locker.h:58</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_select_receiver_html"><div class="ttname"><a href="classhal_1_1_module_select_receiver.html">hal::ModuleSelectReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="module__select__model_8h_source.html#l00148">module_select_model.h:149</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_console_html"><div class="ttname"><a href="classhal_1_1_python_console.html">hal::PythonConsole</a></div><div class="ttdoc">An interactable python console.</div><div class="ttdef"><b>Definition:</b> <a href="python__console_8h_source.html#l00067">python_console.h:68</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_context_html"><div class="ttname"><a href="classhal_1_1_python_context.html">hal::PythonContext</a></div><div class="ttdoc">Interface for pybind11.</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00089">python_context.h:90</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_context_html_a226b5cdb46419ab827130f62b82c8576"><div class="ttname"><a href="classhal_1_1_python_context.html#a226b5cdb46419ab827130f62b82c8576">hal::PythonContext::isThreadRunning</a></div><div class="ttdeci">bool isThreadRunning() const</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00205">python_context.h:205</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_context_subscriber_html"><div class="ttname"><a href="classhal_1_1_python_context_subscriber.html">hal::PythonContextSubscriber</a></div><div class="ttdoc">Interface for handling python outputs.</div><div class="ttdef"><b>Definition:</b> <a href="python__context__subscriber_8h_source.html#l00035">python_context_subscriber.h:36</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html">hal::PythonGateSelectionReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00056">python_context.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html_a2137cf458d4473636f070ce616cdc993"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html#a2137cf458d4473636f070ce616cdc993">hal::PythonGateSelectionReceiver::PythonGateSelectionReceiver</a></div><div class="ttdeci">PythonGateSelectionReceiver(PythonThread *thread, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00063">python_context.h:63</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html_a5b2971d2cef1b5f5a7010ccbc4a1bafe"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">hal::PythonGateSelectionReceiver::handleGatesPicked</a></div><div class="ttdeci">void handleGatesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00385">python_context.cpp:385</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html">hal::PythonModuleSelectionReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00064">python_context.h:65</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html_aab2cd8aadeabd127dc1f70355b982113"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">hal::PythonModuleSelectionReceiver::PythonModuleSelectionReceiver</a></div><div class="ttdeci">PythonModuleSelectionReceiver(PythonThread *thread, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00071">python_context.h:71</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html">hal::PythonModuleSelectionReceiver</a></div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00070">python_context.h:71</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html_aab2cd8aadeabd127dc1f70355b982113"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113">hal::PythonModuleSelectionReceiver::PythonModuleSelectionReceiver</a></div><div class="ttdeci">PythonModuleSelectionReceiver(PythonThread *thread, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8h_source.html#l00077">python_context.h:77</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html_ac28943f3f6e64f280c270b54ce7eca2e"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">hal::PythonModuleSelectionReceiver::handleModulesPicked</a></div><div class="ttdeci">void handleModulesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00394">python_context.cpp:394</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_thread_html"><div class="ttname"><a href="classhal_1_1_python_thread.html">hal::PythonThread</a></div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00058">python_thread.h:59</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_thread_html"><div class="ttname"><a href="classhal_1_1_python_thread.html">hal::PythonThread</a></div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00061">python_thread.h:62</a></div></div>
 <div class="ttc" id="agate__select__model_8h_html"><div class="ttname"><a href="gate__select__model_8h.html">gate_select_model.h</a></div></div>
 <div class="ttc" id="amodule__select__model_8h_html"><div class="ttname"><a href="module__select__model_8h.html">module_select_model.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::PinDirection::output</a></div><div class="ttdeci">@ output</div></div>
+<div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::PinDirection::input</a></div><div class="ttdeci">@ input</div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a05e5f99d786b527ca4a260c21170c5e7"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></div><div class="ttdeci">PinType type</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">netlist_serializer.cpp:59</a></div></div>
 <div class="ttc" id="apython__console_8h_html"><div class="ttname"><a href="python__console_8h.html">python_console.h</a></div></div>
 <div class="ttc" id="apython__thread_8h_html"><div class="ttname"><a href="python__thread_8h.html">python_thread.h</a></div></div>
@@ -269,7 +278,7 @@ $(document).ready(function(){initNavTree('python__context_8h_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_7c750ac7d7398768b8029f5632912b7a.html">python</a></li><li class="navelem"><a class="el" href="python__context_8h.html">python_context.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/python_bindings/python_bindings.h Source File</title>
+<title>HAL: include/hal_core/python_bindings/python_bindings.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -118,7 +120,7 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="solver_8h.html">hal_core/netlist/boolean_function/solver.h</a>&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="symbolic__execution_8h.html">hal_core/netlist/boolean_function/symbolic_execution.h</a>&quot;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="symbolic__state_8h.html">hal_core/netlist/boolean_function/symbolic_state.h</a>&quot;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="types_8h.html">hal_core/netlist/boolean_function/types.h</a>&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2boolean__function_2types_8h.html">hal_core/netlist/boolean_function/types.h</a>&quot;</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="boolean__function__decorator_8h.html">hal_core/netlist/decorators/boolean_function_decorator.h</a>&quot;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="boolean__function__net__decorator_8h.html">hal_core/netlist/decorators/boolean_function_net_decorator.h</a>&quot;</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="netlist__modification__decorator_8h.html">hal_core/netlist/decorators/netlist_modification_decorator.h</a>&quot;</span></div>
@@ -146,7 +148,7 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="project__manager_8h.html">hal_core/netlist/project_manager.h</a>&quot;</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2utilities_2utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wshadow&quot;</span></div>
@@ -172,7 +174,8 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
 <div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">   90</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">RawPtrWrapper</a> = std::unique_ptr&lt;T, py::nodelete&gt;;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">data_container_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// TODO move into own namespace</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment"></span>    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gadc243ad319cf87e17b4593eec859d1f4">data_container_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">core_utils_init</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">py::module</a>&amp; m);</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
@@ -277,7 +280,7 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="ttc" id="agroup__pybind_html_gab35847badbf935ed3e01dbcaad19205c"><div class="ttname"><a href="group__pybind.html#gab35847badbf935ed3e01dbcaad19205c">hal::boolean_function_net_decorator_init</a></div><div class="ttdeci">void boolean_function_net_decorator_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2boolean__function__net__decorator_8cpp_source.html#l00005">boolean_function_net_decorator.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gac072de2b8e9f09d8320090e5873be90d"><div class="ttname"><a href="group__pybind.html#gac072de2b8e9f09d8320090e5873be90d">hal::project_manager_init</a></div><div class="ttdeci">void project_manager_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2project__manager_8cpp_source.html#l00005">project_manager.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gac5492afb41ef2e8dd6c49f56ddb7e73c"><div class="ttname"><a href="group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c">hal::subgraph_netlist_decorator_init</a></div><div class="ttdeci">void subgraph_netlist_decorator_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2subgraph__netlist__decorator_8cpp_source.html#l00007">subgraph_netlist_decorator.cpp:7</a></div></div>
-<div class="ttc" id="agroup__pybind_html_gac711bd76ed6d19d0ae42c56d8f190cfa"><div class="ttname"><a href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a></div><div class="ttdeci">void log_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2log_8cpp_source.html#l00009">log.cpp:9</a></div></div>
+<div class="ttc" id="agroup__pybind_html_gac711bd76ed6d19d0ae42c56d8f190cfa"><div class="ttname"><a href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a></div><div class="ttdeci">void log_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2log_8cpp_source.html#l00041">log.cpp:41</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gacd94e2b9ac19cb0a128446c71673aabf"><div class="ttname"><a href="group__pybind.html#gacd94e2b9ac19cb0a128446c71673aabf">hal::gate_library_manager_init</a></div><div class="ttdeci">void gate_library_manager_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2gate__library__manager_8cpp_source.html#l00005">gate_library_manager.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gad09c61daaa174b451b0519d0f54a2382"><div class="ttname"><a href="group__pybind.html#gad09c61daaa174b451b0519d0f54a2382">hal::gate_type_init</a></div><div class="ttdeci">void gate_type_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2gate__type_8cpp_source.html#l00005">gate_type.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gad828e83bab5914c1f8f18d2cf61e5f98"><div class="ttname"><a href="group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98">hal::netlist_modification_decorator_init</a></div><div class="ttdeci">void netlist_modification_decorator_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2netlist__modification__decorator_8cpp_source.html#l00005">netlist_modification_decorator.cpp:5</a></div></div>
@@ -288,13 +291,15 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="ttc" id="agroup__pybind_html_gae5a4b7d4ff2a9896d9372662906d05fb"><div class="ttname"><a href="group__pybind.html#gae5a4b7d4ff2a9896d9372662906d05fb">hal::boolean_function_init</a></div><div class="ttdeci">void boolean_function_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">boolean_function.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gae67f2029fac093c1e1990401edbcfd0a"><div class="ttname"><a href="group__pybind.html#gae67f2029fac093c1e1990401edbcfd0a">hal::core_utils_init</a></div><div class="ttdeci">void core_utils_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="core__utils_8cpp_source.html#l00005">core_utils.cpp:5</a></div></div>
 <div class="ttc" id="agroup__pybind_html_gaf8d3775de7aff4ada2993c698332de33"><div class="ttname"><a href="group__pybind.html#gaf8d3775de7aff4ada2993c698332de33">hal::netlist_factory_init</a></div><div class="ttdeci">void netlist_factory_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_2bindings_2netlist__factory_8cpp_source.html#l00005">netlist_factory.cpp:5</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2netlist_2boolean__function_2types_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2boolean__function_2types_8h.html">types.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2grouping_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2grouping_8h.html">grouping.h</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
+<div class="ttc" id="ainclude_2hal__core_2utilities_2utils_8h_html"><div class="ttname"><a href="include_2hal__core_2utilities_2utils_8h.html">utils.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div></div>
 <div class="ttc" id="amodule__pin_8h_html"><div class="ttname"><a href="module__pin_8h.html">module_pin.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="anetlist__factory_8h_html"><div class="ttname"><a href="netlist__factory_8h.html">netlist_factory.h</a></div><div class="ttdoc">This file contains various functions to create and load netlists.</div></div>
 <div class="ttc" id="anetlist__modification__decorator_8h_html"><div class="ttname"><a href="netlist__modification__decorator_8h.html">netlist_modification_decorator.h</a></div></div>
@@ -309,15 +314,13 @@ $(document).ready(function(){initNavTree('python__bindings_8h_source.html',''); 
 <div class="ttc" id="asubgraph__netlist__decorator_8h_html"><div class="ttname"><a href="subgraph__netlist__decorator_8h.html">subgraph_netlist_decorator.h</a></div></div>
 <div class="ttc" id="asymbolic__execution_8h_html"><div class="ttname"><a href="symbolic__execution_8h.html">symbolic_execution.h</a></div></div>
 <div class="ttc" id="asymbolic__state_8h_html"><div class="ttname"><a href="symbolic__state_8h.html">symbolic_state.h</a></div></div>
-<div class="ttc" id="atypes_8h_html"><div class="ttname"><a href="types_8h.html">types.h</a></div></div>
-<div class="ttc" id="autils_8h_html"><div class="ttname"><a href="utils_8h.html">utils.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6b3eaace1e5cb9cf9685601c4832ce47.html">python_bindings</a></li><li class="navelem"><a class="el" href="python__bindings_8h.html">python_bindings.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

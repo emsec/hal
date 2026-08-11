@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,17 @@ $(document).ready(function(){initNavTree('classhal_1_1_content_factory.html','')
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="content__manager_8h_source.html">content_manager.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="content__manager_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/content_manager/content_manager.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for hal::ContentFactory:</div>
+<div class="dyncontent">
+<div class="center"><img src="classhal_1_1_content_factory__inherit__graph.png" border="0" usemap="#ahal_1_1_content_factory_inherit__map" alt="Inheritance graph"/></div>
+<map name="ahal_1_1_content_factory_inherit__map" id="ahal_1_1_content_factory_inherit__map">
+<area shape="rect" title=" " alt="" coords="119,5,267,112"/>
+<area shape="rect" href="classhal_1_1_dot_viewer_factory.html" title=" " alt="" coords="5,160,171,311"/>
+<area shape="rect" href="classhal_1_1_waveform_viewer_factory.html" title=" " alt="" coords="195,189,405,281"/>
+</map>
+</div>
 <div class="dynheader">
 Collaboration diagram for hal::ContentFactory:</div>
 <div class="dyncontent">
@@ -110,8 +122,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5e1173d2908fce0a99603ce4eda19d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00057">57</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
+<div class="textblock"><p>The base class for the factories that create the content widgets contributed by a plugin. </p>
+
+<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00063">63</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af666e254b657c66fdfc1074295301503"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af666e254b657c66fdfc1074295301503">&#9670;&nbsp;</a></span>ContentFactory()</h2>
@@ -137,7 +150,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00061">61</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00067">67</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
 
 </div>
 </div>
@@ -164,6 +177,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhal_1_1_waveform_viewer_factory.html#a74329c8c9b0b964772c0e396df6d0e0f">hal::WaveformViewerFactory</a>, and <a class="el" href="classhal_1_1_dot_viewer_factory.html#a7046ec07acd132c854903e7abfa2ba83">hal::DotViewerFactory</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="content__manager_8cpp_source.html#l00299">hal::ContentManager::addExternalWidget()</a>.</p>
 
@@ -192,12 +207,14 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00062">62</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="content__manager_8h_source.html#l00068">68</a> of file <a class="el" href="content__manager_8h_source.html">content_manager.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dot__viewer__factory_8cpp_source.html#l00020">hal::DotViewerFactory::contentFactory()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/content_manager/<a class="el" href="content__manager_8h_source.html">content_manager.h</a></li>
+<li>plugins/gui/include/gui/content_manager/<a class="el" href="content__manager_8h_source.html">content_manager.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -205,7 +222,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_content_factory.html">ContentFactory</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:50 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

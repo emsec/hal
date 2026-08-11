@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/searchbar/searchoptions_dialog.h Source File</title>
+<title>HAL: plugins/gui/include/gui/searchbar/searchoptions_dialog.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -127,52 +129,52 @@ $(document).ready(function(){initNavTree('searchoptions__dialog_8h_source.html',
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_search_options_dialog.html">   42</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_search_options_dialog.html">SearchOptionsDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_search_options_dialog.html#a66814299cf6f8c2a57c7c834f98c7287">SearchOptionsDialog</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#ae4767496a55b24434d56f7c7993ba45b">emitOptions</a>();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_search_options.html">SearchOptions</a>* <a class="code" href="classhal_1_1_search_options_dialog.html#a6b713f8dfd1e6e0724f2daa3e8fa7340">getOptions</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a0ffebb06c42d0e2a07476f8d8e30474d">setOptions</a>(<a class="code" href="classhal_1_1_search_options.html">SearchOptions</a>* opts, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> searchString, <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> columnNames, <span class="keywordtype">bool</span> incSearch, <span class="keywordtype">int</span> minIncSearch);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_search_options_dialog.html#ab19a0a150d3ec68e97463cedc3a38628">getText</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a7c8aae6b91a9e87e2b451ce529b1cde2">getMinIncSearchValue</a>();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_search_options_dialog.html#aa2f1eaefd3ec2262b1cf08c7e95406e6">getIncrementalSearch</a>();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a2ca2d31e7332e029f052a6b3f8a47daa">setSearchHistory</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>&amp; history);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classhal_1_1_search_options_dialog.html#a59864a554df78ade33c9b0c8dd84cd45">   61</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a59864a554df78ade33c9b0c8dd84cd45">emitOptions</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text, <span class="keywordtype">int</span> options);</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_search_options_dialog.html">   45</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_search_options_dialog.html">SearchOptionsDialog</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classhal_1_1_search_options_dialog.html#a66814299cf6f8c2a57c7c834f98c7287">SearchOptionsDialog</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#ae4767496a55b24434d56f7c7993ba45b">emitOptions</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classhal_1_1_search_options.html">SearchOptions</a>* <a class="code" href="classhal_1_1_search_options_dialog.html#a6b713f8dfd1e6e0724f2daa3e8fa7340">getOptions</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a0ffebb06c42d0e2a07476f8d8e30474d">setOptions</a>(<a class="code" href="classhal_1_1_search_options.html">SearchOptions</a>* opts, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> searchString, <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QString&gt;</a> columnNames, <span class="keywordtype">bool</span> incSearch, <span class="keywordtype">int</span> minIncSearch);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="classhal_1_1_search_options_dialog.html#ab19a0a150d3ec68e97463cedc3a38628">getText</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a7c8aae6b91a9e87e2b451ce529b1cde2">getMinIncSearchValue</a>();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_search_options_dialog.html#aa2f1eaefd3ec2262b1cf08c7e95406e6">getIncrementalSearch</a>();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a2ca2d31e7332e029f052a6b3f8a47daa">setSearchHistory</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>&amp; history);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a2b8b6e613b512ddc0f8eb6122047bd6b">emitStartSearch</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a84551053976ce4118c1e21c75cee6a67">incrementalSearchToggled</a>(<span class="keywordtype">int</span>);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a487ca7234aac07d67e06022af4463bad">selectColumns</a>();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mSearchText;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;int&gt;</a> mSelectedColumns = {};</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> mColumnNames;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a>* mLayout;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html">QComboBox</a>* mInputBox;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>* mLineEdit;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mSpinBoxLabel;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mIncrementalSearchBox;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qspinbox.html">QSpinBox</a>* mSpinBox;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mExactMatchBox;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mCaseSensitiveBox;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mRegExBox;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mSearchInLabel;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mSearchBtn;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mCloseBtn;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mSelectColumnsBtn;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> formatColumnButtonText(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> buildColumnButtonText();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    };</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_search_options_dialog_html"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html">hal::SearchOptionsDialog</a></div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8h_source.html#l00042">searchoptions_dialog.h:43</a></div></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classhal_1_1_search_options_dialog.html#a59864a554df78ade33c9b0c8dd84cd45">   64</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a59864a554df78ade33c9b0c8dd84cd45">emitOptions</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text, <span class="keywordtype">int</span> options);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a2b8b6e613b512ddc0f8eb6122047bd6b">emitStartSearch</a>();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a84551053976ce4118c1e21c75cee6a67">incrementalSearchToggled</a>(<span class="keywordtype">int</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_search_options_dialog.html#a487ca7234aac07d67e06022af4463bad">selectColumns</a>();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mSearchText;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;int&gt;</a> mSelectedColumns = {};</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> mColumnNames;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgridlayout.html">QGridLayout</a>* mLayout;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcombobox.html">QComboBox</a>* mInputBox;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html">QLineEdit</a>* mLineEdit;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mSpinBoxLabel;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mIncrementalSearchBox;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qspinbox.html">QSpinBox</a>* mSpinBox;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mExactMatchBox;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mCaseSensitiveBox;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a>* mRegExBox;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>* mSearchInLabel;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mSearchBtn;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mCloseBtn;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mSelectColumnsBtn;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> formatColumnButtonText(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> buildColumnButtonText();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    };</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;}</div>
+<div class="ttc" id="aclasshal_1_1_search_options_dialog_html"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html">hal::SearchOptionsDialog</a></div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8h_source.html#l00045">searchoptions_dialog.h:46</a></div></div>
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_a0ffebb06c42d0e2a07476f8d8e30474d"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#a0ffebb06c42d0e2a07476f8d8e30474d">hal::SearchOptionsDialog::setOptions</a></div><div class="ttdeci">void setOptions(SearchOptions *opts, QString searchString, QList&lt; QString &gt; columnNames, bool incSearch, int minIncSearch)</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00105">searchoptions_dialog.cpp:105</a></div></div>
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_a2b8b6e613b512ddc0f8eb6122047bd6b"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#a2b8b6e613b512ddc0f8eb6122047bd6b">hal::SearchOptionsDialog::emitStartSearch</a></div><div class="ttdeci">void emitStartSearch()</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00080">searchoptions_dialog.cpp:80</a></div></div>
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_a2ca2d31e7332e029f052a6b3f8a47daa"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#a2ca2d31e7332e029f052a6b3f8a47daa">hal::SearchOptionsDialog::setSearchHistory</a></div><div class="ttdeci">void setSearchHistory(const QStringList &amp;history)</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00209">searchoptions_dialog.cpp:209</a></div></div>
@@ -185,8 +187,8 @@ $(document).ready(function(){initNavTree('searchoptions__dialog_8h_source.html',
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_aa2f1eaefd3ec2262b1cf08c7e95406e6"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#aa2f1eaefd3ec2262b1cf08c7e95406e6">hal::SearchOptionsDialog::getIncrementalSearch</a></div><div class="ttdeci">bool getIncrementalSearch()</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00143">searchoptions_dialog.cpp:143</a></div></div>
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_ab19a0a150d3ec68e97463cedc3a38628"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#ab19a0a150d3ec68e97463cedc3a38628">hal::SearchOptionsDialog::getText</a></div><div class="ttdeci">QString getText() const</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00132">searchoptions_dialog.cpp:132</a></div></div>
 <div class="ttc" id="aclasshal_1_1_search_options_dialog_html_ae4767496a55b24434d56f7c7993ba45b"><div class="ttname"><a href="classhal_1_1_search_options_dialog.html#ae4767496a55b24434d56f7c7993ba45b">hal::SearchOptionsDialog::emitOptions</a></div><div class="ttdeci">void emitOptions()</div><div class="ttdef"><b>Definition:</b> <a href="searchoptions__dialog_8cpp_source.html#l00087">searchoptions_dialog.cpp:87</a></div></div>
-<div class="ttc" id="aclasshal_1_1_search_options_html"><div class="ttname"><a href="classhal_1_1_search_options.html">hal::SearchOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="searchoptions_8h_source.html#l00031">searchoptions.h:32</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="aclasshal_1_1_search_options_html"><div class="ttname"><a href="classhal_1_1_search_options.html">hal::SearchOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="searchoptions_8h_source.html#l00034">searchoptions.h:35</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqcheckbox_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcheckbox.html">QCheckBox</a></div></div>
 <div class="ttc" id="aqcombobox_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcombobox.html">QComboBox</a></div></div>
 <div class="ttc" id="aqdialog_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></div></div>
@@ -210,7 +212,7 @@ $(document).ready(function(){initNavTree('searchoptions__dialog_8h_source.html',
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_2255beb432c96c2dabe5df3d52820610.html">searchbar</a></li><li class="navelem"><a class="el" href="searchoptions__dialog_8h.html">searchoptions_dialog.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

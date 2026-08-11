@@ -39,18 +39,5 @@ var classhal_1_1_module_widget =
     [ "showGatesIconPath", "classhal_1_1_module_widget.html#aabef0c0e71adb65b46cf84774ce47084", null ],
     [ "showNetsIconPath", "classhal_1_1_module_widget.html#a7460d4d88a12318841775b48f32450ef", null ],
     [ "toggleSearchbar", "classhal_1_1_module_widget.html#aefccce8419acf451dddcb156e4324af6", null ],
-    [ "updateSearchIcon", "classhal_1_1_module_widget.html#add4e67bd5050b2792b6cb850f62dcbfa", null ],
-    [ "activeIconStyle", "classhal_1_1_module_widget.html#a37d22ea1777d5460faf4d309a17982f9", null ],
-    [ "collapsedIconPath", "classhal_1_1_module_widget.html#a6639362da432c8b14565d6dbaa2084f8", null ],
-    [ "deleteIconPath", "classhal_1_1_module_widget.html#aa696cbc13556d63a3197cd5394547767", null ],
-    [ "disabledIconStyle", "classhal_1_1_module_widget.html#a573645c543b3ccc8124c53fed364617f", null ],
-    [ "expandedIconPath", "classhal_1_1_module_widget.html#abfd022269c9e7bc57424618c181769b4", null ],
-    [ "hideGatesIconPath", "classhal_1_1_module_widget.html#ae268b3b85e5df11a9b2504290c8999f8", null ],
-    [ "hideNetsIconPath", "classhal_1_1_module_widget.html#a2a0047827c6457250d46fd4fe68dbe89", null ],
-    [ "renameIconPath", "classhal_1_1_module_widget.html#a2202948d3186da1956ca5eb56884aa0a", null ],
-    [ "searchActiveIconStyle", "classhal_1_1_module_widget.html#aca9e636ce71e0b7c56d22e8869070715", null ],
-    [ "searchIconPath", "classhal_1_1_module_widget.html#adc3638d198b59dd630bdd98e0d57f503", null ],
-    [ "searchIconStyle", "classhal_1_1_module_widget.html#a256ec10c28837f1691a5724c96b05e0b", null ],
-    [ "showGatesIconPath", "classhal_1_1_module_widget.html#a4157f78b402a7004086d7b70d334875e", null ],
-    [ "showNetsIconPath", "classhal_1_1_module_widget.html#ac0776b1a22e2de7493c52cb69db6b298", null ]
+    [ "updateSearchIcon", "classhal_1_1_module_widget.html#add4e67bd5050b2792b6cb850f62dcbfa", null ]
 ];

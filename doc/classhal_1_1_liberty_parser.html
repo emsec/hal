@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_liberty_parser.html','');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="liberty__parser_8h_source.html">liberty_parser.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="liberty__parser_8h_source.html">/home/runner/work/hal/hal/plugins/liberty_parser/include/liberty_parser/liberty_parser.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::LibertyParser:</div>
 <div class="dyncontent">
@@ -126,8 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6e5aa9f5e1ce20a506d3a7ecce45fd16 inherit pub_methods_classhal_1_1_gate_library_parser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="liberty__parser_8h_source.html#l00046">46</a> of file <a class="el" href="liberty__parser_8h_source.html">liberty_parser.h</a>.</p>
+<div class="textblock"><p>A gate library parser for the Liberty format. </p>
+
+<p class="definition">Definition at line <a class="el" href="liberty__parser_8h_source.html#l00048">48</a> of file <a class="el" href="liberty__parser_8h_source.html">liberty_parser.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a31d56a1e5dc2758f134a9e9837804537"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a31d56a1e5dc2758f134a9e9837804537">&#9670;&nbsp;</a></span>LibertyParser()</h2>
@@ -204,8 +207,16 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Deserializes a gate library in Liberty format from the string stream into a gate library object. In order to also support lookup tables (LUTs) the following extension is allowed:</p>
-<p>lut(&lt;function name&gt;) { data_category = &lt;category&gt;; data_identifier = &lt;identifier&gt;; direction = &lt;"ascending" or "descending"&gt;; }</p>
-<p>&lt;category&gt; and &lt;identifier&gt; refer to the location where the LUT configuration string is stored, for example "generic" and "init". direction describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).</p>
+<div class="fragment"><div class="line"><a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f">lut</a>(&lt;<span class="keyword">function</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>&gt;) {</div>
+<div class="line">    data_category = &lt;category&gt;;</div>
+<div class="line">    data_identifier = &lt;<a class="code" href="netlist__preprocessing_8cpp.html#a48e60d765d82fd046fcd768268ce9dcc">identifier</a>&gt;;</div>
+<div class="line">    <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a> = &lt;<span class="stringliteral">&quot;ascending&quot;</span> or <span class="stringliteral">&quot;descending&quot;</span>&gt;;</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bab56efdaa67baedcc830a453ecd15b37f">hal::PinType::lut</a></div><div class="ttdeci">@ lut</div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a924ab95925fc83b38cba3ac2d8d7e9aa"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a></div><div class="ttdeci">PinDirection direction</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">netlist_serializer.cpp:64</a></div></div>
+<div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">netlist_serializer.cpp:58</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_a48e60d765d82fd046fcd768268ce9dcc"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a48e60d765d82fd046fcd768268ce9dcc">identifier</a></div><div class="ttdeci">std::string identifier</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01962">netlist_preprocessing.cpp:1962</a></div></div>
+</div><!-- fragment --><p><code>&lt;category&gt;</code> and <code>&lt;identifier&gt;</code> refer to the location where the LUT configuration string is stored, for example "generic" and "init". <code>direction</code> describes whether the least significant bit of the configuration is the output for inputs 000... (ascending) or 111... (descending).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">file_path</td><td>- Path to the file containing the gate library definition. </td></tr>
@@ -216,17 +227,15 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_gate_library_parser.html#ad8b3fdfc65b6d87782d8fc7da1a33b36">hal::GateLibraryParser</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2liberty__parser_8cpp_source.html#l00014">14</a> of file <a class="el" href="src_2liberty__parser_8cpp_source.html">liberty_parser.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="liberty__parser_8cpp_source.html#l00014">14</a> of file <a class="el" href="liberty__parser_8cpp_source.html">liberty_parser.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="test_2liberty__parser_8cpp_source.html#l00026">hal::TEST_F()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00064">ERR_APPEND</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/liberty_parser/include/liberty_parser/<a class="el" href="liberty__parser_8h_source.html">liberty_parser.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/liberty_parser/src/<a class="el" href="src_2liberty__parser_8cpp_source.html">liberty_parser.cpp</a></li>
+<li>plugins/liberty_parser/include/liberty_parser/<a class="el" href="liberty__parser_8h_source.html">liberty_parser.h</a></li>
+<li>plugins/liberty_parser/src/<a class="el" href="liberty__parser_8cpp_source.html">liberty_parser.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -234,7 +243,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_liberty_parser.html">LibertyParser</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

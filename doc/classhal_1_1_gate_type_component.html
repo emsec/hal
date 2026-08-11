@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_gate_type_component.html'
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gate__type__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/gate_type_component.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GateTypeComponent:</div>
 <div class="dyncontent">
@@ -162,7 +164,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aa5c8039e44920ea0ab684b7f943641e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e8b60a3dcff1239bf2cbde39c36782f"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a7e8b60a3dcff1239bf2cbde39c36782f">create_latch_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component)</td></tr>
 <tr class="separator:a7e8b60a3dcff1239bf2cbde39c36782f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> bit_size)</td></tr>
+<tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> bit_size)</td></tr>
 <tr class="separator:a90523ddb1cda22842e6e56f3ab41fc03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adebe86800325ba44ce254d441ff1ecf9"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#adebe86800325ba44ce254d441ff1ecf9">create_mac_component</a> ()</td></tr>
 <tr class="separator:adebe86800325ba44ce254d441ff1ecf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -272,8 +274,8 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
-<dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a nullptr. </dd></dl>
+<p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a <code>nullptr</code> is returned in case it is not.</p>
+<dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a <code>nullptr</code>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00153">153</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
@@ -309,8 +311,8 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p></p>
-<p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
-<dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a nullptr. </dd></dl>
+<p>Convert the gate type component to a component of the type specified by the template parameter. A check is performed to determine whether the conversion is legal and a <code>nullptr</code> is returned in case it is not.</p>
+<dl class="section return"><dt>Returns</dt><dd>The component converted to the target type or a <code>nullptr</code>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00167">167</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
@@ -500,7 +502,7 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">component</td><td>- Another component to be added as a child component. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">init_ascending</td><td>- True if ascending bit-order, false otherwise. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">init_ascending</td><td>- <code>true</code> if ascending bit-order, <code>false</code> otherwise. </td></tr>
   </table>
   </dd>
 </dl>
@@ -559,7 +561,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>bit_size</em>&#160;</td>
         </tr>
         <tr>
@@ -655,7 +657,7 @@ template&lt;typename T &gt; </div>
     <tr><td class="paramdir">[in]</td><td class="paramname">addr_group</td><td>- The name of the read or write address pin group. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">clock_bf</td><td>- The read or write clock's Boolean function. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">enable_bf</td><td>- The read or write enable's Boolean function. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">is_write</td><td>- Set true for write port, false for read port. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">is_write</td><td>- Set <code>true</code> for write port, <code>false</code> for read port. </td></tr>
   </table>
   </dd>
 </dl>
@@ -740,14 +742,14 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a single component matching the filter condition (if provided). Returns a nullptr if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
+<p>Get a single component matching the filter condition (if provided). Returns a <code>nullptr</code> if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The filter applied to all candidate components. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The component or a nullptr. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The component or a <code>nullptr</code>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gate__type__component_8cpp_source.html#l00081">81</a> of file <a class="el" href="gate__type__component_8cpp_source.html">gate_type_component.cpp</a>.</p>
 
@@ -782,20 +784,20 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get a single sub-component of the gate type component and convert it to a component of the type specified by the template parameter. A user-defined filter may be applied to the result set, but is disabled by default. If more no or than one components match the filter condition, a nullptr is returned. A check is performed to determine whether the conversion is legal and a nullptr is returned in case it is not.</p>
+<p>Get a single sub-component of the gate type component and convert it to a component of the type specified by the template parameter. A user-defined filter may be applied to the result set, but is disabled by default. If more no or than one components match the filter condition, a <code>nullptr</code> is returned. A check is performed to determine whether the conversion is legal and a <code>nullptr</code> is returned in case it is not.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">filter</td><td>- The user-defined filter function applied to all candidate components. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The sub-component of the gate type component converted to the target type or a nullptr. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The sub-component of the gate type component converted to the target type or a <code>nullptr</code>. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gate__type__component_8h_source.html#l00205">205</a> of file <a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gate__type__component_8h_source.html#l00153">convert_to()</a>, <a class="el" href="gate__type__component_8cpp_source.html#l00081">get_component()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00497">hal::Gate::add_boolean_function()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l01034">hal::Gate::get_init_data()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l01055">hal::Gate::set_init_data()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate_8cpp_source.html#l00497">hal::Gate::add_boolean_function()</a>, <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>, <a class="el" href="latch__function_8cpp_source.html#l00022">hal::verilator::converter::get_function_for_latch()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l01034">hal::Gate::get_init_data()</a>, <a class="el" href="verilator_8cpp_source.html#l00031">hal::verilator::remove_unwanted_parameters_from_netlist()</a>, and <a class="el" href="netlist_2gate_8cpp_source.html#l01055">hal::Gate::set_init_data()</a>.</p>
 
 </div>
 </div>
@@ -869,8 +871,8 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type_component/<a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/gate_library/gate_type_component/<a class="el" href="gate__type__component_8cpp_source.html">gate_type_component.cpp</a></li>
+<li>include/hal_core/netlist/gate_library/gate_type_component/<a class="el" href="gate__type__component_8h_source.html">gate_type_component.h</a></li>
+<li>src/netlist/gate_library/gate_type_component/<a class="el" href="gate__type__component_8cpp_source.html">gate_type_component.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -878,7 +880,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

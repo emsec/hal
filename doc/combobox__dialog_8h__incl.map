@@ -1,8 +1,8 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/input_dialog/combobox_dialog.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/input_dialog/combobox_dialog.h">
-<area shape="rect" id="node1" title=" " alt="" coords="172,5,375,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,124,80,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="105,124,215,151"/>
-<area shape="rect" id="node4" title=" " alt="" coords="240,124,307,151"/>
-<area shape="rect" id="node5" title=" " alt="" coords="331,124,437,151"/>
-<area shape="rect" id="node6" title=" " alt="" coords="462,124,565,151"/>
+<map id="plugins/gui/include/gui/input_dialog/combobox_dialog.h" name="plugins/gui/include/gui/input_dialog/combobox_dialog.h">
+<area shape="rect" id="node1" title=" " alt="" coords="172,5,375,61"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,109,80,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="105,109,215,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="240,109,307,136"/>
+<area shape="rect" id="node5" title=" " alt="" coords="331,109,437,136"/>
+<area shape="rect" id="node6" title=" " alt="" coords="462,109,565,136"/>
 </map>

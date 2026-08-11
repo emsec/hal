@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/content_anchor/content_anchor.cpp Source File</title>
+<title>HAL: plugins/gui/src/content_anchor/content_anchor.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -109,7 +111,7 @@ $(document).ready(function(){initNavTree('content__anchor_8cpp_source.html','');
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="classhal_1_1_settings_manager.html#abf3cc1d3dafbd723414b8072be710448">SettingsManager::instance</a>()-&gt;<a class="code" href="classhal_1_1_settings_manager.html#a9ee03a6bcbe25ca964b232f4275f106f">widgetsSaveGeometry</a>(<a class="code" href="classhal_1_1_content_anchor.html#a30b069b3ccd762a1284bdb96203d52a5">mAnchorPosition</a>, widgets);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> ContentLayout::positionToString(<a class="code" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">Position</a> pos)</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf">   24</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> <a class="code" href="namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf">ContentLayout::positionToString</a>(<a class="code" href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">Position</a> pos)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmetaenum.html">QMetaEnum</a> me = QMetaEnum::fromType&lt;Position&gt;();</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">return</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(me.<a class="codeRef" href="https://doc.qt.io/qt-5/qmetaenum.html#key">key</a>(pos));</div>
@@ -128,8 +130,8 @@ $(document).ready(function(){initNavTree('content__anchor_8cpp_source.html','');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_content_anchor_html_a2253e49fb6ee22a041ca96233c9823c2"><div class="ttname"><a href="classhal_1_1_content_anchor.html#a2253e49fb6ee22a041ca96233c9823c2">hal::ContentAnchor::saveState</a></div><div class="ttdeci">void saveState() const</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00013">content_anchor.cpp:13</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html_a30b069b3ccd762a1284bdb96203d52a5"><div class="ttname"><a href="classhal_1_1_content_anchor.html#a30b069b3ccd762a1284bdb96203d52a5">hal::ContentAnchor::mAnchorPosition</a></div><div class="ttdeci">ContentLayout::Position mAnchorPosition</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00058">content_anchor.h:58</a></div></div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html_abb87593762fc6c012370901dadb97ad0"><div class="ttname"><a href="classhal_1_1_content_anchor.html#abb87593762fc6c012370901dadb97ad0">hal::ContentAnchor::mDockBar</a></div><div class="ttdeci">DockBar * mDockBar</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00057">content_anchor.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html_a30b069b3ccd762a1284bdb96203d52a5"><div class="ttname"><a href="classhal_1_1_content_anchor.html#a30b069b3ccd762a1284bdb96203d52a5">hal::ContentAnchor::mAnchorPosition</a></div><div class="ttdeci">ContentLayout::Position mAnchorPosition</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00061">content_anchor.h:61</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html_abb87593762fc6c012370901dadb97ad0"><div class="ttname"><a href="classhal_1_1_content_anchor.html#abb87593762fc6c012370901dadb97ad0">hal::ContentAnchor::mDockBar</a></div><div class="ttdeci">DockBar * mDockBar</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00060">content_anchor.h:60</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_anchor_html_ada3413738b4fc1e834e5335e94e3afe6"><div class="ttname"><a href="classhal_1_1_content_anchor.html#ada3413738b4fc1e834e5335e94e3afe6">hal::ContentAnchor::count</a></div><div class="ttdeci">virtual int count() const</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00008">content_anchor.cpp:8</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00050">content_widget.h:51</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_aba73ba2b60878f4b1f21fc601c539d78"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aba73ba2b60878f4b1f21fc601c539d78">hal::DockBar::count</a></div><div class="ttdeci">int count()</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00279">dock_bar.cpp:279</a></div></div>
@@ -141,9 +143,10 @@ $(document).ready(function(){initNavTree('content__anchor_8cpp_source.html','');
 <div class="ttc" id="acontent__widget_8h_html"><div class="ttname"><a href="content__widget_8h.html">content_widget.h</a></div></div>
 <div class="ttc" id="adock__bar_8h_html"><div class="ttname"><a href="dock__bar_8h.html">dock_bar.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_content_layout_html_a85162361ddf93adbe2a7328a717a9716"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#a85162361ddf93adbe2a7328a717a9716">hal::ContentLayout::positionFromString</a></div><div class="ttdeci">Position positionFromString(const QString &amp;s)</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00030">content_anchor.cpp:30</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00041">content_anchor.h:41</a></div></div>
-<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377ca34cdb089f401df3ed11900f8658f00a5"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca34cdb089f401df3ed11900f8658f00a5">hal::ContentLayout::Right</a></div><div class="ttdeci">@ Right</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00041">content_anchor.h:41</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377c"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377c">hal::ContentLayout::Position</a></div><div class="ttdeci">Position</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00044">content_anchor.h:44</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_content_layout_html_ad42c41e586a705a081ce0dee0578377ca34cdb089f401df3ed11900f8658f00a5"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#ad42c41e586a705a081ce0dee0578377ca34cdb089f401df3ed11900f8658f00a5">hal::ContentLayout::Right</a></div><div class="ttdeci">@ Right</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00044">content_anchor.h:44</a></div></div>
+<div class="ttc" id="anamespacehal_1_1_content_layout_html_adab5a69bccb6c19c9718ba082c55d1cf"><div class="ttname"><a href="namespacehal_1_1_content_layout.html#adab5a69bccb6c19c9718ba082c55d1cf">hal::ContentLayout::positionToString</a></div><div class="ttdeci">QString positionToString(Position pos)</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8cpp_source.html#l00024">content_anchor.cpp:24</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
 <div class="ttc" id="aqmetaenum_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmetaenum.html">QMetaEnum</a></div></div>
@@ -156,7 +159,7 @@ $(document).ready(function(){initNavTree('content__anchor_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_0c3947b9c9b550f2144794bb9930880b.html">content_anchor</a></li><li class="navelem"><a class="el" href="content__anchor_8cpp.html">content_anchor.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/graph_algorithm/src/plugin_graph_algorithm.cpp Source File</title>
+<title>HAL: plugins/graph_algorithm/src/plugin_graph_algorithm.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('plugin__graph__algorithm_8cpp_source.h
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">extern</span> std::unique_ptr&lt;BasePluginInterface&gt; <a class="code" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">create_plugin_instance</a>()</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">extern</span> std::unique_ptr&lt;BasePluginInterface&gt; <a class="code" href="namespacehal.html#a520a82c66e9e539acaa3fb2d6ce6578a">create_plugin_instance</a>()</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keywordflow">return</span> std::make_unique&lt;GraphAlgorithmPlugin&gt;();</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    }</div>
@@ -122,8 +124,8 @@ $(document).ready(function(){initNavTree('plugin__graph__algorithm_8cpp_source.h
 <div class="ttc" id="aclasshal_1_1_graph_algorithm_plugin_html_ae9b1f634a193b0ccd4eb025bfda13f4f"><div class="ttname"><a href="classhal_1_1_graph_algorithm_plugin.html#ae9b1f634a193b0ccd4eb025bfda13f4f">hal::GraphAlgorithmPlugin::get_dependencies</a></div><div class="ttdeci">std::set&lt; std::string &gt; get_dependencies() const override</div><div class="ttdoc">Get the plugin dependencies.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__graph__algorithm_8cpp_source.html#l00027">plugin_graph_algorithm.cpp:27</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_algorithm_plugin_html_af0c694efa2388d6f404ceaba245f0171"><div class="ttname"><a href="classhal_1_1_graph_algorithm_plugin.html#af0c694efa2388d6f404ceaba245f0171">hal::GraphAlgorithmPlugin::get_name</a></div><div class="ttdeci">std::string get_name() const override</div><div class="ttdoc">Get the name of the plugin.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__graph__algorithm_8cpp_source.html#l00012">plugin_graph_algorithm.cpp:12</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacehal_html_aa8127688230d54c42984bdd3c2bb1f72"><div class="ttname"><a href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">hal::create_plugin_instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; create_plugin_instance()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00071">plugin_gui.cpp:71</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anamespacehal_html_a520a82c66e9e539acaa3fb2d6ce6578a"><div class="ttname"><a href="namespacehal.html#a520a82c66e9e539acaa3fb2d6ce6578a">hal::create_plugin_instance</a></div><div class="ttdeci">std::unique_ptr&lt; BasePluginInterface &gt; create_plugin_instance()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__bitorder__propagation_8cpp_source.html#l00010">plugin_bitorder_propagation.cpp:10</a></div></div>
 <div class="ttc" id="aplugin__graph__algorithm_8h_html"><div class="ttname"><a href="plugin__graph__algorithm_8h.html">plugin_graph_algorithm.h</a></div><div class="ttdoc">This file contains all functions related to the HAL plugin API.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -131,7 +133,7 @@ $(document).ready(function(){initNavTree('plugin__graph__algorithm_8cpp_source.h
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_192b19fb2b8fdce0ad89db78639c6562.html">graph_algorithm</a></li><li class="navelem"><a class="el" href="dir_12e2d667539b63992169e7388aea4805.html">src</a></li><li class="navelem"><a class="el" href="plugin__graph__algorithm_8cpp.html">plugin_graph_algorithm.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

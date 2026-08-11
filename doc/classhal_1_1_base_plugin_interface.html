@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,25 +93,45 @@ $(document).ready(function(){initNavTree('classhal_1_1_base_plugin_interface.htm
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="plugin__interface__base_8h_source.html">hal_core/plugin_system/plugin_interface_base.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::BasePluginInterface:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_base_plugin_interface__inherit__graph.png" border="0" usemap="#ahal_1_1_base_plugin_interface_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_base_plugin_interface_inherit__map" id="ahal_1_1_base_plugin_interface_inherit__map">
-<area shape="rect" title=" " alt="" coords="1115,5,1303,156"/>
-<area shape="rect" href="classhal_1_1_boolean_influence_plugin.html" title="Plugin interface for the Boolean influence plugin." alt="" coords="5,204,216,355"/>
-<area shape="rect" href="classhal_1_1_dataflow_plugin.html" title="Plugin interface for the dataflow analysis plugin (DANA)." alt="" coords="240,204,405,355"/>
-<area shape="rect" href="classhal_1_1_graph_algorithm_plugin.html" title="Plugin interface for graph algorithms." alt="" coords="430,204,631,355"/>
-<area shape="rect" href="classhal_1_1_h_g_l_parser_plugin.html" title=" " alt="" coords="656,211,813,347"/>
-<area shape="rect" href="classhal_1_1_h_g_l_writer_plugin.html" title=" " alt="" coords="838,211,994,347"/>
-<area shape="rect" href="classhal_1_1_liberty_parser_plugin.html" title=" " alt="" coords="1018,211,1193,347"/>
-<area shape="rect" href="classhal_1_1_py_base_plugin_interface.html" title=" " alt="" coords="1217,211,1413,347"/>
-<area shape="rect" href="classhal_1_1_solve_fsm_plugin.html" title="Plugin interface for the solve FSM plugin." alt="" coords="1437,211,1600,347"/>
-<area shape="rect" href="classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="1624,219,1795,340"/>
-<area shape="rect" href="classhal_1_1_v_h_d_l_parser_plugin.html" title=" " alt="" coords="1819,211,1986,347"/>
-<area shape="rect" href="classhal_1_1_verilog_parser_plugin.html" title=" " alt="" coords="2010,211,2185,347"/>
-<area shape="rect" href="classhal_1_1_verilog_writer_plugin.html" title=" " alt="" coords="2209,211,2383,347"/>
+<area shape="rect" title=" " alt="" coords="3085,5,3273,156"/>
+<area shape="rect" href="classhal_1_1_bitorder_propagation_plugin.html" title="Plugin interface for the BitorderPropagationPlugin." alt="" coords="5,226,233,377"/>
+<area shape="rect" href="classhal_1_1_boolean_influence_plugin.html" title="Plugin interface for the Boolean influence plugin." alt="" coords="258,226,469,377"/>
+<area shape="rect" href="classhal_1_1_dataflow_plugin.html" title="Plugin interface for the dataflow analysis plugin (DANA)." alt="" coords="493,226,658,377"/>
+<area shape="rect" href="classhal_1_1_dot_viewer_plugin.html" title="Plugin interface for the DotViewerPlugin." alt="" coords="683,226,849,377"/>
+<area shape="rect" href="classhal_1_1_genlib_writer_plugin.html" title=" " alt="" coords="873,241,1045,362"/>
+<area shape="rect" href="classhal_1_1_gexf_writer_plugin.html" title=" " alt="" coords="1069,233,1231,369"/>
+<area shape="rect" href="classhal_1_1_graph_algorithm_plugin.html" title="Plugin interface for graph algorithms." alt="" coords="1255,226,1456,377"/>
+<area shape="rect" href="classhal_1_1_gui_extension_demo_plugin.html" title=" " alt="" coords="1480,233,1695,369"/>
+<area shape="rect" href="classhal_1_1_h_g_l_parser_plugin.html" title=" " alt="" coords="1719,233,1877,369"/>
+<area shape="rect" href="classhal_1_1_h_g_l_writer_plugin.html" title=" " alt="" coords="1901,233,2057,369"/>
+<area shape="rect" href="classhal_1_1_hawkeye_plugin.html" title="Plugin interface for HAWKEYE." alt="" coords="2082,226,2247,377"/>
+<area shape="rect" href="classhal_1_1_liberty_parser_plugin.html" title=" " alt="" coords="2272,233,2447,369"/>
+<area shape="rect" href="classhal_1_1_logic_evaluator_plugin.html" title=" " alt="" coords="2471,219,2658,384"/>
+<area shape="rect" href="classhal_1_1_module_identification_plugin.html" title="Plugin for identifying functional modules within a netlist." alt="" coords="2683,219,2913,384"/>
+<area shape="rect" href="classhal_1_1_netlist_preprocessing_plugin.html" title="Plugin interface for netlist preprocessing." alt="" coords="2938,219,3170,384"/>
+<area shape="rect" href="classhal_1_1_netlist_simulator_controller_plugin.html" title=" " alt="" coords="3195,211,3415,391"/>
+<area shape="rect" href="classhal_1_1_netlist_simulator_plugin.html" title=" " alt="" coords="3439,226,3635,377"/>
+<area shape="rect" href="classhal_1_1_perf_test_plugin.html" title=" " alt="" coords="3659,233,3801,369"/>
+<area shape="rect" href="classhal_1_1_py_base_plugin_interface.html" title=" " alt="" coords="3825,233,4021,369"/>
+<area shape="rect" href="classhal_1_1_resynthesis_plugin.html" title="Plugin interface for the netlist resynthesis plugin." alt="" coords="4045,226,4223,377"/>
+<area shape="rect" href="classhal_1_1_sequential_symbolic_execution_plugin.html" title="Plugin interface for HAWKEYE." alt="" coords="4247,204,4490,399"/>
+<area shape="rect" href="classhal_1_1_solve_fsm_plugin.html" title="Plugin interface for the solve FSM plugin." alt="" coords="4514,233,4677,369"/>
+<area shape="rect" href="classhal_1_1_u_i_plugin_interface.html" title=" " alt="" coords="4701,241,4871,362"/>
+<area shape="rect" href="classhal_1_1_v_h_d_l_parser_plugin.html" title=" " alt="" coords="4896,233,5063,369"/>
+<area shape="rect" href="classhal_1_1_verilator_simulator_plugin.html" title=" " alt="" coords="5087,233,5295,369"/>
+<area shape="rect" href="classhal_1_1_verilog_parser_plugin.html" title=" " alt="" coords="5320,233,5495,369"/>
+<area shape="rect" href="classhal_1_1_verilog_writer_plugin.html" title=" " alt="" coords="5519,233,5693,369"/>
+<area shape="rect" href="classhal_1_1_waveform_viewer_plugin.html" title=" " alt="" coords="5718,226,5921,377"/>
+<area shape="rect" href="classhal_1_1_xilinx_toolbox_plugin.html" title="Plugin interface for the Xilinx toolbox." alt="" coords="5945,226,6131,377"/>
+<area shape="rect" href="classhal_1_1_z3_utils_plugin.html" title=" " alt="" coords="6155,248,6292,355"/>
+<area shape="rect" href="classhal_1_1_plugin_gui.html" title=" " alt="" coords="4611,447,4772,612"/>
+<area shape="rect" href="classhal_1_1_plugin_python_shell.html" title=" " alt="" coords="4796,461,4963,597"/>
 </map>
 </div>
 <div class="dynheader">
@@ -160,8 +182,9 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a52dcfaa4f1facdebbd555034e2b7e72b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00056">56</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
+<div class="textblock"><p>The base class for all HAL plugins. Every plugin has to derive from this class and implement at least <code>get_name</code> and <code>get_version</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00058">58</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad650a0e81cc8fdcf9e59dc64d80d5ba4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad650a0e81cc8fdcf9e59dc64d80d5ba4">&#9670;&nbsp;</a></span>BasePluginInterface()</h2>
@@ -213,7 +236,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00009">9</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00059">m_extensions</a>.</p>
+<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00061">m_extensions</a>.</p>
 
 </div>
 </div>
@@ -242,9 +265,9 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00042">42</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00059">m_extensions</a>.</p>
+<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00061">m_extensions</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00043">hal::HGLParserPlugin::on_unload()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00043">hal::HGLWriterPlugin::on_unload()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00043">hal::LibertyParserPlugin::on_unload()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00043">hal::VerilogParserPlugin::on_unload()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00043">hal::VerilogWriterPlugin::on_unload()</a>, and <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00045">hal::VHDLParserPlugin::on_unload()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__gexf__writer_8cpp_source.html#l00043">hal::GexfWriterPlugin::on_unload()</a>, <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00043">hal::HGLParserPlugin::on_unload()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00043">hal::HGLWriterPlugin::on_unload()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00043">hal::LibertyParserPlugin::on_unload()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00043">hal::VerilogParserPlugin::on_unload()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00043">hal::VerilogWriterPlugin::on_unload()</a>, and <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00045">hal::VHDLParserPlugin::on_unload()</a>.</p>
 
 </div>
 </div>
@@ -273,7 +296,7 @@ Protected Attributes</h2></td></tr>
 <p>Get all dependencies of this plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>The plugins that this plugin depends on. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#a5d45e52d5534f9e7b653ed2d240a9661">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#ae9b1f634a193b0ccd4eb025bfda13f4f">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#aa1b70a84a626c619fb96fb415ca12684">hal::DataflowPlugin</a>, and <a class="el" href="classhal_1_1_boolean_influence_plugin.html#af365f3fea6fadf1cfaf84b4870588600">hal::BooleanInfluencePlugin</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#a5d45e52d5534f9e7b653ed2d240a9661">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_xilinx_toolbox_plugin.html#a3ed88a9ff371ebf22710852055cf1f67">hal::XilinxToolboxPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#a9b3464d4dfc3d8ec34780d4c201e6afb">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_verilator_simulator_plugin.html#a3a8bc65d13b1505f46d4fc5dece7897a">hal::VerilatorSimulatorPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#a609111dc5c8f436a2c1caf9d328f6f64">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_sequential_symbolic_execution_plugin.html#a0878aecf3278e7b0df6a0f1b5be12313">hal::SequentialSymbolicExecutionPlugin</a>, <a class="el" href="classhal_1_1_resynthesis_plugin.html#ac1e55281535a7fd22170a27921edc946">hal::ResynthesisPlugin</a>, <a class="el" href="classhal_1_1_netlist_preprocessing_plugin.html#abe5e0abf1a3ab5a576b59117b4cc9665">hal::NetlistPreprocessingPlugin</a>, <a class="el" href="classhal_1_1_module_identification_plugin.html#a1e1cc903528aca1cc13f96f1b55a84a9">hal::ModuleIdentificationPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#a11ba252ac498eb553f75abce3bf59baf">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_hawkeye_plugin.html#a8090fb5fc2d6fa01497a483ca0e37162">hal::HawkeyePlugin</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#ae9b1f634a193b0ccd4eb025bfda13f4f">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dot_viewer_plugin.html#ac85b4130db1cc263774eed14c33db20e">hal::DotViewerPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#aa1b70a84a626c619fb96fb415ca12684">hal::DataflowPlugin</a>, and <a class="el" href="classhal_1_1_boolean_influence_plugin.html#af365f3fea6fadf1cfaf84b4870588600">hal::BooleanInfluencePlugin</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00024">24</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -306,7 +329,7 @@ Protected Attributes</h2></td></tr>
 <p>Get the description of the plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>The description of the plugin. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#ab64cabfa9603e1070f936c9570b1552f">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#ab1b78b2179e8b49157c375e234f61bd6">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a21d84fd0af2e6f3acb48a36a234d0982">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#ab375ed4dfacb316db812fbfb7f551d33">hal::DataflowPlugin</a>, and <a class="el" href="classhal_1_1_boolean_influence_plugin.html#ab60daa71a4911482107b5f5af1c30d23">hal::BooleanInfluencePlugin</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#ab64cabfa9603e1070f936c9570b1552f">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_xilinx_toolbox_plugin.html#aec213465840d82ffeb95f62c8d7420ea">hal::XilinxToolboxPlugin</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#ab1b78b2179e8b49157c375e234f61bd6">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#a03efa088cb671fd0acaed7a21b8248ff">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#a740a6836570d8dfd81d042a98a2f6250">hal::NetlistSimulatorControllerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#a8958946221b294fe6729845cd098bdab">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_sequential_symbolic_execution_plugin.html#aaefe0b7031c33d944ce8f0bb3c359ee6">hal::SequentialSymbolicExecutionPlugin</a>, <a class="el" href="classhal_1_1_resynthesis_plugin.html#a0be39e8465e6406726d16fdf4f1b30a7">hal::ResynthesisPlugin</a>, <a class="el" href="classhal_1_1_netlist_preprocessing_plugin.html#a7f78ac12ff83f8e4a76ecc72530d135c">hal::NetlistPreprocessingPlugin</a>, <a class="el" href="classhal_1_1_module_identification_plugin.html#a3282e915f50a019daccec277a8e3bb37">hal::ModuleIdentificationPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#ab601f2029c5a350b752ff8b0b3bfef3e">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_hawkeye_plugin.html#a8bfcde7be1a34f616ca34589c435732b">hal::HawkeyePlugin</a>, <a class="el" href="classhal_1_1_gui_extension_demo_plugin.html#aa9eb22f380616bbebf6f687bcc8ad72a">hal::GuiExtensionDemoPlugin</a>, <a class="el" href="classhal_1_1_plugin_gui.html#a6d97c782348d10e6fc88a900e38170fb">hal::PluginGui</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a21d84fd0af2e6f3acb48a36a234d0982">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a1dc635a9346f3171705d4cd3b4723648">hal::DotViewerPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#ab375ed4dfacb316db812fbfb7f551d33">hal::DataflowPlugin</a>, <a class="el" href="classhal_1_1_boolean_influence_plugin.html#ab60daa71a4911482107b5f5af1c30d23">hal::BooleanInfluencePlugin</a>, and <a class="el" href="classhal_1_1_bitorder_propagation_plugin.html#a52cb9cf283f99df184c058ae11a115e1">hal::BitorderPropagationPlugin</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00019">19</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -340,7 +363,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00037">37</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00059">m_extensions</a>.</p>
+<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00061">m_extensions</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00750">hal::GuiPluginManager::getGuiExtensions()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
 
@@ -370,13 +393,13 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get first extension of given type T. </p><dl class="section return"><dt>Returns</dt><dd>pointer to first extension of type T or nullptr if no such extension exists. </dd></dl>
+<p>Get first extension of given type T. </p><dl class="section return"><dt>Returns</dt><dd>pointer to first extension of type T or <code>nullptr</code> if no such extension exists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00138">138</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00140">140</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__manager_8h_source.html#l00167">hal::plugin_manager::get_first_extension()</a>, and <a class="el" href="result_8cpp_source.html#l00250">hal::dataflow::Result::open_dot_in_viewer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__manager_8h_source.html#l00167">hal::plugin_manager::get_first_extension()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00250">hal::dataflow::Result::open_dot_in_viewer()</a>.</p>
 
 </div>
 </div>
@@ -405,7 +428,7 @@ template&lt;typename T &gt; </div>
 <p>Get the name of the plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the plugin. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#a74c4a52027912d1260e24fb65d2ac6e0">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a0c7eeff0f216b08f68a809143ae8258c">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a41b3e8fed5c21333b87acc44ef3cd864">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a12de0865e3bc8610c2f7baf6c4eed124">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#a759508283f1debfa100863a6a2f74d5b">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#a140e55c46db4d800536bc002c32d4424">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a780ecc22304fcb84848b7f403d2fac90">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#afc61afb516c71527fb563958e607b73b">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#af0c694efa2388d6f404ceaba245f0171">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#a3f07e93bc57793f17e8726b52f07afe7">hal::DataflowPlugin</a>, and <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a7163b39b267151fe1c3e88af349f3663">hal::BooleanInfluencePlugin</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#a74c4a52027912d1260e24fb65d2ac6e0">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_z3_utils_plugin.html#a55898e2ffceafaf5145d495b585a4be2">hal::Z3UtilsPlugin</a>, <a class="el" href="classhal_1_1_xilinx_toolbox_plugin.html#a141e123e559e0ddb6d114559dca2f037">hal::XilinxToolboxPlugin</a>, <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a0c7eeff0f216b08f68a809143ae8258c">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a41b3e8fed5c21333b87acc44ef3cd864">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a12de0865e3bc8610c2f7baf6c4eed124">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#a759508283f1debfa100863a6a2f74d5b">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#af03948fa393d0f22ed0c3baca2e15646">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_verilator_simulator_plugin.html#a925c22bb77525c741087eb0ef4537956">hal::VerilatorSimulatorPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#a062f36be3f9c7dd67de73dfd9d01bbcd">hal::NetlistSimulatorControllerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#a079b6ae4d4d948bfc09564226bcfab36">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_sequential_symbolic_execution_plugin.html#a2c7158293579db543887a4d4bf35be5d">hal::SequentialSymbolicExecutionPlugin</a>, <a class="el" href="classhal_1_1_resynthesis_plugin.html#ab92c610d92c13ef025bac7338b9398cd">hal::ResynthesisPlugin</a>, <a class="el" href="classhal_1_1_plugin_python_shell.html#a1dc859696fb6d02fa08d07d60966c0fd">hal::PluginPythonShell</a>, <a class="el" href="classhal_1_1_perf_test_plugin.html#ad22f241267952ab1f0489b920992942f">hal::PerfTestPlugin</a>, <a class="el" href="classhal_1_1_netlist_preprocessing_plugin.html#a6ebb32c3e70c4bdffc48f8cbeb3dc4f9">hal::NetlistPreprocessingPlugin</a>, <a class="el" href="classhal_1_1_module_identification_plugin.html#a3bb9c770386a7ed371c308b6e1fbbb61">hal::ModuleIdentificationPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#acd399c189912e6f5f9121df11cc4f821">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#a140e55c46db4d800536bc002c32d4424">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a780ecc22304fcb84848b7f403d2fac90">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#afc61afb516c71527fb563958e607b73b">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_hawkeye_plugin.html#a669546fb5a37c54e1dbaffd4540e1951">hal::HawkeyePlugin</a>, <a class="el" href="classhal_1_1_gui_extension_demo_plugin.html#aaa70fe98f7d5d9cf6c629137130b4dc0">hal::GuiExtensionDemoPlugin</a>, <a class="el" href="classhal_1_1_plugin_gui.html#afae9dee5316e1b95812c25b7d1c598a9">hal::PluginGui</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#af0c694efa2388d6f404ceaba245f0171">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_gexf_writer_plugin.html#ab8b90e93dfa530edcd1b5b1cbe94f5cc">hal::GexfWriterPlugin</a>, <a class="el" href="classhal_1_1_genlib_writer_plugin.html#ae66eb387eb67a9aca7421c22ab09a670">hal::GenlibWriterPlugin</a>, <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a322bd532ce9b021f3b6e6bbd7b793cc3">hal::DotViewerPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#a3f07e93bc57793f17e8726b52f07afe7">hal::DataflowPlugin</a>, <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a7163b39b267151fe1c3e88af349f3663">hal::BooleanInfluencePlugin</a>, and <a class="el" href="classhal_1_1_bitorder_propagation_plugin.html#aa893e35508aadd870e59f5403583c1ff">hal::BitorderPropagationPlugin</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">initialize_logging()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>, <a class="el" href="plugin__interfaces_8cpp_source.html#l00040">hal::plugin_interfaces_init()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
 
@@ -436,7 +459,7 @@ template&lt;typename T &gt; </div>
 <p>Get the version of the plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>The version of the plugin. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#ac12c47cf50b2604250dcc63b487c61a0">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a57cfb438770ef0926ed6c98fea771c72">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#af90f92ec67fa79ed4810f89985a4840a">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a6cfc976fa374ab2b48b3068d66c1162d">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#acf756bdee8d038b3d085b85fefd0bf5b">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#af18e57f793c2845d97e1d16f1c3dce0d">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a632d1d3bbf583d4f1b0d6f1b26411573">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#ae3190bd25edfbec86a7a1175cf795a8b">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a48de68f15009493b5ce4e99651a7468d">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#aad2a5008e196f3e8eb32a0c8e2b2c0bf">hal::DataflowPlugin</a>, and <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a78a598b6d687a4d8fb170e103d808aff">hal::BooleanInfluencePlugin</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_py_base_plugin_interface.html#ac12c47cf50b2604250dcc63b487c61a0">hal::PyBasePluginInterface</a>, <a class="el" href="classhal_1_1_z3_utils_plugin.html#a3b10891f949dbcc654f52bcd91f98e4a">hal::Z3UtilsPlugin</a>, <a class="el" href="classhal_1_1_xilinx_toolbox_plugin.html#a2f8e3527f019c0bfc7e606fd92ebf0e1">hal::XilinxToolboxPlugin</a>, <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a57cfb438770ef0926ed6c98fea771c72">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#af90f92ec67fa79ed4810f89985a4840a">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a6cfc976fa374ab2b48b3068d66c1162d">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_solve_fsm_plugin.html#acf756bdee8d038b3d085b85fefd0bf5b">hal::SolveFsmPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#afa6f2c13d460235e541b95562cfbf12b">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_verilator_simulator_plugin.html#aec1bd104b5eed5ad73920fdc06af71f4">hal::VerilatorSimulatorPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#add44a6cb38569be7b393def6393f269f">hal::NetlistSimulatorControllerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#a2abf2e3b1522892c6379fbff6fcd6338">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_sequential_symbolic_execution_plugin.html#ad8f64c911c21bc01c723607a5923056d">hal::SequentialSymbolicExecutionPlugin</a>, <a class="el" href="classhal_1_1_resynthesis_plugin.html#ade6bfc7db901eeee79073cedd5c15b59">hal::ResynthesisPlugin</a>, <a class="el" href="classhal_1_1_plugin_python_shell.html#aa907c9c9591fae4167ac274b11afe3b1">hal::PluginPythonShell</a>, <a class="el" href="classhal_1_1_perf_test_plugin.html#a4001d84a76a34c68293ed4b45acbe50e">hal::PerfTestPlugin</a>, <a class="el" href="classhal_1_1_netlist_preprocessing_plugin.html#aa725517765d846de825d8106e2f2e9c1">hal::NetlistPreprocessingPlugin</a>, <a class="el" href="classhal_1_1_module_identification_plugin.html#a7af8ee2ad45b136165f5218aeaa2d045">hal::ModuleIdentificationPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#a52642c34ff82ffa7281bae1f676d3e0b">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#af18e57f793c2845d97e1d16f1c3dce0d">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a632d1d3bbf583d4f1b0d6f1b26411573">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#ae3190bd25edfbec86a7a1175cf795a8b">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_hawkeye_plugin.html#ae5971d6300383db43d228f58c5befd43">hal::HawkeyePlugin</a>, <a class="el" href="classhal_1_1_gui_extension_demo_plugin.html#af3cd58594ee8ebf5cde56b649652a044">hal::GuiExtensionDemoPlugin</a>, <a class="el" href="classhal_1_1_plugin_gui.html#a21214d366b49e93ebdfad07607adeb8f">hal::PluginGui</a>, <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a48de68f15009493b5ce4e99651a7468d">hal::GraphAlgorithmPlugin</a>, <a class="el" href="classhal_1_1_gexf_writer_plugin.html#a3740f2729b7f15227a3debbcea56cdd4">hal::GexfWriterPlugin</a>, <a class="el" href="classhal_1_1_genlib_writer_plugin.html#a814310d2a4978cee7ef97a8260af30fe">hal::GenlibWriterPlugin</a>, <a class="el" href="classhal_1_1_dot_viewer_plugin.html#aaefaf2132c537ea5e313ee3bc6490978">hal::DotViewerPlugin</a>, <a class="el" href="classhal_1_1_dataflow_plugin.html#aad2a5008e196f3e8eb32a0c8e2b2c0bf">hal::DataflowPlugin</a>, <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a78a598b6d687a4d8fb170e103d808aff">hal::BooleanInfluencePlugin</a>, and <a class="el" href="classhal_1_1_bitorder_propagation_plugin.html#a73a3da4f7ae2b9664ce97d0b6deab6e5">hal::BitorderPropagationPlugin</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__interfaces_8cpp_source.html#l00040">hal::plugin_interfaces_init()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
 
@@ -464,7 +487,9 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Plugins utilize two phase construction. Always populate all members etc in the initialize function which is automatically called by <a class="el" href="namespacehal_1_1plugin__manager.html#ab7b612656ec8fc57b2df14bc0d44668f">plugin_manager::get_plugin_instance()</a> </p>
+<p>Plugins utilize two phase construction. Always populate all members etc in the initialize function which is automatically called by <a class="el" href="namespacehal_1_1plugin__manager.html#af0b517e939fe9cd25f7ea89fb92d5d46">plugin_manager::get_plugin_instance()</a> </p>
+
+<p>Reimplemented in <a class="el" href="classhal_1_1_z3_utils_plugin.html#a330743806a8336960f5c7d22b3713fad">hal::Z3UtilsPlugin</a>, <a class="el" href="classhal_1_1_perf_test_plugin.html#a7ed65cc98df4eb7a6663282d5b84e970">hal::PerfTestPlugin</a>, <a class="el" href="classhal_1_1_gui_extension_demo_plugin.html#aa19a1f6d310dd55f2164c47d0e6a6631">hal::GuiExtensionDemoPlugin</a>, and <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a137655ab49eea0ad0d70602930db42ae">hal::DotViewerPlugin</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00015">15</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -494,6 +519,8 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 <p>Initializes the logging channel(s) of a plugin. <br  />
  If not overwritten, a logging channel equal to the plugin name is created. </p>
+
+<p>Reimplemented in <a class="el" href="classhal_1_1_plugin_gui.html#a3f50c1907b0de260740cefd7bb8e6e19">hal::PluginGui</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00057">57</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -534,9 +561,9 @@ template&lt;typename... Args&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00106">106</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00108">108</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
 
 </div>
 </div>
@@ -564,7 +591,7 @@ template&lt;typename... Args&gt; </div>
 </div><div class="memdoc">
 <p>This function is automatically executed when the factory is loaded by the plugin manager </p>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#ab4e99012232cc91935ab7df1caa11eb1">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a0702d629c91733f44e80294d714933b4">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#acffa14f057bb28b3a01779d18dd48122">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#a0cc219a16a516281c89e61f2b1b80488">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#abea937047f532b78c9b50fabf6802ca4">hal::HGLWriterPlugin</a>, and <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#a0f7364c175cb36ea4c5f14a5facde1d6">hal::HGLParserPlugin</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#ab4e99012232cc91935ab7df1caa11eb1">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a0702d629c91733f44e80294d714933b4">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#acffa14f057bb28b3a01779d18dd48122">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#ab10df8b5c54bff64bec7467c5c80e040">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_verilator_simulator_plugin.html#ab292c20c3fcf489e80e12c3313c002d0">hal::VerilatorSimulatorPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#ae7a1da255548ceb1f861d0724726921d">hal::NetlistSimulatorControllerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#a7d7059a8576ec4f1c22386d9e043fa32">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#a91badffcf25e0c221495f1c470dcc2c3">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#a0cc219a16a516281c89e61f2b1b80488">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#abea937047f532b78c9b50fabf6802ca4">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#a0f7364c175cb36ea4c5f14a5facde1d6">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_gexf_writer_plugin.html#a4503f904a4ba35ede41c80961d329b9c">hal::GexfWriterPlugin</a>, <a class="el" href="classhal_1_1_genlib_writer_plugin.html#a8a3a458083d11baa180c19c20de8b032">hal::GenlibWriterPlugin</a>, and <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a17a6100e5bc86665fcb335f8b8b60ba7">hal::DotViewerPlugin</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00029">29</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -594,7 +621,7 @@ template&lt;typename... Args&gt; </div>
 </div><div class="memdoc">
 <p>This function is automatically executed when the factory is unloaded by the plugin manager </p>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a7f2981f0ca638cf56c20144a2ac30d90">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a80a9d1b4d9d0154892a45e79ae27388d">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a287b0ab70a7853fb1501184c676617ea">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#aa81a5d2bf55ead75ce7f05331a45fac5">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a4c2dd8b085ad08e50c81bc88b3d00860">hal::HGLWriterPlugin</a>, and <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#aa7eb802f60dc2dd2b0da218a1b0cb0ea">hal::HGLParserPlugin</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a7f2981f0ca638cf56c20144a2ac30d90">hal::VHDLParserPlugin</a>, <a class="el" href="classhal_1_1_verilog_writer_plugin.html#a80a9d1b4d9d0154892a45e79ae27388d">hal::VerilogWriterPlugin</a>, <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a287b0ab70a7853fb1501184c676617ea">hal::VerilogParserPlugin</a>, <a class="el" href="classhal_1_1_waveform_viewer_plugin.html#a84e49e211e99562b3610240845de010a">hal::WaveformViewerPlugin</a>, <a class="el" href="classhal_1_1_verilator_simulator_plugin.html#a1dddff29193ba34632c80b607ac4b9d9">hal::VerilatorSimulatorPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_controller_plugin.html#a0762d65c30aaded2d116dac3b4d7a018">hal::NetlistSimulatorControllerPlugin</a>, <a class="el" href="classhal_1_1_netlist_simulator_plugin.html#ad9d70f3b6b6d09a8858b2392b4ce136c">hal::NetlistSimulatorPlugin</a>, <a class="el" href="classhal_1_1_logic_evaluator_plugin.html#ae60ee9c17998d3e148af207d5b116dc7">hal::LogicEvaluatorPlugin</a>, <a class="el" href="classhal_1_1_liberty_parser_plugin.html#aa81a5d2bf55ead75ce7f05331a45fac5">hal::LibertyParserPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_writer_plugin.html#a4c2dd8b085ad08e50c81bc88b3d00860">hal::HGLWriterPlugin</a>, <a class="el" href="classhal_1_1_h_g_l_parser_plugin.html#aa7eb802f60dc2dd2b0da218a1b0cb0ea">hal::HGLParserPlugin</a>, <a class="el" href="classhal_1_1_gexf_writer_plugin.html#ad36cdaf69bd284274dc9a06d4e0a437e">hal::GexfWriterPlugin</a>, <a class="el" href="classhal_1_1_genlib_writer_plugin.html#ace794dbdd0119f2ae80ca690ae730ed7">hal::GenlibWriterPlugin</a>, and <a class="el" href="classhal_1_1_dot_viewer_plugin.html#a9319569e36418a7eed35ea078b793944">hal::DotViewerPlugin</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__interface__base_8cpp_source.html#l00033">33</a> of file <a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a>.</p>
 
@@ -621,15 +648,15 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00059">59</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00061">61</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00039">hal::DataflowPlugin::DataflowPlugin()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00042">delete_extension()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00037">get_extensions()</a>, <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00037">hal::HGLParserPlugin::on_load()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00037">hal::HGLWriterPlugin::on_load()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00037">hal::LibertyParserPlugin::on_load()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00037">hal::VerilogParserPlugin::on_load()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00037">hal::VerilogWriterPlugin::on_load()</a>, <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00039">hal::VHDLParserPlugin::on_load()</a>, and <a class="el" href="plugin__interface__base_8cpp_source.html#l00009">~BasePluginInterface()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00039">hal::DataflowPlugin::DataflowPlugin()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00042">delete_extension()</a>, <a class="el" href="plugin__dot__viewer_8cpp_source.html#l00023">hal::DotViewerPlugin::DotViewerPlugin()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00037">get_extensions()</a>, <a class="el" href="plugin__gui__extension__demo_8cpp_source.html#l00029">hal::GuiExtensionDemoPlugin::GuiExtensionDemoPlugin()</a>, <a class="el" href="plugin__logic__evaluator_8cpp_source.html#l00015">hal::LogicEvaluatorPlugin::LogicEvaluatorPlugin()</a>, <a class="el" href="plugin__module__identification_8cpp_source.html#l00016">hal::ModuleIdentificationPlugin::ModuleIdentificationPlugin()</a>, <a class="el" href="plugin__gexf__writer_8cpp_source.html#l00037">hal::GexfWriterPlugin::on_load()</a>, <a class="el" href="plugin__hgl__parser_8cpp_source.html#l00037">hal::HGLParserPlugin::on_load()</a>, <a class="el" href="plugin__hgl__writer_8cpp_source.html#l00037">hal::HGLWriterPlugin::on_load()</a>, <a class="el" href="plugin__liberty__parser_8cpp_source.html#l00037">hal::LibertyParserPlugin::on_load()</a>, <a class="el" href="plugin__verilog__parser_8cpp_source.html#l00037">hal::VerilogParserPlugin::on_load()</a>, <a class="el" href="plugin__verilog__writer_8cpp_source.html#l00037">hal::VerilogWriterPlugin::on_load()</a>, <a class="el" href="plugin__vhdl__parser_8cpp_source.html#l00039">hal::VHDLParserPlugin::on_load()</a>, <a class="el" href="plugin__perf__test_8cpp_source.html#l00027">hal::PerfTestPlugin::PerfTestPlugin()</a>, <a class="el" href="plugin__gui_8h_source.html#l00068">hal::PluginGui::PluginGui()</a>, <a class="el" href="plugin__python__shell_8h_source.html#l00058">hal::PluginPythonShell::PluginPythonShell()</a>, and <a class="el" href="plugin__interface__base_8cpp_source.html#l00009">~BasePluginInterface()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/plugin_system/<a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a></li>
-<li>/home/runner/work/hal/hal/src/plugin_system/<a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a></li>
+<li>include/hal_core/plugin_system/<a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a></li>
+<li>src/plugin_system/<a class="el" href="plugin__interface__base_8cpp_source.html">plugin_interface_base.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -637,7 +664,7 @@ template&lt;typename... Args&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

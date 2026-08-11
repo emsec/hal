@@ -24,13 +24,5 @@ var classhal_1_1_selection_details_widget =
     [ "toGroupingIconStyle", "classhal_1_1_selection_details_widget.html#a49bf4c3e4a39d37e92ea4fcc42d4e2c9", null ],
     [ "toModuleIconPath", "classhal_1_1_selection_details_widget.html#a973b3961f8a006ed97ad7be97080f707", null ],
     [ "toModuleIconStyle", "classhal_1_1_selection_details_widget.html#a50c1014521b59f45564be2b479b7c98e", null ],
-    [ "triggerHighlight", "classhal_1_1_selection_details_widget.html#af95582c1acedaa718aed0ffb552652b2", null ],
-    [ "disabledIconStyle", "classhal_1_1_selection_details_widget.html#a20ffc750d4e0fbdcca3049155d984465", null ],
-    [ "searchActiveIconStyle", "classhal_1_1_selection_details_widget.html#a89ed768b5d03dcfee39ebb4376697bc8", null ],
-    [ "searchIconPath", "classhal_1_1_selection_details_widget.html#a67971cc387ac16d418067bcfe8b02ccc", null ],
-    [ "searchIconStyle", "classhal_1_1_selection_details_widget.html#a1c67af6ca68247138bbae71d2398be5f", null ],
-    [ "toGroupingIconPath", "classhal_1_1_selection_details_widget.html#adccb5d0277796a9a7d6752592f15b5a8", null ],
-    [ "toGroupingIconStyle", "classhal_1_1_selection_details_widget.html#a528f517b8ac839bed97b377b16dfb780", null ],
-    [ "toModuleIconPath", "classhal_1_1_selection_details_widget.html#ab79714f917bf12326f8885518f48931e", null ],
-    [ "toModuleIconStyle", "classhal_1_1_selection_details_widget.html#a1d92935801758a5a2083ef04e346aa08", null ]
+    [ "triggerHighlight", "classhal_1_1_selection_details_widget.html#af95582c1acedaa718aed0ffb552652b2", null ]
 ];

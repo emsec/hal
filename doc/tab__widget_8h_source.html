@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/docking_system/tab_widget.h Source File</title>
+<title>HAL: plugins/gui/include/gui/docking_system/tab_widget.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -138,7 +140,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_tab_widget.html#a01a06adde0839efb940ab97bb81bb5d6">TabWidget</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f">add</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> index = -1);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f">add</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget, <span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a> = -1);</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#ab6400bdb142ec2b9149d4cd1668152d4">remove</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
@@ -150,7 +152,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#close">close</a>(<a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* widget);</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a4ab3514a0cbfdd9b327959e1a5d48205">handleNoCurrentWidget</a>(<span class="keywordtype">int</span> index);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a4ab3514a0cbfdd9b327959e1a5d48205">handleNoCurrentWidget</a>(<span class="keywordtype">int</span> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743">clear</a>();</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
@@ -172,7 +174,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QShortcut*&gt;</a> mActiveShortcuts;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    };</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;}</div>
-<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00053">content_anchor.h:54</a></div></div>
+<div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00056">content_anchor.h:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_frame_html"><div class="ttname"><a href="classhal_1_1_content_frame.html">hal::ContentFrame</a></div><div class="ttdoc">Wraps the ContentWidget class.</div><div class="ttdef"><b>Definition:</b> <a href="content__frame_8h_source.html#l00044">content_frame.h:45</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00050">content_widget.h:51</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tab_widget_html"><div class="ttname"><a href="classhal_1_1_tab_widget.html">hal::TabWidget</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8h_source.html#l00052">tab_widget.h:53</a></div></div>
@@ -188,10 +190,11 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="ttc" id="aclasshal_1_1_tab_widget_html_ab6400bdb142ec2b9149d4cd1668152d4"><div class="ttname"><a href="classhal_1_1_tab_widget.html#ab6400bdb142ec2b9149d4cd1668152d4">hal::TabWidget::remove</a></div><div class="ttdeci">virtual void remove(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8cpp_source.html#l00069">tab_widget.cpp:69</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tab_widget_html_ae02de948a566f428334c51c2788a06b1"><div class="ttname"><a href="classhal_1_1_tab_widget.html#ae02de948a566f428334c51c2788a06b1">hal::TabWidget::open</a></div><div class="ttdeci">virtual void open(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8cpp_source.html#l00121">tab_widget.cpp:121</a></div></div>
 <div class="ttc" id="aclasshal_1_1_toolbar_html"><div class="ttname"><a href="classhal_1_1_toolbar.html">hal::Toolbar</a></div><div class="ttdoc">Toolbar for all ContentFrames and ContentWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="toolbar_8h_source.html#l00038">toolbar.h:39</a></div></div>
-<div class="ttc" id="aclasshal_1_1_widget_html"><div class="ttname"><a href="classhal_1_1_widget.html">hal::Widget</a></div><div class="ttdoc">A QWidget customized for hal.</div><div class="ttdef"><b>Definition:</b> <a href="widget_8h_source.html#l00040">widget.h:41</a></div></div>
+<div class="ttc" id="aclasshal_1_1_widget_html"><div class="ttname"><a href="classhal_1_1_widget.html">hal::Widget</a></div><div class="ttdoc">A QWidget customized for hal.</div><div class="ttdef"><b>Definition:</b> <a href="widget_8h_source.html#l00041">widget.h:42</a></div></div>
 <div class="ttc" id="acontent__anchor_8h_html"><div class="ttname"><a href="content__anchor_8h.html">content_anchor.h</a></div></div>
 <div class="ttc" id="adock__bar_8h_html"><div class="ttname"><a href="dock__bar_8h.html">dock_bar.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="aqaction_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qaction.html">QAction</a></div></div>
 <div class="ttc" id="aqhboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList&lt; QShortcut * &gt;</a></div></div>
@@ -210,7 +213,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_5a37b91ad729d978f48b50fcc843fc3d.html">docking_system</a></li><li class="navelem"><a class="el" href="tab__widget_8h.html">tab_widget.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

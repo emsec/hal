@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_grid_placement.html','');
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="gui__def_8h_source.html">gui_def.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gui__def_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/gui_def.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GridPlacement:</div>
 <div class="dyncontent">
@@ -116,13 +118,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a433078f1aec251e1d726e11bb42b864e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a994800301fa4b52826fb52281f6f202d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a994800301fa4b52826fb52281f6f202d">GridPlacement</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html">QHash</a>&lt; <a class="el" href="classhal_1_1_node.html">hal::Node</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &gt; &amp;data)</td></tr>
 <tr class="separator:a994800301fa4b52826fb52281f6f202d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a821711893ecb7a583cd1a60bbbc2c2d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a821711893ecb7a583cd1a60bbbc2c2d9">setGatePosition</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gateId, std::pair&lt; int, int &gt;p, bool <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">swap</a>=false)</td></tr>
+<tr class="memitem:a821711893ecb7a583cd1a60bbbc2c2d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a821711893ecb7a583cd1a60bbbc2c2d9">setGatePosition</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId, std::pair&lt; int, int &gt;p, bool <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">swap</a>=false)</td></tr>
 <tr class="separator:a821711893ecb7a583cd1a60bbbc2c2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af93908a5a4bda8e588c4d564f7ea1a19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#af93908a5a4bda8e588c4d564f7ea1a19">setModulePosition</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId, std::pair&lt; int, int &gt;p, bool <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">swap</a>=false)</td></tr>
+<tr class="memitem:af93908a5a4bda8e588c4d564f7ea1a19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#af93908a5a4bda8e588c4d564f7ea1a19">setModulePosition</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> moduleId, std::pair&lt; int, int &gt;p, bool <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">swap</a>=false)</td></tr>
 <tr class="separator:af93908a5a4bda8e588c4d564f7ea1a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b0d1e64eb412b7de287d6d13a371451"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a1b0d1e64eb412b7de287d6d13a371451">gatePosition</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gateId) const</td></tr>
+<tr class="memitem:a1b0d1e64eb412b7de287d6d13a371451"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a1b0d1e64eb412b7de287d6d13a371451">gatePosition</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gateId) const</td></tr>
 <tr class="separator:a1b0d1e64eb412b7de287d6d13a371451"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e0f8d42282ce75591b96e578be8266e"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a1e0f8d42282ce75591b96e578be8266e">modulePosition</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId) const</td></tr>
+<tr class="memitem:a1e0f8d42282ce75591b96e578be8266e"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_grid_placement.html#a1e0f8d42282ce75591b96e578be8266e">modulePosition</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> moduleId) const</td></tr>
 <tr class="separator:a1e0f8d42282ce75591b96e578be8266e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qhash"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qhash')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qhash.html">QHash&lt; Node, QPoint &gt;</a></td></tr>
 <tr class="memitem:QHash inherit pub_methods_qhash"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#QHash">QHash</a> ()</td></tr>
@@ -343,8 +345,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:size_type-typedef inherit pub_attribs_qhash"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00140">140</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<div class="textblock"><p>The grid position of every node of a graph view, used to store and restore a layout. </p>
+
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00143">143</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a433078f1aec251e1d726e11bb42b864e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a433078f1aec251e1d726e11bb42b864e">&#9670;&nbsp;</a></span>GridPlacement() <span class="overload">[1/2]</span></h2>
@@ -369,7 +372,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00143">143</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00146">146</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 </div>
 </div>
@@ -397,7 +400,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00144">144</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00147">147</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>.</p>
 
@@ -416,7 +419,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">std::pair&lt;int,int&gt;* hal::GridPlacement::gatePosition </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>gateId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -428,11 +431,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00191">191</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00194">194</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constEnd">QHash&lt; Node, QPoint &gt;::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constFind">QHash&lt; Node, QPoint &gt;::constFind()</a>, and <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="gui__def_8h_source.html#l00146">setGatePosition()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="gui__def_8h_source.html#l00149">setGatePosition()</a>.</p>
 
 </div>
 </div>
@@ -448,7 +451,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">std::pair&lt;int,int&gt;* hal::GridPlacement::modulePosition </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>moduleId</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -460,11 +463,11 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00197">197</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00200">200</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constEnd">QHash&lt; Node, QPoint &gt;::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#constFind">QHash&lt; Node, QPoint &gt;::constFind()</a>, and <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="gui__def_8h_source.html#l00169">setModulePosition()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="gui__def_8h_source.html#l00172">setModulePosition()</a>.</p>
 
 </div>
 </div>
@@ -480,7 +483,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GridPlacement::setGatePosition </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>gateId</em>, </td>
         </tr>
         <tr>
@@ -508,9 +511,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00146">146</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00149">149</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00191">gatePosition()</a>, <a class="el" href="gui__def_8h_source.html#l00077">hal::Node::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#key">QHash&lt; Node, QPoint &gt;::key()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#operator-5b-5d">QHash&lt; Node, QPoint &gt;::operator[]()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">QHash&lt; Node, QPoint &gt;::swap()</a>.</p>
+<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00194">gatePosition()</a>, <a class="el" href="gui__def_8h_source.html#l00077">hal::Node::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#key">QHash&lt; Node, QPoint &gt;::key()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#operator-5b-5d">QHash&lt; Node, QPoint &gt;::operator[]()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">QHash&lt; Node, QPoint &gt;::swap()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -528,7 +531,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::GridPlacement::setModulePosition </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>moduleId</em>, </td>
         </tr>
         <tr>
@@ -556,16 +559,16 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00169">169</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00172">172</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00077">hal::Node::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#key">QHash&lt; Node, QPoint &gt;::key()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="gui__def_8h_source.html#l00197">modulePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#operator-5b-5d">QHash&lt; Node, QPoint &gt;::operator[]()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">QHash&lt; Node, QPoint &gt;::swap()</a>.</p>
+<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00077">hal::Node::id()</a>, <a class="el" href="gui__def_8h_source.html#l00089">hal::Node::isGate()</a>, <a class="el" href="gui__def_8h_source.html#l00083">hal::Node::isNull()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#key">QHash&lt; Node, QPoint &gt;::key()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, <a class="el" href="gui__def_8h_source.html#l00200">modulePosition()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#operator-5b-5d">QHash&lt; Node, QPoint &gt;::operator[]()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qhash.html#swap">QHash&lt; Node, QPoint &gt;::swap()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/<a class="el" href="gui__def_8h_source.html">gui_def.h</a></li>
+<li>plugins/gui/include/gui/<a class="el" href="gui__def_8h_source.html">gui_def.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -573,7 +576,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_grid_placement.html">GridPlacement</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

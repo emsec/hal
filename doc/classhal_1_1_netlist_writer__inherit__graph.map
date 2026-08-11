@@ -1,4 +1,5 @@
 <map id="hal::NetlistWriter" name="hal::NetlistWriter">
-<area shape="rect" id="node1" title=" " alt="" coords="6,5,147,112"/>
-<area shape="rect" id="node2" href="$classhal_1_1_verilog_writer.html" title=" " alt="" coords="5,160,148,267"/>
+<area shape="rect" id="node1" title=" " alt="" coords="79,5,221,112"/>
+<area shape="rect" id="node2" href="$classhal_1_1_gexf_writer.html" title=" " alt="" coords="5,160,135,267"/>
+<area shape="rect" id="node3" href="$classhal_1_1_verilog_writer.html" title=" " alt="" coords="159,160,301,267"/>
 </map>

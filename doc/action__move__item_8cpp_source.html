@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/user_action/action_move_item.cpp Source File</title>
+<title>HAL: plugins/gui/src/user_action/action_move_item.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -108,7 +110,7 @@ $(document).ready(function(){initNavTree('action__move__item_8cpp_source.html','
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classhal_1_1_action_move_item.html">ActionMoveItem</a>;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    }</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_action_move_item.html#aef28b33e5f37f2ea6a97f80332d3dea6">   23</a></span>&#160;    <a class="code" href="classhal_1_1_action_move_item.html#aef28b33e5f37f2ea6a97f80332d3dea6">ActionMoveItem::ActionMoveItem</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> tgtId, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> srcId, <span class="keywordtype">int</span> tgtRow)</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_action_move_item.html#aef28b33e5f37f2ea6a97f80332d3dea6">   23</a></span>&#160;    <a class="code" href="classhal_1_1_action_move_item.html#aef28b33e5f37f2ea6a97f80332d3dea6">ActionMoveItem::ActionMoveItem</a>(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> tgtId, <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> srcId, <span class="keywordtype">int</span> tgtRow)</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        : mSourceParentId(srcId), mTargetParentId(tgtId), mTargetRow(tgtRow)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {;}</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
@@ -119,7 +121,7 @@ $(document).ready(function(){initNavTree('action__move__item_8cpp_source.html','
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classhal_1_1_action_move_item.html#a2ad6ec069ff33b66d655d224a915ce49">   32</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action_move_item.html#a2ad6ec069ff33b66d655d224a915ce49">ActionMoveItem::addToHash</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qcryptographichash.html">QCryptographicHash</a>&amp; cryptoHash)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        cryptoHash.<a class="codeRef" href="https://doc.qt.io/qt-5/qcryptographichash.html#addData">addData</a>((<span class="keywordtype">char</span>*)(&amp;mTargetParentId), <span class="keyword">sizeof</span>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>));</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        cryptoHash.<a class="codeRef" href="https://doc.qt.io/qt-5/qcryptographichash.html#addData">addData</a>((<span class="keywordtype">char</span>*)(&amp;mTargetParentId), <span class="keyword">sizeof</span>(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>));</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_action_move_item.html#a3a2aa9cc4fec5ddeea5c48f97c57ada6">   37</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_action_move_item.html#a3a2aa9cc4fec5ddeea5c48f97c57ada6">ActionMoveItem::writeToXml</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html">QXmlStreamWriter</a>&amp; xmlOut)<span class="keyword"> const</span></div>
@@ -193,7 +195,7 @@ $(document).ready(function(){initNavTree('action__move__item_8cpp_source.html','
 <div class="ttc" id="aclasshal_1_1_base_tree_item_html"><div class="ttname"><a href="classhal_1_1_base_tree_item.html">hal::BaseTreeItem</a></div><div class="ttdoc">(Future) Base class for all tree models related to the details widget.</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8h_source.html#l00040">base_tree_item.h:41</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_tree_item_html_a13503386a6e07012046b4d173a345b5f"><div class="ttname"><a href="classhal_1_1_base_tree_item.html#a13503386a6e07012046b4d173a345b5f">hal::BaseTreeItem::getParent</a></div><div class="ttdeci">virtual BaseTreeItem * getParent() const</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8cpp_source.html#l00019">base_tree_item.cpp:19</a></div></div>
 <div class="ttc" id="aclasshal_1_1_base_tree_model_html_a0c0375f46d675d30f44f12c170b27006"><div class="ttname"><a href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">hal::BaseTreeModel::getIndexFromItem</a></div><div class="ttdeci">QModelIndex getIndexFromItem(BaseTreeItem *item) const</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__model_8cpp_source.html#l00123">base_tree_model.cpp:123</a></div></div>
-<div class="ttc" id="aclasshal_1_1_context_tree_item_html"><div class="ttname"><a href="classhal_1_1_context_tree_item.html">hal::ContextTreeItem</a></div><div class="ttdef"><b>Definition:</b> <a href="context__tree__model_8h_source.html#l00063">context_tree_model.h:64</a></div></div>
+<div class="ttc" id="aclasshal_1_1_context_tree_item_html"><div class="ttname"><a href="classhal_1_1_context_tree_item.html">hal::ContextTreeItem</a></div><div class="ttdef"><b>Definition:</b> <a href="context__tree__model_8h_source.html#l00069">context_tree_model.h:70</a></div></div>
 <div class="ttc" id="aclasshal_1_1_context_tree_item_html_a83b4d1c8cf017ac5e291be320e1c1e1f"><div class="ttname"><a href="classhal_1_1_context_tree_item.html#a83b4d1c8cf017ac5e291be320e1c1e1f">hal::ContextTreeItem::getId</a></div><div class="ttdeci">u32 getId() const</div><div class="ttdef"><b>Definition:</b> <a href="context__tree__model_8cpp_source.html#l00033">context_tree_model.cpp:33</a></div></div>
 <div class="ttc" id="aclasshal_1_1_context_tree_model_html_a76ae141d7ab33217ea3af5068c8a1d1a"><div class="ttname"><a href="classhal_1_1_context_tree_model.html#a76ae141d7ab33217ea3af5068c8a1d1a">hal::ContextTreeModel::getDirectory</a></div><div class="ttdeci">BaseTreeItem * getDirectory(u32 directoryId) const</div><div class="ttdef"><b>Definition:</b> <a href="context__tree__model_8cpp_source.html#l00197">context_tree_model.cpp:197</a></div></div>
 <div class="ttc" id="aclasshal_1_1_context_tree_model_html_af3f9d745ec4145788bdbe0239a6b0e47"><div class="ttname"><a href="classhal_1_1_context_tree_model.html#af3f9d745ec4145788bdbe0239a6b0e47">hal::ContextTreeModel::getContext</a></div><div class="ttdeci">BaseTreeItem * getContext(u32 contextId) const</div><div class="ttdef"><b>Definition:</b> <a href="context__tree__model_8cpp_source.html#l00202">context_tree_model.cpp:202</a></div></div>
@@ -211,13 +213,13 @@ $(document).ready(function(){initNavTree('action__move__item_8cpp_source.html','
 <div class="ttc" id="aclasshal_1_1_user_action_object_type_html_a2de00e63df4cf86816f688fad6754d79a341c701a1322d287533cc195597dd269"><div class="ttname"><a href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a341c701a1322d287533cc195597dd269">hal::UserActionObjectType::ContextDir</a></div><div class="ttdeci">@ ContextDir</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8h_source.html#l00057">user_action_object.h:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_object_type_html_a2de00e63df4cf86816f688fad6754d79a6ca899e3a4da177c3545a4aca98520b3"><div class="ttname"><a href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a6ca899e3a4da177c3545a4aca98520b3">hal::UserActionObjectType::ContextView</a></div><div class="ttdeci">@ ContextView</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8h_source.html#l00056">user_action_object.h:56</a></div></div>
 <div class="ttc" id="acontext__tree__model_8h_html"><div class="ttname"><a href="context__tree__model_8h.html">context_tree_model.h</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agraph__context_8h_html"><div class="ttname"><a href="graph__context_8h.html">graph_context.h</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
 <div class="ttc" id="alayout__locker_8h_html"><div class="ttname"><a href="layout__locker_8h.html">layout_locker.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a63d96610e22dcbffc0755f514731d730"><div class="ttname"><a href="namespacehal.html#a63d96610e22dcbffc0755f514731d730">hal::gGraphContextManager</a></div><div class="ttdeci">GraphContextManager * gGraphContextManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00085">plugin_gui.cpp:85</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="aqcryptographichash_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcryptographichash.html">QCryptographicHash</a></div></div>
 <div class="ttc" id="aqcryptographichash_html_addData"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcryptographichash.html#addData">QCryptographicHash::addData</a></div><div class="ttdeci">void addData(const char *data, int length)</div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
@@ -239,7 +241,7 @@ $(document).ready(function(){initNavTree('action__move__item_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_5e8fab963b6d7d6d8891b5cad4f241a7.html">user_action</a></li><li class="navelem"><a class="el" href="action__move__item_8cpp.html">action_move_item.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

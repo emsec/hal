@@ -30,19 +30,5 @@ var classhal_1_1_graphics_qss_adapter =
     [ "setNetFont", "classhal_1_1_graphics_qss_adapter.html#a389ae6a8b275e8c38502fcd8324f455a", null ],
     [ "setNetSelectionColor", "classhal_1_1_graphics_qss_adapter.html#a3f99f5c0357302eccc361324447c8fb7", null ],
     [ "setNodeBackgroundColor", "classhal_1_1_graphics_qss_adapter.html#a254724494d4a8805b6a2c100c4fcb751", null ],
-    [ "setNodeTextColor", "classhal_1_1_graphics_qss_adapter.html#ad5aa7aca391858ecb84ec57ee1d4e6ef", null ],
-    [ "gateBaseColor", "classhal_1_1_graphics_qss_adapter.html#a06ae39054b47c0a44a7e69e0245d5265", null ],
-    [ "gateNameFont", "classhal_1_1_graphics_qss_adapter.html#aa0870b481502c8f744944b0f848d36e4", null ],
-    [ "gatePinFont", "classhal_1_1_graphics_qss_adapter.html#ade8e16418e0c0cb14366b7f6c7040511", null ],
-    [ "gateSelectionColor", "classhal_1_1_graphics_qss_adapter.html#ae6a8afb321af8574b45ea1045b0d222c", null ],
-    [ "gateTypeFont", "classhal_1_1_graphics_qss_adapter.html#a07cbb4166eeb91e920533e4a82db64f7", null ],
-    [ "gridBaseDotColor", "classhal_1_1_graphics_qss_adapter.html#a20397d891f58e3b5790725dfb9d8843e", null ],
-    [ "gridBaseLineColor", "classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925", null ],
-    [ "gridClusterDotColor", "classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe", null ],
-    [ "gridClusterLineColor", "classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54", null ],
-    [ "netBaseColor", "classhal_1_1_graphics_qss_adapter.html#a0f7dd9ccd5b2c42ed368dc08ed9df62d", null ],
-    [ "netFont", "classhal_1_1_graphics_qss_adapter.html#a4f6fbcf00413fa5a65bab7d382e5570d", null ],
-    [ "netSelectionColor", "classhal_1_1_graphics_qss_adapter.html#ad6915173753e91896d2e3a09036faba1", null ],
-    [ "nodeBackgroundColor", "classhal_1_1_graphics_qss_adapter.html#a0e6fc9980c06fd6a728fe85c3b04e66e", null ],
-    [ "nodeTextColor", "classhal_1_1_graphics_qss_adapter.html#a72a5de94bdbe01b7560b6b3f4760ea28", null ]
+    [ "setNodeTextColor", "classhal_1_1_graphics_qss_adapter.html#ad5aa7aca391858ecb84ec57ee1d4e6ef", null ]
 ];

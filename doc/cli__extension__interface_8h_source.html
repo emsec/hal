@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/plugin_system/cli_extension_interface.h Source File</title>
+<title>HAL: include/hal_core/plugin_system/cli_extension_interface.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -117,30 +119,28 @@ $(document).ready(function(){initNavTree('cli__extension__interface_8h_source.ht
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="include_2hal__core_2netlist_2netlist_8h.html">hal_core/netlist/netlist.h</a>&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a>  {</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html">   32</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_cli_extension_interface.html">CliExtensionInterface</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_abstract_extension_interface.html">AbstractExtensionInterface</a></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">   35</a></span>&#160;        <a class="code" href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">CliExtensionInterface</a>() {;}</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">   42</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> <a class="code" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">get_cli_options</a>() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">   51</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">handle_cli_call</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, <a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; <a class="code" href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">args</a>) = 0;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    };</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html">   36</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_cli_extension_interface.html">CliExtensionInterface</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_abstract_extension_interface.html">AbstractExtensionInterface</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">   39</a></span>&#160;        <a class="code" href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">CliExtensionInterface</a>() {;}</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">   46</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classhal_1_1_program_options.html">ProgramOptions</a> <a class="code" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">get_cli_options</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">   55</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">handle_cli_call</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* netlist, <a class="code" href="classhal_1_1_program_arguments.html">ProgramArguments</a>&amp; args) = 0;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
 <div class="ttc" id="aabstract__extension__interface_8h_html"><div class="ttname"><a href="abstract__extension__interface_8h.html">abstract_extension_interface.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_abstract_extension_interface_html"><div class="ttname"><a href="classhal_1_1_abstract_extension_interface.html">hal::AbstractExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="abstract__extension__interface_8h_source.html#l00029">abstract_extension_interface.h:30</a></div></div>
-<div class="ttc" id="aclasshal_1_1_cli_extension_interface_html"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html">hal::CliExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="cli__extension__interface_8h_source.html#l00032">cli_extension_interface.h:33</a></div></div>
-<div class="ttc" id="aclasshal_1_1_cli_extension_interface_html_a03fd979987ab178c8aa5d2bfaf7adaca"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">hal::CliExtensionInterface::CliExtensionInterface</a></div><div class="ttdeci">CliExtensionInterface()</div><div class="ttdef"><b>Definition:</b> <a href="cli__extension__interface_8h_source.html#l00035">cli_extension_interface.h:35</a></div></div>
+<div class="ttc" id="aclasshal_1_1_abstract_extension_interface_html"><div class="ttname"><a href="classhal_1_1_abstract_extension_interface.html">hal::AbstractExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="abstract__extension__interface_8h_source.html#l00033">abstract_extension_interface.h:34</a></div></div>
+<div class="ttc" id="aclasshal_1_1_cli_extension_interface_html"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html">hal::CliExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="cli__extension__interface_8h_source.html#l00036">cli_extension_interface.h:37</a></div></div>
+<div class="ttc" id="aclasshal_1_1_cli_extension_interface_html_a03fd979987ab178c8aa5d2bfaf7adaca"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html#a03fd979987ab178c8aa5d2bfaf7adaca">hal::CliExtensionInterface::CliExtensionInterface</a></div><div class="ttdeci">CliExtensionInterface()</div><div class="ttdef"><b>Definition:</b> <a href="cli__extension__interface_8h_source.html#l00039">cli_extension_interface.h:39</a></div></div>
 <div class="ttc" id="aclasshal_1_1_cli_extension_interface_html_a33dde9468b843e0e4872f874420e5730"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">hal::CliExtensionInterface::handle_cli_call</a></div><div class="ttdeci">virtual bool handle_cli_call(Netlist *netlist, ProgramArguments &amp;args)=0</div></div>
 <div class="ttc" id="aclasshal_1_1_cli_extension_interface_html_accd330a2ef66d28e64ce3a3ef0df3d72"><div class="ttname"><a href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">hal::CliExtensionInterface::get_cli_options</a></div><div class="ttdeci">virtual ProgramOptions get_cli_options() const =0</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:56</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_arguments_html"><div class="ttname"><a href="classhal_1_1_program_arguments.html">hal::ProgramArguments</a></div><div class="ttdef"><b>Definition:</b> <a href="program__arguments_8h_source.html#l00045">program_arguments.h:46</a></div></div>
 <div class="ttc" id="aclasshal_1_1_program_options_html"><div class="ttname"><a href="classhal_1_1_program_options.html">hal::ProgramOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="program__options_8h_source.html#l00047">program_options.h:48</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2netlist_2netlist_8h_html"><div class="ttname"><a href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></div></div>
-<div class="ttc" id="anamespacecontrol_html_a3cdfe36ea256f5d4c35f5d89c9f22d46"><div class="ttname"><a href="namespacecontrol.html#a3cdfe36ea256f5d4c35f5d89c9f22d46">control.args</a></div><div class="ttdeci">args</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00033">control.py:33</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00027">test_multiple.py:27</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aprogram__options_8h_html"><div class="ttname"><a href="program__options_8h.html">program_options.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -148,7 +148,7 @@ $(document).ready(function(){initNavTree('cli__extension__interface_8h_source.ht
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="cli__extension__interface_8h.html">cli_extension_interface.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

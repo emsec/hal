@@ -1,7 +1,7 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/gui_utils/graphics.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/gui_utils/graphics.h">
-<area shape="rect" id="node1" title=" " alt="" coords="81,5,257,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,109,72,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="96,109,155,136"/>
-<area shape="rect" id="node4" title=" " alt="" coords="179,109,250,136"/>
-<area shape="rect" id="node5" title=" " alt="" coords="274,109,355,136"/>
+<map id="plugins/gui/include/gui/gui_utils/graphics.h" name="plugins/gui/include/gui/gui_utils/graphics.h">
+<area shape="rect" id="node1" title=" " alt="" coords="81,5,257,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="96,95,155,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="179,95,250,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="274,95,355,121"/>
 </map>

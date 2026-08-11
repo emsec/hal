@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/graph_navigation_widget.h Source File</title>
+<title>HAL: plugins/gui/include/gui/graph_widget/graph_navigation_widget.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -172,7 +174,7 @@ $(document).ready(function(){initNavTree('graph__navigation__widget_8h_source.ht
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#ac45afc7eb5bbd2b73533ac5127c5bcf9">setup</a>(<a class="code" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">SelectionRelay::Subfocus</a> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a35da9582dc9fad114fa4e5cf57a55464">direction</a>);</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#ac45afc7eb5bbd2b73533ac5127c5bcf9">setup</a>(<a class="code" href="classhal_1_1_node.html">Node</a> origin, <a class="code" href="classhal_1_1_net.html">Net</a>* via_net, <a class="code" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">SelectionRelay::Subfocus</a> dir);</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#ac45afc7eb5bbd2b73533ac5127c5bcf9">setup</a>(<a class="code" href="classhal_1_1_node.html">Node</a> <a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>, <a class="code" href="classhal_1_1_net.html">Net</a>* via_net, <a class="code" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">SelectionRelay::Subfocus</a> dir);</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
 <div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_navigation_widget.html#a35da9582dc9fad114fa4e5cf57a55464">  205</a></span>&#160;        <a class="code" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">SelectionRelay::Subfocus</a> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a35da9582dc9fad114fa4e5cf57a55464">direction</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mDirection; }</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
@@ -183,7 +185,7 @@ $(document).ready(function(){initNavTree('graph__navigation__widget_8h_source.ht
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a90e9c2fba321d609b21d0c35df1dc1cc">toggleWidget</a>();</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">  246</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">navigationRequested</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; origin, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> via_net, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_gates, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_modules);</div>
+<div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">  246</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a69b1831b65c4a85bcdbbd110122978e9">navigationRequested</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; <a class="code" href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a>, <span class="keyword">const</span> <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> via_net, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_gates, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; to_modules);</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
 <div class="line"><a name="l00251"></a><span class="lineno"><a class="line" href="classhal_1_1_graph_navigation_widget.html#a8eecdcbedaa21ff866f4aaa84454c419">  251</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_navigation_widget.html#a8eecdcbedaa21ff866f4aaa84454c419">closeRequested</a>();</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
@@ -233,7 +235,7 @@ $(document).ready(function(){initNavTree('graph__navigation__widget_8h_source.ht
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keywordtype">bool</span> addToViewItem(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreewidgetitem.html">QTreeWidgetItem</a>* itemFactory(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a>&amp; fields, <span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; nd);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> gateEntry(<a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> gateEntry(<a class="code" href="classhal_1_1_gate.html">Gate</a>* g, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> moduleEntry(<a class="code" href="classhal_1_1_module.html">Module</a>* m, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep);</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> sDefaultColumnWidth[];</div>
@@ -273,12 +275,12 @@ $(document).ready(function(){initNavTree('graph__navigation__widget_8h_source.ht
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00060">gui_def.h:61</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a75d8c404b06807f7e57fe3f9c1a39ff2"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">hal::SelectionRelay::Subfocus</a></div><div class="ttdeci">Subfocus</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8h_source.html#l00082">selection_relay.h:83</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="aendpoint_8h_html"><div class="ttname"><a href="endpoint_8h.html">endpoint.h</a></div></div>
 <div class="ttc" id="agui__def_8h_html"><div class="ttname"><a href="gui__def_8h.html">gui_def.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_a985c304e5c2ab9a0895677493d4cbd0d"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#a985c304e5c2ab9a0895677493d4cbd0d">origin</a></div><div class="ttdeci">std::string origin</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01964">netlist_preprocessing.cpp:1964</a></div></div>
 <div class="ttc" id="anode__box_8h_html"><div class="ttname"><a href="node__box_8h.html">node_box.h</a></div></div>
 <div class="ttc" id="aqevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qevent.html">QEvent</a></div></div>
 <div class="ttc" id="aqfocusevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qfocusevent.html">QFocusEvent</a></div></div>
@@ -306,7 +308,7 @@ $(document).ready(function(){initNavTree('graph__navigation__widget_8h_source.ht
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__navigation__widget_8h.html">graph_navigation_widget.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

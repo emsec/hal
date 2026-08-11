@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_stacked_validator.html','
 <p>Combines different validators into one.  
  <a href="classhal_1_1_stacked_validator.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="stacked__validator_8h_source.html">stacked_validator.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="stacked__validator_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/validator/stacked_validator.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::StackedValidator:</div>
 <div class="dyncontent">
@@ -140,7 +142,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Combines different validators into one. </p>
-<p>The <a class="el" href="classhal_1_1_stacked_validator.html" title="Combines different validators into one.">StackedValidator</a> is a <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> that combines multiple other Validators. Its validate function returns <b>true</b> if all added Validators accept the string. <br  />
+<p>The <a class="el" href="classhal_1_1_stacked_validator.html" title="Combines different validators into one.">StackedValidator</a> is a <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> that combines multiple other Validators. Its validate function returns <code>true</code> if all added Validators accept the string. <br  />
  The fail text will be chosen from the firstly added validator which validation fails. </p>
 
 <p class="definition">Definition at line <a class="el" href="stacked__validator_8h_source.html#l00042">42</a> of file <a class="el" href="stacked__validator_8h_source.html">stacked_validator.h</a>.</p>
@@ -269,15 +271,15 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Given any string this function returns <b>true</b> iff the string is accepted by all registered Validators (added by <a class="el" href="classhal_1_1_stacked_validator.html" title="Combines different validators into one.">StackedValidator</a>:addValidator).</p>
-<p>If no <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> is registered this function always returns true. If one or more Validators reject the string, the fail text of the failing <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> that was added the earliest will be chosen.</p>
+<p>Given any string this function returns <code>true</code> iff the string is accepted by all registered Validators (added by <a class="el" href="classhal_1_1_stacked_validator.html" title="Combines different validators into one.">StackedValidator</a>:addValidator).</p>
+<p>If no <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> is registered this function always returns <code>true</code>. If one or more Validators reject the string, the fail text of the failing <a class="el" href="classhal_1_1_validator.html" title="Base class for any string validator.">Validator</a> that was added the earliest will be chosen.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>- The input string </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> iff the string is considered valid (accepted by all validators) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> iff the string is considered valid (accepted by all validators), <code>false</code> otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classhal_1_1_validator.html#ad5c3781fcedbe516c57803a7232e7f91">hal::Validator</a>.</p>
 
@@ -288,8 +290,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/validator/<a class="el" href="stacked__validator_8h_source.html">stacked_validator.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/validator/<a class="el" href="stacked__validator_8cpp_source.html">stacked_validator.cpp</a></li>
+<li>plugins/gui/include/gui/validator/<a class="el" href="stacked__validator_8h_source.html">stacked_validator.h</a></li>
+<li>plugins/gui/src/validator/<a class="el" href="stacked__validator_8cpp_source.html">stacked_validator.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -297,7 +299,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_stacked_validator.html">StackedValidator</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['seconds_5fsince_41399',['seconds_since',['../timing__utils_8h.html#a688d26ed86c8b545bd8b86a74085ca99',1,'timing_utils.h']]],
-  ['skip_5fempty_5fparts_41400',['SKIP_EMPTY_PARTS',['../gatelibrary__wizard_8cpp.html#ab0638c99c7aea5ba570d91ae562c3013',1,'gatelibrary_wizard.cpp']]],
-  ['stringify_41401',['STRINGIFY',['../log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7',1,'log.h']]],
-  ['stringistringify_41402',['STRINGISTRINGIFY',['../log_8h.html#ac96c6afee3270eb88719a98239ea7f75',1,'log.h']]]
+  ['rapidjson_5fhas_5fstdstring_44207',['RAPIDJSON_HAS_STDSTRING',['../json__write__document_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;json_write_document.h'],['../hgl__writer_8h.html#a2f2eef0ee4477f3fe5874703a66e997f',1,'RAPIDJSON_HAS_STDSTRING():&#160;hgl_writer.h']]]
 ];

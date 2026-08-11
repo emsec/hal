@@ -1,12 +1,12 @@
-<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/result.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/result.h">
-<area shape="rect" id="node1" title=" " alt="" coords="19,5,228,76"/>
-<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="131,124,331,165"/>
-<area shape="rect" id="node6" title=" " alt="" coords="5,303,129,329"/>
-<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="419,213,619,255"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="621,303,761,329"/>
-<area shape="rect" id="node5" title=" " alt="" coords="202,303,245,329"/>
-<area shape="rect" id="node7" title=" " alt="" coords="333,303,447,329"/>
-<area shape="rect" id="node8" title=" " alt="" coords="504,303,567,329"/>
-<area shape="rect" id="node9" title=" " alt="" coords="206,221,257,247"/>
-<area shape="rect" id="node10" title=" " alt="" coords="281,221,395,247"/>
+<map id="plugins/dataflow_analysis/include/dataflow_analysis/evaluation/result.h" name="plugins/dataflow_analysis/include/dataflow_analysis/evaluation/result.h">
+<area shape="rect" id="node1" title=" " alt="" coords="26,5,221,61"/>
+<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="131,109,331,151"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,288,129,315"/>
+<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="419,199,619,240"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="621,288,761,315"/>
+<area shape="rect" id="node5" title=" " alt="" coords="202,288,245,315"/>
+<area shape="rect" id="node7" title=" " alt="" coords="333,288,447,315"/>
+<area shape="rect" id="node8" title=" " alt="" coords="504,288,567,315"/>
+<area shape="rect" id="node9" title=" " alt="" coords="206,206,257,233"/>
+<area shape="rect" id="node10" title=" " alt="" coords="281,206,395,233"/>
 </map>

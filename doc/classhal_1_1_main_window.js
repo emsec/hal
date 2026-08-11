@@ -4,6 +4,7 @@ var classhal_1_1_main_window =
       [ "Dark", "classhal_1_1_main_window.html#ae3e170bb9748ea88f10c6e3ef04af329aead9b69223731c1eb18da04d9638256a", null ],
       [ "Light", "classhal_1_1_main_window.html#ae3e170bb9748ea88f10c6e3ef04af329aa8f6310d82e943c5eeb8aec719bc8fc1", null ]
     ] ],
+    [ "MainWindow", "classhal_1_1_main_window.html#aa5b4a0047a7277d7cdb34fa42a5760e8", null ],
     [ "addContent", "classhal_1_1_main_window.html#a7f25413537ffc0fd8cefb2bc83d6b3b0", null ],
     [ "clear", "classhal_1_1_main_window.html#a0c8a2886b9c72b402cc7394dce3e3e29", null ],
     [ "closeGateLibraryManager", "classhal_1_1_main_window.html#a04e3c2e080e2271b5dc099d558c99a0f", null ],
@@ -39,7 +40,6 @@ var classhal_1_1_main_window =
     [ "openSettings", "classhal_1_1_main_window.html#ac65fab18815b8253e7aaae656837b936", null ],
     [ "pluginsIconPath", "classhal_1_1_main_window.html#afe1b78964d52b94a97831dddea6edf4d", null ],
     [ "pluginsIconStyle", "classhal_1_1_main_window.html#a22789bbe0529f2731870d4824d9333eb", null ],
-    [ "Q_ENUM", "classhal_1_1_main_window.html#a8702df329ce6159b0023dd7e3b696f96", null ],
     [ "quitIconPath", "classhal_1_1_main_window.html#a8d45785d4773d5dbe35e354ed55395a8", null ],
     [ "quitIconStyle", "classhal_1_1_main_window.html#a760c807bc35c5dad45eebb6ac4058fe8", null ],
     [ "reloadStylsheet", "classhal_1_1_main_window.html#a380542f624230ae54843840c50c80e1b", null ],
@@ -68,20 +68,5 @@ var classhal_1_1_main_window =
     [ "setUndoIconPath", "classhal_1_1_main_window.html#a8ec86ce0e0f70b0530e959a2d35e6323", null ],
     [ "setUndoIconStyle", "classhal_1_1_main_window.html#a1d620c6c8c1e97330e0c0688a8088921", null ],
     [ "undoIconPath", "classhal_1_1_main_window.html#a5ea9a41679654a05e4b9551bfc3089cd", null ],
-    [ "undoIconStyle", "classhal_1_1_main_window.html#add9aa398a1bb8aebd77cf4be79b83947", null ],
-    [ "disabledIconStyle", "classhal_1_1_main_window.html#a7a31c22c730a78c769fdbff03f118764", null ],
-    [ "halIconPath", "classhal_1_1_main_window.html#a21653cd4d6308f11351744edb7436d1c", null ],
-    [ "halIconStyle", "classhal_1_1_main_window.html#a913d7268afde9aa3f569425d6a6025f5", null ],
-    [ "neGateIconPath", "classhal_1_1_main_window.html#a74d9f089f3971179838246d8a2e2b638", null ],
-    [ "neGateIconStyle", "classhal_1_1_main_window.html#a8941ae4cf803ec092409852b74a2c12f", null ],
-    [ "openFileIconPath", "classhal_1_1_main_window.html#a8f2d141df22affeec7031fb76d856d27", null ],
-    [ "openFileIconStyle", "classhal_1_1_main_window.html#a3736f6b15fd9ed7f8f68ee44c49c2c19", null ],
-    [ "pluginsIconPath", "classhal_1_1_main_window.html#af63c572c98c6dcd96d93cb47dc82f546", null ],
-    [ "pluginsIconStyle", "classhal_1_1_main_window.html#a530a886a4e4626dcee90480373881626", null ],
-    [ "quitIconPath", "classhal_1_1_main_window.html#a5f4a876e8a68676748e0e1558863cb4e", null ],
-    [ "quitIconStyle", "classhal_1_1_main_window.html#a18e7e877007107d3c97c1474abea9eda", null ],
-    [ "settingsIconPath", "classhal_1_1_main_window.html#a326fa1c3078b9e8242c2cc8272154901", null ],
-    [ "settingsIconStyle", "classhal_1_1_main_window.html#ac3bab1d6b1d8f5ebe61c987ec0952a76", null ],
-    [ "undoIconPath", "classhal_1_1_main_window.html#af31a3d91b902a3d98b2be4149605f732", null ],
-    [ "undoIconStyle", "classhal_1_1_main_window.html#a28c0d5edd7fcf369192fea951135c363", null ]
+    [ "undoIconStyle", "classhal_1_1_main_window.html#add9aa398a1bb8aebd77cf4be79b83947", null ]
 ];

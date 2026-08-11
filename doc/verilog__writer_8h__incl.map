@@ -1,14 +1,14 @@
-<map id="/home/runner/work/hal/hal/plugins/verilog_writer/include/verilog_writer/verilog_writer.h" name="/home/runner/work/hal/hal/plugins/verilog_writer/include/verilog_writer/verilog_writer.h">
-<area shape="rect" id="node1" title=" " alt="" coords="333,5,505,76"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="92,303,232,329"/>
-<area shape="rect" id="node7" href="$netlist__writer_8h.html" title=" " alt="" coords="165,124,333,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="357,131,399,158"/>
-<area shape="rect" id="node10" title=" " alt="" coords="423,131,498,158"/>
-<area shape="rect" id="node11" title=" " alt="" coords="523,131,647,158"/>
-<area shape="rect" id="node12" title=" " alt="" coords="671,131,733,158"/>
-<area shape="rect" id="node3" title=" " alt="" coords="322,377,413,404"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,377,92,404"/>
-<area shape="rect" id="node5" title=" " alt="" coords="116,377,203,404"/>
-<area shape="rect" id="node6" title=" " alt="" coords="227,377,297,404"/>
-<area shape="rect" id="node8" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="199,213,330,255"/>
+<map id="plugins/verilog_writer/include/verilog_writer/verilog_writer.h" name="plugins/verilog_writer/include/verilog_writer/verilog_writer.h">
+<area shape="rect" id="node1" title=" " alt="" coords="336,5,503,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="92,288,232,315"/>
+<area shape="rect" id="node7" href="$netlist__writer_8h.html" title=" " alt="" coords="165,109,333,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="357,117,399,143"/>
+<area shape="rect" id="node10" title=" " alt="" coords="423,117,498,143"/>
+<area shape="rect" id="node11" title=" " alt="" coords="523,117,647,143"/>
+<area shape="rect" id="node12" title=" " alt="" coords="671,117,733,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="322,363,413,389"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,363,92,389"/>
+<area shape="rect" id="node5" title=" " alt="" coords="116,363,203,389"/>
+<area shape="rect" id="node6" title=" " alt="" coords="227,363,297,389"/>
+<area shape="rect" id="node8" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="199,199,330,240"/>
 </map>

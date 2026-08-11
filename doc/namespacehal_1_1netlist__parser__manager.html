@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -97,24 +99,26 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a63453fc628a74a43f09af54a8d9620d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a63453fc628a74a43f09af54a8d9620d1">get_cli_options</a> ()</td></tr>
-<tr class="separator:a63453fc628a74a43f09af54a8d9620d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72dbc0b71389a49406b62b83ca90ff79"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a72dbc0b71389a49406b62b83ca90ff79">can_parse</a> (const std::filesystem::path &amp;file_name)</td></tr>
-<tr class="separator:a72dbc0b71389a49406b62b83ca90ff79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a4ff1e425ebe75804844cf22c96dca7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a8a4ff1e425ebe75804844cf22c96dca7">register_parser</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1netlist__parser__manager.html#a5699b5404f73462557abe0b8bdfa70c6">ParserFactory</a> &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
-<tr class="separator:a8a4ff1e425ebe75804844cf22c96dca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04926f6855f1bc45cff892925716f737"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a04926f6855f1bc45cff892925716f737">unregister_parser</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
-<tr class="separator:a04926f6855f1bc45cff892925716f737"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff28049722e4a8532867f675aad614e"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a9ff28049722e4a8532867f675aad614e">parse</a> (const std::filesystem::path &amp;file_name, const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
-<tr class="separator:a9ff28049722e4a8532867f675aad614e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9b49cc8225fbc08027cb661bd07ac38"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#af9b49cc8225fbc08027cb661bd07ac38">parse</a> (const std::filesystem::path &amp;file_name, const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library)</td></tr>
-<tr class="separator:af9b49cc8225fbc08027cb661bd07ac38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf748f8b438838ed75c0a4d01e9f01a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#acf748f8b438838ed75c0a4d01e9f01a0">get_cli_options</a> ()</td></tr>
+<tr class="separator:acf748f8b438838ed75c0a4d01e9f01a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5c20961cc7019c6e983cabee8df76a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a4e5c20961cc7019c6e983cabee8df76a">register_parser</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1netlist__parser__manager.html#a5699b5404f73462557abe0b8bdfa70c6">ParserFactory</a> &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
+<tr class="separator:a4e5c20961cc7019c6e983cabee8df76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad31d29eb845c61a4ae5edcf7c0d029dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#ad31d29eb845c61a4ae5edcf7c0d029dd">unregister_parser</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="separator:ad31d29eb845c61a4ae5edcf7c0d029dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7456380a91a0312e64f954faecc67b7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#aa7456380a91a0312e64f954faecc67b7">parse</a> (const std::filesystem::path &amp;file_name, const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
+<tr class="separator:aa7456380a91a0312e64f954faecc67b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1f23462cffa9f5cb61105642aff561c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#ab1f23462cffa9f5cb61105642aff561c">parse</a> (const std::filesystem::path &amp;file_name, const <a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *gate_library=nullptr)</td></tr>
+<tr class="separator:ab1f23462cffa9f5cb61105642aff561c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1c82137bddfd220906ff6e8a2366b2d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#af1c82137bddfd220906ff6e8a2366b2d">parse_all</a> (const std::filesystem::path &amp;file_name)</td></tr>
 <tr class="separator:af1c82137bddfd220906ff6e8a2366b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72dbc0b71389a49406b62b83ca90ff79"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a72dbc0b71389a49406b62b83ca90ff79">can_parse</a> (const std::filesystem::path &amp;file_name)</td></tr>
+<tr class="separator:a72dbc0b71389a49406b62b83ca90ff79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3805ff9dddccbeb91fc3cfb94d622301"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__parser__manager.html#a3805ff9dddccbeb91fc3cfb94d622301">get_parser_to_extensions</a> ()</td></tr>
 <tr class="separator:a3805ff9dddccbeb91fc3cfb94d622301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The netlist parser manager keeps track of all netlist parsers that are available within HAL. It is used to dispatch parsing tasks to the respective parsers. </p>
+</div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a5699b5404f73462557abe0b8bdfa70c6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5699b5404f73462557abe0b8bdfa70c6">&#9670;&nbsp;</a></span>ParserFactory</h2>
 
@@ -127,7 +131,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8h_source.html#l00047">47</a> of file <a class="el" href="netlist__parser__manager_8h_source.html">netlist_parser_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8h_source.html#l00049">49</a> of file <a class="el" href="netlist__parser__manager_8h_source.html">netlist_parser_manager.h</a>.</p>
 
 </div>
 </div>
@@ -153,24 +157,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if parser could be found. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if parser could be found, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8cpp_source.html#l00135">135</a> of file <a class="el" href="netlist__parser__manager_8cpp_source.html">netlist_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="utils_8h_source.html#l00477">hal::utils::to_lower()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00479">hal::utils::to_lower()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="file__manager_8cpp_source.html#l00162">hal::FileManager::directoryStatus()</a>.</p>
 
 </div>
 </div>
-<a id="a63453fc628a74a43f09af54a8d9620d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63453fc628a74a43f09af54a8d9620d1">&#9670;&nbsp;</a></span>get_cli_options()</h2>
+<a id="acf748f8b438838ed75c0a4d01e9f01a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf748f8b438838ed75c0a4d01e9f01a0">&#9670;&nbsp;</a></span>get_cli_options()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a> hal::netlist_parser_manager::get_cli_options </td>
+          <td class="memname"><a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a> hal::netlist_parser_manager::get_cli_options </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -181,8 +185,6 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The options. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8cpp_source.html#l00130">130</a> of file <a class="el" href="netlist__parser__manager_8cpp_source.html">netlist_parser_manager.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__gui_8h_source.html#l00033">Q_DECLARE_METATYPE()</a>.</p>
 
 </div>
 </div>
@@ -206,14 +208,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af9b49cc8225fbc08027cb661bd07ac38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9b49cc8225fbc08027cb661bd07ac38">&#9670;&nbsp;</a></span>parse() <span class="overload">[1/2]</span></h2>
+<a id="ab1f23462cffa9f5cb61105642aff561c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1f23462cffa9f5cb61105642aff561c">&#9670;&nbsp;</a></span>parse() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_parser_manager::parse </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_parser_manager::parse </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>file_name</em>, </td>
@@ -243,18 +245,16 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8cpp_source.html#l00209">209</a> of file <a class="el" href="netlist__parser__manager_8cpp_source.html">netlist_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="configuration_8py_source.html#l00015">configuration::netlists</a>.</p>
-
 </div>
 </div>
-<a id="a9ff28049722e4a8532867f675aad614e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ff28049722e4a8532867f675aad614e">&#9670;&nbsp;</a></span>parse() <span class="overload">[2/2]</span></h2>
+<a id="aa7456380a91a0312e64f954faecc67b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7456380a91a0312e64f954faecc67b7">&#9670;&nbsp;</a></span>parse() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_parser_manager::parse </td>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classhal_1_1_netlist.html">Netlist</a> &gt; hal::netlist_parser_manager::parse </td>
           <td>(</td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>file_name</em>, </td>
@@ -284,7 +284,7 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8cpp_source.html#l00185">185</a> of file <a class="el" href="netlist__parser__manager_8cpp_source.html">netlist_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00175">hal::gate_library_manager::get_gate_library()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00175">hal::gate_library_manager::get_gate_library()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00116">hal::ProgramArguments::get_parameter()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00030">hal::ProgramArguments::is_option_set()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="netlist_2netlist__factory_8cpp_source.html#l00047">hal::netlist_factory::load_netlist()</a>.</p>
 
@@ -320,14 +320,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8a4ff1e425ebe75804844cf22c96dca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a4ff1e425ebe75804844cf22c96dca7">&#9670;&nbsp;</a></span>register_parser()</h2>
+<a id="a4e5c20961cc7019c6e983cabee8df76a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e5c20961cc7019c6e983cabee8df76a">&#9670;&nbsp;</a></span>register_parser()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::netlist_parser_manager::register_parser </td>
+          <td class="memname">void hal::netlist_parser_manager::register_parser </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -363,20 +363,20 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist__parser__manager_8cpp_source.html#l00148">148</a> of file <a class="el" href="netlist__parser__manager_8cpp_source.html">netlist_parser_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="utils_8h_source.html#l00477">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00358">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00479">hal::utils::to_lower()</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>.</p>
 
 </div>
 </div>
-<a id="a04926f6855f1bc45cff892925716f737"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04926f6855f1bc45cff892925716f737">&#9670;&nbsp;</a></span>unregister_parser()</h2>
+<a id="ad31d29eb845c61a4ae5edcf7c0d029dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31d29eb845c61a4ae5edcf7c0d029dd">&#9670;&nbsp;</a></span>unregister_parser()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::netlist_parser_manager::unregister_parser </td>
+          <td class="memname">void hal::netlist_parser_manager::unregister_parser </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -406,7 +406,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__parser__manager.html">netlist_parser_manager</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

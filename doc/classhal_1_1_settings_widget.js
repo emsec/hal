@@ -28,6 +28,5 @@ var classhal_1_1_settings_widget =
     [ "mDefaultButton", "classhal_1_1_settings_widget.html#a964105391119c0bfd243763af8578da3", null ],
     [ "mNameLabel", "classhal_1_1_settings_widget.html#a449526cc0baf75ddee00c2db4656ea06", null ],
     [ "mRevertButton", "classhal_1_1_settings_widget.html#a2a5d9c00a7b8d22cf104b77f8e84190c", null ],
-    [ "mSettingsItem", "classhal_1_1_settings_widget.html#aa6c7ec1a188c4c260967642f38ff9ab9", null ],
-    [ "dirty", "classhal_1_1_settings_widget.html#a998bbd517886a37aa7b85dc803c8bf3e", null ]
+    [ "mSettingsItem", "classhal_1_1_settings_widget.html#aa6c7ec1a188c4c260967642f38ff9ab9", null ]
 ];

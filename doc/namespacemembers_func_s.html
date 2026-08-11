@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -86,25 +88,33 @@ $(document).ready(function(){initNavTree('namespacemembers_func_s.html',''); ini
 
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>save()
-: <a class="el" href="namespacehal_1_1gate__library__manager.html#af49606fc605379b7c43be875d0aee276">hal::gate_library_manager</a>
+: <a class="el" href="namespacehal_1_1gate__library__manager.html#ac51a2114b65e6ff375df474c886525b4">hal::gate_library_manager</a>
 </li>
 <li>scoring()
 : <a class="el" href="namespacehal_1_1dataflow_1_1scoring.html#a262b009f44196cf6daa977f6b673c831">hal::dataflow::scoring</a>
 </li>
 <li>serialize_to_file()
-: <a class="el" href="namespacehal_1_1netlist__serializer.html#a71a6e82f53ef9ed518f35c56f396e838">hal::netlist_serializer</a>
+: <a class="el" href="namespacehal_1_1netlist__serializer.html#ab461cdea128f07c4e2e9ca32774bcdb0">hal::netlist_serializer</a>
 </li>
 <li>set_bit()
-: <a class="el" href="namespacehal_1_1utils.html#a34ef9fc77538514e7bb5a9fe55275550">hal::utils</a>
+: <a class="el" href="namespacehal_1_1utils.html#a703ec944dd53f83e70bf47bb4a28f6cb">hal::utils</a>
 </li>
 <li>Shl()
 : <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a9d9f7b6cb1c6397ecec554c9191aa256">hal::SMT::ConstantPropagation</a>
 </li>
+<li>simplify_local()
+: <a class="el" href="namespacehal_1_1z3__utils.html#a1efc45e11a8dfd28b89ffc88e05651bd">hal::z3_utils</a>
+</li>
+<li>simplify_lut_inits()
+: <a class="el" href="namespacehal_1_1netlist__preprocessing.html#a41ee76bfe0148c3f7a5e40268dda7f14">hal::netlist_preprocessing</a>
+</li>
 <li>Sle()
-: <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a61bed352f65a3e97f95b7b7b7e936b2c">hal::SMT::ConstantPropagation</a>
+: <a class="el" href="namespacehal_1_1_b_v___constant_propagation.html#a594fe896a7d271a88ad0f94639129d66">hal::BV_ConstantPropagation</a>
+, <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a61bed352f65a3e97f95b7b7b7e936b2c">hal::SMT::ConstantPropagation</a>
 </li>
 <li>Slt()
-: <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a4c561fe6e48a56ef28c72f3a7fc17e82">hal::SMT::ConstantPropagation</a>
+: <a class="el" href="namespacehal_1_1_b_v___constant_propagation.html#ac3c8182f8968fb6fb81ba0063dda43b4">hal::BV_ConstantPropagation</a>
+, <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#a4c561fe6e48a56ef28c72f3a7fc17e82">hal::SMT::ConstantPropagation</a>
 </li>
 <li>smt_init()
 : <a class="el" href="group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380">hal</a>
@@ -116,16 +126,23 @@ $(document).ready(function(){initNavTree('namespacemembers_func_s.html',''); ini
 : <a class="el" href="namespacehal_1_1solve__fsm.html#a9cbe139c5b06c205079be2e675b8cdc1">hal::solve_fsm</a>
 </li>
 <li>split()
-: <a class="el" href="namespacehal_1_1utils.html#a43bf1ffd1c76cf2b5809c2346dd561c4">hal::utils</a>
+: <a class="el" href="namespacehal_1_1utils.html#af452307d35980f28eb3f8d118e1f77a0">hal::utils</a>
+</li>
+<li>split_luts()
+: <a class="el" href="namespacehal_1_1xilinx__toolbox.html#a59f138192bc52f09f2f633e850222d40">hal::xilinx_toolbox</a>
+</li>
+<li>split_shift_registers()
+: <a class="el" href="namespacehal_1_1xilinx__toolbox.html#ad5a7abafdb5c8726f3f73da4ceec91fe">hal::xilinx_toolbox</a>
 </li>
 <li>starts_with()
-: <a class="el" href="namespacehal_1_1utils.html#a2ca8da557f49866efbd3d79be8bf5815">hal::utils</a>
+: <a class="el" href="namespacehal_1_1utils.html#a5c3b3c6a9bb67ebc924ddbe2989c4624">hal::utils</a>
 </li>
 <li>stringToDictionary()
 : <a class="el" href="namespacehal_1_1_json_converter.html#a3ecb2730cb3c2ab166e6c5e24189a690">hal::JsonConverter</a>
 </li>
 <li>Sub()
-: <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#acd0c2d4f53295e35342dfc868fce51df">hal::SMT::ConstantPropagation</a>
+: <a class="el" href="namespacehal_1_1_b_v___constant_propagation.html#a0b640bf53d88e8a28af59acb21af41b5">hal::BV_ConstantPropagation</a>
+, <a class="el" href="namespacehal_1_1_s_m_t_1_1_constant_propagation.html#acd0c2d4f53295e35342dfc868fce51df">hal::SMT::ConstantPropagation</a>
 </li>
 <li>subgraph_netlist_decorator_init()
 : <a class="el" href="group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c">hal</a>
@@ -136,7 +153,7 @@ $(document).ready(function(){initNavTree('namespacemembers_func_s.html',''); ini
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -34,11 +34,5 @@ var classhal_1_1_searchbar =
     [ "setSearchIconStyle", "classhal_1_1_searchbar.html#a7b801c20f3bc6eeeb7886ba89512eaf3", null ],
     [ "showEvent", "classhal_1_1_searchbar.html#aee1318fbf959564a565d4147c963edc8", null ],
     [ "triggerNewSearch", "classhal_1_1_searchbar.html#ae0edb3dbec0c28c6bff7b7d63b6e5594", null ],
-    [ "updateSearchHistory", "classhal_1_1_searchbar.html#a8e603890e91da31795904dbf85da319c", null ],
-    [ "clearIcon", "classhal_1_1_searchbar.html#af2817a1aaee40850d8a91e7820306d72", null ],
-    [ "clearIconStyle", "classhal_1_1_searchbar.html#acce2df0b4822dc389bbb13fc981c3f98", null ],
-    [ "optionDialogIcon", "classhal_1_1_searchbar.html#a3d5288c5dd70cbb583de7868485114cb", null ],
-    [ "optionDialogIconStyle", "classhal_1_1_searchbar.html#a5c0c738d271a455f48a92d33117c6cc4", null ],
-    [ "searchIcon", "classhal_1_1_searchbar.html#a1581c13c9b0dd2828d0339329ab52bc2", null ],
-    [ "searchIconStyle", "classhal_1_1_searchbar.html#acbd16cb15da836f444522dc33f196412", null ]
+    [ "updateSearchHistory", "classhal_1_1_searchbar.html#a8e603890e91da31795904dbf85da319c", null ]
 ];

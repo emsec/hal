@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -99,17 +101,17 @@ Typedefs</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a4d998d78fd82eb290cc8679a90f57515"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#a4d998d78fd82eb290cc8679a90f57515">get_cli_options</a> ()</td></tr>
 <tr class="separator:a4d998d78fd82eb290cc8679a90f57515"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">get_writer_extensions</a> ()</td></tr>
-<tr class="memdesc:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the extensions for which extensions have been registered.  <a href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">More...</a><br /></td></tr>
-<tr class="separator:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada281488258c1fb92351e44a9d8ff60c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#ada281488258c1fb92351e44a9d8ff60c">register_writer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1netlist__writer__manager.html#a65494ac5303bc472d87e8be3b4a44505">WriterFactory</a> &amp;writer_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
-<tr class="separator:ada281488258c1fb92351e44a9d8ff60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa30fb9e667974f36773a5b4de75a7fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#aaa30fb9e667974f36773a5b4de75a7fe">unregister_writer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
-<tr class="separator:aaa30fb9e667974f36773a5b4de75a7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcfbc6d60bfc0a45ada8199f606fc32c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#afcfbc6d60bfc0a45ada8199f606fc32c">register_writer</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, const <a class="el" href="namespacehal_1_1netlist__writer__manager.html#a65494ac5303bc472d87e8be3b4a44505">WriterFactory</a> &amp;writer_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</td></tr>
+<tr class="separator:afcfbc6d60bfc0a45ada8199f606fc32c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7b52e05f6057be89accc4bdbc7eedd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#af7b52e05f6057be89accc4bdbc7eedd0">unregister_writer</a> (const std::string &amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="separator:af7b52e05f6057be89accc4bdbc7eedd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4c58af2ca2dfd952511f978dafec685"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#ab4c58af2ca2dfd952511f978dafec685">write</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const <a class="el" href="classhal_1_1_program_arguments.html">ProgramArguments</a> &amp;args)</td></tr>
 <tr class="separator:ab4c58af2ca2dfd952511f978dafec685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bb87c0a35221bb18a28e97611b71a12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#a1bb87c0a35221bb18a28e97611b71a12">write</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;file_path)</td></tr>
 <tr class="separator:a1bb87c0a35221bb18a28e97611b71a12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, std::vector&lt; std::string &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">get_writer_extensions</a> ()</td></tr>
+<tr class="memdesc:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the extensions for which extensions have been registered.  <a href="namespacehal_1_1netlist__writer__manager.html#a69b04c9bcb90a1aa9ff6743c8b38d68d">More...</a><br /></td></tr>
+<tr class="separator:a69b04c9bcb90a1aa9ff6743c8b38d68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The netlist writer manager keeps track of all netlist writers that are available within HAL. It is used to dispatch writing tasks to the respective writers. </p>
@@ -174,16 +176,18 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00048">48</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00062">hal::MainWindow::MainWindow()</a>.</p>
+
 </div>
 </div>
-<a id="ada281488258c1fb92351e44a9d8ff60c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada281488258c1fb92351e44a9d8ff60c">&#9670;&nbsp;</a></span>register_writer()</h2>
+<a id="afcfbc6d60bfc0a45ada8199f606fc32c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcfbc6d60bfc0a45ada8199f606fc32c">&#9670;&nbsp;</a></span>register_writer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::netlist_writer_manager::register_writer </td>
+          <td class="memname">void hal::netlist_writer_manager::register_writer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -219,20 +223,20 @@ Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00053">53</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="utils_8h_source.html#l00477">hal::utils::to_lower()</a>, and <a class="el" href="utils_8h_source.html#l00358">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00479">hal::utils::to_lower()</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">hal::utils::trim()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">hal::plugin_manager::load()</a>.</p>
 
 </div>
 </div>
-<a id="aaa30fb9e667974f36773a5b4de75a7fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa30fb9e667974f36773a5b4de75a7fe">&#9670;&nbsp;</a></span>unregister_writer()</h2>
+<a id="af7b52e05f6057be89accc4bdbc7eedd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b52e05f6057be89accc4bdbc7eedd0">&#9670;&nbsp;</a></span>unregister_writer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="arch__win_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> void hal::netlist_writer_manager::unregister_writer </td>
+          <td class="memname">void hal::netlist_writer_manager::unregister_writer </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
@@ -289,13 +293,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00090">90</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="control_8py_source.html#l00033">control::args</a>, and <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>.</p>
+<p class="reference">References <a class="el" href="program__arguments_8cpp_source.html#l00116">hal::ProgramArguments::get_parameter()</a>, and <a class="el" href="program__arguments_8cpp_source.html#l00030">hal::ProgramArguments::is_option_set()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="export__registered__format_8cpp_source.html#l00070">hal::ExportRegisteredFormat::exportNetlist()</a>, and <a class="el" href="python__bindings_2bindings_2netlist__writer__manager_8cpp_source.html#l00005">hal::netlist_writer_manager_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="export__registered__format_8cpp_source.html#l00070">hal::ExportRegisteredFormat::exportNetlist()</a>, <a class="el" href="python__bindings_2bindings_2netlist__writer__manager_8cpp_source.html#l00005">hal::netlist_writer_manager_init()</a>, and <a class="el" href="verilator_8cpp_source.html#l00120">hal::verilator::VerilatorEngine::setSimulationInput()</a>.</p>
 
 </div>
 </div>
@@ -332,11 +336,11 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00101">101</a> of file <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html">netlist_writer_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="test__multiple_8py_source.html#l00027">test_multiple::netlist</a>.</p>
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00104">hal::Netlist::get_design_name()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
 
 </div>
 </div>
@@ -346,7 +350,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__writer__manager.html">netlist_writer_manager</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

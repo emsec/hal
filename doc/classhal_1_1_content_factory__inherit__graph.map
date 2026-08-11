@@ -1,0 +1,5 @@
+<map id="hal::ContentFactory" name="hal::ContentFactory">
+<area shape="rect" id="node1" title=" " alt="" coords="119,5,267,112"/>
+<area shape="rect" id="node2" href="$classhal_1_1_dot_viewer_factory.html" title=" " alt="" coords="5,160,171,311"/>
+<area shape="rect" id="node3" href="$classhal_1_1_waveform_viewer_factory.html" title=" " alt="" coords="195,189,405,281"/>
+</map>

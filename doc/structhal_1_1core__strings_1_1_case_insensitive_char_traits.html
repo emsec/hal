@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('structhal_1_1core__strings_1_1_case_in
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="special__strings_8h_source.html">special_strings.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="special__strings_8h_source.html">hal_core/utilities/special_strings.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::core_strings::CaseInsensitiveCharTraits:</div>
 <div class="dyncontent">
@@ -126,7 +128,7 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Char traits that ignore the case of a string. </p>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00061">61</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00063">63</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0a2d016644e01f43d60895e8e04246e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0a2d016644e01f43d60895e8e04246e0">&#9670;&nbsp;</a></span>compare()</h2>
@@ -178,9 +180,7 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>'0' if 's1 == s2', '1' if 's1 &gt; s2', or '-1' if 's1 &lt; s2'. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00107">107</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
-
-<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00109">109</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 
 </div>
 </div>
@@ -225,9 +225,9 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if equal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if equal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00070">70</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00072">72</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 
 </div>
 </div>
@@ -279,11 +279,9 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pointer to the position of 'a' within 's' or a 'nullptr'. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the position of 'a' within 's' or a <code>nullptr</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00129">129</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
-
-<p class="reference">References <a class="el" href="test_8py_source.html#l00006">test::n</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00131">131</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 
 </div>
 </div>
@@ -328,9 +326,9 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if lower, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if lower, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00094">94</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00096">96</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 
 </div>
 </div>
@@ -375,14 +373,14 @@ Static Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if unequal, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if unequal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00082">82</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="special__strings_8h_source.html#l00084">84</a> of file <a class="el" href="special__strings_8h_source.html">special_strings.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="special__strings_8h_source.html">special_strings.h</a></li>
+<li>include/hal_core/utilities/<a class="el" href="special__strings_8h_source.html">special_strings.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -390,7 +388,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1core__strings.html">core_strings</a></li><li class="navelem"><a class="el" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html">CaseInsensitiveCharTraits</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

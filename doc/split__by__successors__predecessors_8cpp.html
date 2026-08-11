@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/split_by_successors_predecessors.cpp File Reference</title>
+<title>HAL: plugins/dataflow_analysis/src/processing/passes/split_by_successors_predecessors.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,26 +94,26 @@ $(document).ready(function(){initNavTree('split__by__successors__predecessors_8c
 <div class="textblock"><code>#include &quot;<a class="el" href="split__by__successors__predecessors_8h_source.html">dataflow_analysis/processing/passes/split_by_successors_predecessors.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__abstraction_8h_source.html">dataflow_analysis/common/netlist_abstraction.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for split_by_successors_predecessors.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="split__by__successors__predecessors_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp" id="a_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp">
-<area shape="rect" title=" " alt="" coords="546,5,750,91"/>
-<area shape="rect" href="split__by__successors__predecessors_8h.html" title=" " alt="" coords="5,139,219,195"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="480,146,680,187"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="491,243,691,284"/>
-<area shape="rect" title=" " alt="" coords="757,332,800,359"/>
-<area shape="rect" title=" " alt="" coords="816,250,867,277"/>
-<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="243,146,456,187"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="121,332,261,359"/>
-<area shape="rect" title=" " alt="" coords="550,332,674,359"/>
-<area shape="rect" title=" " alt="" coords="308,332,423,359"/>
-<area shape="rect" title=" " alt="" coords="458,332,521,359"/>
-<area shape="rect" title=" " alt="" coords="352,250,467,277"/>
+<div class="center"><img src="split__by__successors__predecessors_8cpp__incl.png" border="0" usemap="#aplugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp" alt=""/></div>
+<map name="aplugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp" id="aplugins_2dataflow__analysis_2src_2processing_2passes_2split__by__successors__predecessors_8cpp">
+<area shape="rect" title=" " alt="" coords="511,5,785,61"/>
+<area shape="rect" href="split__by__successors__predecessors_8h.html" title=" " alt="" coords="5,109,219,165"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="480,117,680,158"/>
+<area shape="rect" href="netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="491,213,691,255"/>
+<area shape="rect" title=" " alt="" coords="757,303,800,329"/>
+<area shape="rect" title=" " alt="" coords="816,221,867,247"/>
+<area shape="rect" href="dataflow__analysis_2include_2dataflow__analysis_2processing_2configuration_8h.html" title=" " alt="" coords="243,117,456,158"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="121,303,261,329"/>
+<area shape="rect" title=" " alt="" coords="550,303,674,329"/>
+<area shape="rect" title=" " alt="" coords="308,303,423,329"/>
+<area shape="rect" title=" " alt="" coords="458,303,521,329"/>
+<area shape="rect" title=" " alt="" coords="352,221,467,247"/>
 </map>
 </div>
 </div>
@@ -137,7 +139,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_27b66f703f923c992ad19006fb7d81a2.html">processing</a></li><li class="navelem"><a class="el" href="dir_48aa5910fdaf6ebf7e0f2983fa64fd1f.html">passes</a></li><li class="navelem"><a class="el" href="split__by__successors__predecessors_8cpp.html">split_by_successors_predecessors.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

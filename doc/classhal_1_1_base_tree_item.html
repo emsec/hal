@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -94,7 +96,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_base_tree_item.html','');
 <p>(Future) Base class for all tree models related to the details widget.  
  <a href="classhal_1_1_base_tree_item.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="base__tree__item_8h_source.html">base_tree_item.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="base__tree__item_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/basic_tree_model/base_tree_item.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::BaseTreeItem:</div>
 <div class="dyncontent">
@@ -107,6 +109,7 @@ Inheritance diagram for hal::BaseTreeItem:</div>
 <area shape="rect" href="classhal_1_1_module_pins_tree_item.html" title=" " alt="" coords="569,219,751,369"/>
 <area shape="rect" href="classhal_1_1_pin_item.html" title="An item in the PinModel." alt="" coords="776,219,939,369"/>
 <area shape="rect" href="classhal_1_1_root_tree_item.html" title=" " alt="" coords="963,219,1125,369"/>
+<area shape="rect" href="classhal_1_1_select_gate_item.html" title=" " alt="" coords="387,417,538,553"/>
 </map>
 </div>
 <div class="dynheader">
@@ -145,7 +148,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0472eac3818f3d2ae12a97fc0c61f1a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48496a62ce615523139d8c5327e631bc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a48496a62ce615523139d8c5327e631bc">appendChild</a> (<a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
 <tr class="separator:a48496a62ce615523139d8c5327e631bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa653ce250f516cf4bf767191721080a4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">insertChild</a> (int index, <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
+<tr class="memitem:aa653ce250f516cf4bf767191721080a4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">insertChild</a> (int <a class="el" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>, <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
 <tr class="separator:aa653ce250f516cf4bf767191721080a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c2cffc3bda3bce36ce7ae795252aff6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a6c2cffc3bda3bce36ce7ae795252aff6">removeChildAtPos</a> (int row)</td></tr>
 <tr class="separator:a6c2cffc3bda3bce36ce7ae795252aff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -353,7 +356,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The child if within bounds. Nullptr otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The child if within bounds. <code>nullptr</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__item_8cpp_source.html#l00029">29</a> of file <a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a>.</p>
 
@@ -596,7 +599,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__item_8cpp_source.html#l00082">82</a> of file <a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>, and <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00096">getOwnRow()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00112">hal::ContextTreeItem::row()</a>, and <a class="el" href="pin__item_8cpp_source.html#l00017">hal::PinItem::row()</a>.</p>
 
@@ -646,7 +649,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__item_8cpp_source.html#l00045">45</a> of file <a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00024">setParent()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>, <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00024">setParent()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00151">hal::BaseTreeModel::insertChildItem()</a>.</p>
 
@@ -675,18 +678,18 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Removes the given item and returns True if removing was successful or False if the given item was no child.</p>
+<p>Removes the given item and returns <code>true</code> if removing was successful or <code>false</code> if the given item was no child.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">child</td><td>- The child to remove. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, False otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__item_8cpp_source.html#l00065">65</a> of file <a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
+<p class="reference">References <a class="el" href="netlist__preprocessing_8cpp_source.html#l01963">index</a>, and <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="pin__model_8cpp_source.html#l00661">hal::PinModel::handleDeleteItem()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00344">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00704">hal::ModuleModel::updateModuleParent()</a>.</p>
 
@@ -722,7 +725,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The removed child. Nullptr if row was out of bounds. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The removed child. <code>nullptr</code> if row was out of bounds. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__item_8cpp_source.html#l00053">53</a> of file <a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a>.</p>
 
@@ -803,7 +806,7 @@ Protected Attributes</h2></td></tr>
 <p>Sets the data for a specified column. The index must be within already existing boundaries (for example, add dummy data beforehand).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">index</td><td>- The column to set the new data. </td></tr>
+    <tr><td class="paramname">column</td><td>- The column to set the new data. </td></tr>
     <tr><td class="paramname">data</td><td>- The new column data. </td></tr>
   </table>
   </dd>
@@ -906,8 +909,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/basic_tree_model/<a class="el" href="base__tree__item_8h_source.html">base_tree_item.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/basic_tree_model/<a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a></li>
+<li>plugins/gui/include/gui/basic_tree_model/<a class="el" href="base__tree__item_8h_source.html">base_tree_item.h</a></li>
+<li>plugins/gui/src/basic_tree_model/<a class="el" href="base__tree__item_8cpp_source.html">base_tree_item.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -915,7 +918,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:49 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

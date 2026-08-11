@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Preprocessing &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Netlist Preprocessing &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -90,19 +90,19 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="netlist_preprocessing.create_multi_bit_gate_modules">
 <span class="sig-prename descclassname"><span class="pre">netlist_preprocessing.</span></span><span class="sig-name descname"><span class="pre">create_multi_bit_gate_modules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">concatenated_pin_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.create_multi_bit_gate_modules" title="Permalink to this definition"></a></dt>
-<dd><p>Create modules from large gates like RAMs and DSPs with the option to concat multiple gate pin groups to larger consecutive pin groups.</p>
+<dd><p>Create modules from large gates like RAMs and DSPs with the option to concatenate multiple gate pin groups into larger consecutive pin groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
-<li><p><strong>concatenated_pin_groups</strong> – </p></li>
+<li><p><strong>concatenated_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – A dict from gate type name to a dict from the name of the resulting pin group to the names of the pin groups it is concatenated from.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dd class="field-even"><p>The created modules on success, an empty list otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -110,24 +110,35 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="netlist_preprocessing.create_nets_at_unconnected_pins">
 <span class="sig-prename descclassname"><span class="pre">netlist_preprocessing.</span></span><span class="sig-name descname"><span class="pre">create_nets_at_unconnected_pins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.create_nets_at_unconnected_pins" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create a new net for every unconnected output pin of every gate of the netlist.
+The new nets are named <code class="docutils literal notranslate"><span class="pre">HAL_UNCONNECTED_&lt;net_id&gt;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created nets on success, an empty list otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="netlist_preprocessing.manual_mux_optimizations">
 <span class="sig-prename descclassname"><span class="pre">netlist_preprocessing.</span></span><span class="sig-name descname"><span class="pre">manual_mux_optimizations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mux_inv_gl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><span class="pre">hal_py.GateLibrary</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#netlist_preprocessing.manual_mux_optimizations" title="Permalink to this definition"></a></dt>
 <dd><p>Apply manually implemented optimizations to the netlist centered around muxes.
 Currently implemented optimizations include:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>removing inverters incase there are inverter gates in front and behind every data input and output of the mux</p></li>
+<ul class="simple">
+<li><p>removing inverters in case there are inverter gates in front of and behind every data input and output of the mux</p></li>
 <li><p>optimizing and therefore unifying possible inverters preceding the select signals by resynthesizing</p></li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<em>halp_py.Netlist</em>) – The netlist to operate on.</p></li>
-<li><p><strong>mux_inv_gl</strong> (<em>halp_py.GateLibrary</em>) – A gate library only containing mux and inverter gates used for resynthesis.</p></li>
+<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
+<li><p><strong>mux_inv_gl</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – A gate library only containing mux and inverter gates used for resynthesis.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

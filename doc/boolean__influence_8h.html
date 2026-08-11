@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/boolean_influence/include/boolean_influence/boolean_influence.h File Reference</title>
+<title>HAL: plugins/boolean_influence/include/boolean_influence/boolean_influence.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,30 +93,34 @@ $(document).ready(function(){initNavTree('boolean__influence_8h.html',''); initR
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">hal_core/utilities/result.h</a>&quot;</code><br />
-<code>#include &quot;z3_utils/z3_utils.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="z3__utils_8h_source.html">z3_utils/z3_utils.h</a>&quot;</code><br />
 <code>#include &lt;map&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for boolean_influence.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="boolean__influence_8h__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2plugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h" alt=""/></div>
-<map name="a_2home_2runner_2work_2hal_2hal_2plugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h" id="a_2home_2runner_2work_2hal_2hal_2plugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h">
-<area shape="rect" title=" " alt="" coords="494,5,717,76"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,124,453,165"/>
-<area shape="rect" title=" " alt="" coords="477,131,616,158"/>
-<area shape="rect" title=" " alt="" coords="640,131,691,158"/>
-<area shape="rect" title=" " alt="" coords="715,131,839,158"/>
-<area shape="rect" title=" " alt="" coords="863,131,926,158"/>
-<area shape="rect" title=" " alt="" coords="5,377,96,404"/>
-<area shape="rect" title=" " alt="" coords="121,377,207,404"/>
-<area shape="rect" title=" " alt="" coords="231,377,318,404"/>
-<area shape="rect" title=" " alt="" coords="342,377,413,404"/>
-<area shape="rect" href="error_8h.html" title=" " alt="" coords="256,213,387,255"/>
-<area shape="rect" title=" " alt="" coords="411,221,498,247"/>
-<area shape="rect" title=" " alt="" coords="522,221,614,247"/>
-<area shape="rect" title=" " alt="" coords="638,221,706,247"/>
+<div class="center"><img src="boolean__influence_8h__incl.png" border="0" usemap="#aplugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h" alt=""/></div>
+<map name="aplugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h" id="aplugins_2boolean__influence_2include_2boolean__influence_2boolean__influence_8h">
+<area shape="rect" title=" " alt="" coords="300,5,495,61"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="410,452,550,479"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="649,273,780,315"/>
+<area shape="rect" href="z3__utils_8h.html" title=" " alt="" coords="201,109,340,136"/>
+<area shape="rect" title=" " alt="" coords="60,281,111,307"/>
+<area shape="rect" title=" " alt="" coords="349,281,473,307"/>
+<area shape="rect" title=" " alt="" coords="805,281,867,307"/>
+<area shape="rect" title=" " alt="" coords="267,527,357,553"/>
+<area shape="rect" title=" " alt="" coords="382,527,469,553"/>
+<area shape="rect" title=" " alt="" coords="493,527,579,553"/>
+<area shape="rect" title=" " alt="" coords="603,527,674,553"/>
+<area shape="rect" href="error_8h.html" title=" " alt="" coords="837,363,968,404"/>
+<area shape="rect" title=" " alt="" coords="518,370,605,397"/>
+<area shape="rect" title=" " alt="" coords="629,370,721,397"/>
+<area shape="rect" title=" " alt="" coords="745,370,813,397"/>
+<area shape="rect" href="boolean__function_8h.html" title=" " alt="" coords="245,184,424,225"/>
+<area shape="rect" title=" " alt="" coords="135,281,206,307"/>
+<area shape="rect" title=" " alt="" coords="231,281,273,307"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="499,191,677,218"/>
 </map>
 </div>
 </div>
@@ -129,27 +135,27 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a33ceedd9c2bfc14d106942a29c95245b"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a33ceedd9c2bfc14d106942a29c95245b">hal::boolean_influence::get_boolean_influence</a> (const BooleanFunction &amp;bf, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000)</td></tr>
+<tr class="memitem:a33ceedd9c2bfc14d106942a29c95245b"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a33ceedd9c2bfc14d106942a29c95245b">hal::boolean_influence::get_boolean_influence</a> (const BooleanFunction &amp;bf, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations=32000)</td></tr>
 <tr class="separator:a33ceedd9c2bfc14d106942a29c95245b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4db5ecda63a25949aa5d2098568f4cc"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#ae4db5ecda63a25949aa5d2098568f4cc">hal::boolean_influence::get_boolean_influence_with_hal_boolean_function_class</a> (const BooleanFunction &amp;bf, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations)</td></tr>
+<tr class="memitem:ae4db5ecda63a25949aa5d2098568f4cc"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#ae4db5ecda63a25949aa5d2098568f4cc">hal::boolean_influence::get_boolean_influence_with_hal_boolean_function_class</a> (const BooleanFunction &amp;bf, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations)</td></tr>
 <tr class="separator:ae4db5ecda63a25949aa5d2098568f4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13862a6e7f196e4c32ed1ab58db30a84"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a13862a6e7f196e4c32ed1ab58db30a84">hal::boolean_influence::get_boolean_influence_with_z3_expr</a> (const BooleanFunction &amp;bf, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations)</td></tr>
+<tr class="memitem:a13862a6e7f196e4c32ed1ab58db30a84"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a13862a6e7f196e4c32ed1ab58db30a84">hal::boolean_influence::get_boolean_influence_with_z3_expr</a> (const BooleanFunction &amp;bf, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations)</td></tr>
 <tr class="separator:a13862a6e7f196e4c32ed1ab58db30a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a410b8493d39582b34e9698097aa6cf38"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a410b8493d39582b34e9698097aa6cf38">hal::boolean_influence::get_boolean_influence</a> (const z3::expr &amp;e, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000)</td></tr>
+<tr class="memitem:a410b8493d39582b34e9698097aa6cf38"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a410b8493d39582b34e9698097aa6cf38">hal::boolean_influence::get_boolean_influence</a> (const z3::expr &amp;e, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations=32000)</td></tr>
 <tr class="separator:a410b8493d39582b34e9698097aa6cf38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a66c113aa9f31df8ac760ffd29d3be0"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a1a66c113aa9f31df8ac760ffd29d3be0">hal::boolean_influence::get_boolean_influence_deterministic</a> (const BooleanFunction &amp;bf)</td></tr>
 <tr class="separator:a1a66c113aa9f31df8ac760ffd29d3be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf6800c61cdbcbe137f97def46131080"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#acf6800c61cdbcbe137f97def46131080">hal::boolean_influence::get_boolean_influence_deterministic</a> (const z3::expr &amp;e)</td></tr>
 <tr class="separator:acf6800c61cdbcbe137f97def46131080"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a012f7e70d113d81ebf0369360abf709f"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a012f7e70d113d81ebf0369360abf709f">hal::boolean_influence::get_boolean_influences_of_subcircuit</a> (const std::vector&lt; Gate * &gt; &amp;gates, const Net *start_net, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000)</td></tr>
+<tr class="memitem:a012f7e70d113d81ebf0369360abf709f"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a012f7e70d113d81ebf0369360abf709f">hal::boolean_influence::get_boolean_influences_of_subcircuit</a> (const std::vector&lt; Gate * &gt; &amp;gates, const Net *start_net, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations=32000)</td></tr>
 <tr class="separator:a012f7e70d113d81ebf0369360abf709f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a067fb558be7e4b302226adbd283f6138"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a067fb558be7e4b302226adbd283f6138">hal::boolean_influence::get_boolean_influences_of_gate</a> (const Gate *gate, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000)</td></tr>
+<tr class="memitem:a067fb558be7e4b302226adbd283f6138"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a067fb558be7e4b302226adbd283f6138">hal::boolean_influence::get_boolean_influences_of_gate</a> (const Gate *gate, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> num_evaluations=32000)</td></tr>
 <tr class="separator:a067fb558be7e4b302226adbd283f6138"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a195203f8eb98d98ddce1fa90fb6cccdb"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a195203f8eb98d98ddce1fa90fb6cccdb">hal::boolean_influence::get_boolean_influences_of_subcircuit_deterministic</a> (const std::vector&lt; Gate * &gt; &amp;gates, const Net *start_net)</td></tr>
 <tr class="separator:a195203f8eb98d98ddce1fa90fb6cccdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a663ff2c0a5691d7580ee2f92b79fa5e2"><td class="memItemLeft" align="right" valign="top">Result&lt; std::map&lt; Net *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a663ff2c0a5691d7580ee2f92b79fa5e2">hal::boolean_influence::get_boolean_influences_of_gate_deterministic</a> (const Gate *gate)</td></tr>
 <tr class="separator:a663ff2c0a5691d7580ee2f92b79fa5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eec5e7e81501ef10aec207a7ef75e2c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::pair&lt; std::map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, Gate * &gt;, std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a9eec5e7e81501ef10aec207a7ef75e2c">hal::boolean_influence::get_ff_dependency_matrix</a> (const Netlist *netlist, bool with_boolean_influence)</td></tr>
+<tr class="memitem:a9eec5e7e81501ef10aec207a7ef75e2c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::pair&lt; std::map&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>, Gate * &gt;, std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1boolean__influence.html#a9eec5e7e81501ef10aec207a7ef75e2c">hal::boolean_influence::get_ff_dependency_matrix</a> (const Netlist *netlist, bool with_boolean_influence)</td></tr>
 <tr class="separator:a9eec5e7e81501ef10aec207a7ef75e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
@@ -158,7 +164,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e66abdd4ce1958cbb4df6935267b2aa1.html">boolean_influence</a></li><li class="navelem"><a class="el" href="dir_34cf25f055500cd191be7471fca6df11.html">include</a></li><li class="navelem"><a class="el" href="dir_5bf97c9d6a33e0546cea2ef6bbf7ea13.html">boolean_influence</a></li><li class="navelem"><a class="el" href="boolean__influence_8h.html">boolean_influence.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

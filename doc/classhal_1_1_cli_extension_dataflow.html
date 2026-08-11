@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,7 +92,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_cli_extension_dataflow.ht
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="plugin__dataflow_8h_source.html">/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/plugin_dataflow.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::CliExtensionDataflow:</div>
 <div class="dyncontent">
@@ -130,8 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751b42cfec9354dc5d576a207557229e inherit pub_methods_classhal_1_1_abstract_extension_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00043">43</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
+<div class="textblock"><p>The command line interface of the dataflow analysis plugin. </p>
+
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00046">46</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae8f8e59a6c33996471872acfe8ed0ae1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8f8e59a6c33996471872acfe8ed0ae1">&#9670;&nbsp;</a></span>CliExtensionDataflow()</h2>
@@ -156,7 +159,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00046">46</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00049">49</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
 
 </div>
 </div>
@@ -235,19 +238,19 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classhal_1_1_cli_extension_interface.html#a33dde9468b843e0e4872f874420e5730">hal::CliExtensionInterface</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00060">60</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="control_8py_source.html#l00033">control::args</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="api_2configuration_8h_source.html#l00082">hal::dataflow::Configuration::expected_sizes</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="api_2configuration_8h_source.html#l00077">hal::dataflow::Configuration::min_group_size</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>, <a class="el" href="configuration_8cpp_source.html#l00290">hal::dataflow::Configuration::with_control_pin_types()</a>, and <a class="el" href="configuration_8cpp_source.html#l00257">hal::dataflow::Configuration::with_gate_types()</a>.</p>
+<p class="reference">References <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2api_2configuration_8h_source.html#l00082">hal::dataflow::Configuration::expected_sizes</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="program__arguments_8cpp_source.html#l00116">hal::ProgramArguments::get_parameter()</a>, <a class="el" href="program__arguments_8cpp_source.html#l00030">hal::ProgramArguments::is_option_set()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="dataflow__analysis_2include_2dataflow__analysis_2api_2configuration_8h_source.html#l00077">hal::dataflow::Configuration::min_group_size</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>, <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00290">hal::dataflow::Configuration::with_control_pin_types()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2configuration_8cpp_source.html#l00257">hal::dataflow::Configuration::with_gate_types()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/<a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/src/<a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a></li>
+<li>plugins/dataflow_analysis/include/dataflow_analysis/<a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a></li>
+<li>plugins/dataflow_analysis/src/<a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -255,7 +258,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_cli_extension_dataflow.html">CliExtensionDataflow</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

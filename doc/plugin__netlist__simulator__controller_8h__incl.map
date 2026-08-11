@@ -1,0 +1,20 @@
+<map id="plugins/simulator/netlist_simulator_controller/include/netlist_simulator_controller/plugin_netlist_simulator_controller.h" name="plugins/simulator/netlist_simulator_controller/include/netlist_simulator_controller/plugin_netlist_simulator_controller.h">
+<area shape="rect" id="node1" title=" " alt="" coords="243,5,506,76"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="210,303,350,329"/>
+<area shape="rect" id="node7" href="$plugin__interface__base_8h.html" title=" " alt="" coords="57,124,239,165"/>
+<area shape="rect" id="node13" href="$gui__extension__interface_8h.html" title=" " alt="" coords="277,124,472,165"/>
+<area shape="rect" id="node17" href="$project__serializer_8h.html" title=" " alt="" coords="1116,213,1287,255"/>
+<area shape="rect" id="node18" title=" " alt="" coords="547,131,597,158"/>
+<area shape="rect" id="node3" title=" " alt="" coords="693,377,784,404"/>
+<area shape="rect" id="node4" title=" " alt="" coords="126,377,213,404"/>
+<area shape="rect" id="node5" title=" " alt="" coords="237,377,323,404"/>
+<area shape="rect" id="node6" title=" " alt="" coords="347,377,418,404"/>
+<area shape="rect" id="node8" href="$log_8h.html" title=" " alt="" coords="68,213,199,255"/>
+<area shape="rect" id="node10" title=" " alt="" coords="47,303,89,329"/>
+<area shape="rect" id="node11" title=" " alt="" coords="599,303,657,329"/>
+<area shape="rect" id="node12" title=" " alt="" coords="223,221,286,247"/>
+<area shape="rect" id="node9" title=" " alt="" coords="374,303,461,329"/>
+<area shape="rect" id="node14" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="412,221,591,247"/>
+<area shape="rect" id="node15" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="665,213,892,255"/>
+<area shape="rect" id="node16" href="$plugin__parameter_8h.html" title=" " alt="" coords="916,213,1092,255"/>
+</map>

@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +95,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_json_write_document.html'
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="json__write__document_8h_source.html">hal_core/utilities/json_write_document.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::JsonWriteDocument:</div>
 <div class="dyncontent">
@@ -163,7 +165,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:aab1cc00b6a78ab484bf1c4f49c1d1500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73e3987ae9ada77e90b6047734f3b500"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_document.html#a73e3987ae9ada77e90b6047734f3b500">finalize</a> (<a class="el" href="classhal_1_1_json_write_complex.html">JsonWriteComplex</a> *cplx) override</td></tr>
 <tr class="separator:a73e3987ae9ada77e90b6047734f3b500"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d258f0623495af2d9a8a8dfc4ffde20"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_document.html#a9d258f0623495af2d9a8a8dfc4ffde20">add_member</a> (rapidjson::Document::ValueType &amp;&amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, rapidjson::Document::ValueType &amp;&amp;value, rapidjson::Document::AllocatorType &amp;<a class="el" href="classhal_1_1_json_write_document.html#aab1cc00b6a78ab484bf1c4f49c1d1500">allocator</a>) override</td></tr>
+<tr class="memitem:a9d258f0623495af2d9a8a8dfc4ffde20"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_document.html#a9d258f0623495af2d9a8a8dfc4ffde20">add_member</a> (rapidjson::Document::ValueType &amp;&amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, rapidjson::Document::ValueType &amp;&amp;value, rapidjson::Document::AllocatorType &amp;<a class="el" href="classhal_1_1_json_write_document.html#aab1cc00b6a78ab484bf1c4f49c1d1500">allocator</a>) override</td></tr>
 <tr class="separator:a9d258f0623495af2d9a8a8dfc4ffde20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69c9337047caabef341435e407b63da0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_document.html#a69c9337047caabef341435e407b63da0">dump</a> (rapidjson::Value &amp;parent)</td></tr>
 <tr class="separator:a69c9337047caabef341435e407b63da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,8 +191,9 @@ Friends</h2></td></tr>
 <tr class="separator:a164b2a703fdcd6611aa2beebced6c2af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00231">231</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<div class="textblock"><p>The root of a JSON document that is being written. Members are added like for any other JSON object, and <code>serialize</code> writes the result to a file. </p>
+
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00241">241</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aabc926a0a79048eb859d89f12e02309a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aabc926a0a79048eb859d89f12e02309a">&#9670;&nbsp;</a></span>JsonWriteDocument()</h2>
@@ -209,7 +212,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00164">164</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>.</p>
 
 </div>
 </div>
@@ -236,7 +239,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00247">247</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00257">257</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 </div>
 </div>
@@ -285,7 +288,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00179">179</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00169">allocator()</a>, <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00169">allocator()</a>, <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
 </div>
 </div>
@@ -316,7 +319,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00169">169</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="json__write__document_8cpp_source.html#l00179">add_member()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00023">hal::JsonWriteData::allocator()</a>, and <a class="el" href="json__write__document_8cpp_source.html#l00174">finalize()</a>.</p>
 
@@ -340,7 +343,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00202">202</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>.</p>
 
 </div>
 </div>
@@ -402,7 +405,7 @@ Friends</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00174">174</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00169">allocator()</a>, <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>, <a class="el" href="json__write__document_8h_source.html#l00115">hal::JsonWriteComplex::mRapidValue</a>, and <a class="el" href="json__write__document_8h_source.html#l00052">hal::JsonWriteData::mTagname</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8cpp_source.html#l00169">allocator()</a>, <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>, <a class="el" href="json__write__document_8h_source.html#l00115">hal::JsonWriteComplex::mRapidValue</a>, and <a class="el" href="json__write__document_8h_source.html#l00052">hal::JsonWriteData::mTagname</a>.</p>
 
 </div>
 </div>
@@ -428,13 +431,13 @@ Friends</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if successful, false otherwise </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful, <code>false</code> otherwise </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00184">184</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00236">mRapidDocument</a>, and <a class="el" href="_apache_01_license_8txt_source.html#l00057">of</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00246">mRapidDocument</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="grouping__serializer_8cpp_source.html#l00023">hal::GroupingSerializer::serialize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00085">hal::WaveTreeModel::persist()</a>, and <a class="el" href="grouping__serializer_8cpp_source.html#l00023">hal::GroupingSerializer::serialize()</a>.</p>
 
 </div>
 </div>
@@ -459,7 +462,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00233">233</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00243">243</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 </div>
 </div>
@@ -484,15 +487,15 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00236">236</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00246">246</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="json__write__document_8cpp_source.html#l00179">add_member()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00169">allocator()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00202">dump()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00174">finalize()</a>, <a class="el" href="json__write__document_8cpp_source.html#l00164">JsonWriteDocument()</a>, and <a class="el" href="json__write__document_8cpp_source.html#l00184">serialize()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a></li>
-<li>/home/runner/work/hal/hal/src/utilities/<a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a></li>
+<li>include/hal_core/utilities/<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a></li>
+<li>src/utilities/<a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -500,7 +503,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_json_write_document.html">JsonWriteDocument</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

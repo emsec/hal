@@ -1,12 +1,12 @@
-<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/context.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/context.h">
-<area shape="rect" id="node1" title=" " alt="" coords="21,5,242,76"/>
-<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="139,124,339,165"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,303,145,329"/>
-<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="427,213,627,255"/>
-<area shape="rect" id="node5" title=" " alt="" coords="210,303,253,329"/>
-<area shape="rect" id="node6" title=" " alt="" coords="319,303,443,329"/>
-<area shape="rect" id="node7" title=" " alt="" coords="489,303,603,329"/>
-<area shape="rect" id="node8" title=" " alt="" coords="665,303,728,329"/>
-<area shape="rect" id="node9" title=" " alt="" coords="214,221,265,247"/>
-<area shape="rect" id="node10" title=" " alt="" coords="289,221,403,247"/>
+<map id="plugins/dataflow_analysis/include/dataflow_analysis/evaluation/context.h" name="plugins/dataflow_analysis/include/dataflow_analysis/evaluation/context.h">
+<area shape="rect" id="node1" title=" " alt="" coords="34,5,229,61"/>
+<area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="139,109,339,151"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,288,145,315"/>
+<area shape="rect" id="node3" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="427,199,627,240"/>
+<area shape="rect" id="node5" title=" " alt="" coords="210,288,253,315"/>
+<area shape="rect" id="node6" title=" " alt="" coords="319,288,443,315"/>
+<area shape="rect" id="node7" title=" " alt="" coords="489,288,603,315"/>
+<area shape="rect" id="node8" title=" " alt="" coords="665,288,728,315"/>
+<area shape="rect" id="node9" title=" " alt="" coords="214,206,265,233"/>
+<area shape="rect" id="node10" title=" " alt="" coords="289,206,403,233"/>
 </map>

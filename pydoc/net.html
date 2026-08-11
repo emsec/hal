@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Net &mdash; hal_py v4.5.0-75-gc6be35b87 documentation</title>
+  <title>Net &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-75-gc6be35b87
+                v4.5.0-76-gdaf633736
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -39,6 +39,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hal_py_module.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="async_set_reset_behavior.html">Async Set Reset Behavior</a></li>
 <li class="toctree-l2"><a class="reference internal" href="base_plugin_interface.html">Base Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function.html">Boolean Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_function_decorator.html">Boolean Function Decorator</a></li>
@@ -47,6 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_container.html">Data Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="endpoint.html">Endpoint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_base_pin.html">Gate Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library.html">Gate Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_library_manager.html">Gate Library Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_pin.html">Gate Pin</a></li>
@@ -55,7 +58,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_manager.html">Log Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_base_pin.html">Module Base Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Net</a></li>
@@ -69,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pin_direction.html">Pin Direction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pin_type.html">Pin Type</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plugin_manager.html">Plugin Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_directory.html">Project Directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="project_manager.html">Project Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smt.html">SMT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_netlist_decorator.html">Subgraph Netlist Decorator</a></li>
@@ -126,7 +132,7 @@ The endpoint is specified by a tuple of a gate and the name of an input pin of t
 <dd class="field-even"><p>The name of an input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-odd"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>hal_py.Endpoint or None</p>
@@ -142,11 +148,11 @@ The endpoint is specified by a tuple of a gate and an input pin of that gate.</p
 <dt class="field-odd">param hal_py.Gate gate</dt>
 <dd class="field-odd"><p>The gate.</p>
 </dd>
-<dt class="field-even">param str pin_name</dt>
+<dt class="field-even">param hal_py.GatePin pin</dt>
 <dd class="field-even"><p>The input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-odd"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>hal_py.Endpoint or None</p>
@@ -174,7 +180,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd class="field-even"><p>The name of an output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-odd"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>hal_py.Endpoint or None</p>
@@ -194,7 +200,7 @@ The endpoint is specified by a tuple of a gate and an output pin of that gate.</
 <dd class="field-even"><p>The output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>The endpoint on success, None otherwise.</p>
+<dd class="field-odd"><p>The endpoint on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>hal_py.Endpoint or None</p>
@@ -223,13 +229,13 @@ The endpoint is specified by a tuple of a gate and an output pin of that gate.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>log_with_info_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Force explicit logging channel ‘netlist’ with log level ‘info’ to trace GUI events.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -255,7 +261,7 @@ The endpoint is specified by a tuple of a gate and an output pin of that gate.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
@@ -304,7 +310,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dt class="sig sig-object py" id="hal_py.Net.get_grouping">
 <span class="sig-name descname"><span class="pre">get_grouping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Grouping</span></span></span><a class="headerlink" href="#hal_py.Net.get_grouping" title="Permalink to this definition"></a></dt>
 <dd><p>Get the grouping in which this net is contained.
-If no grouping contains this gate, <em>None</em> is returned.</p>
+If no grouping contains this gate, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The grouping.</p>
@@ -418,12 +424,12 @@ The optional filter is evaluated on every candidate such that the result only co
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the entry exists, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the entry exists, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -455,7 +461,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dd class="field-odd"><p>The gate.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True if the gate is a destination of the net, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate is a destination of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -475,7 +481,7 @@ The endpoint is specified by a tuple of a gate and the name of an input pin of t
 <dd class="field-even"><p>The name of an input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True if the endpoint is a destination of the net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a destination of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -495,7 +501,7 @@ The endpoint is specified by a tuple of a gate and an input pin of that gate.</p
 <dd class="field-even"><p>The input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True if the endpoint is a destination of the net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a destination of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -511,7 +517,7 @@ The endpoint is specified by a tuple of a gate and an input pin of that gate.</p
 <dd class="field-odd"><p>The endpoint.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True if the endpoint is a destination of the net, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a destination of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -535,7 +541,7 @@ The endpoint is specified by a tuple of a gate and an input pin of that gate.</p
 <dd class="field-odd"><p>The gate.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True if the gate is a source of the net, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate is a source of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -555,7 +561,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd class="field-even"><p>The name of an output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True if the endpoint is a source of the net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a source of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -575,7 +581,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd class="field-even"><p>The output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True if the endpoint is a source of the net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a source of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -591,7 +597,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd class="field-odd"><p>The endpoint.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True if the endpoint is a source of the net, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the endpoint is a source of the net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -608,7 +614,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Checks whether this net is a global input net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the net is a global input net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is a global input net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -622,7 +628,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Checks whether this net is a global output net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the net is a global output net, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is a global output net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -636,7 +642,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Check whether the net is connected to GND.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the net is connected to GND, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is connected to GND, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -650,7 +656,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Check whether the net is unrouted, i.e., it has no source or no destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the net is unrouted, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is unrouted, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -664,7 +670,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Check whether the net is connected to VCC.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the net is connected to VCC, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is connected to VCC, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -678,7 +684,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Mark this net as a global input net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -692,7 +698,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd><p>Mark this net as a global output net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -761,7 +767,7 @@ The endpoint is specified by a tuple of a gate and the name of an input pin of t
 <dd class="field-even"><p>The name of an input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -781,7 +787,7 @@ The endpoint is specified by a tuple of a gate and the name of an input pin of t
 <dd class="field-even"><p>The input pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -794,10 +800,10 @@ The endpoint is specified by a tuple of a gate and the name of an input pin of t
 <div><p>Remove a destination endpoint from the net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.Endpoint ep</dt>
-<dd class="field-odd"><p>The destination endpoint.</p>
+<dd class="field-odd"><p>The endpoint.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True on success, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -825,7 +831,7 @@ The endpoint is specified by a tuple of a gate and the name of an output pin of 
 <dd class="field-even"><p>The name of an output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -845,7 +851,7 @@ The endpoint is specified by a tuple of a gate and an output pin of that gate.</
 <dd class="field-even"><p>The output pin of the gate.</p>
 </dd>
 <dt class="field-odd">returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">rtype</dt>
 <dd class="field-even"><p>bool</p>
@@ -861,7 +867,7 @@ The endpoint is specified by a tuple of a gate and an output pin of that gate.</
 <dd class="field-odd"><p>The endpoint.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>True on success, False otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>bool</p>
@@ -880,7 +886,7 @@ May overwrite an existing entry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key category.</p></li>
+<li><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data category.</p></li>
 <li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data key.</p></li>
 <li><p><strong>data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data type.</p></li>
 <li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The data value.</p></li>
@@ -888,7 +894,7 @@ May overwrite an existing entry.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True on success, false otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -924,7 +930,7 @@ May overwrite an existing entry.</p>
 <dd><p>Unmark this net as a global input net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
@@ -938,7 +944,7 @@ May overwrite an existing entry.</p>
 <dd><p>Unmark this net as a global output net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True on success, False otherwise.</p>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>

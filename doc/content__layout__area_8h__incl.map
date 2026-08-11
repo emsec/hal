@@ -1,5 +1,5 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/content_layout_area/content_layout_area.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/content_layout_area/content_layout_area.h">
-<area shape="rect" id="node1" title=" " alt="" coords="140,5,323,76"/>
+<map id="plugins/gui/include/gui/content_layout_area/content_layout_area.h" name="plugins/gui/include/gui/content_layout_area/content_layout_area.h">
+<area shape="rect" id="node1" title=" " alt="" coords="152,5,311,76"/>
 <area shape="rect" id="node2" href="$content__widget_8h.html" title=" " alt="" coords="158,124,305,165"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,288,84,315"/>
 <area shape="rect" id="node7" href="$content__anchor_8h.html" title=" " alt="" coords="329,124,475,165"/>

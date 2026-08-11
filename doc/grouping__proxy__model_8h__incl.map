@@ -1,11 +1,11 @@
-<map id="/home/runner/work/hal/hal/plugins/gui/include/gui/grouping/grouping_proxy_model.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/grouping/grouping_proxy_model.h">
-<area shape="rect" id="node1" title=" " alt="" coords="151,5,363,76"/>
-<area shape="rect" id="node2" href="$sort_8h.html" title=" " alt="" coords="5,131,148,158"/>
-<area shape="rect" id="node6" title=" " alt="" coords="173,131,341,158"/>
-<area shape="rect" id="node7" href="$search__proxy__model_8h.html" title=" " alt="" coords="365,124,522,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="287,288,341,315"/>
-<area shape="rect" id="node4" title=" " alt="" coords="41,213,112,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="136,213,295,240"/>
-<area shape="rect" id="node8" title=" " alt="" coords="319,213,493,240"/>
-<area shape="rect" id="node9" href="$searchoptions_8h.html" title=" " alt="" coords="517,213,735,240"/>
+<map id="plugins/gui/include/gui/grouping/grouping_proxy_model.h" name="plugins/gui/include/gui/grouping/grouping_proxy_model.h">
+<area shape="rect" id="node1" title=" " alt="" coords="173,5,341,61"/>
+<area shape="rect" id="node2" href="$sort_8h.html" title=" " alt="" coords="5,117,148,143"/>
+<area shape="rect" id="node6" title=" " alt="" coords="173,117,341,143"/>
+<area shape="rect" id="node7" href="$search__proxy__model_8h.html" title=" " alt="" coords="365,109,522,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="287,273,341,300"/>
+<area shape="rect" id="node4" title=" " alt="" coords="41,199,112,225"/>
+<area shape="rect" id="node5" title=" " alt="" coords="136,199,295,225"/>
+<area shape="rect" id="node8" title=" " alt="" coords="319,199,493,225"/>
+<area shape="rect" id="node9" href="$searchoptions_8h.html" title=" " alt="" coords="517,199,735,225"/>
 </map>

@@ -1,0 +1,12 @@
+<map id="plugins/simulator/netlist_simulator_controller/include/netlist_simulator_controller/dummy_engine.h" name="plugins/simulator/netlist_simulator_controller/include/netlist_simulator_controller/dummy_engine.h">
+<area shape="rect" id="node1" title=" " alt="" coords="268,5,478,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="55,392,118,419"/>
+<area shape="rect" id="node3" title=" " alt="" coords="770,221,829,247"/>
+<area shape="rect" id="node4" title=" " alt="" coords="538,392,662,419"/>
+<area shape="rect" id="node5" href="$simulation__engine_8h.html" title=" " alt="" coords="480,124,682,165"/>
+<area shape="rect" id="node6" href="$defines_8h.html" title=" " alt="" coords="339,392,479,419"/>
+<area shape="rect" id="node8" href="$boolean__function_8h.html" title=" " alt="" coords="320,303,498,344"/>
+<area shape="rect" id="node9" href="$simulation__input_8h.html" title=" " alt="" coords="64,213,266,255"/>
+<area shape="rect" id="node10" href="$wave__event_8h.html" title=" " alt="" coords="342,213,543,255"/>
+<area shape="rect" id="node7" title=" " alt="" coords="525,467,616,493"/>
+</map>

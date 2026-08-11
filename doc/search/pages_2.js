@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['welcome_20to_20hal_21_41444',['Welcome to HAL!',['../index.html',1,'']]]
+  ['license_44254',['LICENSE',['../md_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html',1,'']]]
 ];

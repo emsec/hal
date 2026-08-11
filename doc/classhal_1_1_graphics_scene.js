@@ -25,7 +25,6 @@ var classhal_1_1_graphics_scene =
     [ "handleInternSelectionChanged", "classhal_1_1_graphics_scene.html#a94739cc177b5f2188e8bd59dd7c16086", null ],
     [ "mousePressEvent", "classhal_1_1_graphics_scene.html#a058a592f0c567866e683fdf8589d21de", null ],
     [ "moveNetsToBackground", "classhal_1_1_graphics_scene.html#af1b953794af7656ee478baa25e4e4896", null ],
-    [ "Q_ENUM", "classhal_1_1_graphics_scene.html#a57b158b86bf8ede19567c8be7116d75d", null ],
     [ "removeGraphItem", "classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76", null ],
     [ "setDragController", "classhal_1_1_graphics_scene.html#ad0c02fc2864dbed69490ed53bd2e19b5", null ],
     [ "setMousePressed", "classhal_1_1_graphics_scene.html#a24e241c8c1cb88963a01fd4d60a86cb0", null ],

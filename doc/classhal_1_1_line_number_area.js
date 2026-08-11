@@ -7,7 +7,5 @@ var classhal_1_1_line_number_area =
     [ "rightOffset", "classhal_1_1_line_number_area.html#a2b3e676a2b7cd3e8e4de506b82ebd86d", null ],
     [ "setLeftOffset", "classhal_1_1_line_number_area.html#a2c18a0a9570c287cdc3a8acd881b1ae9", null ],
     [ "setRightOffset", "classhal_1_1_line_number_area.html#a80d23adfe6646eae2f961de34b841e6e", null ],
-    [ "wheelEvent", "classhal_1_1_line_number_area.html#a41f602643db70509473eadeab5487e9c", null ],
-    [ "leftOffset", "classhal_1_1_line_number_area.html#a3920f1da35f031d9d811864583ccf091", null ],
-    [ "rightOffset", "classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723", null ]
+    [ "wheelEvent", "classhal_1_1_line_number_area.html#a41f602643db70509473eadeab5487e9c", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/python_bindings/bindings/module_pin_group.cpp Source File</title>
+<title>HAL: src/python_bindings/bindings/module_pin_group.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -99,14 +101,14 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="stringliteral">        py_module_pin_group.def(py::self == py::self, R</span><span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">            Check whether two module pin groups are equal.</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :returns: True if both module pin groups are equal, False otherwise.</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">            :returns: ``True`` if both module pin groups are equal, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">        py_module_pin_group.def(py::self != py::self, R</span><span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">            Check whether two module pin groups are unequal.</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">            :returns: True if both module pin groups are unequal, False otherwise.</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">            :returns: ``True`` if both module pin groups are unequal, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral"></span> </div>
@@ -126,7 +128,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;get_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::get_id</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="stringliteral">            Get the ID of the module pin group. The ID is unique within a module.</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral">            :returns: The ID of the pin.</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="stringliteral">            :returns: The ID of the pin group.</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="stringliteral"></span> </div>
@@ -152,7 +154,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;get_direction&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::get_direction</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            Get the direction of the pin group.</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :returns: The direction of the pin.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :returns: The direction of the pin group.</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">            :rtype: hal_py.PinDirection</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral"></span> </div>
@@ -165,7 +167,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;get_type&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::get_type</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            Get the type of the pin group.</span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :returns: The type of the pin.</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">            :returns: The type of the pin group.</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">            :rtype: hal_py.PinType</span></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral"></span> </div>
@@ -177,17 +179,17 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;get_pins&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::get_pins</a>, py::arg(<span class="stringliteral">&quot;filter&quot;</span>) = <span class="keyword">nullptr</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">            Get the (ordered) pins of the pin groups.</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            The optional filter is evaluated on every pin such that the result only contains pins matching the specified condition.</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            :param lambda filter: Filter function to be evaluated on each pin.</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            :param lambda filter: An optional filter.</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">            :returns: The ordered pins.</span></div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.ModulePin]</span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;get_pin_at_index&quot;</span>,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;</a>&amp; <span class="keyword">self</span>, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> index) -&gt; <a class="code" href="classhal_1_1_module_pin.html">ModulePin</a>* {</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_pin_at_index(index);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            [](<span class="keyword">const</span> <a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;</a>&amp; <span class="keyword">self</span>, <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>) -&gt; <a class="code" href="classhal_1_1_module_pin.html">ModulePin</a>* {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keyword">auto</span> res = <span class="keyword">self</span>.get_pin_at_index(<a class="code" href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a>);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keywordflow">if</span> (res.is_ok())</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                {</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    return res.get();</div>
@@ -203,7 +205,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="stringliteral">            Get the pin specified by the given index.</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="stringliteral">            :param int index: The index of the pin within the pin group.</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">            :returns: The pin on success, None otherwise.</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">            :returns: The pin on success, ``None`` otherwise.</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">            :rtype: hal_py.ModulePin or None</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral"></span> </div>
@@ -231,10 +233,10 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;contains_pin&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::contains_pin</a>, py::arg(<span class="stringliteral">&quot;pin&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">            Check whether the pin group contaisn the given pin.</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="stringliteral">            Check whether the pin group contains the given pin.</span></div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="stringliteral">            :param hal_py.ModulePin pin: The pin to check.</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">            :returns: True if the pin group contains the pin, True otherwise.</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="stringliteral">            :returns: ``True`` if the pin group contains the pin, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="stringliteral"></span> </div>
@@ -329,7 +331,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="stringliteral">        py_module_pin_group.def(</span><span class="stringliteral">&quot;empty&quot;</span>, &amp;<a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;::empty</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="stringliteral">            Check whether the pin group is empty, i.e., contains no pins.</span></div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="stringliteral">            :returns: True if the pin group is empty, False otherwise.</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="stringliteral">            :returns: ``True`` if the pin group is empty, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="stringliteral"></span> </div>
@@ -342,14 +344,15 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="stringliteral">    }</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_module_pin_html"><div class="ttname"><a href="classhal_1_1_module_pin.html">hal::ModulePin</a></div><div class="ttdef"><b>Definition:</b> <a href="module__pin_8h_source.html#l00044">module_pin.h:45</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00050">pin_group.h:51</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00053">pin_group.h:54</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="adefines_8h_html_aec41e5f8e4b7aef2540e84268692fa84"><div class="ttname"><a href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a></div><div class="ttdeci">int32_t i32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00036">defines.h:36</a></div></div>
 <div class="ttc" id="agroup__pybind_html_ga81181bacca930bfda574ce3a51a01e9c"><div class="ttname"><a href="group__pybind.html#ga81181bacca930bfda574ce3a51a01e9c">hal::RawPtrWrapper</a></div><div class="ttdeci">std::unique_ptr&lt; T, py::nodelete &gt; RawPtrWrapper</div><div class="ttdef"><b>Definition:</b> <a href="python__bindings_8h_source.html#l00090">python_bindings.h:90</a></div></div>
 <div class="ttc" id="agroup__pybind_html_ga99c6b86dabda84a9ccb3b6612557f10f"><div class="ttname"><a href="group__pybind.html#ga99c6b86dabda84a9ccb3b6612557f10f">hal::module_pin_group_init</a></div><div class="ttdeci">void module_pin_group_init(py::module &amp;m)</div><div class="ttdef"><b>Definition:</b> <a href="module__pin__group_8cpp_source.html#l00005">module_pin_group.cpp:5</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00078">log.h:78</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
+<div class="ttc" id="anetlist__preprocessing_8cpp_html_afd715dc311d1a73bd24f87a7624e1bac"><div class="ttname"><a href="netlist__preprocessing_8cpp.html#afd715dc311d1a73bd24f87a7624e1bac">index</a></div><div class="ttdeci">u32 index</div><div class="ttdef"><b>Definition:</b> <a href="netlist__preprocessing_8cpp_source.html#l01963">netlist_preprocessing.cpp:1963</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -357,7 +360,7 @@ $(document).ready(function(){initNavTree('module__pin__group_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="module__pin__group_8cpp.html">module_pin_group.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

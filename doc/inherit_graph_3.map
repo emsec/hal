@@ -1,14 +1,23 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="5,183,232,209"/>
-<area shape="rect" id="node2" href="$classhal_1_1_cli_extension_interface.html" title=" " alt="" coords="283,69,472,96"/>
-<area shape="rect" id="node4" href="$classhal_1_1_fac_extension_interface.html" title=" " alt="" coords="281,183,474,209"/>
-<area shape="rect" id="node11" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="280,284,475,311"/>
-<area shape="rect" id="node3" href="$classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="527,5,717,32"/>
-<area shape="rect" id="node5" href="$classhal_1_1_h_g_l_parser_extension.html" title=" " alt="" coords="531,56,713,83"/>
-<area shape="rect" id="node6" href="$classhal_1_1_h_g_l_writer_extension.html" title=" " alt="" coords="532,107,712,133"/>
-<area shape="rect" id="node7" href="$classhal_1_1_liberty_parser_extension.html" title=" " alt="" coords="523,157,721,184"/>
-<area shape="rect" id="node8" href="$classhal_1_1_v_h_d_l_parser_extension.html" title=" " alt="" coords="527,208,717,235"/>
-<area shape="rect" id="node9" href="$classhal_1_1_verilog_parser_extension.html" title=" " alt="" coords="523,259,721,285"/>
-<area shape="rect" id="node10" href="$classhal_1_1_verilog_writer_extension.html" title=" " alt="" coords="523,309,721,336"/>
-<area shape="rect" id="node12" href="$classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="525,360,719,387"/>
+<area shape="rect" id="node1" href="$classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="5,360,232,387"/>
+<area shape="rect" id="node2" href="$classhal_1_1_cli_extension_interface.html" title=" " alt="" coords="283,107,472,133"/>
+<area shape="rect" id="node7" href="$classhal_1_1_fac_extension_interface.html" title=" " alt="" coords="281,360,474,387"/>
+<area shape="rect" id="node15" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="280,664,475,691"/>
+<area shape="rect" id="node3" href="$classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="563,5,752,32"/>
+<area shape="rect" id="node4" href="$classhal_1_1_cli_extension_python_shell.html" title=" " alt="" coords="553,56,761,83"/>
+<area shape="rect" id="node5" href="$classhal_1_1_cli_extensions_gui.html" title=" " alt="" coords="577,107,737,133"/>
+<area shape="rect" id="node6" href="$classhal_1_1_cli_extensions_perf_test.html" title=" " alt="" coords="562,157,753,184"/>
+<area shape="rect" id="node8" href="$classhal_1_1_gexf_writer_extension.html" title=" " alt="" coords="565,208,750,235"/>
+<area shape="rect" id="node9" href="$classhal_1_1_h_g_l_parser_extension.html" title=" " alt="" coords="567,259,748,285"/>
+<area shape="rect" id="node10" href="$classhal_1_1_h_g_l_writer_extension.html" title=" " alt="" coords="567,309,747,336"/>
+<area shape="rect" id="node11" href="$classhal_1_1_liberty_parser_extension.html" title=" " alt="" coords="558,360,757,387"/>
+<area shape="rect" id="node12" href="$classhal_1_1_v_h_d_l_parser_extension.html" title=" " alt="" coords="562,411,753,437"/>
+<area shape="rect" id="node13" href="$classhal_1_1_verilog_parser_extension.html" title=" " alt="" coords="558,461,757,488"/>
+<area shape="rect" id="node14" href="$classhal_1_1_verilog_writer_extension.html" title=" " alt="" coords="558,512,757,539"/>
+<area shape="rect" id="node16" href="$classhal_1_1_gui_extension_context.html" title=" " alt="" coords="564,563,751,589"/>
+<area shape="rect" id="node17" href="$classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="560,613,755,640"/>
+<area shape="rect" id="node18" href="$classhal_1_1_gui_extension_dot_viewer.html" title=" " alt="" coords="555,664,759,691"/>
+<area shape="rect" id="node19" href="$classhal_1_1_gui_extension_logic_evaluator.html" title=" " alt="" coords="541,715,773,741"/>
+<area shape="rect" id="node20" href="$classhal_1_1_gui_extension_module_identification.html" title="GUI extension interface for the module identification plugin." alt="" coords="523,765,792,792"/>
+<area shape="rect" id="node21" href="$classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="558,816,757,843"/>
 </map>

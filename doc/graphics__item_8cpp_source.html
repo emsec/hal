@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/graph_widget/items/graphics_item.cpp Source File</title>
+<title>HAL: plugins/gui/src/graph_widget/items/graphics_item.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -108,7 +110,7 @@ $(document).ready(function(){initNavTree('graphics__item_8cpp_source.html',''); 
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="classhal_1_1_graphics_item.html#ad5026cc90c226228638bfeafc276a9cf">sLod</a> = lod;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    }</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">   23</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">GraphicsItem::GraphicsItem</a>(<span class="keyword">const</span> <a class="code" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>) :</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">   23</a></span>&#160;    <a class="code" href="classhal_1_1_graphics_item.html#ab8965bbab77c3c96c6fa20a9fa58b7bd">GraphicsItem::GraphicsItem</a>(<span class="keyword">const</span> <a class="code" href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">ItemType</a> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>) :</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mItemType(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>),</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mHighlight(false),</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        mId(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>),</div>
@@ -122,7 +124,7 @@ $(document).ready(function(){initNavTree('graphics__item_8cpp_source.html',''); 
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classhal_1_1_graphics_item.html#a4f5bc6af869516d935ec9143aba34409">mItemType</a>;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">   37</a></span>&#160;    <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">GraphicsItem::id</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">   37</a></span>&#160;    <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">GraphicsItem::id</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classhal_1_1_graphics_item.html#a9c4df4387503cfebc024215ccd177af9">mId</a>;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
@@ -174,15 +176,15 @@ $(document).ready(function(){initNavTree('graphics__item_8cpp_source.html',''); 
 <div class="ttc" id="aclasshal_1_1_graphics_item_html_af245ab823135383a30a131a8f173f4a0"><div class="ttname"><a href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">hal::GraphicsItem::id</a></div><div class="ttdeci">u32 id() const</div><div class="ttdef"><b>Definition:</b> <a href="graphics__item_8cpp_source.html#l00037">graphics_item.cpp:37</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_manager_widget_html_a49dd1b299cfac83466bc42c2390a3a89"><div class="ttname"><a href="classhal_1_1_grouping_manager_widget.html#a49dd1b299cfac83466bc42c2390a3a89">hal::GroupingManagerWidget::getModel</a></div><div class="ttdeci">GroupingTableModel * getModel() const</div><div class="ttdef"><b>Definition:</b> <a href="grouping__manager__widget_8h_source.html#l00156">grouping_manager_widget.h:156</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_table_model_html_acd28f9dfab1c578f0402a991ca994117"><div class="ttname"><a href="classhal_1_1_grouping_table_model.html#acd28f9dfab1c578f0402a991ca994117">hal::GroupingTableModel::colorForItem</a></div><div class="ttdeci">QColor colorForItem(ItemType itemType, u32 itemId) const</div><div class="ttdef"><b>Definition:</b> <a href="grouping__table__model_8cpp_source.html#l00341">grouping_table_model.cpp:341</a></div></div>
+<div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="agraphics__item_8h_html"><div class="ttname"><a href="graphics__item_8h.html">graphics_item.h</a></div></div>
 <div class="ttc" id="agroup__gui_html_gaab0cd38a41c1215ae70822b1d501daa1"><div class="ttname"><a href="group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1">hal::ItemType</a></div><div class="ttdeci">ItemType</div><div class="ttdoc">The ItemType enum provides the enum type to classify graphic items into Modules, Gates or Nets....</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00044">gui_def.h:45</a></div></div>
 <div class="ttc" id="agrouping__manager__widget_8h_html"><div class="ttname"><a href="grouping__manager__widget_8h.html">grouping_manager_widget.h</a></div></div>
 <div class="ttc" id="agrouping__table__model_8h_html"><div class="ttname"><a href="grouping__table__model_8h.html">grouping_table_model.h</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="anamespacehal_html_a36ac15c9dc231bbb2cff96b936a5b8d4"><div class="ttname"><a href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">hal::gContentManager</a></div><div class="ttdeci">ContentManager * gContentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00078">plugin_gui.cpp:78</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::PinType::state</a></div><div class="ttdeci">@ state</div></div>
-<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a05e5f99d786b527ca4a260c21170c5e7"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></div><div class="ttdeci">PinType type</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">netlist_serializer.cpp:59</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_ab832d8349a6c8a3927b85c5ada524cb2"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a></div><div class="ttdeci">i32 id</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
 <div class="ttc" id="aqcolor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html">QColor</a></div></div>
@@ -197,7 +199,7 @@ $(document).ready(function(){initNavTree('graphics__item_8cpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_d567a330f572ed0886077de5e2105e8c.html">items</a></li><li class="navelem"><a class="el" href="graphics__item_8cpp.html">graphics_item.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

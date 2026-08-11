@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type_component/lut_component.h Source File</title>
+<title>HAL: include/hal_core/netlist/gate_library/gate_type_component/lut_component.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -117,32 +119,32 @@ $(document).ready(function(){initNavTree('lut__component_8h_source.html',''); in
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classhal_1_1_l_u_t_component.html">   32</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_l_u_t_component.html">LUTComponent</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="classhal_1_1_l_u_t_component.html#afbf2834ed8ec8c452e666d899ab0f74c">LUTComponent</a>(std::unique_ptr&lt;GateTypeComponent&gt; component, <span class="keywordtype">bool</span> init_ascending);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> <a class="code" href="classhal_1_1_l_u_t_component.html#a7d2a56cb79108b3c044066e1d058ff88">get_type</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_l_u_t_component.html#ae5a9e33404275dd5f1ee003717589408">is_class_of</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>* component);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        std::vector&lt;GateTypeComponent*&gt; <a class="code" href="classhal_1_1_l_u_t_component.html#a8f6370099b3ee28c75c1829957af989e">get_components</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_l_u_t_component.html#aabc82d8d1e5efaae4bd6f00a1ba43f0c">is_init_ascending</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_l_u_t_component.html#a88e0b6226de6897ef5c726f7ea2c7508">set_init_ascending</a>(<span class="keywordtype">bool</span> init_ascending = <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> m_type          = <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ab56efdaa67baedcc830a453ecd15b37f">ComponentType::lut</a>;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::unique_ptr&lt;GateTypeComponent&gt; m_component = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">bool</span> m_init_ascending = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    };</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhal_1_1_l_u_t_component.html">   35</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_l_u_t_component.html">LUTComponent</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classhal_1_1_l_u_t_component.html#afbf2834ed8ec8c452e666d899ab0f74c">LUTComponent</a>(std::unique_ptr&lt;GateTypeComponent&gt; component, <span class="keywordtype">bool</span> init_ascending);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> <a class="code" href="classhal_1_1_l_u_t_component.html#a7d2a56cb79108b3c044066e1d058ff88">get_type</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_l_u_t_component.html#ae5a9e33404275dd5f1ee003717589408">is_class_of</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>* component);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        std::vector&lt;GateTypeComponent*&gt; <a class="code" href="classhal_1_1_l_u_t_component.html#a8f6370099b3ee28c75c1829957af989e">get_components</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_l_u_t_component.html#aabc82d8d1e5efaae4bd6f00a1ba43f0c">is_init_ascending</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_l_u_t_component.html#a88e0b6226de6897ef5c726f7ea2c7508">set_init_ascending</a>(<span class="keywordtype">bool</span> init_ascending = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">ComponentType</a> m_type          = <a class="code" href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ab56efdaa67baedcc830a453ecd15b37f">ComponentType::lut</a>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        std::unique_ptr&lt;GateTypeComponent&gt; m_component = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordtype">bool</span> m_init_ascending = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    };</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_component_html"><div class="ttname"><a href="classhal_1_1_gate_type_component.html">hal::GateTypeComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00039">gate_type_component.h:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_component_html_a1ee2af2d1a1dba836136b2a9fce0f017"><div class="ttname"><a href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017">hal::GateTypeComponent::ComponentType</a></div><div class="ttdeci">ComponentType</div><div class="ttdef"><b>Definition:</b> <a href="gate__type__component_8h_source.html#l00047">gate_type_component.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_type_component_html_a1ee2af2d1a1dba836136b2a9fce0f017ab56efdaa67baedcc830a453ecd15b37f"><div class="ttname"><a href="classhal_1_1_gate_type_component.html#a1ee2af2d1a1dba836136b2a9fce0f017ab56efdaa67baedcc830a453ecd15b37f">hal::GateTypeComponent::ComponentType::lut</a></div><div class="ttdeci">@ lut</div></div>
-<div class="ttc" id="aclasshal_1_1_l_u_t_component_html"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html">hal::LUTComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8h_source.html#l00032">lut_component.h:33</a></div></div>
+<div class="ttc" id="aclasshal_1_1_l_u_t_component_html"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html">hal::LUTComponent</a></div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8h_source.html#l00035">lut_component.h:36</a></div></div>
 <div class="ttc" id="aclasshal_1_1_l_u_t_component_html_a7d2a56cb79108b3c044066e1d058ff88"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html#a7d2a56cb79108b3c044066e1d058ff88">hal::LUTComponent::get_type</a></div><div class="ttdeci">ComponentType get_type() const override</div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8cpp_source.html#l00009">lut_component.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_l_u_t_component_html_a88e0b6226de6897ef5c726f7ea2c7508"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html#a88e0b6226de6897ef5c726f7ea2c7508">hal::LUTComponent::set_init_ascending</a></div><div class="ttdeci">void set_init_ascending(bool init_ascending=true)</div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8cpp_source.html#l00047">lut_component.cpp:47</a></div></div>
 <div class="ttc" id="aclasshal_1_1_l_u_t_component_html_a8f6370099b3ee28c75c1829957af989e"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html#a8f6370099b3ee28c75c1829957af989e">hal::LUTComponent::get_components</a></div><div class="ttdeci">std::vector&lt; GateTypeComponent * &gt; get_components(const std::function&lt; bool(const GateTypeComponent *)&gt; &amp;filter=nullptr) const override</div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8cpp_source.html#l00019">lut_component.cpp:19</a></div></div>
@@ -150,14 +152,14 @@ $(document).ready(function(){initNavTree('lut__component_8h_source.html',''); in
 <div class="ttc" id="aclasshal_1_1_l_u_t_component_html_ae5a9e33404275dd5f1ee003717589408"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html#ae5a9e33404275dd5f1ee003717589408">hal::LUTComponent::is_class_of</a></div><div class="ttdeci">static bool is_class_of(const GateTypeComponent *component)</div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8cpp_source.html#l00014">lut_component.cpp:14</a></div></div>
 <div class="ttc" id="aclasshal_1_1_l_u_t_component_html_afbf2834ed8ec8c452e666d899ab0f74c"><div class="ttname"><a href="classhal_1_1_l_u_t_component.html#afbf2834ed8ec8c452e666d899ab0f74c">hal::LUTComponent::LUTComponent</a></div><div class="ttdeci">LUTComponent(std::unique_ptr&lt; GateTypeComponent &gt; component, bool init_ascending)</div><div class="ttdef"><b>Definition:</b> <a href="lut__component_8cpp_source.html#l00005">lut_component.cpp:5</a></div></div>
 <div class="ttc" id="agate__type__component_8h_html"><div class="ttname"><a href="gate__type__component_8h.html">gate_type_component.h</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_99c48257bccc675a80b3dd868bdc8162.html">gate_library</a></li><li class="navelem"><a class="el" href="dir_527facc1459bfa3f362f8599485e2a7b.html">gate_type_component</a></li><li class="navelem"><a class="el" href="lut__component_8h.html">lut_component.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

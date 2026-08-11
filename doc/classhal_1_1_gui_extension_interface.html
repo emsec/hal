@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -90,15 +92,20 @@ $(document).ready(function(){initNavTree('classhal_1_1_gui_extension_interface.h
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gui__extension__interface_8h_source.html">hal_core/plugin_system/gui_extension_interface.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::GuiExtensionInterface:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gui_extension_interface__inherit__graph.png" border="0" usemap="#ahal_1_1_gui_extension_interface_inherit__map" alt="Inheritance graph"/></div>
 <map name="ahal_1_1_gui_extension_interface_inherit__map" id="ahal_1_1_gui_extension_interface_inherit__map">
-<area shape="rect" title=" " alt="" coords="11,145,235,296"/>
-<area shape="rect" href="classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="11,344,235,495"/>
-<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="5,5,240,97"/>
+<area shape="rect" title=" " alt="" coords="599,145,823,296"/>
+<area shape="rect" href="classhal_1_1_gui_extension_context.html" title=" " alt="" coords="5,351,215,502"/>
+<area shape="rect" href="classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="239,351,463,502"/>
+<area shape="rect" href="classhal_1_1_gui_extension_dot_viewer.html" title=" " alt="" coords="488,366,692,487"/>
+<area shape="rect" href="classhal_1_1_gui_extension_logic_evaluator.html" title=" " alt="" coords="717,351,949,502"/>
+<area shape="rect" href="classhal_1_1_gui_extension_module_identification.html" title="GUI extension interface for the module identification plugin." alt="" coords="973,344,1242,509"/>
+<area shape="rect" href="classhal_1_1_gui_extension_simulator.html" title=" " alt="" coords="1267,373,1465,480"/>
+<area shape="rect" href="classhal_1_1_abstract_extension_interface.html" title=" " alt="" coords="594,5,829,97"/>
 </map>
 </div>
 <div class="dynheader">
@@ -123,9 +130,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af1ca25c1234985faaabb3cc5060d2eb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad71442d65633cbfbc939f052ea5fa7a5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#ad71442d65633cbfbc939f052ea5fa7a5">register_progress_indicator</a> (std::function&lt; void(int, const std::string &amp;)&gt; pif)</td></tr>
 <tr class="separator:ad71442d65633cbfbc939f052ea5fa7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c3bc15ce0f1f96d2a54ace22dfa9477"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structhal_1_1_context_menu_contribution.html">ContextMenuContribution</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#a1c3bc15ce0f1f96d2a54ace22dfa9477">get_context_contribution</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;mods, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gats, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;nets)</td></tr>
+<tr class="memitem:a1c3bc15ce0f1f96d2a54ace22dfa9477"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; <a class="el" href="structhal_1_1_context_menu_contribution.html">ContextMenuContribution</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#a1c3bc15ce0f1f96d2a54ace22dfa9477">get_context_contribution</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;mods, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;gats, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;nets)</td></tr>
 <tr class="separator:a1c3bc15ce0f1f96d2a54ace22dfa9477"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cf49aaee37a182da0f94b697ee86699"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#a4cf49aaee37a182da0f94b697ee86699">execute_function</a> (std::string tag, <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;mods, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gats, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;nets)</td></tr>
+<tr class="memitem:a4cf49aaee37a182da0f94b697ee86699"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#a4cf49aaee37a182da0f94b697ee86699">execute_function</a> (std::string tag, <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;mods, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;gats, const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;nets)</td></tr>
 <tr class="separator:a4cf49aaee37a182da0f94b697ee86699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa153be7c77b26ff62cf1d7af86057ea"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_interface.html#aaa153be7c77b26ff62cf1d7af86057ea">netlist_loaded</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl)</td></tr>
 <tr class="separator:aaa153be7c77b26ff62cf1d7af86057ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,8 +151,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a751b42cfec9354dc5d576a207557229e inherit pub_methods_classhal_1_1_abstract_extension_interface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00046">46</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<div class="textblock"><p>A plugin extension that adds contributions to the GUI, e.g., configurable parameters and context menu entries. </p>
+
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00052">52</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a670b11f0a20ab3861bcb64b62864146a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a670b11f0a20ab3861bcb64b62864146a">&#9670;&nbsp;</a></span>GuiExtensionInterface()</h2>
@@ -171,7 +179,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00051">51</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00057">57</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 </div>
 </div>
@@ -198,7 +206,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00054">54</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00060">60</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 </div>
 </div>
@@ -227,7 +235,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Get top label for context menu contributions. If empty the plugin name will show as top label. </p><dl class="section return"><dt>Returns</dt><dd>The label or empty if no label different from plugin name was provided for constructor. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00134">134</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00140">140</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00090">hal::GuiPluginManager::addPluginActions()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00302">hal::GuiPluginManager::addPluginSubmenus()</a>.</p>
 
@@ -257,19 +265,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>mods</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gats</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>nets</em>&#160;</td>
         </tr>
         <tr>
@@ -296,7 +304,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">hal::GuiExtensionDataflow</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a74e947c3c28557d308fdb36aea1e7130">hal::GuiExtensionModuleIdentification</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a4788e18368dd3c2d2b3f200770ce88ad">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#ac1ebae27126641fb4177f230520a62c0">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">hal::GuiExtensionDataflow</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00018">18</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -322,19 +330,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>mods</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>gats</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>nets</em>&#160;</td>
         </tr>
         <tr>
@@ -360,6 +368,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#a6b0e0acac87c6fb30c642c5e972751b1">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#af31567a7f0d17f072d0fc8fffb5a962b">hal::GuiExtensionContext</a>, and <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a164ad9a39d0667af1180bfc9752c5ca7">hal::GuiExtensionModuleIdentification</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00010">10</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -392,7 +402,7 @@ Public Member Functions</h2></td></tr>
 <p>Get list of configurable parameter</p>
 <dl class="section return"><dt>Returns</dt><dd>List of configurable parameter </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">hal::GuiExtensionDataflow</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_simulator.html#a36a0470c8e375fe79de5fbe37e6d99c7">hal::GuiExtensionSimulator</a>, <a class="el" href="classhal_1_1_gui_extension_module_identification.html#ab90cd2e1a0373f6c170ba4446205f4fd">hal::GuiExtensionModuleIdentification</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#aa89bad8a253e9af2c98185eb99c82735">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#a79623283d66d2c14787a15dc06909fb4">hal::GuiExtensionContext</a>, <a class="el" href="classhal_1_1_gui_extension_dot_viewer.html#a3e291badc7e60c47ca35a1aa9c7c5c2c">hal::GuiExtensionDotViewer</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">hal::GuiExtensionDataflow</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00004">4</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -422,9 +432,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Check whether context menu contributions are enabled for this plugin </p><dl class="section return"><dt>Returns</dt><dd>True if enabled, false otherwise </dd></dl>
+<p>Check whether context menu contributions are enabled for this plugin </p><dl class="section return"><dt>Returns</dt><dd><code>true</code> if enabled, <code>false</code> otherwise </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00122">122</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00128">128</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00090">hal::GuiPluginManager::addPluginActions()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00302">hal::GuiPluginManager::addPluginSubmenus()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00996">hal::GuiPluginEntry::enforceGuiExtensionState()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01116">hal::GuiPluginDelegate::paint()</a>.</p>
 
@@ -459,6 +469,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dot_viewer.html#ae7d8edee50e5eca2ba9c82ce215270e4">hal::GuiExtensionDotViewer</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00027">27</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -532,7 +544,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">hal::GuiExtensionDataflow</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a0169ad4cb603e8afcb27e19dd9cbf277">hal::GuiExtensionModuleIdentification</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">hal::GuiExtensionDataflow</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00006">6</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
@@ -568,7 +580,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00128">128</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00134">134</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00996">hal::GuiPluginEntry::enforceGuiExtensionState()</a>.</p>
 
@@ -605,17 +617,17 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">hal::GuiExtensionDataflow</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_simulator.html#a44aebfbfa4e25f80f7d9407ad7a27c47">hal::GuiExtensionSimulator</a>, <a class="el" href="classhal_1_1_gui_extension_module_identification.html#a1cab62d6fbc130580cbcec52395f69d3">hal::GuiExtensionModuleIdentification</a>, <a class="el" href="classhal_1_1_gui_extension_logic_evaluator.html#afba1d90949d0fd93a8450aba82888239">hal::GuiExtensionLogicEvaluator</a>, <a class="el" href="classhal_1_1_gui_extension_context.html#ac4efcb2393beae658cb8bfe89f037b93">hal::GuiExtensionContext</a>, <a class="el" href="classhal_1_1_gui_extension_dot_viewer.html#a2a6262d1336c159cde3c3814a52cd9d3">hal::GuiExtensionDotViewer</a>, and <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">hal::GuiExtensionDataflow</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="gui__extension__interface_8cpp_source.html#l00008">8</a> of file <a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__parameter__dialog_8cpp_source.html#l00209">hal::PluginParameterDialog::accept()</a>, and <a class="el" href="result_8cpp_source.html#l00250">hal::dataflow::Result::open_dot_in_viewer()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__parameter__dialog_8cpp_source.html#l00209">hal::PluginParameterDialog::accept()</a>, and <a class="el" href="dataflow__analysis_2src_2api_2result_8cpp_source.html#l00250">hal::dataflow::Result::open_dot_in_viewer()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/plugin_system/<a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a></li>
-<li>/home/runner/work/hal/hal/src/plugin_system/<a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a></li>
+<li>include/hal_core/plugin_system/<a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a></li>
+<li>src/plugin_system/<a class="el" href="gui__extension__interface_8cpp_source.html">gui_extension_interface.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -623,7 +635,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_extension_interface.html">GuiExtensionInterface</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

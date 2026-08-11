@@ -16,11 +16,7 @@ var group__settings =
       [ "setIconStyle", "classhal_1_1_expanding_list_button.html#a42913a11de423a54caf29fc063ad9679", null ],
       [ "setSelected", "classhal_1_1_expanding_list_button.html#a06f2797f7fc177bc7e353481952cf6b7", null ],
       [ "setText", "classhal_1_1_expanding_list_button.html#a9c1583606e5897d4b052469ccbc0eebf", null ],
-      [ "text", "classhal_1_1_expanding_list_button.html#a38a3e11b7e4d7f93d41339d8dca1136c", null ],
-      [ "hover", "classhal_1_1_expanding_list_button.html#aadee1ae499cc2e50f598d96220a39611", null ],
-      [ "iconStyle", "classhal_1_1_expanding_list_button.html#a6da932428e095e768d3a0b51787af046", null ],
-      [ "level", "classhal_1_1_expanding_list_button.html#afcd8efbfba28bb3592233642003025c3", null ],
-      [ "selected", "classhal_1_1_expanding_list_button.html#a0dee28b46b13de71b977e716aced51b8", null ]
+      [ "text", "classhal_1_1_expanding_list_button.html#a38a3e11b7e4d7f93d41339d8dca1136c", null ]
     ] ],
     [ "ExpandingListItem", "classhal_1_1_expanding_list_item.html", [
       [ "ExpandingListItem", "classhal_1_1_expanding_list_item.html#ada2d2409cfdd4620fb678fa50e758907", null ],
@@ -33,9 +29,7 @@ var group__settings =
       [ "repolish", "classhal_1_1_expanding_list_item.html#a09fb27b61b01976b6b0df6f1de2c3e25", null ],
       [ "resizeEvent", "classhal_1_1_expanding_list_item.html#aca2ef25456ea4fbf68bfb71761c3c886", null ],
       [ "setFixedHeight", "classhal_1_1_expanding_list_item.html#a02a490d7327660cad4c92cf7733155c3", null ],
-      [ "sizeHint", "classhal_1_1_expanding_list_item.html#af73af7a4b2d2ba91b125f10b6da8c15f", null ],
-      [ "expanded", "classhal_1_1_expanding_list_item.html#a2ecd1f8f06fccb1374c63c23ebf1e3cc", null ],
-      [ "fixedHeight", "classhal_1_1_expanding_list_item.html#ad3384e9860dd575bec2c6718e0bb9bcf", null ]
+      [ "sizeHint", "classhal_1_1_expanding_list_item.html#af73af7a4b2d2ba91b125f10b6da8c15f", null ]
     ] ],
     [ "ExpandingListGroup", "classhal_1_1_expanding_list_group.html", [
       [ "ExpandingListGroup", "classhal_1_1_expanding_list_group.html#a5fdd2a803d6d2b34ad682129977d2407", null ],
@@ -64,9 +58,7 @@ var group__settings =
       [ "load", "classhal_1_1_keybind_edit.html#acab7fb6090db27e591701781415e1d46", null ],
       [ "setHasGrab", "classhal_1_1_keybind_edit.html#a9f94e92342e2609c0adcd586efe4846b", null ],
       [ "setValidated", "classhal_1_1_keybind_edit.html#a2a85fa50377d69d3d5ea61cb1be7d60e", null ],
-      [ "validated", "classhal_1_1_keybind_edit.html#a4be4190483347c53a4e1e46ff414db67", null ],
-      [ "hasGrab", "classhal_1_1_keybind_edit.html#aa82badefa99e6a1ab6a7d75960b8d28e", null ],
-      [ "validated", "classhal_1_1_keybind_edit.html#a78033cb786211e5fe9f4b382441b1fee", null ]
+      [ "validated", "classhal_1_1_keybind_edit.html#a4be4190483347c53a4e1e46ff414db67", null ]
     ] ],
     [ "AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", [
       [ "assign", "classhal_1_1_assigned_keybind_map.html#a0ed41dadbeafeeb51c87f0d5a2cf9039", null ],
@@ -225,8 +217,7 @@ var group__settings =
       [ "mDefaultButton", "classhal_1_1_settings_widget.html#a964105391119c0bfd243763af8578da3", null ],
       [ "mNameLabel", "classhal_1_1_settings_widget.html#a449526cc0baf75ddee00c2db4656ea06", null ],
       [ "mRevertButton", "classhal_1_1_settings_widget.html#a2a5d9c00a7b8d22cf104b77f8e84190c", null ],
-      [ "mSettingsItem", "classhal_1_1_settings_widget.html#aa6c7ec1a188c4c260967642f38ff9ab9", null ],
-      [ "dirty", "classhal_1_1_settings_widget.html#a998bbd517886a37aa7b85dc803c8bf3e", null ]
+      [ "mSettingsItem", "classhal_1_1_settings_widget.html#aa6c7ec1a188c4c260967642f38ff9ab9", null ]
     ] ],
     [ "SettingsWidgetCheckbox", "classhal_1_1_settings_widget_checkbox.html", [
       [ "SettingsWidgetCheckbox", "classhal_1_1_settings_widget_checkbox.html#aee23d97b393cc9d98e9c169c9430f008", null ],

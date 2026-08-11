@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_json_write_object.html','
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="json__write__document_8h_source.html">hal_core/utilities/json_write_document.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::JsonWriteObject:</div>
 <div class="dyncontent">
@@ -150,7 +152,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ac08f7fad27e184acacb469db32151aa5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_object.html#ac08f7fad27e184acacb469db32151aa5">add_member</a> (rapidjson::Document::ValueType &amp;&amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, rapidjson::Document::ValueType &amp;&amp;value, rapidjson::Document::AllocatorType &amp;<a class="el" href="classhal_1_1_json_write_data.html#abffaab0f8e493ffcf3c7c3e09e948556">allocator</a>)</td></tr>
+<tr class="memitem:ac08f7fad27e184acacb469db32151aa5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_object.html#ac08f7fad27e184acacb469db32151aa5">add_member</a> (rapidjson::Document::ValueType &amp;&amp;<a class="el" href="netlist__preprocessing_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, rapidjson::Document::ValueType &amp;&amp;value, rapidjson::Document::AllocatorType &amp;<a class="el" href="classhal_1_1_json_write_data.html#abffaab0f8e493ffcf3c7c3e09e948556">allocator</a>)</td></tr>
 <tr class="separator:ac08f7fad27e184acacb469db32151aa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3db9f37da3dc71a541393e0bf32041e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_json_write_object.html#ad3db9f37da3dc71a541393e0bf32041e">finalize</a> (<a class="el" href="classhal_1_1_json_write_complex.html">JsonWriteComplex</a> *cplx) override</td></tr>
 <tr class="separator:ad3db9f37da3dc71a541393e0bf32041e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,8 +181,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3b602a6e5fbdb08b71fa564ba829c61e inherit pro_attribs_classhal_1_1_json_write_data"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00135">135</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<div class="textblock"><p>A JSON object that members and nested objects or arrays can be added to. </p>
+
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00138">138</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a17b1918bf8760e9327e7419c0bc19fe2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17b1918bf8760e9327e7419c0bc19fe2">&#9670;&nbsp;</a></span>JsonWriteObject()</h2>
@@ -245,7 +248,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00155">155</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00158">158</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 </div>
 </div>
@@ -278,7 +281,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00110">hal::JsonWriteComplex::JsonWriteArray</a>, and <a class="el" href="json__write__document_8h_source.html#l00114">hal::JsonWriteComplex::mChildData</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="grouping__serializer_8cpp_source.html#l00023">hal::GroupingSerializer::serialize()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, <a class="el" href="wave__tree__model_8cpp_source.html#l00085">hal::WaveTreeModel::persist()</a>, and <a class="el" href="grouping__serializer_8cpp_source.html#l00023">hal::GroupingSerializer::serialize()</a>.</p>
 
 </div>
 </div>
@@ -360,6 +363,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00109">hal::JsonWriteComplex::JsonWriteObject</a>, and <a class="el" href="json__write__document_8h_source.html#l00114">hal::JsonWriteComplex::mChildData</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="netlist__simulator__controller_8cpp_source.html#l00483">hal::NetlistSimulatorController::persist()</a>, and <a class="el" href="wave__tree__model_8cpp_source.html#l00085">hal::WaveTreeModel::persist()</a>.</p>
+
 </div>
 </div>
 <a id="ad3db9f37da3dc71a541393e0bf32041e"></a>
@@ -422,7 +427,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="json__write__document_8cpp_source.html#l00100">100</a> of file <a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00137">JsonWriteData</a>, and <a class="el" href="json__write__document_8h_source.html#l00114">hal::JsonWriteComplex::mChildData</a>.</p>
+<p class="reference">References <a class="el" href="json__write__document_8h_source.html#l00140">JsonWriteData</a>, and <a class="el" href="json__write__document_8h_source.html#l00114">hal::JsonWriteComplex::mChildData</a>.</p>
 
 </div>
 </div>
@@ -447,7 +452,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00137">137</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00140">140</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="json__write__document_8cpp_source.html#l00100">operator[]()</a>.</p>
 
@@ -473,13 +478,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00138">138</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__write__document_8h_source.html#l00141">141</a> of file <a class="el" href="json__write__document_8h_source.html">json_write_document.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/utilities/<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a></li>
-<li>/home/runner/work/hal/hal/src/utilities/<a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a></li>
+<li>include/hal_core/utilities/<a class="el" href="json__write__document_8h_source.html">json_write_document.h</a></li>
+<li>src/utilities/<a class="el" href="json__write__document_8cpp_source.html">json_write_document.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -487,7 +492,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_json_write_object.html">JsonWriteObject</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

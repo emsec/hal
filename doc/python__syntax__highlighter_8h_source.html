@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/include/gui/code_editor/syntax_highlighter/python_syntax_highlighter.h Source File</title>
+<title>HAL: plugins/gui/include/gui/code_editor/syntax_highlighter/python_syntax_highlighter.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -132,23 +134,23 @@ $(document).ready(function(){initNavTree('python__syntax__highlighter_8h_source.
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">int</span> closeMultilineComment(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a>&amp; delimiter, <span class="keyword">const</span> <span class="keywordtype">int</span> offset = 0);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keyword">struct </span>HighlightingRule</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mPattern;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtextcharformat.html">QTextCharFormat</a> mFormat;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        };</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;HighlightingRule&gt;</a> mHighlightingRules;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mMultiLineCommentDelimiter;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mTrippleSingleQuote;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mTrippleDoubleQuote;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    };</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">struct </span>HighlightingRule</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mPattern;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtextcharformat.html">QTextCharFormat</a> mFormat;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        };</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvector.html">QVector&lt;HighlightingRule&gt;</a> mHighlightingRules;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mMultiLineCommentDelimiter;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mTrippleSingleQuote;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a> mTrippleDoubleQuote;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    };</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}</div>
 <div class="ttc" id="aclasshal_1_1_python_syntax_highlighter_html"><div class="ttname"><a href="classhal_1_1_python_syntax_highlighter.html">hal::PythonSyntaxHighlighter</a></div><div class="ttdoc">A syntax highlighter that fits for python code.</div><div class="ttdef"><b>Definition:</b> <a href="python__syntax__highlighter_8h_source.html#l00050">python_syntax_highlighter.h:51</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_syntax_highlighter_html_a40afab1768c803aa19b73d0c29d185f0"><div class="ttname"><a href="classhal_1_1_python_syntax_highlighter.html#a40afab1768c803aa19b73d0c29d185f0">hal::PythonSyntaxHighlighter::PythonSyntaxHighlighter</a></div><div class="ttdeci">PythonSyntaxHighlighter(QTextDocument *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="python__syntax__highlighter_8cpp_source.html#l00006">python_syntax_highlighter.cpp:6</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_syntax_highlighter_html_abfdc072d1d4c233871df0854ab9e35f7"><div class="ttname"><a href="classhal_1_1_python_syntax_highlighter.html#abfdc072d1d4c233871df0854ab9e35f7">hal::PythonSyntaxHighlighter::highlightBlock</a></div><div class="ttdeci">void highlightBlock(const QString &amp;text) override</div><div class="ttdef"><b>Definition:</b> <a href="python__syntax__highlighter_8cpp_source.html#l00080">python_syntax_highlighter.cpp:80</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aqregularexpression_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qregularexpression.html">QRegularExpression</a></div></div>
@@ -163,7 +165,7 @@ $(document).ready(function(){initNavTree('python__syntax__highlighter_8h_source.
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e597ffa93f7bdb95469ec32316daa779.html">code_editor</a></li><li class="navelem"><a class="el" href="dir_4b346f2da5758358aaea2285e1f43dfc.html">syntax_highlighter</a></li><li class="navelem"><a class="el" href="python__syntax__highlighter_8h.html">python_syntax_highlighter.h</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:46 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

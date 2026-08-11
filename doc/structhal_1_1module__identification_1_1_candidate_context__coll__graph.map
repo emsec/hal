@@ -1,0 +1,4 @@
+<map id="hal::module_identification::CandidateContext" name="hal::module_identification::CandidateContext">
+<area shape="rect" id="node1" title="This struct manages the context of a candidate during module identification, including caches for all..." alt="" coords="5,219,219,428"/>
+<area shape="rect" id="node2" href="$classhal_1_1_netlist.html" title=" " alt="" coords="50,5,174,156"/>
+</map>

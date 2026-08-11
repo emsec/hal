@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -92,7 +94,7 @@ $(document).ready(function(){initNavTree('structhal_1_1_s_m_t_1_1_constraint.htm
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="types_8h_source.html">types.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">hal_core/netlist/boolean_function/types.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::SMT::Constraint:</div>
 <div class="dyncontent">
@@ -131,7 +133,7 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a constraint to the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> query. A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00147">147</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00150">150</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab8f8f64bef41e927c39f9f38ed047077"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8f8f64bef41e927c39f9f38ed047077">&#9670;&nbsp;</a></span>Constraint() <span class="overload">[1/2]</span></h2>
@@ -164,7 +166,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00143">143</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00143">143</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -210,7 +212,7 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00147">147</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00147">147</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -232,9 +234,9 @@ Friends</h2></td></tr>
 <p>Returns the assignment constraint as a pair of Boolean functions.</p>
 <dl class="section return"><dt>Returns</dt><dd>The assignment constraint on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00178">178</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00178">178</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00154">constraint</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00157">constraint</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="symbolic__execution_8cpp_source.html#l00580">hal::SMT::SymbolicExecution::evaluate()</a>.</p>
 
@@ -257,9 +259,9 @@ Friends</h2></td></tr>
 <p>Returns the function constraint.</p>
 <dl class="section return"><dt>Returns</dt><dd>The function constraint on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00187">187</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00187">187</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00154">constraint</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00157">constraint</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00060">ERR</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00056">OK</a>.</p>
 
 </div>
 </div>
@@ -280,11 +282,11 @@ Friends</h2></td></tr>
 <p>Checks whether the constraint is an assignment constraint.</p>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the constraint is an assignment, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00173">173</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00173">173</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8h_source.html#l00154">constraint</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00157">constraint</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="symbolic__execution_8cpp_source.html#l00580">hal::SMT::SymbolicExecution::evaluate()</a>, <a class="el" href="types_8cpp_source.html#l00178">get_assignment()</a>, <a class="el" href="types_8cpp_source.html#l00187">get_function()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="symbolic__execution_8cpp_source.html#l00580">hal::SMT::SymbolicExecution::evaluate()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00178">get_assignment()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00187">get_function()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
@@ -305,7 +307,7 @@ Friends</h2></td></tr>
 <p>Translate the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> constraint into its string representation.</p>
 <dl class="section return"><dt>Returns</dt><dd>A string representing the <a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a> constraint. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00166">166</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00166">166</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +355,7 @@ Friends</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the output stream. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="types_8cpp_source.html#l00151">151</a> of file <a class="el" href="types_8cpp_source.html">types.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00151">151</a> of file <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a>.</p>
 
 </div>
 </div>
@@ -372,15 +374,15 @@ Friends</h2></td></tr>
 
 <p>A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar. </p>
 
-<p class="definition">Definition at line <a class="el" href="types_8h_source.html#l00154">154</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html#l00157">157</a> of file <a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="types_8cpp_source.html#l00178">get_assignment()</a>, <a class="el" href="types_8cpp_source.html#l00187">get_function()</a>, <a class="el" href="types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00178">get_assignment()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00187">get_function()</a>, <a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html#l00173">is_assignment()</a>, and <a class="el" href="smt_8cpp_source.html#l00005">hal::smt_init()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/boolean_function/<a class="el" href="types_8h_source.html">types.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/boolean_function/<a class="el" href="types_8cpp_source.html">types.cpp</a></li>
+<li>include/hal_core/netlist/boolean_function/<a class="el" href="include_2hal__core_2netlist_2boolean__function_2types_8h_source.html">types.h</a></li>
+<li>src/netlist/boolean_function/<a class="el" href="src_2netlist_2boolean__function_2types_8cpp_source.html">types.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -388,7 +390,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1_s_m_t.html">SMT</a></li><li class="navelem"><a class="el" href="structhal_1_1_s_m_t_1_1_constraint.html">Constraint</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

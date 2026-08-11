@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/gui/src/gatelibrary_management/gatelibrary_graphics_view.cpp Source File</title>
+<title>HAL: plugins/gui/src/gatelibrary_management/gatelibrary_graphics_view.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -109,10 +111,10 @@ $(document).ready(function(){initNavTree('gatelibrary__graphics__view_8cpp_sourc
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#scale">scale</a>(scalef, scalef);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_gatelibrary_graphics_view.html#ab7d42213272bc86ac7748ced8e64b607">   24</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_graphics_view.html#ab7d42213272bc86ac7748ced8e64b607">GatelibraryGraphicsView::showGate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a> *<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>)</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_gatelibrary_graphics_view.html#ab7d42213272bc86ac7748ced8e64b607">   24</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_gatelibrary_graphics_view.html#ab7d42213272bc86ac7748ced8e64b607">GatelibraryGraphicsView::showGate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a> *g)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">if</span>(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>){</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* gg = <a class="code" href="namespacehal_1_1_graphics_factory.html#a992f059f6bcf2ba92a2e22652735c0a8">GraphicsFactory::createGraphicsGate</a>(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>,0);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">if</span>(g){</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* gg = <a class="code" href="namespacehal_1_1_graphics_factory.html#a992f059f6bcf2ba92a2e22652735c0a8">GraphicsFactory::createGraphicsGate</a>(g,0);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            gg-&gt;<a class="code" href="classhal_1_1_graphics_item.html#a6386d74cab6c19494707c58511a39c6f">setLod</a>(1.0);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#rect-prop">rect</a> = gg-&gt;<a class="code" href="classhal_1_1_graphics_node.html#a0d4e0774a664e45bc3f98893c5545b6a">boundingRect</a>();</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsview.html#scene">scene</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#clear">clear</a>();</div>
@@ -137,8 +139,7 @@ $(document).ready(function(){initNavTree('gatelibrary__graphics__view_8cpp_sourc
 <div class="ttc" id="agatelibrary__graphics__view_8h_html"><div class="ttname"><a href="gatelibrary__graphics__view_8h.html">gatelibrary_graphics_view.h</a></div></div>
 <div class="ttc" id="agraphics__factory_8h_html"><div class="ttname"><a href="graphics__factory_8h.html">graphics_factory.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_graphics_factory_html_a992f059f6bcf2ba92a2e22652735c0a8"><div class="ttname"><a href="namespacehal_1_1_graphics_factory.html#a992f059f6bcf2ba92a2e22652735c0a8">hal::GraphicsFactory::createGraphicsGate</a></div><div class="ttdeci">GraphicsGate * createGraphicsGate(Gate *g, const int type)</div><div class="ttdef"><b>Definition:</b> <a href="graphics__factory_8cpp_source.html#l00039">graphics_factory.cpp:39</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
-<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="aqgraphicsscene_html_addItem"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#addItem">QGraphicsScene::addItem</a></div><div class="ttdeci">void addItem(QGraphicsItem *item)</div></div>
 <div class="ttc" id="aqgraphicsscene_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#clear">QGraphicsScene::clear</a></div><div class="ttdeci">void clear()</div></div>
 <div class="ttc" id="aqgraphicsscene_html_sceneRect-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#sceneRect-prop">QGraphicsScene::setSceneRect</a></div><div class="ttdeci">void setSceneRect(const QRectF &amp;rect)</div></div>
@@ -156,7 +157,7 @@ $(document).ready(function(){initNavTree('gatelibrary__graphics__view_8cpp_sourc
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_e94d755b33bc55104d832e61a117714c.html">gatelibrary_management</a></li><li class="navelem"><a class="el" href="gatelibrary__graphics__view_8cpp.html">gatelibrary_graphics_view.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:47 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

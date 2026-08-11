@@ -1,5 +1,5 @@
 <map id="hal::ContentWidget" name="hal::ContentWidget">
-<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="378,1575,527,1945"/>
+<area shape="rect" id="node1" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="378,1575,527,1931"/>
 <area shape="rect" id="node2" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="5,1303,113,1424"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="127,396,333,840"/>
 <area shape="rect" id="node9" href="$classhal_1_1_content_frame.html" title="Wraps the ContentWidget class." alt="" coords="138,1288,325,1439"/>

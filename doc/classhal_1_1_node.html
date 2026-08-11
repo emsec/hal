@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -94,7 +96,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_node.html',''); initResiz
 <p>The <a class="el" href="classhal_1_1_node.html" title="The Node class object represents a module or a gate.">Node</a> class object represents a module or a gate.  
  <a href="classhal_1_1_node.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="gui__def_8h_source.html">gui_def.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="gui__def_8h_source.html">/home/runner/work/hal/hal/plugins/gui/include/gui/gui_def.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::Node:</div>
 <div class="dyncontent">
@@ -114,12 +116,12 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acb24042240bb31f17a887ba76b25449a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#acb24042240bb31f17a887ba76b25449a">Node</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> i=0, <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34">NodeType</a> t=<a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">None</a>)</td></tr>
+<tr class="memitem:acb24042240bb31f17a887ba76b25449a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#acb24042240bb31f17a887ba76b25449a">Node</a> (<a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> i=0, <a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34">NodeType</a> t=<a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34ac7228ae4039373b165b4c709c27f91f8">None</a>)</td></tr>
 <tr class="separator:acb24042240bb31f17a887ba76b25449a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a307f9316d8728fb5e34cb90529dbe234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node.html#a6c45a5cdff7a8605756256c939244e34">NodeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#a307f9316d8728fb5e34cb90529dbe234">type</a> () const</td></tr>
 <tr class="memdesc:a307f9316d8728fb5e34cb90529dbe234"><td class="mdescLeft">&#160;</td><td class="mdescRight">type getter for type information  <a href="classhal_1_1_node.html#a307f9316d8728fb5e34cb90529dbe234">More...</a><br /></td></tr>
 <tr class="separator:a307f9316d8728fb5e34cb90529dbe234"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb47b4912d86e9a074a501e5027b88f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#aeb47b4912d86e9a074a501e5027b88f4">id</a> () const</td></tr>
+<tr class="memitem:aeb47b4912d86e9a074a501e5027b88f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#aeb47b4912d86e9a074a501e5027b88f4">id</a> () const</td></tr>
 <tr class="memdesc:aeb47b4912d86e9a074a501e5027b88f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">id getter for ID information  <a href="classhal_1_1_node.html#aeb47b4912d86e9a074a501e5027b88f4">More...</a><br /></td></tr>
 <tr class="separator:aeb47b4912d86e9a074a501e5027b88f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adacd3a9d2917a4d6761653f840e72d86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_node.html#adacd3a9d2917a4d6761653f840e72d86">isNull</a> () const</td></tr>
@@ -181,7 +183,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">hal::Node::Node </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a>&#160;</td>
           <td class="paramname"><em>i</em> = <code>0</code>, </td>
         </tr>
         <tr>
@@ -218,7 +220,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> hal::Node::id </td>
+          <td class="memname"><a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> hal::Node::id </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -236,7 +238,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00077">77</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="standard__graph__layouter_8cpp_source.html#l00028">hal::StandardGraphLayouter::add()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00095">hal::CommentEntry::dump()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="wait__to__be__seated_8h_source.html#l00057">hal::WaitToBeSeatedEntry::getId()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="node__box_8h_source.html#l00087">hal::NodeBox::id()</a>, <a class="el" href="wait__to__be__seated_8cpp_source.html#l00060">hal::WaitToBeSeatedEntry::isModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00898">hal::GraphContext::isScheduledRemove()</a>, <a class="el" href="gui__def_8h_source.html#l00146">hal::GridPlacement::setGatePosition()</a>, <a class="el" href="gui__def_8h_source.html#l00169">hal::GridPlacement::setModulePosition()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00076">hal::CommentEntry::toJson()</a>, and <a class="el" href="action__add__items__to__object_8cpp_source.html#l00044">hal::ActionAddItemsToObject::writeToXml()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="standard__graph__layouter_8cpp_source.html#l00028">hal::StandardGraphLayouter::add()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00095">hal::CommentEntry::dump()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="wait__to__be__seated_8h_source.html#l00062">hal::WaitToBeSeatedEntry::getId()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="node__box_8h_source.html#l00087">hal::NodeBox::id()</a>, <a class="el" href="wait__to__be__seated_8cpp_source.html#l00060">hal::WaitToBeSeatedEntry::isModule()</a>, <a class="el" href="graph__context_8cpp_source.html#l00898">hal::GraphContext::isScheduledRemove()</a>, <a class="el" href="node__box_8cpp_source.html#l00094">hal::qHash()</a>, <a class="el" href="gui__def_8h_source.html#l00149">hal::GridPlacement::setGatePosition()</a>, <a class="el" href="gui__def_8h_source.html#l00172">hal::GridPlacement::setModulePosition()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00076">hal::CommentEntry::toJson()</a>, and <a class="el" href="action__add__items__to__object_8cpp_source.html#l00044">hal::ActionAddItemsToObject::writeToXml()</a>.</p>
 
 </div>
 </div>
@@ -264,13 +266,13 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>isGate test whether node is a gate </p>
-<dl class="section return"><dt>Returns</dt><dd>true if node is a gate </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if node is a gate, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00089">89</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">Gate</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="node__box_8cpp_source.html#l00061">hal::NodeBoxes::addBox()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00095">hal::CommentEntry::dump()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="gui__def_8h_source.html#l00146">hal::GridPlacement::setGatePosition()</a>, and <a class="el" href="gui__def_8h_source.html#l00169">hal::GridPlacement::setModulePosition()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="node__box_8cpp_source.html#l00061">hal::NodeBoxes::addBox()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00095">hal::CommentEntry::dump()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="gui__def_8h_source.html#l00149">hal::GridPlacement::setGatePosition()</a>, and <a class="el" href="gui__def_8h_source.html#l00172">hal::GridPlacement::setModulePosition()</a>.</p>
 
 </div>
 </div>
@@ -298,7 +300,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>isModule test wheter node is a module </p>
-<dl class="section return"><dt>Returns</dt><dd>true if node is a module </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if node is a module, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00095">95</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
@@ -332,13 +334,13 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>isNull test for null-Node object typically returned from functions </p>
-<dl class="section return"><dt>Returns</dt><dd>true if node is null </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if node is null, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00083">83</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
 <p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">None</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00213">hal::DragController::finalGridPlacement()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00090">hal::CommentEntry::isInvalid()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="gui__def_8h_source.html#l00146">hal::GridPlacement::setGatePosition()</a>, and <a class="el" href="gui__def_8h_source.html#l00169">hal::GridPlacement::setModulePosition()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00175">hal::NetlistRelay::addToModuleDialog()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, <a class="el" href="drag__controller_8cpp_source.html#l00213">hal::DragController::finalGridPlacement()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l01258">hal::GraphGraphicsView::handleShortestPathToGrouping()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00090">hal::CommentEntry::isInvalid()</a>, <a class="el" href="graph__layouter_8cpp_source.html#l00082">hal::GraphLayouter::positonForNode()</a>, <a class="el" href="gui__def_8h_source.html#l00149">hal::GridPlacement::setGatePosition()</a>, and <a class="el" href="gui__def_8h_source.html#l00172">hal::GridPlacement::setModulePosition()</a>.</p>
 
 </div>
 </div>
@@ -373,7 +375,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if nodes have either different type or different ID </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if nodes have either different type or different ID, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00126">126</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
@@ -410,7 +412,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if node is 'smaller' according to test </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if node is 'smaller' according to test, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00102">102</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
@@ -447,7 +449,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if nodes are of same type and have same ID </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if nodes are of same type and have same ID, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00116">116</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
@@ -481,12 +483,12 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="gui__def_8h_source.html#l00071">71</a> of file <a class="el" href="gui__def_8h_source.html">gui_def.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="standard__graph__layouter_8cpp_source.html#l00028">hal::StandardGraphLayouter::add()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00898">hal::GraphContext::isScheduledRemove()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00076">hal::CommentEntry::toJson()</a>, <a class="el" href="node__box_8h_source.html#l00081">hal::NodeBox::type()</a>, and <a class="el" href="action__add__items__to__object_8cpp_source.html#l00044">hal::ActionAddItemsToObject::writeToXml()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="standard__graph__layouter_8cpp_source.html#l00028">hal::StandardGraphLayouter::add()</a>, <a class="el" href="action__move__node_8cpp_source.html#l00123">hal::ActionMoveNode::exec()</a>, <a class="el" href="coordinate__from__data_8cpp_source.html#l00015">hal::CoordinateFromData::fromNode()</a>, <a class="el" href="graph__context_8cpp_source.html#l00898">hal::GraphContext::isScheduledRemove()</a>, <a class="el" href="node__box_8cpp_source.html#l00094">hal::qHash()</a>, <a class="el" href="comment__entry_8cpp_source.html#l00076">hal::CommentEntry::toJson()</a>, <a class="el" href="node__box_8h_source.html#l00081">hal::NodeBox::type()</a>, and <a class="el" href="action__add__items__to__object_8cpp_source.html#l00044">hal::ActionAddItemsToObject::writeToXml()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/<a class="el" href="gui__def_8h_source.html">gui_def.h</a></li>
+<li>plugins/gui/include/gui/<a class="el" href="gui__def_8h_source.html">gui_def.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -494,7 +496,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_node.html">Node</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:51 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

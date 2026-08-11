@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/src/python_bindings/bindings/gate_type_components.cpp Source File</title>
+<title>HAL: src/python_bindings/bindings/gate_type_components.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -148,10 +150,10 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="stringliteral">        py_gate_type_component.def(</span><span class="stringliteral">&quot;get_component&quot;</span>, &amp;<a class="code" href="classhal_1_1_gate_type_component.html#acb0075c46f66aa6004b6cd529cb4c411">GateTypeComponent::get_component</a>, py::arg(<span class="stringliteral">&quot;filter&quot;</span>) = <span class="keyword">nullptr</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="stringliteral">            Get a single component matching the filter condition (if provided).</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">            Returns None if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="stringliteral">            Returns ``None`` if (i) the gate type does not contain any components, (ii) multiple components match the filter condition, or (iii) no component matches the filter condition.</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            :param lambda filter: The filter applied to all candidate components.</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            :returns: The component or None.</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral">            :returns: The component or ``None``.</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            :rtype: hal_py.GateTypeComponent or None</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"></span> </div>
@@ -163,13 +165,13 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">            Check whether a component is a LUTComponent.</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            :returns: True if component is a LUTComponent, False otherwise.</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a LUTComponent, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">        py_lut_component.def_property(</span><span class="stringliteral">&quot;init_ascending&quot;</span>, &amp;<a class="code" href="classhal_1_1_l_u_t_component.html#aabc82d8d1e5efaae4bd6f00a1ba43f0c">LUTComponent::is_init_ascending</a>, &amp;<a class="code" href="classhal_1_1_l_u_t_component.html#a88e0b6226de6897ef5c726f7ea2c7508">LUTComponent::set_init_ascending</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">            The bit-order of the initialization string. </span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            True if ascending, False otherwise.</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            ``True`` if ascending, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            :type: bool</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -177,14 +179,14 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">        py_lut_component.def(</span><span class="stringliteral">&quot;is_init_ascending&quot;</span>, &amp;<a class="code" href="classhal_1_1_l_u_t_component.html#aabc82d8d1e5efaae4bd6f00a1ba43f0c">LUTComponent::is_init_ascending</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">            Get the bit-order of the initialization string.</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">         </span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            :returns: True if ascending bit-order, False otherwise.</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            :returns: ``True`` if ascending bit-order, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">        py_lut_component.def(</span><span class="stringliteral">&quot;set_init_ascending&quot;</span>, &amp;<a class="code" href="classhal_1_1_l_u_t_component.html#a88e0b6226de6897ef5c726f7ea2c7508">LUTComponent::set_init_ascending</a>, py::arg(<span class="stringliteral">&quot;init_ascending&quot;</span>) = <span class="keyword">true</span>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">            Set the bit-order of the initialization string.</span></div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">         </span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">            :param bool init_ascending: True if ascending bit-order, False otherwise.</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">            :param bool init_ascending: ``True`` if ascending bit-order, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="stringliteral">        py::class_&lt;FFComponent, GateTypeComponent, RawPtrWrapper&lt;FFComponent&gt;&gt; py_ff_component(m, </span><span class="stringliteral">&quot;FFComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
@@ -195,7 +197,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">            Check whether a component is a FFComponent.</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">            :returns: True if component is a FFComponent, False otherwise.</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a FFComponent, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="stringliteral"></span> </div>
@@ -275,7 +277,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">            Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.</span></div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">            :returns: The values specifying the behavior for the internal and negated internal state.</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">            :rtype: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)</span></div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="stringliteral">        py_ff_component.def(</span><span class="stringliteral">&quot;set_async_set_reset_behavior&quot;</span>, &amp;<a class="code" href="classhal_1_1_f_f_component.html#a12b533860dc5d25c0a2964e54005d65c">FFComponent::set_async_set_reset_behavior</a>, py::arg(<span class="stringliteral">&quot;behav_state&quot;</span>), py::arg(<span class="stringliteral">&quot;behav_neg_state&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
@@ -293,7 +295,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">            Check whether a component is a LatchComponent.</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="stringliteral">            :returns: True if component is a LatchComponent, False otherwise.</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a LatchComponent, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="stringliteral"></span> </div>
@@ -373,7 +375,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="stringliteral">            Get the behavior of the internal state and the negated internal state when both asynchronous set and reset are active at the same time.</span></div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="stringliteral">            :returns: The values specifying the behavior for the internal and negated internal state.</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">            :rytpe: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">            :rtype: tuple(hal_py.AsyncSetResetBehavior, hal_py.AsyncSetResetBehavior)</span></div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="stringliteral">        py_latch_component.def(</span><span class="stringliteral">&quot;set_async_set_reset_behavior&quot;</span>, &amp;<a class="code" href="classhal_1_1_latch_component.html#a385abf4d3f6badf4692432e0142212b0">LatchComponent::set_async_set_reset_behavior</a>, py::arg(<span class="stringliteral">&quot;behav_state&quot;</span>), py::arg(<span class="stringliteral">&quot;behav_neg_state&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
@@ -391,7 +393,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="stringliteral">            Check whether a component is a RAMComponent.</span></div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="stringliteral">            :returns: True if component is a RAMComponent, False otherwise.</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a RAMComponent, ``False`` otherwise.</span></div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="stringliteral"></span> </div>
@@ -405,234 +407,235 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="stringliteral">            Get the size of the RAM in bits.</span></div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="stringliteral">            :returns: The size of the RAM in bits.</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="stringliteral">        py_ram_component.def(</span><span class="stringliteral">&quot;set_bit_size&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_component.html#affdecd26e389236f4f342c7398aa8f2f">RAMComponent::set_bit_size</a>, py::arg(<span class="stringliteral">&quot;bit_size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="stringliteral">            Set the size of the RAM in bits.</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="stringliteral">            :param int bit_size: The size of the RAM in bits.</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral">        py::class_&lt;MACComponent, GateTypeComponent, RawPtrWrapper&lt;MACComponent&gt;&gt; py_mac_component(m, </span><span class="stringliteral">&quot;MACComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">            A MAC component specifying the MAC gate type&#39;s functionality.</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="stringliteral">        py_mac_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_m_a_c_component.html#a1cad294cc44811fb44f0a49b53719463">MACComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="stringliteral">            Check whether a component is a MACComponent.</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="stringliteral">            :returns: True if component is a MACComponent, False otherwise.</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="stringliteral">        py::class_&lt;InitComponent, GateTypeComponent, RawPtrWrapper&lt;InitComponent&gt;&gt; py_init_component(m, </span><span class="stringliteral">&quot;InitComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="stringliteral">            An initialization component specifying the initialization behavior of a gate type.</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="stringliteral">        py_init_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3e5574c9566f0ed71f21abb316db8e59">InitComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="stringliteral">            Check whether a component is an InitComponent.</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="stringliteral">            :returns: True if component is a InitComponent, False otherwise.</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="stringliteral">        py_init_component.def_property(</span><span class="stringliteral">&quot;init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3a0498f6c6327b1c1c9eae921f983cba">InitComponent::get_init_category</a>, &amp;<a class="code" href="classhal_1_1_init_component.html#a4b2bc0fe60abb3af87e395dd62c9d7d5">InitComponent::set_init_category</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="stringliteral">            The category in which to find the initialization data.</span></div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="stringliteral">            </span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;get_init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3a0498f6c6327b1c1c9eae921f983cba">InitComponent::get_init_category</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="stringliteral">            Get the category in which to find the initialization data.</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="stringliteral">            :returns: The data category.</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;set_init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a4b2bc0fe60abb3af87e395dd62c9d7d5">InitComponent::set_init_category</a>, py::arg(<span class="stringliteral">&quot;init_category&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="stringliteral">            Set the category in which to find the initialization data.</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="stringliteral">            :param str init_category: The data category.</span></div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="stringliteral">        py_init_component.def_property(</span><span class="stringliteral">&quot;init_identifiers&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#af200f3404d4e8c802652bd26f948c3d5">InitComponent::get_init_identifiers</a>, &amp;<a class="code" href="classhal_1_1_init_component.html#abefd1ef6c66cf530eb54b7cc97bf5fa7">InitComponent::set_init_identifiers</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="stringliteral">            The list of identifiers at which to find initialization data.</span></div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="stringliteral">            </span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;get_init_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#af200f3404d4e8c802652bd26f948c3d5">InitComponent::get_init_identifiers</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="stringliteral">            Get the list of identifiers at which to find the initialization data.</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="stringliteral">            :returns: The data identifiers.</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="stringliteral">            :rtype: list[str]</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;set_init_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#abefd1ef6c66cf530eb54b7cc97bf5fa7">InitComponent::set_init_identifiers</a>, py::arg(<span class="stringliteral">&quot;init_identifiers&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="stringliteral">            Set the list of identifiers at which to find the initialization data.</span></div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="stringliteral">            :param list[str] init_identifiers: The data identifiers.</span></div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="stringliteral">        py::class_&lt;StateComponent, GateTypeComponent, RawPtrWrapper&lt;StateComponent&gt;&gt; py_state_component(m, </span><span class="stringliteral">&quot;StateComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="stringliteral">            A StateComponent with given child component and the internal state identifiers.</span></div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="stringliteral">        py_state_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a627aeef2d413a1014d1007a5f731f54c">StateComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;<span class="stringliteral">            Check whether a component is an StateComponent.</span></div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="stringliteral">            :returns: True if component is a StateComponent, False otherwise.</span></div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;<span class="stringliteral">        py_state_component.def_property(</span><span class="stringliteral">&quot;state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">StateComponent::get_state_identifier</a>, &amp;<a class="code" href="classhal_1_1_state_component.html#a1a7ea0e47fd06ce6d77439270f6d6cc3">StateComponent::set_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;<span class="stringliteral">            The identifier of the internal state.</span></div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="stringliteral">            </span></div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;get_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">StateComponent::get_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="stringliteral">            Get the identifier of the internal state.</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="stringliteral">            :returns: The identifier of the internal state.</span></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;set_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a1a7ea0e47fd06ce6d77439270f6d6cc3">StateComponent::set_state_identifier</a>, py::arg(<span class="stringliteral">&quot;state_identifier&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="stringliteral">            Set the identifier of the internal state.</span></div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="stringliteral">            :param str state_identifier: The identifier of the internal state.</span></div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;<span class="stringliteral">        py_state_component.def_property(</span><span class="stringliteral">&quot;neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a795d40ea17d8d89425e1c1a0b2b7c0a3">StateComponent::get_neg_state_identifier</a>, &amp;<a class="code" href="classhal_1_1_state_component.html#aef260619e36469fa8d48a5a5639a24b7">StateComponent::set_neg_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;<span class="stringliteral">            The identifier of the negated internal state.</span></div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;<span class="stringliteral">            </span></div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;get_neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a795d40ea17d8d89425e1c1a0b2b7c0a3">StateComponent::get_neg_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;<span class="stringliteral">            Get the identifier of the negated internal state.</span></div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="stringliteral">            :returns: The identifier of the negated internal state.</span></div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;set_neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#aef260619e36469fa8d48a5a5639a24b7">StateComponent::set_neg_state_identifier</a>, py::arg(<span class="stringliteral">&quot;neg_state_identifier&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="stringliteral">            Set the identifier of the negated internal state.</span></div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="stringliteral">            :param str neg_state_identifier: The identifier of the negated internal state.</span></div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;<span class="stringliteral">        py::class_&lt;RAMPortComponent, GateTypeComponent, RawPtrWrapper&lt;RAMPortComponent&gt;&gt; py_ram_port_component(m, </span><span class="stringliteral">&quot;RAMPortComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;<span class="stringliteral">            A RAM port component specifying the behavior of a port belonging to a RAM gate type.</span></div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;<span class="stringliteral">        py_ram_port_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a9caf20c45c5b4e7d4aa11649b3165d20">RAMPortComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;<span class="stringliteral">            Check whether a component is a RAMPortComponent.</span></div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;<span class="stringliteral">            :returns: True if component is a RAMPortComponent, False otherwise.</span></div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a4f2b30cb68bc2b8dd79c628dc33b3d8a">RAMPortComponent::get_data_group</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#acaed12deab271b7481021e6fcdb50bf9">RAMPortComponent::set_data_group</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="stringliteral">            The name of the read or write data pin group.</span></div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a4f2b30cb68bc2b8dd79c628dc33b3d8a">RAMPortComponent::get_data_group</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="stringliteral">            Get the name of the read or write data pin group.</span></div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="stringliteral">            :returns: The name of the pin group.</span></div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#acaed12deab271b7481021e6fcdb50bf9">RAMPortComponent::set_data_group</a>, py::arg(<span class="stringliteral">&quot;data_group&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">            Set the name of the read or write data pin group.</span></div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral">            :param str data_group: The name of the pin group.</span></div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa946590a84c87481c87e0df2b9b70178">RAMPortComponent::get_address_group</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a37252b2f8761d7d7e4cae3e90f266fd6">RAMPortComponent::set_address_group</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">            The name of the read or write address pin group.</span></div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral">            :type: str</span></div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa946590a84c87481c87e0df2b9b70178">RAMPortComponent::get_address_group</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;<span class="stringliteral">            Get the name of the read or write address pin group.</span></div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="stringliteral">            :returns: The name of the pin group.</span></div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a37252b2f8761d7d7e4cae3e90f266fd6">RAMPortComponent::set_address_group</a>, py::arg(<span class="stringliteral">&quot;addr_group&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="stringliteral">            Set the name of the read or write address pin group.</span></div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="stringliteral">            :param str addr_group: The name of the pin group.</span></div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3">RAMPortComponent::get_clock_function</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#ac4ea45acf41a169f8683dc5e27d1933c">RAMPortComponent::set_clock_function</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="stringliteral">            The Boolean function determining the read or write clock.</span></div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral">            :type: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3">RAMPortComponent::get_clock_function</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="stringliteral">            Get the Boolean function determining the read or write clock.</span></div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral">            :returns: The Boolean function.</span></div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#ac4ea45acf41a169f8683dc5e27d1933c">RAMPortComponent::set_clock_function</a>, py::arg(<span class="stringliteral">&quot;clock_bf&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="stringliteral">            Set the Boolean function determining the read or write clock.</span></div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction clock_bf: The Boolean function.</span></div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a7fabba1220d9391dccc8dc2dade7279b">RAMPortComponent::get_enable_function</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a056747db053980f99026c817181b7786">RAMPortComponent::set_enable_function</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="stringliteral">            The Boolean function determining the read or write enable.</span></div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="stringliteral">            :type: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a7fabba1220d9391dccc8dc2dade7279b">RAMPortComponent::get_enable_function</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="stringliteral">            Get the Boolean function determining the read or write enable.</span></div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="stringliteral">            :returns: The Boolean function.</span></div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a056747db053980f99026c817181b7786">RAMPortComponent::set_enable_function</a>, py::arg(<span class="stringliteral">&quot;enable_bf&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">            Set the Boolean function determining the read or write enable.</span></div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction enable_bf: The Boolean function.</span></div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a8ded6a82e43d4947cc5f2cea2719bcf3">RAMPortComponent::is_write_port</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a39e0c5f718ce1399b4e16b60629bdf13">RAMPortComponent::set_write_port</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral">            True if the port is a write port, false if it is a read port.</span></div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="stringliteral">            :type: bool</span></div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;is_write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a8ded6a82e43d4947cc5f2cea2719bcf3">RAMPortComponent::is_write_port</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;<span class="stringliteral">            Check whether the port is a write or a read port.</span></div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="stringliteral">            :returns: True if the port is a write port, false if it is a read port.</span></div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a39e0c5f718ce1399b4e16b60629bdf13">RAMPortComponent::set_write_port</a>, py::arg(<span class="stringliteral">&quot;is_write&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;<span class="stringliteral">            Set the port to be a write or a read port.</span></div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="stringliteral">            :param bool is_write: True if the port is a write port, false if it is a read port.</span></div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="stringliteral">        py_ram_component.def(</span><span class="stringliteral">&quot;set_bit_size&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_component.html#affdecd26e389236f4f342c7398aa8f2f">RAMComponent::set_bit_size</a>, py::arg(<span class="stringliteral">&quot;bit_size&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="stringliteral">            Set the size of the RAM in bits.</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="stringliteral">            :param int bit_size: The size of the RAM in bits.</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">        py::class_&lt;MACComponent, GateTypeComponent, RawPtrWrapper&lt;MACComponent&gt;&gt; py_mac_component(m, </span><span class="stringliteral">&quot;MACComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">            A MAC component specifying the MAC gate type&#39;s functionality.</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="stringliteral">        py_mac_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_m_a_c_component.html#a1cad294cc44811fb44f0a49b53719463">MACComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="stringliteral">            Check whether a component is a MACComponent.</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a MACComponent, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="stringliteral">        py::class_&lt;InitComponent, GateTypeComponent, RawPtrWrapper&lt;InitComponent&gt;&gt; py_init_component(m, </span><span class="stringliteral">&quot;InitComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="stringliteral">            An initialization component specifying the initialization behavior of a gate type.</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="stringliteral">        py_init_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3e5574c9566f0ed71f21abb316db8e59">InitComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="stringliteral">            Check whether a component is an InitComponent.</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is an InitComponent, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="stringliteral">        py_init_component.def_property(</span><span class="stringliteral">&quot;init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3a0498f6c6327b1c1c9eae921f983cba">InitComponent::get_init_category</a>, &amp;<a class="code" href="classhal_1_1_init_component.html#a4b2bc0fe60abb3af87e395dd62c9d7d5">InitComponent::set_init_category</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="stringliteral">            The category in which to find the initialization data.</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="stringliteral">            </span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;get_init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a3a0498f6c6327b1c1c9eae921f983cba">InitComponent::get_init_category</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="stringliteral">            Get the category in which to find the initialization data.</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="stringliteral">            :returns: The data category.</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;set_init_category&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#a4b2bc0fe60abb3af87e395dd62c9d7d5">InitComponent::set_init_category</a>, py::arg(<span class="stringliteral">&quot;init_category&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="stringliteral">            Set the category in which to find the initialization data.</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="stringliteral">            :param str init_category: The data category.</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="stringliteral">        py_init_component.def_property(</span><span class="stringliteral">&quot;init_identifiers&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#af200f3404d4e8c802652bd26f948c3d5">InitComponent::get_init_identifiers</a>, &amp;<a class="code" href="classhal_1_1_init_component.html#abefd1ef6c66cf530eb54b7cc97bf5fa7">InitComponent::set_init_identifiers</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="stringliteral">            The list of identifiers at which to find initialization data.</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="stringliteral">            </span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;get_init_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#af200f3404d4e8c802652bd26f948c3d5">InitComponent::get_init_identifiers</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="stringliteral">            Get the list of identifiers at which to find the initialization data.</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="stringliteral">            :returns: The data identifiers.</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="stringliteral">            :rtype: list[str]</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="stringliteral">        py_init_component.def(</span><span class="stringliteral">&quot;set_init_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_init_component.html#abefd1ef6c66cf530eb54b7cc97bf5fa7">InitComponent::set_init_identifiers</a>, py::arg(<span class="stringliteral">&quot;init_identifiers&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="stringliteral">            Set the list of identifiers at which to find the initialization data.</span></div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="stringliteral">            :param list[str] init_identifiers: The data identifiers.</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="stringliteral">        py::class_&lt;StateComponent, GateTypeComponent, RawPtrWrapper&lt;StateComponent&gt;&gt; py_state_component(m, </span><span class="stringliteral">&quot;StateComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;<span class="stringliteral">            A StateComponent with given child component and the internal state identifiers.</span></div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;<span class="stringliteral">        py_state_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a627aeef2d413a1014d1007a5f731f54c">StateComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="stringliteral">            Check whether a component is a StateComponent.</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a StateComponent, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;<span class="stringliteral">        py_state_component.def_property(</span><span class="stringliteral">&quot;state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">StateComponent::get_state_identifier</a>, &amp;<a class="code" href="classhal_1_1_state_component.html#a1a7ea0e47fd06ce6d77439270f6d6cc3">StateComponent::set_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="stringliteral">            The identifier of the internal state.</span></div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;<span class="stringliteral">            </span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;get_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">StateComponent::get_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="stringliteral">            Get the identifier of the internal state.</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="stringliteral">            :returns: The identifier of the internal state.</span></div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;set_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a1a7ea0e47fd06ce6d77439270f6d6cc3">StateComponent::set_state_identifier</a>, py::arg(<span class="stringliteral">&quot;state_identifier&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="stringliteral">            Set the identifier of the internal state.</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;<span class="stringliteral">            :param str state_identifier: The identifier of the internal state.</span></div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;<span class="stringliteral">        py_state_component.def_property(</span><span class="stringliteral">&quot;neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a795d40ea17d8d89425e1c1a0b2b7c0a3">StateComponent::get_neg_state_identifier</a>, &amp;<a class="code" href="classhal_1_1_state_component.html#aef260619e36469fa8d48a5a5639a24b7">StateComponent::set_neg_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;<span class="stringliteral">            The identifier of the negated internal state.</span></div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;<span class="stringliteral">            </span></div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;get_neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#a795d40ea17d8d89425e1c1a0b2b7c0a3">StateComponent::get_neg_state_identifier</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="stringliteral">            Get the identifier of the negated internal state.</span></div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="stringliteral">            :returns: The identifier of the negated internal state.</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="stringliteral">        py_state_component.def(</span><span class="stringliteral">&quot;set_neg_state_identifier&quot;</span>, &amp;<a class="code" href="classhal_1_1_state_component.html#aef260619e36469fa8d48a5a5639a24b7">StateComponent::set_neg_state_identifier</a>, py::arg(<span class="stringliteral">&quot;neg_state_identifier&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;<span class="stringliteral">            Set the identifier of the negated internal state.</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="stringliteral">            :param str neg_state_identifier: The identifier of the negated internal state.</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;<span class="stringliteral">        py::class_&lt;RAMPortComponent, GateTypeComponent, RawPtrWrapper&lt;RAMPortComponent&gt;&gt; py_ram_port_component(m, </span><span class="stringliteral">&quot;RAMPortComponent&quot;</span>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;<span class="stringliteral">            A RAM port component specifying the behavior of a port belonging to a RAM gate type.</span></div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;<span class="stringliteral">        py_ram_port_component.def_static(</span><span class="stringliteral">&quot;is_class_of&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a9caf20c45c5b4e7d4aa11649b3165d20">RAMPortComponent::is_class_of</a>, py::arg(<span class="stringliteral">&quot;component&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="stringliteral">            Check whether a component is a RAMPortComponent.</span></div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;<span class="stringliteral">            :param hal_py.GateTypeComponent component: The component to check.</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;<span class="stringliteral">            :returns: ``True`` if component is a RAMPortComponent, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a4f2b30cb68bc2b8dd79c628dc33b3d8a">RAMPortComponent::get_data_group</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#acaed12deab271b7481021e6fcdb50bf9">RAMPortComponent::set_data_group</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="stringliteral">            The name of the read or write data pin group.</span></div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a4f2b30cb68bc2b8dd79c628dc33b3d8a">RAMPortComponent::get_data_group</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="stringliteral">            Get the name of the read or write data pin group.</span></div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="stringliteral">            :returns: The name of the pin group.</span></div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_data_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#acaed12deab271b7481021e6fcdb50bf9">RAMPortComponent::set_data_group</a>, py::arg(<span class="stringliteral">&quot;data_group&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral">            Set the name of the read or write data pin group.</span></div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">            :param str data_group: The name of the pin group.</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa946590a84c87481c87e0df2b9b70178">RAMPortComponent::get_address_group</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a37252b2f8761d7d7e4cae3e90f266fd6">RAMPortComponent::set_address_group</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral">            The name of the read or write address pin group.</span></div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="stringliteral">            :type: str</span></div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa946590a84c87481c87e0df2b9b70178">RAMPortComponent::get_address_group</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="stringliteral">            Get the name of the read or write address pin group.</span></div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;<span class="stringliteral">            :returns: The name of the pin group.</span></div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="stringliteral">            :rtype: str</span></div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_address_group&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a37252b2f8761d7d7e4cae3e90f266fd6">RAMPortComponent::set_address_group</a>, py::arg(<span class="stringliteral">&quot;addr_group&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="stringliteral">            Set the name of the read or write address pin group.</span></div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;<span class="stringliteral">            :param str addr_group: The name of the pin group.</span></div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3">RAMPortComponent::get_clock_function</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#ac4ea45acf41a169f8683dc5e27d1933c">RAMPortComponent::set_clock_function</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral">            The Boolean function determining the read or write clock.</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral">            :type: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#aa0dcc4d24215aa62fb80938990dad8d3">RAMPortComponent::get_clock_function</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="stringliteral">            Get the Boolean function determining the read or write clock.</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="stringliteral">            :returns: The Boolean function.</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_clock_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#ac4ea45acf41a169f8683dc5e27d1933c">RAMPortComponent::set_clock_function</a>, py::arg(<span class="stringliteral">&quot;clock_bf&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="stringliteral">            Set the Boolean function determining the read or write clock.</span></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction clock_bf: The Boolean function.</span></div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a7fabba1220d9391dccc8dc2dade7279b">RAMPortComponent::get_enable_function</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a056747db053980f99026c817181b7786">RAMPortComponent::set_enable_function</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="stringliteral">            The Boolean function determining the read or write enable.</span></div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="stringliteral">            :type: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;get_enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a7fabba1220d9391dccc8dc2dade7279b">RAMPortComponent::get_enable_function</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="stringliteral">            Get the Boolean function determining the read or write enable.</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="stringliteral">            :returns: The Boolean function.</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">            :rtype: hal_py.BooleanFunction</span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_enable_function&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a056747db053980f99026c817181b7786">RAMPortComponent::set_enable_function</a>, py::arg(<span class="stringliteral">&quot;enable_bf&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral">            Set the Boolean function determining the read or write enable.</span></div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral">            :param hal_py.BooleanFunction enable_bf: The Boolean function.</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral">        py_ram_port_component.def_property(</span><span class="stringliteral">&quot;write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a8ded6a82e43d4947cc5f2cea2719bcf3">RAMPortComponent::is_write_port</a>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a39e0c5f718ce1399b4e16b60629bdf13">RAMPortComponent::set_write_port</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="stringliteral">            ``True`` if the port is a write port, ``False`` if it is a read port.</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;<span class="stringliteral">            :type: bool</span></div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;is_write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a8ded6a82e43d4947cc5f2cea2719bcf3">RAMPortComponent::is_write_port</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="stringliteral">            Check whether the port is a write or a read port.</span></div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="stringliteral">            :returns: ``True`` if the port is a write port, ``False`` otherwise.</span></div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;<span class="stringliteral">        py_ram_port_component.def(</span><span class="stringliteral">&quot;set_write_port&quot;</span>, &amp;<a class="code" href="classhal_1_1_r_a_m_port_component.html#a39e0c5f718ce1399b4e16b60629bdf13">RAMPortComponent::set_write_port</a>, py::arg(<span class="stringliteral">&quot;is_write&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="stringliteral">            Set the port to be a write or a read port.</span></div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="stringliteral">            :param bool is_write: ``True`` to set the port to be a write port, ``False`` to set it to be a read port.</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_f_f_component_html_a105ae2a6bc26e9988d88788d0bdbdc62"><div class="ttname"><a href="classhal_1_1_f_f_component.html#a105ae2a6bc26e9988d88788d0bdbdc62">hal::FFComponent::set_clock_function</a></div><div class="ttdeci">void set_clock_function(const BooleanFunction &amp;clock_bf)</div><div class="ttdef"><b>Definition:</b> <a href="ff__component_8cpp_source.html#l00058">ff_component.cpp:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_f_f_component_html_a12b533860dc5d25c0a2964e54005d65c"><div class="ttname"><a href="classhal_1_1_f_f_component.html#a12b533860dc5d25c0a2964e54005d65c">hal::FFComponent::set_async_set_reset_behavior</a></div><div class="ttdeci">void set_async_set_reset_behavior(const AsyncSetResetBehavior behav_state, const AsyncSetResetBehavior behav_neg_state)</div><div class="ttdef"><b>Definition:</b> <a href="ff__component_8cpp_source.html#l00088">ff_component.cpp:88</a></div></div>
 <div class="ttc" id="aclasshal_1_1_f_f_component_html_a1725909ea5946e95864a5ff05f6fdcda"><div class="ttname"><a href="classhal_1_1_f_f_component.html#a1725909ea5946e95864a5ff05f6fdcda">hal::FFComponent::set_async_set_function</a></div><div class="ttdeci">void set_async_set_function(const BooleanFunction &amp;async_set_bf)</div><div class="ttdef"><b>Definition:</b> <a href="ff__component_8cpp_source.html#l00078">ff_component.cpp:78</a></div></div>
@@ -702,7 +705,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div class="ttc" id="alut__component_8h_html"><div class="ttname"><a href="lut__component_8h.html">lut_component.h</a></div></div>
 <div class="ttc" id="amac__component_8h_html"><div class="ttname"><a href="mac__component_8h.html">mac_component.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1_shortest_path_html_a6f60f4bfa62d51227fa5fcc3e7d838a9"><div class="ttname"><a href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">hal::ShortestPath::module</a></div><div class="ttdeci">const Module * module(const Gate *g, const NodeBoxes &amp;boxes)</div><div class="ttdef"><b>Definition:</b> <a href="graph__graphics__view_8cpp_source.html#l00751">graph_graphics_view.cpp:751</a></div></div>
-<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:10</a></div></div>
+<div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="apython__bindings_8h_html"><div class="ttname"><a href="python__bindings_8h.html">python_bindings.h</a></div></div>
 <div class="ttc" id="aram__component_8h_html"><div class="ttname"><a href="ram__component_8h.html">ram_component.h</a></div></div>
 <div class="ttc" id="aram__port__component_8h_html"><div class="ttname"><a href="ram__port__component_8h.html">ram_port_component.h</a></div></div>
@@ -713,7 +716,7 @@ $(document).ready(function(){initNavTree('gate__type__components_8cpp_source.htm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="gate__type__components_8cpp.html">gate_type_components.cpp</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:48 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

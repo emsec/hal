@@ -27,7 +27,9 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
+   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
    </div>
+   <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
  </tr>
  </tbody>
@@ -91,7 +93,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_state_component.html','')
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="state__component_8h_source.html">state_component.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="state__component_8h_source.html">hal_core/netlist/gate_library/gate_type_component/state_component.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::StateComponent:</div>
 <div class="dyncontent">
@@ -153,7 +155,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aa5c8039e44920ea0ab684b7f943641e4 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e8b60a3dcff1239bf2cbde39c36782f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a7e8b60a3dcff1239bf2cbde39c36782f">create_latch_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component)</td></tr>
 <tr class="separator:a7e8b60a3dcff1239bf2cbde39c36782f inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> bit_size)</td></tr>
+<tr class="memitem:a90523ddb1cda22842e6e56f3ab41fc03 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#a90523ddb1cda22842e6e56f3ab41fc03">create_ram_component</a> (std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt; component, const <a class="el" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> bit_size)</td></tr>
 <tr class="separator:a90523ddb1cda22842e6e56f3ab41fc03 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adebe86800325ba44ce254d441ff1ecf9 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classhal_1_1_gate_type_component.html">GateTypeComponent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_type_component.html#adebe86800325ba44ce254d441ff1ecf9">create_mac_component</a> ()</td></tr>
 <tr class="separator:adebe86800325ba44ce254d441ff1ecf9 inherit pub_static_methods_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,8 +184,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a1ee2af2d1a1dba836136b2a9fce0f017 inherit pub_types_classhal_1_1_gate_type_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="state__component_8h_source.html#l00033">33</a> of file <a class="el" href="state__component_8h_source.html">state_component.h</a>.</p>
+<div class="textblock"><p>A gate type component that describes the internal state of a sequential gate by naming its state and negated state identifiers. </p>
+
+<p class="definition">Definition at line <a class="el" href="state__component_8h_source.html#l00036">36</a> of file <a class="el" href="state__component_8h_source.html">state_component.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="accb0f3377497307099e56ba7152dfe4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#accb0f3377497307099e56ba7152dfe4d">&#9670;&nbsp;</a></span>StateComponent()</h2>
@@ -288,7 +291,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="state__component_8cpp_source.html#l00053">53</a> of file <a class="el" href="state__component_8cpp_source.html">state_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00097">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, and <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>.</p>
 
 </div>
 </div>
@@ -311,7 +314,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="state__component_8cpp_source.html#l00043">43</a> of file <a class="el" href="state__component_8cpp_source.html">state_component.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, and <a class="el" href="test_2liberty__parser_8cpp_source.html#l00097">hal::TEST_F()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, and <a class="el" href="ff__function_8cpp_source.html#l00023">hal::verilator::converter::get_function_for_ff()</a>.</p>
 
 </div>
 </div>
@@ -376,13 +379,13 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if component is a <a class="el" href="classhal_1_1_state_component.html">StateComponent</a>, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if component is a <a class="el" href="classhal_1_1_state_component.html">StateComponent</a>, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="state__component_8cpp_source.html#l00015">15</a> of file <a class="el" href="state__component_8cpp_source.html">state_component.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="classhal_1_1_gate_type_component.html#a4104ed67b98abffcf8485a42cd49f248">hal::GateTypeComponent::get_type()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, <a class="el" href="test_2liberty__parser_8cpp_source.html#l00097">hal::TEST_F()</a>, and <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__type__components_8cpp_source.html#l00014">hal::gate_type_components_init()</a>, <a class="el" href="state__wizardpage_8cpp_source.html#l00041">hal::StateWizardPage::setData()</a>, and <a class="el" href="gatelibrary__frame__state_8cpp_source.html#l00020">hal::GatelibraryFrameState::update()</a>.</p>
 
 </div>
 </div>
@@ -401,7 +404,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the identifier of the negated internal state.</p>
+<p>Set the identifier of the negated internal state.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">neg_state_identifier</td><td>- The identifier of the negated internal state. </td></tr>
@@ -430,7 +433,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the identifier of the internal state.</p>
+<p>Set the identifier of the internal state.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">state_identifier</td><td>- The identifier of the internal state. </td></tr>
@@ -445,8 +448,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/include/hal_core/netlist/gate_library/gate_type_component/<a class="el" href="state__component_8h_source.html">state_component.h</a></li>
-<li>/home/runner/work/hal/hal/src/netlist/gate_library/gate_type_component/<a class="el" href="state__component_8cpp_source.html">state_component.cpp</a></li>
+<li>include/hal_core/netlist/gate_library/gate_type_component/<a class="el" href="state__component_8h_source.html">state_component.h</a></li>
+<li>src/netlist/gate_library/gate_type_component/<a class="el" href="state__component_8cpp_source.html">state_component.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -454,7 +457,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_state_component.html">StateComponent</a></li>
-    <li class="footer">Generated on Tue Aug 11 2026 19:05:52 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
