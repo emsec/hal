@@ -16,7 +16,11 @@ namespace hal
 
         NetlistGraph::NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates) : m_nl(nl), m_graph(std::move(graph)), m_nodes_to_gates(std::move(nodes_to_gates))
         {
-            m_graph_ptr = &m_graph;
+            // This constructor receives an already-initialized graph and takes over its ownership. Note that
+            // `igraph_t` is a trivially copyable C struct, so the `std::move()` above is a bitwise copy and the
+            // caller's object is left holding the same pointers -- the caller must therefore not destroy it.
+            m_graph_initialized = true;
+            m_graph_ptr         = &m_graph;
 
             for (const auto& [node, gate] : m_nodes_to_gates)
             {
@@ -29,7 +33,12 @@ namespace hal
 
         NetlistGraph::~NetlistGraph()
         {
-            igraph_destroy(&m_graph);
+            // Guarded because the `NetlistGraph(Netlist*)` constructor leaves `m_graph` uninitialized and a
+            // factory may bail out before initializing it -- see `m_graph_initialized`.
+            if (m_graph_initialized)
+            {
+                igraph_destroy(&m_graph);
+            }
         }
 
         Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist(Netlist* nl, bool create_dummy_vertices, const std::function<bool(const Net*)>& filter)
@@ -154,6 +163,8 @@ namespace hal
                 return ERR(igraph_strerror(err));
             }
 
+            graph->m_graph_initialized = true;
+
             return OK(std::move(graph));
         }
 
@@ -183,6 +194,8 @@ namespace hal
                 return ERR(igraph_strerror(err));
             }
 
+            graph->m_graph_initialized = true;
+
             return OK(std::move(graph));
         }
 
@@ -195,9 +208,10 @@ namespace hal
                 return ERR(igraph_strerror(res));
             }
 
-            graph->m_graph_ptr      = &(graph->m_graph);
-            graph->m_gates_to_nodes = this->m_gates_to_nodes;
-            graph->m_nodes_to_gates = this->m_nodes_to_gates;
+            graph->m_graph_initialized = true;
+            graph->m_graph_ptr         = &(graph->m_graph);
+            graph->m_gates_to_nodes    = this->m_gates_to_nodes;
+            graph->m_nodes_to_gates    = this->m_nodes_to_gates;
 
             return OK(std::move(graph));
         }
