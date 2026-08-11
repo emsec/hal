@@ -733,6 +733,8 @@ namespace hal
         std::vector<std::unique_ptr<ModulePin>> m_pins;
         std::unordered_map<u32, ModulePin*> m_pins_map;
         std::unordered_map<std::string, ModulePin*> m_pin_names_map;
+        // the net of a pin never changes, so this index only needs to be maintained on pin creation and deletion
+        std::unordered_map<const Net*, ModulePin*> m_pin_nets_map;
         std::vector<std::unique_ptr<PinGroup<ModulePin>>> m_pin_groups;
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
         std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
