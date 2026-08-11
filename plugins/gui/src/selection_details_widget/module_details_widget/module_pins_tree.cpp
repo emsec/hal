@@ -42,6 +42,75 @@ namespace hal
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModulePinsTree::handleContextMenuRequested);
         connect(mPortModel, &ModulePinsTreeModel::numberOfPortsChanged, this, &ModulePinsTree::handleNumberOfPortsChanged);
+        connect(mPortModel, &ModulePinsTreeModel::pinsAboutToReload, this, &ModulePinsTree::handlePinsAboutToReload);
+        connect(mPortModel, &ModulePinsTreeModel::pinsReloaded, this, &ModulePinsTree::handlePinsReloaded);
+    }
+
+    void ModulePinsTree::handlePinsAboutToReload()
+    {
+        mExpandedGroupIds.clear();
+        mSelectedGroupIds.clear();
+        mSelectedPinIds.clear();
+
+        for (int irow = 0; irow < mPortModel->rowCount(); irow++)
+        {
+            QModelIndex inx = mPortModel->index(irow, 0);
+            if (!isExpanded(inx))
+                continue;
+            if (ModulePinsTreeItem* grp = dynamic_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(inx)))
+                mExpandedGroupIds.insert(grp->id());
+        }
+
+        for (const QModelIndex& inx : selectionModel()->selectedRows())
+        {
+            ModulePinsTreeItem* item = dynamic_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(inx));
+            if (!item)
+                continue;
+            if (item->itemType() == ModulePinsTreeItem::Group)
+                mSelectedGroupIds.insert(item->id());
+            else if (item->itemType() == ModulePinsTreeItem::Pin)
+                mSelectedPinIds.insert(item->id());
+        }
+    }
+
+    void ModulePinsTree::handlePinsReloaded()
+    {
+        if (mExpandedGroupIds.isEmpty() && mSelectedGroupIds.isEmpty() && mSelectedPinIds.isEmpty())
+            return;
+
+        QItemSelection restored;
+
+        for (int irow = 0; irow < mPortModel->rowCount(); irow++)
+        {
+            QModelIndex groupInx      = mPortModel->index(irow, 0);
+            ModulePinsTreeItem* group = dynamic_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(groupInx));
+            if (!group)
+                continue;
+
+            // a bulk change might have removed pins and pin groups, whatever is gone just stays unrestored
+            if (mExpandedGroupIds.contains(group->id()))
+                setExpanded(groupInx, true);
+            if (mSelectedGroupIds.contains(group->id()))
+                restored.select(groupInx, groupInx);
+
+            if (mSelectedPinIds.isEmpty())
+                continue;
+
+            for (int prow = 0; prow < mPortModel->rowCount(groupInx); prow++)
+            {
+                QModelIndex pinInx      = mPortModel->index(prow, 0, groupInx);
+                ModulePinsTreeItem* pin = dynamic_cast<ModulePinsTreeItem*>(mPortModel->getItemFromIndex(pinInx));
+                if (pin && mSelectedPinIds.contains(pin->id()))
+                    restored.select(pinInx, pinInx);
+            }
+        }
+
+        if (!restored.isEmpty())
+            selectionModel()->select(restored, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+
+        mExpandedGroupIds.clear();
+        mSelectedGroupIds.clear();
+        mSelectedPinIds.clear();
     }
 
     void ModulePinsTree::setModule(u32 moduleID)
