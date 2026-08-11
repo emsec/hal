@@ -113,7 +113,7 @@ namespace hal
 
                     if (previous_size < current_size)
                     {
-                        IGRAPH_CHECK(igraph_vector_int_swap(previous_hood_p, current_hood_p));
+                        igraph_vector_int_swap(previous_hood_p, current_hood_p);
                         igraph_vector_int_clear(current_hood_p);
 
                         memset(added, false, no_of_nodes * sizeof(igraph_bool_t));
@@ -122,7 +122,8 @@ namespace hal
                         {
                             igraph_integer_t actnode = VECTOR(*previous_hood_p)[j];
                             igraph_vector_int_clear(&tmp);
-                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT));
+                            // IGRAPH_LOOPS_TWICE and multiple = true keep every neighbor in the result, duplicates are filtered by `added` below
+                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT, IGRAPH_LOOPS_TWICE, true));
 
                             for (k = 0; k < igraph_vector_int_size(&tmp); k++)
                             {
@@ -208,8 +209,8 @@ namespace hal
                     if (previous_size < current_size || current_size == 1)
                     {
                         // move current objects to previous
-                        IGRAPH_CHECK(igraph_vector_int_swap(previous_hood_p, current_hood_p));
-                        IGRAPH_CHECK(igraph_vector_int_swap(previous_component_p, current_component_p));
+                        igraph_vector_int_swap(previous_hood_p, current_hood_p);
+                        igraph_vector_int_swap(previous_component_p, current_component_p);
                         igraph_vector_int_clear(current_hood_p);
                         igraph_vector_int_clear(current_component_p);
 
@@ -221,7 +222,8 @@ namespace hal
                         {
                             igraph_integer_t actnode = VECTOR(*previous_hood_p)[j];
                             igraph_vector_int_clear(&tmp);
-                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT));
+                            // IGRAPH_LOOPS_TWICE and multiple = true keep every neighbor in the result, duplicates are filtered by `added` below
+                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT, IGRAPH_LOOPS_TWICE, true));
 
                             for (k = 0; k < igraph_vector_int_size(&tmp); k++)
                             {
