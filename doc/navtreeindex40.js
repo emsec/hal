@@ -1,5 +1,7 @@
 var NAVTREEINDEX40 =
 {
+"searchbar_8h.html":[7,0,1,3,0,0,41,2],
+"searchbar_8h_source.html":[7,0,1,3,0,0,41,2],
 "searchcolumndialog_8cpp.html":[7,0,1,3,2,40,3],
 "searchcolumndialog_8cpp_source.html":[7,0,1,3,2,40,3],
 "searchcolumndialog_8h.html":[7,0,1,3,0,0,41,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX40 =
 "sort_8cpp.html#ae6ccc351f66906dee7470b40fda9ce14":[7,0,1,3,2,25,4,0],
 "sort_8cpp.html#aeacb51281299c97ba69b4152275bc686":[7,0,1,3,2,25,4,1],
 "sort_8cpp_source.html":[7,0,1,3,2,25,4],
-"sort_8h.html":[7,0,1,3,0,0,25,4],
-"sort_8h.html#a1e42f7d639871593e9c5a2fbecd1f579":[7,0,1,3,0,0,25,4,7],
-"sort_8h.html#a1e95bade9096c47139daec1bd6600432":[7,0,1,3,0,0,25,4,6]
+"sort_8h.html":[7,0,1,3,0,0,25,4]
 };

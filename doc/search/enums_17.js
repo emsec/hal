@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['yearrange_40218',['YearRange',['https://doc.qt.io/qt-5/qdatetime.html#YearRange-enum',1,'QDateTime']]],
-  ['yuvlayout_40219',['YUVLayout',['https://doc.qt.io/qt-5/qpixelformat.html#YUVLayout-enum',1,'QPixelFormat']]]
+  ['yearrange_40215',['YearRange',['https://doc.qt.io/qt-5/qdatetime.html#YearRange-enum',1,'QDateTime']]],
+  ['yuvlayout_40216',['YUVLayout',['https://doc.qt.io/qt-5/qpixelformat.html#YUVLayout-enum',1,'QPixelFormat']]]
 ];

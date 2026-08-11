@@ -802,6 +802,7 @@ var namespacehal =
     [ "subgraph_netlist_decorator_init", "group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c", null ],
     [ "TEST_F", "namespacehal.html#aadbafa6a6f015693c4a1b47d750798f6", null ],
     [ "TEST_F", "namespacehal.html#ab58f4b532beeb5266918ab2f1026ab03", null ],
+    [ "TEST_F", "namespacehal.html#a2b4af51ddb7ff57052c967dfb37085aa", null ],
     [ "TEST_F", "namespacehal.html#aaba2a46b3b2cba9af17a242eb675632b", null ],
     [ "TEST_F", "namespacehal.html#ade7da5e5d9485ed515b38bd2932c1952", null ],
     [ "TEST_F", "namespacehal.html#a0e63eee41c47a088e0e466b421430a43", null ],
