@@ -47,8 +47,8 @@ namespace hal
     namespace plugin_manager
     {
         /**
-         * TODO Python binding.
-         * 
+         * TODO Python binding, requires bindings for ProgramOptions.
+         *
          * Register existing program options to avoid reuse by plugins.
          *
          * @param[in] existing_options - The program options.
@@ -70,8 +70,6 @@ namespace hal
         std::filesystem::path get_plugin_path(std::string plugin_name);
 
         /**
-         * TODO Python binding.
-         * 
          * Get a mapping of flags pointing to their corresponding CLI plugin.
          *
          * @returns A map from flag to plugin name.
@@ -79,8 +77,6 @@ namespace hal
         std::unordered_map<std::string, std::string> get_cli_plugin_flags();
 
         /**
-         * TODO Python binding.
-         * 
          * Get a mapping of flags pointing to their corresponding UI plugin.
          *
          * @returns A map from flag to plugin name.
@@ -88,8 +84,8 @@ namespace hal
         std::unordered_map<std::string, std::string> get_ui_plugin_flags();
 
         /**
-         * TODO Python binding.
-         * 
+         * TODO Python binding, requires bindings for ProgramOptions.
+         *
          * Get command line interface options for all plugins.
          *
          * @returns The program options.
@@ -141,8 +137,6 @@ namespace hal
         BasePluginInterface* get_plugin_instance(const std::string& plugin_name, bool initialize = true, bool silent = false);
 
         /**
-         * TODO Python bindings for different types and extend by initialize flag.
-         * 
          * Gets a specific interface for a plugin specified by name.
          * By default calls the initialize() function of the plugin.
          *
@@ -173,8 +167,6 @@ namespace hal
         }
 
         /**
-         * TODO Python binding.
-         * 
          * Add a callback to notify the GUI about loaded or unloaded plugins.
          *
          * @param[in] callback - The callback function. Parameters are:
@@ -186,8 +178,6 @@ namespace hal
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback);
 
         /**
-         * TODO Python binding.
-         * 
          * Remove a registered callback.
          *
          * @param[in] id - The id of the registered callback.
