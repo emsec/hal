@@ -214,8 +214,9 @@ namespace hal
             }
             else if (next_token == "bit_to")
             {
+                // the value is implied by 'bit_from', 'bit_width', and 'downto', but must still be consumed
                 type_str.consume(":", true);
-                [[maybe_unused]] u32 bit_to = std::stol(type_str.consume().string);
+                type_str.consume_until(";");
             }
             else if (next_token == "downto")
             {
