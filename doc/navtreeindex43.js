@@ -1,6 +1,5 @@
 var NAVTREEINDEX43 =
 {
-"structhal_1_1_standard_graphics_net_1_1_v_line.html#a5975f0d2d5db7d34d751b944ce398679":[4,0,0,0,2,6,2,0],
 "structhal_1_1_standard_graphics_net_1_1_v_line.html#a8f95c6684677ef6af4006bf2557a14f6":[4,0,0,0,2,6,2,2],
 "structhal_1_1_token.html":[4,1,2,4],
 "structhal_1_1_token.html#a0ab51ce8f9e344e7ba83d69366ca5c83":[4,1,2,4,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX43 =
 "test__multiple_8py.html#acc4677858c72770ae76519b4ccc47178":[7,0,1,0,2,1,0],
 "test__multiple_8py.html#ae231762a69fc3d6b78a3d8ba62544d67":[7,0,1,0,2,1,2],
 "test__multiple_8py_source.html":[7,0,1,0,2,1],
-"test__plugin_8py.html":[7,0,1,7,3]
+"test__plugin_8py.html":[7,0,1,7,3],
+"test__plugin_8py.html#a0cdd8d0a4db94689375f04ce4546f816":[7,0,1,7,3,0]
 };
