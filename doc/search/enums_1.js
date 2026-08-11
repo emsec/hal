@@ -1,18 +1,18 @@
 var searchData=
 [
-  ['base64option_39721',['Base64Option',['https://doc.qt.io/qt-5/qbytearray.html#Base64Option-enum',1,'QByteArray']]],
-  ['bgmode_39722',['BGMode',['https://doc.qt.io/qt-5/qt.html#BGMode-enum',1,'Qt']]],
-  ['bindingtarget_39723',['BindingTarget',['https://doc.qt.io/qt-5/qopengltexture.html#BindingTarget-enum',1,'QOpenGLTexture']]],
-  ['blurhint_39724',['BlurHint',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#BlurHint-enum',1,'QGraphicsBlurEffect']]],
-  ['borderstyle_39725',['BorderStyle',['https://doc.qt.io/qt-5/qtextframeformat.html#BorderStyle-enum',1,'QTextFrameFormat']]],
-  ['boundaryreason_39726',['BoundaryReason',['https://doc.qt.io/qt-5/qtextboundaryfinder.html#BoundaryReason-enum',1,'QTextBoundaryFinder']]],
-  ['boundarytype_39727',['BoundaryType',['https://doc.qt.io/qt-5/qtextboundaryfinder.html#BoundaryType-enum',1,'QTextBoundaryFinder']]],
-  ['brushstyle_39728',['BrushStyle',['https://doc.qt.io/qt-5/qt.html#BrushStyle-enum',1,'Qt']]],
-  ['button_5forientation_39729',['button_orientation',['../group__docking.html#ga96c899c45d7192341d04caf575c7f02c',1,'hal']]],
-  ['buttonfeature_39730',['ButtonFeature',['https://doc.qt.io/qt-5/qstyleoptionbutton.html#ButtonFeature-enum',1,'QStyleOptionButton']]],
-  ['buttonlayout_39731',['ButtonLayout',['https://doc.qt.io/qt-5/qdialogbuttonbox.html#ButtonLayout-enum',1,'QDialogButtonBox']]],
-  ['buttonposition_39732',['ButtonPosition',['https://doc.qt.io/qt-5/qtabbar.html#ButtonPosition-enum',1,'QTabBar']]],
-  ['buttonrole_39733',['ButtonRole',['https://doc.qt.io/qt-5/qdialogbuttonbox.html#ButtonRole-enum',1,'QDialogButtonBox::ButtonRole()'],['https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum',1,'QMessageBox::ButtonRole()']]],
-  ['buttonsymbols_39734',['ButtonSymbols',['https://doc.qt.io/qt-5/qabstractspinbox.html#ButtonSymbols-enum',1,'QAbstractSpinBox']]],
-  ['byteorder_39735',['ByteOrder',['https://doc.qt.io/qt-5/qdatastream.html#ByteOrder-enum',1,'QDataStream::ByteOrder()'],['https://doc.qt.io/qt-5/qpixelformat.html#ByteOrder-enum',1,'QPixelFormat::ByteOrder()']]]
+  ['base64option_39727',['Base64Option',['https://doc.qt.io/qt-5/qbytearray.html#Base64Option-enum',1,'QByteArray']]],
+  ['bgmode_39728',['BGMode',['https://doc.qt.io/qt-5/qt.html#BGMode-enum',1,'Qt']]],
+  ['bindingtarget_39729',['BindingTarget',['https://doc.qt.io/qt-5/qopengltexture.html#BindingTarget-enum',1,'QOpenGLTexture']]],
+  ['blurhint_39730',['BlurHint',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#BlurHint-enum',1,'QGraphicsBlurEffect']]],
+  ['borderstyle_39731',['BorderStyle',['https://doc.qt.io/qt-5/qtextframeformat.html#BorderStyle-enum',1,'QTextFrameFormat']]],
+  ['boundaryreason_39732',['BoundaryReason',['https://doc.qt.io/qt-5/qtextboundaryfinder.html#BoundaryReason-enum',1,'QTextBoundaryFinder']]],
+  ['boundarytype_39733',['BoundaryType',['https://doc.qt.io/qt-5/qtextboundaryfinder.html#BoundaryType-enum',1,'QTextBoundaryFinder']]],
+  ['brushstyle_39734',['BrushStyle',['https://doc.qt.io/qt-5/qt.html#BrushStyle-enum',1,'Qt']]],
+  ['button_5forientation_39735',['button_orientation',['../group__docking.html#ga96c899c45d7192341d04caf575c7f02c',1,'hal']]],
+  ['buttonfeature_39736',['ButtonFeature',['https://doc.qt.io/qt-5/qstyleoptionbutton.html#ButtonFeature-enum',1,'QStyleOptionButton']]],
+  ['buttonlayout_39737',['ButtonLayout',['https://doc.qt.io/qt-5/qdialogbuttonbox.html#ButtonLayout-enum',1,'QDialogButtonBox']]],
+  ['buttonposition_39738',['ButtonPosition',['https://doc.qt.io/qt-5/qtabbar.html#ButtonPosition-enum',1,'QTabBar']]],
+  ['buttonrole_39739',['ButtonRole',['https://doc.qt.io/qt-5/qdialogbuttonbox.html#ButtonRole-enum',1,'QDialogButtonBox::ButtonRole()'],['https://doc.qt.io/qt-5/qmessagebox.html#ButtonRole-enum',1,'QMessageBox::ButtonRole()']]],
+  ['buttonsymbols_39740',['ButtonSymbols',['https://doc.qt.io/qt-5/qabstractspinbox.html#ButtonSymbols-enum',1,'QAbstractSpinBox']]],
+  ['byteorder_39741',['ByteOrder',['https://doc.qt.io/qt-5/qdatastream.html#ByteOrder-enum',1,'QDataStream::ByteOrder()'],['https://doc.qt.io/qt-5/qpixelformat.html#ByteOrder-enum',1,'QPixelFormat::ByteOrder()']]]
 ];

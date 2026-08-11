@@ -1,5 +1,6 @@
 var NAVTREEINDEX44 =
 {
+"test__plugin_8py.html#a2bf2b4c4b4a2cc5295fb68bbc4f39a42":[7,0,1,7,3,3],
 "test__plugin_8py.html#a79feb4c3846c15acf42a9a2908ecefec":[7,0,1,7,3,6],
 "test__plugin_8py.html#a7efa8a9ff852d172d85bb93479bc913b":[7,0,1,7,3,1],
 "test__plugin_8py.html#a8cd40629c5013844954ad61ed2ab0f9f":[7,0,1,7,3,4],
@@ -187,5 +188,6 @@ var NAVTREEINDEX44 =
 "widget__overlay_8cpp.html":[7,0,1,3,2,36,1],
 "widget__overlay_8cpp_source.html":[7,0,1,3,2,36,1],
 "widget__overlay_8h.html":[7,0,1,3,0,0,37,1],
-"widget__overlay_8h_source.html":[7,0,1,3,0,0,37,1]
+"widget__overlay_8h_source.html":[7,0,1,3,0,0,37,1],
+"":[5,0,5]
 };
