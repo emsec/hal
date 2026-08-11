@@ -214,7 +214,9 @@ namespace hal
             }
             else if (next_token == "bit_to")
             {
+                // the value is implied by 'bit_from', 'bit_width', and 'downto', but must still be consumed
                 type_str.consume(":", true);
+                type_str.consume_until(";");
             }
             else if (next_token == "downto")
             {
