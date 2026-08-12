@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
 * fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
 * changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
+* GUI
+  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
+  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
+  * changed the module elements tree to not rebuild itself twice per selection change
+* sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
+* added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
+* removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
 * fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
 * added information to GUI setting file so that widgets position and size from previous session gets restored
