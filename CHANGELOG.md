@@ -10,6 +10,11 @@ All notable changes to this project will be documented in this file.
 * module pin groups
   * fixed bug in pin model which must not crash when deleting a non-empty pin group
   * fixed bug by disallowing deletion of group comprising a single pin with same name
+* Boolean functions
+  * fixed silent truncation of additions and subtractions, results of operands wider than 32 bit lost their upper bits
+  * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
+  * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations, which were not implemented and made evaluation of any function containing them fail, following the SMT-LIB definitions these operations are translated to
+  * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well

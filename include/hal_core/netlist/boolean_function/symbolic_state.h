@@ -28,6 +28,7 @@
 #include "hal_core/netlist/boolean_function.h"
 
 #include <map>
+#include <unordered_map>
 
 namespace hal
 {
@@ -70,6 +71,17 @@ namespace hal
              * @param[in] value - The equivalent Boolean function.
              */
             void set(const BooleanFunction& key, const BooleanFunction& value);
+
+            /**
+             * Collects the variables bound within the symbolic state, indexed by their name.
+             *
+             * Looking a variable up through get() builds a Boolean function to use as the key and compares it
+             * against the keys of the state node by node. Callers that resolve many variables of the same
+             * state, such as the evaluation of a Boolean function, are better served by this index.
+             *
+             * @returns A map from variable name to the Boolean function bound to it.
+             */
+            std::unordered_map<std::string, const BooleanFunction*> get_bindings() const;
 
             ////////////////////////////////////////////////////////////////////////////
             // Members
