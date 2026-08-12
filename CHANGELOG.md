@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
+* changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module
+* fixed `simplify_lut_inits` crashing on a LUT whose output pin is unconnected
+* fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
+* fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
+* fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
+* added tests for the `xilinx_toolbox` plugin, which had none so far
 * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
 * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
 * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime

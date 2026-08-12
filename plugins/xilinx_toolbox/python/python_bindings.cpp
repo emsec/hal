@@ -82,8 +82,8 @@ namespace hal
 
         m.def(
             "split_luts",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = xilinx_toolbox::split_luts(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = xilinx_toolbox::split_luts(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -95,19 +95,21 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
             Split LUTs with two outputs into two separate LUT gates.
             Replaces ``LUT6_2`` with a ``LUT6`` and a ``LUT5`` gate if the respective outputs of the ``LUT6_2`` are actually used, i.e., connected to other gates.
 
             :param hal_py.Netlist nl: The netlist to operate on. 
+            :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
             :returns: The number of split ``LUT6_2`` gates on success, ``None`` otherwise.
             :rtype: int or None
         )");
 
         m.def(
             "split_shift_registers",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = xilinx_toolbox::split_shift_registers(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = xilinx_toolbox::split_shift_registers(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -119,11 +121,14 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
             Split shift register primitives and replaces them with equivalent flip-flops chains.
-            Currently only implemented for gate type ``SRL16E``.
+            Currently only implemented for gate types ``SRL16E`` and ``SRLC32E``.
+            The created flip-flops are assigned to the module of the shift register gate that they replace.
 
             :param hal_py.Netlist nl: The netlist to operate on. 
+            :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
             :returns: The number of split shift registers on success, ``None`` otherwise.
             :rtype: int or None
         )");

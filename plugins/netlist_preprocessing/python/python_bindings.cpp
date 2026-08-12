@@ -80,8 +80,8 @@ namespace hal
 
         m.def(
             "remove_unused_lut_inputs",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_unused_lut_inputs(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_unused_lut_inputs(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -93,18 +93,20 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of removed LUT endpoints on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
         m.def(
             "remove_buffers",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_buffers(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_buffers(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -116,20 +118,22 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
                 Considers all combinational gates and takes their inputs into account.
                 For example, a 2-input AND gate with one input being connected to constant ``1`` will also be removed.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of removed buffers on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
         m.def(
             "remove_redundant_gates",
-            [](Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_redundant_gates(nl, filter);
+            [](Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr, const std::vector<Gate*>& gates = {}) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_redundant_gates(nl, filter, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -142,11 +146,14 @@ namespace hal
             },
             py::arg("nl"),
             py::arg("filter") = nullptr,
+            py::arg("gates")  = std::vector<Gate*>(),
             R"(
                 Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
+                Only gates contained in ``gates`` are removed, the equivalent gate that is kept in their stead may lie outside of ``gates``.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param lambda filter: Optional filter to fine-tune which gates are being replaced. Default to a ``None``.
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -204,8 +211,8 @@ namespace hal
 
         m.def(
             "remove_unconnected_gates",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_unconnected_gates(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_unconnected_gates(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -217,10 +224,13 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Removes gates for which all fan-out nets do not have a destination and are not global output nets.
+                The removal is repeated until no further gates can be removed, but gates outside of ``gates`` are never removed, even if they become unconnected in the process.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -302,8 +312,8 @@ namespace hal
 
         m.def(
             "propagate_constants",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::propagate_constants(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::propagate_constants(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -315,19 +325,22 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Builds for all gate output nets the Boolean function and substitutes all variables connected to vcc/gnd nets with the respective boolean value.
                 If the function simplifies to a static boolean constant cut the connection to the nets destinations and directly connect it to vcc/gnd. 
+                The propagation is repeated until no further gates can be substituted, but gates outside of ``gates`` are never substituted, even if they become constant in the process.
 
                 :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of rerouted nets on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
         m.def(
             "remove_consecutive_inverters",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::remove_consecutive_inverters(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::remove_consecutive_inverters(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -339,19 +352,22 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
                 If the first inverter has additional successors, only the second inverter is deleted.
+                Both inverters must be contained in ``gates`` for the pair to be considered, even if only the second one ends up being deleted.
 
                 :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of removed inverter gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
         m.def(
             "simplify_lut_inits",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = netlist_preprocessing::simplify_lut_inits(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::optional<u32> {
+                auto res = netlist_preprocessing::simplify_lut_inits(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -363,10 +379,12 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The number of simplified INIT strings on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -473,8 +491,8 @@ namespace hal
 
         m.def(
             "create_nets_at_unconnected_pins",
-            [](Netlist* nl) -> std::vector<Net*> {
-                auto res = netlist_preprocessing::create_nets_at_unconnected_pins(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates) -> std::vector<Net*> {
+                auto res = netlist_preprocessing::create_nets_at_unconnected_pins(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -486,11 +504,13 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(
                 Create a new net for every unconnected output pin of every gate of the netlist.
                 The new nets are named ``HAL_UNCONNECTED_<net_id>``.
 
                 :param hal_py.Netlist nl: The netlist to operate on.
+                :param list[hal_py.Gate] gates: The gates to consider. Defaults to an empty list, in which case all gates of the netlist are considered.
                 :returns: The created nets on success, an empty list otherwise.
                 :rtype: list[hal_py.Net]
             )");
@@ -515,7 +535,8 @@ namespace hal
             R"(
                 Iterates all flip-flops of the netlist or specified by the user.
                 If a flip-flop has a ``state`` and a ``neg_state`` output, a new inverter gate is created and connected to the ``state`` output net as an additional destination.
-                Finally, the ``neg_state`` output net is disconnected from the ``neg_state`` pin and re-connected to the new inverter gate's output. 
+                Finally, the ``neg_state`` output net is disconnected from the ``neg_state`` pin and re-connected to the new inverter gate's output.
+                The new inverter gate is assigned to the module of the respective flip-flop. 
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.Gate] ffs: The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.
