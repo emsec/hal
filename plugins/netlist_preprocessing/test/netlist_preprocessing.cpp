@@ -1,5 +1,7 @@
 #include "netlist_preprocessing/netlist_preprocessing.h"
 
+#include "netlist_preprocessing/plugin_netlist_preprocessing.h"
+
 #include "netlist_test_utils.h"
 #include "gate_library_test_utils.h"
 
@@ -862,6 +864,129 @@ namespace hal {
 
             // the new inverter belongs to the flip-flop it was created for, not to the top module
             EXPECT_EQ(inverters.front()->get_module(), mod);
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the context menu entries contributed to the GUI.
+     *
+     * Functions: GuiExtensionNetlistPreprocessing::get_context_contribution, GuiExtensionNetlistPreprocessing::execute_function
+     */
+    TEST_F(NetlistPreprocessingTest, check_gui_extension)
+    {
+        TEST_START
+        {
+            NetlistPreprocessingPlugin plugin;
+
+            GuiExtensionNetlistPreprocessing* gui = nullptr;
+            for (auto* ext : plugin.get_extensions())
+            {
+                if (auto* casted = dynamic_cast<GuiExtensionNetlistPreprocessing*>(ext); casted != nullptr)
+                {
+                    gui = casted;
+                }
+            }
+            ASSERT_NE(gui, nullptr);
+
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* b1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "b1");
+            Gate* b2 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "b2");
+            Gate* g3 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g3");
+
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->mark_global_input_net();
+
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->mark_global_input_net();
+
+            Net* n2 = nl->create_net("n2");
+            n2->add_destination(g3, "I1");
+            n2->mark_global_input_net();
+
+            test_utils::connect(nl.get(), g0, "O", b1, "I");
+            test_utils::connect(nl.get(), b1, "O", b2, "I");
+            test_utils::connect(nl.get(), b2, "O", g3, "I0");
+
+            // without a selection the netlist-wide entries are offered
+            auto without_selection = gui->get_context_contribution(nl.get(), {}, {}, {});
+            ASSERT_EQ(without_selection.size(), 2);
+            for (const auto& cmc : without_selection)
+            {
+                EXPECT_EQ(cmc.mContributer, gui);
+                EXPECT_FALSE(cmc.mEntry.empty());
+                EXPECT_NE(cmc.mTagname.find("_netlist"), std::string::npos);
+            }
+
+            // with a selection only the entries operating on it are offered
+            auto with_selection = gui->get_context_contribution(nl.get(), {}, {b1->get_id()}, {});
+            ASSERT_EQ(with_selection.size(), 2);
+            for (const auto& cmc : with_selection)
+            {
+                EXPECT_EQ(cmc.mContributer, gui);
+                EXPECT_FALSE(cmc.mEntry.empty());
+                EXPECT_NE(cmc.mTagname.find("_selection"), std::string::npos);
+            }
+
+            // running the entry on the selected gate removes only that buffer
+            gui->execute_function("remove_buffers_selection", nl.get(), {}, {b1->get_id()}, {});
+            EXPECT_EQ(nl->get_gates().size(), 3);
+            ASSERT_NE(g0->get_successor("O"), nullptr);
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), b2);
+
+            // the netlist-wide entry then removes the remaining one
+            gui->execute_function("remove_buffers_netlist", nl.get(), {}, {}, {});
+            EXPECT_EQ(nl->get_gates().size(), 2);
+            ASSERT_NE(g0->get_successor("O"), nullptr);
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), g3);
+        }
+        {
+            // a module selection is expanded into the gates it contains
+            NetlistPreprocessingPlugin plugin;
+            auto* gui = dynamic_cast<GuiExtensionNetlistPreprocessing*>(plugin.get_extensions().front());
+            ASSERT_NE(gui, nullptr);
+
+            std::unique_ptr<Netlist> nl = test_utils::create_empty_netlist();
+            ASSERT_NE(nl, nullptr);
+            const GateLibrary* gl = nl->get_gate_library();
+            ASSERT_NE(gl, nullptr);
+
+            Gate* g0 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g0");
+            Gate* b1 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "b1");
+            Gate* b2 = nl->create_gate(gl->get_gate_type_by_name("BUF"), "b2");
+            Gate* g3 = nl->create_gate(gl->get_gate_type_by_name("AND2"), "g3");
+
+            Net* n0 = nl->create_net("n0");
+            n0->add_destination(g0, "I0");
+            n0->mark_global_input_net();
+
+            Net* n1 = nl->create_net("n1");
+            n1->add_destination(g0, "I1");
+            n1->mark_global_input_net();
+
+            Net* n2 = nl->create_net("n2");
+            n2->add_destination(g3, "I1");
+            n2->mark_global_input_net();
+
+            test_utils::connect(nl.get(), g0, "O", b1, "I");
+            test_utils::connect(nl.get(), b1, "O", b2, "I");
+            test_utils::connect(nl.get(), b2, "O", g3, "I0");
+
+            // only the first buffer lives inside the module
+            Module* mod = nl->create_module("mod", nl->get_top_module(), {b1});
+            ASSERT_NE(mod, nullptr);
+
+            gui->execute_function("remove_buffers_selection", nl.get(), {mod->get_id()}, {}, {});
+            EXPECT_EQ(nl->get_gates().size(), 3);
+            ASSERT_NE(g0->get_successor("O"), nullptr);
+            EXPECT_EQ(g0->get_successor("O")->get_gate(), b2);
         }
         TEST_END
     }

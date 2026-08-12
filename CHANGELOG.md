@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * fixed `split_luts` crashing on a `LUT6_2` that only uses one of its two output pins, which is the common case the function is meant to handle
 * fixed `remove_unconnected_gates` looping forever if a gate could not be deleted
 * fixed the documentation of `split_shift_registers`, which claimed that only `SRL16E` is supported although `SRLC32E` is handled as well
+* added context menu entries to the GUI for `remove_buffers`, `unify_ff_outputs`, `split_luts`, and `split_shift_registers`, each applicable to the current selection or to the entire netlist
 * added tests for the `xilinx_toolbox` plugin, which had none so far
 * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
 * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`

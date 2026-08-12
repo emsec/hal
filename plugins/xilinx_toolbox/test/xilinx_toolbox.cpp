@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hgl_parser/hgl_parser.h"
 #include "netlist_test_utils.h"
+#include "xilinx_toolbox/plugin_xilinx_toolbox.h"
 #include "xilinx_toolbox/preprocessing.h"
 
 namespace hal
@@ -234,6 +235,82 @@ namespace hal
             auto ffs = nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "FDE"; });
             ASSERT_EQ(ffs.size(), 1);
             EXPECT_EQ(ffs.front()->get_module(), mod);
+        }
+        TEST_END
+    }
+
+    /**
+     * Test the context menu entries contributed to the GUI.
+     *
+     * Functions: GuiExtensionXilinxToolbox::get_context_contribution, GuiExtensionXilinxToolbox::execute_function
+     */
+    TEST_F(XilinxToolboxTest, check_gui_extension)
+    {
+        TEST_START
+        {
+            XilinxToolboxPlugin plugin;
+
+            GuiExtensionXilinxToolbox* gui = nullptr;
+            for (auto* ext : plugin.get_extensions())
+            {
+                if (auto* casted = dynamic_cast<GuiExtensionXilinxToolbox*>(ext); casted != nullptr)
+                {
+                    gui = casted;
+                }
+            }
+            ASSERT_NE(gui, nullptr);
+
+            Net *gnd_net = nullptr, *vcc_net = nullptr;
+            std::unique_ptr<Netlist> nl = create_netlist(&gnd_net, &vcc_net);
+            ASSERT_NE(nl, nullptr);
+
+            std::vector<Gate*> luts;
+            for (const std::string& name : {"l0", "l1"})
+            {
+                Gate* l = nl->create_gate(m_gl->get_gate_type_by_name("LUT6_2"), name);
+                ASSERT_TRUE(l->set_init_data({"ABCDEF0123456789"}).is_ok());
+
+                for (u32 i = 0; i < 6; i++)
+                {
+                    Net* n = nl->create_net(name + "_i" + std::to_string(i));
+                    n->add_destination(l, "I" + std::to_string(i));
+                    n->mark_global_input_net();
+                }
+
+                Net* o6 = nl->create_net(name + "_o6");
+                o6->add_source(l, "O6");
+                o6->add_destination(nl->create_gate(m_gl->get_gate_type_by_name("INV"), name + "_sink"), "I");
+
+                luts.push_back(l);
+            }
+
+            // without a selection the netlist-wide entries are offered
+            auto without_selection = gui->get_context_contribution(nl.get(), {}, {}, {});
+            ASSERT_EQ(without_selection.size(), 2);
+            for (const auto& cmc : without_selection)
+            {
+                EXPECT_NE(cmc.mTagname.find("_netlist"), std::string::npos);
+            }
+
+            // with a selection only the entries operating on it are offered
+            auto with_selection = gui->get_context_contribution(nl.get(), {}, {luts.at(0)->get_id()}, {});
+            ASSERT_EQ(with_selection.size(), 2);
+            for (const auto& cmc : with_selection)
+            {
+                EXPECT_EQ(cmc.mContributer, gui);
+                EXPECT_FALSE(cmc.mEntry.empty());
+                EXPECT_NE(cmc.mTagname.find("_selection"), std::string::npos);
+            }
+
+            // running the entry on the selected gate splits only that LUT
+            gui->execute_function("split_luts_selection", nl.get(), {}, {luts.at(0)->get_id()}, {});
+            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }).size(), 1);
+            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6"; }).size(), 1);
+
+            // the netlist-wide entry then splits the remaining one
+            gui->execute_function("split_luts_netlist", nl.get(), {}, {}, {});
+            EXPECT_TRUE(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6_2"; }).empty());
+            EXPECT_EQ(nl->get_gates([](const Gate* g) { return g->get_type()->get_name() == "LUT6"; }).size(), 2);
         }
         TEST_END
     }
