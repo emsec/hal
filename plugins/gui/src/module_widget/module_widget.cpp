@@ -72,6 +72,8 @@ namespace hal
         mTreeView->setFrameStyle(QFrame::NoFrame);
         //mTreeView->header()->close();
         mTreeView->setExpandsOnDoubleClick(false);
+        // all rows are plain single line text, so the view must not measure each of them separately
+        mTreeView->setUniformRowHeights(true);
         mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
         mContentLayout->addWidget(mTreeView);

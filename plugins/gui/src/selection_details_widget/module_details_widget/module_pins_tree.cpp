@@ -25,6 +25,8 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        // all rows are plain single line text, so the view must not measure each of them separately
+        setUniformRowHeights(true);
         //setSelectionMode(QAbstractItemView::NoSelection);
         setSelectionMode(QAbstractItemView::ExtendedSelection);
         //setSelectionMode(QAbstractItemView::SingleSelection);

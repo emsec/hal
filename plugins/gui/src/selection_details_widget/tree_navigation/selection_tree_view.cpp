@@ -22,6 +22,8 @@ namespace hal
     SelectionTreeView::SelectionTreeView(QWidget* parent, bool isGrouping) : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        // all rows are plain single line text, so the view must not measure each of them separately
+        setUniformRowHeights(true);
         setDefaultColumnWidth();
         header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
 
