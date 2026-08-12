@@ -1651,6 +1651,25 @@ namespace hal
                             }
                         }
 
+                        // a slice of an extension either sees only the padding or only the original value
+                        if (p[0].is(BooleanFunction::NodeType::Zext) || p[0].is(BooleanFunction::NodeType::Sext))
+                        {
+                            const auto extended = p[0].get_parameters();
+                            const auto original = extended[0].size();
+
+                            // SLICE(ZEXT(X, n), i, j)   =>   0, the range lies entirely in the zero padding
+                            if (p[0].is(BooleanFunction::NodeType::Zext) && (start >= original))
+                            {
+                                return OK(BooleanFunction::Const(0, node.size));
+                            }
+                            // SLICE(ZEXT(X, n), i, j)   =>   SLICE(X, i, j), the range lies entirely within X
+                            // SLICE(SEXT(X, n), i, j)   =>   SLICE(X, i, j), which holds for both extensions
+                            if (end < original)
+                            {
+                                return BooleanFunction::Slice(extended[0].clone(), BooleanFunction::Index(start, original), BooleanFunction::Index(end, original), node.size);
+                            }
+                        }
+
                         // a slice that falls entirely into one half of a concatenation only needs that half,
                         // where the second parameter of the concatenation holds the least significant bits
                         if (p[0].is(BooleanFunction::NodeType::Concat))

@@ -1476,6 +1476,14 @@ namespace hal {
             {"SLICE(CONCAT(A, B), 1, 2)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(1, 8), i(2, 8), 2).get()},
             {"SLICE(CONCAT(A, B), 5, 6)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(5, 8), i(6, 8), 2).get()},
 
+            // a slice of an extension sees either only the padding or only the original value
+            {"SLICE(ZEXT(A, 8), 4, 7)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(4, 8), i(7, 8), 4).get()},
+            {"SLICE(ZEXT(A, 8), 5, 6)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(5, 8), i(6, 8), 2).get()},
+            {"SLICE(ZEXT(A, 8), 0, 3)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(ZEXT(A, 8), 1, 2)", BooleanFunction::Slice(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(1, 8), i(2, 8), 2).get()},
+            {"SLICE(SEXT(A, 8), 0, 3)", BooleanFunction::Slice(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(SEXT(A, 8), 1, 2)", BooleanFunction::Slice(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(1, 8), i(2, 8), 2).get()},
+
             // comparisons against the extremes of the unsigned range
             {"0 <=u A", BooleanFunction::Ule(BooleanFunction::Const(0, 4), a4.clone(), 1).get()},
             {"A <=u 15", BooleanFunction::Ule(a4.clone(), BooleanFunction::Const(15, 4), 1).get()},
