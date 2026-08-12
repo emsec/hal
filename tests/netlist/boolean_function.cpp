@@ -4,6 +4,7 @@
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/boolean_function/types.h"
 
+#include <functional>
 #include <iostream>
 #include <type_traits>
 #include <variant>
@@ -1407,6 +1408,49 @@ namespace hal {
                 {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
                 {"B", {Value::ZERO, Value::ZERO, Value::ZERO, Value::ZERO}}};
             EXPECT_EQ(bits(0, 1), BooleanFunction::Eq(a4.clone(), b4.clone(), 1).get().evaluate(distinguishable).get()) << "0b00X1 == 0b0000";
+        }
+    }
+
+    TEST(BooleanFunction, DivisionFactories) {
+        const auto a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4),
+                   c = BooleanFunction::Var("C", 8);
+
+        struct Factory
+        {
+            std::string name;
+            std::function<Result<BooleanFunction>(BooleanFunction&&, BooleanFunction&&, u16)> create;
+            u16 node_type;
+            std::string symbol;
+        };
+
+        const std::vector<Factory> factories = {
+            {"Sdiv", &BooleanFunction::Sdiv, BooleanFunction::NodeType::Sdiv, "/s"},
+            {"Udiv", &BooleanFunction::Udiv, BooleanFunction::NodeType::Udiv, "/"},
+            {"Srem", &BooleanFunction::Srem, BooleanFunction::NodeType::Srem, "%s"},
+            {"Urem", &BooleanFunction::Urem, BooleanFunction::NodeType::Urem, "%"},
+        };
+
+        for (const auto& factory : factories)
+        {
+            {
+                // operands and result of equal size are accepted
+                auto res = factory.create(a.clone(), b.clone(), 4);
+                ASSERT_TRUE(res.is_ok()) << factory.name;
+
+                const auto function = res.get();
+                EXPECT_EQ(4, function.size()) << factory.name;
+                EXPECT_EQ(factory.node_type, function.get_top_level_node().type) << factory.name;
+                EXPECT_EQ(std::set<std::string>({"A", "B"}), function.get_variable_names()) << factory.name;
+                EXPECT_NE(std::string::npos, function.to_string().find(factory.symbol)) << factory.name << " prints as " << function.to_string();
+            }
+
+            // operands of different size are rejected
+            EXPECT_TRUE(factory.create(a.clone(), c.clone(), 4).is_error()) << factory.name << " with mismatched operands";
+            EXPECT_TRUE(factory.create(c.clone(), a.clone(), 4).is_error()) << factory.name << " with mismatched operands";
+
+            // a result size that differs from the operands is rejected
+            EXPECT_TRUE(factory.create(a.clone(), b.clone(), 8).is_error()) << factory.name << " with mismatched result size";
         }
     }
 
