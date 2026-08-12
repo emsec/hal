@@ -384,6 +384,14 @@ namespace hal
         QMultiMap<u32, ModuleItem*>* mModuleItemMaps[3] = {&mModuleMap, &mGateMap, &mNetMap};;
 
         bool mIsModifying;
+
+        /**
+         * Set while the model is between beginResetModel() and endResetModel().
+         * The reset already tells the views to re-read everything, so createChildItem() and removeChildItem()
+         * must not emit row signals of their own while it is set.
+         */
+        bool mResetInProgress;
+
         TempGateAssignment mTempGateAssignment;
     };
 }    // namespace hal
