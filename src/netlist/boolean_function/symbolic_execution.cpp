@@ -1607,12 +1607,12 @@ namespace hal
                     return BooleanFunction::Srem(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Urem: {
-                    // X %s 1    =>   0
+                    // X % 1    =>   0
                     if (p[1].has_constant_value(1))
                     {
                         return OK(BooleanFunction::Const(0, node.size));
                     }
-                    // X %s X    =>   0
+                    // X % X    =>   0
                     if (p[0] == p[1])
                     {
                         return OK(BooleanFunction::Const(0, node.size));
@@ -1631,6 +1631,47 @@ namespace hal
                     if (node.size == p[0].size() && p[1].has_index_value(0) && p[2].has_index_value(node.size - 1))
                     {
                         return OK(p[0]);
+                    }
+
+                    if (const auto start_res = p[1].get_index_value(), end_res = p[2].get_index_value(); start_res.is_ok() && end_res.is_ok())
+                    {
+                        const auto start = start_res.get(), end = end_res.get();
+
+                        // SLICE(SLICE(X, i, j), k, l)   =>   SLICE(X, i+k, i+l)
+                        if (p[0].is(BooleanFunction::NodeType::Slice))
+                        {
+                            const auto inner = p[0].get_parameters();
+                            if (const auto inner_start = inner[1].get_index_value(); inner_start.is_ok())
+                            {
+                                const auto offset = inner_start.get();
+                                return BooleanFunction::Slice(inner[0].clone(),
+                                                              BooleanFunction::Index(offset + start, inner[0].size()),
+                                                              BooleanFunction::Index(offset + end, inner[0].size()),
+                                                              node.size);
+                            }
+                        }
+
+                        // a slice that falls entirely into one half of a concatenation only needs that half,
+                        // where the second parameter of the concatenation holds the least significant bits
+                        if (p[0].is(BooleanFunction::NodeType::Concat))
+                        {
+                            const auto halves = p[0].get_parameters();
+                            const auto lower  = halves[1].size();
+
+                            // SLICE(CONCAT(X, Y), i, j)   =>   SLICE(Y, i, j)
+                            if (end < lower)
+                            {
+                                return BooleanFunction::Slice(halves[1].clone(), BooleanFunction::Index(start, lower), BooleanFunction::Index(end, lower), node.size);
+                            }
+                            // SLICE(CONCAT(X, Y), i, j)   =>   SLICE(X, i-|Y|, j-|Y|)
+                            if (start >= lower)
+                            {
+                                return BooleanFunction::Slice(halves[0].clone(),
+                                                              BooleanFunction::Index(start - lower, halves[0].size()),
+                                                              BooleanFunction::Index(end - lower, halves[0].size()),
+                                                              node.size);
+                            }
+                        }
                     }
 
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
@@ -1769,9 +1810,33 @@ namespace hal
                     return BooleanFunction::Concat(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Zext: {
+                    // ZEXT(X, |X|)   =>   X
+                    if (node.size == p[0].size())
+                    {
+                        return OK(p[0]);
+                    }
+                    // ZEXT(ZEXT(X, n), m)   =>   ZEXT(X, m), only for two extensions of the same kind
+                    if (p[0].is(BooleanFunction::NodeType::Zext))
+                    {
+                        const auto inner = p[0].get_parameters();
+                        return BooleanFunction::Zext(inner[0].clone(), BooleanFunction::Index(node.size, node.size), node.size);
+                    }
+
                     return BooleanFunction::Zext(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Sext: {
+                    // SEXT(X, |X|)   =>   X
+                    if (node.size == p[0].size())
+                    {
+                        return OK(p[0]);
+                    }
+                    // SEXT(SEXT(X, n), m)   =>   SEXT(X, m), only for two extensions of the same kind
+                    if (p[0].is(BooleanFunction::NodeType::Sext))
+                    {
+                        const auto inner = p[0].get_parameters();
+                        return BooleanFunction::Sext(inner[0].clone(), BooleanFunction::Index(node.size, node.size), node.size);
+                    }
+
                     return BooleanFunction::Sext(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Eq: {
@@ -1779,6 +1844,25 @@ namespace hal
                     if (p[0] == p[1])
                     {
                         return OK(BooleanFunction::Const(1, node.size));
+                    }
+                    // X == ~X   =>   0, the two differ in every single bit
+                    if (is_x_not_y(p[0], p[1]))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // on a single bit an equality is the operand itself, or its negation
+                    if (p[0].size() == 1)
+                    {
+                        // X == 1   =>   X
+                        if (p[1] == One(1))
+                        {
+                            return OK(p[0]);
+                        }
+                        // X == 0   =>   ~X
+                        if (p[1].has_constant_value(0))
+                        {
+                            return OK(~p[0]);
+                        }
                     }
 
                     return BooleanFunction::Eq(p[0].clone(), p[1].clone(), node.size);
@@ -1807,6 +1891,16 @@ namespace hal
                     {
                         return OK(BooleanFunction::Const(1, node.size));
                     }
+                    // 0 <= X   =>   1, no unsigned value is below zero
+                    if (p[0].has_constant_value(0))
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+                    // X <= 111...1   =>   1, no unsigned value is above the maximum
+                    if (p[1] == One(p[1].size()))
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
 
                     return BooleanFunction::Ule(p[0].clone(), p[1].clone(), node.size);
                 }
@@ -1818,6 +1912,11 @@ namespace hal
                     }
                     // X < X   =>   0
                     if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // 111...1 < X   =>   0, no unsigned value is above the maximum
+                    if (p[0] == One(p[0].size()))
                     {
                         return OK(BooleanFunction::Const(0, node.size));
                     }
@@ -1839,6 +1938,20 @@ namespace hal
                     if (p[1] == p[2])
                     {
                         return OK(p[1]);
+                    }
+                    // a single bit choice between 1 and 0 is the condition itself, or its negation
+                    if (node.size == 1)
+                    {
+                        // ITE(a, 1, 0)  =>  a
+                        if ((p[1] == One(1)) && p[2].has_constant_value(0))
+                        {
+                            return OK(p[0]);
+                        }
+                        // ITE(a, 0, 1)  =>  ~a
+                        if (p[1].has_constant_value(0) && (p[2] == One(1)))
+                        {
+                            return OK(~p[0]);
+                        }
                     }
 
                     return BooleanFunction::Ite(p[0].clone(), p[1].clone(), p[2].clone(), node.size);

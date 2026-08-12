@@ -1411,6 +1411,92 @@ namespace hal {
         }
     }
 
+    namespace {
+        /**
+         * Checks that simplifying a function does not change the value it computes for any input, by
+         * enumerating every assignment of its variables.
+         */
+        void expect_simplification_preserves_value(const BooleanFunction& function, const std::string& description) {
+            const auto simplified = function.simplify();
+
+            std::vector<std::pair<std::string, u16>> variables;
+            u32 total_bits = 0;
+            for (const auto& name : function.get_variable_names()) {
+                u16 size = 0;
+                for (const auto& node : function.get_nodes()) {
+                    if (node.is_variable() && (node.variable == name)) {
+                        size = node.size;
+                    }
+                }
+                variables.emplace_back(name, size);
+                total_bits += size;
+            }
+            ASSERT_LE(total_bits, 16u) << description << ": too many bits to enumerate";
+
+            for (u64 assignment = 0; assignment < (1ull << total_bits); assignment++) {
+                std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input;
+                u32 offset = 0;
+                for (const auto& [name, size] : variables) {
+                    input[name] = bits(assignment >> offset, size);
+                    offset += size;
+                }
+
+                const auto before = function.evaluate(input);
+                const auto after  = simplified.evaluate(input);
+                ASSERT_TRUE(before.is_ok()) << description;
+                ASSERT_TRUE(after.is_ok()) << description;
+                ASSERT_EQ(before.get(), after.get()) << description << ", assignment " << assignment << ", simplified to " << simplified.to_string();
+            }
+        }
+    }
+
+    TEST(BooleanFunction, SimplificationOfWordLevelOperations) {
+        const auto a1 = BooleanFunction::Var("A", 1),
+                   a4 = BooleanFunction::Var("A", 4),
+                   b4 = BooleanFunction::Var("B", 4);
+
+        const auto i = [](u16 value, u16 size) { return BooleanFunction::Index(value, size); };
+
+        const std::vector<std::pair<std::string, BooleanFunction>> cases = {
+            // an extension to the width the value already has changes nothing
+            {"ZEXT(A, 4)", BooleanFunction::Zext(a4.clone(), i(4, 4), 4).get()},
+            {"SEXT(A, 4)", BooleanFunction::Sext(a4.clone(), i(4, 4), 4).get()},
+
+            // two extensions of the same kind collapse into the wider one
+            {"ZEXT(ZEXT(A, 8), 16)", BooleanFunction::Zext(BooleanFunction::Zext(a4.clone(), i(8, 8), 8).get(), i(16, 16), 16).get()},
+            {"SEXT(SEXT(A, 8), 16)", BooleanFunction::Sext(BooleanFunction::Sext(a4.clone(), i(8, 8), 8).get(), i(16, 16), 16).get()},
+
+            // a slice of a slice is a single slice of the original
+            {"SLICE(SLICE(A, 1, 3), 0, 1)", BooleanFunction::Slice(BooleanFunction::Slice(a4.clone(), i(1, 4), i(3, 4), 3).get(), i(0, 3), i(1, 3), 2).get()},
+            {"SLICE(SLICE(A, 1, 3), 1, 2)", BooleanFunction::Slice(BooleanFunction::Slice(a4.clone(), i(1, 4), i(3, 4), 3).get(), i(1, 3), i(2, 3), 2).get()},
+
+            // a slice that falls into one half of a concatenation only needs that half
+            {"SLICE(CONCAT(A, B), 0, 3)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(0, 8), i(3, 8), 4).get()},
+            {"SLICE(CONCAT(A, B), 4, 7)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(4, 8), i(7, 8), 4).get()},
+            {"SLICE(CONCAT(A, B), 1, 2)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(1, 8), i(2, 8), 2).get()},
+            {"SLICE(CONCAT(A, B), 5, 6)", BooleanFunction::Slice(BooleanFunction::Concat(a4.clone(), b4.clone(), 8).get(), i(5, 8), i(6, 8), 2).get()},
+
+            // comparisons against the extremes of the unsigned range
+            {"0 <=u A", BooleanFunction::Ule(BooleanFunction::Const(0, 4), a4.clone(), 1).get()},
+            {"A <=u 15", BooleanFunction::Ule(a4.clone(), BooleanFunction::Const(15, 4), 1).get()},
+            {"15 <u A", BooleanFunction::Ult(BooleanFunction::Const(15, 4), a4.clone(), 1).get()},
+
+            // equality of a value with its own negation, and of a single bit with a constant
+            {"A == ~A", BooleanFunction::Eq(a4.clone(), (~a4.clone()), 1).get()},
+            {"A == 1", BooleanFunction::Eq(a1.clone(), BooleanFunction::Const(1, 1), 1).get()},
+            {"A == 0", BooleanFunction::Eq(a1.clone(), BooleanFunction::Const(0, 1), 1).get()},
+
+            // a single bit choice between the two constants is the condition itself
+            {"ITE(A, 1, 0)", BooleanFunction::Ite(a1.clone(), BooleanFunction::Const(1, 1), BooleanFunction::Const(0, 1), 1).get()},
+            {"ITE(A, 0, 1)", BooleanFunction::Ite(a1.clone(), BooleanFunction::Const(0, 1), BooleanFunction::Const(1, 1), 1).get()},
+        };
+
+        for (const auto& [description, function] : cases) {
+            expect_simplification_preserves_value(function, description);
+            EXPECT_LT(function.simplify().get_nodes().size(), function.get_nodes().size()) << description << " was not simplified at all";
+        }
+    }
+
     TEST(BooleanFunction, DivisionFactories) {
         const auto a = BooleanFunction::Var("A", 4),
                    b = BooleanFunction::Var("B", 4),

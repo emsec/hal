@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
   * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations, which were not implemented and made evaluation of any function containing them fail, following the SMT-LIB definitions these operations are translated to
   * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
+  * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well
