@@ -56,8 +56,11 @@
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/netlist/project_manager.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/program_arguments.h"
+#include "hal_core/utilities/program_options.h"
 #include "hal_core/utilities/utils.h"
 
 #pragma GCC diagnostic push
@@ -269,6 +272,8 @@ namespace hal
      *
      * @param[in] m - the python module
      */
+    void program_options_init(py::module& m);
+
     void plugin_manager_init(py::module& m);
 
     /**

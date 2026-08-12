@@ -128,7 +128,7 @@ CMakeLists.txt.user*
 
 Testing
 
-# Python bytecode caches (tools/, tests/python_binding/, ...)
+# Python bytecode caches (tools/, ...)
 __pycache__/
 *.py[cod]
 

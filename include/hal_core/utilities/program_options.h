@@ -114,6 +114,17 @@ namespace hal
         bool add(const std::initializer_list<std::string>& flags, const std::string& description, const std::initializer_list<std::string>& parameters = {});
 
         /**
+         * Adds a new option with one or more flags.<br>
+         * Same as add(), but takes the flags and parameters as vectors so that they can be assembled at runtime.
+         *
+         * @param[in] flags - The flags activating the option.
+         * @param[in] description - A description of the option.
+         * @param[in] parameters - A list of default values for all parameters. [optional]
+         * @returns True on success.
+         */
+        bool add_flags(const std::vector<std::string>& flags, const std::string& description, const std::vector<std::string>& parameters = {});
+
+        /**
          * Adds another set of options.<br>
          * A category can be supplied for grouping in the get_options_string() function.
          *
