@@ -1457,7 +1457,7 @@ namespace hal {
     TEST(BooleanFunction, EvaluateWideArithmetic) {
         // Addition and subtraction used to mask their result to 32 bit before truncating it to the width of
         // the operands, so anything wider than that silently lost its upper bits.
-        for (const u16 size : {16, 32, 33, 40, 64}) {
+        for (const u16 size : std::vector<u16>{16, 32, 33, 40, 64}) {
             const auto a = BooleanFunction::Var("A", size),
                        b = BooleanFunction::Var("B", size);
 
@@ -1485,21 +1485,21 @@ namespace hal {
         // The division operations are translated to bvudiv, bvurem, bvsdiv and bvsrem when handed to an SMT
         // solver, so constant folding has to agree with the SMT-LIB definitions of those. Reference
         // implementations of exactly those definitions, against which the folding is checked exhaustively.
-        const auto mask = [](u16 size) { return (size >= 64) ? ~0ull : ((1ull << size) - 1); };
-        const auto negate = [&](u64 value, u16 size) { return (~value + 1) & mask(size); };
+        const auto mask = [](u16 size) -> u64 { return (size >= 64) ? ~0ull : ((1ull << size) - 1); };
+        const auto negate = [&](u64 value, u16 size) -> u64 { return (~value + 1) & mask(size); };
         const auto is_negative = [](u64 value, u16 size) { return ((value >> (size - 1)) & 1) == 1; };
 
-        const auto ref_udiv = [&](u64 s, u64 t, u16 size) { return (t == 0) ? mask(size) : (s / t); };
-        const auto ref_urem = [&](u64 s, u64 t, u16 size) { return (t == 0) ? s : (s % t); };
+        const auto ref_udiv = [&](u64 s, u64 t, u16 size) -> u64 { return (t == 0) ? mask(size) : (s / t); };
+        const auto ref_urem = [&](u64 s, u64 t, u16 size) -> u64 { (void)size; return (t == 0) ? s : (s % t); };
 
-        const auto ref_sdiv = [&](u64 s, u64 t, u16 size) {
+        const auto ref_sdiv = [&](u64 s, u64 t, u16 size) -> u64 {
             const auto ms = is_negative(s, size), mt = is_negative(t, size);
             if (!ms && !mt) return ref_udiv(s, t, size);
             if (ms && !mt) return negate(ref_udiv(negate(s, size), t, size), size);
             if (!ms && mt) return negate(ref_udiv(s, negate(t, size), size), size);
             return ref_udiv(negate(s, size), negate(t, size), size);
         };
-        const auto ref_srem = [&](u64 s, u64 t, u16 size) {
+        const auto ref_srem = [&](u64 s, u64 t, u16 size) -> u64 {
             const auto ms = is_negative(s, size), mt = is_negative(t, size);
             if (!ms && !mt) return ref_urem(s, t, size);
             if (ms && !mt) return negate(ref_urem(negate(s, size), t, size), size);
