@@ -591,11 +591,13 @@ namespace hal
             py::arg("sbox_candidate"),
             py::arg("db"),
             R"(
-            Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence. 
+            Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.
+
+            Note that a candidate which simply does not match any S-box of the database is not an error: in that case an empty string is returned. ``None`` is only returned if the candidate could not be analyzed at all.
 
             :param hawkeye.SBoxCandidate sbox_candidate: An S-box candidate.
             :param hawkeye.SBoxDatabase db: A database of known S-boxes.
-            :returns: The name of the S-box on success, ``None`` otherwise.
+            :returns: The name of the matching S-box, or an empty string if no S-box of the database matched. ``None`` on error.
             :rtype: str or None
         )");
 
