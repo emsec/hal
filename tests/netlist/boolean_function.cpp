@@ -1176,6 +1176,376 @@ namespace hal {
         }
     }
 
+    namespace {
+        /**
+         * Translates an integer into the little endian vector of values that BooleanFunction::evaluate() takes
+         * and returns, so that the expectations below can be written as plain bit patterns.
+         */
+        std::vector<BooleanFunction::Value> bits(u64 value, u16 size) {
+            std::vector<BooleanFunction::Value> res;
+            res.reserve(size);
+            for (u16 i = 0; i < size; i++) {
+                res.push_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+            }
+            return res;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateShiftsAndRotates) {
+        const auto a  = BooleanFunction::Var("A", 4);
+        const auto i0 = BooleanFunction::Index(0, 4),
+                   i1 = BooleanFunction::Index(1, 4),
+                   i3 = BooleanFunction::Index(3, 4),
+                   i4 = BooleanFunction::Index(4, 4),
+                   i5 = BooleanFunction::Index(5, 4);
+
+        // description, function, value of A, expected result
+        const std::vector<std::tuple<std::string, BooleanFunction, u64, u64>> data = {
+            {"Shl 0b1011 by 0",  BooleanFunction::Shl(a.clone(), i0.clone(), 4).get(),  0b1011, 0b1011},
+            {"Shl 0b1011 by 1",  BooleanFunction::Shl(a.clone(), i1.clone(), 4).get(),  0b1011, 0b0110},
+            {"Shl 0b1011 by 3",  BooleanFunction::Shl(a.clone(), i3.clone(), 4).get(),  0b1011, 0b1000},
+
+            {"Lshr 0b1011 by 1", BooleanFunction::Lshr(a.clone(), i1.clone(), 4).get(), 0b1011, 0b0101},
+            {"Lshr 0b1011 by 3", BooleanFunction::Lshr(a.clone(), i3.clone(), 4).get(), 0b1011, 0b0001},
+
+            // arithmetic shift right replicates the sign bit, in contrast to the logical one
+            {"Ashr 0b1011 by 1", BooleanFunction::Ashr(a.clone(), i1.clone(), 4).get(), 0b1011, 0b1101},
+            {"Ashr 0b1011 by 3", BooleanFunction::Ashr(a.clone(), i3.clone(), 4).get(), 0b1011, 0b1111},
+            {"Ashr 0b0110 by 1", BooleanFunction::Ashr(a.clone(), i1.clone(), 4).get(), 0b0110, 0b0011},
+
+            {"Rol 0b1011 by 1",  BooleanFunction::Rol(a.clone(), i1.clone(), 4).get(),  0b1011, 0b0111},
+            {"Rol 0b1011 by 3",  BooleanFunction::Rol(a.clone(), i3.clone(), 4).get(),  0b1011, 0b1101},
+            {"Ror 0b1011 by 1",  BooleanFunction::Ror(a.clone(), i1.clone(), 4).get(),  0b1011, 0b1101},
+            {"Ror 0b1011 by 3",  BooleanFunction::Ror(a.clone(), i3.clone(), 4).get(),  0b1011, 0b0111},
+
+            // shifting by at least the bit width leaves nothing of the original value behind, while a
+            // rotation wraps around and is the identity for a full turn
+            {"Shl 0b1011 by 4",  BooleanFunction::Shl(a.clone(), i4.clone(), 4).get(),  0b1011, 0b0000},
+            {"Shl 0b1011 by 5",  BooleanFunction::Shl(a.clone(), i5.clone(), 4).get(),  0b1011, 0b0000},
+            {"Lshr 0b1011 by 4", BooleanFunction::Lshr(a.clone(), i4.clone(), 4).get(), 0b1011, 0b0000},
+            {"Ashr 0b1011 by 4", BooleanFunction::Ashr(a.clone(), i4.clone(), 4).get(), 0b1011, 0b1111},
+            {"Ashr 0b0110 by 4", BooleanFunction::Ashr(a.clone(), i4.clone(), 4).get(), 0b0110, 0b0000},
+            {"Rol 0b1011 by 4",  BooleanFunction::Rol(a.clone(), i4.clone(), 4).get(),  0b1011, 0b1011},
+            {"Rol 0b1011 by 5",  BooleanFunction::Rol(a.clone(), i5.clone(), 4).get(),  0b1011, 0b0111},
+            {"Ror 0b1011 by 4",  BooleanFunction::Ror(a.clone(), i4.clone(), 4).get(),  0b1011, 0b1011},
+            {"Ror 0b1011 by 5",  BooleanFunction::Ror(a.clone(), i5.clone(), 4).get(),  0b1011, 0b1101},
+        };
+
+        for (const auto& [description, function, input, expected] : data) {
+            const auto value = function.evaluate({{"A", bits(input, 4)}});
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(bits(expected, 4), value.get()) << description;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateSliceConcatAndExtend) {
+        const auto a2 = BooleanFunction::Var("A", 2),
+                   b2 = BooleanFunction::Var("B", 2),
+                   a4 = BooleanFunction::Var("A", 4);
+
+        {
+            // slice keeps the bits from index p1 up to and including index p2
+            const std::vector<std::tuple<std::string, BooleanFunction, u64, u16, u64>> data = {
+                {"Slice 0b1010 [1:1]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(1, 4), BooleanFunction::Index(1, 4), 1).get(), 0b1010, 1, 0b1},
+                {"Slice 0b1010 [2:2]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(2, 4), BooleanFunction::Index(2, 4), 1).get(), 0b1010, 1, 0b0},
+                {"Slice 0b1010 [1:2]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(1, 4), BooleanFunction::Index(2, 4), 2).get(), 0b1010, 2, 0b01},
+                {"Slice 0b1010 [0:3]", BooleanFunction::Slice(a4.clone(), BooleanFunction::Index(0, 4), BooleanFunction::Index(3, 4), 4).get(), 0b1010, 4, 0b1010},
+            };
+
+            for (const auto& [description, function, input, size, expected] : data) {
+                const auto value = function.evaluate({{"A", bits(input, 4)}});
+                ASSERT_TRUE(value.is_ok()) << description;
+                EXPECT_EQ(bits(expected, size), value.get()) << description;
+            }
+        }
+
+        {
+            // the first parameter of a concatenation holds the most significant bits
+            const auto function = BooleanFunction::Concat(a2.clone(), b2.clone(), 4).get();
+            const auto value    = function.evaluate({{"A", bits(0b10, 2)}, {"B", bits(0b01, 2)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b1001, 4), value.get());
+        }
+
+        {
+            const auto zext = BooleanFunction::Zext(a2.clone(), BooleanFunction::Index(4, 4), 4).get();
+            const auto sext = BooleanFunction::Sext(a2.clone(), BooleanFunction::Index(4, 4), 4).get();
+
+            // zero extension always pads with zeroes, sign extension replicates the most significant bit
+            const std::vector<std::tuple<std::string, BooleanFunction, u64, u64>> data = {
+                {"Zext 0b01 to 4", zext.clone(), 0b01, 0b0001},
+                {"Zext 0b11 to 4", zext.clone(), 0b11, 0b0011},
+                {"Sext 0b01 to 4", sext.clone(), 0b01, 0b0001},
+                {"Sext 0b11 to 4", sext.clone(), 0b11, 0b1111},
+            };
+
+            for (const auto& [description, function, input, expected] : data) {
+                const auto value = function.evaluate({{"A", bits(input, 2)}});
+                ASSERT_TRUE(value.is_ok()) << description;
+                EXPECT_EQ(bits(expected, 4), value.get()) << description;
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateComparisons) {
+        const auto a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4);
+
+        const auto eq  = BooleanFunction::Eq(a.clone(), b.clone(), 1).get(),
+                   ule = BooleanFunction::Ule(a.clone(), b.clone(), 1).get(),
+                   ult = BooleanFunction::Ult(a.clone(), b.clone(), 1).get(),
+                   sle = BooleanFunction::Sle(a.clone(), b.clone(), 1).get(),
+                   slt = BooleanFunction::Slt(a.clone(), b.clone(), 1).get();
+
+        // description, function, A, B, expected. 0b1111 is 15 unsigned but -1 signed, 0b1000 is 8 but -8.
+        const std::vector<std::tuple<std::string, BooleanFunction, u64, u64, u64>> data = {
+            {"0b1010 == 0b1010", eq.clone(),  0b1010, 0b1010, 1},
+            {"0b1010 == 0b0101", eq.clone(),  0b1010, 0b0101, 0},
+
+            {"1 <=u 15", ule.clone(), 0b0001, 0b1111, 1},
+            {"15 <=u 15", ule.clone(), 0b1111, 0b1111, 1},
+            {"15 <=u 1", ule.clone(), 0b1111, 0b0001, 0},
+            {"1 <u 15", ult.clone(), 0b0001, 0b1111, 1},
+            {"15 <u 15", ult.clone(), 0b1111, 0b1111, 0},
+            {"15 <u 1", ult.clone(), 0b1111, 0b0001, 0},
+
+            // the same bit patterns compare the other way round once they are read as signed
+            {"-1 <=s 1", sle.clone(), 0b1111, 0b0001, 1},
+            {"1 <=s -1", sle.clone(), 0b0001, 0b1111, 0},
+            {"-8 <=s -8", sle.clone(), 0b1000, 0b1000, 1},
+            {"-1 <s 1", slt.clone(), 0b1111, 0b0001, 1},
+            {"1 <s -1", slt.clone(), 0b0001, 0b1111, 0},
+            {"-8 <s 7", slt.clone(), 0b1000, 0b0111, 1},
+            {"-8 <s -8", slt.clone(), 0b1000, 0b1000, 0},
+        };
+
+        for (const auto& [description, function, lhs, rhs, expected] : data) {
+            const auto value = function.evaluate({{"A", bits(lhs, 4)}, {"B", bits(rhs, 4)}});
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(bits(expected, 1), value.get()) << description;
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateIte) {
+        const auto c = BooleanFunction::Var("C", 1),
+                   a = BooleanFunction::Var("A", 4),
+                   b = BooleanFunction::Var("B", 4);
+
+        const auto function = BooleanFunction::Ite(c.clone(), a.clone(), b.clone(), 4).get();
+
+        {
+            const auto value = function.evaluate({{"C", bits(1, 1)}, {"A", bits(0b1010, 4)}, {"B", bits(0b0101, 4)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b1010, 4), value.get());
+        }
+        {
+            const auto value = function.evaluate({{"C", bits(0, 1)}, {"A", bits(0b1010, 4)}, {"B", bits(0b0101, 4)}});
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(bits(0b0101, 4), value.get());
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateUndefinedPropagation) {
+        using Value = BooleanFunction::Value;
+
+        const auto a = BooleanFunction::Var("A"),
+                   b = BooleanFunction::Var("B");
+
+        // an undefined input only stays undefined where the other operand does not already determine the result
+        const std::vector<std::tuple<std::string, BooleanFunction, Value, Value, Value>> data = {
+            {"0 & X", a & b, Value::ZERO, Value::X, Value::ZERO},
+            {"1 & X", a & b, Value::ONE, Value::X, Value::X},
+            {"X & X", a & b, Value::X, Value::X, Value::X},
+
+            {"1 | X", a | b, Value::ONE, Value::X, Value::ONE},
+            {"0 | X", a | b, Value::ZERO, Value::X, Value::X},
+            {"X | X", a | b, Value::X, Value::X, Value::X},
+
+            {"0 ^ X", a ^ b, Value::ZERO, Value::X, Value::X},
+            {"1 ^ X", a ^ b, Value::ONE, Value::X, Value::X},
+        };
+
+        for (const auto& [description, function, lhs, rhs, expected] : data) {
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", {lhs}}, {"B", {rhs}}};
+            const auto value = function.evaluate(input);
+            ASSERT_TRUE(value.is_ok()) << description;
+            EXPECT_EQ(std::vector<Value>({expected}), value.get()) << description;
+        }
+
+        {
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", {Value::X}}};
+            const auto value = (~a).evaluate(input);
+            ASSERT_TRUE(value.is_ok());
+            EXPECT_EQ(std::vector<Value>({Value::X}), value.get()) << "~X";
+        }
+
+        {
+            const auto a4 = BooleanFunction::Var("A", 4),
+                       b4 = BooleanFunction::Var("B", 4);
+
+            // 0b00X1 and 0b0001
+            const std::unordered_map<std::string, std::vector<Value>> input = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", {Value::ONE, Value::ZERO, Value::ZERO, Value::ZERO}}};
+
+            const auto undefined = std::vector<Value>(4, Value::X);
+
+            // a single undefined bit makes the whole arithmetic result undefined, while the bitwise
+            // operations stay per bit
+            EXPECT_EQ(undefined, (a4 + b4).evaluate(input).get()) << "0b00X1 + 0b0001";
+            EXPECT_EQ(undefined, (a4 - b4).evaluate(input).get()) << "0b00X1 - 0b0001";
+            EXPECT_EQ(undefined, (a4 * b4).evaluate(input).get()) << "0b00X1 * 0b0001";
+            EXPECT_EQ(bits(0b0001, 4), (a4 & b4).evaluate(input).get()) << "0b00X1 & 0b0001";
+
+            EXPECT_EQ(std::vector<Value>({Value::X}), BooleanFunction::Ult(a4.clone(), b4.clone(), 1).get().evaluate(input).get()) << "0b00X1 <u 0b0001";
+
+            // an undefined bit hides whether the two are equal, just as it does for the other comparisons
+            EXPECT_EQ(std::vector<Value>({Value::X}), BooleanFunction::Eq(a4.clone(), b4.clone(), 1).get().evaluate(input).get()) << "0b00X1 == 0b0001";
+
+            // unless another bit already tells them apart
+            const std::unordered_map<std::string, std::vector<Value>> distinguishable = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", {Value::ZERO, Value::ZERO, Value::ZERO, Value::ZERO}}};
+            EXPECT_EQ(bits(0, 1), BooleanFunction::Eq(a4.clone(), b4.clone(), 1).get().evaluate(distinguishable).get()) << "0b00X1 == 0b0000";
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateWideArithmetic) {
+        // Addition and subtraction used to mask their result to 32 bit before truncating it to the width of
+        // the operands, so anything wider than that silently lost its upper bits.
+        for (const u16 size : {16, 32, 33, 40, 64}) {
+            const auto a = BooleanFunction::Var("A", size),
+                       b = BooleanFunction::Var("B", size);
+
+            const u64 mask    = (size >= 64) ? ~0ull : ((1ull << size) - 1);
+            const u64 operand = 1ull << (size - 2);
+
+            {
+                // the sum carries into the most significant bit
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(operand, size)}, {"B", bits(operand, size)}};
+                const auto value = (a + b).evaluate(input);
+                ASSERT_TRUE(value.is_ok()) << "addition of " << size << " bit operands";
+                EXPECT_EQ(bits((operand + operand) & mask, size), value.get()) << "addition of " << size << " bit operands";
+            }
+            {
+                // the difference underflows and wraps around over the full width
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(0, size)}, {"B", bits(1, size)}};
+                const auto value = (a - b).evaluate(input);
+                ASSERT_TRUE(value.is_ok()) << "subtraction of " << size << " bit operands";
+                EXPECT_EQ(bits(mask, size), value.get()) << "subtraction of " << size << " bit operands";
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateDivisionAndRemainder) {
+        // The division operations are translated to bvudiv, bvurem, bvsdiv and bvsrem when handed to an SMT
+        // solver, so constant folding has to agree with the SMT-LIB definitions of those. Reference
+        // implementations of exactly those definitions, against which the folding is checked exhaustively.
+        const auto mask = [](u16 size) { return (size >= 64) ? ~0ull : ((1ull << size) - 1); };
+        const auto negate = [&](u64 value, u16 size) { return (~value + 1) & mask(size); };
+        const auto is_negative = [](u64 value, u16 size) { return ((value >> (size - 1)) & 1) == 1; };
+
+        const auto ref_udiv = [&](u64 s, u64 t, u16 size) { return (t == 0) ? mask(size) : (s / t); };
+        const auto ref_urem = [&](u64 s, u64 t, u16 size) { return (t == 0) ? s : (s % t); };
+
+        const auto ref_sdiv = [&](u64 s, u64 t, u16 size) {
+            const auto ms = is_negative(s, size), mt = is_negative(t, size);
+            if (!ms && !mt) return ref_udiv(s, t, size);
+            if (ms && !mt) return negate(ref_udiv(negate(s, size), t, size), size);
+            if (!ms && mt) return negate(ref_udiv(s, negate(t, size), size), size);
+            return ref_udiv(negate(s, size), negate(t, size), size);
+        };
+        const auto ref_srem = [&](u64 s, u64 t, u16 size) {
+            const auto ms = is_negative(s, size), mt = is_negative(t, size);
+            if (!ms && !mt) return ref_urem(s, t, size);
+            if (ms && !mt) return negate(ref_urem(negate(s, size), t, size), size);
+            if (!ms && mt) return ref_urem(s, negate(t, size), size);
+            return negate(ref_urem(negate(s, size), negate(t, size), size), size);
+        };
+
+        constexpr u16 size = 4;
+        const auto a = BooleanFunction::Var("A", size),
+                   b = BooleanFunction::Var("B", size);
+
+        const auto udiv = BooleanFunction::Udiv(a.clone(), b.clone(), size).get(),
+                   urem = BooleanFunction::Urem(a.clone(), b.clone(), size).get(),
+                   sdiv = BooleanFunction::Sdiv(a.clone(), b.clone(), size).get(),
+                   srem = BooleanFunction::Srem(a.clone(), b.clone(), size).get();
+
+        // every pair of 4 bit operands, including every division by zero
+        for (u64 lhs = 0; lhs < 16; lhs++) {
+            for (u64 rhs = 0; rhs < 16; rhs++) {
+                const std::unordered_map<std::string, std::vector<BooleanFunction::Value>> input = {{"A", bits(lhs, size)}, {"B", bits(rhs, size)}};
+
+                const auto quotient_unsigned = udiv.evaluate(input);
+                ASSERT_TRUE(quotient_unsigned.is_ok()) << lhs << " udiv " << rhs;
+                EXPECT_EQ(bits(ref_udiv(lhs, rhs, size) & mask(size), size), quotient_unsigned.get()) << lhs << " udiv " << rhs;
+
+                const auto remainder_unsigned = urem.evaluate(input);
+                ASSERT_TRUE(remainder_unsigned.is_ok()) << lhs << " urem " << rhs;
+                EXPECT_EQ(bits(ref_urem(lhs, rhs, size) & mask(size), size), remainder_unsigned.get()) << lhs << " urem " << rhs;
+
+                const auto quotient_signed = sdiv.evaluate(input);
+                ASSERT_TRUE(quotient_signed.is_ok()) << lhs << " sdiv " << rhs;
+                EXPECT_EQ(bits(ref_sdiv(lhs, rhs, size) & mask(size), size), quotient_signed.get()) << lhs << " sdiv " << rhs;
+
+                const auto remainder_signed = srem.evaluate(input);
+                ASSERT_TRUE(remainder_signed.is_ok()) << lhs << " srem " << rhs;
+                EXPECT_EQ(bits(ref_srem(lhs, rhs, size) & mask(size), size), remainder_signed.get()) << lhs << " srem " << rhs;
+            }
+        }
+    }
+
+    TEST(BooleanFunction, EvaluateDivisionEdgeCases) {
+        using Value = BooleanFunction::Value;
+
+        {
+            // an undefined bit in either operand makes the whole result undefined, as it does for the other
+            // arithmetic operations
+            const auto a = BooleanFunction::Var("A", 4),
+                       b = BooleanFunction::Var("B", 4);
+            const std::unordered_map<std::string, std::vector<Value>> input = {
+                {"A", {Value::ONE, Value::X, Value::ZERO, Value::ZERO}},
+                {"B", bits(0b0010, 4)}};
+
+            const auto undefined = std::vector<Value>(4, Value::X);
+            EXPECT_EQ(undefined, BooleanFunction::Udiv(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Urem(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Sdiv(a.clone(), b.clone(), 4).get().evaluate(input).get());
+            EXPECT_EQ(undefined, BooleanFunction::Srem(a.clone(), b.clone(), 4).get().evaluate(input).get());
+        }
+
+        {
+            // wider than 64 bit, where the operands no longer fit into an integer
+            constexpr u16 size = 80;
+            const auto a = BooleanFunction::Var("A", size),
+                       b = BooleanFunction::Var("B", size);
+
+            auto dividend = std::vector<Value>(size, Value::ZERO);
+            auto divisor  = std::vector<Value>(size, Value::ZERO);
+            auto expected = std::vector<Value>(size, Value::ZERO);
+            dividend[70]  = Value::ONE;    // 2^70
+            divisor[35]   = Value::ONE;    // 2^35
+            expected[35]  = Value::ONE;    // 2^35
+
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", dividend}, {"B", divisor}};
+
+            EXPECT_EQ(expected, BooleanFunction::Udiv(a.clone(), b.clone(), size).get().evaluate(input).get()) << "2^70 udiv 2^35";
+            EXPECT_EQ(std::vector<Value>(size, Value::ZERO), BooleanFunction::Urem(a.clone(), b.clone(), size).get().evaluate(input).get()) << "2^70 urem 2^35";
+        }
+
+        {
+            // a division by zero yields all ones for the quotient and the dividend for the remainder, which
+            // is what bvudiv and bvurem are defined to do
+            const auto a = BooleanFunction::Var("A", 4),
+                       b = BooleanFunction::Var("B", 4);
+            const std::unordered_map<std::string, std::vector<Value>> input = {{"A", bits(0b0101, 4)}, {"B", bits(0, 4)}};
+
+            EXPECT_EQ(bits(0b1111, 4), BooleanFunction::Udiv(a.clone(), b.clone(), 4).get().evaluate(input).get()) << "5 udiv 0";
+            EXPECT_EQ(bits(0b0101, 4), BooleanFunction::Urem(a.clone(), b.clone(), 4).get().evaluate(input).get()) << "5 urem 0";
+        }
+    }
+
     TEST(BooleanFunction, TruthTable) {
         const auto a = BooleanFunction::Var("A"),
                    b = BooleanFunction::Var("B"),

@@ -138,7 +138,9 @@ namespace hal
 
                     if (a_res.is_ok() && b_res.is_ok())
                     {
-                        const auto res = (a_res.get() + b_res.get()) & 0xffffffff;
+                        // no mask needed, Const() takes exactly p0.size() bits. Masking to 32 bit here
+                        // silently truncated every result of a wider operation.
+                        const auto res = a_res.get() + b_res.get();
                         return BooleanFunction::Const(res, p0.size());
                     }
 
@@ -179,7 +181,9 @@ namespace hal
 
                     if (a_res.is_ok() && b_res.is_ok())
                     {
-                        const auto res = (a_res.get() - b_res.get()) & 0xffffffff;
+                        // no mask needed, Const() takes exactly p0.size() bits. Masking to 32 bit here
+                        // silently truncated every result of a wider operation.
+                        const auto res = a_res.get() - b_res.get();
                         return BooleanFunction::Const(res, p0.size());
                     }
 
@@ -232,6 +236,242 @@ namespace hal
                     }
                 }
                 return BooleanFunction::Const(simplified);
+            }
+
+            /**
+             * Helper functions for the division and remainder operations below. They operate on little endian
+             * vectors of defined values, i.e. ZERO or ONE only, of equal length.
+             */
+            namespace
+            {
+                bool is_zero(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return std::all_of(value.begin(), value.end(), [](auto v) { return v == BooleanFunction::Value::ZERO; });
+                }
+
+                bool is_negative(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return value.back() == BooleanFunction::Value::ONE;
+                }
+
+                /**
+                 * Compares two values as unsigned numbers, starting at the most significant bit.
+                 */
+                bool greater_equal_unsigned(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+                {
+                    for (auto i = p0.size(); i-- > 0;)
+                    {
+                        if (p0[i] != p1[i])
+                        {
+                            return p0[i] == BooleanFunction::Value::ONE;
+                        }
+                    }
+                    return true;
+                }
+
+                /**
+                 * Subtracts p1 from p0, wrapping around on an underflow.
+                 */
+                std::vector<BooleanFunction::Value> subtract(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+                {
+                    std::vector<BooleanFunction::Value> res;
+                    res.reserve(p0.size());
+
+                    auto borrow = 0;
+                    for (auto i = 0u; i < p0.size(); i++)
+                    {
+                        const auto difference = static_cast<int>(p0[i]) - static_cast<int>(p1[i]) - borrow;
+                        borrow                = (difference < 0) ? 1 : 0;
+                        res.emplace_back(static_cast<BooleanFunction::Value>(difference & 1));
+                    }
+                    return res;
+                }
+
+                /**
+                 * Negates a value in two's complement.
+                 */
+                std::vector<BooleanFunction::Value> negate(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return subtract(std::vector<BooleanFunction::Value>(value.size(), BooleanFunction::Value::ZERO), value);
+                }
+
+                /**
+                 * Restoring long division of two unsigned values of arbitrary width.
+                 *
+                 * Follows the SMT-LIB definition of bvudiv and bvurem on a division by zero, which yields all
+                 * ones as the quotient and the dividend as the remainder, since these operations are
+                 * translated to bvudiv and bvurem when handed to an SMT solver.
+                 *
+                 * @returns the quotient and the remainder.
+                 */
+                std::pair<std::vector<BooleanFunction::Value>, std::vector<BooleanFunction::Value>> divide_unsigned(const std::vector<BooleanFunction::Value>& dividend,
+                                                                                                                    const std::vector<BooleanFunction::Value>& divisor)
+                {
+                    const auto size = dividend.size();
+
+                    if (is_zero(divisor))
+                    {
+                        return {std::vector<BooleanFunction::Value>(size, BooleanFunction::Value::ONE), dividend};
+                    }
+
+                    // the shifted remainder needs one bit more than the operands to not overflow
+                    auto divisor_extended = divisor;
+                    divisor_extended.push_back(BooleanFunction::Value::ZERO);
+
+                    std::vector<BooleanFunction::Value> quotient(size, BooleanFunction::Value::ZERO);
+                    std::vector<BooleanFunction::Value> remainder(size + 1, BooleanFunction::Value::ZERO);
+
+                    for (auto i = size; i-- > 0;)
+                    {
+                        for (auto j = remainder.size(); j-- > 1;)
+                        {
+                            remainder[j] = remainder[j - 1];
+                        }
+                        remainder[0] = dividend[i];
+
+                        if (greater_equal_unsigned(remainder, divisor_extended))
+                        {
+                            remainder   = subtract(remainder, divisor_extended);
+                            quotient[i] = BooleanFunction::Value::ONE;
+                        }
+                    }
+
+                    remainder.pop_back();
+                    return {quotient, remainder};
+                }
+
+                bool any_undefined(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return std::any_of(value.begin(), value.end(), [](auto v) { return v == BooleanFunction::Value::X || v == BooleanFunction::Value::Z; });
+                }
+            }    // namespace
+
+            /**
+             * Helper function to simplify a constant EQ operation.
+             *
+             * A single undefined bit hides whether the two values are equal, unless some other bit already
+             * tells them apart.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Eq(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                auto undefined = false;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    if ((p0[i] == BooleanFunction::Value::X) || (p0[i] == BooleanFunction::Value::Z) || (p1[i] == BooleanFunction::Value::X) || (p1[i] == BooleanFunction::Value::Z))
+                    {
+                        undefined = true;
+                    }
+                    else if (p0[i] != p1[i])
+                    {
+                        return BooleanFunction::Const(0, 1);
+                    }
+                }
+
+                return undefined ? BooleanFunction::Const(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X})) : BooleanFunction::Const(1, 1);
+            }
+
+            /**
+             * Helper function to simplify a constant UDIV operation.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Udiv(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                return BooleanFunction::Const(divide_unsigned(p0, p1).first);
+            }
+
+            /**
+             * Helper function to simplify a constant UREM operation.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Urem(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                return BooleanFunction::Const(divide_unsigned(p0, p1).second);
+            }
+
+            /**
+             * Helper function to simplify a constant SDIV operation.
+             *
+             * Signed division truncates towards zero, following the SMT-LIB definition of bvsdiv.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Sdiv(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                const auto dividend_negative = is_negative(p0), divisor_negative = is_negative(p1);
+
+                if (!dividend_negative && !divisor_negative)
+                {
+                    return BooleanFunction::Const(divide_unsigned(p0, p1).first);
+                }
+                if (dividend_negative && !divisor_negative)
+                {
+                    return BooleanFunction::Const(negate(divide_unsigned(negate(p0), p1).first));
+                }
+                if (!dividend_negative && divisor_negative)
+                {
+                    return BooleanFunction::Const(negate(divide_unsigned(p0, negate(p1)).first));
+                }
+                return BooleanFunction::Const(divide_unsigned(negate(p0), negate(p1)).first);
+            }
+
+            /**
+             * Helper function to simplify a constant SREM operation.
+             *
+             * The sign of a signed remainder follows the dividend, following the SMT-LIB definition of bvsrem.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            BooleanFunction Srem(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                }
+
+                const auto dividend_negative = is_negative(p0), divisor_negative = is_negative(p1);
+
+                if (!dividend_negative && !divisor_negative)
+                {
+                    return BooleanFunction::Const(divide_unsigned(p0, p1).second);
+                }
+                if (dividend_negative && !divisor_negative)
+                {
+                    return BooleanFunction::Const(negate(divide_unsigned(negate(p0), p1).second));
+                }
+                if (!dividend_negative && divisor_negative)
+                {
+                    return BooleanFunction::Const(divide_unsigned(p0, negate(p1)).second);
+                }
+                return BooleanFunction::Const(negate(divide_unsigned(negate(p0), negate(p1)).second));
             }
 
             /**
@@ -1455,22 +1695,14 @@ namespace hal
                 case BooleanFunction::NodeType::Mul:
                     return OK(ConstantPropagation::Mul(values[0], values[1]));
 
-                case BooleanFunction::NodeType::Sdiv: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Udiv: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Srem: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Urem: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
+                case BooleanFunction::NodeType::Sdiv:
+                    return OK(ConstantPropagation::Sdiv(values[0], values[1]));
+                case BooleanFunction::NodeType::Udiv:
+                    return OK(ConstantPropagation::Udiv(values[0], values[1]));
+                case BooleanFunction::NodeType::Srem:
+                    return OK(ConstantPropagation::Srem(values[0], values[1]));
+                case BooleanFunction::NodeType::Urem:
+                    return OK(ConstantPropagation::Urem(values[0], values[1]));
 
                 case BooleanFunction::NodeType::Concat: {
                     values[1].insert(values[1].end(), values[0].begin(), values[0].end());
@@ -1502,7 +1734,7 @@ namespace hal
                     return OK(ConstantPropagation::Ror(values[0], indices[0]));
 
                 case BooleanFunction::NodeType::Eq:
-                    return OK((values[0] == values[1]) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1));
+                    return OK(ConstantPropagation::Eq(values[0], values[1]));
                 case BooleanFunction::NodeType::Sle:
                     return OK(ConstantPropagation::Sle(values[0], values[1]));
                 case BooleanFunction::NodeType::Slt:
