@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
+  <title>Index &mdash; hal_py v4.5.0-77-gbdd4682cc documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -24,7 +24,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-76-gdaf633736
+                v4.5.0-77-gbdd4682cc
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -390,9 +390,13 @@
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation.add_event">add_event() (netlist_simulator.Simulation method)</a>
 </li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.add_existing_options_description">add_existing_options_description() (in module hal_py.plugin_manager)</a>
+</li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.add_gates">add_gates() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.add_include">add_include() (hal_py.GateLibrary method)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.add_model_changed_callback">add_model_changed_callback() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="net.html#hal_py.Net.add_source">add_source() (hal_py.Net method)</a>
 </li>
@@ -408,15 +412,17 @@
 </li>
       <li><a href="module_identification.html#module_identification.Configuration.already_classified_candidates">already_classified_candidates (module_identification.Configuration property)</a>
 </li>
-      <li><a href="dataflow.html#dataflow.analyze">analyze() (in module dataflow)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dataflow.html#dataflow.analyze">analyze() (in module dataflow)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.And">And (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.And">And() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="module_identification.html#module_identification.Architecture">Architecture (class in module_identification)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.PluginFeature.args">args (hal_py.plugin_manager.PluginFeature property)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.arity">arity (hal_py.BooleanFunction.Node property)</a>
 </li>
@@ -783,6 +789,8 @@
 </li>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.description">(hal_py.BasePluginInterface property)</a>
 </li>
+        <li><a href="plugin_manager.html#hal_py.plugin_manager.PluginFeature.description">(hal_py.plugin_manager.PluginFeature property)</a>
+</li>
         <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.description">(hawkeye.HawkeyePlugin property)</a>
 </li>
         <li><a href="module_identification.html#module_identification.ModuleIdentificationPlugin.description">(module_identification.ModuleIdentificationPlugin property)</a>
@@ -911,10 +919,12 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.fan_out_nets">fan_out_nets (hal_py.Gate property)</a>
 </li>
-      <li><a href="gate_type_component.html#hal_py.FFComponent">FFComponent (class in hal_py)</a>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.PluginFeature.feature">feature (hal_py.plugin_manager.PluginFeature property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_type_component.html#hal_py.FFComponent">FFComponent (class in hal_py)</a>
+</li>
       <li><a href="hawkeye.html#hawkeye.SBoxDatabase.from_file">from_file() (hawkeye.SBoxDatabase static method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.from_netlist">from_netlist() (graph_algorithm.NetlistGraph static method)</a>
@@ -1064,6 +1074,10 @@
       <li><a href="log_manager.html#hal_py.LogManager.get_channel">get_channel() (hal_py.LogManager static method)</a>
 </li>
       <li><a href="log_manager.html#hal_py.LogManager.get_channels">get_channels() (hal_py.LogManager method)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.get_cli_plugin_flags">get_cli_plugin_flags() (in module hal_py.plugin_manager)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.get_cli_plugin_options">get_cli_plugin_options() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="gate_type_component.html#hal_py.FFComponent.get_clock_function">get_clock_function() (hal_py.FFComponent method)</a>
 
@@ -1471,10 +1485,10 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.get_modules">get_modules() (hal_py.Gate method)</a>
 
       <ul>
@@ -1731,9 +1745,13 @@
       </ul></li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_plugin_directories">get_plugin_directories() (in module hal_py.CoreUtils)</a>
 </li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.get_plugin_features">get_plugin_features() (in module hal_py.plugin_manager)</a>
+</li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.get_plugin_instance">get_plugin_instance() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="plugin_manager.html#hal_py.plugin_manager.get_plugin_names">get_plugin_names() (in module hal_py.plugin_manager)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.get_plugin_path">get_plugin_path() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_predecessor">get_predecessor() (hal_py.Gate method)</a>
 </li>
@@ -1849,6 +1867,8 @@
         <li><a href="module_pin_group.html#hal_py.ModulePinGroup.get_type">(hal_py.ModulePinGroup method)</a>
 </li>
       </ul></li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.get_ui_plugin_flags">get_ui_plugin_flags() (in module hal_py.plugin_manager)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_unique_gate_id">get_unique_gate_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_unique_grouping_id">get_unique_grouping_id() (hal_py.Netlist method)</a>
@@ -2071,10 +2091,10 @@
         <li><a href="smt.html#module-hal_py.SMT">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type.html#hal_py.GateType.has_component_of_type">has_component_of_type() (hal_py.GateType method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_constant_value">has_constant_value() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -2102,6 +2122,8 @@
       <li><a href="gate.html#hal_py.Gate.has_location">has_location() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate_type.html#hal_py.GateType.has_property">has_property() (hal_py.GateType method)</a>
+</li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.has_valid_file_extension">has_valid_file_extension() (in module hal_py.plugin_manager)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_variable_name">has_variable_name() (hal_py.BooleanFunction method)</a>
 
@@ -2889,6 +2911,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pin_type.html#hal_py.PinType">PinType (class in hal_py)</a>
 </li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.PluginFeature">PluginFeature (class in hal_py.plugin_manager)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.predecessors">predecessors (hal_py.Gate property)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.print">print() (graph_algorithm.NetlistGraph method)</a>
@@ -2963,6 +2987,8 @@
 </li>
       <li><a href="module.html#hal_py.Module.remove_gates">remove_gates() (hal_py.Module method)</a>
 </li>
+      <li><a href="plugin_manager.html#hal_py.plugin_manager.remove_model_changed_callback">remove_model_changed_callback() (in module hal_py.plugin_manager)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.remove_module">remove_module() (hal_py.Grouping method)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.remove_module_by_id">remove_module_by_id() (hal_py.Grouping method)</a>
@@ -2989,10 +3015,10 @@
 </li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.remove_unconnected_looped">remove_unconnected_looped() (in module netlist_preprocessing)</a>
 </li>
-      <li><a href="netlist_preprocessing.html#netlist_preprocessing.remove_unconnected_nets">remove_unconnected_nets() (in module netlist_preprocessing)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="netlist_preprocessing.html#netlist_preprocessing.remove_unconnected_nets">remove_unconnected_nets() (in module netlist_preprocessing)</a>
+</li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_unused_lut_endpoints">remove_unused_lut_endpoints() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.remove_unused_lut_inputs">remove_unused_lut_inputs() (in module netlist_preprocessing)</a>

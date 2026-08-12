@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_python_qss_adapter.html#ada915f05ee76b426170befa5667a5e83":[7,1,1,2,10],
+"classhal_1_1_python_qss_adapter.html#af456bc67c5202547b935594d38c29866":[7,1,1,2,27],
 "classhal_1_1_python_qss_adapter.html#af6c44b2b5acfbecd98c7f4a9d7c5a388":[7,1,1,2,18],
 "classhal_1_1_python_qss_adapter.html#af951a02eac0b0fd9ff26656360539c28":[7,1,1,2,0],
 "classhal_1_1_python_qss_adapter.html#afb83edd66f419becf57fb490214ff692":[7,1,1,2,28],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "classhal_1_1_saleae_header.html#a3cced1f6150dec070cfdc09bd7088e52":[9,0,0,544,16],
 "classhal_1_1_saleae_header.html#a4afdaad41016110da953258b32831fe2":[9,0,0,544,13],
 "classhal_1_1_saleae_header.html#a4e2ee71af8c7917d4faa064c8b968a34":[9,0,0,544,12],
-"classhal_1_1_saleae_header.html#a4e334efe58189cf3fd6afcdab0cd6523":[9,0,0,544,9],
-"classhal_1_1_saleae_header.html#a4e58b83914668d39a9371f0a77f81f7d":[9,0,0,544,17],
-"classhal_1_1_saleae_header.html#a56311d5ac7232d31a17f5ef098fb8248":[9,0,0,544,20]
+"classhal_1_1_saleae_header.html#a4e334efe58189cf3fd6afcdab0cd6523":[9,0,0,544,9]
 };

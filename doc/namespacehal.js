@@ -1022,6 +1022,7 @@ var namespacehal =
     [ "pin_event_order", "namespacehal.html#a727315bb04e7d8b01d1b172818a1bb56", null ],
     [ "plugin_interfaces_init", "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
+    [ "program_options_init", "group__pybind.html#ga24730220376b911e08e8ba91bbba0352", null ],
     [ "project_manager_init", "group__pybind.html#gac072de2b8e9f09d8320090e5873be90d", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a4e45c1b95ca5659cce7098ca78a7d986", null ],
     [ "PYBIND11_PLUGIN", "namespacehal.html#a5a130b3b2ea5e756dc624ad405996251", null ],

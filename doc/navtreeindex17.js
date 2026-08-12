@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_netlist_simulator_controller.html#a07585349bd11ba1ba0466b25e26aa574":[7,0,0,3,2,21],
 "classhal_1_1_netlist_simulator_controller.html#a0ab277745f16b8ee60698f8c4e356f27":[7,0,0,3,2,34],
 "classhal_1_1_netlist_simulator_controller.html#a0b4963ce5804753930b1f5600968aa90":[7,0,0,3,2,8],
 "classhal_1_1_netlist_simulator_controller.html#a0d6b5f14e662a4cf0dedf8a7be5c00b4":[7,0,0,3,2,65],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a173dce598f1790da8792f87bdb1d66d8":[9,0,0,455,0,7],
 "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a1aae9dcaaee95e100819a217eff2e8cf":[9,0,0,455,0,9],
 "classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a1f20d6544ec3112e62c3d7fe7ce162c4":[9,0,0,455,0,11],
-"classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a2e45654ca340b828ac594b61d1af1015":[9,0,0,455,0,8],
-"classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a4b1a3ecd322c77048742296111066048":[9,0,0,455,0,1]
+"classhal_1_1_pin_action_type.html#a98eca4813bcc06125f7a1308893714e2a2e45654ca340b828ac594b61d1af1015":[9,0,0,455,0,8]
 };

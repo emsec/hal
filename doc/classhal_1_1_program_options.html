@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
+   &#160;<span id="projectnumber">v4.5.0-77-gbdd4682cc</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -120,6 +120,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9dd3cc27b3d0a9bfaa87999390594fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fe1cdf2ec39e1dd01093c45dbf8c6cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_program_options.html#a5fe1cdf2ec39e1dd01093c45dbf8c6cb">add</a> (const std::initializer_list&lt; std::string &gt; &amp;flags, const std::string &amp;description, const std::initializer_list&lt; std::string &gt; &amp;parameters={})</td></tr>
 <tr class="separator:a5fe1cdf2ec39e1dd01093c45dbf8c6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a481b6d544f0e0ab0b5d7f37cd818cf6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_program_options.html#a481b6d544f0e0ab0b5d7f37cd818cf6a">add_flags</a> (const std::vector&lt; std::string &gt; &amp;flags, const std::string &amp;description, const std::vector&lt; std::string &gt; &amp;parameters={})</td></tr>
+<tr class="separator:a481b6d544f0e0ab0b5d7f37cd818cf6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3762e99f97b0b390318ace276dfca04e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_program_options.html#a3762e99f97b0b390318ace276dfca04e">add</a> (const <a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a> &amp;other_options, const std::string &amp;category=&quot;&quot;)</td></tr>
 <tr class="separator:a3762e99f97b0b390318ace276dfca04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7946b5dc6662a17e747bdcc65537459b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_program_options.html#a7946b5dc6662a17e747bdcc65537459b">remove</a> (const std::string &amp;flag)</td></tr>
@@ -163,7 +165,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00017">17</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00017">17</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
@@ -231,7 +233,7 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00208">208</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00213">213</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
@@ -282,9 +284,9 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00134">134</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00134">134</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="program__options_8h_source.html#l00051">A_REQUIRED_PARAMETER</a>, <a class="el" href="program__options_8cpp_source.html#l00117">is_registered()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">hal::utils::trim()</a>.</p>
+<p class="reference">References <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">add_flags()</a>.</p>
 
 </div>
 </div>
@@ -333,9 +335,62 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00129">129</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00129">129</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00041">hal::netlist_writer_manager::get_cli_options()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00045">hal::CliExtensionDataflow::get_cli_options()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00294">hal::CliExtensionsGui::get_cli_options()</a>, <a class="el" href="plugin__perf__test_8cpp_source.html#l00046">hal::CliExtensionsPerfTest::get_cli_options()</a>, <a class="el" href="plugin__python__shell_8cpp_source.html#l00018">hal::CliExtensionPythonShell::get_cli_options()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>, and <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>.</p>
+<p class="reference">References <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">add_flags()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00041">hal::netlist_writer_manager::get_cli_options()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00045">hal::CliExtensionDataflow::get_cli_options()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00294">hal::CliExtensionsGui::get_cli_options()</a>, <a class="el" href="plugin__perf__test_8cpp_source.html#l00046">hal::CliExtensionsPerfTest::get_cli_options()</a>, <a class="el" href="plugin__python__shell_8cpp_source.html#l00018">hal::CliExtensionPythonShell::get_cli_options()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
+
+</div>
+</div>
+<a id="a481b6d544f0e0ab0b5d7f37cd818cf6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a481b6d544f0e0ab0b5d7f37cd818cf6a">&#9670;&nbsp;</a></span>add_flags()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::ProgramOptions::add_flags </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>description</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parameters</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds a new option with one or more flags.<br  />
+ Same as <a class="el" href="classhal_1_1_program_options.html#a9dd3cc27b3d0a9bfaa87999390594fa5">add()</a>, but takes the flags and parameters as vectors so that they can be assembled at runtime.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">flags</td><td>- The flags activating the option. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">description</td><td>- A description of the option. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">parameters</td><td>- A list of default values for all parameters. [optional] </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">139</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="program__options_8h_source.html#l00051">A_REQUIRED_PARAMETER</a>, <a class="el" href="utilities_2program__options_8cpp_source.html#l00117">is_registered()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00360">hal::utils::trim()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="utilities_2program__options_8cpp_source.html#l00129">add()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
@@ -356,9 +411,9 @@ Static Public Attributes</h2></td></tr>
 <p>Returns all options' flags and their description.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of ( (1) a set with all flags of the option, (2) the description of the option). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00285">285</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00290">290</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
@@ -381,9 +436,9 @@ Static Public Attributes</h2></td></tr>
  Useful for "usage" messages.</p>
 <dl class="section return"><dt>Returns</dt><dd>The formatted string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00265">265</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00270">270</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l01049">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
 
 </div>
 </div>
@@ -405,9 +460,9 @@ Static Public Attributes</h2></td></tr>
  Only valid after <a class="el" href="classhal_1_1_program_options.html#a92aa887fce50724339aebea1ab3836ee">parse()</a> was called.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector containing all strings which could not be parsed. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00022">22</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00022">22</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
@@ -436,9 +491,9 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the flag is already registered, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00117">117</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00117">117</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="program__options_8cpp_source.html#l00134">add()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">add_flags()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
@@ -477,7 +532,7 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The parsed arguments. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00027">27</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00027">27</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="program__options_8h_source.html#l00051">A_REQUIRED_PARAMETER</a>, <a class="el" href="log_8h_source.html#l00094">die</a>, <a class="el" href="include_2hal__core_2utilities_2utils_8h_source.html#l00414">hal::utils::join()</a>, and <a class="el" href="program__arguments_8cpp_source.html#l00043">hal::ProgramArguments::set_option()</a>.</p>
 
@@ -510,7 +565,9 @@ Static Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the option was found, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__options_8cpp_source.html#l00237">237</a> of file <a class="el" href="program__options_8cpp_source.html">program_options.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_2program__options_8cpp_source.html#l00242">242</a> of file <a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
@@ -539,13 +596,13 @@ Static Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__options_8h_source.html#l00051">51</a> of file <a class="el" href="program__options_8h_source.html">program_options.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="program__options_8cpp_source.html#l00134">add()</a>, <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00041">hal::netlist_writer_manager::get_cli_options()</a>, <a class="el" href="plugin__python__shell_8cpp_source.html#l00018">hal::CliExtensionPythonShell::get_cli_options()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, and <a class="el" href="program__options_8cpp_source.html#l00027">parse()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="utilities_2program__options_8cpp_source.html#l00139">add_flags()</a>, <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00041">hal::netlist_writer_manager::get_cli_options()</a>, <a class="el" href="plugin__python__shell_8cpp_source.html#l00018">hal::CliExtensionPythonShell::get_cli_options()</a>, <a class="el" href="utilities_2log_8cpp_source.html#l00353">hal::LogManager::get_option_descriptions()</a>, <a class="el" href="saleae_8cpp_source.html#l00783">main()</a>, <a class="el" href="utilities_2program__options_8cpp_source.html#l00027">parse()</a>, and <a class="el" href="python__bindings_2bindings_2program__options_8cpp_source.html#l00005">hal::program_options_init()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/hal_core/utilities/<a class="el" href="program__options_8h_source.html">program_options.h</a></li>
-<li>src/utilities/<a class="el" href="program__options_8cpp_source.html">program_options.cpp</a></li>
+<li>src/utilities/<a class="el" href="utilities_2program__options_8cpp_source.html">program_options.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

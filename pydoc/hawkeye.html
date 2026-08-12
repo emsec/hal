@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HAWKEYE &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
+  <title>HAWKEYE &mdash; hal_py v4.5.0-77-gbdd4682cc documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-76-gdaf633736
+                v4.5.0-77-gbdd4682cc
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -119,6 +119,7 @@ To this end, large candidates that fully contain a smaller candidate and candida
 <dt class="sig sig-object py" id="hawkeye.identify_sbox">
 <span class="sig-prename descclassname"><span class="pre">hawkeye.</span></span><span class="sig-name descname"><span class="pre">identify_sbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sbox_candidate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.SBoxCandidate" title="hawkeye.SBoxCandidate"><span class="pre">hawkeye.SBoxCandidate</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.SBoxDatabase" title="hawkeye.SBoxDatabase"><span class="pre">hawkeye.SBoxDatabase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.identify_sbox" title="Permalink to this definition"></a></dt>
 <dd><p>Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.</p>
+<p>Note that a candidate which simply does not match any S-box of the database is not an error: in that case an empty string is returned. <code class="docutils literal notranslate"><span class="pre">None</span></code> is only returned if the candidate could not be analyzed at all.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -127,7 +128,7 @@ To this end, large candidates that fully contain a smaller candidate and candida
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The name of the S-box on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p>The name of the matching S-box, or an empty string if no S-box of the database matched. <code class="docutils literal notranslate"><span class="pre">None</span></code> on error.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>

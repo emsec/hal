@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"classhal_1_1_net_layout_point.html#a691ec3487ff6e8a391774308c76d514e":[7,1,0,2,11,5],
 "classhal_1_1_net_layout_point.html#a852f2acc5385430ba2bc8254f5fc99a6":[7,1,0,2,11,2],
 "classhal_1_1_net_layout_point.html#ac2dbf5b3e524bd8177a3357ead0dc8d9":[7,1,0,2,11,3],
 "classhal_1_1_net_layout_point.html#ae112790b2c5cc193e3384b2285758625":[7,1,0,2,11,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "classhal_1_1_netlist_simulator_controller.html#a01f8fbdbbf27d0f6f3e67e537ae63d38":[7,0,0,3,2,20],
 "classhal_1_1_netlist_simulator_controller.html#a041a0cd11dfd41e65cb30a0572e74909":[7,0,0,3,2,70],
 "classhal_1_1_netlist_simulator_controller.html#a0603e4c25cb0308800ea9983f80b6e0e":[7,0,0,3,2,23],
-"classhal_1_1_netlist_simulator_controller.html#a06526c032fcecd6bc041b4b9ec331f80":[7,0,0,3,2,47],
-"classhal_1_1_netlist_simulator_controller.html#a07585349bd11ba1ba0466b25e26aa574":[7,0,0,3,2,21]
+"classhal_1_1_netlist_simulator_controller.html#a06526c032fcecd6bc041b4b9ec331f80":[7,0,0,3,2,47]
 };

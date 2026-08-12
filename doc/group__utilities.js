@@ -61,6 +61,7 @@ var group__utilities =
       [ "add", "classhal_1_1_program_options.html#a3762e99f97b0b390318ace276dfca04e", null ],
       [ "add", "classhal_1_1_program_options.html#a5fe1cdf2ec39e1dd01093c45dbf8c6cb", null ],
       [ "add", "classhal_1_1_program_options.html#a9dd3cc27b3d0a9bfaa87999390594fa5", null ],
+      [ "add_flags", "classhal_1_1_program_options.html#a481b6d544f0e0ab0b5d7f37cd818cf6a", null ],
       [ "get_options", "classhal_1_1_program_options.html#a90f4f3a1d46824e398c29044f47e6b6a", null ],
       [ "get_options_string", "classhal_1_1_program_options.html#a34dc05683ea51eaa706c5b0d30c94820", null ],
       [ "get_unknown_arguments", "classhal_1_1_program_options.html#ad7465c2d8b92d4ba7960b08c76fa0c5e", null ],

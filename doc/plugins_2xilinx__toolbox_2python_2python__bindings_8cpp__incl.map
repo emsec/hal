@@ -1,48 +1,51 @@
 <map id="plugins/xilinx_toolbox/python/python_bindings.cpp" name="plugins/xilinx_toolbox/python/python_bindings.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="3982,5,4192,47"/>
-<area shape="rect" id="node2" href="$python__bindings_8h.html" title=" " alt="" coords="2282,95,2470,136"/>
-<area shape="rect" id="node40" title=" " alt="" coords="3662,199,3822,225"/>
-<area shape="rect" id="node41" title=" " alt="" coords="3846,199,4005,225"/>
-<area shape="rect" id="node42" title=" " alt="" coords="4030,199,4144,225"/>
-<area shape="rect" id="node44" title=" " alt="" coords="4168,199,4318,225"/>
-<area shape="rect" id="node45" href="$plugin__xilinx__toolbox_8h.html" title="This file contains all functions related to the HAL plugin API." alt="" coords="4201,95,4360,136"/>
-<area shape="rect" id="node46" href="$preprocessing_8h.html" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="3859,994,4080,1021"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="2348,1180,2488,1207"/>
-<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="1367,600,1546,641"/>
-<area shape="rect" id="node6" href="$solver_8h.html" title=" " alt="" coords="2008,191,2187,233"/>
-<area shape="rect" id="node7" href="$include_2hal__core_2netlist_2boolean__function_2types_8h.html" title=" " alt="" coords="2034,288,2212,329"/>
-<area shape="rect" id="node8" href="$symbolic__execution_8h.html" title=" " alt="" coords="1120,191,1347,233"/>
-<area shape="rect" id="node9" href="$symbolic__state_8h.html" title=" " alt="" coords="1072,288,1270,329"/>
-<area shape="rect" id="node10" href="$boolean__function__decorator_8h.html" title=" " alt="" coords="2862,191,3080,233"/>
-<area shape="rect" id="node11" href="$module_8h.html" title=" " alt="" coords="2464,295,2651,322"/>
-<area shape="rect" id="node12" href="$gate__library_8h.html" title=" " alt="" coords="1688,377,1851,419"/>
-<area shape="rect" id="node13" href="$gate__type_8h.html" title=" " alt="" coords="1798,481,1952,523"/>
-<area shape="rect" id="node14" href="$gate__pin_8h.html" title=" " alt="" coords="2702,600,2856,641"/>
-<area shape="rect" id="node15" href="$base__pin_8h.html" title=" " alt="" coords="2854,711,3008,753"/>
-<area shape="rect" id="node16" href="$pin__group_8h.html" title=" " alt="" coords="2449,808,2602,849"/>
-<area shape="rect" id="node17" href="$log_8h.html" title=" " alt="" coords="2352,897,2483,939"/>
-<area shape="rect" id="node18" href="$include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="208,987,339,1028"/>
-<area shape="rect" id="node19" href="$module__pin_8h.html" title=" " alt="" coords="2854,377,3008,419"/>
-<area shape="rect" id="node20" href="$net_8h.html" title=" " alt="" coords="2601,489,2760,515"/>
-<area shape="rect" id="node21" href="$boolean__function__net__decorator_8h.html" title=" " alt="" coords="2026,377,2273,419"/>
-<area shape="rect" id="node22" href="$netlist__modification__decorator_8h.html" title=" " alt="" coords="94,191,328,233"/>
-<area shape="rect" id="node23" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="667,295,846,322"/>
-<area shape="rect" id="node24" href="$netlist__traversal__decorator_8h.html" title=" " alt="" coords="642,191,854,233"/>
-<area shape="rect" id="node25" href="$subgraph__netlist__decorator_8h.html" title=" " alt="" coords="353,191,568,233"/>
-<area shape="rect" id="node26" href="$gate_8h.html" title=" " alt="" coords="1497,385,1664,411"/>
-<area shape="rect" id="node27" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="1473,184,1637,240"/>
-<area shape="rect" id="node28" href="$gate__library__manager_8h.html" title=" " alt="" coords="3006,1076,3160,1132"/>
-<area shape="rect" id="node29" href="$gate__library__parser__manager_8h.html" title=" " alt="" coords="3184,467,3384,537"/>
-<area shape="rect" id="node30" href="$gate__library__writer__manager_8h.html" title=" " alt="" coords="3238,585,3432,656"/>
-<area shape="rect" id="node31" href="$include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="94,905,288,931"/>
-<area shape="rect" id="node32" href="$netlist__factory_8h.html" title="This file contains various functions to create and load netlists." alt="" coords="1792,288,1958,329"/>
-<area shape="rect" id="node33" href="$netlist__utils_8h.html" title=" " alt="" coords="878,191,1045,233"/>
-<area shape="rect" id="node34" href="$netlist__writer__manager_8h.html" title=" " alt="" coords="3286,704,3453,760"/>
-<area shape="rect" id="node35" href="$netlist__serializer_8h.html" title=" " alt="" coords="3593,808,3784,849"/>
-<area shape="rect" id="node36" href="$project__manager_8h.html" title=" " alt="" coords="1662,191,1832,233"/>
-<area shape="rect" id="node37" href="$plugin__manager_8h.html" title=" " alt="" coords="3478,711,3654,753"/>
-<area shape="rect" id="node39" title=" " alt="" coords="2414,199,2576,225"/>
-<area shape="rect" id="node43" title=" " alt="" coords="2600,199,2787,225"/>
-<area shape="rect" id="node5" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1415,1083,1546,1125"/>
-<area shape="rect" id="node38" href="$plugin__interface__base_8h.html" title=" " alt="" coords="3387,808,3568,849"/>
+<area shape="rect" id="node1" title=" " alt="" coords="4384,5,4593,47"/>
+<area shape="rect" id="node2" href="$python__bindings_8h.html" title=" " alt="" coords="2357,95,2545,136"/>
+<area shape="rect" id="node43" title=" " alt="" coords="4063,199,4223,225"/>
+<area shape="rect" id="node44" title=" " alt="" coords="4248,199,4407,225"/>
+<area shape="rect" id="node45" title=" " alt="" coords="4431,199,4546,225"/>
+<area shape="rect" id="node47" title=" " alt="" coords="4570,199,4719,225"/>
+<area shape="rect" id="node48" href="$plugin__xilinx__toolbox_8h.html" title="This file contains all functions related to the HAL plugin API." alt="" coords="4603,95,4761,136"/>
+<area shape="rect" id="node49" href="$preprocessing_8h.html" title="This file contains functions specifically designed to preprocess Xilinx FPGA netlists." alt="" coords="3630,994,3851,1021"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="1940,1180,2080,1207"/>
+<area shape="rect" id="node4" href="$boolean__function_8h.html" title=" " alt="" coords="1921,571,2099,612"/>
+<area shape="rect" id="node6" href="$solver_8h.html" title=" " alt="" coords="2957,191,3135,233"/>
+<area shape="rect" id="node7" href="$include_2hal__core_2netlist_2boolean__function_2types_8h.html" title=" " alt="" coords="2715,288,2894,329"/>
+<area shape="rect" id="node8" href="$symbolic__execution_8h.html" title=" " alt="" coords="2413,191,2639,233"/>
+<area shape="rect" id="node9" href="$symbolic__state_8h.html" title=" " alt="" coords="2291,288,2489,329"/>
+<area shape="rect" id="node10" href="$boolean__function__decorator_8h.html" title=" " alt="" coords="417,191,635,233"/>
+<area shape="rect" id="node11" href="$module_8h.html" title=" " alt="" coords="347,295,534,322"/>
+<area shape="rect" id="node12" href="$gate__library_8h.html" title=" " alt="" coords="1162,377,1325,419"/>
+<area shape="rect" id="node13" href="$gate__type_8h.html" title=" " alt="" coords="1055,467,1210,508"/>
+<area shape="rect" id="node14" href="$gate__pin_8h.html" title=" " alt="" coords="625,571,779,612"/>
+<area shape="rect" id="node15" href="$base__pin_8h.html" title=" " alt="" coords="247,689,400,731"/>
+<area shape="rect" id="node16" href="$pin__group_8h.html" title=" " alt="" coords="625,793,779,835"/>
+<area shape="rect" id="node17" href="$log_8h.html" title=" " alt="" coords="750,890,881,931"/>
+<area shape="rect" id="node18" href="$program__arguments_8h.html" title=" " alt="" coords="246,987,417,1028"/>
+<area shape="rect" id="node19" href="$program__options_8h.html" title=" " alt="" coords="3395,987,3543,1028"/>
+<area shape="rect" id="node20" href="$include_2hal__core_2utilities_2utils_8h.html" title=" " alt="" coords="1298,987,1429,1028"/>
+<area shape="rect" id="node21" href="$module__pin_8h.html" title=" " alt="" coords="247,377,400,419"/>
+<area shape="rect" id="node22" href="$net_8h.html" title=" " alt="" coords="619,474,777,501"/>
+<area shape="rect" id="node23" href="$boolean__function__net__decorator_8h.html" title=" " alt="" coords="791,377,1037,419"/>
+<area shape="rect" id="node24" href="$netlist__modification__decorator_8h.html" title=" " alt="" coords="1143,191,1378,233"/>
+<area shape="rect" id="node25" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="1706,295,1885,322"/>
+<area shape="rect" id="node26" href="$netlist__traversal__decorator_8h.html" title=" " alt="" coords="1401,191,1613,233"/>
+<area shape="rect" id="node27" href="$subgraph__netlist__decorator_8h.html" title=" " alt="" coords="1688,191,1903,233"/>
+<area shape="rect" id="node28" href="$gate_8h.html" title=" " alt="" coords="2163,385,2329,411"/>
+<area shape="rect" id="node29" href="$async__set__reset__behavior_8h.html" title=" " alt="" coords="1979,184,2143,240"/>
+<area shape="rect" id="node30" href="$gate__library__manager_8h.html" title=" " alt="" coords="2859,1076,3014,1132"/>
+<area shape="rect" id="node31" href="$gate__library__parser__manager_8h.html" title=" " alt="" coords="3069,556,3269,627"/>
+<area shape="rect" id="node32" href="$gate__library__writer__manager_8h.html" title=" " alt="" coords="3122,675,3317,745"/>
+<area shape="rect" id="node33" href="$include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="1285,474,1479,501"/>
+<area shape="rect" id="node34" href="$netlist__factory_8h.html" title="This file contains various functions to create and load netlists." alt="" coords="3344,288,3511,329"/>
+<area shape="rect" id="node35" href="$netlist__utils_8h.html" title=" " alt="" coords="2715,191,2881,233"/>
+<area shape="rect" id="node36" href="$netlist__writer__manager_8h.html" title=" " alt="" coords="3689,883,3856,939"/>
+<area shape="rect" id="node37" href="$netlist__serializer_8h.html" title=" " alt="" coords="3983,890,4173,931"/>
+<area shape="rect" id="node38" href="$project__manager_8h.html" title=" " alt="" coords="2167,191,2338,233"/>
+<area shape="rect" id="node39" href="$fac__extension__interface_8h.html" title=" " alt="" coords="3495,793,3690,835"/>
+<area shape="rect" id="node40" href="$plugin__manager_8h.html" title=" " alt="" coords="3770,689,3946,731"/>
+<area shape="rect" id="node42" title=" " alt="" coords="3261,199,3423,225"/>
+<area shape="rect" id="node46" title=" " alt="" coords="3447,199,3634,225"/>
+<area shape="rect" id="node5" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="1578,1083,1709,1125"/>
+<area shape="rect" id="node41" href="$plugin__interface__base_8h.html" title=" " alt="" coords="3815,793,3997,835"/>
 </map>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plugin Manager &mdash; hal_py v4.5.0-76-gdaf633736 documentation</title>
+  <title>Plugin Manager &mdash; hal_py v4.5.0-77-gbdd4682cc documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.5.0-76-gdaf633736
+                v4.5.0-77-gbdd4682cc
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -110,21 +110,138 @@
              
   <section id="module-hal_py.plugin_manager">
 <span id="plugin-manager"></span><h1>Plugin Manager<a class="headerlink" href="#module-hal_py.plugin_manager" title="Permalink to this headline"></a></h1>
-<p>The plugin manager takes care of loading and unloading plugins at runtime.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.PluginFeature">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">PluginFeature</span></span><a class="headerlink" href="#hal_py.plugin_manager.PluginFeature" title="Permalink to this definition"></a></dt>
+<dd><p>A feature provided by a plugin, such as a parser or a writer.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.PluginFeature.args">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">args</span></span><a class="headerlink" href="#hal_py.plugin_manager.PluginFeature.args" title="Permalink to this definition"></a></dt>
+<dd><p>Additional arguments of the feature, holding the supported file extensions if a parser or writer is registered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.PluginFeature.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#hal_py.plugin_manager.PluginFeature.description" title="Permalink to this definition"></a></dt>
+<dd><p>The description of the feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.PluginFeature.feature">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">feature</span></span><a class="headerlink" href="#hal_py.plugin_manager.PluginFeature.feature" title="Permalink to this definition"></a></dt>
+<dd><p>The kind of feature that is provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>hal_py.FacExtensionInterface.Feature</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
-<dt class="sig sig-object py" id="hal_py.plugin_manager.get_plugin_instance">
-<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_plugin_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::BasePluginInterface</span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_plugin_instance" title="Permalink to this definition"></a></dt>
-<dd><p>Gets the basic interface for a plugin specified by name.
-By default calls the initialize() function of the plugin.</p>
+<dt class="sig sig-object py" id="hal_py.plugin_manager.add_existing_options_description">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">add_existing_options_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">existing_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.ProgramOptions</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.plugin_manager.add_existing_options_description" title="Permalink to this definition"></a></dt>
+<dd><p>Register existing program options to avoid reuse by plugins.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>plugin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the plugin.</p>
+<dd class="field-odd"><p><strong>existing_options</strong> (<em>hal_py.ProgramOptions</em>) – The program options.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.add_model_changed_callback">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">add_model_changed_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#hal_py.plugin_manager.add_model_changed_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Add a callback to notify the GUI about loaded or unloaded plugins.
+The callback takes a bool that is <code class="docutils literal notranslate"><span class="pre">True</span></code> on load and <code class="docutils literal notranslate"><span class="pre">False</span></code> on unload, the plugin name, and the plugin path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>callback</strong> (<em>lambda</em><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>) </em><em>-&gt; None</em>) – The callback function.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The basic plugin interface.</p>
+<dd class="field-even"><p>The ID of the registered callback.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="base_plugin_interface.html#hal_py.BasePluginInterface" title="hal_py.BasePluginInterface">hal_py.BasePluginInterface</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_cli_plugin_flags">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_cli_plugin_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_cli_plugin_flags" title="Permalink to this definition"></a></dt>
+<dd><p>Get a mapping of flags pointing to their corresponding CLI plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dict from flag to plugin name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_cli_plugin_options">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_cli_plugin_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.ProgramOptions</span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_cli_plugin_options" title="Permalink to this definition"></a></dt>
+<dd><p>Get the command line interface options of all plugins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The program options.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>hal_py.ProgramOptions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_plugin_features">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_plugin_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.plugin_manager.PluginFeature" title="hal_py.plugin_manager.PluginFeature"><span class="pre">hal_py.plugin_manager.PluginFeature</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_plugin_features" title="Permalink to this definition"></a></dt>
+<dd><p>Get the features of a plugin identified by the stem of its file name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The stem of the file name of the plugin.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of features such as parsers or writers.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="#hal_py.plugin_manager.PluginFeature" title="hal_py.plugin_manager.PluginFeature">hal_py.plugin_manager.PluginFeature</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_plugin_instance">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_plugin_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::BasePluginInterface</span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_plugin_instance" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the interface for a plugin specified by name.
+By default calls the initialize() function of the plugin.
+The returned object is of the plugin’s own type as soon as the Python module of that plugin has been imported, and of type <code class="docutils literal notranslate"><span class="pre">hal_py.BasePluginInterface</span></code> otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plugin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the plugin.</p></li>
+<li><p><strong>initialize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to not call the initialize function of the plugin. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>silent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Set to <code class="docutils literal notranslate"><span class="pre">True</span></code> to omit the error message if the plugin is not found. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The plugin interface on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="base_plugin_interface.html#hal_py.BasePluginInterface" title="hal_py.BasePluginInterface">hal_py.BasePluginInterface</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -139,6 +256,55 @@ By default calls the initialize() function of the plugin.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.14)">set</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_plugin_path">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_plugin_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plugin_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_plugin_path" title="Permalink to this definition"></a></dt>
+<dd><p>Get the full path of a plugin.
+On macOS, several possible file extensions are probed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>plugin_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – The name of the plugin.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The full path to the plugin within the HAL build directory.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.get_ui_plugin_flags">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">get_ui_plugin_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.plugin_manager.get_ui_plugin_flags" title="Permalink to this definition"></a></dt>
+<dd><p>Get a mapping of flags pointing to their corresponding UI plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dict from flag to plugin name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.has_valid_file_extension">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">has_valid_file_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.14)"><span class="pre">os.PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.plugin_manager.has_valid_file_extension" title="Permalink to this definition"></a></dt>
+<dd><p>Check whether a file has an extension that is legal for a plugin on the current operating system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>pathlib.Path</em></a>) – The path to the file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">False</span></code> if the extension indicates that the file cannot be a plugin, <code class="docutils literal notranslate"><span class="pre">True</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -177,6 +343,17 @@ If <code class="docutils literal notranslate"><span class="pre">directory_names<
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hal_py.plugin_manager.remove_model_changed_callback">
+<span class="sig-prename descclassname"><span class="pre">hal_py.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">remove_model_changed_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.plugin_manager.remove_model_changed_callback" title="Permalink to this definition"></a></dt>
+<dd><p>Remove a registered callback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The ID of the registered callback.</p>
 </dd>
 </dl>
 </dd></dl>

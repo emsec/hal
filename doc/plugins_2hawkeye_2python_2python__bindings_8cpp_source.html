@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-76-gdaf633736</span>
+   &#160;<span id="projectnumber">v4.5.0-77-gbdd4682cc</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -681,19 +681,21 @@ $(document).ready(function(){initNavTree('plugins_2hawkeye_2python_2python__bind
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            py::arg(<span class="stringliteral">&quot;sbox_candidate&quot;</span>),</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            py::arg(<span class="stringliteral">&quot;db&quot;</span>),</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;            R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">            Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence. </span></div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">            Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.</span></div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="stringliteral">            :param hawkeye.SBoxCandidate sbox_candidate: An S-box candidate.</span></div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="stringliteral">            :param hawkeye.SBoxDatabase db: A database of known S-boxes.</span></div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="stringliteral">            :returns: The name of the S-box on success, ``None`` otherwise.</span></div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    }</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="stringliteral">            Note that a candidate which simply does not match any S-box of the database is not an error: in that case an empty string is returned. ``None`` is only returned if the candidate could not be analyzed at all.</span></div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="stringliteral">            :param hawkeye.SBoxCandidate sbox_candidate: An S-box candidate.</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;<span class="stringliteral">            :param hawkeye.SBoxDatabase db: A database of known S-boxes.</span></div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="stringliteral">            :returns: The name of the matching S-box, or an empty string if no S-box of the database matched. ``None`` on error.</span></div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="stringliteral">            :rtype: str or None</span></div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="stringliteral"></span><span class="preprocessor">#ifndef PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;        <span class="keywordflow">return</span> m.ptr();</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;<span class="preprocessor">#endif    </span><span class="comment">// PYBIND11_MODULE</span></div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;    }</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="acandidate__search_8h_html"><div class="ttname"><a href="candidate__search_8h.html">candidate_search.h</a></div><div class="ttdoc">This file contains the function for HAWKEYE's candidate search as well as a struct for configuring th...</div></div>
 <div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00058">plugin_interface_base.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_hawkeye_plugin_html_a669546fb5a37c54e1dbaffd4540e1951"><div class="ttname"><a href="classhal_1_1_hawkeye_plugin.html#a669546fb5a37c54e1dbaffd4540e1951">hal::HawkeyePlugin::get_name</a></div><div class="ttdeci">std::string get_name() const override</div><div class="ttdoc">Get the name of the plugin.</div><div class="ttdef"><b>Definition:</b> <a href="plugin__hawkeye_8cpp_source.html#l00010">plugin_hawkeye.cpp:10</a></div></div>
