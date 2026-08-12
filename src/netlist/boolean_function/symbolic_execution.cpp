@@ -1423,6 +1423,7 @@ namespace hal
 
             std::vector<std::vector<BooleanFunction::Value>> values;
             std::vector<u16> indices;
+            values.reserve(p.size());
 
             for (const auto& parameter : p)
             {
@@ -1432,8 +1433,8 @@ namespace hal
                 }
                 else
                 {
-                    const auto v = parameter.get_top_level_node().constant;
-                    values.emplace_back(v);
+                    // some of the cases below modify the value in place, so it has to be a copy, but one is enough
+                    values.emplace_back(parameter.get_top_level_node().constant);
                 }
             }
 

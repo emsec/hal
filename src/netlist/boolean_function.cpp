@@ -721,7 +721,9 @@ namespace hal
             return false;
         }
 
-        return this->to_string_in_reverse_polish_notation() < other.to_string_in_reverse_polish_notation();
+        // compare the nodes directly instead of their string representation, this operator is on the hot path
+        // of every symbolic state lookup and formatting two strings per comparison dominated the evaluation
+        return std::lexicographical_compare(this->m_nodes.begin(), this->m_nodes.end(), other.m_nodes.begin(), other.m_nodes.end());
     }
 
     bool BooleanFunction::is_empty() const
@@ -1246,16 +1248,20 @@ namespace hal
             return OK(std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}));
         }
 
-        // (1) validate whether the input sizes match the boolean function
-        for (const auto& [name, value] : inputs)
+        // (1) validate whether the input sizes match the boolean function.
+        //     Walk the nodes once and look up each variable, rather than comparing every input name against
+        //     every node, since compute_truth_table() calls this for each of its rows.
+        for (const auto& node : this->m_nodes)
         {
-            for (const auto& node : this->m_nodes)
+            if (!node.is_variable())
             {
-                if (node.has_variable_name(name) && node.size != value.size())
-                {
-                    return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the size of vairbale " + name + " with size " + std::to_string(node.size)
-                               + " does not match the size of the provided input (" + std::to_string(value.size()) + ")");
-                }
+                continue;
+            }
+
+            if (const auto it = inputs.find(node.variable); it != inputs.end() && node.size != it->second.size())
+            {
+                return ERR("could not evaluate Boolean function '" + this->to_string() + "': as the size of vairbale " + node.variable + " with size " + std::to_string(node.size)
+                           + " does not match the size of the provided input (" + std::to_string(it->second.size()) + ")");
             }
         }
 
