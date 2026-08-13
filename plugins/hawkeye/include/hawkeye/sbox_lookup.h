@@ -106,7 +106,7 @@ namespace hal
          * 
          * @param[in] sbox_candidate - An S-box candidate.
          * @param[in] db - A database of known S-boxes.
-         * @returns The name of the S-box on success, an error otherwise.
+         * @returns OK() and the name of the matching S-box, or an empty string if no S-box of the database matched the candidate. An error is only returned if the candidate could not be analyzed at all.
          */
         Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db);
     }    // namespace hawkeye

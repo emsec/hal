@@ -21,6 +21,20 @@ namespace hal
             return (it == this->variable.end()) ? key : it->second;
         }
 
+        std::unordered_map<std::string, const BooleanFunction*> SymbolicState::get_bindings() const
+        {
+            std::unordered_map<std::string, const BooleanFunction*> res;
+            for (const auto& [key, value] : this->variable)
+            {
+                const auto& key_node = key.get_top_level_node();
+                if (key_node.is_variable())
+                {
+                    res.emplace(key_node.variable, &value);
+                }
+            }
+            return res;
+        }
+
         void SymbolicState::set(const BooleanFunction& key, const BooleanFunction& value)
         {
             if (key.is_variable())

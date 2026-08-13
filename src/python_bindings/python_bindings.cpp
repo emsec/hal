@@ -56,6 +56,8 @@ namespace hal
 
         netlist_writer_manager_init(m);
 
+        program_options_init(m);
+
         plugin_manager_init(m);
 
         plugin_interfaces_init(m);

@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
+* added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+* added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
+* fixed crash when passing a `nullptr` pin to `Net::remove_source` or `Net::remove_destination`, which is also reachable from Python
+* changed `Net` and `Gate` to identify a pin by pointer identity instead of by value when looking up an endpoint
+* GUI
+  * fixed the GUI hanging for minutes when a module with many gates is selected, `ModuleModel` emitted a row insert signal per item while the model was already being reset, which made the attached filter proxy remap its rows once per item
+  * fixed the GUI stalling when a large module is unfolded, the tree views measured every row individually and shaped the text of each gate name just to learn how tall the row is
+  * changed the module elements tree to not rebuild itself twice per selection change
+* sped up the evaluation of Boolean functions, `BooleanFunction::operator<` compared two functions by building and comparing their reverse polish notation strings, which the symbolic state hit on every variable lookup
+* added the HAWKEYE S-box database to the build directory so that it is found at runtime, and clarified that `identify_sbox` returning an empty string means no match rather than an error
+* removed the tests below `tests/python_binding`, which were neither referenced by the build nor by any workflow and called API that no longer exists
 * updated the vendored igraph dependency from 0.10.12 to 1.0.1 and ported the graph algorithm and HAWKEYE plugins to the igraph 1.0 API
 * fixed bug in code and comment editor: avoid hang ups when RegExp-search returns zero-length matches
 * added information to GUI setting file so that widgets position and size from previous session gets restored
@@ -10,6 +22,12 @@ All notable changes to this project will be documented in this file.
 * module pin groups
   * fixed bug in pin model which must not crash when deleting a non-empty pin group
   * fixed bug by disallowing deletion of group comprising a single pin with same name
+* Boolean functions
+  * fixed silent truncation of additions and subtractions, results of operands wider than 32 bit lost their upper bits
+  * fixed `Eq` reporting a definite inequality when an undefined bit could have made the two values equal, it now reports an undefined result like the other comparisons do
+  * added constant folding for the `Sdiv`, `Udiv`, `Srem` and `Urem` operations, which were not implemented and made evaluation of any function containing them fail, following the SMT-LIB definitions these operations are translated to
+  * sped up evaluation with constant inputs by about 3x by folding the values directly instead of building a Boolean function per operation, which dominates the runtime of `compute_truth_table()` and thereby of the HAWKEYE S-box identification
+  * added simplification rules for the word level operations, which the single-bit simplification through ABC cannot reach: extensions to the width the value already has, nested extensions and slices, slices that fall into one half of a concatenation or into either part of an extension, unsigned comparisons against zero and the maximum, equality of a value with its own negation, and single bit equalities and selections
 * plugins
   * simulation
     * added feature, selecting a waveform in viewer selects net in graph view as well

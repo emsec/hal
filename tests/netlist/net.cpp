@@ -346,6 +346,22 @@ namespace hal {
                 EXPECT_TRUE(test_net->get_sources().empty());
             }
             {
+                // remove a source by specifying gate and pin object
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                GatePin* o_pin = buf_type->get_pin_by_name("O");
+                ASSERT_NE(o_pin, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, o_pin), nullptr);
+                EXPECT_TRUE(test_net->remove_source(test_gate, o_pin));
+                EXPECT_TRUE(test_net->get_sources().empty());
+            }
+            {
                 // remove a source by specifying endpoint
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
@@ -404,6 +420,48 @@ namespace hal {
                 EXPECT_FALSE(test_net->remove_source(nullptr, "O"));          // nullptr gate
                 EXPECT_FALSE(test_net->remove_source(nullptr));               // nullptr endpoint
                 EXPECT_EQ(test_net->get_sources().size(), 1);
+            }
+            {
+                // remove invalid source by specifying gate and pin object
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Gate* other_gate = nl->create_gate(buf_type, "other_gate");
+                ASSERT_NE(other_gate, nullptr);
+                GatePin* o_pin = buf_type->get_pin_by_name("O");
+                ASSERT_NE(o_pin, nullptr);
+                GatePin* i_pin = buf_type->get_pin_by_name("I");
+                ASSERT_NE(i_pin, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, o_pin), nullptr);
+                EXPECT_FALSE(test_net->remove_source(test_gate, i_pin));            // input pin
+                EXPECT_FALSE(test_net->remove_source(test_gate, nullptr));          // nullptr pin
+                EXPECT_FALSE(test_net->remove_source(nullptr, o_pin));              // nullptr gate
+                EXPECT_FALSE(test_net->remove_source(other_gate, o_pin));           // gate that is not a source
+                EXPECT_EQ(test_net->get_sources().size(), 1);
+            }
+            {
+                // remove source twice by specifying gate and pin object
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                GatePin* o_pin = buf_type->get_pin_by_name("O");
+                ASSERT_NE(o_pin, nullptr);
+                EXPECT_NE(test_net->add_source(test_gate, o_pin), nullptr);
+                EXPECT_TRUE(test_net->remove_source(test_gate, o_pin));
+                EXPECT_FALSE(test_net->remove_source(test_gate, o_pin));
+                EXPECT_TRUE(test_net->get_sources().empty());
             }
             {
                 // remove source twice by specifying gate and pin
@@ -509,6 +567,22 @@ namespace hal {
                 EXPECT_TRUE(test_net->get_destinations().empty());
             }
             {
+                // remove a destination by specifying gate and pin object
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                GatePin* i_pin = buf_type->get_pin_by_name("I");
+                ASSERT_NE(i_pin, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, i_pin), nullptr);
+                EXPECT_TRUE(test_net->remove_destination(test_gate, i_pin));
+                EXPECT_TRUE(test_net->get_destinations().empty());
+            }
+            {
                 // remove a destination by specifying endpoint
                 auto nl = test_utils::create_empty_netlist();
                 ASSERT_NE(nl, nullptr);
@@ -568,6 +642,48 @@ namespace hal {
                 EXPECT_FALSE(test_net->remove_destination(nullptr, "I"));          // nullptr gate
                 EXPECT_FALSE(test_net->remove_destination(nullptr));               // nullptr endpoint
                 EXPECT_EQ(test_net->get_destinations().size(), 1);
+            }
+            {
+                // remove invalid destination by specifying gate and pin object
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                Gate* other_gate = nl->create_gate(buf_type, "other_gate");
+                ASSERT_NE(other_gate, nullptr);
+                GatePin* i_pin = buf_type->get_pin_by_name("I");
+                ASSERT_NE(i_pin, nullptr);
+                GatePin* o_pin = buf_type->get_pin_by_name("O");
+                ASSERT_NE(o_pin, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, i_pin), nullptr);
+                EXPECT_FALSE(test_net->remove_destination(test_gate, o_pin));            // output pin
+                EXPECT_FALSE(test_net->remove_destination(test_gate, nullptr));          // nullptr pin
+                EXPECT_FALSE(test_net->remove_destination(nullptr, i_pin));              // nullptr gate
+                EXPECT_FALSE(test_net->remove_destination(other_gate, i_pin));           // gate that is not a destination
+                EXPECT_EQ(test_net->get_destinations().size(), 1);
+            }
+            {
+                // remove destination twice by specifying gate and pin object
+                NO_COUT_TEST_BLOCK;
+                auto nl = test_utils::create_empty_netlist();
+                ASSERT_NE(nl, nullptr);
+                Net* test_net = nl->create_net("test_net");
+                ASSERT_NE(test_net, nullptr);
+                GateType* buf_type = nl->get_gate_library()->get_gate_type_by_name("BUF");
+                ASSERT_NE(buf_type, nullptr);
+                Gate* test_gate = nl->create_gate(buf_type, "test_gate");
+                ASSERT_NE(test_gate, nullptr);
+                GatePin* i_pin = buf_type->get_pin_by_name("I");
+                ASSERT_NE(i_pin, nullptr);
+                EXPECT_NE(test_net->add_destination(test_gate, i_pin), nullptr);
+                EXPECT_TRUE(test_net->remove_destination(test_gate, i_pin));
+                EXPECT_FALSE(test_net->remove_destination(test_gate, i_pin));
+                EXPECT_TRUE(test_net->get_destinations().empty());
             }
             {
                 // remove destination twice by specifying gate and pin
