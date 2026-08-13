@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
 * reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
 * changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
 * changed `solve_fsm` to no longer write a file on its own, the DOT graph is now rendered by calling `generate_dot_graph` on the returned state transition graph
