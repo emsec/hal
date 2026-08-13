@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
+#include "netlist_preprocessing/utils/gui_layout_locker.h"
 #include "netlist_preprocessing/netlist_preprocessing.h"
 
 #include <unordered_set>
@@ -114,6 +115,10 @@ namespace hal
             log_warning("netlist_preprocessing", "cannot run preprocessing: no netlist loaded.");
             return;
         }
+
+        // deleting or replacing a gate makes the GUI re-layout its graph views, which would otherwise happen once
+        // per gate and dominate the runtime of the preprocessing itself
+        const netlist_preprocessing::GuiLayoutLocker layout_locker;
 
         // an empty scope makes the preprocessing functions consider the entire netlist
         std::vector<Gate*> scope;

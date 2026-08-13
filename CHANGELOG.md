@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * fixed the GUI dropping an unrelated gate from the selection instead of the net itself when a selected net is deleted
+* fixed the GUI re-laying out its graph views once per gate while a preprocessing function invoked from a context menu deletes or replaces many of them
 * fixed the DOT viewer drawing the line break escapes of a node label verbatim instead of breaking the line, and drawing a red debug rectangle around any label that does not fit its node
 * reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
 * changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it

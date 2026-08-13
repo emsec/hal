@@ -4,6 +4,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
 #include "xilinx_toolbox/preprocessing.h"
+#include "xilinx_toolbox/utils/gui_layout_locker.h"
 
 #include <unordered_set>
 
@@ -111,6 +112,10 @@ namespace hal
             log_warning("xilinx_toolbox", "cannot run preprocessing: no netlist loaded.");
             return;
         }
+
+        // deleting or replacing a gate makes the GUI re-layout its graph views, which would otherwise happen once
+        // per gate and dominate the runtime of the preprocessing itself
+        const xilinx_toolbox::GuiLayoutLocker layout_locker;
 
         // an empty scope makes the preprocessing functions consider the entire netlist
         std::vector<Gate*> scope;
