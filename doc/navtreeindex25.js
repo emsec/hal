@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"classhal_1_1_wave_data.html#acb7582b28be1a886b854d4a5003ac27a":[9,0,0,566,4],
 "classhal_1_1_wave_data.html#acdf7626bac2a3bd21e9d2eb0d2aadd63":[9,0,0,566,13],
 "classhal_1_1_wave_data.html#adbc15411842c7bb435dd5733f8165caf":[9,0,0,566,30],
 "classhal_1_1_wave_data.html#add4b5442f28451602f3604857fcd6177":[9,0,0,566,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "classhal_1_1_wave_form_painted.html#afe8ab372cca232e807e2ffaf30c6d1f8":[9,0,0,597,17],
 "classhal_1_1_wave_form_primitive.html":[9,0,0,598],
 "classhal_1_1_wave_form_primitive.html#a18e113d3e93bfab2914b7987c33a2da5":[9,0,0,598,6],
-"classhal_1_1_wave_form_primitive.html#a1b922b23b4ee3f4fbb86c2548f0867b7":[9,0,0,598,3],
-"classhal_1_1_wave_form_primitive.html#a2517fbdc9232bedf2a705b9ddc5716a1":[9,0,0,598,7]
+"classhal_1_1_wave_form_primitive.html#a1b922b23b4ee3f4fbb86c2548f0867b7":[9,0,0,598,3]
 };

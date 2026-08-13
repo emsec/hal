@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classhal_1_1_wave_form_primitive.html#a2517fbdc9232bedf2a705b9ddc5716a1":[9,0,0,598,7],
 "classhal_1_1_wave_form_primitive.html#a3904089c8c5d746d92e7be5ba8c02982":[9,0,0,598,1],
 "classhal_1_1_wave_form_primitive.html#a58bb27be54b85ace342a7590db7f75d1":[9,0,0,598,8],
 "classhal_1_1_wave_form_primitive.html#a889f7d64a603d8fb93e83d88e0c88274":[9,0,0,598,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "classhal_1_1_wave_tree_model.html#a70edf3a1e874ac3278060652cb31913c":[9,0,0,622,57],
 "classhal_1_1_wave_tree_model.html#a7771dbd5e01e95600114cf8c05616fb7":[9,0,0,622,37],
 "classhal_1_1_wave_tree_model.html#a77c84612eedf1510c7221e93a68232f1":[9,0,0,622,10],
-"classhal_1_1_wave_tree_model.html#a7c329f4bb5396516cb399947183b5e86":[9,0,0,622,38],
-"classhal_1_1_wave_tree_model.html#a7ce6181720b001962ca6ea81d6bdba2f":[9,0,0,622,24]
+"classhal_1_1_wave_tree_model.html#a7c329f4bb5396516cb399947183b5e86":[9,0,0,622,38]
 };

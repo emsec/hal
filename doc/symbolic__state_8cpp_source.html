@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-77-gbdd4682cc</span>
+   &#160;<span id="projectnumber">v4.5.0-78-g89332e557</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -111,20 +111,35 @@ $(document).ready(function(){initNavTree('symbolic__state_8cpp_source.html','');
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keywordflow">return</span> (it == this-&gt;variable.end()) ? key : it-&gt;second;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        }</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">   24</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">SymbolicState::set</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; key, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; value)</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordflow">if</span> (key.<a class="code" href="classhal_1_1_boolean_function.html#a5d00c051b0f9666b68e726c679bcd950">is_variable</a>())</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                this-&gt;variable.emplace(std::move(key), std::move(value));</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        }</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a7fb1525370359d297c994b5be0cd677f">   24</a></span>&#160;        std::unordered_map&lt;std::string, const BooleanFunction*&gt; <a class="code" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a7fb1525370359d297c994b5be0cd677f">SymbolicState::get_bindings</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            std::unordered_map&lt;std::string, const BooleanFunction*&gt; res;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [key, value] : this-&gt;variable)</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span>&amp; key_node = key.get_top_level_node();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                <span class="keywordflow">if</span> (key_node.is_variable())</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                    res.emplace(key_node.variable, &amp;value);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            }</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        }</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">   38</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">SymbolicState::set</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; key, <span class="keyword">const</span> <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a>&amp; value)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">if</span> (key.<a class="code" href="classhal_1_1_boolean_function.html#a5d00c051b0f9666b68e726c679bcd950">is_variable</a>())</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                this-&gt;variable.emplace(std::move(key), std::move(value));</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html_a5d00c051b0f9666b68e726c679bcd950"><div class="ttname"><a href="classhal_1_1_boolean_function.html#a5d00c051b0f9666b68e726c679bcd950">hal::BooleanFunction::is_variable</a></div><div class="ttdeci">bool is_variable() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2boolean__function_8cpp_source.html#l00757">boolean_function.cpp:757</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_a1c9bd4903f4e05927b1f0012b03e7423"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a1c9bd4903f4e05927b1f0012b03e7423">hal::SMT::SymbolicState::get</a></div><div class="ttdeci">const BooleanFunction &amp; get(const BooleanFunction &amp;key) const</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00018">symbolic_state.cpp:18</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_a7fb1525370359d297c994b5be0cd677f"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a7fb1525370359d297c994b5be0cd677f">hal::SMT::SymbolicState::get_bindings</a></div><div class="ttdeci">std::unordered_map&lt; std::string, const BooleanFunction * &gt; get_bindings() const</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00024">symbolic_state.cpp:24</a></div></div>
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_acb31d002d2e0140fa9c0ebbdf862b856"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#acb31d002d2e0140fa9c0ebbdf862b856">hal::SMT::SymbolicState::SymbolicState</a></div><div class="ttdeci">SymbolicState(const std::vector&lt; BooleanFunction &gt; &amp;variables={})</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00007">symbolic_state.cpp:7</a></div></div>
-<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_aef987fbf26ebff0cf943f039477cfe61"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">hal::SMT::SymbolicState::set</a></div><div class="ttdeci">void set(const BooleanFunction &amp;key, const BooleanFunction &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00024">symbolic_state.cpp:24</a></div></div>
+<div class="ttc" id="aclasshal_1_1_s_m_t_1_1_symbolic_state_html_aef987fbf26ebff0cf943f039477cfe61"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">hal::SMT::SymbolicState::set</a></div><div class="ttdeci">void set(const BooleanFunction &amp;key, const BooleanFunction &amp;value)</div><div class="ttdef"><b>Definition:</b> <a href="symbolic__state_8cpp_source.html#l00038">symbolic_state.cpp:38</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00044">defines.h:45</a></div></div>
 <div class="ttc" id="asymbolic__state_8h_html"><div class="ttname"><a href="symbolic__state_8h.html">symbolic_state.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

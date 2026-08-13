@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-77-gbdd4682cc</span>
+   &#160;<span id="projectnumber">v4.5.0-78-g89332e557</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -98,7 +98,7 @@ Collaboration diagram for hal::SMT::SymbolicState:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_s_m_t_1_1_symbolic_state__coll__graph.png" border="0" usemap="#ahal_1_1_s_m_t_1_1_symbolic_state_coll__map" alt="Collaboration graph"/></div>
 <map name="ahal_1_1_s_m_t_1_1_symbolic_state_coll__map" id="ahal_1_1_s_m_t_1_1_symbolic_state_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,184,112"/>
+<area shape="rect" title=" " alt="" coords="5,5,184,127"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -110,11 +110,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1c9bd4903f4e05927b1f0012b03e7423"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef987fbf26ebff0cf943f039477cfe61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#aef987fbf26ebff0cf943f039477cfe61">set</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;key, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;value)</td></tr>
 <tr class="separator:aef987fbf26ebff0cf943f039477cfe61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fb1525370359d297c994b5be0cd677f"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a7fb1525370359d297c994b5be0cd677f">get_bindings</a> () const</td></tr>
+<tr class="separator:a7fb1525370359d297c994b5be0cd677f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the data structure that keeps track of symbolic variable values (e.g., required for symbolic simplification). </p>
 
-<p class="definition">Definition at line <a class="el" href="symbolic__state_8h_source.html#l00040">40</a> of file <a class="el" href="symbolic__state_8h_source.html">symbolic_state.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="symbolic__state_8h_source.html#l00041">41</a> of file <a class="el" href="symbolic__state_8h_source.html">symbolic_state.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acb31d002d2e0140fa9c0ebbdf862b856"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acb31d002d2e0140fa9c0ebbdf862b856">&#9670;&nbsp;</a></span>SymbolicState()</h2>
@@ -182,6 +184,28 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7fb1525370359d297c994b5be0cd677f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fb1525370359d297c994b5be0cd677f">&#9670;&nbsp;</a></span>get_bindings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> * &gt; hal::SMT::SymbolicState::get_bindings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Collects the variables bound within the symbolic state, indexed by their name.</p>
+<p>Looking a variable up through <a class="el" href="classhal_1_1_s_m_t_1_1_symbolic_state.html#a1c9bd4903f4e05927b1f0012b03e7423">get()</a> builds a Boolean function to use as the key and compares it against the keys of the state node by node. Callers that resolve many variables of the same state, such as the evaluation of a Boolean function, are better served by this index.</p>
+<dl class="section return"><dt>Returns</dt><dd>A map from variable name to the Boolean function bound to it. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="symbolic__state_8cpp_source.html#l00024">24</a> of file <a class="el" href="symbolic__state_8cpp_source.html">symbolic_state.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aef987fbf26ebff0cf943f039477cfe61"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aef987fbf26ebff0cf943f039477cfe61">&#9670;&nbsp;</a></span>set()</h2>
 
@@ -216,7 +240,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="symbolic__state_8cpp_source.html#l00024">24</a> of file <a class="el" href="symbolic__state_8cpp_source.html">symbolic_state.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="symbolic__state_8cpp_source.html#l00038">38</a> of file <a class="el" href="symbolic__state_8cpp_source.html">symbolic_state.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00757">hal::BooleanFunction::is_variable()</a>.</p>
 
