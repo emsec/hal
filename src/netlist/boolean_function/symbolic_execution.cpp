@@ -7,6 +7,22 @@ namespace hal
     {
         namespace ConstantPropagation
         {
+            namespace
+            {
+                /**
+                 * Translates an integer into a little endian vector of values of the given width.
+                 */
+                std::vector<BooleanFunction::Value> to_values(u64 value, u16 size)
+                {
+                    std::vector<BooleanFunction::Value> res;
+                    res.reserve(size);
+                    for (u16 i = 0; i < size; i++)
+                    {
+                        res.emplace_back(((value >> i) & 1) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO);
+                    }
+                    return res;
+                }
+            }    // namespace
             /**
              * Helper function to simplify a constant AND operation.
              * 
@@ -14,7 +30,7 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction And(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> And(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
                 simplified.reserve(p0.size());
@@ -33,7 +49,7 @@ namespace hal
                         simplified.emplace_back(BooleanFunction::Value::X);
                     }
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -43,7 +59,7 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Or(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Or(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
                 simplified.reserve(p0.size());
@@ -62,7 +78,7 @@ namespace hal
                         simplified.emplace_back(BooleanFunction::Value::X);
                     }
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -71,7 +87,7 @@ namespace hal
              * @param[in] p - Boolean function parameter.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Not(const std::vector<BooleanFunction::Value>& p)
+            std::vector<BooleanFunction::Value> Not(const std::vector<BooleanFunction::Value>& p)
             {
                 std::vector<BooleanFunction::Value> simplified;
                 simplified.reserve(p.size());
@@ -90,7 +106,7 @@ namespace hal
                         simplified.emplace_back(value);
                     }
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -100,7 +116,7 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Xor(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Xor(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 std::vector<BooleanFunction::Value> simplified;
                 simplified.reserve(p0.size());
@@ -119,7 +135,7 @@ namespace hal
                         simplified.emplace_back(BooleanFunction::Value::X);
                     }
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -129,7 +145,7 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Add(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Add(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (p0.size() <= 64 && p1.size() <= 64)
                 {
@@ -138,17 +154,19 @@ namespace hal
 
                     if (a_res.is_ok() && b_res.is_ok())
                     {
-                        const auto res = (a_res.get() + b_res.get()) & 0xffffffff;
-                        return BooleanFunction::Const(res, p0.size());
+                        // no mask needed, Const() takes exactly p0.size() bits. Masking to 32 bit here
+                        // silently truncated every result of a wider operation.
+                        const auto res = a_res.get() + b_res.get();
+                        return to_values(res, p0.size());
                     }
 
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
                 }
 
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
                 }
 
                 std::vector<BooleanFunction::Value> simplified;
@@ -160,7 +178,7 @@ namespace hal
                     simplified.emplace_back(static_cast<BooleanFunction::Value>(res & 0x1));
                     carry = static_cast<BooleanFunction::Value>(res >> 1);
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -170,7 +188,7 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Sub(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Sub(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (p0.size() <= 64 && p1.size() <= 64)
                 {
@@ -179,17 +197,19 @@ namespace hal
 
                     if (a_res.is_ok() && b_res.is_ok())
                     {
-                        const auto res = (a_res.get() - b_res.get()) & 0xffffffff;
-                        return BooleanFunction::Const(res, p0.size());
+                        // no mask needed, Const() takes exactly p0.size() bits. Masking to 32 bit here
+                        // silently truncated every result of a wider operation.
+                        const auto res = a_res.get() - b_res.get();
+                        return to_values(res, p0.size());
                     }
 
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
                 }
 
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
                 }
 
                 std::vector<BooleanFunction::Value> simplified;
@@ -201,7 +221,7 @@ namespace hal
                     simplified.emplace_back(static_cast<BooleanFunction::Value>(res & 0x1));
                     carry = static_cast<BooleanFunction::Value>(res >> 1);
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
             }
 
             /**
@@ -211,12 +231,12 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Mul(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Mul(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
                 }
 
                 auto bitsize = p0.size();
@@ -231,7 +251,243 @@ namespace hal
                         carry             = static_cast<BooleanFunction::Value>(res >> 1);
                     }
                 }
-                return BooleanFunction::Const(simplified);
+                return simplified;
+            }
+
+            /**
+             * Helper functions for the division and remainder operations below. They operate on little endian
+             * vectors of defined values, i.e. ZERO or ONE only, of equal length.
+             */
+            namespace
+            {
+                bool is_zero(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return std::all_of(value.begin(), value.end(), [](auto v) { return v == BooleanFunction::Value::ZERO; });
+                }
+
+                bool is_negative(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return value.back() == BooleanFunction::Value::ONE;
+                }
+
+                /**
+                 * Compares two values as unsigned numbers, starting at the most significant bit.
+                 */
+                bool greater_equal_unsigned(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+                {
+                    for (auto i = p0.size(); i-- > 0;)
+                    {
+                        if (p0[i] != p1[i])
+                        {
+                            return p0[i] == BooleanFunction::Value::ONE;
+                        }
+                    }
+                    return true;
+                }
+
+                /**
+                 * Subtracts p1 from p0, wrapping around on an underflow.
+                 */
+                std::vector<BooleanFunction::Value> subtract(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+                {
+                    std::vector<BooleanFunction::Value> res;
+                    res.reserve(p0.size());
+
+                    auto borrow = 0;
+                    for (auto i = 0u; i < p0.size(); i++)
+                    {
+                        const auto difference = static_cast<int>(p0[i]) - static_cast<int>(p1[i]) - borrow;
+                        borrow                = (difference < 0) ? 1 : 0;
+                        res.emplace_back(static_cast<BooleanFunction::Value>(difference & 1));
+                    }
+                    return res;
+                }
+
+                /**
+                 * Negates a value in two's complement.
+                 */
+                std::vector<BooleanFunction::Value> negate(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return subtract(std::vector<BooleanFunction::Value>(value.size(), BooleanFunction::Value::ZERO), value);
+                }
+
+                /**
+                 * Restoring long division of two unsigned values of arbitrary width.
+                 *
+                 * Follows the SMT-LIB definition of bvudiv and bvurem on a division by zero, which yields all
+                 * ones as the quotient and the dividend as the remainder, since these operations are
+                 * translated to bvudiv and bvurem when handed to an SMT solver.
+                 *
+                 * @returns the quotient and the remainder.
+                 */
+                std::pair<std::vector<BooleanFunction::Value>, std::vector<BooleanFunction::Value>> divide_unsigned(const std::vector<BooleanFunction::Value>& dividend,
+                                                                                                                    const std::vector<BooleanFunction::Value>& divisor)
+                {
+                    const auto size = dividend.size();
+
+                    if (is_zero(divisor))
+                    {
+                        return {std::vector<BooleanFunction::Value>(size, BooleanFunction::Value::ONE), dividend};
+                    }
+
+                    // the shifted remainder needs one bit more than the operands to not overflow
+                    auto divisor_extended = divisor;
+                    divisor_extended.push_back(BooleanFunction::Value::ZERO);
+
+                    std::vector<BooleanFunction::Value> quotient(size, BooleanFunction::Value::ZERO);
+                    std::vector<BooleanFunction::Value> remainder(size + 1, BooleanFunction::Value::ZERO);
+
+                    for (auto i = size; i-- > 0;)
+                    {
+                        for (auto j = remainder.size(); j-- > 1;)
+                        {
+                            remainder[j] = remainder[j - 1];
+                        }
+                        remainder[0] = dividend[i];
+
+                        if (greater_equal_unsigned(remainder, divisor_extended))
+                        {
+                            remainder   = subtract(remainder, divisor_extended);
+                            quotient[i] = BooleanFunction::Value::ONE;
+                        }
+                    }
+
+                    remainder.pop_back();
+                    return {quotient, remainder};
+                }
+
+                bool any_undefined(const std::vector<BooleanFunction::Value>& value)
+                {
+                    return std::any_of(value.begin(), value.end(), [](auto v) { return v == BooleanFunction::Value::X || v == BooleanFunction::Value::Z; });
+                }
+            }    // namespace
+
+            /**
+             * Helper function to simplify a constant EQ operation.
+             *
+             * A single undefined bit hides whether the two values are equal, unless some other bit already
+             * tells them apart.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            std::vector<BooleanFunction::Value> Eq(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                auto undefined = false;
+                for (auto i = 0u; i < p0.size(); i++)
+                {
+                    if ((p0[i] == BooleanFunction::Value::X) || (p0[i] == BooleanFunction::Value::Z) || (p1[i] == BooleanFunction::Value::X) || (p1[i] == BooleanFunction::Value::Z))
+                    {
+                        undefined = true;
+                    }
+                    else if (p0[i] != p1[i])
+                    {
+                        return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
+                    }
+                }
+
+                return undefined ? std::vector<BooleanFunction::Value>({BooleanFunction::Value::X}) : std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
+            }
+
+            /**
+             * Helper function to simplify a constant UDIV operation.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            std::vector<BooleanFunction::Value> Udiv(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
+                }
+
+                return divide_unsigned(p0, p1).first;
+            }
+
+            /**
+             * Helper function to simplify a constant UREM operation.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            std::vector<BooleanFunction::Value> Urem(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
+                }
+
+                return divide_unsigned(p0, p1).second;
+            }
+
+            /**
+             * Helper function to simplify a constant SDIV operation.
+             *
+             * Signed division truncates towards zero, following the SMT-LIB definition of bvsdiv.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            std::vector<BooleanFunction::Value> Sdiv(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
+                }
+
+                const auto dividend_negative = is_negative(p0), divisor_negative = is_negative(p1);
+
+                if (!dividend_negative && !divisor_negative)
+                {
+                    return divide_unsigned(p0, p1).first;
+                }
+                if (dividend_negative && !divisor_negative)
+                {
+                    return negate(divide_unsigned(negate(p0), p1).first);
+                }
+                if (!dividend_negative && divisor_negative)
+                {
+                    return negate(divide_unsigned(p0, negate(p1)).first);
+                }
+                return divide_unsigned(negate(p0), negate(p1)).first;
+            }
+
+            /**
+             * Helper function to simplify a constant SREM operation.
+             *
+             * The sign of a signed remainder follows the dividend, following the SMT-LIB definition of bvsrem.
+             *
+             * @param[in] p0 - Boolean function parameter 0.
+             * @param[in] p1 - Boolean function parameter 1.
+             * @returns Boolean function with a simplified constant value.
+             */
+            std::vector<BooleanFunction::Value> Srem(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            {
+                if (any_undefined(p0) || any_undefined(p1))
+                {
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
+                }
+
+                const auto dividend_negative = is_negative(p0), divisor_negative = is_negative(p1);
+
+                if (!dividend_negative && !divisor_negative)
+                {
+                    return divide_unsigned(p0, p1).second;
+                }
+                if (dividend_negative && !divisor_negative)
+                {
+                    return negate(divide_unsigned(negate(p0), p1).second);
+                }
+                if (!dividend_negative && divisor_negative)
+                {
+                    return divide_unsigned(p0, negate(p1)).second;
+                }
+                return negate(divide_unsigned(negate(p0), negate(p1)).second);
             }
 
             /**
@@ -241,12 +497,12 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Shl(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            std::vector<BooleanFunction::Value> Shl(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
             {
                 if (p1 >= p0.size())
                 {
                     // Shift amount is too large, result is all zeros
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO);
                 }
 
                 std::vector<BooleanFunction::Value> result(p0.size(), BooleanFunction::Value::ZERO);
@@ -257,7 +513,7 @@ namespace hal
                     result[i] = p0[i - p1];
                 }
 
-                return BooleanFunction::Const(result);
+                return result;
             }
 
             /**
@@ -267,12 +523,12 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Lshr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            std::vector<BooleanFunction::Value> Lshr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
             {
                 if (p1 >= p0.size())
                 {
                     // Shift amount is too large, result is all zeros
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::ZERO);
                 }
 
                 std::vector<BooleanFunction::Value> result(p0.size(), BooleanFunction::Value::ZERO);
@@ -283,7 +539,7 @@ namespace hal
                     result[i] = p0[i + p1];
                 }
 
-                return BooleanFunction::Const(result);
+                return result;
             }
 
             /**
@@ -293,14 +549,14 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Ashr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            std::vector<BooleanFunction::Value> Ashr(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
             {
                 auto sign_bit = p0.back();    // MSB is the sign bit
 
                 if (p1 >= p0.size())
                 {
                     // Shift amount is too large, result is all sign bits
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), sign_bit));
+                    return std::vector<BooleanFunction::Value>(p0.size(), sign_bit);
                 }
 
                 std::vector<BooleanFunction::Value> result(p0.size(), sign_bit);
@@ -311,7 +567,7 @@ namespace hal
                     result[i] = p0[i + p1];
                 }
 
-                return BooleanFunction::Const(result);
+                return result;
             }
 
             /**
@@ -321,13 +577,13 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Rol(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            std::vector<BooleanFunction::Value> Rol(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
             {
                 auto rotate_amount = p1 % p0.size();    // Modulo for rotation
 
                 if (rotate_amount == 0)
                 {
-                    return BooleanFunction::Const(p0);    // No rotation needed
+                    return p0;    // No rotation needed
                 }
 
                 std::vector<BooleanFunction::Value> result(p0.size());
@@ -339,7 +595,7 @@ namespace hal
                     result[new_pos] = p0[i];
                 }
 
-                return BooleanFunction::Const(result);
+                return result;
             }
 
             /**
@@ -349,13 +605,13 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Ror(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
+            std::vector<BooleanFunction::Value> Ror(const std::vector<BooleanFunction::Value>& p0, const u16 p1)
             {
                 auto rotate_amount = p1 % p0.size();    // Modulo for rotation
 
                 if (rotate_amount == 0)
                 {
-                    return BooleanFunction::Const(p0);    // No rotation needed
+                    return p0;    // No rotation needed
                 }
 
                 std::vector<BooleanFunction::Value> result(p0.size());
@@ -367,7 +623,7 @@ namespace hal
                     result[new_pos] = p0[i];
                 }
 
-                return BooleanFunction::Const(result);
+                return result;
             }
             /**
              * Helper function to simplify a constant SLE operation.
@@ -376,23 +632,23 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Sle(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Sle(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                    return {BooleanFunction::Value::X};
                 }
 
                 auto msb_p0 = p0.back();
                 auto msb_p1 = p1.back();
                 if (msb_p0 == BooleanFunction::Value::ONE && msb_p1 == BooleanFunction::Value::ZERO)
                 {
-                    return BooleanFunction::Const(1, 1);
+                    return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
                 }
                 else if (msb_p0 == BooleanFunction::Value::ZERO && msb_p1 == BooleanFunction::Value::ONE)
                 {
-                    return BooleanFunction::Const(0, 1);
+                    return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
                 }
 
                 std::vector<BooleanFunction::Value> simplified;
@@ -406,7 +662,7 @@ namespace hal
                     neq |= res & 1;
                 }
 
-                return BooleanFunction::Const({static_cast<BooleanFunction::Value>((res & 1) | !neq)});
+                return {static_cast<BooleanFunction::Value>((res & 1) | !neq)};
             }
 
             /**
@@ -416,23 +672,23 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Slt(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Slt(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                    return {BooleanFunction::Value::X};
                 }
 
                 auto msb_p0 = p0.back();
                 auto msb_p1 = p1.back();
                 if (msb_p0 == BooleanFunction::Value::ONE && msb_p1 == BooleanFunction::Value::ZERO)
                 {
-                    return BooleanFunction::Const(1, 1);
+                    return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
                 }
                 else if (msb_p0 == BooleanFunction::Value::ZERO && msb_p1 == BooleanFunction::Value::ONE)
                 {
-                    return BooleanFunction::Const(0, 1);
+                    return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
                 }
 
                 std::vector<BooleanFunction::Value> simplified;
@@ -444,7 +700,7 @@ namespace hal
                     carry = (res >> 1) & 1;
                 }
 
-                return BooleanFunction::Const({static_cast<BooleanFunction::Value>(res & 1)});
+                return {static_cast<BooleanFunction::Value>(res & 1)};
             }
 
             /**
@@ -454,26 +710,26 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Ule(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Ule(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                    return {BooleanFunction::Value::X};
                 }
 
                 for (i32 i = p0.size() - 1; i >= 0; i--)
                 {
                     if (p0[i] == BooleanFunction::Value::ONE && p1[i] == BooleanFunction::Value::ZERO)
                     {
-                        return BooleanFunction::Const(0, 1);
+                        return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
                     }
                     else if (p0[i] == BooleanFunction::Value::ZERO && p1[i] == BooleanFunction::Value::ONE)
                     {
-                        return BooleanFunction::Const(1, 1);
+                        return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
                     }
                 }
-                return BooleanFunction::Const(1, 1);
+                return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
             }
 
             /**
@@ -483,26 +739,26 @@ namespace hal
              * @param[in] p1 - Boolean function parameter 1.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Ult(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
+            std::vector<BooleanFunction::Value> Ult(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1)
             {
                 if (std::any_of(p0.begin(), p0.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; })
                     || std::any_of(p1.begin(), p1.end(), [](auto val) { return val == BooleanFunction::Value::X || val == BooleanFunction::Value::Z; }))
                 {
-                    return BooleanFunction::Const({BooleanFunction::Value::X});
+                    return {BooleanFunction::Value::X};
                 }
 
                 for (i32 i = p0.size() - 1; i >= 0; i--)
                 {
                     if (p0[i] == BooleanFunction::Value::ONE && p1[i] == BooleanFunction::Value::ZERO)
                     {
-                        return BooleanFunction::Const(0, 1);
+                        return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
                     }
                     else if (p0[i] == BooleanFunction::Value::ZERO && p1[i] == BooleanFunction::Value::ONE)
                     {
-                        return BooleanFunction::Const(1, 1);
+                        return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ONE});
                     }
                 }
-                return BooleanFunction::Const(0, 1);
+                return std::vector<BooleanFunction::Value>({BooleanFunction::Value::ZERO});
             }
 
             /**
@@ -513,19 +769,110 @@ namespace hal
              * @param[in] p2 - Boolean function parameter 2.
              * @returns Boolean function with a simplified constant value.
              */
-            BooleanFunction Ite(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1, const std::vector<BooleanFunction::Value>& p2)
+            std::vector<BooleanFunction::Value> Ite(const std::vector<BooleanFunction::Value>& p0, const std::vector<BooleanFunction::Value>& p1, const std::vector<BooleanFunction::Value>& p2)
             {
                 if (p0.front() == BooleanFunction::Value::ONE)
                 {
-                    return BooleanFunction::Const(p1);
+                    return p1;
                 }
                 else if (p0.front() == BooleanFunction::Value::ZERO)
                 {
-                    return BooleanFunction::Const(p2);
+                    return p2;
                 }
                 else
                 {
-                    return BooleanFunction::Const(std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X));
+                    return std::vector<BooleanFunction::Value>(p0.size(), BooleanFunction::Value::X);
+                }
+            }
+
+            /**
+             * Applies a node to operands that have already been folded to constant values.
+             *
+             * Shared by SymbolicExecution::constant_propagation(), which wraps the result back into a
+             * Boolean function, and by the constant evaluation in SymbolicExecution::evaluate(), which
+             * keeps working on plain values.
+             *
+             * @param[in] node - The node to apply.
+             * @param[in,out] values - The constant operands, some of the cases modify them in place.
+             * @param[in] indices - The index operands, in the order in which they appear.
+             * @returns Ok() and the resulting value on success, Err() otherwise.
+             */
+            Result<std::vector<BooleanFunction::Value>> fold(const BooleanFunction::Node& node,
+                                                             std::vector<std::vector<BooleanFunction::Value>>& values,
+                                                             const std::vector<u16>& indices)
+            {
+                UNUSED(indices);
+                switch (node.type)
+                {
+                    case BooleanFunction::NodeType::And:
+                        return OK(ConstantPropagation::And(values[0], values[1]));
+                    case BooleanFunction::NodeType::Or:
+                        return OK(ConstantPropagation::Or(values[0], values[1]));
+                    case BooleanFunction::NodeType::Not:
+                        return OK(ConstantPropagation::Not(values[0]));
+                    case BooleanFunction::NodeType::Xor:
+                        return OK(ConstantPropagation::Xor(values[0], values[1]));
+
+                    case BooleanFunction::NodeType::Add:
+                        return OK(ConstantPropagation::Add(values[0], values[1]));
+                    case BooleanFunction::NodeType::Sub:
+                        return OK(ConstantPropagation::Sub(values[0], values[1]));
+                    case BooleanFunction::NodeType::Mul:
+                        return OK(ConstantPropagation::Mul(values[0], values[1]));
+
+                    case BooleanFunction::NodeType::Sdiv:
+                        return OK(ConstantPropagation::Sdiv(values[0], values[1]));
+                    case BooleanFunction::NodeType::Udiv:
+                        return OK(ConstantPropagation::Udiv(values[0], values[1]));
+                    case BooleanFunction::NodeType::Srem:
+                        return OK(ConstantPropagation::Srem(values[0], values[1]));
+                    case BooleanFunction::NodeType::Urem:
+                        return OK(ConstantPropagation::Urem(values[0], values[1]));
+
+                    case BooleanFunction::NodeType::Concat: {
+                        values[1].insert(values[1].end(), values[0].begin(), values[0].end());
+                        return OK((values[1]));
+                    }
+                    case BooleanFunction::NodeType::Slice: {
+                        auto start = indices[0];
+                        auto end   = indices[1];
+                        return OK((std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end + 1)));
+                    }
+                    case BooleanFunction::NodeType::Zext: {
+                        values[0].resize(node.size, BooleanFunction::Value::ZERO);
+                        return OK((values[0]));
+                    }
+                    case BooleanFunction::NodeType::Sext: {
+                        values[0].resize(node.size, static_cast<BooleanFunction::Value>(values[0].back()));
+                        return OK((values[0]));
+                    }
+
+                    case BooleanFunction::NodeType::Shl:
+                        return OK(ConstantPropagation::Shl(values[0], indices[0]));
+                    case BooleanFunction::NodeType::Lshr:
+                        return OK(ConstantPropagation::Lshr(values[0], indices[0]));
+                    case BooleanFunction::NodeType::Ashr:
+                        return OK(ConstantPropagation::Ashr(values[0], indices[0]));
+                    case BooleanFunction::NodeType::Rol:
+                        return OK(ConstantPropagation::Rol(values[0], indices[0]));
+                    case BooleanFunction::NodeType::Ror:
+                        return OK(ConstantPropagation::Ror(values[0], indices[0]));
+
+                    case BooleanFunction::NodeType::Eq:
+                        return OK(ConstantPropagation::Eq(values[0], values[1]));
+                    case BooleanFunction::NodeType::Sle:
+                        return OK(ConstantPropagation::Sle(values[0], values[1]));
+                    case BooleanFunction::NodeType::Slt:
+                        return OK(ConstantPropagation::Slt(values[0], values[1]));
+                    case BooleanFunction::NodeType::Ule:
+                        return OK(ConstantPropagation::Ule(values[0], values[1]));
+                    case BooleanFunction::NodeType::Ult:
+                        return OK(ConstantPropagation::Ult(values[0], values[1]));
+                    case BooleanFunction::NodeType::Ite:
+                        return OK(ConstantPropagation::Ite(values[0], values[1], values[2]));
+
+                    default:
+                        return ERR("could not propagate constants: not implemented for given node type");
                 }
             }
 
@@ -549,8 +896,95 @@ namespace hal
         {
         }
 
+        std::optional<std::vector<BooleanFunction::Value>> SymbolicExecution::evaluate_constant(const BooleanFunction& function) const
+        {
+            // Resolve the bindings once by name. Going through SymbolicState::get() per variable would build
+            // a temporary Var() and look it up in a std::map keyed by whole Boolean functions, which compares
+            // them node by node and therefore string by string.
+            const auto bindings = this->state.get_bindings();
+
+            std::vector<std::vector<BooleanFunction::Value>> values;
+            std::vector<u16> indices;
+
+            // operands of a node are the trailing entries of the two stacks, an operation consumes as many of
+            // them as its arity and pushes its result back
+            std::vector<std::vector<BooleanFunction::Value>> operands;
+            std::vector<u16> operand_indices;
+
+            for (const auto& node : function.get_nodes())
+            {
+                if (node.is_constant())
+                {
+                    values.push_back(node.constant);
+                    continue;
+                }
+
+                if (node.is_index())
+                {
+                    indices.push_back(node.index);
+                    continue;
+                }
+
+                if (node.is_variable())
+                {
+                    const auto it = bindings.find(node.variable);
+                    if ((it == bindings.end()) || !it->second->is_constant() || (it->second->size() != node.size))
+                    {
+                        return std::nullopt;    // not bound to a constant, the general path has to take over
+                    }
+                    values.push_back(it->second->get_top_level_node().constant);
+                    continue;
+                }
+
+                // an operation, collect its operands from the back of the stacks. Which of the two a given
+                // operand sits on is decided by the node type, so count the index operands it expects.
+                const auto arity = node.get_arity();
+                const auto index_arity = (node.type == BooleanFunction::NodeType::Slice)                                                                 ? 2
+                                         : (node.type == BooleanFunction::NodeType::Zext || node.type == BooleanFunction::NodeType::Sext
+                                            || node.type == BooleanFunction::NodeType::Shl || node.type == BooleanFunction::NodeType::Lshr
+                                            || node.type == BooleanFunction::NodeType::Ashr || node.type == BooleanFunction::NodeType::Rol
+                                            || node.type == BooleanFunction::NodeType::Ror)
+                                             ? 1
+                                             : 0;
+                const auto value_arity = arity - index_arity;
+
+                if (values.size() < value_arity || indices.size() < index_arity)
+                {
+                    return std::nullopt;
+                }
+
+                operands.assign(std::make_move_iterator(values.end() - value_arity), std::make_move_iterator(values.end()));
+                values.erase(values.end() - value_arity, values.end());
+                operand_indices.assign(indices.end() - index_arity, indices.end());
+                indices.erase(indices.end() - index_arity, indices.end());
+
+                auto folded = ConstantPropagation::fold(node, operands, operand_indices);
+                if (folded.is_error())
+                {
+                    return std::nullopt;
+                }
+                values.push_back(folded.get());
+            }
+
+            if ((values.size() != 1) || !indices.empty())
+            {
+                return std::nullopt;
+            }
+            return values.front();
+        }
+
         Result<BooleanFunction> SymbolicExecution::evaluate(const BooleanFunction& function) const
         {
+            // Whenever every variable of the function is bound to a constant, which is the case for anything
+            // computing a truth table, the whole result is a constant and no sub-expression can survive. The
+            // general path below would still build a Boolean function per node, each owning a vector of nodes
+            // that own a string and a vector of values, which costs several allocations per operation. Fold
+            // the values directly instead and fall back to the general path as soon as that is not possible.
+            if (auto folded = this->evaluate_constant(function); folded.has_value())
+            {
+                return OK(BooleanFunction::Const(folded.value()));
+            }
+
             std::vector<BooleanFunction> stack;
             for (const auto& node : function.get_nodes())
             {
@@ -1173,12 +1607,12 @@ namespace hal
                     return BooleanFunction::Srem(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Urem: {
-                    // X %s 1    =>   0
+                    // X % 1    =>   0
                     if (p[1].has_constant_value(1))
                     {
                         return OK(BooleanFunction::Const(0, node.size));
                     }
-                    // X %s X    =>   0
+                    // X % X    =>   0
                     if (p[0] == p[1])
                     {
                         return OK(BooleanFunction::Const(0, node.size));
@@ -1197,6 +1631,66 @@ namespace hal
                     if (node.size == p[0].size() && p[1].has_index_value(0) && p[2].has_index_value(node.size - 1))
                     {
                         return OK(p[0]);
+                    }
+
+                    if (const auto start_res = p[1].get_index_value(), end_res = p[2].get_index_value(); start_res.is_ok() && end_res.is_ok())
+                    {
+                        const auto start = start_res.get(), end = end_res.get();
+
+                        // SLICE(SLICE(X, i, j), k, l)   =>   SLICE(X, i+k, i+l)
+                        if (p[0].is(BooleanFunction::NodeType::Slice))
+                        {
+                            const auto inner = p[0].get_parameters();
+                            if (const auto inner_start = inner[1].get_index_value(); inner_start.is_ok())
+                            {
+                                const auto offset = inner_start.get();
+                                return BooleanFunction::Slice(inner[0].clone(),
+                                                              BooleanFunction::Index(offset + start, inner[0].size()),
+                                                              BooleanFunction::Index(offset + end, inner[0].size()),
+                                                              node.size);
+                            }
+                        }
+
+                        // a slice of an extension either sees only the padding or only the original value
+                        if (p[0].is(BooleanFunction::NodeType::Zext) || p[0].is(BooleanFunction::NodeType::Sext))
+                        {
+                            const auto extended = p[0].get_parameters();
+                            const auto original = extended[0].size();
+
+                            // SLICE(ZEXT(X, n), i, j)   =>   0, the range lies entirely in the zero padding
+                            if (p[0].is(BooleanFunction::NodeType::Zext) && (start >= original))
+                            {
+                                return OK(BooleanFunction::Const(0, node.size));
+                            }
+                            // SLICE(ZEXT(X, n), i, j)   =>   SLICE(X, i, j), the range lies entirely within X
+                            // SLICE(SEXT(X, n), i, j)   =>   SLICE(X, i, j), which holds for both extensions
+                            if (end < original)
+                            {
+                                return BooleanFunction::Slice(extended[0].clone(), BooleanFunction::Index(start, original), BooleanFunction::Index(end, original), node.size);
+                            }
+                        }
+
+                        // a slice that falls entirely into one half of a concatenation only needs that half,
+                        // where the second parameter of the concatenation holds the least significant bits
+                        if (p[0].is(BooleanFunction::NodeType::Concat))
+                        {
+                            const auto halves = p[0].get_parameters();
+                            const auto lower  = halves[1].size();
+
+                            // SLICE(CONCAT(X, Y), i, j)   =>   SLICE(Y, i, j)
+                            if (end < lower)
+                            {
+                                return BooleanFunction::Slice(halves[1].clone(), BooleanFunction::Index(start, lower), BooleanFunction::Index(end, lower), node.size);
+                            }
+                            // SLICE(CONCAT(X, Y), i, j)   =>   SLICE(X, i-|Y|, j-|Y|)
+                            if (start >= lower)
+                            {
+                                return BooleanFunction::Slice(halves[0].clone(),
+                                                              BooleanFunction::Index(start - lower, halves[0].size()),
+                                                              BooleanFunction::Index(end - lower, halves[0].size()),
+                                                              node.size);
+                            }
+                        }
                     }
 
                     return BooleanFunction::Slice(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
@@ -1335,9 +1829,33 @@ namespace hal
                     return BooleanFunction::Concat(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Zext: {
+                    // ZEXT(X, |X|)   =>   X
+                    if (node.size == p[0].size())
+                    {
+                        return OK(p[0]);
+                    }
+                    // ZEXT(ZEXT(X, n), m)   =>   ZEXT(X, m), only for two extensions of the same kind
+                    if (p[0].is(BooleanFunction::NodeType::Zext))
+                    {
+                        const auto inner = p[0].get_parameters();
+                        return BooleanFunction::Zext(inner[0].clone(), BooleanFunction::Index(node.size, node.size), node.size);
+                    }
+
                     return BooleanFunction::Zext(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Sext: {
+                    // SEXT(X, |X|)   =>   X
+                    if (node.size == p[0].size())
+                    {
+                        return OK(p[0]);
+                    }
+                    // SEXT(SEXT(X, n), m)   =>   SEXT(X, m), only for two extensions of the same kind
+                    if (p[0].is(BooleanFunction::NodeType::Sext))
+                    {
+                        const auto inner = p[0].get_parameters();
+                        return BooleanFunction::Sext(inner[0].clone(), BooleanFunction::Index(node.size, node.size), node.size);
+                    }
+
                     return BooleanFunction::Sext(p[0].clone(), p[1].clone(), node.size);
                 }
                 case BooleanFunction::NodeType::Eq: {
@@ -1345,6 +1863,25 @@ namespace hal
                     if (p[0] == p[1])
                     {
                         return OK(BooleanFunction::Const(1, node.size));
+                    }
+                    // X == ~X   =>   0, the two differ in every single bit
+                    if (is_x_not_y(p[0], p[1]))
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // on a single bit an equality is the operand itself, or its negation
+                    if (p[0].size() == 1)
+                    {
+                        // X == 1   =>   X
+                        if (p[1] == One(1))
+                        {
+                            return OK(p[0]);
+                        }
+                        // X == 0   =>   ~X
+                        if (p[1].has_constant_value(0))
+                        {
+                            return OK(~p[0]);
+                        }
                     }
 
                     return BooleanFunction::Eq(p[0].clone(), p[1].clone(), node.size);
@@ -1373,6 +1910,16 @@ namespace hal
                     {
                         return OK(BooleanFunction::Const(1, node.size));
                     }
+                    // 0 <= X   =>   1, no unsigned value is below zero
+                    if (p[0].has_constant_value(0))
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
+                    // X <= 111...1   =>   1, no unsigned value is above the maximum
+                    if (p[1] == One(p[1].size()))
+                    {
+                        return OK(BooleanFunction::Const(1, node.size));
+                    }
 
                     return BooleanFunction::Ule(p[0].clone(), p[1].clone(), node.size);
                 }
@@ -1384,6 +1931,11 @@ namespace hal
                     }
                     // X < X   =>   0
                     if (p[0] == p[1])
+                    {
+                        return OK(BooleanFunction::Const(0, node.size));
+                    }
+                    // 111...1 < X   =>   0, no unsigned value is above the maximum
+                    if (p[0] == One(p[0].size()))
                     {
                         return OK(BooleanFunction::Const(0, node.size));
                     }
@@ -1405,6 +1957,20 @@ namespace hal
                     if (p[1] == p[2])
                     {
                         return OK(p[1]);
+                    }
+                    // a single bit choice between 1 and 0 is the condition itself, or its negation
+                    if (node.size == 1)
+                    {
+                        // ITE(a, 1, 0)  =>  a
+                        if ((p[1] == One(1)) && p[2].has_constant_value(0))
+                        {
+                            return OK(p[0]);
+                        }
+                        // ITE(a, 0, 1)  =>  ~a
+                        if (p[1].has_constant_value(0) && (p[2] == One(1)))
+                        {
+                            return OK(~p[0]);
+                        }
                     }
 
                     return BooleanFunction::Ite(p[0].clone(), p[1].clone(), p[2].clone(), node.size);
@@ -1438,85 +2004,13 @@ namespace hal
                 }
             }
 
-            switch (node.type)
+            if (auto res = ConstantPropagation::fold(node, values, indices); res.is_ok())
             {
-                case BooleanFunction::NodeType::And:
-                    return OK(ConstantPropagation::And(values[0], values[1]));
-                case BooleanFunction::NodeType::Or:
-                    return OK(ConstantPropagation::Or(values[0], values[1]));
-                case BooleanFunction::NodeType::Not:
-                    return OK(ConstantPropagation::Not(values[0]));
-                case BooleanFunction::NodeType::Xor:
-                    return OK(ConstantPropagation::Xor(values[0], values[1]));
-
-                case BooleanFunction::NodeType::Add:
-                    return OK(ConstantPropagation::Add(values[0], values[1]));
-                case BooleanFunction::NodeType::Sub:
-                    return OK(ConstantPropagation::Sub(values[0], values[1]));
-                case BooleanFunction::NodeType::Mul:
-                    return OK(ConstantPropagation::Mul(values[0], values[1]));
-
-                case BooleanFunction::NodeType::Sdiv: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Udiv: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Srem: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-                case BooleanFunction::NodeType::Urem: {
-                    // TODO implement
-                    return ERR("could not propagate constants: not implemented for given node type");
-                }
-
-                case BooleanFunction::NodeType::Concat: {
-                    values[1].insert(values[1].end(), values[0].begin(), values[0].end());
-                    return OK(BooleanFunction::Const(values[1]));
-                }
-                case BooleanFunction::NodeType::Slice: {
-                    auto start = p[1].get_index_value().get();
-                    auto end   = p[2].get_index_value().get();
-                    return OK(BooleanFunction::Const(std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end + 1)));
-                }
-                case BooleanFunction::NodeType::Zext: {
-                    values[0].resize(node.size, BooleanFunction::Value::ZERO);
-                    return OK(BooleanFunction::Const(values[0]));
-                }
-                case BooleanFunction::NodeType::Sext: {
-                    values[0].resize(node.size, static_cast<BooleanFunction::Value>(values[0].back()));
-                    return OK(BooleanFunction::Const(values[0]));
-                }
-
-                case BooleanFunction::NodeType::Shl:
-                    return OK(ConstantPropagation::Shl(values[0], indices[0]));
-                case BooleanFunction::NodeType::Lshr:
-                    return OK(ConstantPropagation::Lshr(values[0], indices[0]));
-                case BooleanFunction::NodeType::Ashr:
-                    return OK(ConstantPropagation::Ashr(values[0], indices[0]));
-                case BooleanFunction::NodeType::Rol:
-                    return OK(ConstantPropagation::Rol(values[0], indices[0]));
-                case BooleanFunction::NodeType::Ror:
-                    return OK(ConstantPropagation::Ror(values[0], indices[0]));
-
-                case BooleanFunction::NodeType::Eq:
-                    return OK((values[0] == values[1]) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1));
-                case BooleanFunction::NodeType::Sle:
-                    return OK(ConstantPropagation::Sle(values[0], values[1]));
-                case BooleanFunction::NodeType::Slt:
-                    return OK(ConstantPropagation::Slt(values[0], values[1]));
-                case BooleanFunction::NodeType::Ule:
-                    return OK(ConstantPropagation::Ule(values[0], values[1]));
-                case BooleanFunction::NodeType::Ult:
-                    return OK(ConstantPropagation::Ult(values[0], values[1]));
-                case BooleanFunction::NodeType::Ite:
-                    return OK(ConstantPropagation::Ite(values[0], values[1], values[2]));
-
-                default:
-                    return ERR("could not propagate constants: not implemented for given node type");
+                return OK(BooleanFunction::Const(res.get()));
+            }
+            else
+            {
+                return ERR(res.get_error());
             }
         }
     }    // namespace SMT
