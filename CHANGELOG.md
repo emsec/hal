@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* reworked the API of `solve_fsm` into a single function that is set up through a `Configuration` object, which also selects between the SMT and the brute force approach
+* changed `solve_fsm` to report the value of each configured output of the FSM in each state, annotating the states of the DOT graph with it
+* changed `solve_fsm` to no longer write a file on its own, the DOT graph is now rendered by calling `generate_dot_graph` on the returned state transition graph
+* changed `solve_fsm` to no longer open the graph in the dot viewer behind the user's back, use `dot_viewer.load_dot_file` to display it
+* added `to_string` and `write_txt` to the state transition graph, printing the full conditions of all transitions together with a legend that maps the state bits, the outputs, and every net variable of a Boolean function back to the netlist
+* split the `solve_fsm` API into one header per struct, mirroring the layout of the dataflow analysis plugin
+* removed the debug output that `solve_fsm` printed to stdout on every run
+* fixed `solve_fsm` interpreting a user-provided initial state with the wrong bit order, which made the exploration start from a different state than the one requested
+* added tests for the `solve_fsm` plugin, which had none so far
 * added an optional gate scope to the preprocessing functions of `netlist_preprocessing` and `xilinx_toolbox`, restricting which gates may be modified or deleted and defaulting to the entire netlist
 * changed `split_shift_registers` and `unify_ff_outputs` to assign newly created gates to the module of the gate they replace instead of always to the top module
 * fixed `simplify_lut_inits` crashing on a LUT whose output pin is unconnected

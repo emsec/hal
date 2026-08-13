@@ -12,4 +12,6 @@ if(PL_SOLVE_FSM OR BUILD_ALL_PLUGINS)
                    SOURCES ${SOLVE_FSM_SRC} ${SOLVE_FSM_PYTHON_SRC}
                    PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/solve_fsm.rst
                    )
+
+    add_subdirectory(test)
 endif()
