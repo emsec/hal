@@ -36,6 +36,11 @@ public:
     ~QGVNode();
 
     QString label() const;
+
+    /**
+     * The label as it should be drawn, with the line break escapes of the DOT format resolved.
+     */
+    QString displayLabel() const;
     void setLabel(const QString &label);
 
     QRectF boundingRect() const override;

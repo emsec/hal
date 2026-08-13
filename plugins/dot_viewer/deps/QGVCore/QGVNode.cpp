@@ -46,6 +46,17 @@ QString QGVNode::label() const
     return QString();
 }
 
+QString QGVNode::displayLabel() const
+{
+    /* The DOT format encodes line breaks within a label as the escape sequences \n, \l and \r, which are kept
+     * verbatim in the attribute and would be drawn as literal characters. */
+    QString retval = label();
+    retval.replace("\\n", "\n");
+    retval.replace("\\l", "\n");
+    retval.replace("\\r", "\n");
+    return retval;
+}
+
 void QGVNode::setLabel(const QString &label)
 {
     setAttribute("label", label);
@@ -83,10 +94,15 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
     painter->setPen(QGVCore::toColor(getAttribute("labelfontcolor")));
 
     const QRectF rect = boundingRect().adjusted(2,2,-2,-2); //Margin
+    const QString text = displayLabel();
     if(_icon.isNull())
     {
+        /* A label may span several lines, so the widest of them decides whether it still fits. */
         QFontMetrics fm(painter->font());
-        qreal fw = fm.horizontalAdvance(label());
+        qreal fw = 0;
+        for (const QString& line : text.split('\n'))
+            fw = qMax(fw, (qreal) fm.horizontalAdvance(line));
+
         if (fw > rect.width())
         {
             qreal scl = rect.width()/fw;
@@ -96,18 +112,15 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
             painter->translate(tx,ty);
             painter->scale(scl, scl);
             painter->translate(-tx/scl, -ty);
-            painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip | Qt::TextSingleLine, label());
-            painter->setPen( QPen(Qt::red,1) );
-            painter->setBrush ( Qt::NoBrush );
-            painter->drawRect(rect);
+            painter->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip, text);
             painter->restore();
         }
         else
-            painter->drawText(rect, Qt::AlignCenter , QGVNode::label());
+            painter->drawText(rect, Qt::AlignCenter, text);
     }
     else
     {
-        painter->drawText(rect.adjusted(0,0,0, -rect.height()*2/3), Qt::AlignCenter , QGVNode::label());
+        painter->drawText(rect.adjusted(0,0,0, -rect.height()*2/3), Qt::AlignCenter, text);
 
         const QRectF img_rect = rect.adjusted(0, rect.height()/3,0, 0);
         QImage img = _icon.scaled(img_rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
