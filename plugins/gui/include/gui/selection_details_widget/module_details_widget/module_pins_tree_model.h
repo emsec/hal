@@ -123,6 +123,14 @@ namespace hal
         void setModule(Module* m);
 
         /**
+         * Re-reads all pins and pin groups of the currently represented module.
+         * Bulk operations, like assigning a couple of thousand gates to a module, change the pins wholesale and
+         * therefore emit a single ``PinEvent::PinsReload`` instead of several events per pin. Listeners of
+         * #pinsAboutToReload and #pinsReloaded can preserve their view state across the reload.
+         */
+        void reload();
+
+        /**
          * Get the underlying net from an (port) item.
          * If this model does not represent a module or
          * an invalid (port) item is given a `nullptr` is returned.
@@ -161,7 +169,17 @@ namespace hal
          */
         void numberOfPortsChanged(const int newNumber);
 
-    private:        
+        /**
+         * Q_SIGNAL that is emitted right before #reload() discards the current tree items.
+         */
+        void pinsAboutToReload();
+
+        /**
+         * Q_SIGNAL that is emitted once #reload() has rebuilt the tree items.
+         */
+        void pinsReloaded();
+
+    private:
         Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, BaseTreeItem*> mNameToTreeItem;

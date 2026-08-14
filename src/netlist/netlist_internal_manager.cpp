@@ -874,6 +874,9 @@ namespace hal
         m_netlist->m_free_module_ids.insert(to_remove->get_id());
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
 
+        // no pin event must survive the module it refers to
+        PinChangedEvent::discard(to_remove);
+
         m_event_handler->notify(ModuleEvent::event::removed, to_remove);
         return true;
     }
@@ -973,6 +976,10 @@ namespace hal
 
         if (m_net_checks_enabled)
         {
+            // a bulk assignment changes the pins of the affected modules wholesale, so the individual pin events
+            // are collapsed into a single PinEvent::PinsReload per module instead of several events per pin
+            PinChangedBulkScope pin_scope;
+
             for (const auto& [affected_module, nets] : nets_to_check)
             {
                 for (Net* net : nets)
