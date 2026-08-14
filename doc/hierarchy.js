@@ -268,6 +268,7 @@ var hierarchy =
     [ "std::filesystem::path", null, [
       [ "hal::ProjectDirectory", "classhal_1_1_project_directory.html", null ]
     ] ],
+    [ "hal::PinChangedBulkScope", "classhal_1_1_pin_changed_bulk_scope.html", null ],
     [ "hal::PinChangedEvent", "classhal_1_1_pin_changed_event.html", null ],
     [ "hal::PinChangedEventScope", "classhal_1_1_pin_changed_event_scope.html", null ],
     [ "hal::PinGroup< T >", "classhal_1_1_pin_group.html", null ],

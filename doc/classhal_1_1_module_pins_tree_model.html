@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-78-g89332e557</span>
+   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -124,6 +124,10 @@ Collaboration diagram for hal::ModulePinsTreeModel:</div>
 Signals</h2></td></tr>
 <tr class="memitem:ae7b02e4137a6250b6e5baad35d6cf554"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#ae7b02e4137a6250b6e5baad35d6cf554">numberOfPortsChanged</a> (const int newNumber)</td></tr>
 <tr class="separator:ae7b02e4137a6250b6e5baad35d6cf554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a534164685f4e33aa13e9dd2058088024"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#a534164685f4e33aa13e9dd2058088024">pinsAboutToReload</a> ()</td></tr>
+<tr class="separator:a534164685f4e33aa13e9dd2058088024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a473d8ec7e3fc1597d0be5bebfd07817b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#a473d8ec7e3fc1597d0be5bebfd07817b">pinsReloaded</a> ()</td></tr>
+<tr class="separator:a473d8ec7e3fc1597d0be5bebfd07817b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -145,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a68a8c7a8d0efb778590a0032ab12698e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02c26a5fdd9dca1bcd29f5d671bdd5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#ae02c26a5fdd9dca1bcd29f5d671bdd5f">setModule</a> (<a class="el" href="classhal_1_1_module.html">Module</a> *m)</td></tr>
 <tr class="separator:ae02c26a5fdd9dca1bcd29f5d671bdd5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7976bd5f0867ccdb9b25346a8ed0fd6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#a7976bd5f0867ccdb9b25346a8ed0fd6e">reload</a> ()</td></tr>
+<tr class="separator:a7976bd5f0867ccdb9b25346a8ed0fd6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac351d3829af2230673f16d7e16d0e6f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_net.html">Net</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#ac351d3829af2230673f16d7e16d0e6f4">getNetFromItem</a> (<a class="el" href="classhal_1_1_module_pins_tree_item.html">ModulePinsTreeItem</a> *item)</td></tr>
 <tr class="separator:ac351d3829af2230673f16d7e16d0e6f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7da70a9f921133ff5929e74e124220b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_pins_tree_model.html#ad7da70a9f921133ff5929e74e124220b">getRepresentedModuleId</a> ()</td></tr>
@@ -588,7 +594,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00084">84</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00418">handleModulePortsChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#abc878af5efe19717e0788df5202282d8">hal::NetlistRelay::modulePortsChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00110">hal::BaseTreeModel::setHeaderLabels()</a>, and <a class="el" href="module__pins__tree__model_8cpp_source.html#l00304">setModule()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="gui__globals_8h_source.html#l00074">hal::gNetlistRelay</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00430">handleModulePortsChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#abc878af5efe19717e0788df5202282d8">hal::NetlistRelay::modulePortsChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00110">hal::BaseTreeModel::setHeaderLabels()</a>, and <a class="el" href="module__pins__tree__model_8cpp_source.html#l00304">setModule()</a>.</p>
 
 </div>
 </div>
@@ -705,7 +711,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00089">hal::BaseTreeModel::clear()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00068">hal::ModulePinsTree::removeContent()</a>, and <a class="el" href="module__pins__tree_8cpp_source.html#l00049">hal::ModulePinsTree::setModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">reload()</a>, <a class="el" href="module__pins__tree_8cpp_source.html#l00137">hal::ModulePinsTree::removeContent()</a>, and <a class="el" href="module__pins__tree_8cpp_source.html#l00118">hal::ModulePinsTree::setModule()</a>.</p>
 
 </div>
 </div>
@@ -826,11 +832,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The net or <code>nullptr</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">391</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00403">403</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00985">hal::Module::get_pin_by_id()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00077">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="gui__globals_8h_source.html#l00069">hal::gNetlist</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Group</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00082">hal::ModulePinsTreeItem::id()</a>, and <a class="el" href="module__pins__tree__model_8h_source.html#l00069">hal::ModulePinsTreeItem::itemType()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00079">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -851,11 +857,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the id of the module that is currently represented. If no module is represented, -1 is returned.</p>
 <dl class="section return"><dt>Returns</dt><dd>The module id. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00412">412</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00424">424</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00079">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -891,9 +897,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00418">418</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00430">430</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00077">hal::BaseTreeModel::columnCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="pin__group_8h_source.html#l00193">hal::PinGroup&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00160">hal::BasePin&lt; T &gt;::get_group()</a>, <a class="el" href="base__pin_8h_source.html#l00090">hal::BasePin&lt; T &gt;::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00133">hal::PinGroup&lt; T &gt;::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="base__pin_8h_source.html#l00110">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2pins_2module__pin_8cpp_source.html#l00019">hal::ModulePin::get_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00985">hal::Module::get_pin_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01036">hal::Module::get_pin_group_by_id()</a>, <a class="el" href="base__pin_8h_source.html#l00150">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="pin__group_8h_source.html#l00173">hal::PinGroup&lt; T &gt;::get_type()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00034">hal::BaseTreeItem::getChildren()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Group</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a92b5daa6b3d58ecbe757bd80f636fb9e">hal::GroupCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900">hal::GroupDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ac102b937a778cf3fbf1bd4f1bc165336">hal::GroupDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a75303991d2134c0efe5015a010659dcb">hal::GroupRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2e0287ad8c995258749b1d1a8abfb2b4">hal::GroupReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a41dda1854fea3684c3f034b05d2e48a1">hal::GroupTypeChange</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00082">hal::ModulePinsTreeItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="pin__group_8h_source.html#l00276">hal::PinGroup&lt; T &gt;::is_ascending()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Pin</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a592d895d4fb492a27bbe35a41c1f0b3c">hal::PinAssignToGroup</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a330a4afd2ac65f346a528ab639d5ac3a">hal::PinCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a72dc6c6e1813f94bdc4e9559a09933e2">hal::PinDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a306bc42071a8e25c889fa66bd16f6f56">hal::PinDirChange</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00010">hal::ActionPingroup::pinGroupIndex()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00039">hal::ActionPingroup::pinIndex2Row()</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a456167f78b7e11fcf6219adbe8fa47d0">hal::PinRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ad22b76f1106d79c4e25a002895183445">hal::PinReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2188b8cfa602817b9227080dd2aecc74">hal::PinTypeChange</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00071">hal::ModulePinsTreeItem::setName()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00073">hal::ModulePinsTreeItem::setPinDirection()</a>, and <a class="el" href="module__pins__tree__model_8h_source.html#l00072">hal::ModulePinsTreeItem::setPinType()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00077">hal::BaseTreeModel::columnCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">QAbstractItemModel::dataChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="base__pin_8h_source.html#l00130">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="pin__group_8h_source.html#l00193">hal::PinGroup&lt; T &gt;::get_direction()</a>, <a class="el" href="base__pin_8h_source.html#l00160">hal::BasePin&lt; T &gt;::get_group()</a>, <a class="el" href="base__pin_8h_source.html#l00090">hal::BasePin&lt; T &gt;::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00133">hal::PinGroup&lt; T &gt;::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="base__pin_8h_source.html#l00110">hal::BasePin&lt; T &gt;::get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00153">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="netlist_2pins_2module__pin_8cpp_source.html#l00019">hal::ModulePin::get_net()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00985">hal::Module::get_pin_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01036">hal::Module::get_pin_group_by_id()</a>, <a class="el" href="base__pin_8h_source.html#l00150">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="pin__group_8h_source.html#l00173">hal::PinGroup&lt; T &gt;::get_type()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00034">hal::BaseTreeItem::getChildren()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Group</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a92b5daa6b3d58ecbe757bd80f636fb9e">hal::GroupCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900">hal::GroupDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ac102b937a778cf3fbf1bd4f1bc165336">hal::GroupDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a75303991d2134c0efe5015a010659dcb">hal::GroupRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2e0287ad8c995258749b1d1a8abfb2b4">hal::GroupReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a41dda1854fea3684c3f034b05d2e48a1">hal::GroupTypeChange</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00082">hal::ModulePinsTreeItem::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="el" href="pin__group_8h_source.html#l00276">hal::PinGroup&lt; T &gt;::is_ascending()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Pin</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a592d895d4fb492a27bbe35a41c1f0b3c">hal::PinAssignToGroup</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a330a4afd2ac65f346a528ab639d5ac3a">hal::PinCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a72dc6c6e1813f94bdc4e9559a09933e2">hal::PinDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a306bc42071a8e25c889fa66bd16f6f56">hal::PinDirChange</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00010">hal::ActionPingroup::pinGroupIndex()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00039">hal::ActionPingroup::pinIndex2Row()</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a456167f78b7e11fcf6219adbe8fa47d0">hal::PinRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ad22b76f1106d79c4e25a002895183445">hal::PinReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a203784bce415b883bb81051a7392eef2">hal::PinsReload</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2188b8cfa602817b9227080dd2aecc74">hal::PinTypeChange</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">reload()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#row">QModelIndex::row()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00071">hal::ModulePinsTreeItem::setName()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00073">hal::ModulePinsTreeItem::setPinDirection()</a>, and <a class="el" href="module__pins__tree__model_8h_source.html#l00072">hal::ModulePinsTreeItem::setPinType()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="module__pins__tree__model_8cpp_source.html#l00084">ModulePinsTreeModel()</a>.</p>
 
@@ -995,6 +1001,86 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a534164685f4e33aa13e9dd2058088024"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a534164685f4e33aa13e9dd2058088024">&#9670;&nbsp;</a></span>pinsAboutToReload</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::ModulePinsTreeModel::pinsAboutToReload </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL that is emitted right before <a class="el" href="classhal_1_1_module_pins_tree_model.html#a7976bd5f0867ccdb9b25346a8ed0fd6e">reload()</a> discards the current tree items. </p>
+
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00024">hal::ModulePinsTree::ModulePinsTree()</a>, and <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">reload()</a>.</p>
+
+</div>
+</div>
+<a id="a473d8ec7e3fc1597d0be5bebfd07817b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a473d8ec7e3fc1597d0be5bebfd07817b">&#9670;&nbsp;</a></span>pinsReloaded</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::ModulePinsTreeModel::pinsReloaded </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Q_SIGNAL that is emitted once <a class="el" href="classhal_1_1_module_pins_tree_model.html#a7976bd5f0867ccdb9b25346a8ed0fd6e">reload()</a> has rebuilt the tree items. </p>
+
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00024">hal::ModulePinsTree::ModulePinsTree()</a>, and <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">reload()</a>.</p>
+
+</div>
+</div>
+<a id="a7976bd5f0867ccdb9b25346a8ed0fd6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7976bd5f0867ccdb9b25346a8ed0fd6e">&#9670;&nbsp;</a></span>reload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::ModulePinsTreeModel::reload </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Re-reads all pins and pin groups of the currently represented module. Bulk operations, like assigning a couple of thousand gates to a module, change the pins wholesale and therefore emit a single <code><a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a203784bce415b883bb81051a7392eef2" title="group deleted">PinEvent::PinsReload</a></code> instead of several events per pin. Listeners of <a class="el" href="classhal_1_1_module_pins_tree_model.html#a534164685f4e33aa13e9dd2058088024">pinsAboutToReload</a> and <a class="el" href="classhal_1_1_module_pins_tree_model.html#a473d8ec7e3fc1597d0be5bebfd07817b">pinsReloaded</a> can preserve their view state across the reload. </p>
+
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">391</a> of file <a class="el" href="module__pins__tree__model_8cpp_source.html">module_pins_tree_model.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="module__pins__tree__model_8cpp_source.html#l00295">clear()</a>, <a class="el" href="classhal_1_1_module_pins_tree_model.html#a534164685f4e33aa13e9dd2058088024">pinsAboutToReload()</a>, <a class="el" href="classhal_1_1_module_pins_tree_model.html#a473d8ec7e3fc1597d0be5bebfd07817b">pinsReloaded()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="module__pins__tree__model_8cpp_source.html#l00304">setModule()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__pins__tree__model_8cpp_source.html#l00430">handleModulePortsChanged()</a>.</p>
+
+</div>
+</div>
 <a id="ae02c26a5fdd9dca1bcd29f5d671bdd5f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae02c26a5fdd9dca1bcd29f5d671bdd5f">&#9670;&nbsp;</a></span>setModule()</h2>
 
@@ -1022,7 +1108,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00964">hal::Module::get_pin_groups()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00873">hal::Module::get_pins()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Group</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">hal::BaseTreeModel::mRootItem</a>, <a class="el" href="classhal_1_1_module_pins_tree_model.html#ae7b02e4137a6250b6e5baad35d6cf554">numberOfPortsChanged()</a>, <a class="el" href="module__pins__tree__model_8h_source.html#l00048">hal::ModulePinsTreeItem::Pin</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree__model_8cpp_source.html#l00084">ModulePinsTreeModel()</a>, and <a class="el" href="module__pins__tree_8cpp_source.html#l00049">hal::ModulePinsTree::setModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree__model_8cpp_source.html#l00084">ModulePinsTreeModel()</a>, <a class="el" href="module__pins__tree__model_8cpp_source.html#l00391">reload()</a>, and <a class="el" href="module__pins__tree_8cpp_source.html#l00118">hal::ModulePinsTree::setModule()</a>.</p>
 
 </div>
 </div>
@@ -1047,9 +1133,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00151">151</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00159">159</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00079">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -1073,9 +1159,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00150">150</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00158">158</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00079">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
 
 </div>
 </div>
@@ -1099,7 +1185,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00153">153</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00161">161</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
 
 </div>
 </div>
@@ -1123,9 +1209,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00152">152</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__pins__tree__model_8h_source.html#l00160">160</a> of file <a class="el" href="module__pins__tree__model_8h_source.html">module_pins_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00079">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__pins__tree_8cpp_source.html#l00148">hal::ModulePinsTree::handleContextMenuRequested()</a>.</p>
 
 </div>
 </div>

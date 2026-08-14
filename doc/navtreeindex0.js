@@ -1,6 +1,5 @@
 var NAVTREEINDEX0 =
 {
-"":[8,0,3],
 "about__dialog_8cpp.html":[10,0,1,7,2,30,0],
 "about__dialog_8cpp_source.html":[10,0,1,7,2,30,0],
 "about__dialog_8h.html":[10,0,1,7,0,0,31,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "candidate__types_8h_source.html":[10,0,1,14,0,0,4,1],
 "channel__item_8cpp.html":[10,0,1,7,2,2,0],
 "channel__item_8cpp.html#adb305243e2213b319240e3f98afd7142":[10,0,1,7,2,2,0,0],
-"channel__item_8cpp_source.html":[10,0,1,7,2,2,0]
+"channel__item_8cpp_source.html":[10,0,1,7,2,2,0],
+"channel__item_8h.html":[10,0,1,7,0,0,2,0]
 };

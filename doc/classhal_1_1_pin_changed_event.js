@@ -5,5 +5,6 @@ var classhal_1_1_pin_changed_event =
     [ "get_module", "classhal_1_1_pin_changed_event.html#a937a27b7b5a10fade40c52454ccdba51", null ],
     [ "send", "classhal_1_1_pin_changed_event.html#af1ba7150f9fe1725097691f5d2344a93", null ],
     [ "pin_event_order", "classhal_1_1_pin_changed_event.html#a5ba03375a633d3893cf9856de503c4b0", null ],
+    [ "PinChangedBulkScope", "classhal_1_1_pin_changed_event.html#a1668877d3825e709517b28b1afba2051", null ],
     [ "PinChangedEventScope", "classhal_1_1_pin_changed_event.html#a7431cf1b3339cf868cceb7b9b865f8d8", null ]
 ];

@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-78-g89332e557</span>
+   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -964,437 +964,444 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;        m_netlist-&gt;m_free_module_ids.insert(to_remove-&gt;get_id());</div>
 <div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;        m_netlist-&gt;m_used_module_ids.erase(to_remove-&gt;get_id());</div>
 <div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160; </div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fab07286ebbb5bc7aa91cc3eaa8bc19711">ModuleEvent::event::removed</a>, to_remove);</div>
-<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;    }</div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160; </div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gate(Module* m, Gate* g)</div>
-<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;    {</div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;        <span class="keywordflow">return</span> module_assign_gates(m, {g});</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;    }</div>
-<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160; </div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gates(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; gates)</div>
-<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;    {</div>
-<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;        <span class="comment">// check all gates for validity</span></div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;        {</div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;module cannot be a nullptr.&quot;</span>);</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;        }</div>
-<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160; </div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;        std::map&lt;Module*, u32&gt; prev_modules;</div>
-<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160; </div>
-<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* g : gates)</div>
-<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;        {</div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;            <span class="keywordflow">if</span> (g == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;            {</div>
-<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;gate cannot be a nullptr.&quot;</span>);</div>
-<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;            }</div>
-<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160; </div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;            <a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* prev_mod = g-&gt;m_module;</div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160; </div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;            <span class="keywordflow">if</span> (prev_mod == <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>)</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;            {</div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>,</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;                          <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is already contained in module &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;                          g-&gt;get_name(),</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;                          g-&gt;get_id(),</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>(),</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;            }</div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160; </div>
-<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = prev_modules.find(prev_mod); it == prev_modules.end())</div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;            {</div>
-<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;                prev_modules[prev_mod] = 1;</div>
-<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;            }</div>
-<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;            {</div>
-<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;                std::get&lt;1&gt;(*it)++;</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;            }</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;        }</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160; </div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c">ModuleEvent::event::gates_assign_begin</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, gates.size());</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [prev_mod, num_gates] : prev_modules)</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;        {</div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58">ModuleEvent::event::gates_remove_begin</a>, prev_mod, num_gates);</div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;        }</div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;        prev_modules.clear();</div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160; </div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;        <span class="comment">// re-assign gates</span></div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;        std::unordered_map&lt;Module*, std::unordered_set&lt;Net*&gt;&gt; nets_to_check;</div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* g : gates)</div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;        {</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;            <span class="comment">// remove gate from old module</span></div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;            <a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* prev_mod = g-&gt;m_module;</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> it    = prev_mod-&gt;m_gates_map.find(g-&gt;get_id());</div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;            assert(it != prev_mod-&gt;m_gates_map.end());</div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;            prev_mod-&gt;m_gates_map.erase(it);</div>
-<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160; </div>
-<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;            <a class="code" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">utils::unordered_vector_erase</a>(prev_mod-&gt;m_gates, g);</div>
-<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160; </div>
-<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;            <span class="comment">// move gate to new module</span></div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_gates_map[g-&gt;get_id()] = g;</div>
-<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_gates.push_back(g);</div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;            g-&gt;m_module = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>;</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160; </div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <span class="comment">// collect affected nets</span></div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            std::vector&lt;Net*&gt; fan_in = g-&gt;get_fan_in_nets();</div>
-<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;            nets_to_check[prev_mod].insert(fan_in.begin(), fan_in.end());</div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;            nets_to_check[<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>].insert(fan_in.begin(), fan_in.end());</div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160; </div>
-<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;            std::vector&lt;Net*&gt; fan_out = g-&gt;get_fan_out_nets();</div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;            nets_to_check[prev_mod].insert(fan_out.begin(), fan_out.end());</div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;            nets_to_check[<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>].insert(fan_out.begin(), fan_out.end());</div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd">ModuleEvent::event::gate_removed</a>, prev_mod, g-&gt;get_id());</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25">ModuleEvent::event::gate_assigned</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, g-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>());</div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160; </div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> prev_mod_it = prev_modules.find(prev_mod); prev_mod_it == prev_modules.end())</div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;            {</div>
-<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;                prev_modules[prev_mod] = 1;</div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;            }</div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;            {</div>
-<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;                std::get&lt;1&gt;(*prev_mod_it)++;</div>
-<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;            }</div>
-<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;        }</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160; </div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;        <span class="keywordflow">if</span> (m_net_checks_enabled)</div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;        {</div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [affected_module, nets] : nets_to_check)</div>
-<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;            {</div>
-<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a18aff2af13a58cdbdf65a107df14ec07">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> : nets)</div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;                {</div>
-<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = affected_module-&gt;check_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keyword">true</span>); res.is_error())</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;                    {</div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;                    }</div>
-<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;                }</div>
-<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            }</div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;        }</div>
-<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160; </div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12">ModuleEvent::event::gates_assign_end</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, gates.size());</div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [prev_mod, num_gates] : prev_modules)</div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;        {</div>
-<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08">ModuleEvent::event::gates_remove_end</a>, prev_mod, num_gates);</div>
-<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;        }</div>
-<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160; </div>
-<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;    }</div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160; </div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_check_net(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> recursive)</div>
-<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;    {</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;check_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, recursive); res.is_error())</div>
-<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;        {</div>
-<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;        }</div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    }</div>
-<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160; </div>
-<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;    <span class="comment">//######################################################################</span></div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;    <span class="comment">//###                      groupings                                 ###</span></div>
-<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;    <span class="comment">//######################################################################</span></div>
-<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160; </div>
-<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;    Grouping* NetlistInternalManager::create_grouping(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;    {</div>
-<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == 0)</div>
-<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;        {</div>
-<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;ID 0 represents an invalid grouping ID.&quot;</span>);</div>
-<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;        }</div>
-<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;        <span class="keywordflow">if</span> (m_netlist-&gt;m_used_grouping_ids.find(<span class="keywordtype">id</span>) != m_netlist-&gt;m_used_grouping_ids.end())</div>
-<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;        {</div>
-<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;grouping ID {} is already taken in netlist with ID {}.&quot;</span>, <span class="keywordtype">id</span>, m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;        }</div>
-<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1utils.html#afc3e55de1af050c4d02459c6ef0782c6">utils::trim</a>(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>).empty())</div>
-<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;        {</div>
-<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;grouping name cannot be empty.&quot;</span>);</div>
-<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;        }</div>
-<div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160; </div>
-<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;        <span class="keyword">auto</span> new_grouping = std::unique_ptr&lt;Grouping&gt;(<span class="keyword">new</span> <a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>(<span class="keyword">this</span>, m_event_handler, <span class="keywordtype">id</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>));</div>
-<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160; </div>
-<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;        <span class="keyword">auto</span> free_id_it = m_netlist-&gt;m_free_grouping_ids.find(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;        <span class="keywordflow">if</span> (free_id_it != m_netlist-&gt;m_free_grouping_ids.end())</div>
-<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;        {</div>
-<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;            m_netlist-&gt;m_free_grouping_ids.erase(free_id_it);</div>
-<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;        }</div>
-<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160; </div>
-<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;        m_netlist-&gt;m_used_grouping_ids.insert(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160; </div>
-<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;        <span class="keyword">auto</span> raw = new_grouping.get();</div>
-<div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160; </div>
-<div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;        m_netlist-&gt;m_groupings_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>] = std::move(new_grouping);</div>
-<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;        m_netlist-&gt;m_groupings_set.insert(raw);</div>
-<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;        m_netlist-&gt;m_groupings.push_back(raw);</div>
-<div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160; </div>
-<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;        <span class="comment">// notify</span></div>
-<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ae2fa538867c3830a859a5b17ab24644b">GroupingEvent::event::created</a>, raw);</div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;        <span class="comment">// no pin event must survive the module it refers to</span></div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;        <a class="code" href="classhal_1_1_pin_changed_event.html#a160157559ebbfa375c180cf34a8eb538">PinChangedEvent::discard</a>(to_remove);</div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160; </div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fab07286ebbb5bc7aa91cc3eaa8bc19711">ModuleEvent::event::removed</a>, to_remove);</div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;    }</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160; </div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gate(Module* m, Gate* g)</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;    {</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;        <span class="keywordflow">return</span> module_assign_gates(m, {g});</div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;    }</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160; </div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_assign_gates(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <span class="keyword">const</span> std::vector&lt;Gate*&gt;&amp; gates)</div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;    {</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;        <span class="comment">// check all gates for validity</span></div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;        {</div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;module cannot be a nullptr.&quot;</span>);</div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;        }</div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160; </div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;        std::map&lt;Module*, u32&gt; prev_modules;</div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160; </div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* g : gates)</div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;        {</div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;            <span class="keywordflow">if</span> (g == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;            {</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;gate cannot be a nullptr.&quot;</span>);</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;            }</div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160; </div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;            <a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* prev_mod = g-&gt;m_module;</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160; </div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;            <span class="keywordflow">if</span> (prev_mod == <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>)</div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;            {</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>,</div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;                          <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is already contained in module &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                          g-&gt;get_name(),</div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;                          g-&gt;get_id(),</div>
+<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>(),</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;            }</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160; </div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = prev_modules.find(prev_mod); it == prev_modules.end())</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;            {</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;                prev_modules[prev_mod] = 1;</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;            }</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;            {</div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;                std::get&lt;1&gt;(*it)++;</div>
+<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;            }</div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;        }</div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160; </div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c">ModuleEvent::event::gates_assign_begin</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, gates.size());</div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [prev_mod, num_gates] : prev_modules)</div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;        {</div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa034ad9ff6284cea7a7af194181b2e58">ModuleEvent::event::gates_remove_begin</a>, prev_mod, num_gates);</div>
+<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;        }</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;        prev_modules.clear();</div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160; </div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;        <span class="comment">// re-assign gates</span></div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;        std::unordered_map&lt;Module*, std::unordered_set&lt;Net*&gt;&gt; nets_to_check;</div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* g : gates)</div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;        {</div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;            <span class="comment">// remove gate from old module</span></div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;            <a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* prev_mod = g-&gt;m_module;</div>
+<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> it    = prev_mod-&gt;m_gates_map.find(g-&gt;get_id());</div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;            assert(it != prev_mod-&gt;m_gates_map.end());</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;            prev_mod-&gt;m_gates_map.erase(it);</div>
+<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160; </div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;            <a class="code" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">utils::unordered_vector_erase</a>(prev_mod-&gt;m_gates, g);</div>
+<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160; </div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;            <span class="comment">// move gate to new module</span></div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_gates_map[g-&gt;get_id()] = g;</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_gates.push_back(g);</div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;            g-&gt;m_module = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>;</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160; </div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;            <span class="comment">// collect affected nets</span></div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;            std::vector&lt;Net*&gt; fan_in = g-&gt;get_fan_in_nets();</div>
+<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;            nets_to_check[prev_mod].insert(fan_in.begin(), fan_in.end());</div>
+<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;            nets_to_check[<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>].insert(fan_in.begin(), fan_in.end());</div>
+<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160; </div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;            std::vector&lt;Net*&gt; fan_out = g-&gt;get_fan_out_nets();</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;            nets_to_check[prev_mod].insert(fan_out.begin(), fan_out.end());</div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;            nets_to_check[<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>].insert(fan_out.begin(), fan_out.end());</div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd">ModuleEvent::event::gate_removed</a>, prev_mod, g-&gt;get_id());</div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa43159fd1b72c5cef395389b38e4d7c25">ModuleEvent::event::gate_assigned</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, g-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>());</div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160; </div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> prev_mod_it = prev_modules.find(prev_mod); prev_mod_it == prev_modules.end())</div>
+<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;            {</div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;                prev_modules[prev_mod] = 1;</div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;            }</div>
+<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;            {</div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;                std::get&lt;1&gt;(*prev_mod_it)++;</div>
+<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;            }</div>
+<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;        }</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160; </div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;        <span class="keywordflow">if</span> (m_net_checks_enabled)</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        {</div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;            <span class="comment">// a bulk assignment changes the pins of the affected modules wholesale, so the individual pin events</span></div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            <span class="comment">// are collapsed into a single PinEvent::PinsReload per module instead of several events per pin</span></div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;            PinChangedBulkScope pin_scope;</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160; </div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [affected_module, nets] : nets_to_check)</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;            {</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;                <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a18aff2af13a58cdbdf65a107df14ec07">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> : nets)</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;                {</div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = affected_module-&gt;check_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keyword">true</span>); res.is_error())</div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;                    {</div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;module&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;                    }</div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;                }</div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;            }</div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;        }</div>
+<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160; </div>
+<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53faa00f842019349e5fec426e5b5f1b7c12">ModuleEvent::event::gates_assign_end</a>, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, gates.size());</div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [prev_mod, num_gates] : prev_modules)</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;        {</div>
+<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;            m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa0f975f12da3a233e7b7e38665cf67f08">ModuleEvent::event::gates_remove_end</a>, prev_mod, num_gates);</div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        }</div>
+<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160; </div>
+<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;    }</div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160; </div>
+<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::module_check_net(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> recursive)</div>
+<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;    {</div>
+<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;check_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, recursive); res.is_error())</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        {</div>
+<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;        }</div>
+<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;    }</div>
+<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160; </div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;    <span class="comment">//######################################################################</span></div>
+<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;    <span class="comment">//###                      groupings                                 ###</span></div>
+<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;    <span class="comment">//######################################################################</span></div>
+<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160; </div>
+<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;    Grouping* NetlistInternalManager::create_grouping(<a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
+<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;    {</div>
+<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == 0)</div>
+<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;        {</div>
+<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;ID 0 represents an invalid grouping ID.&quot;</span>);</div>
+<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;        }</div>
+<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;        <span class="keywordflow">if</span> (m_netlist-&gt;m_used_grouping_ids.find(<span class="keywordtype">id</span>) != m_netlist-&gt;m_used_grouping_ids.end())</div>
+<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;        {</div>
+<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;grouping ID {} is already taken in netlist with ID {}.&quot;</span>, <span class="keywordtype">id</span>, m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;        }</div>
+<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1utils.html#afc3e55de1af050c4d02459c6ef0782c6">utils::trim</a>(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>).empty())</div>
+<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;        {</div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>, <span class="stringliteral">&quot;grouping name cannot be empty.&quot;</span>);</div>
+<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;        }</div>
+<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160; </div>
+<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;        <span class="keyword">auto</span> new_grouping = std::unique_ptr&lt;Grouping&gt;(<span class="keyword">new</span> <a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>(<span class="keyword">this</span>, m_event_handler, <span class="keywordtype">id</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>));</div>
+<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160; </div>
+<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;        <span class="keyword">auto</span> free_id_it = m_netlist-&gt;m_free_grouping_ids.find(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;        <span class="keywordflow">if</span> (free_id_it != m_netlist-&gt;m_free_grouping_ids.end())</div>
+<div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;        {</div>
+<div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;            m_netlist-&gt;m_free_grouping_ids.erase(free_id_it);</div>
+<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;        }</div>
+<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160; </div>
+<div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;        m_netlist-&gt;m_used_grouping_ids.insert(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160; </div>
+<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;        <span class="keyword">auto</span> raw = new_grouping.get();</div>
 <div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160; </div>
-<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160;        <span class="keywordflow">return</span> raw;</div>
-<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;    }</div>
-<div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160; </div>
-<div class="line"><a name="l01051"></a><span class="lineno"> 1051</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::delete_grouping(Grouping* grouping)</div>
-<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;    {</div>
-<div class="line"><a name="l01053"></a><span class="lineno"> 1053</span>&#160;        <span class="keywordflow">if</span> (!m_netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#a73007da157efe824df82d312498b50c2">is_grouping_in_netlist</a>(grouping))</div>
-<div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160;        {</div>
-<div class="line"><a name="l01055"></a><span class="lineno"> 1055</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;        }</div>
+<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160;        m_netlist-&gt;m_groupings_map[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>] = std::move(new_grouping);</div>
+<div class="line"><a name="l01049"></a><span class="lineno"> 1049</span>&#160;        m_netlist-&gt;m_groupings_set.insert(raw);</div>
+<div class="line"><a name="l01050"></a><span class="lineno"> 1050</span>&#160;        m_netlist-&gt;m_groupings.push_back(raw);</div>
+<div class="line"><a name="l01051"></a><span class="lineno"> 1051</span>&#160; </div>
+<div class="line"><a name="l01052"></a><span class="lineno"> 1052</span>&#160;        <span class="comment">// notify</span></div>
+<div class="line"><a name="l01053"></a><span class="lineno"> 1053</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ae2fa538867c3830a859a5b17ab24644b">GroupingEvent::event::created</a>, raw);</div>
+<div class="line"><a name="l01054"></a><span class="lineno"> 1054</span>&#160; </div>
+<div class="line"><a name="l01055"></a><span class="lineno"> 1055</span>&#160;        <span class="keywordflow">return</span> raw;</div>
+<div class="line"><a name="l01056"></a><span class="lineno"> 1056</span>&#160;    }</div>
 <div class="line"><a name="l01057"></a><span class="lineno"> 1057</span>&#160; </div>
-<div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* gate : grouping-&gt;get_gates())</div>
-<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;        {</div>
-<div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;            gate-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;        }</div>
-<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160; </div>
-<div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a18aff2af13a58cdbdf65a107df14ec07">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> : grouping-&gt;get_nets())</div>
-<div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160;        {</div>
-<div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;            <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;        }</div>
-<div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160; </div>
-<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> : grouping-&gt;get_modules())</div>
-<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;        {</div>
-<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;        }</div>
-<div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160; </div>
-<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;        <span class="keyword">auto</span> it  = m_netlist-&gt;m_groupings_map.find(grouping-&gt;get_id());</div>
-<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;        <span class="keyword">auto</span> ptr = std::move(it-&gt;second);</div>
-<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;        m_netlist-&gt;m_groupings_map.erase(it);</div>
-<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;        m_netlist-&gt;m_groupings_set.erase(grouping);</div>
-<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;        <a class="code" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">utils::unordered_vector_erase</a>(m_netlist-&gt;m_groupings, grouping);</div>
-<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160; </div>
-<div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;        <span class="comment">// free ids</span></div>
-<div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;        m_netlist-&gt;m_free_grouping_ids.insert(grouping-&gt;get_id());</div>
-<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;        m_netlist-&gt;m_used_grouping_ids.erase(grouping-&gt;get_id());</div>
-<div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160; </div>
-<div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;        <span class="comment">// notify</span></div>
-<div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711">GroupingEvent::event::removed</a>, grouping);</div>
+<div class="line"><a name="l01058"></a><span class="lineno"> 1058</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::delete_grouping(Grouping* grouping)</div>
+<div class="line"><a name="l01059"></a><span class="lineno"> 1059</span>&#160;    {</div>
+<div class="line"><a name="l01060"></a><span class="lineno"> 1060</span>&#160;        <span class="keywordflow">if</span> (!m_netlist-&gt;<a class="code" href="classhal_1_1_netlist.html#a73007da157efe824df82d312498b50c2">is_grouping_in_netlist</a>(grouping))</div>
+<div class="line"><a name="l01061"></a><span class="lineno"> 1061</span>&#160;        {</div>
+<div class="line"><a name="l01062"></a><span class="lineno"> 1062</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;        }</div>
+<div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160; </div>
+<div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">Gate</a>* gate : grouping-&gt;get_gates())</div>
+<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;        {</div>
+<div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;            gate-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;        }</div>
+<div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160; </div>
+<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a18aff2af13a58cdbdf65a107df14ec07">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> : grouping-&gt;get_nets())</div>
+<div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;        {</div>
+<div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;            <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;        }</div>
+<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160; </div>
+<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">Module</a>* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> : grouping-&gt;get_modules())</div>
+<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;        {</div>
+<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;            <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;        }</div>
+<div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160; </div>
+<div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;        <span class="keyword">auto</span> it  = m_netlist-&gt;m_groupings_map.find(grouping-&gt;get_id());</div>
+<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;        <span class="keyword">auto</span> ptr = std::move(it-&gt;second);</div>
+<div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160;        m_netlist-&gt;m_groupings_map.erase(it);</div>
+<div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;        m_netlist-&gt;m_groupings_set.erase(grouping);</div>
+<div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;        <a class="code" href="namespacehal_1_1utils.html#ad5404c6eab703aa306f6769ae81ce7ec">utils::unordered_vector_erase</a>(m_netlist-&gt;m_groupings, grouping);</div>
 <div class="line"><a name="l01085"></a><span class="lineno"> 1085</span>&#160; </div>
-<div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160;    }</div>
-<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160; </div>
-<div class="line"><a name="l01089"></a><span class="lineno"> 1089</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate, <span class="keywordtype">bool</span> force)</div>
-<div class="line"><a name="l01090"></a><span class="lineno"> 1090</span>&#160;    {</div>
-<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;        <span class="keywordflow">if</span> (gate == <span class="keyword">nullptr</span> || gate-&gt;get_grouping() == grouping)</div>
-<div class="line"><a name="l01092"></a><span class="lineno"> 1092</span>&#160;        {</div>
-<div class="line"><a name="l01093"></a><span class="lineno"> 1093</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01094"></a><span class="lineno"> 1094</span>&#160;        }</div>
+<div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;        <span class="comment">// free ids</span></div>
+<div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160;        m_netlist-&gt;m_free_grouping_ids.insert(grouping-&gt;get_id());</div>
+<div class="line"><a name="l01088"></a><span class="lineno"> 1088</span>&#160;        m_netlist-&gt;m_used_grouping_ids.erase(grouping-&gt;get_id());</div>
+<div class="line"><a name="l01089"></a><span class="lineno"> 1089</span>&#160; </div>
+<div class="line"><a name="l01090"></a><span class="lineno"> 1090</span>&#160;        <span class="comment">// notify</span></div>
+<div class="line"><a name="l01091"></a><span class="lineno"> 1091</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ab07286ebbb5bc7aa91cc3eaa8bc19711">GroupingEvent::event::removed</a>, grouping);</div>
+<div class="line"><a name="l01092"></a><span class="lineno"> 1092</span>&#160; </div>
+<div class="line"><a name="l01093"></a><span class="lineno"> 1093</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01094"></a><span class="lineno"> 1094</span>&#160;    }</div>
 <div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160; </div>
-<div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gate_id = gate-&gt;get_id();</div>
-<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160; </div>
-<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = gate-&gt;get_grouping(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_gate(Grouping* grouping, Gate* gate, <span class="keywordtype">bool</span> force)</div>
+<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160;    {</div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160;        <span class="keywordflow">if</span> (gate == <span class="keyword">nullptr</span> || gate-&gt;get_grouping() == grouping)</div>
 <div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160;        {</div>
-<div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;            <span class="keywordflow">if</span> (force)</div>
-<div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;            {</div>
-<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;                other-&gt;remove_gate(gate);</div>
-<div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;            }</div>
-<div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160;            {</div>
-<div class="line"><a name="l01106"></a><span class="lineno"> 1106</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01107"></a><span class="lineno"> 1107</span>&#160;                          <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;                          gate-&gt;get_name(),</div>
-<div class="line"><a name="l01109"></a><span class="lineno"> 1109</span>&#160;                          gate_id,</div>
-<div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;                          other-&gt;get_name(),</div>
-<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;                          other-&gt;get_id(),</div>
-<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;            }</div>
-<div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160;        }</div>
-<div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160; </div>
-<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;        grouping-&gt;m_gates.push_back(gate);</div>
-<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;        grouping-&gt;m_gates_map.emplace(gate_id, gate);</div>
-<div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;        gate-&gt;m_grouping = grouping;</div>
-<div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160; </div>
-<div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25">GroupingEvent::event::gate_assigned</a>, grouping, gate_id);</div>
-<div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160; </div>
-<div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160;    }</div>
-<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160; </div>
-<div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_gate(Grouping* grouping, Gate* gate)</div>
-<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;    {</div>
-<div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;        <span class="keywordflow">if</span> (gate == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160;        {</div>
-<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01131"></a><span class="lineno"> 1131</span>&#160;        }</div>
+<div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;        }</div>
+<div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160; </div>
+<div class="line"><a name="l01103"></a><span class="lineno"> 1103</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gate_id = gate-&gt;get_id();</div>
+<div class="line"><a name="l01104"></a><span class="lineno"> 1104</span>&#160; </div>
+<div class="line"><a name="l01105"></a><span class="lineno"> 1105</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = gate-&gt;get_grouping(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01106"></a><span class="lineno"> 1106</span>&#160;        {</div>
+<div class="line"><a name="l01107"></a><span class="lineno"> 1107</span>&#160;            <span class="keywordflow">if</span> (force)</div>
+<div class="line"><a name="l01108"></a><span class="lineno"> 1108</span>&#160;            {</div>
+<div class="line"><a name="l01109"></a><span class="lineno"> 1109</span>&#160;                other-&gt;remove_gate(gate);</div>
+<div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;            }</div>
+<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;            {</div>
+<div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;                          <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160;                          gate-&gt;get_name(),</div>
+<div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160;                          gate_id,</div>
+<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;                          other-&gt;get_name(),</div>
+<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;                          other-&gt;get_id(),</div>
+<div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;            }</div>
+<div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160;        }</div>
+<div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160; </div>
+<div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160;        grouping-&gt;m_gates.push_back(gate);</div>
+<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;        grouping-&gt;m_gates_map.emplace(gate_id, gate);</div>
+<div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;        gate-&gt;m_grouping = grouping;</div>
+<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160; </div>
+<div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a43159fd1b72c5cef395389b38e4d7c25">GroupingEvent::event::gate_assigned</a>, grouping, gate_id);</div>
+<div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160; </div>
+<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01131"></a><span class="lineno"> 1131</span>&#160;    }</div>
 <div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160; </div>
-<div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gate_id = gate-&gt;get_id();</div>
-<div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160; </div>
-<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_gate(gate))</div>
+<div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_gate(Grouping* grouping, Gate* gate)</div>
+<div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160;    {</div>
+<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160;        <span class="keywordflow">if</span> (gate == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l01136"></a><span class="lineno"> 1136</span>&#160;        {</div>
-<div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;                      <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01139"></a><span class="lineno"> 1139</span>&#160;                      gate-&gt;get_name(),</div>
-<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;                      gate_id,</div>
-<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160;                      grouping-&gt;get_name(),</div>
-<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;                      grouping-&gt;get_id(),</div>
-<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;        }</div>
-<div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160; </div>
-<div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_gates.begin(), grouping-&gt;m_gates.end(), gate);</div>
-<div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160; </div>
-<div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;        *vec_it = grouping-&gt;m_gates.back();</div>
-<div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160;        grouping-&gt;m_gates.pop_back();</div>
-<div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;        grouping-&gt;m_gates_map.erase(gate_id);</div>
-<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;        gate-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;        }</div>
+<div class="line"><a name="l01139"></a><span class="lineno"> 1139</span>&#160; </div>
+<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> gate_id = gate-&gt;get_id();</div>
+<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160; </div>
+<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_gate(gate))</div>
+<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;        {</div>
+<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;                      <span class="stringliteral">&quot;gate &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160;                      gate-&gt;get_name(),</div>
+<div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;                      gate_id,</div>
+<div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160;                      grouping-&gt;get_name(),</div>
+<div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;                      grouping-&gt;get_id(),</div>
+<div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;        }</div>
 <div class="line"><a name="l01153"></a><span class="lineno"> 1153</span>&#160; </div>
-<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5bf6888f7204acd17fd29978733807dd">GroupingEvent::event::gate_removed</a>, grouping, gate_id);</div>
+<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_gates.begin(), grouping-&gt;m_gates.end(), gate);</div>
 <div class="line"><a name="l01155"></a><span class="lineno"> 1155</span>&#160; </div>
-<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01157"></a><span class="lineno"> 1157</span>&#160;    }</div>
-<div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160; </div>
-<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> force)</div>
-<div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;    {</div>
-<div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> == <span class="keyword">nullptr</span> || <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_grouping() == grouping)</div>
-<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;        {</div>
-<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;        }</div>
+<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;        *vec_it = grouping-&gt;m_gates.back();</div>
+<div class="line"><a name="l01157"></a><span class="lineno"> 1157</span>&#160;        grouping-&gt;m_gates.pop_back();</div>
+<div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160;        grouping-&gt;m_gates_map.erase(gate_id);</div>
+<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;        gate-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160; </div>
+<div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5bf6888f7204acd17fd29978733807dd">GroupingEvent::event::gate_removed</a>, grouping, gate_id);</div>
+<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160; </div>
+<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;    }</div>
 <div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160; </div>
-<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_id();</div>
-<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160; </div>
-<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_grouping(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_net(Grouping* grouping, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>, <span class="keywordtype">bool</span> force)</div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;    {</div>
+<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> == <span class="keyword">nullptr</span> || <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_grouping() == grouping)</div>
 <div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;        {</div>
-<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;            <span class="keywordflow">if</span> (force)</div>
-<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;            {</div>
-<div class="line"><a name="l01172"></a><span class="lineno"> 1172</span>&#160;                other-&gt;remove_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
-<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;            }</div>
-<div class="line"><a name="l01174"></a><span class="lineno"> 1174</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160;            {</div>
-<div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01177"></a><span class="lineno"> 1177</span>&#160;                          <span class="stringliteral">&quot;net &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01178"></a><span class="lineno"> 1178</span>&#160;                          <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_name(),</div>
-<div class="line"><a name="l01179"></a><span class="lineno"> 1179</span>&#160;                          net_id,</div>
-<div class="line"><a name="l01180"></a><span class="lineno"> 1180</span>&#160;                          other-&gt;get_name(),</div>
-<div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;                          other-&gt;get_id(),</div>
-<div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;            }</div>
-<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;        }</div>
-<div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160; </div>
-<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;        grouping-&gt;m_nets.push_back(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
-<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;        grouping-&gt;m_nets_map.emplace(net_id, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
-<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;        <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = grouping;</div>
-<div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160; </div>
-<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a239fa5c81d08e83fc00aefb42c050a55">GroupingEvent::event::net_assigned</a>, grouping, net_id);</div>
-<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160; </div>
-<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;    }</div>
-<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160; </div>
-<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_net(Grouping* grouping, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>)</div>
-<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;    {</div>
-<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160;        {</div>
-<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;        }</div>
+<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;        }</div>
+<div class="line"><a name="l01172"></a><span class="lineno"> 1172</span>&#160; </div>
+<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_id();</div>
+<div class="line"><a name="l01174"></a><span class="lineno"> 1174</span>&#160; </div>
+<div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_grouping(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;        {</div>
+<div class="line"><a name="l01177"></a><span class="lineno"> 1177</span>&#160;            <span class="keywordflow">if</span> (force)</div>
+<div class="line"><a name="l01178"></a><span class="lineno"> 1178</span>&#160;            {</div>
+<div class="line"><a name="l01179"></a><span class="lineno"> 1179</span>&#160;                other-&gt;remove_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
+<div class="line"><a name="l01180"></a><span class="lineno"> 1180</span>&#160;            }</div>
+<div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;            {</div>
+<div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;                          <span class="stringliteral">&quot;net &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;                          <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_name(),</div>
+<div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;                          net_id,</div>
+<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;                          other-&gt;get_name(),</div>
+<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;                          other-&gt;get_id(),</div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;            }</div>
+<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;        }</div>
+<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160; </div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;        grouping-&gt;m_nets.push_back(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
+<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;        grouping-&gt;m_nets_map.emplace(net_id, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
+<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;        <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = grouping;</div>
+<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160; </div>
+<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a239fa5c81d08e83fc00aefb42c050a55">GroupingEvent::event::net_assigned</a>, grouping, net_id);</div>
+<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160; </div>
+<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;    }</div>
 <div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160; </div>
-<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_id();</div>
-<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160; </div>
-<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>))</div>
+<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_net(Grouping* grouping, Net* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>)</div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;    {</div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;        {</div>
-<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;                      <span class="stringliteral">&quot;net &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;                      <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_name(),</div>
-<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160;                      net_id,</div>
-<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160;                      grouping-&gt;get_name(),</div>
-<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;                      grouping-&gt;get_id(),</div>
-<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;        }</div>
-<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160; </div>
-<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_nets.begin(), grouping-&gt;m_nets.end(), <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
-<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160; </div>
-<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;        *vec_it = grouping-&gt;m_nets.back();</div>
-<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;        grouping-&gt;m_nets.pop_back();</div>
-<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;        grouping-&gt;m_nets_map.erase(net_id);</div>
-<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;        <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;        }</div>
+<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160; </div>
+<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> net_id = <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_id();</div>
+<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160; </div>
+<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_net(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>))</div>
+<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;        {</div>
+<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;                      <span class="stringliteral">&quot;net &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;                      <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;get_name(),</div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;                      net_id,</div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;                      grouping-&gt;get_name(),</div>
+<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;                      grouping-&gt;get_id(),</div>
+<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;        }</div>
 <div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160; </div>
-<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8abc1c2da0450a73fe0e28bc16a9202a1c">GroupingEvent::event::net_removed</a>, grouping, net_id);</div>
+<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_nets.begin(), grouping-&gt;m_nets.end(), <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
 <div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160; </div>
-<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;    }</div>
-<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160; </div>
-<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <span class="keywordtype">bool</span> force)</div>
-<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;    {</div>
-<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span> || <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc">get_grouping</a>() == grouping)</div>
-<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;        {</div>
-<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;        }</div>
+<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;        *vec_it = grouping-&gt;m_nets.back();</div>
+<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;        grouping-&gt;m_nets.pop_back();</div>
+<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;        grouping-&gt;m_nets_map.erase(net_id);</div>
+<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;        <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160; </div>
+<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8abc1c2da0450a73fe0e28bc16a9202a1c">GroupingEvent::event::net_removed</a>, grouping, net_id);</div>
+<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160; </div>
+<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;    }</div>
 <div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160; </div>
-<div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>();</div>
-<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160; </div>
-<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc">get_grouping</a>(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_assign_module(Grouping* grouping, Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, <span class="keywordtype">bool</span> force)</div>
+<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;    {</div>
+<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span> || <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc">get_grouping</a>() == grouping)</div>
 <div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;        {</div>
-<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;            <span class="keywordflow">if</span> (force)</div>
-<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;            {</div>
-<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;                other-&gt;remove_module(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;            }</div>
-<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;            {</div>
-<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;                          <span class="stringliteral">&quot;module &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
-<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;                          module_id,</div>
-<div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;                          other-&gt;get_name(),</div>
-<div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;                          other-&gt;get_id(),</div>
-<div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;            }</div>
-<div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;        }</div>
-<div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160; </div>
-<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;        grouping-&gt;m_modules.push_back(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;        grouping-&gt;m_modules_map.emplace(module_id, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;        <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = grouping;</div>
-<div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160; </div>
-<div class="line"><a name="l01261"></a><span class="lineno"> 1261</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5829a61ba2f7ba0ac089960b4c326861">GroupingEvent::event::module_assigned</a>, grouping, module_id);</div>
-<div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160; </div>
-<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;    }</div>
-<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160; </div>
-<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_module(Grouping* grouping, Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>)</div>
-<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;    {</div>
-<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160;        {</div>
-<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;        }</div>
+<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;        }</div>
+<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160; </div>
+<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>();</div>
+<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160; </div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">Grouping</a>* other = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc">get_grouping</a>(); other != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;        {</div>
+<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;            <span class="keywordflow">if</span> (force)</div>
+<div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;            {</div>
+<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;                other-&gt;remove_module(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;            }</div>
+<div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;            {</div>
+<div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;                          <span class="stringliteral">&quot;module &#39;{}&#39; with ID {} is already part of another grouping called &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160;                          <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
+<div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;                          module_id,</div>
+<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;                          other-&gt;get_name(),</div>
+<div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;                          other-&gt;get_id(),</div>
+<div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;                          m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01261"></a><span class="lineno"> 1261</span>&#160;            }</div>
+<div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160;        }</div>
+<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160; </div>
+<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;        grouping-&gt;m_modules.push_back(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;        grouping-&gt;m_modules_map.emplace(module_id, <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
+<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;        <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = grouping;</div>
+<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160; </div>
+<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a5829a61ba2f7ba0ac089960b4c326861">GroupingEvent::event::module_assigned</a>, grouping, module_id);</div>
+<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160; </div>
+<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;    }</div>
 <div class="line"><a name="l01272"></a><span class="lineno"> 1272</span>&#160; </div>
-<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>();</div>
-<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160; </div>
-<div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_module(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>))</div>
+<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;    <span class="keywordtype">bool</span> NetlistInternalManager::grouping_remove_module(Grouping* grouping, Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>)</div>
+<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160;    {</div>
+<div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l01276"></a><span class="lineno"> 1276</span>&#160;        {</div>
-<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
-<div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;                      <span class="stringliteral">&quot;module &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
-<div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160;                      <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
-<div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;                      module_id,</div>
-<div class="line"><a name="l01281"></a><span class="lineno"> 1281</span>&#160;                      grouping-&gt;get_name(),</div>
-<div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;                      grouping-&gt;get_id(),</div>
-<div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
-<div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;        }</div>
-<div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160; </div>
-<div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_modules.begin(), grouping-&gt;m_modules.end(), <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
-<div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160; </div>
-<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;        *vec_it = grouping-&gt;m_modules.back();</div>
-<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;        grouping-&gt;m_modules.pop_back();</div>
-<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;        grouping-&gt;m_modules_map.erase(module_id);</div>
-<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;        <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;        }</div>
+<div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160; </div>
+<div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;        <a class="code" href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a> module_id = <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">get_id</a>();</div>
+<div class="line"><a name="l01281"></a><span class="lineno"> 1281</span>&#160; </div>
+<div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;        <span class="keywordflow">if</span> (!grouping-&gt;contains_module(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>))</div>
+<div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;        {</div>
+<div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160;            <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;grouping&quot;</span>,</div>
+<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;                      <span class="stringliteral">&quot;module &#39;{}&#39; with ID {} is not part of grouping &#39;{}&#39; with ID {} in netlist with ID {}.&quot;</span>,</div>
+<div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;                      <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>(),</div>
+<div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;                      module_id,</div>
+<div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;                      grouping-&gt;get_name(),</div>
+<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;                      grouping-&gt;get_id(),</div>
+<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;                      m_netlist-&gt;m_netlist_id);</div>
+<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;        }</div>
 <div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160; </div>
-<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b">GroupingEvent::event::module_removed</a>, grouping, module_id);</div>
+<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160;        <span class="keyword">auto</span> vec_it = std::find(grouping-&gt;m_modules.begin(), grouping-&gt;m_modules.end(), <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
 <div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160; </div>
-<div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160;    }</div>
-<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160; </div>
-<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;    <span class="comment">//######################################################################</span></div>
-<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;    <span class="comment">//###                           caches                               ###</span></div>
-<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;    <span class="comment">//######################################################################</span></div>
+<div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;        *vec_it = grouping-&gt;m_modules.back();</div>
+<div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160;        grouping-&gt;m_modules.pop_back();</div>
+<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;        grouping-&gt;m_modules_map.erase(module_id);</div>
+<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;        <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>-&gt;m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160; </div>
+<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;        m_event_handler-&gt;<a class="code" href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">notify</a>(<a class="code" href="classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8a3498343970b2fc238d834cc62603463b">GroupingEvent::event::module_removed</a>, grouping, module_id);</div>
 <div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160; </div>
-<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;    <span class="keywordtype">void</span> NetlistInternalManager::clear_caches()</div>
-<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;    {</div>
-<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;        m_lut_function_cache.clear();</div>
-<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;    }</div>
-<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;    }</div>
+<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160; </div>
+<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;    <span class="comment">//######################################################################</span></div>
+<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;    <span class="comment">//###                           caches                               ###</span></div>
+<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;    <span class="comment">//######################################################################</span></div>
+<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160; </div>
+<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;    <span class="keywordtype">void</span> NetlistInternalManager::clear_caches()</div>
+<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;    {</div>
+<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;        m_lut_function_cache.clear();</div>
+<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;    }</div>
+<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160;}    <span class="comment">// namespace hal</span></div>
 <div class="ttc" id="aclasshal_1_1_data_container_html_a1067630aa486e2a76391c0572d263a24"><div class="ttname"><a href="classhal_1_1_data_container.html#a1067630aa486e2a76391c0572d263a24">hal::DataContainer::get_data_map</a></div><div class="ttdeci">const std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt; &amp; get_data_map() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2data__container_8cpp_source.html#l00072">data_container.cpp:72</a></div></div>
 <div class="ttc" id="aclasshal_1_1_data_container_html_a379e3abc9ed3ff7e624564785d5425b6"><div class="ttname"><a href="classhal_1_1_data_container.html#a379e3abc9ed3ff7e624564785d5425b6">hal::DataContainer::m_data</a></div><div class="ttdeci">std::map&lt; std::tuple&lt; std::string, std::string &gt;, std::tuple&lt; std::string, std::string &gt; &gt; m_data</div><div class="ttdef"><b>Definition:</b> <a href="data__container_8h_source.html#l00123">data_container.h:123</a></div></div>
 <div class="ttc" id="aclasshal_1_1_event_handler_html_aa927b6131fa523ccb921bcf9377ab80b"><div class="ttname"><a href="classhal_1_1_event_handler.html#aa927b6131fa523ccb921bcf9377ab80b">hal::EventHandler::notify</a></div><div class="ttdeci">void notify(NetlistEvent::event ev, Netlist *netlist, u32 associated_data=0xFFFFFFFF)</div><div class="ttdef"><b>Definition:</b> <a href="event__handler_8cpp_source.html#l00081">event_handler.cpp:81</a></div></div>
@@ -1441,6 +1448,7 @@ $(document).ready(function(){initNavTree('netlist__internal__manager_8cpp_source
 <div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html_a21f639900c480510650969df9c74d17d"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d">hal::NetlistInternalManager::Module</a></div><div class="ttdeci">friend class Module</div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00056">netlist_internal_manager.h:56</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html_ab61c4d8e4b1799e5578ebdd78701c76c"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c">hal::NetlistInternalManager::Grouping</a></div><div class="ttdeci">friend class Grouping</div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00059">netlist_internal_manager.h:59</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_internal_manager_html_ad8205f09f8efdf8fab19078d103cd6e7"><div class="ttname"><a href="classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7">hal::NetlistInternalManager::Gate</a></div><div class="ttdeci">friend class Gate</div><div class="ttdef"><b>Definition:</b> <a href="netlist__internal__manager_8h_source.html#l00058">netlist_internal_manager.h:58</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_changed_event_html_a160157559ebbfa375c180cf34a8eb538"><div class="ttname"><a href="classhal_1_1_pin_changed_event.html#a160157559ebbfa375c180cf34a8eb538">hal::PinChangedEvent::discard</a></div><div class="ttdeci">static void discard(Module *m)</div><div class="ttdef"><b>Definition:</b> <a href="pin__event_8cpp_source.html#l00057">pin_event.cpp:57</a></div></div>
 <div class="ttc" id="adefines_8h_html_a70c1fcc1a4e96af8f6580f708657cd41"><div class="ttname"><a href="defines_8h.html#a70c1fcc1a4e96af8f6580f708657cd41">u32</a></div><div class="ttdeci">uint32_t u32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00041">defines.h:41</a></div></div>
 <div class="ttc" id="adefines_8h_html_aec41e5f8e4b7aef2540e84268692fa84"><div class="ttname"><a href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a></div><div class="ttdeci">int32_t i32</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00036">defines.h:36</a></div></div>
 <div class="ttc" id="aendpoint_8h_html"><div class="ttname"><a href="endpoint_8h.html">endpoint.h</a></div></div>

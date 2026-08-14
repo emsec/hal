@@ -109,6 +109,7 @@ var annotated_dup =
       [ "Gate", "classhal_1_1_gate.html", "classhal_1_1_gate" ],
       [ "PinChangedEvent", "classhal_1_1_pin_changed_event.html", "classhal_1_1_pin_changed_event" ],
       [ "PinChangedEventScope", "classhal_1_1_pin_changed_event_scope.html", "classhal_1_1_pin_changed_event_scope" ],
+      [ "PinChangedBulkScope", "classhal_1_1_pin_changed_bulk_scope.html", "classhal_1_1_pin_changed_bulk_scope" ],
       [ "GateLibrary", "classhal_1_1_gate_library.html", "classhal_1_1_gate_library" ],
       [ "GateLibraryParser", "classhal_1_1_gate_library_parser.html", "classhal_1_1_gate_library_parser" ],
       [ "GateLibraryWriter", "classhal_1_1_gate_library_writer.html", "classhal_1_1_gate_library_writer" ],

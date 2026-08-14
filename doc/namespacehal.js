@@ -253,6 +253,7 @@ var namespacehal =
     [ "Gate", "classhal_1_1_gate.html", "classhal_1_1_gate" ],
     [ "PinChangedEvent", "classhal_1_1_pin_changed_event.html", "classhal_1_1_pin_changed_event" ],
     [ "PinChangedEventScope", "classhal_1_1_pin_changed_event_scope.html", "classhal_1_1_pin_changed_event_scope" ],
+    [ "PinChangedBulkScope", "classhal_1_1_pin_changed_bulk_scope.html", "classhal_1_1_pin_changed_bulk_scope" ],
     [ "GateLibrary", "classhal_1_1_gate_library.html", "classhal_1_1_gate_library" ],
     [ "GateLibraryParser", "classhal_1_1_gate_library_parser.html", "classhal_1_1_gate_library_parser" ],
     [ "GateLibraryWriter", "classhal_1_1_gate_library_writer.html", "classhal_1_1_gate_library_writer" ],
@@ -949,7 +950,8 @@ var namespacehal =
       [ "PinDirChange", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a306bc42071a8e25c889fa66bd16f6f56", null ],
       [ "PinReorder", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ad22b76f1106d79c4e25a002895183445", null ],
       [ "PinDelete", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a72dc6c6e1813f94bdc4e9559a09933e2", null ],
-      [ "GroupDelete", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900", null ]
+      [ "GroupDelete", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900", null ],
+      [ "PinsReload", "namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a203784bce415b883bb81051a7392eef2", null ]
     ] ],
     [ "PinType", "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b", [
       [ "none", "namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba334c4a4c42fdb79d7ebc3e73b517e6f8", null ],

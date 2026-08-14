@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_wave_group_value.html" title=" " alt="" coords="5,5,167,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_wave_form_primitive.html" title=" " alt="" coords="5,132,184,159"/>
+<area shape="rect" id="node2" href="$classhal_1_1_wave_form_primitive_filled.html" title=" " alt="" coords="247,5,461,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_wave_form_primitive_hline.html" title=" " alt="" coords="248,56,460,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_wave_form_primitive_transition.html" title=" " alt="" coords="233,107,475,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_wave_form_primitive_trigger.html" title=" " alt="" coords="243,157,465,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_wave_form_primitive_undefined.html" title=" " alt="" coords="232,208,476,235"/>
+<area shape="rect" id="node7" href="$classhal_1_1_wave_form_primitive_value.html" title=" " alt="" coords="247,259,461,285"/>
 </map>

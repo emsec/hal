@@ -1,5 +1,15 @@
 var NAVTREEINDEX41 =
 {
+"pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b":[10,0,0,0,1,3,0,4,0,20],
+"pin__type_8h_source.html":[10,0,0,0,1,3,0,4],
+"pingroup__selector__dialog_8cpp.html":[10,0,1,7,2,26,2],
+"pingroup__selector__dialog_8cpp_source.html":[10,0,1,7,2,26,2],
+"pingroup__selector__dialog_8h.html":[10,0,1,7,0,0,27,2],
+"pingroup__selector__dialog_8h_source.html":[10,0,1,7,0,0,27,2],
+"pins__wizardpage_8cpp.html":[10,0,1,7,2,18,1,6],
+"pins__wizardpage_8cpp_source.html":[10,0,1,7,2,18,1,6],
+"pins__wizardpage_8h.html":[10,0,1,7,0,0,18,1,6],
+"pins__wizardpage_8h_source.html":[10,0,1,7,0,0,18,1,6],
 "plugin__bitorder__propagation_8cpp.html":[10,0,1,0,2,1],
 "plugin__bitorder__propagation_8cpp.html#a520a82c66e9e539acaa3fb2d6ce6578a":[10,0,1,0,2,1,0],
 "plugin__bitorder__propagation_8cpp_source.html":[10,0,1,0,2,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX41 =
 "plugins_2graph__algorithm_2python_2python__bindings_8cpp.html#a75149032538edc19dd5073e7ef475ad4":[10,0,1,6,1,0,0],
 "plugins_2graph__algorithm_2python_2python__bindings_8cpp_source.html":[10,0,1,6,1,0],
 "plugins_2gui_2include_2gui_2doxy__groups_8h.html":[10,0,1,7,0,0,55],
-"plugins_2gui_2include_2gui_2doxy__groups_8h_source.html":[10,0,1,7,0,0,55],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html":[10,0,1,7,0,0,25,3],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#a3706ba37634242a317cc5abe4acd919f":[10,0,1,7,0,0,25,3,1],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#aac880cdffea5d42f94b5582c92d644c3":[10,0,1,7,0,0,25,3,0],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ab18ab45d5471bc18531142eba0744767":[10,0,1,7,0,0,25,3,2],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ad51f27ed983b775629326cdfc3052fe5":[10,0,1,7,0,0,25,3,3],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h_source.html":[10,0,1,7,0,0,25,3],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html":[10,0,1,7,2,25,3],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#a3706ba37634242a317cc5abe4acd919f":[10,0,1,7,2,25,3,1],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#aac880cdffea5d42f94b5582c92d644c3":[10,0,1,7,2,25,3,0],
-"plugins_2gui_2src_2gui__utils_2netlist_8cpp.html#ab18ab45d5471bc18531142eba0744767":[10,0,1,7,2,25,3,2]
+"plugins_2gui_2include_2gui_2doxy__groups_8h_source.html":[10,0,1,7,0,0,55]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX31 =
 {
+"dock__mime__data_8cpp.html":[10,0,1,7,2,11,3],
+"dock__mime__data_8cpp_source.html":[10,0,1,7,2,11,3],
+"dock__mime__data_8h.html":[10,0,1,7,0,0,11,3],
+"dock__mime__data_8h_source.html":[10,0,1,7,0,0,11,3],
+"dot__graphics__view_8cpp.html":[10,0,1,3,2,1],
+"dot__graphics__view_8cpp_source.html":[10,0,1,3,2,1],
+"dot__graphics__view_8h.html":[10,0,1,3,0,0,1],
+"dot__graphics__view_8h_source.html":[10,0,1,3,0,0,1],
 "dot__viewer_8cpp.html":[10,0,1,3,2,2],
 "dot__viewer_8cpp_source.html":[10,0,1,3,2,2],
 "dot__viewer_8h.html":[10,0,1,3,0,0,2],
@@ -204,8 +212,8 @@ var NAVTREEINDEX31 =
 "functions_type.html":[9,3,3],
 "functions_u.html":[9,3,0,20],
 "functions_v.html":[9,3,0,21],
-"functions_vars.html":[9,3,2,0],
 "functions_vars.html":[9,3,2],
+"functions_vars.html":[9,3,2,0],
 "functions_vars_b.html":[9,3,2,1],
 "functions_vars_c.html":[9,3,2,2],
 "functions_vars_d.html":[9,3,2,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX31 =
 "gate__details__tab__widget_8h.html":[10,0,1,7,0,0,42,9],
 "gate__details__tab__widget_8h_source.html":[10,0,1,7,0,0,42,9],
 "gate__dialog_8cpp.html":[10,0,1,7,2,32,0],
-"gate__dialog_8cpp_source.html":[10,0,1,7,2,32,0],
-"gate__dialog_8h.html":[10,0,1,7,0,0,33,0],
-"gate__dialog_8h_source.html":[10,0,1,7,0,0,33,0],
-"gate__info__table_8cpp.html":[10,0,1,7,2,41,0,2],
-"gate__info__table_8cpp_source.html":[10,0,1,7,2,41,0,2],
-"gate__info__table_8h.html":[10,0,1,7,0,0,42,0,2],
-"gate__info__table_8h_source.html":[10,0,1,7,0,0,42,0,2],
-"gate__library_8h.html":[10,0,0,0,1,3,4],
-"gate__library_8h_source.html":[10,0,0,0,1,3,4]
+"gate__dialog_8cpp_source.html":[10,0,1,7,2,32,0]
 };

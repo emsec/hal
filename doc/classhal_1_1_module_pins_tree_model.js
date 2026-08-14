@@ -12,5 +12,8 @@ var classhal_1_1_module_pins_tree_model =
     [ "mimeData", "classhal_1_1_module_pins_tree_model.html#a577f070116421575f87c95d1940b8d59", null ],
     [ "mimeTypes", "classhal_1_1_module_pins_tree_model.html#a26365d328b74b65cfa546823b508895f", null ],
     [ "numberOfPortsChanged", "classhal_1_1_module_pins_tree_model.html#ae7b02e4137a6250b6e5baad35d6cf554", null ],
+    [ "pinsAboutToReload", "classhal_1_1_module_pins_tree_model.html#a534164685f4e33aa13e9dd2058088024", null ],
+    [ "pinsReloaded", "classhal_1_1_module_pins_tree_model.html#a473d8ec7e3fc1597d0be5bebfd07817b", null ],
+    [ "reload", "classhal_1_1_module_pins_tree_model.html#a7976bd5f0867ccdb9b25346a8ed0fd6e", null ],
     [ "setModule", "classhal_1_1_module_pins_tree_model.html#ae02c26a5fdd9dca1bcd29f5d671bdd5f", null ]
 ];

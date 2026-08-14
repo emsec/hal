@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="hal_icon.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HAL
-   &#160;<span id="projectnumber">v4.5.0-78-g89332e557</span>
+   &#160;<span id="projectnumber">v4.5.0-83-g30c8f0afc</span>
    </div>
    <div id="projectbrief">The Hardware Analyzer - a comprehensive reverse engineering and manipulation framework for gate-level netlists.</div>
   </td>
@@ -386,8 +386,9 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The pin event is encoded in the four least significant bits of the associated event data, so there is room for at most 16 distinct values. </p>
 
-<p class="definition">Definition at line <a class="el" href="pin__event_8h_source.html#l00060">60</a> of file <a class="el" href="pin__event_8h_source.html">pin_event.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__event_8h_source.html#l00067">67</a> of file <a class="el" href="pin__event_8h_source.html">pin_event.h</a>.</p>
 
 </div>
 </div>
@@ -839,7 +840,7 @@ struct hal::EnumStrings&lt; T, typename &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="pin__event_8cpp_source.html#l00010">10</a> of file <a class="el" href="pin__event_8cpp_source.html">pin_event.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a92b5daa6b3d58ecbe757bd80f636fb9e">hal::GroupCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900">hal::GroupDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ac102b937a778cf3fbf1bd4f1bc165336">hal::GroupDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a75303991d2134c0efe5015a010659dcb">hal::GroupRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2e0287ad8c995258749b1d1a8abfb2b4">hal::GroupReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a41dda1854fea3684c3f034b05d2e48a1">hal::GroupTypeChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a592d895d4fb492a27bbe35a41c1f0b3c">hal::PinAssignToGroup</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a330a4afd2ac65f346a528ab639d5ac3a">hal::PinCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a72dc6c6e1813f94bdc4e9559a09933e2">hal::PinDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a306bc42071a8e25c889fa66bd16f6f56">hal::PinDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a456167f78b7e11fcf6219adbe8fa47d0">hal::PinRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ad22b76f1106d79c4e25a002895183445">hal::PinReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2188b8cfa602817b9227080dd2aecc74">hal::PinTypeChange</a>, and <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250aad921d60486366258809553a3db49a4a">hal::unknown</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a92b5daa6b3d58ecbe757bd80f636fb9e">hal::GroupCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ab8fe763a507dabe6756cf1037d251900">hal::GroupDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ac102b937a778cf3fbf1bd4f1bc165336">hal::GroupDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a75303991d2134c0efe5015a010659dcb">hal::GroupRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2e0287ad8c995258749b1d1a8abfb2b4">hal::GroupReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a41dda1854fea3684c3f034b05d2e48a1">hal::GroupTypeChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a592d895d4fb492a27bbe35a41c1f0b3c">hal::PinAssignToGroup</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a330a4afd2ac65f346a528ab639d5ac3a">hal::PinCreate</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a72dc6c6e1813f94bdc4e9559a09933e2">hal::PinDelete</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a306bc42071a8e25c889fa66bd16f6f56">hal::PinDirChange</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a456167f78b7e11fcf6219adbe8fa47d0">hal::PinRename</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250ad22b76f1106d79c4e25a002895183445">hal::PinReorder</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a203784bce415b883bb81051a7392eef2">hal::PinsReload</a>, <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250a2188b8cfa602817b9227080dd2aecc74">hal::PinTypeChange</a>, and <a class="el" href="namespacehal.html#a52e5d9661d32e7e2e4e4c4c6473c9250aad921d60486366258809553a3db49a4a">hal::unknown</a>.</p>
 
 </div>
 </div>

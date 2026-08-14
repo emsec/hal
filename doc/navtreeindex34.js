@@ -1,5 +1,13 @@
 var NAVTREEINDEX34 =
 {
+"group__pybind.html#gaf8d3775de7aff4ada2993c698332de33":[8,0,0,722],
+"group__pybind.html#gaf8d3775de7aff4ada2993c698332de33":[7,0,3,23],
+"group__python-console.html":[7,1,1,1],
+"group__python-editor.html":[7,1,1,0],
+"group__python.html":[7,1,1],
+"group__settings.html":[7,1,4],
+"group__unused.html":[7,1,8],
+"group__user__action.html":[7,1,5],
 "group__utilities.html":[7,0,2],
 "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[10,0,0,0,4,4,2],
 "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[7,0,2,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX34 =
 "label__button_8cpp.html":[10,0,1,7,2,28,0],
 "label__button_8cpp_source.html":[10,0,1,7,2,28,0],
 "label__button_8h.html":[10,0,1,7,0,0,29,0],
-"label__button_8h_source.html":[10,0,1,7,0,0,29,0],
-"labeled__frame_8cpp.html":[10,0,1,7,2,17,0],
-"labeled__frame_8cpp_source.html":[10,0,1,7,2,17,0],
-"labeled__frame_8h.html":[10,0,1,7,0,0,17,0],
-"labeled__frame_8h_source.html":[10,0,1,7,0,0,17,0],
-"labeled__separated__net_8cpp.html":[10,0,1,7,2,20,1,0,3],
-"labeled__separated__net_8cpp_source.html":[10,0,1,7,2,20,1,0,3],
-"labeled__separated__net_8h.html":[10,0,1,7,0,0,20,1,0,3],
-"labeled__separated__net_8h_source.html":[10,0,1,7,0,0,20,1,0,3]
+"label__button_8h_source.html":[10,0,1,7,0,0,29,0]
 };
