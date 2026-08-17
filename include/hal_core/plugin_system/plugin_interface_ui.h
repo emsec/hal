@@ -57,5 +57,21 @@ namespace hal
          * @param[in] enable Enable lock on `true`, disable on `false`
          */
         virtual void set_layout_locker(bool enable) = 0;
+
+        /**
+         * Generic call to report the progress of a long-running operation to the user.
+         *
+         * A percentage of 100 indicates that the operation is done and dismisses the progress display again, so it
+         * must be reported exactly once per operation. Prefer `ProgressScope` over calling this directly, as it takes
+         * care of that. The default implementation does nothing.
+         *
+         * @param[in] percent - The progress in percent, where 100 means done.
+         * @param[in] message - The message to display alongside the progress.
+         */
+        virtual void set_progress(int percent, const std::string& message)
+        {
+            UNUSED(percent);
+            UNUSED(message);
+        }
     };
 }    // namespace hal

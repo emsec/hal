@@ -5,7 +5,7 @@
 #include "module_identification/api/configuration.h"
 #include "module_identification/api/module_identification.h"
 #include "module_identification/api/result.h"
-#include "module_identification/utils/gui_layout_locker.h"
+#include "hal_core/plugin_system/user_feedback.h"
 
 #include <algorithm>
 #include <fstream>
@@ -192,12 +192,12 @@ namespace hal
             return;
         }
 
-        if (GuiExtensionModuleIdentification::s_progress_indicator_function)
-        {
-            GuiExtensionModuleIdentification::s_progress_indicator_function(0, "module identification running ...");
-        }
+        // keeps the progress display up until this function returns, including while the modules are being created.
+        // Declared before the layout locker and hence destroyed after it, so that the display is dismissed only once
+        // the deferred layout updates have been applied.
+        const user_feedback::ProgressScope progress("module identification running ...");
 
-        module_identification::GuiLayoutLocker gll;
+        const user_feedback::LayoutLocker layout_locker;
 
         auto config = module_identification::Configuration(nl)
                           .with_max_thread_count(m_max_thread_count)
@@ -262,10 +262,6 @@ namespace hal
             }
         }
 
-        // if (GuiExtensionModuleIdentification::s_progress_indicator_function)
-        // {
-        //     GuiExtensionModuleIdentification::s_progress_indicator_function(100, "module identification finished");
-        // }
     }
 
     std::function<void(int, const std::string&)> GuiExtensionModuleIdentification::s_progress_indicator_function = nullptr;

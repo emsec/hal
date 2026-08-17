@@ -436,6 +436,18 @@ namespace hal
             return instance;
         }
 
+        UIPluginInterface* get_ui_plugin()
+        {
+            for (const auto& [_, plugin] : m_loaded_plugins)
+            {
+                if (auto* ui_plugin = dynamic_cast<UIPluginInterface*>(std::get<0>(plugin).get()); ui_plugin != nullptr)
+                {
+                    return ui_plugin;
+                }
+            }
+            return nullptr;
+        }
+
         u64 add_model_changed_callback(std::function<void(bool, std::string const&, std::string const&)> callback)
         {
             if (callback == nullptr)

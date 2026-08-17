@@ -3,7 +3,7 @@
 #include "dataflow_analysis/evaluation/evaluation.h"
 #include "dataflow_analysis/pre_processing/pre_processing.h"
 #include "dataflow_analysis/processing/processing.h"
-#include "dataflow_analysis/utils/progress_scope.h"
+#include "hal_core/plugin_system/user_feedback.h"
 #include "hal_core/utilities/log.h"
 
 namespace hal
@@ -29,7 +29,7 @@ namespace hal
 
             // the analysis reports its progress to the GUI from here on, so it also has to dismiss the progress
             // indicator again once it is done, no matter whether it was invoked from the GUI or from a script
-            const ProgressScope progress("dataflow analysis …");
+            const user_feedback::ProgressScope progress("dataflow analysis …");
 
             // set up dataflow analysis
             double total_time = 0;

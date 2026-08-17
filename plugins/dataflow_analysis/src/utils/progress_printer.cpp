@@ -1,6 +1,6 @@
 #include "dataflow_analysis/utils/progress_printer.h"
 
-#include "dataflow_analysis/plugin_dataflow.h"
+#include "hal_core/plugin_system/user_feedback.h"
 
 #include <iostream>
 #include <sstream>
@@ -38,10 +38,9 @@ namespace hal
 
         void ProgressPrinter::print_progress_to_gui(int percent)
         {
-            if (!GuiExtensionDataflow::s_progress_indicator_function) return;
             if (percent < 0) percent = m_last_percentage;
             if (percent > 99) percent = 99;
-            GuiExtensionDataflow::s_progress_indicator_function(percent, m_gui_message);
+            user_feedback::report_progress(percent, m_gui_message);
         }
 
         void ProgressPrinter::print_progress_to_stderr(float progress, const std::string& message)
