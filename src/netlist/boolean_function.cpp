@@ -1334,13 +1334,9 @@ namespace hal
         // A row of the truth table is one assignment of the variables, and the value of variable i in row r is bit i
         // of r. Instead of evaluating the function once per row, evaluate it once per 64 rows: every intermediate
         // value becomes a 64-bit word holding that value for 64 consecutive rows at once, and a gate becomes a single
-        // bitwise instruction. Values are three-valued, so each one is a pair of words: the value itself and whether
-        // it is known at all, with the value masked to the known positions.
-        struct Word
-        {
-            u64 value = 0;
-            u64 known = 0;
-        };
+        // bitwise instruction. No value can ever be unknown, as the checks above rejected every function that holds a
+        // variable outside the truth table or a constant that is not Boolean, so one word per value is enough and the
+        // operations are plain two-valued logic.
 
         // the value of variable i within a chunk of 64 consecutive rows, which for i < 6 is a fixed pattern and for
         // larger i is constant across the whole chunk
@@ -1360,9 +1356,9 @@ namespace hal
         }
 
         const u64 num_rows = u64(1) << variables.size();
-        std::vector<Value> result(num_rows, Value::X);
+        std::vector<Value> result(num_rows, Value::ZERO);
 
-        std::vector<Word> stack;
+        std::vector<u64> stack;
         stack.reserve(this->m_nodes.size());
 
         for (u64 base = 0; base < num_rows; base += 64)
@@ -1375,28 +1371,14 @@ namespace hal
             {
                 if (node.type == NodeType::Variable)
                 {
-                    Word w;
-                    if (const auto it = variable_index.find(node.variable); it != variable_index.end())
-                    {
-                        const u32 i = it->second;
-                        w.value     = (i < 6) ? PATTERN[i] : (((base >> i) & 1) ? ~u64(0) : u64(0));
-                        w.known     = ~u64(0);
-                        w.value &= w.known;
-                    }
-                    // a variable that is not part of the truth table stays unknown
-                    stack.push_back(w);
+                    const u32 i = variable_index.at(node.variable);
+                    stack.push_back((i < 6) ? PATTERN[i] : (((base >> i) & 1) ? ~u64(0) : u64(0)));
                     continue;
                 }
 
                 if (node.type == NodeType::Constant)
                 {
-                    Word w;
-                    if (node.constant.size() == 1 && (node.constant[0] == Value::ZERO || node.constant[0] == Value::ONE))
-                    {
-                        w.known = ~u64(0);
-                        w.value = (node.constant[0] == Value::ONE) ? ~u64(0) : u64(0);
-                    }
-                    stack.push_back(w);
+                    stack.push_back((node.constant[0] == Value::ONE) ? ~u64(0) : u64(0));
                     continue;
                 }
 
@@ -1408,43 +1390,29 @@ namespace hal
 
                 if (node.type == NodeType::Not)
                 {
-                    Word a = stack.back();
+                    const u64 a = stack.back();
                     stack.pop_back();
-                    Word w;
-                    w.known = a.known;
-                    w.value = (~a.value) & w.known;
-                    stack.push_back(w);
+                    stack.push_back(~a);
                     continue;
                 }
 
-                Word b = stack.back();
+                const u64 b = stack.back();
                 stack.pop_back();
-                Word a = stack.back();
+                const u64 a = stack.back();
                 stack.pop_back();
 
-                Word w;
                 if (node.type == NodeType::And)
                 {
-                    // the result is known if both operands are, or if either of them is known to be zero
-                    const u64 a_is_zero = a.known & ~a.value;
-                    const u64 b_is_zero = b.known & ~b.value;
-                    w.known             = (a.known & b.known) | a_is_zero | b_is_zero;
-                    w.value             = a.value & b.value & w.known;
+                    stack.push_back(a & b);
                 }
                 else if (node.type == NodeType::Or)
                 {
-                    // the result is known if both operands are, or if either of them is known to be one
-                    const u64 a_is_one = a.known & a.value;
-                    const u64 b_is_one = b.known & b.value;
-                    w.known            = (a.known & b.known) | a_is_one | b_is_one;
-                    w.value            = (a.value | b.value) & w.known;
+                    stack.push_back(a | b);
                 }
                 else    // NodeType::Xor
                 {
-                    w.known = a.known & b.known;
-                    w.value = (a.value ^ b.value) & w.known;
+                    stack.push_back(a ^ b);
                 }
-                stack.push_back(w);
             }
 
             if (stack.size() != 1)
@@ -1452,15 +1420,10 @@ namespace hal
                 return ERR("could not compute truth table: malformed node list");
             }
 
-            const Word out = stack.back();
+            const u64 out = stack.back() & chunk_mask;
             for (u64 bit = 0; bit < rows_in_chunk; bit++)
             {
-                const u64 selector = u64(1) << bit;
-                if ((out.known & chunk_mask & selector) == 0)
-                {
-                    continue;
-                }
-                result[base + bit] = (out.value & selector) ? Value::ONE : Value::ZERO;
+                result[base + bit] = (out & (u64(1) << bit)) ? Value::ONE : Value::ZERO;
             }
         }
 
