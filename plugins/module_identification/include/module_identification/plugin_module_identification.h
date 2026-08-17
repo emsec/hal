@@ -100,18 +100,6 @@ namespace hal
         void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
 
         /**
-         * @brief Register function to indicate work progress when busy.
-         * 
-         * @param[in] pif - Progress Indicator Function to register.
-         */
-        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
-
-        /**
-         * @brief Static progress indicator function.
-         */
-        static std::function<void(int, const std::string&)> s_progress_indicator_function;
-
-        /**
          * @brief Get context menu contributions based on the current netlist and selection.
          * 
          * @param[in] nl - The netlist to operate on.

@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * fixed the candidates of HAWKEYE being ordered by the addresses of their gates, which made the result of `detect_candidates` depend on where the gates of the netlist happened to be allocated and hence differ between runs of the same binary. Two candidates sharing size and input register could also compare equal and silently discard one another, which cost an entire candidate and the S-box identification that depended on it
 * fixed `RegisterCandidate::operator==` never reporting a round-based candidate as equal to itself
 * added `NetlistGraph::from_gates` that builds a graph from a subset of the gates of a netlist, optionally representing a gate by a primary and a shadow vertex so that feedback through it does not close a cycle
+* added Python bindings for `NetlistGraph::from_gates`, `is_shadow_vertex`, and `get_all_vertices_from_gate`
 * fixed the progress overlay of the graph view staying up until it is clicked away after a dataflow analysis that was started from a script instead of from the plugin dialog, only the dialog reported the analysis as finished although both report its progress
 * fixed the progress overlay of the graph view never being dismissed after a module identification run, the call reporting the analysis as finished was commented out
 * fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner

@@ -264,13 +264,6 @@ namespace hal
 
     }
 
-    std::function<void(int, const std::string&)> GuiExtensionModuleIdentification::s_progress_indicator_function = nullptr;
-
-    void GuiExtensionModuleIdentification::register_progress_indicator(std::function<void(int, const std::string&)> pif)
-    {
-        s_progress_indicator_function = pif;
-    }
-
     std::vector<ContextMenuContribution> GuiExtensionModuleIdentification::get_context_contribution(const Netlist*, const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&)
     {
         std::vector<ContextMenuContribution> retval;
