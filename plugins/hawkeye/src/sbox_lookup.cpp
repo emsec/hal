@@ -393,6 +393,37 @@ namespace hal
                     // bf = bf.simplify();
                 }
 
+                // Tabulate every output over the state and the control inputs together, so that the assignment of the
+                // control inputs becomes a slice of that one table instead of a table of its own. Ordering the state
+                // inputs first makes the rows of one assignment contiguous: the state inputs occupy the low bits of a
+                // row index and the control inputs the high ones, so assignment i covers the rows i << |state| to
+                // (i + 1) << |state|. This used to substitute the control values into every output and tabulate anew
+                // for each of up to 256 assignments, which is where the runtime of this function went.
+                std::vector<std::vector<BooleanFunction::Value>> combined_truth_tables;
+                bool have_combined = (actual_state_inputs.size() + actual_control_inputs.size()) <= BooleanFunction::MAX_TRUTH_TABLE_VARIABLES;
+                if (have_combined)
+                {
+                    std::vector<std::string> combined_names = actual_state_input_names;
+                    for (const auto* ci : actual_control_inputs)
+                    {
+                        combined_names.push_back(BooleanFunctionNetDecorator(*ci).get_boolean_variable_name());
+                    }
+
+                    for (const auto& bf : bfs)
+                    {
+                        auto tt_res = bf.compute_truth_table(combined_names);
+                        if (tt_res.is_error())
+                        {
+                            // fall back to tabulating per assignment, for instance if the function holds something
+                            // the fast path of compute_truth_table does not handle
+                            have_combined = false;
+                            combined_truth_tables.clear();
+                            break;
+                        }
+                        combined_truth_tables.push_back(tt_res.get().front());
+                    }
+                }
+
                 // brute-force all control inputs
                 for (u32 i = 0; i < (1 << actual_control_inputs.size()); i++)
                 {
@@ -406,12 +437,23 @@ namespace hal
                     }
 
                     // actually assign the values
-                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted(1 << actual_state_inputs.size(), std::vector<BooleanFunction::Value>(bfs.size()));
+                    const u32 num_state_rows = 1 << actual_state_inputs.size();
+                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted(num_state_rows, std::vector<BooleanFunction::Value>(bfs.size()));
                     for (j = 0; j < bfs.size(); j++)
                     {
+                        if (have_combined)
+                        {
+                            // read the rows of this control assignment out of the combined table
+                            const auto& tmp = combined_truth_tables.at(j);
+                            for (u32 k = 0; k < num_state_rows; k++)
+                            {
+                                truth_tables_inverted.at(k).at(j) = tmp.at((u64(i) << actual_state_inputs.size()) + k);
+                            }
+                            continue;
+                        }
+
                         const auto& bf    = bfs.at(j);
                         const auto tt_res = bf.substitute(control_values).map<std::vector<std::vector<BooleanFunction::Value>>>([&actual_state_input_names](auto&& bf) {
-                            // return bf.simplify().compute_truth_table(actual_state_input_names);
                             return bf.compute_truth_table(actual_state_input_names);
                         });
                         if (tt_res.is_error())
