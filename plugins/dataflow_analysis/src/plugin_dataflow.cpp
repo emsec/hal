@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/utils/gui_layout_locker.h"
+#include "dataflow_analysis/utils/progress_scope.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
@@ -192,10 +193,10 @@ namespace hal
             return;
         }
 
-        if (GuiExtensionDataflow::s_progress_indicator_function)
-        {
-            GuiExtensionDataflow::s_progress_indicator_function(0, "dataflow analysis running ...");
-        }
+        // keeps the progress indicator up until this function returns, so that it also covers writing the reports and
+        // creating the modules further below. Declared before the layout locker and hence destroyed after it, so that
+        // the indicator is dismissed only once the deferred layout updates have been applied.
+        const dataflow::ProgressScope progress("dataflow analysis …");
 
         dataflow::GuiLayoutLocker gll;
 
@@ -246,11 +247,6 @@ namespace hal
         if (!dot_graph_written_to_path.empty())
         {
             grouping.open_dot_in_viewer(dot_graph_written_to_path);
-        }
-
-        if (GuiExtensionDataflow::s_progress_indicator_function)
-        {
-            GuiExtensionDataflow::s_progress_indicator_function(100, "dataflow analysis finished");
         }
     }
 

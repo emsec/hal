@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* fixed the progress overlay of the graph view staying up until it is clicked away after a dataflow analysis that was started from a script instead of from the plugin dialog, only the dialog reported the analysis as finished although both report its progress
+* fixed the progress overlay of the graph view being dismissed while the layout updates deferred during a dataflow analysis were still being applied, which left the graph view showing its spinner
 * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
 * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
 * added `ProgramOptions::add_flags` that takes the flags and parameters as vectors so that they can be assembled at runtime
