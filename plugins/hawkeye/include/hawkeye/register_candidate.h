@@ -33,6 +33,7 @@
 #include "hal_core/utilities/result.h"
 
 #include <set>
+#include <vector>
 
 namespace hal
 {
@@ -171,6 +172,29 @@ namespace hal
              * The candidate output register. May be equal to `m_in_reg` for round-based implementations.
              */
             std::set<Gate*> m_out_reg;
+
+            /**
+             * The IDs of the gates of `m_in_reg` in ascending order.
+             *
+             * A `std::set<Gate*>` is ordered by the addresses of its gates, so comparing two of them yields an order
+             * that depends on where the gates happen to have been allocated and hence differs between runs. The
+             * candidates are kept in a `std::set` and are reduced by an order-dependent pass, so they are compared by
+             * gate ID instead. The IDs are computed once on construction, as comparing candidates is the hot part.
+             */
+            std::vector<u32> m_in_reg_ids;
+
+            /**
+             * The IDs of the gates of `m_out_reg` in ascending order, see `m_in_reg_ids`.
+             */
+            std::vector<u32> m_out_reg_ids;
+
+            /**
+             * Get the IDs of the given gates in ascending order.
+             *
+             * @param[in] gates - The gates.
+             * @returns The IDs of the gates in ascending order.
+             */
+            static std::vector<u32> get_sorted_ids(const std::set<Gate*>& gates);
         };
     }    // namespace hawkeye
 }    // namespace hal
