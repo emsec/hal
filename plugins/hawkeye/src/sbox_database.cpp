@@ -1,5 +1,6 @@
 #include "hawkeye/sbox_database.h"
 
+#include "hal_core/utilities/log.h"
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/stringbuffer.h"
@@ -276,6 +277,27 @@ namespace hal
 {
     namespace hawkeye
     {
+        namespace
+        {
+            /**
+             * The number of recursive steps that computing one linear representative may spend before the search is
+             * abandoned, see the budget check in `subroutine`. Defined here because the S-box database consults it
+             * before the search itself is defined.
+             *
+             * Measured against every stored variant of every S-box of the shipped database, the most expensive search
+             * of a real S-box is AES at roughly 67 000 steps, while Ascon needs 2 600 and the 4-bit S-boxes 370. The
+             * limit therefore leaves a real S-box a margin of more than three times its worst observed case, and no
+             * S-box of the database comes anywhere near it. Tables that are close to linear, on the other hand, run
+             * into it immediately: looking up an 8-bit table that glues two 4-bit S-boxes together takes 99 seconds
+             * without the limit and half a second with it, and the identity permutation does not finish at all. Both
+             * are tables a round function can produce, and neither can be a real S-box, which is why giving up on
+             * them costs nothing.
+             */
+            constexpr u64 LINEAR_REPRESENTATIVE_BUDGET = 250000;
+
+            std::vector<u8> compute_linear_representative_bounded(const std::vector<u8>& sbox, u64& budget);
+        }    // namespace
+
         SBoxDatabase::SBoxDatabase(const std::map<std::string, std::vector<u8>>& sboxes)
         {
             add(sboxes).is_ok();
@@ -311,7 +333,14 @@ namespace hal
                 {
                     sbox_alpha.push_back(sbox.at(i) ^ alpha);
                 }
-                auto lin_rep = compute_linear_representative(sbox_alpha);
+                u64 budget   = LINEAR_REPRESENTATIVE_BUDGET;
+                auto lin_rep = compute_linear_representative_bounded(sbox_alpha, budget);
+                if (budget == 0)
+                {
+                    // storing a representative from a truncated search would silently break every lookup against this
+                    // entry, and a real S-box is never degenerate enough to exhaust the search in the first place
+                    return ERR("cannot add S-box '" + name + "' to the database: the canonical form search was abandoned, the S-box is too close to linear");
+                }
                 m_data[bit_size][lin_rep].push_back(std::make_pair(name, alpha));
             }
             return OK({});
@@ -430,10 +459,14 @@ namespace hal
             document.Accept(writer);
 
             std::ofstream file(file_path);
+            if (!file.is_open())
+            {
+                return ERR("could not store the S-box database: failed to open file '" + file_path.string() + "'");
+            }
             file << buffer.GetString();
             file.close();
 
-            return ERR("not implemented");
+            return OK({});
         }
 
         Result<std::string> SBoxDatabase::lookup(const std::vector<u8>& sbox) const
@@ -451,14 +484,25 @@ namespace hal
                 return ERR("no S-box of matching bit-size of " + std::to_string(bit_size) + " bits contained in database");
             }
 
-            for (u8 beta = 0; beta < sbox.size(); beta++)
+            // beta has to count beyond the largest table index, so it must be wider than a table entry: a u8 stays
+            // below a size of 256 forever, which made this loop endless for every 8-bit S-box not in the database
+            for (u32 beta = 0; beta < sbox.size(); beta++)
             {
                 std::vector<u8> sbox_beta;
                 for (u32 i = 0; i < sbox.size(); i++)
                 {
                     sbox_beta.push_back(sbox.at(i) ^ beta);
                 }
-                auto lin_rep = compute_linear_representative(sbox_beta);
+
+                u64 budget   = LINEAR_REPRESENTATIVE_BUDGET;
+                auto lin_rep = compute_linear_representative_bounded(sbox_beta, budget);
+                if (budget == 0)
+                {
+                    // XORing a constant onto the outputs does not change how close to linear the table is, so if the
+                    // search degenerates for one beta it degenerates for all of them, and no real S-box ever does
+                    log_info("hawkeye", "giving up the S-box lookup, as the table is too close to linear to be a real S-box.");
+                    break;
+                }
 
                 const auto& matching_size_data = std::get<1>(*size_it);
                 const auto rep_it              = matching_size_data.find(lin_rep);
@@ -980,8 +1024,19 @@ namespace hal
                 return true;
             }
 
-            bool subroutine(const std::vector<u8>& S, const std::vector<u8>& S_inv, const state_t& state, std::vector<u8>& R_S_best, const u32 len)
+            bool subroutine(const std::vector<u8>& S, const std::vector<u8>& S_inv, const state_t& state, std::vector<u8>& R_S_best, const u32 len, u64& budget)
             {
+                // The search backtracks over guesses of a linear map, which finishes quickly for anything that looks
+                // like a real S-box but degenerates on tables that are close to linear, as those have too many linear
+                // self-equivalences to enumerate. Such a table cannot be a real S-box, so give up on it instead:
+                // R_S_best then holds the best representative found so far, which still belongs to the equivalence
+                // class of S, so a truncated search can only miss a match in the database, never invent one.
+                if (budget == 0)
+                {
+                    return false;
+                }
+                budget--;
+
                 std::vector<u8> A(state.A);
                 std::vector<u8> B(state.B);
                 std::vector<u8> R_S(state.R_S);
@@ -1160,7 +1215,7 @@ namespace hal
                         state_next.U_A = U_A;
                         state_next.U_B = U_B;
 
-                        if (subroutine(S, S_inv, state_next, R_S_best, len))
+                        if (subroutine(S, S_inv, state_next, R_S_best, len, budget))
                         {
                             flag = true;
                         }
@@ -1169,10 +1224,8 @@ namespace hal
                     return flag;
                 }
             }
-        }    // namespace
-
-        std::vector<u8> SBoxDatabase::compute_linear_representative(const std::vector<u8>& sbox)
-        {
+            std::vector<u8> compute_linear_representative_bounded(const std::vector<u8>& sbox, u64& budget)
+            {
             u32 len = sbox.size();
 
             // variable for current best candidate
@@ -1215,9 +1268,21 @@ namespace hal
             }
 
             // compute linear representative recursively
-            subroutine(sbox, S_inv, state, R_S_best, len);
+            subroutine(sbox, S_inv, state, R_S_best, len, budget);
 
             return R_S_best;
+            }
+        }    // namespace
+
+        std::vector<u8> SBoxDatabase::compute_linear_representative(const std::vector<u8>& sbox)
+        {
+            u64 budget = LINEAR_REPRESENTATIVE_BUDGET;
+            auto res   = compute_linear_representative_bounded(sbox, budget);
+            if (budget == 0)
+            {
+                log_info("hawkeye", "gave up computing the canonical form of a table of {} entries, as it is too close to linear to be a real S-box.", sbox.size());
+            }
+            return res;
         }
     }    // namespace hawkeye
 }    // namespace hal
