@@ -6,7 +6,7 @@
 #include "dataflow_analysis/processing/context.h"
 #include "dataflow_analysis/processing/pass_collection.h"
 #include "dataflow_analysis/processing/result.h"
-#include "dataflow_analysis/utils/progress_printer.h"
+#include "hal_core/plugin_system/user_feedback.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
@@ -24,7 +24,13 @@ namespace hal
         {
             namespace
             {
-                ProgressPrinter m_progress_printer;
+                /**
+                 * The progress of the layer currently being processed, reported into by every worker thread.
+                 *
+                 * Held by pointer because it puts the progress display up on construction and takes it down again on
+                 * destruction, so it must not outlive the layer it belongs to.
+                 */
+                std::unique_ptr<user_feedback::ProgressPrinter> m_progress_printer;
 
                 void process_pass_configuration(const Configuration& config, Context& ctx)
                 {
@@ -78,11 +84,10 @@ namespace hal
                                     std::lock_guard guard(ctx.result_mutex);
                                     ctx.new_recurring_results.emplace_back(current_state, current_pass.id, it->second);
                                     ctx.finished_passes++;
-                                    m_progress_printer.print_progress_to_stderr((float)ctx.finished_passes / ctx.current_passes.size(),
-                                                                  std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
-                                                                      + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
+                                    m_progress_printer->report((float)ctx.finished_passes / ctx.current_passes.size(),
+                                                              std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
+                                                                  + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
                                 }
-                                m_progress_printer.print_progress_to_gui();
                                 continue;
                             }
 
@@ -111,11 +116,10 @@ namespace hal
                                 }
 
                                 ctx.finished_passes++;
-                                m_progress_printer.print_progress_to_stderr((float)ctx.finished_passes / ctx.current_passes.size(),
-                                                                  std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
-                                                                      + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
+                                m_progress_printer->report((float)ctx.finished_passes / ctx.current_passes.size(),
+                                                          std::to_string(ctx.finished_passes) + "\\" + std::to_string(ctx.current_passes.size()) + " ("
+                                                              + std::to_string(ctx.new_unique_groupings.size()) + " new results)");
                             }
-                            m_progress_printer.print_progress_to_gui();
                         }
                     }
                 }
@@ -171,7 +175,7 @@ namespace hal
                     ctx.pass_counter    = 0;
                     ctx.finished_passes = 0;
 
-                    m_progress_printer = ProgressPrinter(30);
+                    m_progress_printer = std::make_unique<user_feedback::ProgressPrinter>("dataflow: processing …", 30);
 
                     // spawn threads
                     std::vector<std::thread> workers;
@@ -188,7 +192,7 @@ namespace hal
                         worker.join();
                     }
 
-                    m_progress_printer.clear();
+                    m_progress_printer.reset();
 
                     log_info("dataflow", "  finished in {:3.2f}s, processed {} passes, filtering results...", seconds_since(begin_time), ctx.finished_passes, ctx.new_unique_groupings.size());
 

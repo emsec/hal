@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* moved the progress bar of the dataflow analysis into the core as `user_feedback::ProgressPrinter`, which reports to the terminal and to the user interface at once and brackets the operation like a `ProgressScope` does, so that a plugin reports its progress once and reaches whoever is watching
 * sped up the S-box identification of HAWKEYE by tabulating each output over the state and the control inputs together and reading the assignment of the control inputs out of that one table, instead of substituting the control values and tabulating anew for each of up to 256 assignments
 * sped up `BooleanFunction::compute_truth_table` by evaluating 64 rows of the table at once instead of running a symbolic execution per row, which walks and simplifies the entire node list every single time. Applies to single-bit functions of bitwise operations whose variables are all part of the truth table, everything else keeps using the previous implementation
 * raised the limit on the number of variables a truth table may be computed for from 10 to 20, see `BooleanFunction::MAX_TRUTH_TABLE_VARIABLES`

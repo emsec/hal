@@ -50,7 +50,9 @@ namespace hal
          * Report the progress of a long-running operation to the user interface.
          *
          * A percentage of 100 dismisses the progress display again and must therefore be reported exactly once per
-         * operation, which is what `ProgressScope` is for. Prefer that over calling this directly.
+         * operation, which is what `ProgressScope` is for. Prefer that over calling this directly, and prefer
+         * `ProgressPrinter` over both if the operation can say how far along it is, as that also reaches a user
+         * running from the command line.
          *
          * @param[in] percent - The progress in percent, where 100 means done.
          * @param[in] message - The message to display alongside the progress.
@@ -103,6 +105,84 @@ namespace hal
 
         private:
             static std::atomic<u32> s_depth;
+        };
+
+        /**
+         * Brackets a long-running operation that can say how far along it is, and reports that both as a progress bar
+         * on the terminal and to the progress display of the user interface.
+         *
+         * This is a `ProgressScope` that an operation can report into, so use it instead of a scope wherever progress
+         * can be quantified at all, and a bare `ProgressScope` only where it cannot. Covering both the terminal and
+         * the user interface with one object means a plugin reports its progress once and reaches whoever is watching.
+         * The bar is only drawn if stderr is a terminal wide enough for it, so redirected output stays clean.
+         */
+        class ProgressPrinter
+        {
+        public:
+            /**
+             * Construct a progress printer and show the progress display at zero percent.
+             *
+             * @param[in] message - The message naming the operation, shown alongside the progress.
+             * @param[in] max_detail_size - The number of characters to reserve for the detail passed to `report`, `0` for none.
+             */
+            explicit ProgressPrinter(const std::string& message, u32 max_detail_size = 0);
+
+            /** Erases the progress bar and dismisses the progress display, so that whatever comes next starts clean. */
+            ~ProgressPrinter();
+
+            ProgressPrinter(const ProgressPrinter&)            = delete;
+            ProgressPrinter& operator=(const ProgressPrinter&) = delete;
+
+            /**
+             * Report how far the operation has come along.
+             *
+             * Cheap to call in a tight loop: the bar is only redrawn when it actually changes.
+             *
+             * @param[in] progress - The progress, from `0.0` to `1.0`.
+             * @param[in] detail - What the operation is doing right now, shown next to the bar. Truncated to the maximum detail size.
+             */
+            void report(float progress, const std::string& detail = "");
+
+            /**
+             * Change the message naming the operation, for instance when it moves on to another phase.
+             *
+             * @param[in] message - The message naming the operation.
+             */
+            void set_message(const std::string& message);
+
+            /** Erase the progress bar, for instance before printing something else. */
+            void clear();
+
+            /** Forget what has been drawn, so that the next report draws the bar again from scratch. */
+            void reset();
+
+        private:
+            /** Determine the width of the terminal on stderr, negative if there is none. */
+            static int get_terminal_width();
+
+            /** Puts the progress display of the user interface up and takes it down again. */
+            ProgressScope m_scope;
+
+            /** The message naming the operation, reported to the user interface. */
+            std::string m_message;
+
+            /** The detail that was printed last, kept so that an unchanged one is not printed again. */
+            std::string m_last_detail;
+
+            /** The number of bar segments printed so far, kept so that an unchanged bar is not printed again. */
+            u32 m_printed_progress;
+
+            /** The width of the progress bar in characters. */
+            u32 m_bar_width;
+
+            /** The maximum length of a detail, longer ones are truncated. */
+            u32 m_max_detail_size;
+
+            /** The percentage that was reported last. */
+            int m_last_percentage;
+
+            /** The width of the terminal in characters, negative if there is none. */
+            int m_terminal_width;
         };
     }    // namespace user_feedback
 }    // namespace hal
