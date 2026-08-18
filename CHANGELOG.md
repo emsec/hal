@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
+* added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
+* added `CipherCandidate::create_modules` that writes a candidate back into the netlist as a module hierarchy of the candidate, its state register, and one submodule per identified S-box
+* fixed the S-box search of HAWKEYE calling `std::includes` on the unsorted result of `get_unique_predecessors`, which decided by an order that is not guaranteed which inverters it drops from an S-box. This made the number of located S-boxes differ between runs of the same binary, 476 to 1508 across three runs of a netlist that holds 16
+* fixed the round function of HAWKEYE walking every path from each flip-flop of the register rather than every gate, which is exponential in a cone of logic that reconverges. Computing it for a 514 flip-flop candidate took 179 seconds and now takes 0.21 seconds with an unchanged result
+* fixed the linear independence check of HAWKEYE shifting by more than the width of its type for S-boxes of more than 6 bits, which is undefined and made the check operate on garbage for 7-bit and 8-bit S-boxes
+* changed the round function of a HAWKEYE candidate to determine which flip-flops each of its gates depends on only when the S-box search asks for it, as that is the most expensive part of analyzing a candidate and nothing else reads the result
 * fixed `SBoxDatabase::lookup` never terminating for an 8-bit S-box that is not contained in the database, as it counted the constant it adds to the outputs in a `u8`, which never reaches 256
 * fixed `SBoxDatabase::store` reporting a failure although it had written the database, and made it report one if the file cannot be opened
 * added a limit to the canonical form search behind an S-box lookup, which finishes quickly for a real S-box but does not terminate in reasonable time for a table that is close to linear, such as two 4-bit S-boxes glued into an 8-bit one by the surrounding logic
