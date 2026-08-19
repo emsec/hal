@@ -87,7 +87,7 @@ namespace hal
             :type: tuple(hal_py.GatePinGroup,int)
         )");
 
-        py_gate_base_pin.def("get_group", &BasePin<GatePin>::get_group, R"(
+        py_gate_base_pin.def("get_group", &BasePin<GatePin>::get_group, py::return_value_policy::reference_internal, R"(
             Get the group of the pin as well as the index of the pin within the group.
 
             :returns: The group and the index of the pin.
@@ -177,7 +177,7 @@ namespace hal
             :type: tuple(hal_py.ModulePinGroup,int)
         )");
 
-        py_module_base_pin.def("get_group", &BasePin<ModulePin>::get_group, R"(
+        py_module_base_pin.def("get_group", &BasePin<ModulePin>::get_group, py::return_value_policy::reference_internal, R"(
             Get the group of the pin as well as the index of the pin within the group.
 
             :returns: The group and the index of the pin.

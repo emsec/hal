@@ -349,13 +349,13 @@ namespace hal
             The exact size and shape of an S-box is not known in advance, so the search deliberately produces more S-boxes than the round function actually contains, among them smaller ones nested inside larger ones. Identification resolves that, see ``SBoxStatus``.
         )");
 
-        py_hawkeye_sbox.def_readonly("component", &hawkeye::SBox::component, R"(
+        py_hawkeye_sbox.def_readonly("component", &hawkeye::SBox::component, py::return_value_policy::reference_internal, R"(
             The gates of the connected component that the S-box was located in, including its input flip-flops.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_hawkeye_sbox.def_readonly("input_gates", &hawkeye::SBox::input_gates, R"(
+        py_hawkeye_sbox.def_readonly("input_gates", &hawkeye::SBox::input_gates, py::return_value_policy::reference_internal, R"(
             The input flip-flops of the S-box, ordered by gate ID.
 
             These are the flip-flops of the state register that the S-box reads, and hence the only link between the identified S-box and the state bits it operates on. They are **not** ordered by S-box input bit: the database matches under affine equivalence, which absorbs any permutation of the input and output bits, so no bit correspondence is established during identification.
@@ -363,7 +363,7 @@ namespace hal
             :type: list[hal_py.Gate]
         )");
 
-        py_hawkeye_sbox.def_readonly("output_gates", &hawkeye::SBox::output_gates, R"(
+        py_hawkeye_sbox.def_readonly("output_gates", &hawkeye::SBox::output_gates, py::return_value_policy::reference_internal, R"(
             The output gates of the S-box, ordered by gate ID. Usually combinational gates feeding the linear layer.
 
             :type: list[hal_py.Gate]
@@ -381,7 +381,7 @@ namespace hal
             :type: hawkeye.SBoxStatus
         )");
 
-        py_hawkeye_sbox.def("get_combinational_gates", &hawkeye::SBox::get_combinational_gates, R"(
+        py_hawkeye_sbox.def("get_combinational_gates", &hawkeye::SBox::get_combinational_gates, py::return_value_policy::reference_internal, R"(
             Get the combinational gates computing the outputs of the S-box from its input flip-flops.
 
             Walks back from the output gates within the component and stops at the flip-flops, so the result is the logic of this S-box alone rather than that of the whole component, which several S-boxes may share.
@@ -568,7 +568,7 @@ namespace hal
                 log_error("python_context", "cannot create the modules of the candidate:\n{}", res.get_error().get());
                 return nullptr;
             },
-            R"(
+            py::return_value_policy::reference_internal, R"(
             Write the candidate back into the netlist as a module hierarchy.
 
             Creates one module holding the entire candidate, a submodule holding its state register, and one submodule per identified S-box holding its combinational gates.
@@ -578,7 +578,7 @@ namespace hal
             :rtype: hal_py.Module or None
         )");
 
-        py_hawkeye_cipher_candidate.def("get_netlist", &hawkeye::CipherCandidate::get_netlist, R"(
+        py_hawkeye_cipher_candidate.def("get_netlist", &hawkeye::CipherCandidate::get_netlist, py::return_value_policy::reference, R"(
             Get the netlist that the candidate belongs to.
 
             :returns: The netlist of the candidate.
@@ -606,28 +606,28 @@ namespace hal
             :rtype: bool
         )");
 
-        py_hawkeye_cipher_candidate.def("get_input_reg", &hawkeye::CipherCandidate::get_input_reg, R"(
+        py_hawkeye_cipher_candidate.def("get_input_reg", &hawkeye::CipherCandidate::get_input_reg, py::return_value_policy::reference_internal, R"(
             Get the input register of the candidate, ordered by gate ID.
 
             :returns: The input register of the candidate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_output_reg", &hawkeye::CipherCandidate::get_output_reg, R"(
+        py_hawkeye_cipher_candidate.def("get_output_reg", &hawkeye::CipherCandidate::get_output_reg, py::return_value_policy::reference_internal, R"(
             Get the output register of the candidate, ordered by gate ID. Equal to the input register for a round-based candidate.
 
             :returns: The output register of the candidate.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_round_logic", &hawkeye::CipherCandidate::get_round_logic, R"(
+        py_hawkeye_cipher_candidate.def("get_round_logic", &hawkeye::CipherCandidate::get_round_logic, py::return_value_policy::reference_internal, R"(
             Get the combinational logic computing the next state, ordered by gate ID.
 
             :returns: The round function of the candidate, empty if it has not been computed yet.
             :rtype: list[hal_py.Gate]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_gates", &hawkeye::CipherCandidate::get_gates, R"(
+        py_hawkeye_cipher_candidate.def("get_gates", &hawkeye::CipherCandidate::get_gates, py::return_value_policy::reference_internal, R"(
             Get all gates of the candidate, i.e., its registers together with its round function, ordered by gate ID.
 
             :returns: The gates of the candidate.
@@ -648,28 +648,28 @@ namespace hal
             :rtype: graph_algorithm.NetlistGraph or None
         )");
 
-        py_hawkeye_cipher_candidate.def("get_state_inputs", &hawkeye::CipherCandidate::get_state_inputs, R"(
+        py_hawkeye_cipher_candidate.def("get_state_inputs", &hawkeye::CipherCandidate::get_state_inputs, py::return_value_policy::reference_internal, R"(
             Get the state inputs of the round function.
 
             :returns: The state inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_control_inputs", &hawkeye::CipherCandidate::get_control_inputs, R"(
+        py_hawkeye_cipher_candidate.def("get_control_inputs", &hawkeye::CipherCandidate::get_control_inputs, py::return_value_policy::reference_internal, R"(
             Get the control inputs of the round function.
 
             :returns: The control inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_other_inputs", &hawkeye::CipherCandidate::get_other_inputs, R"(
+        py_hawkeye_cipher_candidate.def("get_other_inputs", &hawkeye::CipherCandidate::get_other_inputs, py::return_value_policy::reference_internal, R"(
             Get the remaining inputs of the round function.
 
             :returns: The other inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_state_outputs", &hawkeye::CipherCandidate::get_state_outputs, R"(
+        py_hawkeye_cipher_candidate.def("get_state_outputs", &hawkeye::CipherCandidate::get_state_outputs, py::return_value_policy::reference_internal, R"(
             Get the state outputs of the round function.
 
             :returns: The state outputs of the candidate.

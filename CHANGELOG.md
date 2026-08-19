@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* fixed `NetlistGraph` never being freed by Python: its factories hand over ownership but it was bound with a non-owning holder, so every graph built from a netlist leaked, more than a gigabyte over 1500 graphs on a 3458 gate netlist
+* fixed the Python bindings handing out gates, nets, modules, endpoints and pins without tying them to the netlist that owns them, so that dropping the netlist left them pointing into freed memory. Reading 500 gates and 500 nets of a dropped netlist returned the wrong name and ID for 184 and 230 of them respectively, silently rather than by crashing
+* fixed the decorators storing a reference to the netlist or net they were constructed from without keeping it alive
+* fixed reloading a gate library destroying the library a netlist was built against, which silently replaced every gate type of that netlist. Gate libraries are now owned through a `shared_ptr` and outlive both the netlists and the Python handles that refer to them
+* fixed `GateLibrary::get_path` and the `path` property returning the name of the library instead of its path
+* fixed `GuiApi::getSelectedModules` and `getSelectedItems` not tying the returned modules to the netlist
 * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
 * added `CipherCandidate::identify_sboxes` that identifies every S-box of a candidate at once and annotates it with the outcome, grouping the variants the search produces of one and the same S-box and leaving a group as soon as one of them matches
 * added `CipherCandidate::create_modules` that writes a candidate back into the netlist as a module hierarchy of the candidate, its state register, and one submodule per identified S-box

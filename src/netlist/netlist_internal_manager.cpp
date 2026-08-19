@@ -27,7 +27,7 @@ namespace hal
 
     Result<std::unique_ptr<Netlist>> NetlistInternalManager::copy_netlist(const Netlist* nl) const
     {
-        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library);
+        std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(nl->m_gate_library.get());
         if (c_netlist == nullptr)
         {
             return ERR("could not copy netlist with ID " + std::to_string(nl->get_id()) + ": failed to create netlist");

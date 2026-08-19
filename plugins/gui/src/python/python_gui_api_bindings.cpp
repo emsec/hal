@@ -311,32 +311,32 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: tuple(int, int, int)
 )");
 
-    py_gui_api.def("getSelectedGates", &GuiApi::getSelectedGates, R"(
+    py_gui_api.def("getSelectedGates", &GuiApi::getSelectedGates, py::return_value_policy::reference_internal, R"(
         Get the gates which are currently selected in the graph view of the GUI.
 
         :returns: List of currently selected gates.
         :rtype: list[hal_py.Gate]
 )");
 
-    py_gui_api.def("getSelectedNets", &GuiApi::getSelectedNets, R"(
+    py_gui_api.def("getSelectedNets", &GuiApi::getSelectedNets, py::return_value_policy::reference_internal, R"(
         Get the nets which are currently selected in the graph view of the GUI.
 
         :returns: List of currently selected nets.
         :rtype: list[hal_py.Net]
 )");
 
-    py_gui_api.def("getSelectedModules", &GuiApi::getSelectedModules, R"(
+    py_gui_api.def("getSelectedModules", &GuiApi::getSelectedModules, py::return_value_policy::reference_internal, R"(
        Get the modules which are currently selected in the graph view of the GUI.
 
        :returns: List of currently selected modules.
-       :rtype: list[hal_py.module]
+       :rtype: list[hal_py.Module]
 )");
 
-    py_gui_api.def("getSelectedItems", &GuiApi::getSelectedItems, R"(
+    py_gui_api.def("getSelectedItems", &GuiApi::getSelectedItems, py::return_value_policy::reference_internal, R"(
        Get all selected items which are currently selected in the graph view of the GUI.
 
        :returns: Tuple of currently selected items.
-       :rtype: tuple(hal_py.Gate, hal_py.Net, hal_py.module)
+       :rtype: tuple(hal_py.Gate, hal_py.Net, hal_py.Module)
 )");
 
     py_gui_api.def("selectGate", py::overload_cast<u32, bool, bool>(&GuiApi::selectGate), py::arg("gate_id"), py::arg("clear_current_selection") = true, py::arg("navigate_to_selection") = true, R"(

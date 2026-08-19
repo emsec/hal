@@ -96,7 +96,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py::class_<graph_algorithm::NetlistGraph, RawPtrWrapper<graph_algorithm::NetlistGraph>> py_netlist_graph(m, "NetlistGraph", R"(
+        py::class_<graph_algorithm::NetlistGraph> py_netlist_graph(m, "NetlistGraph", R"(
             Holds a directed graph corresponding to a netlist.
         )");
 
@@ -126,6 +126,7 @@ namespace hal
             py::arg("nl"),
             py::arg("create_dummy_vertices") = false,
             py::arg("filter")                = nullptr,
+            py::keep_alive<0, 1>(),
             R"(Create a directed graph from a netlist. Optionally create dummy nodes at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
              
              :param hal_py.Netlist nl: The netlist.
@@ -151,6 +152,7 @@ namespace hal
             },
             py::arg("nl"),
             py::arg("gates") = std::vector<Gate*>(),
+            py::keep_alive<0, 1>(),
             R"(Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              
              :param hal_py.Netlist nl: The netlist.
@@ -176,6 +178,7 @@ namespace hal
             py::arg("gates"),
             py::arg("split_gates") = std::set<Gate*>(),
             py::arg("filter")      = nullptr,
+            py::keep_alive<0, 1>(),
             R"(Create a directed graph from a subset of the gates of a netlist.
 
              Only the given gates become vertices and only nets between two of them become edges, so the graph is a closed world irrespective of what the gates are connected to elsewhere in the netlist.
@@ -208,6 +211,7 @@ namespace hal
                     return nullptr;
                 }
             },
+            py::keep_alive<0, 1>(),
             R"(
                 Create a deep copy of the netlist graph.
 
@@ -215,7 +219,7 @@ namespace hal
                 :rtype: graph_algorithm.NetlistGraph or None
         )");
 
-        py_netlist_graph.def("get_netlist", &graph_algorithm::NetlistGraph::get_netlist, R"(
+        py_netlist_graph.def("get_netlist", &graph_algorithm::NetlistGraph::get_netlist, py::return_value_policy::reference, R"(
             Get the netlist associated with the netlist graph.
 
             :returns: The netlist.
@@ -237,7 +241,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
                 Get the gates corresponding to the specified list of vertices.
                 The result may contain ``None`` for dummy vertices.
 
@@ -261,7 +265,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
                 Get the gates corresponding to the specified set of vertices.
                 The result may contain ``None`` for dummy vertices.
 
@@ -285,7 +289,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
                 Get the gates corresponding to the specified list of vertices.
 
                 :param list[int] vertices: A list of vertices.
@@ -308,7 +312,7 @@ namespace hal
                 }
             },
             py::arg("vertices"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
                 Get the gates corresponding to the specified set of vertices.
 
                 :param set[int] vertices: A set of vertices.
@@ -331,7 +335,7 @@ namespace hal
                 }
             },
             py::arg("vertex"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
                 Get the gates corresponding to the specified vertex.
 
                 :param int vertex: A vertex.
@@ -884,6 +888,7 @@ namespace hal
             },
             py::arg("graph"),
             py::arg("subgraph_gates"),
+            py::keep_alive<0, 1>(),
             R"(
                 Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
 
@@ -909,6 +914,7 @@ namespace hal
             },
             py::arg("graph"),
             py::arg("subgraph_gates"),
+            py::keep_alive<0, 1>(),
             R"(
                 Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
 
@@ -934,6 +940,7 @@ namespace hal
             },
             py::arg("graph"),
             py::arg("subgraph_vertices"),
+            py::keep_alive<0, 1>(),
             R"(
                 Compute the subgraph induced by the specified vertices, including all edges between these vertices.
                 
@@ -959,6 +966,7 @@ namespace hal
             },
             py::arg("graph"),
             py::arg("subgraph_vertices"),
+            py::keep_alive<0, 1>(),
             R"(
                 Compute the subgraph induced by the specified vertices, including all edges between these vertices.
                 

@@ -812,8 +812,12 @@ namespace hal
         bool load_gate_locations_from_data(const std::string& data_category = "", const std::pair<std::string, std::string>& data_identifiers = std::pair<std::string, std::string>());
 
     private:
-        /* stores the gate library */
-        const GateLibrary* m_gate_library;
+        /*
+         * Stores the gate library, owning it rather than pointing at it: reloading a library replaces it in the
+         * gate library manager and destroys the one that was loaded before, which would leave every gate of this
+         * netlist pointing at a freed gate type.
+         */
+        std::shared_ptr<const GateLibrary> m_gate_library;
 
         /* stores the netlist id */
         u32 m_netlist_id;

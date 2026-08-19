@@ -1,5 +1,7 @@
 #include "hal_core/netlist/netlist.h"
 
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
+
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
@@ -10,7 +12,7 @@
 
 namespace hal
 {
-    Netlist::Netlist(const GateLibrary* library) : m_gate_library(library)
+    Netlist::Netlist(const GateLibrary* library) : m_gate_library(gate_library_manager::get_owning(library))
     {
         m_event_handler    = std::make_unique<EventHandler>();
         m_manager          = new NetlistInternalManager(this, m_event_handler.get());
@@ -36,7 +38,7 @@ namespace hal
             return false;
         }
 
-        if (m_gate_library != other.get_gate_library())
+        if (m_gate_library.get() != other.get_gate_library())
         {
             log_info("netlist", "the netlists with IDs {} and {} are not equal due to an unequal gate library.", m_netlist_id, other.get_id());
             return false;
@@ -131,7 +133,7 @@ namespace hal
 
     const GateLibrary* Netlist::get_gate_library() const
     {
-        return m_gate_library;
+        return m_gate_library.get();
     }
 
     EventHandler* Netlist::get_event_handler() const

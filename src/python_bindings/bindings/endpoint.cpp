@@ -8,7 +8,7 @@ namespace hal
             An endpoint comprises the pin of a gate, the respective gate, and the connected net.
         )");
 
-        py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, R"(
+        py_endpoint.def_property_readonly("gate", &Endpoint::get_gate, py::return_value_policy::reference_internal, R"(
             The gate associated with the endpoint.
 
             :type: hal_py.Gate
@@ -28,33 +28,33 @@ namespace hal
             :rtype: bool
         )");
 
-        py_endpoint.def("get_gate", &Endpoint::get_gate, R"(
+        py_endpoint.def("get_gate", &Endpoint::get_gate, py::return_value_policy::reference_internal, R"(
             Get the gate associated with the endpoint.
 
             :returns: The gate.
             :rtype: hal_py.Gate
         )");
 
-        py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, R"(
+        py_endpoint.def_property_readonly("pin", &Endpoint::get_pin, py::return_value_policy::reference_internal, R"(
             The pin associated with the endpoint.
 
             :type: hal_py.GatePin
         )");
 
-        py_endpoint.def("get_pin", &Endpoint::get_pin, R"(
+        py_endpoint.def("get_pin", &Endpoint::get_pin, py::return_value_policy::reference_internal, R"(
             Get the pin associated with the endpoint.
 
             :returns: The pin.
             :rtype: hal_py.GatePin
         )");
 
-        py_endpoint.def_property_readonly("net", &Endpoint::get_net, R"(
+        py_endpoint.def_property_readonly("net", &Endpoint::get_net, py::return_value_policy::reference_internal, R"(
             The net associated with the endpoint.
 
             :type: hal_py.Net
         )");
 
-        py_endpoint.def("get_net", &Endpoint::get_net, R"(
+        py_endpoint.def("get_net", &Endpoint::get_net, py::return_value_policy::reference_internal, R"(
             Get the net associated with the endpoint.
 
             :returns: The net.
