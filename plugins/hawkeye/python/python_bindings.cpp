@@ -21,20 +21,6 @@ namespace hal
     PYBIND11_MODULE(hawkeye, m)
     {
         m.doc() = "Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.";
-
-        // The graph of a round function is a type of the graph_algorithm plugin, and pybind11 can only hand a type to
-        // Python once the module defining it has been imported. Importing it here means that whoever calls
-        // CipherCandidate.get_graph does not have to know that, instead of running into an unregistered type. The
-        // plugin depends on graph_algorithm and links against it, so this only fails if this module is imported
-        // outside of the hal_plugins package, in which case get_graph is the only thing that stops working.
-        try
-        {
-            py::module_::import("hal_plugins.graph_algorithm");
-        }
-        catch (const py::error_already_set&)
-        {
-            PyErr_Clear();
-        }
 #else
     PYBIND11_PLUGIN(hawkeye)
     {
@@ -641,7 +627,21 @@ namespace hal
             :rtype: list[hawkeye.SBox]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_graph", &hawkeye::CipherCandidate::get_graph, py::return_value_policy::reference_internal, R"(
+        py_hawkeye_cipher_candidate.def(
+            "get_graph",
+            [](const hawkeye::CipherCandidate& self) -> graph_algorithm::NetlistGraph* {
+                // The graph is a type of the graph_algorithm plugin, and pybind11 can only hand a type to Python once
+                // the module defining it has been imported. Import it here, where the type is about to be handed over,
+                // rather than at module initialization: importing a sibling extension module while this one is still
+                // initializing changes the order in which the two libraries are torn down, which aborts the interpreter
+                // at exit on some platforms. The plugin links against graph_algorithm, so this only fails if this
+                // module is imported outside of the hal_plugins package, in which case get_graph is the only thing that
+                // stops working.
+                py::module_::import("hal_plugins.graph_algorithm");
+                return self.get_graph();
+            },
+            py::return_value_policy::reference_internal,
+            R"(
             Get the graph of the round function, in which the gates of the state register are represented by a primary and a shadow vertex so that the feedback of a round-based candidate does not close a cycle.
 
             :returns: The graph of the round function, ``None`` if the round function has not been computed yet.
