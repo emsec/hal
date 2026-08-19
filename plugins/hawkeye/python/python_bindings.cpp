@@ -676,7 +676,7 @@ namespace hal
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_cipher_candidate.def("get_input_ffs_of_gate", &hawkeye::CipherCandidate::get_input_ffs_of_gate, R"(
+        py_hawkeye_cipher_candidate.def("get_input_ffs_of_gate", &hawkeye::CipherCandidate::get_input_ffs_of_gate, py::return_value_policy::reference_internal, R"(
             Get a dict from each gate of the round function to the input flip-flops it depends on.
 
             :returns: A dict from gates to sets of input flip-flops.

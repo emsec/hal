@@ -325,7 +325,7 @@ namespace hal
             },
             py::arg("successors"),
             py::arg("forbidden_pins"),
-            R"(
+            py::return_value_policy::reference_internal, R"(
             Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
             Compute a dict from a sequential gate to all its successors.
             Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.

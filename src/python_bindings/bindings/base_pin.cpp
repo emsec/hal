@@ -81,7 +81,7 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_gate_base_pin.def_property_readonly("group", &BasePin<GatePin>::get_group, R"(
+        py_gate_base_pin.def_property_readonly("group", &BasePin<GatePin>::get_group, py::return_value_policy::reference_internal, R"(
             A tuple comprising the group of the pin as well as the index of the pin within the group.
 
             :type: tuple(hal_py.GatePinGroup,int)
@@ -171,7 +171,7 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_module_base_pin.def_property_readonly("group", &BasePin<ModulePin>::get_group, R"(
+        py_module_base_pin.def_property_readonly("group", &BasePin<ModulePin>::get_group, py::return_value_policy::reference_internal, R"(
             A tuple comprising the group of the pin as well as the index of the pin within the group.
 
             :type: tuple(hal_py.ModulePinGroup,int)
