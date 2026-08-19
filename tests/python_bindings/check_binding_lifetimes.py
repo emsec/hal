@@ -44,14 +44,10 @@ DEF_RE = re.compile(
 
 
 def binding_files(root: Path):
-    # A checkout may contain unrelated repositories below plugins/ that are not part of the build,
-    # so skip anything sitting inside a nested repository.
-    nested = {p.parent for p in root.rglob(".git") if p.parent != root}
-
+    # Plugins kept in a repository of their own are checked as well: they bind the same borrowed
+    # types and get the lifetime wrong in the same ways.
     for base in ("src/python_bindings", "plugins"):
         for path in sorted((root / base).rglob("*.cpp")):
-            if any(nest in path.parents for nest in nested):
-                continue
             text = str(path)
             if "python" in text or "binding" in text:
                 yield path
