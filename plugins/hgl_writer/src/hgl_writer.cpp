@@ -8,6 +8,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_table_component.h"
 #include "hal_core/utilities/log.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/prettywriter.h"
@@ -15,6 +16,40 @@
 #include <algorithm>
 #include <iostream>
 #include <string>
+
+namespace
+{
+    using TI = hal::StateTableComponent::TableInputSymbol;
+    using TO = hal::StateTableComponent::TableOutputSymbol;
+
+    const char* input_sym_str(TI s)
+    {
+        switch (s)
+        {
+            case TI::LOW:         return "L";
+            case TI::HIGH:        return "H";
+            case TI::DONT_CARE:   return "-";
+            case TI::RISING:      return "R";
+            case TI::FALLING:     return "F";
+            case TI::NOT_RISING:  return "~R";
+            case TI::NOT_FALLING: return "~F";
+        }
+        return "-";
+    }
+
+    const char* output_sym_str(TO s)
+    {
+        switch (s)
+        {
+            case TO::LOW:         return "L";
+            case TO::HIGH:        return "H";
+            case TO::UNSPECIFIED: return "-";
+            case TO::UNKNOWN:     return "X";
+            case TO::HOLD:        return "N";
+        }
+        return "-";
+    }
+}    // anonymous namespace
 
 namespace hal
 {
@@ -314,6 +349,66 @@ namespace hal
                 }
                 ram_config.AddMember("ram_ports", ram_ports, allocator);
                 cell.AddMember("ram_config", ram_config, allocator);
+            }
+
+            // state_table_config — independent of ff/latch/lut/ram
+            if (StateTableComponent* st_comp = gt->get_component_as<StateTableComponent>([](const GateTypeComponent* c) { return StateTableComponent::is_class_of(c); }); st_comp != nullptr)
+            {
+                rapidjson::Value st_config(rapidjson::kObjectType);
+                rapidjson::Value tables_arr(rapidjson::kArrayType);
+
+                for (const StateTableComponent::StateTable& table : st_comp->get_state_tables())
+                {
+                    rapidjson::Value t(rapidjson::kObjectType);
+                    t.AddMember("pin", rapidjson::Value{}.SetString(table.pin_name.c_str(), table.pin_name.length(), allocator), allocator);
+
+                    rapidjson::Value ip_arr(rapidjson::kArrayType);
+                    for (const std::string& p : table.input_pins)
+                    {
+                        ip_arr.PushBack(rapidjson::Value{}.SetString(p.c_str(), p.length(), allocator), allocator);
+                    }
+                    t.AddMember("input_pins", ip_arr, allocator);
+
+                    rapidjson::Value csp_arr(rapidjson::kArrayType);
+                    for (const std::string& p : table.current_state_pins)
+                    {
+                        csp_arr.PushBack(rapidjson::Value{}.SetString(p.c_str(), p.length(), allocator), allocator);
+                    }
+                    t.AddMember("current_state_pins", csp_arr, allocator);
+
+                    rapidjson::Value rows_arr(rapidjson::kArrayType);
+                    for (const StateTableComponent::TableRow& row : table.rows)
+                    {
+                        rapidjson::Value r(rapidjson::kObjectType);
+
+                        rapidjson::Value in_arr(rapidjson::kArrayType);
+                        for (TI v : row.input_values)
+                        {
+                            const char* s = input_sym_str(v);
+                            in_arr.PushBack(rapidjson::Value{}.SetString(s, static_cast<rapidjson::SizeType>(std::strlen(s)), allocator), allocator);
+                        }
+                        r.AddMember("input", in_arr, allocator);
+
+                        rapidjson::Value cs_arr(rapidjson::kArrayType);
+                        for (TI v : row.current_state_values)
+                        {
+                            const char* s = input_sym_str(v);
+                            cs_arr.PushBack(rapidjson::Value{}.SetString(s, static_cast<rapidjson::SizeType>(std::strlen(s)), allocator), allocator);
+                        }
+                        r.AddMember("current_state", cs_arr, allocator);
+
+                        const char* ns = output_sym_str(row.next_state_value);
+                        r.AddMember("next_state", rapidjson::Value{}.SetString(ns, static_cast<rapidjson::SizeType>(std::strlen(ns)), allocator), allocator);
+
+                        rows_arr.PushBack(r, allocator);
+                    }
+                    t.AddMember("rows", rows_arr, allocator);
+
+                    tables_arr.PushBack(t, allocator);
+                }
+
+                st_config.AddMember("tables", tables_arr, allocator);
+                cell.AddMember("state_table_config", st_config, allocator);
             }
 
             // pins

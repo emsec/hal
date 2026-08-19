@@ -66,5 +66,6 @@ namespace hal
         Result<std::unique_ptr<GateTypeComponent>> parse_ff_config(const rapidjson::Value& ff_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_latch_config(const rapidjson::Value& latch_config);
         Result<std::unique_ptr<GateTypeComponent>> parse_ram_config(const rapidjson::Value& ram_config);
+        Result<std::unique_ptr<GateTypeComponent>> parse_state_table_config(const rapidjson::Value& st_config, std::unique_ptr<GateTypeComponent> child);
     };
 }    // namespace hal

@@ -9,6 +9,7 @@
 #include "hal_core/netlist/gate_library/gate_type_component/ram_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_table_component.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/result.h"
 #include "rapidjson/filereadstream.h"
@@ -132,17 +133,18 @@ namespace hal
             properties = {GateTypeProperty::combinational};
         }
 
-        std::unique_ptr<GateTypeComponent> parent_component = nullptr;
+        // Parse the sequential/structural component (ff/latch/lut/ram).
+        // If a state_table_config is also present it will wrap this as its child.
+        std::unique_ptr<GateTypeComponent> seq_component = nullptr;
         if (gate_type.HasMember("lut_config") && gate_type["lut_config"].IsObject())
         {
-            const auto& lut_cfg = gate_type["lut_config"];
-            if (auto res = parse_lut_config(lut_cfg); res.is_error())
+            if (auto res = parse_lut_config(gate_type["lut_config"]); res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing LUT configuration");
             }
             else
             {
-                parent_component = res.get();
+                seq_component = res.get();
             }
         }
         else if (gate_type.HasMember("ff_config") && gate_type["ff_config"].IsObject())
@@ -153,7 +155,7 @@ namespace hal
             }
             else
             {
-                parent_component = res.get();
+                seq_component = res.get();
             }
         }
         else if (gate_type.HasMember("latch_config") && gate_type["latch_config"].IsObject())
@@ -164,7 +166,7 @@ namespace hal
             }
             else
             {
-                parent_component = res.get();
+                seq_component = res.get();
             }
         }
         else if (gate_type.HasMember("ram_config") && gate_type["ram_config"].IsObject())
@@ -175,8 +177,26 @@ namespace hal
             }
             else
             {
+                seq_component = res.get();
+            }
+        }
+
+        // state_table_config is independent of ff/latch — wraps seq_component as its child when both present.
+        std::unique_ptr<GateTypeComponent> parent_component = nullptr;
+        if (gate_type.HasMember("state_table_config") && gate_type["state_table_config"].IsObject())
+        {
+            if (auto res = parse_state_table_config(gate_type["state_table_config"], std::move(seq_component)); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not parse gate type '" + name + "': failed parsing state table configuration");
+            }
+            else
+            {
                 parent_component = res.get();
             }
+        }
+        else
+        {
+            parent_component = std::move(seq_component);
         }
 
         GateType* gt = m_gate_lib->create_gate_type(name, properties, std::move(parent_component));
@@ -887,5 +907,135 @@ namespace hal
         std::unique_ptr<GateTypeComponent> component = RAMComponent::create(std::move(sub_component), ram_config["bit_size"].GetUint(), init_identifiers);
 
         return OK(std::move(component));
+    }
+
+    Result<std::unique_ptr<GateTypeComponent>> HGLParser::parse_state_table_config(const rapidjson::Value& st_config, std::unique_ptr<GateTypeComponent> child)
+    {
+        if (!st_config.HasMember("tables") || !st_config["tables"].IsArray())
+        {
+            return ERR("could not parse state table configuration: missing or invalid 'tables' array");
+        }
+
+        auto parse_input_sym = [](const std::string& s) -> Result<StateTableComponent::TableInputSymbol> {
+            using TI = StateTableComponent::TableInputSymbol;
+            if (s == "L")  return OK(TI::LOW);
+            if (s == "H")  return OK(TI::HIGH);
+            if (s == "-")  return OK(TI::DONT_CARE);
+            if (s == "R")  return OK(TI::RISING);
+            if (s == "F")  return OK(TI::FALLING);
+            if (s == "~R") return OK(TI::NOT_RISING);
+            if (s == "~F") return OK(TI::NOT_FALLING);
+            return ERR("unknown input symbol '" + s + "'");
+        };
+
+        auto parse_output_sym = [](const std::string& s) -> Result<StateTableComponent::TableOutputSymbol> {
+            using TO = StateTableComponent::TableOutputSymbol;
+            if (s == "L") return OK(TO::LOW);
+            if (s == "H") return OK(TO::HIGH);
+            if (s == "-") return OK(TO::UNSPECIFIED);
+            if (s == "X") return OK(TO::UNKNOWN);
+            if (s == "N") return OK(TO::HOLD);
+            return ERR("unknown output symbol '" + s + "'");
+        };
+
+        std::vector<StateTableComponent::StateTable> tables;
+
+        for (const auto& t_val : st_config["tables"].GetArray())
+        {
+            if (!t_val.HasMember("pin") || !t_val["pin"].IsString())
+            {
+                return ERR("could not parse state table configuration: missing or invalid 'pin' in table entry");
+            }
+            StateTableComponent::StateTable table;
+            table.pin_name = t_val["pin"].GetString();
+
+            if (!t_val.HasMember("input_pins") || !t_val["input_pins"].IsArray())
+            {
+                return ERR("could not parse state table for pin '" + table.pin_name + "': missing or invalid 'input_pins'");
+            }
+            for (const auto& p : t_val["input_pins"].GetArray())
+            {
+                if (!p.IsString())
+                {
+                    return ERR("could not parse state table for pin '" + table.pin_name + "': non-string entry in 'input_pins'");
+                }
+                table.input_pins.emplace_back(p.GetString());
+            }
+
+            if (!t_val.HasMember("current_state_pins") || !t_val["current_state_pins"].IsArray())
+            {
+                return ERR("could not parse state table for pin '" + table.pin_name + "': missing or invalid 'current_state_pins'");
+            }
+            for (const auto& p : t_val["current_state_pins"].GetArray())
+            {
+                if (!p.IsString())
+                {
+                    return ERR("could not parse state table for pin '" + table.pin_name + "': non-string entry in 'current_state_pins'");
+                }
+                table.current_state_pins.emplace_back(p.GetString());
+            }
+
+            if (!t_val.HasMember("rows") || !t_val["rows"].IsArray())
+            {
+                return ERR("could not parse state table for pin '" + table.pin_name + "': missing or invalid 'rows'");
+            }
+            for (const auto& r_val : t_val["rows"].GetArray())
+            {
+                StateTableComponent::TableRow row;
+
+                if (!r_val.HasMember("input") || !r_val["input"].IsArray())
+                {
+                    return ERR("could not parse row in state table for pin '" + table.pin_name + "': missing or invalid 'input'");
+                }
+                for (const auto& sv : r_val["input"].GetArray())
+                {
+                    if (!sv.IsString())
+                    {
+                        return ERR("could not parse row in state table for pin '" + table.pin_name + "': non-string entry in 'input'");
+                    }
+                    auto sym = parse_input_sym(sv.GetString());
+                    if (sym.is_error())
+                    {
+                        return ERR_APPEND(sym.get_error(), "could not parse 'input' in row for pin '" + table.pin_name + "'");
+                    }
+                    row.input_values.push_back(sym.get());
+                }
+
+                if (!r_val.HasMember("current_state") || !r_val["current_state"].IsArray())
+                {
+                    return ERR("could not parse row in state table for pin '" + table.pin_name + "': missing or invalid 'current_state'");
+                }
+                for (const auto& sv : r_val["current_state"].GetArray())
+                {
+                    if (!sv.IsString())
+                    {
+                        return ERR("could not parse row in state table for pin '" + table.pin_name + "': non-string entry in 'current_state'");
+                    }
+                    auto sym = parse_input_sym(sv.GetString());
+                    if (sym.is_error())
+                    {
+                        return ERR_APPEND(sym.get_error(), "could not parse 'current_state' in row for pin '" + table.pin_name + "'");
+                    }
+                    row.current_state_values.push_back(sym.get());
+                }
+
+                if (!r_val.HasMember("next_state") || !r_val["next_state"].IsString())
+                {
+                    return ERR("could not parse row in state table for pin '" + table.pin_name + "': missing or invalid 'next_state'");
+                }
+                auto ns_sym = parse_output_sym(r_val["next_state"].GetString());
+                if (ns_sym.is_error())
+                {
+                    return ERR_APPEND(ns_sym.get_error(), "could not parse 'next_state' in row for pin '" + table.pin_name + "'");
+                }
+                row.next_state_value = ns_sym.get();
+
+                table.rows.push_back(std::move(row));
+            }
+
+            tables.push_back(std::move(table));
+        }
+
+        return OK(StateTableComponent::create(std::move(child), std::move(tables)));
     }
 }    // namespace hal

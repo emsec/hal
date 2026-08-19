@@ -6,7 +6,9 @@
 #include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/utilities/log.h"
 
+#include <algorithm>
 #include <fstream>
+#include <sstream>
 
 // TODO remove LUT parsing
 
@@ -326,6 +328,17 @@ namespace hal
                     cell.latch = latch.get();
                 }
             }
+            else if (next_token == "statetable")
+            {
+                if (auto st = parse_statetable(cell_str); st.is_error())
+                {
+                    return ERR_APPEND(st.get_error(), "could not parse cell '" + cell.name + "': failed to parse 'statetable' group (line " + std::to_string(next_token.number) + ")");
+                }
+                else
+                {
+                    cell.statetable = st.get();
+                }
+            }
         }
 
         return OK(cell);
@@ -453,6 +466,18 @@ namespace hal
                 {
                     pin.clock = true;
                 }
+                pin_str.consume(";", true);
+            }
+            else if (next_token == "internal_node")
+            {
+                pin_str.consume(":", true);
+                pin.internal_node = pin_str.consume().string;
+                pin_str.consume(";", true);
+            }
+            else if (next_token == "input_map")
+            {
+                pin_str.consume(":", true);
+                pin.input_map = pin_str.consume().string;
                 pin_str.consume(";", true);
             }
         }
@@ -751,6 +776,321 @@ namespace hal
         return OK(latch);
     }
 
+    namespace
+    {
+        using TI = StateTableComponent::TableInputSymbol;
+        using TO = StateTableComponent::TableOutputSymbol;
+
+        Result<TI> parse_input_symbol(const std::string& s)
+        {
+            if (s == "L")
+            {
+                return OK(TI::LOW);
+            }
+            if (s == "H")
+            {
+                return OK(TI::HIGH);
+            }
+            if (s == "-")
+            {
+                return OK(TI::DONT_CARE);
+            }
+            if (s == "R")
+            {
+                return OK(TI::RISING);
+            }
+            if (s == "F")
+            {
+                return OK(TI::FALLING);
+            }
+            if (s == "~R")
+            {
+                return OK(TI::NOT_RISING);
+            }
+            if (s == "~F")
+            {
+                return OK(TI::NOT_FALLING);
+            }
+            return ERR("unknown input/current-state symbol '" + s + "'");
+        }
+
+        Result<TO> parse_output_symbol(const std::string& s)
+        {
+            if (s == "L")
+            {
+                return OK(TO::LOW);
+            }
+            if (s == "H")
+            {
+                return OK(TO::HIGH);
+            }
+            if (s == "-")
+            {
+                return OK(TO::UNSPECIFIED);
+            }
+            if (s == "X")
+            {
+                return OK(TO::UNKNOWN);
+            }
+            if (s == "N")
+            {
+                return OK(TO::HOLD);
+            }
+            return ERR("unknown next-state symbol '" + s + "'");
+        }
+
+        std::vector<std::string> split_whitespace(const std::string& s)
+        {
+            std::vector<std::string> tokens;
+            std::istringstream iss(s);
+            std::string tok;
+            while (iss >> tok)
+            {
+                tokens.push_back(tok);
+            }
+            return tokens;
+        }
+
+        bool has_expansion(const std::vector<std::string>& toks)
+        {
+            for (const auto& t : toks)
+            {
+                if (t == "L/H" || t == "H/L")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        Result<std::vector<TI>> expand_input_section(const std::vector<std::string>& toks, bool second_expansion)
+        {
+            std::vector<TI> result;
+            for (const auto& t : toks)
+            {
+                if (t == "L/H")
+                {
+                    result.push_back(second_expansion ? TI::HIGH : TI::LOW);
+                }
+                else if (t == "H/L")
+                {
+                    result.push_back(second_expansion ? TI::LOW : TI::HIGH);
+                }
+                else
+                {
+                    auto res = parse_input_symbol(t);
+                    if (res.is_error())
+                    {
+                        return ERR(res.get_error().get());
+                    }
+                    result.push_back(res.get());
+                }
+            }
+            return OK(result);
+        }
+
+        Result<std::vector<TO>> expand_output_section(const std::vector<std::string>& toks, bool second_expansion)
+        {
+            std::vector<TO> result;
+            for (const auto& t : toks)
+            {
+                if (t == "L/H")
+                {
+                    result.push_back(second_expansion ? TO::HIGH : TO::LOW);
+                }
+                else if (t == "H/L")
+                {
+                    result.push_back(second_expansion ? TO::LOW : TO::HIGH);
+                }
+                else
+                {
+                    auto res = parse_output_symbol(t);
+                    if (res.is_error())
+                    {
+                        return ERR(res.get_error().get());
+                    }
+                    result.push_back(res.get());
+                }
+            }
+            return OK(result);
+        }
+
+    }    // namespace
+
+    Result<std::monostate> LibertyParser::parse_statetable_rows(const std::string& raw, statetable_group& st)
+    {
+        const u32 n_inputs = static_cast<u32>(st.input_names.size());
+        const u32 n_nodes  = static_cast<u32>(st.node_names.size());
+
+        // split by ',' into raw rows
+        std::vector<std::string> raw_rows;
+        std::string current;
+        for (char c : raw)
+        {
+            if (c == ',')
+            {
+                raw_rows.push_back(current);
+                current.clear();
+            }
+            else
+            {
+                current += c;
+            }
+        }
+        if (!current.empty())
+        {
+            raw_rows.push_back(current);
+        }
+
+        for (const std::string& raw_row : raw_rows)
+        {
+            // split by ':' into 3 sections
+            std::vector<std::string> sections;
+            std::string sec;
+            for (char c : raw_row)
+            {
+                if (c == ':')
+                {
+                    sections.push_back(sec);
+                    sec.clear();
+                }
+                else
+                {
+                    sec += c;
+                }
+            }
+            sections.push_back(sec);
+
+            if (sections.size() != 3)
+            {
+                return ERR("expected 3 colon-separated sections per row, got " + std::to_string(sections.size()));
+            }
+
+            const auto input_toks   = split_whitespace(sections[0]);
+            const auto current_toks = split_whitespace(sections[1]);
+            const auto next_toks    = split_whitespace(sections[2]);
+
+            if (input_toks.empty() && current_toks.empty() && next_toks.empty())
+            {
+                continue;    // skip blank rows (trailing comma, whitespace-only)
+            }
+
+            if (input_toks.size() != n_inputs)
+            {
+                return ERR("input section has " + std::to_string(input_toks.size()) + " tokens, expected " + std::to_string(n_inputs));
+            }
+            if (current_toks.size() != n_nodes)
+            {
+                return ERR("current-state section has " + std::to_string(current_toks.size()) + " tokens, expected " + std::to_string(n_nodes));
+            }
+            if (next_toks.size() != n_nodes)
+            {
+                return ERR("next-state section has " + std::to_string(next_toks.size()) + " tokens, expected " + std::to_string(n_nodes));
+            }
+
+            const bool expand    = has_expansion(input_toks) || has_expansion(current_toks) || has_expansion(next_toks);
+            const int iterations = expand ? 2 : 1;
+
+            for (int i = 0; i < iterations; ++i)
+            {
+                const bool second = (i == 1);
+                LibertyParser::statetable_group::RawRow row;
+
+                auto in_res = expand_input_section(input_toks, second);
+                if (in_res.is_error())
+                {
+                    return ERR_APPEND(in_res.get_error(), "could not parse input section");
+                }
+                row.input_values = in_res.get();
+
+                auto cur_res = expand_input_section(current_toks, second);
+                if (cur_res.is_error())
+                {
+                    return ERR_APPEND(cur_res.get_error(), "could not parse current-state section");
+                }
+                row.current_state_values = cur_res.get();
+
+                auto next_res = expand_output_section(next_toks, second);
+                if (next_res.is_error())
+                {
+                    return ERR_APPEND(next_res.get_error(), "could not parse next-state section");
+                }
+                row.next_state_values = next_res.get();
+
+                st.rows.push_back(std::move(row));
+            }
+        }
+
+        return OK({});
+    }
+
+    Result<LibertyParser::statetable_group> LibertyParser::parse_statetable(TokenStream<std::string>& str)
+    {
+        statetable_group st;
+        st.line_number = str.peek().number;
+
+        // header: ( "input_names", "node_names" )
+        str.consume("(", true);
+        const std::string input_names_str = str.consume().string;
+        str.consume(",", true);
+        const std::string node_names_str = str.consume().string;
+        str.consume(")", true);
+        str.consume("{", true);
+        auto st_str = str.extract_until("}", TokenStream<std::string>::END_OF_STREAM, true, true);
+        str.consume("}", true);
+
+        // split header strings by whitespace
+        for (auto& tok : split_whitespace(input_names_str))
+        {
+            st.input_names.push_back(std::move(tok));
+        }
+        for (auto& tok : split_whitespace(node_names_str))
+        {
+            st.node_names.push_back(std::move(tok));
+        }
+
+        if (st.input_names.empty())
+        {
+            return ERR("could not parse statetable: empty input column list (line " + std::to_string(st.line_number) + ")");
+        }
+        if (st.node_names.empty())
+        {
+            return ERR("could not parse statetable: empty node column list (line " + std::to_string(st.line_number) + ")");
+        }
+
+        while (st_str.remaining() > 0)
+        {
+            auto next_token = st_str.consume();
+            if (next_token == "table")
+            {
+                st_str.consume(":", true);
+
+                // collect all tokens until ';' — the table value may be split across multiple
+                // lines by the tokenizer (one token per continuation line)
+                std::string raw_table;
+                while (st_str.remaining() > 0 && st_str.peek() != ";")
+                {
+                    std::string part = st_str.consume().string;
+                    // strip line-continuation backslash
+                    if (!part.empty() && part.back() == '\\')
+                    {
+                        part.pop_back();
+                    }
+                    raw_table += part;
+                }
+                st_str.consume(";", true);
+
+                if (auto res = parse_statetable_rows(raw_table, st); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse statetable 'table' attribute (line " + std::to_string(next_token.number) + ")");
+                }
+            }
+            // unknown attributes are silently skipped via the consume() at loop top
+        }
+
+        return OK(st);
+    }
+
     Result<std::monostate> LibertyParser::construct_gate_type(cell_group&& cell)
     {
         // get input and from pin groups
@@ -772,6 +1112,87 @@ namespace hal
                 output_func = pin.function;
             }
         }
+
+        // Build a StateTableComponent from the parsed statetable (if any), passing `child` through
+        // as its sub-component. When no statetable is present, returns `child` unchanged so the
+        // caller can assign it directly to parent_component without branching.
+        auto build_state_table_component = [&](std::unique_ptr<GateTypeComponent> child) -> std::unique_ptr<GateTypeComponent> {
+            if (!cell.statetable.has_value())
+            {
+                return child;
+            }
+
+            const statetable_group& st = cell.statetable.value();
+
+            // Resolve current_state_pins: map each node_name to the real pin that declares it
+            // via internal_node.
+            std::vector<std::string> current_state_pins;
+            for (const auto& node_name : st.node_names)
+            {
+                std::string resolved;
+                for (const auto& p : cell.pins)
+                {
+                    if (p.internal_node == node_name && !p.pin_names.empty())
+                    {
+                        resolved = p.pin_names.front();
+                        break;
+                    }
+                }
+                current_state_pins.push_back(std::move(resolved));
+            }
+
+            // Build one StateTable per pin that has both internal_node and input_map set.
+            std::vector<StateTableComponent::StateTable> tables;
+            for (const auto& p : cell.pins)
+            {
+                if (p.internal_node.empty() || p.input_map.empty())
+                {
+                    continue;
+                }
+
+                auto it = std::find(st.node_names.begin(), st.node_names.end(), p.internal_node);
+                if (it == st.node_names.end())
+                {
+                    log_warning("liberty_parser", "statetable: internal_node '{}' not found in node column list, skipping pin", p.internal_node);
+                    continue;
+                }
+                const u32 col_idx = static_cast<u32>(std::distance(st.node_names.begin(), it));
+
+                std::vector<std::string> input_pins = split_whitespace(p.input_map);
+                if (input_pins.size() != st.input_names.size())
+                {
+                    log_warning("liberty_parser", "statetable: input_map size ({}) does not match input column count ({}), skipping pin", input_pins.size(), st.input_names.size());
+                    continue;
+                }
+
+                std::vector<StateTableComponent::TableRow> rows;
+                for (const auto& raw : st.rows)
+                {
+                    StateTableComponent::TableRow row;
+                    row.input_values         = raw.input_values;
+                    row.current_state_values = raw.current_state_values;
+                    row.next_state_value     = raw.next_state_values.at(col_idx);
+                    rows.push_back(std::move(row));
+                }
+
+                for (const auto& pin_name : p.pin_names)
+                {
+                    StateTableComponent::StateTable table;
+                    table.pin_name           = pin_name;
+                    table.input_pins         = input_pins;
+                    table.current_state_pins = current_state_pins;
+                    table.rows               = rows;
+                    tables.push_back(std::move(table));
+                }
+            }
+
+            if (tables.empty())
+            {
+                return child;
+            }
+
+            return StateTableComponent::create(std::move(child), std::move(tables));
+        };
 
         std::unique_ptr<GateTypeComponent> parent_component = nullptr;
         if (!has_inputs && num_outputs == 1)
@@ -806,9 +1227,9 @@ namespace hal
             {
                 return ERR_APPEND(next_state_function.get_error(), "could not construct gate type '" + cell.name + "': failed parsing 'clocked_on' function from string");
             }
-            parent_component = FFComponent::create(std::move(state_component), next_state_function.get(), clocked_on_function.get());
+            std::unique_ptr<GateTypeComponent> ff_base = FFComponent::create(std::move(state_component), next_state_function.get(), clocked_on_function.get());
 
-            FFComponent* ff_component = parent_component->convert_to<FFComponent>();
+            FFComponent* ff_component = ff_base->convert_to<FFComponent>();
             if (!cell.ff->clear.empty())
             {
                 auto clear_function = BooleanFunction::from_string(cell.ff->clear);
@@ -845,13 +1266,15 @@ namespace hal
                     pin.type = PinType::neg_state;
                 }
             }
+
+            parent_component = build_state_table_component(std::move(ff_base));
         }
         else if (cell.latch.has_value())
         {
             std::unique_ptr<GateTypeComponent> state_component = StateComponent::create(nullptr, cell.latch->state1, cell.latch->state2);
 
-            parent_component                = LatchComponent::create(std::move(state_component));
-            LatchComponent* latch_component = parent_component->convert_to<LatchComponent>();
+            std::unique_ptr<GateTypeComponent> latch_base = LatchComponent::create(std::move(state_component));
+            LatchComponent* latch_component                = latch_base->convert_to<LatchComponent>();
             assert(latch_component != nullptr);
 
             if (!cell.latch->data_in.empty())
@@ -908,6 +1331,13 @@ namespace hal
                     pin.type = PinType::neg_state;
                 }
             }
+
+            parent_component = build_state_table_component(std::move(latch_base));
+        }
+        else if (cell.statetable.has_value())
+        {
+            cell.properties.insert(GateTypeProperty::sequential);
+            parent_component = build_state_table_component(nullptr);
         }
 
         if (cell.properties.empty())

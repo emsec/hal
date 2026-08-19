@@ -31,6 +31,7 @@
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_table_component.h"
 #include "hal_core/utilities/token_stream.h"
 
 #include <filesystem>
@@ -89,6 +90,8 @@ namespace hal
             bool clock  = false;
             bool power  = false;
             bool ground = false;
+            std::string internal_node; /**< State variable name this pin corresponds to; empty if absent. */
+            std::string input_map;     /**< Space-separated real port names mapping to statetable input columns; empty if absent. */
         };
 
         struct bus_group
@@ -136,6 +139,22 @@ namespace hal
             std::string data_direction;
         };
 
+        struct statetable_group
+        {
+            u32 line_number;
+            std::vector<std::string> input_names; /**< Column names from the first quoted string of the statetable header. */
+            std::vector<std::string> node_names;  /**< Column names from the second quoted string of the statetable header. */
+
+            struct RawRow
+            {
+                std::vector<StateTableComponent::TableInputSymbol>  input_values;
+                std::vector<StateTableComponent::TableInputSymbol>  current_state_values;
+                std::vector<StateTableComponent::TableOutputSymbol> next_state_values; /**< One entry per node column; not yet sliced per pin. */
+            };
+
+            std::vector<RawRow> rows; /**< L/H and H/L expanded rows in priority order. */
+        };
+
         struct cell_group
         {
             u32 line_number;
@@ -144,6 +163,7 @@ namespace hal
             std::optional<ff_group> ff;
             std::optional<latch_group> latch;
             std::optional<lut_group> lut;
+            std::optional<statetable_group> statetable;
             std::vector<pin_group> pins;
             std::map<std::string, bus_group> buses;
             std::set<std::string> pin_names;
@@ -167,6 +187,8 @@ namespace hal
         Result<bus_group> parse_bus(TokenStream<std::string>& str, cell_group& cell);
         Result<ff_group> parse_ff(TokenStream<std::string>& str);
         Result<latch_group> parse_latch(TokenStream<std::string>& str);
+        Result<statetable_group> parse_statetable(TokenStream<std::string>& str);
+        static Result<std::monostate> parse_statetable_rows(const std::string& raw, statetable_group& st);
         Result<std::monostate> construct_gate_type(cell_group&& cell);
 
         void remove_comments(std::string& line, bool& multi_line_comment);
