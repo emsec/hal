@@ -1,0 +1,1142 @@
+{
+    "version": 6,
+    "library": "cyclonev",
+    "cells": [
+        {
+            "name": "cyclonev_lcell_comb",
+            "types": [
+                "combinational",
+                "c_lut"
+            ],
+            "parameters": [
+                {
+                    "name": "lut_mask",
+                    "type": "bit_vector",
+                    "size": 64,
+                    "default": "0x0"
+                },
+                {
+                    "name": "extended_lut",
+                    "type": "enum",
+                    "values": [
+                        "off",
+                        "on"
+                    ],
+                    "default": "off"
+                },
+                {
+                    "name": "shared_arith",
+                    "type": "enum",
+                    "values": [
+                        "off",
+                        "on"
+                    ],
+                    "default": "off"
+                }
+            ],
+            "lut_config": {
+                "output_pins": [
+                    {
+                        "pin": "combout",
+                        "data_identifier": "lut_mask",
+                        "bit_offset": 0,
+                        "bit_count": 64,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "dataa",
+                            "datab",
+                            "datac",
+                            "datad",
+                            "datae",
+                            "dataf"
+                        ]
+                    },
+                    {
+                        "pin": "f0",
+                        "data_identifier": "lut_mask",
+                        "bit_offset": 0,
+                        "bit_count": 16,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "dataa",
+                            "datab",
+                            "datac",
+                            "datad"
+                        ]
+                    },
+                    {
+                        "pin": "f1",
+                        "data_identifier": "lut_mask",
+                        "bit_offset": 16,
+                        "bit_count": 16,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "dataa",
+                            "datab",
+                            "c_or_g",
+                            "datad"
+                        ]
+                    },
+                    {
+                        "pin": "f2",
+                        "data_identifier": "lut_mask",
+                        "bit_offset": 32,
+                        "bit_count": 16,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "dataa",
+                            "datab",
+                            "datac",
+                            "datad"
+                        ]
+                    },
+                    {
+                        "pin": "f3",
+                        "data_identifier": "lut_mask",
+                        "bit_offset": 48,
+                        "bit_count": 16,
+                        "is_ascending": true,
+                        "input_pins": [
+                            "dataa",
+                            "datab",
+                            "c_or_g",
+                            "datad"
+                        ]
+                    }
+                ]
+            },
+            "pin_groups": [
+                {
+                    "name": "dataa",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "dataa",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "datab",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "datab",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "datac",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "datac",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "datad",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "datad",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "datae",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "datae",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "dataf",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "dataf",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "datag",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "datag",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "cin",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "cin",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "sharein",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "sharein",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "c_or_g",
+                    "direction": "internal",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "c_or_g",
+                            "direction": "internal",
+                            "type": "none",
+                            "function": "((extended_lut == 0b1) ? datag : datac)"
+                        }
+                    ]
+                },
+                {
+                    "name": "g0_out",
+                    "direction": "internal",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "g0_out",
+                            "direction": "internal",
+                            "type": "none",
+                            "function": "(datae ? f1 : f0)"
+                        }
+                    ]
+                },
+                {
+                    "name": "g1_out",
+                    "direction": "internal",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "g1_out",
+                            "direction": "internal",
+                            "type": "none",
+                            "function": "(datae ? f3 : f2)"
+                        }
+                    ]
+                },
+                {
+                    "name": "adder_input2",
+                    "direction": "internal",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "adder_input2",
+                            "direction": "internal",
+                            "type": "none",
+                            "function": "((shared_arith == 0b1) ? sharein : (! f2))"
+                        }
+                    ]
+                },
+                {
+                    "name": "f0",
+                    "direction": "internal",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "f0",
+                            "direction": "internal",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "f1",
+                    "direction": "internal",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "f1",
+                            "direction": "internal",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "f2",
+                    "direction": "internal",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "f2",
+                            "direction": "internal",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "f3",
+                    "direction": "internal",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "f3",
+                            "direction": "internal",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "combout",
+                    "direction": "output",
+                    "type": "lut",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "combout",
+                            "direction": "output",
+                            "type": "lut"
+                        }
+                    ]
+                },
+                {
+                    "name": "sumout",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "sumout",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(f0 ^ (cin ^ adder_input2))"
+                        }
+                    ]
+                },
+                {
+                    "name": "cout",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "cout",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((cin & f0) | ((cin & adder_input2) | (f0 & adder_input2)))"
+                        }
+                    ]
+                },
+                {
+                    "name": "shareout",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "shareout",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "f2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "cyclonev_clkena",
+            "types": [
+                "combinational"
+            ],
+            "parameters": [
+                {
+                    "name": "disable_mode",
+                    "type": "enum",
+                    "values": [
+                        "low",
+                        "high",
+                        "none"
+                    ],
+                    "default": "none"
+                }
+            ],
+            "pin_groups": [
+                {
+                    "name": "inclk",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "inclk",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "ena",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "ena",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "outclk",
+                    "direction": "output",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "outclk",
+                            "direction": "output",
+                            "type": "clock",
+                            "function": "(inclk & ena)"
+                        }
+                    ]
+                },
+                {
+                    "name": "enaout",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "enaout",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "ena"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "cyclonev_io_ibuf",
+            "types": [
+                "combinational",
+                "c_buffer"
+            ],
+            "pin_groups": [
+                {
+                    "name": "i",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "i",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "ibar",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "ibar",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "dynamicterminationcontrol",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "dynamicterminationcontrol",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "o",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "o",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "i"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "cyclonev_io_obuf",
+            "types": [
+                "combinational",
+                "c_buffer"
+            ],
+            "pin_groups": [
+                {
+                    "name": "i",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "i",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "oe",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "oe",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "dynamicterminationcontrol",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "dynamicterminationcontrol",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "seriesterminationcontrol",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 15,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "seriesterminationcontrol(15)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(14)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(13)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(12)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(11)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(10)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(9)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(8)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(7)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(6)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(5)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(4)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(3)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(2)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "seriesterminationcontrol(0)",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "parallelterminationcontrol",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 15,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "parallelterminationcontrol(15)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(14)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(13)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(12)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(11)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(10)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(9)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(8)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(7)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(6)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(5)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(4)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(3)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(2)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(1)",
+                            "direction": "input",
+                            "type": "none"
+                        },
+                        {
+                            "name": "parallelterminationcontrol(0)",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "devoe",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "devoe",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "o",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "o",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(oe & devoe & i)"
+                        }
+                    ]
+                },
+                {
+                    "name": "obar",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "obar",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((oe & devoe & !i) | !(oe & devoe)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "dffeas",
+            "types": [
+                "sequential",
+                "ff"
+            ],
+            "parameters": [
+                {
+                    "name": "power_up",
+                    "type": "enum",
+                    "values": [
+                        "low",
+                        "high"
+                    ],
+                    "default": "low"
+                },
+                {
+                    "name": "async_mode",
+                    "type": "enum",
+                    "values": [
+                        "none",
+                        "clear",
+                        "preset",
+                        "clear_preset",
+                        "preset_clear",
+                        "load"
+                    ],
+                    "default": "clear"
+                },
+                {
+                    "name": "sync_mode",
+                    "type": "enum",
+                    "values": [
+                        "none",
+                        "clear",
+                        "preset",
+                        "load",
+                        "clear_load",
+                        "preset_load"
+                    ],
+                    "default": "clear_load"
+                },
+                {
+                    "name": "ena_register_mode",
+                    "type": "enum",
+                    "values": [
+                        "always enabled",
+                        "use ena"
+                    ],
+                    "default": "use ena"
+                }
+            ],
+            "ff_config": {
+                "state": "IQ",
+                "neg_state": "IQN",
+                "next_state": "(ena ? (sclr ? 0b0 : (sload ? sdata : d)) : IQ)",
+                "clocked_on": "clk",
+                "clear_on": "!clrn",
+                "preset_on": "prn_b"
+            },
+            "pin_groups": [
+                {
+                    "name": "clk",
+                    "direction": "input",
+                    "type": "clock",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "clk",
+                            "direction": "input",
+                            "type": "clock"
+                        }
+                    ]
+                },
+                {
+                    "name": "d",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "d",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "ena",
+                    "direction": "input",
+                    "type": "enable",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "ena",
+                            "direction": "input",
+                            "type": "enable"
+                        }
+                    ]
+                },
+                {
+                    "name": "clrn",
+                    "direction": "input",
+                    "type": "reset",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "clrn",
+                            "direction": "input",
+                            "type": "reset"
+                        }
+                    ]
+                },
+                {
+                    "name": "prn",
+                    "direction": "input",
+                    "type": "set",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "prn",
+                            "direction": "input",
+                            "type": "set"
+                        }
+                    ]
+                },
+                {
+                    "name": "aload",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "aload",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "asdata",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "asdata",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "sclr",
+                    "direction": "input",
+                    "type": "reset",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "sclr",
+                            "direction": "input",
+                            "type": "reset"
+                        }
+                    ]
+                },
+                {
+                    "name": "sload",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "sload",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "sdata",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "sdata",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "devclrn",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "devclrn",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "devpor",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "devpor",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "q",
+                    "direction": "output",
+                    "type": "state",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "q",
+                            "direction": "output",
+                            "type": "state",
+                            "function": "IQ"
+                        }
+                    ]
+                },
+                {
+                    "name": "prn_b",
+                    "direction": "internal",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "ordered": false,
+                    "pins": [
+                        {
+                            "name": "prn_b",
+                            "direction": "internal",
+                            "type": "none",
+                            "function": "(! prn)"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

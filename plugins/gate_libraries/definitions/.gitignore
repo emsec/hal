@@ -2,6 +2,7 @@
 *
 !example_library.hgl
 !XILINX_SIMPRIM.hgl
+!cyclonev.hgl
 !XILINX_UNISIM.hgl
 !XILINX_UNISIM_hal.hgl
 !ice40ultra.hgl
