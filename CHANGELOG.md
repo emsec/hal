@@ -39,6 +39,9 @@ All notable changes to this project will be documented in this file.
   * added Python bindings for `NetlistGraph::from_gates`, `is_shadow_vertex`, and `get_all_vertices_from_gate`
   * added Python bindings for `ProgramOptions`, `ProgramArguments`, and `FacExtensionInterface`
   * added Python bindings for the remaining functions of `plugin_manager` and exposed the `initialize` and `silent` parameters of `get_plugin_instance`
+  * fixed `GateLibraryManager.get_gate_libraries` handing each library to Python as a newly constructed `shared_ptr` over a pointer it had only borrowed, which opened a second ownership group over a library the manager already owned and freed it twice
+  * fixed `Module.pins`, `Module.pin_groups` and `GateType.components` raising a `TypeError` whenever they were read, as each was bound to a method whose only parameter has a default in C++, which pybind11 exposes as a required argument that a property cannot pass
+  * added a test that calls every no-argument binding reachable from a small netlist and imports every plugin module, so that a binding which compiles and only fails when called is caught
 * Plugins
   * HAWKEYE
     * replaced `RegisterCandidate`, `RoundCandidate` and the free S-box functions of HAWKEYE with a single `CipherCandidate` that analyzes a candidate in place instead of copying it into a netlist of its own, so its gates and nets are the ones of the netlist under analysis and no longer have to be mapped back
