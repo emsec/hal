@@ -82,7 +82,7 @@ namespace hal
             :rtype: set[str]
         )");
 
-        py::class_<hawkeye::SBoxDatabase, RawPtrWrapper<hawkeye::SBoxDatabase>> py_hawkeye_sbox_database(m, "SBoxDatabase", R"(
+        py::class_<hawkeye::SBoxDatabase> py_hawkeye_sbox_database(m, "SBoxDatabase", R"(
             This class holds and manages known S-boxes and allows to perform efficient S-box lookups in the database.
         )");
 
@@ -250,7 +250,7 @@ namespace hal
             Print the database.
         )");
 
-        py::class_<hawkeye::DetectionConfiguration, RawPtrWrapper<hawkeye::DetectionConfiguration>> py_hawkeye_detection_configuration(
+        py::class_<hawkeye::DetectionConfiguration> py_hawkeye_detection_configuration(
             m, "DetectionConfiguration", R"(This class holds important parameters that configure the candidate search of HAWKEYE, see ``CipherCandidate.detect``.)");
 
         py_hawkeye_detection_configuration.def(py::init<>(), R"(

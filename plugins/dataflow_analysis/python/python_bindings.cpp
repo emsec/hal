@@ -60,7 +60,7 @@ namespace hal
             :rtype: str
         )");
 
-        py::class_<dataflow::Configuration, RawPtrWrapper<dataflow::Configuration>> py_dataflow_configuration(m, "Configuration", R"(
+        py::class_<dataflow::Configuration> py_dataflow_configuration(m, "Configuration", R"(
             This class holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze.
         )");
 
